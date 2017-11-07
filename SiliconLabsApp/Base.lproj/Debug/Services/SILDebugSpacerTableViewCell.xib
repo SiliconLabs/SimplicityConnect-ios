@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SILDebugSpacerTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="10"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="10"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Hn-9G-q8K" userLabel="background">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="10"/>
+                        <animations/>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="10" id="X7C-3Y-S1m">
+                                <variation key="heightClass=regular-widthClass=regular" constant="36"/>
+                            </constraint>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aPw-qk-BHZ" userLabel="separator">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
+                        <animations/>
+                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="c6Q-uX-onM"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="aPw-qk-BHZ" secondAttribute="trailing" id="EpF-52-ncH"/>
+                    <constraint firstItem="aPw-qk-BHZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="IFk-TY-1uz"/>
+                    <constraint firstItem="2Hn-9G-q8K" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="SI6-dE-dc1"/>
+                    <constraint firstItem="2Hn-9G-q8K" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="WaW-an-gaE"/>
+                    <constraint firstAttribute="trailing" secondItem="2Hn-9G-q8K" secondAttribute="trailing" id="X6A-qK-O2G"/>
+                    <constraint firstItem="2Hn-9G-q8K" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="gZl-GL-KMg"/>
+                    <constraint firstAttribute="bottom" secondItem="2Hn-9G-q8K" secondAttribute="bottom" id="hDV-7S-Z0U"/>
+                    <constraint firstItem="aPw-qk-BHZ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="psb-yz-Sz9"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="spacerView" destination="2Hn-9G-q8K" id="5j2-dh-FEQ"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>
