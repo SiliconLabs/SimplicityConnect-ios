@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SILDeviceSelectionCollectionViewCellIdentifier" id="SPD-AH-eml" customClass="SILDeviceSelectionCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="282" height="104"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="282" height="104"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BZO-Kg-RA5">
+                        <rect key="frame" x="10" y="28.5" width="99" height="47"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconZigbee" translatesAutoresizingMaskIntoConstraints="NO" id="JX1-Xv-b70">
+                                <rect key="frame" x="0.0" y="0.0" width="47" height="47"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BTMedium" translatesAutoresizingMaskIntoConstraints="NO" id="d9X-9O-eAN">
+                                <rect key="frame" x="52" y="0.0" width="47" height="47"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="76" id="HrW-3T-tyi">
+                                        <variation key="widthClass=compact" constant="47"/>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="76" id="zzC-o2-XAO">
+                                        <variation key="widthClass=compact" constant="47"/>
+                                    </constraint>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="JX1-Xv-b70" firstAttribute="height" secondItem="d9X-9O-eAN" secondAttribute="height" id="ZFu-Dr-JeZ"/>
+                            <constraint firstItem="JX1-Xv-b70" firstAttribute="width" secondItem="d9X-9O-eAN" secondAttribute="width" priority="999" id="nPj-HS-bf7"/>
+                        </constraints>
+                    </stackView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FD1-eU-J4c">
+                        <rect key="frame" x="129" y="102" width="143" height="1"/>
+                        <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="zIN-6u-Ib3"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" text="Silicon Labs Keyboard" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="12" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="CqA-bB-xcX">
+                        <rect key="frame" x="129" y="28.5" width="143" height="47"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                        <color key="textColor" red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="BZO-Kg-RA5" firstAttribute="leading" secondItem="SPD-AH-eml" secondAttribute="leading" constant="10" id="1U2-me-muR"/>
+                <constraint firstItem="CqA-bB-xcX" firstAttribute="leading" secondItem="BZO-Kg-RA5" secondAttribute="trailing" constant="20" id="6gF-PE-s9v"/>
+                <constraint firstItem="BZO-Kg-RA5" firstAttribute="top" secondItem="CqA-bB-xcX" secondAttribute="top" id="Bt7-7w-GZB"/>
+                <constraint firstItem="CqA-bB-xcX" firstAttribute="leading" secondItem="FD1-eU-J4c" secondAttribute="leading" id="FWa-ud-ZxM"/>
+                <constraint firstItem="CqA-bB-xcX" firstAttribute="trailing" secondItem="FD1-eU-J4c" secondAttribute="trailing" id="JXn-Ln-tk1"/>
+                <constraint firstItem="BZO-Kg-RA5" firstAttribute="centerY" secondItem="SPD-AH-eml" secondAttribute="centerY" id="Le5-Ys-HKe"/>
+                <constraint firstAttribute="bottom" secondItem="FD1-eU-J4c" secondAttribute="bottom" constant="1" id="VMo-BJ-2Nd"/>
+                <constraint firstAttribute="trailing" secondItem="CqA-bB-xcX" secondAttribute="trailing" priority="999" constant="20" id="Vfg-Y7-OhQ">
+                    <variation key="widthClass=compact" constant="10"/>
+                </constraint>
+                <constraint firstItem="BZO-Kg-RA5" firstAttribute="bottom" secondItem="CqA-bB-xcX" secondAttribute="bottom" id="dd5-BR-hOb"/>
+            </constraints>
+            <connections>
+                <outlet property="deviceNameLabel" destination="CqA-bB-xcX" id="vhO-xj-Ekx"/>
+                <outlet property="dmpTypeImageView" destination="JX1-Xv-b70" id="Idc-mQ-DLF"/>
+                <outlet property="signalImageView" destination="d9X-9O-eAN" id="1WK-kt-P4z"/>
+            </connections>
+            <point key="canvasLocation" x="185" y="277"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="BTMedium" width="47" height="47"/>
+        <image name="iconZigbee" width="44" height="44"/>
+    </resources>
+</document>

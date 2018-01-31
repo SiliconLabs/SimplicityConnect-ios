@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="61" id="KGk-i7-Jjw" customClass="SILDebugCharacteristicValueFieldTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="60.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AtO-zN-4aI" userLabel="Separator">
+                        <rect key="frame" x="16" y="0.0" width="288" height="1"/>
+                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="txe-k3-x3e"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="245" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
+                        <rect key="frame" x="16" y="11" width="245" height="25"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="245" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-q1-Cq4" userLabel="Subtitle">
+                        <rect key="frame" x="16" y="36" width="245" height="14"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KLX-On-Fb3">
+                        <rect key="frame" x="269" y="16" width="35" height="30"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                        <state key="normal" title="EDIT">
+                            <color key="titleColor" red="0.79607843137254897" green="0.0039215686274509803" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="didTapEdit:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="VaO-VE-fBz"/>
+                        </connections>
+                    </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pY8-Xg-Lnt" userLabel="Left Border">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="13" id="h7c-wn-mKW">
+                                <variation key="heightClass=regular-widthClass=regular" constant="1"/>
+                            </constraint>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="h7c-wn-mKW"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="h7c-wn-mKW"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3h8-Ux-bPw" userLabel="Right Border">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="13" id="YL5-xA-ghz">
+                                <variation key="heightClass=regular-widthClass=regular" constant="1"/>
+                            </constraint>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="YL5-xA-ghz"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="YL5-xA-ghz"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" red="0.97530043125152588" green="0.97527122497558594" blue="0.9752877950668335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="pY8-Xg-Lnt" secondAttribute="bottom" constant="-7.5" id="0hQ-Oo-Zbs">
+                        <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                    </constraint>
+                    <constraint firstItem="KLX-On-Fb3" firstAttribute="trailing" secondItem="AtO-zN-4aI" secondAttribute="trailing" id="3VZ-my-6Z2"/>
+                    <constraint firstAttribute="trailing" secondItem="3h8-Ux-bPw" secondAttribute="trailing" constant="281" id="6sc-x1-LLK">
+                        <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                    </constraint>
+                    <constraint firstAttribute="bottom" secondItem="gVo-q1-Cq4" secondAttribute="bottom" constant="11" id="9Bl-uM-NcK"/>
+                    <constraint firstAttribute="trailing" secondItem="AtO-zN-4aI" secondAttribute="trailing" constant="16" id="B3F-JC-QEJ">
+                        <variation key="heightClass=regular-widthClass=regular" constant="24"/>
+                    </constraint>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="top" secondItem="LeD-xP-tdg" secondAttribute="bottom" id="I36-ph-jJN"/>
+                    <constraint firstAttribute="bottom" secondItem="3h8-Ux-bPw" secondAttribute="bottom" id="ILf-8r-30S">
+                        <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
+                    </constraint>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="leading" secondItem="LeD-xP-tdg" secondAttribute="leading" id="KKA-og-rxQ"/>
+                    <constraint firstItem="KLX-On-Fb3" firstAttribute="leading" secondItem="gVo-q1-Cq4" secondAttribute="trailing" constant="8" id="Lph-Pu-iDK"/>
+                    <constraint firstItem="pY8-Xg-Lnt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="MPc-8z-Aps"/>
+                    <constraint firstItem="LeD-xP-tdg" firstAttribute="leading" secondItem="AtO-zN-4aI" secondAttribute="leading" id="YY4-y5-cwi"/>
+                    <constraint firstItem="3h8-Ux-bPw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="bdo-3t-Pqx"/>
+                    <constraint firstItem="LeD-xP-tdg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="dmZ-xr-Zxk"/>
+                    <constraint firstItem="AtO-zN-4aI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="f3H-qb-Up1">
+                        <variation key="heightClass=regular-widthClass=regular" constant="326"/>
+                    </constraint>
+                    <constraint firstItem="KLX-On-Fb3" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="msy-ah-Bev"/>
+                    <constraint firstItem="KLX-On-Fb3" firstAttribute="leading" secondItem="LeD-xP-tdg" secondAttribute="trailing" constant="8" id="oNq-ze-3EF"/>
+                    <constraint firstItem="pY8-Xg-Lnt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="uyI-zN-bjy"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="subviews">
+                        <exclude reference="pY8-Xg-Lnt"/>
+                        <exclude reference="3h8-Ux-bPw"/>
+                    </mask>
+                    <mask key="constraints">
+                        <exclude reference="6sc-x1-LLK"/>
+                        <exclude reference="ILf-8r-30S"/>
+                        <exclude reference="bdo-3t-Pqx"/>
+                        <exclude reference="0hQ-Oo-Zbs"/>
+                        <exclude reference="MPc-8z-Aps"/>
+                        <exclude reference="uyI-zN-bjy"/>
+                    </mask>
+                </variation>
+                <variation key="heightClass=regular-widthClass=regular">
+                    <mask key="subviews">
+                        <include reference="pY8-Xg-Lnt"/>
+                        <include reference="3h8-Ux-bPw"/>
+                    </mask>
+                    <mask key="constraints">
+                        <include reference="6sc-x1-LLK"/>
+                        <include reference="ILf-8r-30S"/>
+                        <include reference="bdo-3t-Pqx"/>
+                        <include reference="0hQ-Oo-Zbs"/>
+                        <include reference="MPc-8z-Aps"/>
+                        <include reference="uyI-zN-bjy"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="AtO-zN-4aI" firstAttribute="top" secondItem="KGk-i7-Jjw" secondAttribute="top" id="sMM-kA-6SY"/>
+            </constraints>
+            <connections>
+                <outlet property="editButton" destination="KLX-On-Fb3" id="0Mc-ht-VSW"/>
+                <outlet property="topSeparatorView" destination="AtO-zN-4aI" id="6l8-0e-14a"/>
+                <outlet property="typeLabel" destination="gVo-q1-Cq4" id="zCa-3z-Yn1"/>
+                <outlet property="valueLabel" destination="LeD-xP-tdg" id="9p5-Jr-dVK"/>
+            </connections>
+            <point key="canvasLocation" x="571" y="414.5"/>
+        </tableViewCell>
+    </objects>
+</document>
