@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="124" id="KGk-i7-Jjw" userLabel="Beacon Registry Entry Cell" customClass="SILBeaconRegistryEntryCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="124"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="123.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="BTStrong" translatesAutoresizingMaskIntoConstraints="NO" id="ots-Dw-mmv" userLabel="Beacon Icon">
+                        <rect key="frame" x="13" y="42" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="ots-Dw-mmv" secondAttribute="height" multiplier="1:1" id="UtT-hM-m4v"/>
+                            <constraint firstAttribute="height" constant="40" id="XTt-wj-Ge7"/>
+                        </constraints>
+                        <variation key="widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="UtT-hM-m4v"/>
+                            </mask>
+                        </variation>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="245" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-q1-Cq4" userLabel="Subtitle">
+                        <rect key="frame" x="64" y="86" width="82" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="x7k-UQ-JVX"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                        </variation>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AtO-zN-4aI" userLabel="Separator">
+                        <rect key="frame" x="64" y="1" width="240" height="1"/>
+                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.85098039215686272" green="0.85098039215686272" blue="0.85098039215686272" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="txe-k3-x3e"/>
+                        </constraints>
+                        <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="8" right="8"/>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nMU-CA-Edj" userLabel="Distance Indicator">
+                        <rect key="frame" x="222" y="86" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="nMU-CA-Edj" secondAttribute="height" multiplier="1:1" id="olZ-99-Lns"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Far" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TKr-o9-oez" userLabel="Distance Value">
+                        <rect key="frame" x="156" y="86" width="60" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="JsS-bC-mnc"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-27" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NvH-BF-CtF" userLabel="RSSI Value">
+                        <rect key="frame" x="250" y="86" width="25" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="25" id="ygh-Kk-qEW"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RSSI" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJ7-vm-Jfa">
+                        <rect key="frame" x="279" y="86" width="25" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="25" id="E6q-kS-mtO"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="245" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
+                        <rect key="frame" x="64" y="18" width="240" height="60"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                        </variation>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <constraints>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="centerY" secondItem="nMU-CA-Edj" secondAttribute="centerY" id="0zs-Rl-0Ps"/>
+                    <constraint firstItem="TKr-o9-oez" firstAttribute="leading" secondItem="gVo-q1-Cq4" secondAttribute="trailing" constant="10" id="45x-Yx-6Ah"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="centerY" secondItem="NvH-BF-CtF" secondAttribute="centerY" id="58D-6Z-D98"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="LeD-xP-tdg" secondAttribute="trailing" constant="16" id="ACU-2A-hiw"/>
+                    <constraint firstAttribute="trailing" secondItem="AtO-zN-4aI" secondAttribute="trailing" constant="16" id="B3F-JC-QEJ"/>
+                    <constraint firstItem="ots-Dw-mmv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="13" id="Bwm-Yf-MrF"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="height" secondItem="TKr-o9-oez" secondAttribute="height" id="Cud-ri-toO"/>
+                    <constraint firstItem="LeD-xP-tdg" firstAttribute="leading" secondItem="gVo-q1-Cq4" secondAttribute="leading" id="E6v-gT-4wD"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="height" secondItem="NvH-BF-CtF" secondAttribute="height" id="ENh-nY-h0p"/>
+                    <constraint firstItem="AtO-zN-4aI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="HEr-px-eac"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="nMU-CA-Edj" secondAttribute="trailing" constant="82" id="Juy-4d-36w"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="top" secondItem="LeD-xP-tdg" secondAttribute="bottom" constant="8" id="QOj-Vq-4S6"/>
+                    <constraint firstItem="CJ7-vm-Jfa" firstAttribute="leading" secondItem="NvH-BF-CtF" secondAttribute="trailing" constant="4" id="XRK-Vj-9vJ"/>
+                    <constraint firstItem="ots-Dw-mmv" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="XhY-WD-uwU"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="gVo-q1-Cq4" secondAttribute="bottom" constant="21" id="YNM-aZ-kDz"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="64" id="dig-Zq-0WD"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="height" secondItem="nMU-CA-Edj" secondAttribute="height" id="mNz-IL-yes"/>
+                    <constraint firstItem="AtO-zN-4aI" firstAttribute="trailing" secondItem="CJ7-vm-Jfa" secondAttribute="trailing" id="mYD-Ub-gYW"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="height" secondItem="CJ7-vm-Jfa" secondAttribute="height" id="nsL-vW-3a3"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="CJ7-vm-Jfa" secondAttribute="trailing" constant="16" id="nt8-hC-Y5R"/>
+                    <constraint firstItem="AtO-zN-4aI" firstAttribute="leading" secondItem="gVo-q1-Cq4" secondAttribute="leading" id="sDQ-Dy-lbJ"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="centerY" secondItem="CJ7-vm-Jfa" secondAttribute="centerY" id="tK9-1q-sY5"/>
+                    <constraint firstItem="nMU-CA-Edj" firstAttribute="leading" secondItem="TKr-o9-oez" secondAttribute="trailing" constant="6" id="voc-5u-RPB"/>
+                    <constraint firstItem="gVo-q1-Cq4" firstAttribute="centerY" secondItem="TKr-o9-oez" secondAttribute="centerY" id="wO5-lJ-0BA"/>
+                    <constraint firstItem="LeD-xP-tdg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="18" id="yBS-e1-ZEB"/>
+                </constraints>
+                <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                <variation key="heightClass=regular-widthClass=compact">
+                    <mask key="subviews">
+                        <include reference="AtO-zN-4aI"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="beaconDistanceImageView" destination="nMU-CA-Edj" id="SJI-LE-RkY"/>
+                <outlet property="beaconDistanceValue" destination="TKr-o9-oez" id="y1K-Ov-ASq"/>
+                <outlet property="beaconIconImageView" destination="ots-Dw-mmv" id="KQb-mc-Zod"/>
+                <outlet property="beaconName" destination="LeD-xP-tdg" id="k01-ll-mUa"/>
+                <outlet property="beaconRSSIValue" destination="NvH-BF-CtF" id="TLc-Gt-Pkn"/>
+                <outlet property="beaconSeparatorView" destination="AtO-zN-4aI" id="pe0-62-ZRU"/>
+                <outlet property="beaconType" destination="gVo-q1-Cq4" id="wf6-pT-Sjs"/>
+            </connections>
+            <point key="canvasLocation" x="552" y="446"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="BTStrong" width="47" height="47"/>
+    </resources>
+</document>

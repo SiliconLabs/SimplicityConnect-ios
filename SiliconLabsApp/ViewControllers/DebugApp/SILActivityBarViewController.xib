@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILActivityBarViewController">
+            <connections>
+                <outlet property="activityButton" destination="45H-3E-VMt" id="Clt-Jh-I7F"/>
+                <outlet property="leftwayIndicatorImageView" destination="dKS-Ul-cYT" id="5Gg-eD-2VM"/>
+                <outlet property="leftwayLeadingConstraint" destination="2vH-Zg-A76" id="h3T-ak-gKg"/>
+                <outlet property="refreshDivider" destination="oKd-7m-dVg" id="avp-Sf-FTh"/>
+                <outlet property="rightwayIndicatorImageView" destination="IOJ-yk-e2f" id="yJa-Bo-ShL"/>
+                <outlet property="rightwayTrailingConstraint" destination="N6U-0K-M1G" id="NTD-OV-Bqr"/>
+                <outlet property="stopActivityButton" destination="wGr-YB-yVD" id="vo1-Um-pP3"/>
+                <outlet property="view" destination="Lnw-wg-itc" id="fhH-ye-aqU"/>
+            </connections>
+        </placeholder>
+        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lnw-wg-itc" userLabel="Refresh">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="48"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oKd-7m-dVg" userLabel="Refresh Divider">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                    <color key="backgroundColor" red="0.81568627449999997" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="tj4-ht-Bpp"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="45H-3E-VMt">
+                    <rect key="frame" x="106.5" y="3" width="163" height="42"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="163" id="Ukr-9U-JNq"/>
+                    </constraints>
+                    <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                    <state key="normal" title="REFRESH" image="debug_refresh">
+                        <color key="titleColor" red="0.79607843140000001" green="0.0" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="didTapActivityButton:" destination="-1" eventType="touchUpInside" id="erw-RQ-atk"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="debug_scanning_indicator" translatesAutoresizingMaskIntoConstraints="NO" id="IOJ-yk-e2f" userLabel="Rightway indicator">
+                    <rect key="frame" x="-235" y="0.0" width="20" height="48"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="debug_scanning_indicator" translatesAutoresizingMaskIntoConstraints="NO" id="dKS-Ul-cYT" userLabel="Leftway indicator">
+                    <rect key="frame" x="590" y="0.0" width="20" height="48"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wGr-YB-yVD">
+                    <rect key="frame" x="105.5" y="7.5" width="163" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="163" id="tjh-f6-dV1"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                    <state key="normal" title="Button">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didTapStopActivityButton:" destination="-1" eventType="touchUpInside" id="ydu-DS-0Z8"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.90196078430000004" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="oKd-7m-dVg" firstAttribute="top" secondItem="Lnw-wg-itc" secondAttribute="top" id="1K1-Cc-Oay"/>
+                <constraint firstItem="dKS-Ul-cYT" firstAttribute="leading" secondItem="Lnw-wg-itc" secondAttribute="leading" constant="590" id="2vH-Zg-A76"/>
+                <constraint firstItem="dKS-Ul-cYT" firstAttribute="top" secondItem="Lnw-wg-itc" secondAttribute="top" id="3WO-DQ-zxp"/>
+                <constraint firstItem="wGr-YB-yVD" firstAttribute="centerY" secondItem="Lnw-wg-itc" secondAttribute="centerY" id="9ch-G8-WZ9"/>
+                <constraint firstItem="oKd-7m-dVg" firstAttribute="leading" secondItem="Lnw-wg-itc" secondAttribute="leading" id="9fT-AG-hfE"/>
+                <constraint firstAttribute="trailing" secondItem="IOJ-yk-e2f" secondAttribute="trailing" constant="590" id="N6U-0K-M1G"/>
+                <constraint firstAttribute="trailing" secondItem="oKd-7m-dVg" secondAttribute="trailing" id="R9B-ea-9N3"/>
+                <constraint firstAttribute="bottom" secondItem="IOJ-yk-e2f" secondAttribute="bottom" id="V2N-LG-11R"/>
+                <constraint firstItem="45H-3E-VMt" firstAttribute="centerX" secondItem="Lnw-wg-itc" secondAttribute="centerX" id="ZKT-w8-YhV"/>
+                <constraint firstItem="wGr-YB-yVD" firstAttribute="centerX" secondItem="Lnw-wg-itc" secondAttribute="centerX" id="jVu-yO-FKT"/>
+                <constraint firstItem="45H-3E-VMt" firstAttribute="centerY" secondItem="Lnw-wg-itc" secondAttribute="centerY" id="krq-eR-AgO"/>
+                <constraint firstAttribute="bottom" secondItem="dKS-Ul-cYT" secondAttribute="bottom" id="pDy-iJ-ggi"/>
+                <constraint firstItem="IOJ-yk-e2f" firstAttribute="top" secondItem="Lnw-wg-itc" secondAttribute="top" id="zur-vw-Z5I"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="34.5" y="-370"/>
+        </view>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+    </objects>
+    <resources>
+        <image name="debug_refresh" width="13" height="15"/>
+        <image name="debug_scanning_indicator" width="20" height="49"/>
+    </resources>
+</document>

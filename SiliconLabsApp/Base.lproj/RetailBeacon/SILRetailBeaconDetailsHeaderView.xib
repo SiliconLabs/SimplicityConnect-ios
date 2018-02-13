@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="SFj-hK-lmP" customClass="SILRetailBeaconDetailsHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4r-8Y-Y5c">
+                    <rect key="frame" x="16" y="17" width="42" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.4039215686" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YzH-MM-Mmt" userLabel="Divider">
+                    <rect key="frame" x="15" y="59" width="290" height="1"/>
+                    <color key="backgroundColor" red="0.81568627449999997" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="UER-oq-Flt"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="e4r-8Y-Y5c" secondAttribute="bottom" constant="9" id="FQn-ny-dsE"/>
+                <constraint firstAttribute="trailing" secondItem="YzH-MM-Mmt" secondAttribute="trailing" constant="15" id="K32-Aq-V5V"/>
+                <constraint firstAttribute="bottom" secondItem="YzH-MM-Mmt" secondAttribute="bottom" id="Kmn-kY-6Wd"/>
+                <constraint firstItem="e4r-8Y-Y5c" firstAttribute="top" secondItem="SFj-hK-lmP" secondAttribute="top" constant="17" id="LH7-Sr-AwD"/>
+                <constraint firstItem="YzH-MM-Mmt" firstAttribute="leading" secondItem="SFj-hK-lmP" secondAttribute="leading" constant="15" id="b4U-lp-Thj"/>
+                <constraint firstItem="e4r-8Y-Y5c" firstAttribute="leading" secondItem="SFj-hK-lmP" secondAttribute="leading" constant="16" id="irJ-22-Ccq"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="dividerView" destination="YzH-MM-Mmt" id="XkR-Tn-Pin"/>
+                <outlet property="headerLabel" destination="e4r-8Y-Y5c" id="F1v-ax-gta"/>
+            </connections>
+            <point key="canvasLocation" x="324" y="330"/>
+        </view>
+    </objects>
+</document>

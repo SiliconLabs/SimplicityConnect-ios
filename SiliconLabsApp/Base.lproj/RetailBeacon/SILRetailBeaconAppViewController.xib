@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+        <array key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILRetailBeaconAppViewController">
+            <connections>
+                <outlet property="beaconListTableView" destination="E0x-Li-r2x" id="fZz-qN-osX"/>
+                <outlet property="bottomScanningImageView" destination="OYw-Ku-QOv" id="HFe-7Q-cmw"/>
+                <outlet property="bottomScanningLabel" destination="6QK-Qm-m9A" id="D5o-Bo-Bb5"/>
+                <outlet property="loadingImageView" destination="4yI-LE-5Bq" id="AiD-N5-6FW"/>
+                <outlet property="loadingView" destination="CTu-hE-DHs" id="T3q-je-fqh"/>
+                <outlet property="view" destination="V5w-TJ-t3n" id="3aQ-OL-a0Z"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="V5w-TJ-t3n">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CTu-hE-DHs" userLabel="Loading View">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RetailBigRadar" translatesAutoresizingMaskIntoConstraints="NO" id="4yI-LE-5Bq">
+                            <rect key="frame" x="92.5" y="208.5" width="190" height="190"/>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Looking for Beacons..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nRZ-8g-X7u">
+                            <rect key="frame" x="70" y="434.5" width="234" height="28.5"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="36"/>
+                            <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <variation key="widthClass=compact">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="24"/>
+                            </variation>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.92941176470588238" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="nRZ-8g-X7u" firstAttribute="centerX" secondItem="4yI-LE-5Bq" secondAttribute="centerX" id="36b-dK-KDa"/>
+                        <constraint firstAttribute="centerX" secondItem="4yI-LE-5Bq" secondAttribute="centerX" id="TrX-P1-IeG"/>
+                        <constraint firstItem="nRZ-8g-X7u" firstAttribute="top" secondItem="4yI-LE-5Bq" secondAttribute="bottom" constant="52" id="mHN-K2-QcQ">
+                            <variation key="widthClass=compact" constant="36"/>
+                        </constraint>
+                        <constraint firstAttribute="centerY" secondItem="4yI-LE-5Bq" secondAttribute="centerY" constant="45" id="r3i-9e-dNQ">
+                            <variation key="widthClass=compact" constant="30"/>
+                        </constraint>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qRi-nu-LHi" userLabel="Beacon View">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BNe-6S-I16" userLabel="Body View">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <subviews>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-Li-r2x" userLabel="Beacon details table">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="619"/>
+                                    <color key="backgroundColor" red="0.92941176470588238" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-1" id="l1Y-aR-AFo"/>
+                                        <outlet property="delegate" destination="-1" id="Puz-it-awp"/>
+                                    </connections>
+                                </tableView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rno-a3-IGH" userLabel="Body Divider">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="atA-fI-20m">
+                                            <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                                        </constraint>
+                                    </constraints>
+                                    <variation key="heightClass=regular-widthClass=compact">
+                                        <mask key="constraints">
+                                            <include reference="atA-fI-20m"/>
+                                        </mask>
+                                    </variation>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" red="0.92941176470588238" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstItem="Rno-a3-IGH" firstAttribute="top" secondItem="BNe-6S-I16" secondAttribute="top" id="8Dj-dw-k6t"/>
+                                <constraint firstItem="E0x-Li-r2x" firstAttribute="leading" secondItem="BNe-6S-I16" secondAttribute="leading" id="H2V-QN-Xbw"/>
+                                <constraint firstAttribute="trailing" secondItem="Rno-a3-IGH" secondAttribute="trailing" id="Iys-8o-Eag"/>
+                                <constraint firstItem="Rno-a3-IGH" firstAttribute="leading" secondItem="BNe-6S-I16" secondAttribute="leading" id="Zay-20-yIo"/>
+                                <constraint firstAttribute="trailing" secondItem="E0x-Li-r2x" secondAttribute="trailing" id="mjO-1u-RDy"/>
+                                <constraint firstItem="E0x-Li-r2x" firstAttribute="top" secondItem="BNe-6S-I16" secondAttribute="top" id="mll-Ix-qYE"/>
+                            </constraints>
+                            <variation key="heightClass=regular-widthClass=compact">
+                                <mask key="subviews">
+                                    <include reference="Rno-a3-IGH"/>
+                                </mask>
+                                <mask key="constraints">
+                                    <include reference="8Dj-dw-k6t"/>
+                                    <include reference="Iys-8o-Eag"/>
+                                    <include reference="Zay-20-yIo"/>
+                                </mask>
+                            </variation>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Z3-DX-WyO" userLabel="Footer View">
+                            <rect key="frame" x="0.0" y="619" width="375" height="48"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4b-Gq-nHp" userLabel="Footer Divider">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="UmR-f6-yxs">
+                                            <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                                        </constraint>
+                                    </constraints>
+                                    <variation key="heightClass=regular-widthClass=compact">
+                                        <mask key="constraints">
+                                            <include reference="UmR-f6-yxs"/>
+                                        </mask>
+                                    </variation>
+                                </view>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RetailSmallRadar" translatesAutoresizingMaskIntoConstraints="NO" id="OYw-Ku-QOv" userLabel="Bottom Scanning Radial">
+                                    <rect key="frame" x="8" y="8" width="32" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="OYw-Ku-QOv" secondAttribute="height" multiplier="1:1" id="Q3e-j3-8F4"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Still scanning..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QK-Qm-m9A">
+                                    <rect key="frame" x="56" y="13.5" width="122.5" height="21"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                    <color key="textColor" red="0.40261614322662354" green="0.39476463198661804" blue="0.39494368433952332" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                    <variation key="heightClass=regular-widthClass=regular">
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
+                                    </variation>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.8784313725490196" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstItem="OYw-Ku-QOv" firstAttribute="top" secondItem="8Z3-DX-WyO" secondAttribute="top" constant="8" id="1k1-Mu-O6N">
+                                    <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                                </constraint>
+                                <constraint firstAttribute="height" constant="48" id="KUG-Bb-BZP">
+                                    <variation key="heightClass=regular-widthClass=regular" constant="96"/>
+                                </constraint>
+                                <constraint firstItem="OYw-Ku-QOv" firstAttribute="leading" secondItem="8Z3-DX-WyO" secondAttribute="leading" constant="8" id="Mud-Md-YBQ">
+                                    <variation key="heightClass=regular-widthClass=regular" constant="28"/>
+                                </constraint>
+                                <constraint firstItem="b4b-Gq-nHp" firstAttribute="top" secondItem="8Z3-DX-WyO" secondAttribute="top" id="Xdq-uc-4e8"/>
+                                <constraint firstAttribute="bottom" secondItem="OYw-Ku-QOv" secondAttribute="bottom" constant="8" id="d4K-Ia-D5g">
+                                    <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                                </constraint>
+                                <constraint firstItem="6QK-Qm-m9A" firstAttribute="centerY" secondItem="OYw-Ku-QOv" secondAttribute="centerY" id="mlh-Jh-Hb9"/>
+                                <constraint firstItem="b4b-Gq-nHp" firstAttribute="leading" secondItem="8Z3-DX-WyO" secondAttribute="leading" id="uNk-nx-Lhv"/>
+                                <constraint firstItem="6QK-Qm-m9A" firstAttribute="leading" secondItem="OYw-Ku-QOv" secondAttribute="trailing" constant="16" id="yT9-NX-538"/>
+                                <constraint firstAttribute="trailing" secondItem="b4b-Gq-nHp" secondAttribute="trailing" id="zXJ-Fc-Cu6"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="8Z3-DX-WyO" firstAttribute="leading" secondItem="qRi-nu-LHi" secondAttribute="leading" id="3Ss-w7-zQz"/>
+                        <constraint firstAttribute="trailing" secondItem="BNe-6S-I16" secondAttribute="trailing" id="4zU-mW-1HA"/>
+                        <constraint firstAttribute="trailing" secondItem="8Z3-DX-WyO" secondAttribute="trailing" id="JmF-aZ-1xd"/>
+                        <constraint firstAttribute="bottom" secondItem="8Z3-DX-WyO" secondAttribute="bottom" id="XlH-MQ-wAy"/>
+                        <constraint firstItem="8Z3-DX-WyO" firstAttribute="top" secondItem="E0x-Li-r2x" secondAttribute="bottom" id="ZZT-S3-dJX"/>
+                        <constraint firstAttribute="bottom" secondItem="BNe-6S-I16" secondAttribute="bottom" id="fUw-EY-C7H"/>
+                        <constraint firstItem="BNe-6S-I16" firstAttribute="top" secondItem="qRi-nu-LHi" secondAttribute="top" id="oUe-xT-hk0"/>
+                        <constraint firstItem="BNe-6S-I16" firstAttribute="leading" secondItem="qRi-nu-LHi" secondAttribute="leading" id="zcp-Ko-9v6"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="qRi-nu-LHi" firstAttribute="leading" secondItem="V5w-TJ-t3n" secondAttribute="leading" id="0Xg-bp-Shb"/>
+                <constraint firstAttribute="trailing" secondItem="CTu-hE-DHs" secondAttribute="trailing" id="ZlS-fy-7IJ"/>
+                <constraint firstAttribute="bottom" secondItem="qRi-nu-LHi" secondAttribute="bottom" id="bWF-gk-2JU"/>
+                <constraint firstItem="CTu-hE-DHs" firstAttribute="leading" secondItem="V5w-TJ-t3n" secondAttribute="leading" id="gqa-tS-eoT"/>
+                <constraint firstItem="CTu-hE-DHs" firstAttribute="top" secondItem="V5w-TJ-t3n" secondAttribute="top" id="q6V-hC-Qd5"/>
+                <constraint firstAttribute="trailing" secondItem="qRi-nu-LHi" secondAttribute="trailing" id="qrQ-iZ-5m0"/>
+                <constraint firstItem="qRi-nu-LHi" firstAttribute="top" secondItem="V5w-TJ-t3n" secondAttribute="top" id="woD-cH-8wY"/>
+                <constraint firstAttribute="bottom" secondItem="CTu-hE-DHs" secondAttribute="bottom" id="xls-Di-uix"/>
+            </constraints>
+            <point key="canvasLocation" x="552" y="431"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="RetailBigRadar" width="190" height="190"/>
+        <image name="RetailSmallRadar" width="32" height="32"/>
+    </resources>
+</document>
