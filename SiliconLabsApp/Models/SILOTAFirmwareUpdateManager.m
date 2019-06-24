@@ -20,7 +20,9 @@
 #endif
 
 static NSTimeInterval const kSILDurationBeforeUpdatingDFUStatusToWaiting = 2.0;
-static NSTimeInterval const kSILDurationBeforeAttemptingToReconnect = 4.0;
+static NSTimeInterval const kSILDurationBeforeUpdatingDFUStatusToTimeout = 20.0;
+static NSString * const kSILDurationBeforeUpdatingDFUStatusToTimeoutErrorDomain = @"com.silabs.BlueGeckoDemoApp.SILOTAFirmwareUpdateManager.Timeout";
+static NSString * const kSILDurationBeforeUpdatingDFUStatusToTimeoutMessage = @"Unable to find \"OTA\" device.";
 static NSInteger const kSILOTAByteAlignment = 4;
 static unsigned char kSILOTAByteAlignmentPadding[] = {0xFF, 0xFF, 0xFF, 0xFF};
 static char const kSILInitiateDFUData = 0x00;
@@ -48,6 +50,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 @property (nonatomic) NSInteger length;
 @property (strong, nonatomic) NSData *fileData;
 @property (nonatomic) BOOL expectingToDisconnectFromPeripheral;
+@property (nonatomic) BOOL didDiscoverOTADevice;
 
 @property (nonatomic, copy) void (^dfuCompletion)(CBPeripheral *, NSError *);
 @property (nonatomic, copy) void (^fileCompletion)(CBPeripheral *, NSError *);
@@ -129,16 +132,56 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
         [self disconnectConnectedPeripheral];
     }
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleDidFailToConnectPeripheral:)
+                                                 name:SILCentralManagerDidFailToConnectPeripheralNotification
+                                               object:nil];
+    
     progress(SILDFUStatusRebooting);
 
+    __weak typeof(self) weakSelf = self;
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeUpdatingDFUStatusToWaiting * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        progress(SILDFUStatusWaiting);
+        __strong typeof(self) self = weakSelf;
+        
+        if (self) {
+            progress(SILDFUStatusWaiting);
+            self.didDiscoverOTADevice = NO;
+            [self.centralManager addScanForPeripheralsObserver:self selector:@selector(searchHandlerForOTADevice)];
+        }
     });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeUpdatingDFUStatusToTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __strong typeof(self) self = weakSelf;
+        
+        if (self && !self.didDiscoverOTADevice) {
+            [self.centralManager removeScanForPeripheralsObserver:self];
+            NSError * const error = [NSError errorWithDomain:kSILDurationBeforeUpdatingDFUStatusToTimeoutErrorDomain
+                                                        code:-1
+                                                    userInfo:@{ NSLocalizedDescriptionKey : kSILDurationBeforeUpdatingDFUStatusToTimeoutMessage }];
+            [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:nil error:error];
+        }
+    });
+}
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeAttemptingToReconnect * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        SILDiscoveredPeripheral *discoveredPeripheral = [[SILDiscoveredPeripheral alloc] initWithPeripheral:self.peripheral advertisementData:nil RSSI:nil];
-        [self.centralManager connectToDiscoveredPeripheral:discoveredPeripheral];
-    });
+- (void)searchHandlerForOTADevice {
+    if (self.didDiscoverOTADevice) { return; }
+    
+    for (SILDiscoveredPeripheral *discoveredPeripheral in self.centralManager.discoveredPeripherals) {
+        NSString * const name = discoveredPeripheral.advertisedLocalName;
+        
+        if ([@"OTA" isEqualToString:name]) {
+            self.didDiscoverOTADevice = YES;
+            self.peripheral = discoveredPeripheral.peripheral;
+            [self.centralManager connectToDiscoveredPeripheral:discoveredPeripheral];
+            break;
+        }
+    }
+}
+
+- (void)handleDidFailToConnectPeripheral:(NSNotification *)notification {
+    NSError * const error = notification.userInfo[SILCentralManagerErrorKey];
+    [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:nil error:error];
 }
 
 - (void)uploadFile:(SILOTAFirmwareFile *)file
@@ -203,7 +246,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
             if (self.fileProgress) {
                 double fraction = (double)_location / (double)_fileData.length;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.fileProgress(_location, fraction);
+                    self.fileProgress(self.location, fraction);
                 });
             }
         } else {
@@ -233,12 +276,12 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
     // moment. We have to dispatch openWithCompletionHandler: on the main queue in order to not have an exception thrown.
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([file.fileData length] > 0) {
-            _fileData = file.fileData;
-            _location = 0;
+            self.fileData = file.fileData;
+            self.location = 0;
             // Even though the data characteristic is advertised as WriteWithResponse and WriteWithoutResponse, choose
             // WriteWithoutResponse.
-            _length = [SILOTAFirmwareUpdateManager maximumByteAlignedWriteValueLengthForPeripheral:self.peripheral forType:CBCharacteristicWriteWithoutResponse];
-            if (_location < _fileData.length) {
+            self.length = [SILOTAFirmwareUpdateManager maximumByteAlignedWriteValueLengthForPeripheral:self.peripheral forType:CBCharacteristicWriteWithoutResponse];
+            if (self.location < self.fileData.length) {
                 [self writeFileDataToCharacteristic:[self.peripheral otaDataCharacteristic]];
             }
         } else {
@@ -251,25 +294,27 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 - (void)writeFileDataToCharacteristic:(CBCharacteristic *)characteristic {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSData *data;
-        if (_location + _length > _fileData.length) {
-            NSInteger currentLength = _fileData.length - _location;
-            NSMutableData *mutableData = [[NSMutableData alloc] initWithData:[_fileData subdataWithRange:NSMakeRange(_location, currentLength)]];
+        if (self.location + self.length > self.fileData.length) {
+            NSInteger currentLength = self.fileData.length - self.location;
+            NSMutableData *mutableData = [[NSMutableData alloc] initWithData:[self.fileData subdataWithRange:NSMakeRange(self.location, currentLength)]];
             NSInteger lengthPastByteAlignmentBoundary = currentLength % kSILOTAByteAlignment;
             if (lengthPastByteAlignmentBoundary > 0) {
                 NSInteger requiredAdditionalLength = kSILOTAByteAlignment - lengthPastByteAlignmentBoundary;
                 [mutableData appendBytes:kSILOTAByteAlignmentPadding length:requiredAdditionalLength];
             }
             data = [[NSData alloc] initWithData:mutableData];
-            _location = _location + currentLength;
+            self.location = self.location + currentLength;
         } else {
-            data = [_fileData subdataWithRange:NSMakeRange(_location, _length)];
-            _location = _location + _length;
+            data = [self.fileData subdataWithRange:NSMakeRange(self.location, self.length)];
+            self.location = self.location + self.length;
         }
-        [_peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+        [self.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
     });
 }
 
 - (void)handleCompletionWithMode:(SILFirmwareMode)firmwareMode peripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SILCentralManagerDidFailToConnectPeripheralNotification object:nil];
+    
     if (firmwareMode == SILFirmwareModeDFU) {
         if (self.dfuCompletion) {
             self.dfuCompletion(peripheral, error);

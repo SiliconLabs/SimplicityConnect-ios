@@ -33,9 +33,9 @@ final class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
             return textField.attributedPlaceholder?.string
         }
         set {
-            let attributes: [String : Any] = [
-                NSFontAttributeName : Constants.placeholderFont,
-                NSForegroundColorAttributeName : Constants.placeholderColor
+            let attributes: [NSAttributedString.Key : Any] = [
+                NSAttributedString.Key.font : Constants.placeholderFont,
+                NSAttributedString.Key.foregroundColor : Constants.placeholderColor
             ]
             if let newValue = newValue {
                 textField.attributedPlaceholder = NSAttributedString(string: newValue, attributes: attributes)
@@ -69,7 +69,7 @@ final class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
         setup()
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
     }

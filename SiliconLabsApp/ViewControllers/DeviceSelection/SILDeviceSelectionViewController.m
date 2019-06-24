@@ -152,9 +152,24 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 
     cell.deviceNameLabel.text = discoveredPeripheral.advertisedLocalName;
     
+    if ([cell.deviceNameLabel.text length] == 0) {
+        cell.deviceNameLabel.text = @"<unknown>";
+    }
+    
     if (self.viewModel.app.appType == SILAppTypeConnectedLighting) {
+        NSString *dmpImage;
+        
+        if (discoveredPeripheral.isDMPConnectedLightConnect) {
+            dmpImage = @"iconBleConnect";
+        } else if (discoveredPeripheral.isDMPConnectedLightThread) {
+            dmpImage = @"iconThread";
+        } else if (discoveredPeripheral.isDMPConnectedLightZigbee) {
+            dmpImage = @"iconZigbee";
+        } else {
+            dmpImage = @"iconProprietary";
+        }
+        
         cell.dmpTypeImageView.hidden = NO;
-        NSString *dmpImage = discoveredPeripheral.isDMPConnectedLightZigbee ? @"iconZigbee" : @"iconProprietary";
         cell.dmpTypeImageView.image = [UIImage imageNamed:dmpImage];
     } else {
         cell.dmpTypeImageView.hidden = YES;

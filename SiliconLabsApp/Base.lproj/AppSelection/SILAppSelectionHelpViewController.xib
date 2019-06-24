@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILAppSelectionHelpViewController">
             <connections>
+                <outlet property="descriptionTextView" destination="xFi-iS-e1Z" id="psB-Bh-19p"/>
                 <outlet property="versionLabel" destination="WKY-pL-tjS" id="uE2-W5-jKx"/>
                 <outlet property="view" destination="Mlc-w7-zrC" id="VUX-Qz-n48"/>
             </connections>
@@ -24,7 +24,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="48"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HdR-te-efS">
-                            <rect key="frame" x="170.5" y="14" width="35" height="20"/>
+                            <rect key="frame" x="170" y="14" width="35" height="20"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                             <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -60,28 +60,16 @@
                                 </constraint>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="rLk-qH-yy1">
-                            <rect key="frame" x="22" y="53" width="331" height="17"/>
-                            <attributedString key="attributedText">
-                                <fragment>
-                                    <string key="content">Quickly deliver Bluetooth® Smart connectivity with Silicon Labs Blue Gecko energy-friendly wireless system-on-chip (SoC) devices. Take advantage of a Bluetooth Smart applications, software stack and BGScript based development that transitions your software from module-based to discrete circuit designs.</string>
-                                    <attributes>
-                                        <color key="NSBackgroundColor" red="1" green="0.99997437000274658" blue="0.99999129772186279" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="NSColor" red="0.40261614322662354" green="0.39476463198661804" blue="0.39494368433952332" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <font key="NSFont" size="14" name="HelveticaNeue"/>
-                                        <real key="NSKern" value="0.0"/>
-                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36">
-                                            <tabStops/>
-                                        </paragraphStyle>
-                                        <color key="NSStrokeColor" red="0.096035212278366089" green="0.2151549905538559" blue="0.41409125924110413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <real key="NSStrokeWidth" value="0.0"/>
-                                    </attributes>
-                                </fragment>
-                            </attributedString>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="331" placeholderIntrinsicHeight="100" scrollEnabled="NO" contentInsetAdjustmentBehavior="never" editable="NO" text="Placeholder description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xFi-iS-e1Z">
+                            <rect key="frame" x="22" y="53" width="331" height="100"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" red="0.40261614322662354" green="0.39476463198661804" blue="0.39494368433952332" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                        </textView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VERSION:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WKY-pL-tjS">
-                            <rect key="frame" x="22" y="80" width="55" height="14"/>
+                            <rect key="frame" x="22" y="163" width="55" height="14"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                             <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -98,24 +86,22 @@
                         <constraint firstItem="SPg-Sb-313" firstAttribute="width" secondItem="3lt-nk-Du5" secondAttribute="width" constant="-72" id="4Xz-96-SU0">
                             <variation key="widthClass=compact" constant="-44"/>
                         </constraint>
+                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="width" secondItem="SPg-Sb-313" secondAttribute="width" id="Bmw-7z-y6c"/>
                         <constraint firstItem="e2F-lE-fcX" firstAttribute="leading" secondItem="SPg-Sb-313" secondAttribute="leading" id="Fzm-6C-atc"/>
                         <constraint firstAttribute="bottom" secondItem="WKY-pL-tjS" secondAttribute="bottom" constant="18" id="SCb-rO-p0Z"/>
-                        <constraint firstItem="WKY-pL-tjS" firstAttribute="top" secondItem="rLk-qH-yy1" secondAttribute="bottom" constant="10" id="VRF-Zp-c6C"/>
-                        <constraint firstItem="rLk-qH-yy1" firstAttribute="centerX" secondItem="SPg-Sb-313" secondAttribute="centerX" id="ZFd-Oi-7j1"/>
+                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="leading" secondItem="SPg-Sb-313" secondAttribute="leading" id="WC5-Da-VhD"/>
+                        <constraint firstItem="WKY-pL-tjS" firstAttribute="top" secondItem="xFi-iS-e1Z" secondAttribute="bottom" constant="10" id="aAq-eB-zd1"/>
                         <constraint firstItem="SPg-Sb-313" firstAttribute="top" secondItem="e2F-lE-fcX" secondAttribute="bottom" constant="18" id="cZ0-m9-veQ">
                             <variation key="widthClass=compact" constant="10"/>
                         </constraint>
                         <constraint firstItem="SPg-Sb-313" firstAttribute="leading" secondItem="3lt-nk-Du5" secondAttribute="leading" constant="36" id="fW7-Vc-iBb">
                             <variation key="widthClass=compact" constant="22"/>
                         </constraint>
-                        <constraint firstItem="rLk-qH-yy1" firstAttribute="width" secondItem="SPg-Sb-313" secondAttribute="width" id="kfI-g1-m9v"/>
                         <constraint firstAttribute="trailing" secondItem="SPg-Sb-313" secondAttribute="trailing" constant="36" id="opb-TC-JDj">
                             <variation key="widthClass=compact" constant="22"/>
                         </constraint>
-                        <constraint firstItem="WKY-pL-tjS" firstAttribute="leading" secondItem="rLk-qH-yy1" secondAttribute="leading" id="xft-gd-j0c"/>
-                        <constraint firstItem="rLk-qH-yy1" firstAttribute="top" secondItem="SPg-Sb-313" secondAttribute="bottom" constant="18" id="zmU-QJ-9TK">
-                            <variation key="widthClass=compact" constant="10"/>
-                        </constraint>
+                        <constraint firstItem="WKY-pL-tjS" firstAttribute="leading" secondItem="SPg-Sb-313" secondAttribute="leading" id="r16-8Z-yOj"/>
+                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="top" secondItem="SPg-Sb-313" secondAttribute="bottom" constant="10" id="yh2-Em-dgY"/>
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iqn-Cl-cQh" userLabel="Footer View">
@@ -165,6 +151,7 @@
                 <constraint firstItem="Iqn-Cl-cQh" firstAttribute="leading" secondItem="Mlc-w7-zrC" secondAttribute="leading" id="kdW-49-JXy"/>
                 <constraint firstItem="u0T-dv-dWX" firstAttribute="top" secondItem="Mlc-w7-zrC" secondAttribute="top" id="q2y-bE-YPh"/>
             </constraints>
+            <point key="canvasLocation" x="64.799999999999997" y="52.623688155922046"/>
         </view>
     </objects>
 </document>

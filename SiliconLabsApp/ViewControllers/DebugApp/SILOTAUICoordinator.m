@@ -246,61 +246,97 @@ SILOTAFirmwareUpdateManagerDelegate>
 }
 
 - (void)otaSetupViewControllerDidInitiateFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
-    __weak SILOTAUICoordinator *weakSelf = self;
-
-    void (^appFileUploadCompletion)(CBPeripheral *, NSError *) = ^void(CBPeripheral *peripheral, NSError *error) {
-        weakSelf.progressViewModel.uploadingFile = NO;
-        if (error == nil) {
-            weakSelf.progressViewModel.finished = YES;
-        } else {
-            [weakSelf dismissPopoverWithCompletion:^{
-                [weakSelf presentAlertControllerWithError:error animated:YES];
-            }];
+    const BOOL isFullUpdate = firmwareUpdate.updateMode == SILOTAModeFull;
+    const BOOL isPartialUpdate = firmwareUpdate.updateMode == SILOTAModePartial;
+    
+    if (!(isFullUpdate || isPartialUpdate)) {
+        return;
+    }
+    
+    __weak SILOTAUICoordinator * const weakSelf = self;
+    SILOTAFirmwareFile * const firmwareFile = isFullUpdate ? firmwareUpdate.stackFile : firmwareUpdate.appFile;
+    NSString * const firmwareFileType = isFullUpdate ? @"STACK" : @"APP";
+    const int numberOfFilesToUpload = isFullUpdate ? 2 : 1;
+    void (^const uploadFileCompletion)(CBPeripheral *peripheral, NSError *error) = ^(CBPeripheral *peripheral, NSError *error) {
+        if (isFullUpdate) {
+            [weakSelf handleStackFileUploadCompletionForPeripheral:peripheral error:error withFirmwareUpdate:firmwareUpdate];
+        } else if (isPartialUpdate) {
+            [weakSelf handleAppFileUploadCompletionForPeripheral:peripheral error:error];
         }
     };
+    
+    [self showOTAProgressForFirmwareFile:firmwareFile ofType:firmwareFileType outOf:numberOfFilesToUpload withCompletion:^{
+        [weakSelf.otaFirmwareUpdateManager uploadFile:firmwareFile
+                                             progress:^(NSInteger bytes, double fraction) {
+                                                 [weakSelf handleFileUploadProgress:fraction uploadedBytes:bytes];
+                                             }
+                                           completion:uploadFileCompletion];
+    }];
+}
 
-    if (firmwareUpdate.updateMode == SILOTAModeFull) {
-        [self showOTAProgressForFirmwareFile:firmwareUpdate.stackFile ofType:@"STACK" outOf:2 withCompletion:^ {
-            [self.otaFirmwareUpdateManager uploadFile:firmwareUpdate.stackFile progress:^(NSInteger bytes, double fraction) {
-                weakSelf.progressViewModel.progressFraction = (CGFloat)fraction;
-                weakSelf.progressViewModel.progressBytes = bytes;
-            } completion:^(CBPeripheral *peripheral, NSError *error) {
-                if (error != nil) {
-                    [weakSelf dismissPopoverWithCompletion:^{
-                        [weakSelf presentAlertControllerWithError:error animated:YES];
-                    }];
-                    return;
-                }
-                [weakSelf.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:NO
-                                                                                progress:^(SILDFUStatus status) {
-                                                                                    weakSelf.progressViewModel.uploadingFile = NO;
-                                                                                    weakSelf.progressViewModel.statusString = [self stringForDFUStatus:status];
-                                                                                } completion:^(CBPeripheral *peripheral, NSError *error) {
-                                                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                        if (error != nil) {
-                                                                                            [weakSelf dismissPopoverWithCompletion:^{
-                                                                                                [weakSelf presentAlertControllerWithError:error animated:YES];
-                                                                                            }];
-                                                                                            return;
-                                                                                        }
+- (void)handleError:(NSError *)error {
+    [self dismissPopoverWithCompletion:^{
+        [self presentAlertControllerWithError:error animated:YES];
+    }];
+}
 
-                                                                                        weakSelf.progressViewModel.file = firmwareUpdate.appFile;
-                                                                                        weakSelf.progressViewModel.uploadType = @"APP";
-                                                                                        weakSelf.progressViewModel.uploadingFile = YES;
-                                                                                        [weakSelf.otaFirmwareUpdateManager uploadFile:firmwareUpdate.appFile progress:^(NSInteger bytes, double progress) {
-                                                                                            weakSelf.progressViewModel.progressFraction = (CGFloat)progress;
-                                                                                            weakSelf.progressViewModel.progressBytes = bytes;
-                                                                                        } completion:appFileUploadCompletion];
-                                                                                    });
-                                                                                }];
-            }];
-        }];
-    } else if (firmwareUpdate.updateMode == SILOTAModePartial) {
-        [self showOTAProgressForFirmwareFile:firmwareUpdate.appFile ofType:@"APP" outOf:1 withCompletion:^ {
-            [self.otaFirmwareUpdateManager uploadFile:firmwareUpdate.appFile progress:^(NSInteger bytes, double progress) {
-                weakSelf.progressViewModel.progressFraction = (CGFloat)progress;
-                weakSelf.progressViewModel.progressBytes = bytes;
-            } completion:appFileUploadCompletion];
+- (void)handleFileUploadProgress:(double)progress uploadedBytes:(NSInteger)bytes {
+    self.progressViewModel.progressFraction = (CGFloat)progress;
+    self.progressViewModel.progressBytes = bytes;
+}
+
+- (void)handleCycleDeviceProgress:(SILDFUStatus)status {
+    self.progressViewModel.uploadingFile = NO;
+    self.progressViewModel.statusString = [self stringForDFUStatus:status];
+}
+
+- (void)handleCycleDeviceCompletionForPeripheral:(CBPeripheral *)peripheral error:(NSError *)error withFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
+    __weak SILOTAUICoordinator *weakSelf = self;
+    
+    if (error != nil) {
+        [self handleError:error];
+        return;
+    }
+    
+    self.progressViewModel.file = firmwareUpdate.appFile;
+    self.progressViewModel.uploadType = @"APP";
+    self.progressViewModel.uploadingFile = YES;
+    [self.otaFirmwareUpdateManager uploadFile:firmwareUpdate.appFile
+                                         progress:^(NSInteger bytes, double fraction) {
+                                             [weakSelf handleFileUploadProgress:fraction uploadedBytes:bytes];
+                                         }
+                                       completion:^void(CBPeripheral *peripheral, NSError *error) {
+                                           [weakSelf handleAppFileUploadCompletionForPeripheral:peripheral error:error];
+                                       }];
+}
+
+- (void)handleStackFileUploadCompletionForPeripheral:(CBPeripheral *)peripheral error:(NSError *)error withFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
+    __weak SILOTAUICoordinator *weakSelf = self;
+    
+    if (error != nil) {
+        [self handleError:error];
+        return;
+    }
+    
+    [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:NO
+                                                                progress:^(SILDFUStatus status) {
+                                                                    [weakSelf handleCycleDeviceProgress:status];
+                                                                }
+                                                              completion:^(CBPeripheral *peripheral, NSError *error) {
+                                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                                        [weakSelf handleCycleDeviceCompletionForPeripheral:peripheral error:error withFirmwareUpdate:firmwareUpdate];
+                                                                    });
+                                                                }];
+}
+
+- (void)handleAppFileUploadCompletionForPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    self.progressViewModel.uploadingFile = NO;
+    
+    if (error == nil) {
+        self.progressViewModel.finished = YES;
+    } else {
+        [self dismissPopoverWithCompletion:^{
+            [self presentAlertControllerWithError:error animated:YES];
         }];
     }
 }

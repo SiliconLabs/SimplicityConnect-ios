@@ -40,6 +40,9 @@ NSString * const kAltBeaconUUIDString = @"511AB500511AB500511AB500511AB500";
 NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
 NSString * const kIBeaconDMPZigbeeIdentifier = @"com.silabs.retailbeacon.dmpZigbee";
 NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dmpProprietary";
+NSString * const kScanningForBeacons = @"Scanning for beacons...";
+NSString * const kAdditionalBeacons = @"Scanning for additional beacons...";
+NSString * const kScanForNewBeacons = @"Scan for new beacons";
 
 @interface SILRetailBeaconAppViewController () <CBCentralManagerDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, EddystoneScannerDelegate, WYPopoverControllerDelegate, SILRetailBeaconDetailsViewControllerDelegate>
 
@@ -60,9 +63,13 @@ NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dm
 @property (weak, nonatomic) IBOutlet UITableView *beaconListTableView;
 @property (weak, nonatomic) IBOutlet UIImageView *loadingImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *bottomScanningImageView;
+@property (weak, nonatomic) IBOutlet UIButton *bottomScanningImageButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *footerHeightConstraint;
 @property (strong, nonatomic) EddystoneScanner *eddystoneScanner;
 
 @property (strong, nonatomic) WYPopoverController *devicePopoverController;
+
+@property (assign, nonatomic) BOOL firstLayout;
 
 @end
 
@@ -74,7 +81,10 @@ NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dm
     [super viewDidLoad];
     
     self.title = self.app.title;
+    self.firstLayout = YES;
+    self.bottomScanningLabel.text = kScanningForBeacons;
     self.beaconRegistry = [[SILBeaconRegistry alloc] init];
+
     [self startScanningImages];
     
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self
@@ -90,6 +100,15 @@ NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dm
     [super viewDidAppear:animated];
     
     [self startTimers];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    BOOL deviceIsIPhoneX = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIScreen.mainScreen.nativeBounds.size.height == 2436);
+    if (deviceIsIPhoneX && self.firstLayout) {
+        self.footerHeightConstraint.constant = 75;
+        self.firstLayout = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -191,23 +210,21 @@ NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dm
 
 - (void)reloadData {
     BOOL beaconFound = [self.beaconRegistry beaconRegistryEntries].count > 0;
-    
+
     if (beaconFound) {
-        self.loadingView.alpha = 0.0;
-        [self updateBeaconList];
-    } else {
-        self.loadingView.alpha = 1.0;
+        if (self.isScanning) {
+            self.bottomScanningLabel.text = kAdditionalBeacons;
+        }
     }
+
+    [self updateBeaconList];
 }
 
 - (void)startScanningImages {
-    [self.loadingView.superview bringSubviewToFront:self.loadingView];
-    [UIView addContinuousRotationAnimationToLayer:self.loadingImageView.layer withFullRotationDuration:2 forKey:@"rotationAnimation"];
     [UIView addContinuousRotationAnimationToLayer:self.bottomScanningImageView.layer withFullRotationDuration:2 forKey:@"rotationAnimation"];
 }
 
 - (void)pauseScanningImages {
-    [self.loadingImageView.layer removeAllAnimations];
     [self.bottomScanningImageView.layer removeAllAnimations];
 }
 
@@ -228,6 +245,22 @@ NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dm
 }
 
 #pragma mark - Scanning
+
+- (IBAction)didTapScanningToggleButton:(UIButton *)sender {
+    if (self.isScanning) {
+        [self stopScanning];
+        [self pauseScanningImages];
+    } else {
+        self.beaconRegistry = [[SILBeaconRegistry alloc] init];
+        [self.beaconListTableView reloadData];
+        [self startScanning];
+        [self startScanningImages];
+    }
+    self.bottomScanningLabel.text = self.isScanning ? kScanningForBeacons : kScanForNewBeacons;
+    self.bottomScanningImageView.alpha = self.isScanning ? 1.0 : 0.0;
+    NSString *imageString = self.isScanning ? @"cancelScanning" : @"startScanning";
+    [self.bottomScanningImageButton setImage:[UIImage imageNamed:imageString] forState: UIControlStateNormal];
+}
 
 - (void)startScanning {
     if (!self.isScanning) {

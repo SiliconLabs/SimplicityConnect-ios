@@ -21,7 +21,7 @@ static NSString * const kSILTimerFormat = @"m:ss";
 
 @property (weak) SILOTAProgressViewModel *viewModel;
 @property (strong) SILOTAHUDPeripheralViewModel *hudPeripheralViewModel;
-@property (weak, nonatomic) IBOutlet UICircularProgressRingView *progressRing;
+@property (weak, nonatomic) IBOutlet UICircularProgressRing *progressRing;
 @property (weak, nonatomic) IBOutlet UILabel *percentNumberLabel;
 @property (weak, nonatomic) IBOutlet UILabel *uploadRateNumberLabel;
 @property (weak, nonatomic) IBOutlet SILBigRedButton *doneButton;

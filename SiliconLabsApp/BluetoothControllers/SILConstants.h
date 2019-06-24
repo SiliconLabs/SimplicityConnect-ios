@@ -14,8 +14,11 @@ extern NSString * const SILServiceNumberTXPower;
 extern NSString * const SILServiceNumberHealthThermometer;
 extern NSString * const SILServiceNumberHeartRate;
 extern NSString * const SILServiceNumberHumanInterfaceDevice;
-extern NSString * const SILServiceNumberConnectedLightingZigbee;
+extern NSString * const SILServiceNumberConnectedLightingConnect;
 extern NSString * const SILServiceNumberConnectedLightingProprietary;
+extern NSString * const SILServiceNumberConnectedLightingThread;
+extern NSString * const SILServiceNumberConnectedLightingZigbee;
+extern NSString * const SILServiceNumberRangeTest;
 
 extern NSString * const SILCharacteristicNumberAlertLevel;
 extern NSString * const SILCharacteristicNumberTXPowerLevel;

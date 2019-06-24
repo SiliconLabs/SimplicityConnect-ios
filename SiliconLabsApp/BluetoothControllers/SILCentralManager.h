@@ -30,7 +30,7 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 - (nonnull instancetype)initWithServiceUUIDs:(nonnull NSArray *)serviceUUIDs;
 
 - (nonnull NSArray<SILDiscoveredPeripheral *> *)discoveredPeripherals;
-- (nonnull SILDiscoveredPeripheral *)discoveredPeripheralForPeripheral:(nonnull CBPeripheral *)peripheral;
+- (nullable SILDiscoveredPeripheral *)discoveredPeripheralForPeripheral:(nonnull CBPeripheral *)peripheral;
 
 - (void)insertOrUpdateDiscoveredPeripheral:(nonnull CBPeripheral *)peripheral advertisementData:(nullable NSDictionary *)advertisementData RSSI:(nullable NSNumber *)RSSI;
 

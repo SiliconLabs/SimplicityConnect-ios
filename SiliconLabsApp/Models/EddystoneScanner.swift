@@ -13,6 +13,7 @@ import Eddystone
     func eddystoneScanner(_ eddystoneScanner: EddystoneScanner, didFindBeacons beacons: [EddystoneBeacon])
 }
 
+@objcMembers
 final class EddystoneScanner: NSObject, ScannerDelegate {
 
     weak var delegate: EddystoneScannerDelegate?

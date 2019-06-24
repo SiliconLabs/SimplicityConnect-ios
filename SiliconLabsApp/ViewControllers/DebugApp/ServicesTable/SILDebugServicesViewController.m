@@ -41,7 +41,6 @@
 #import "SILEncodingPseudoFieldRowModel.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "SILActivityBarViewController.h"
-#import <Crashlytics/Crashlytics.h>
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
 #import "CBPeripheral+Services.h"
@@ -68,6 +67,8 @@ static float kTableRefreshInterval = 1;
 
 @property (nonatomic) BOOL tableNeedsRefresh;
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
+
+@property (nonatomic) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) SILOTAUICoordinator *otaUICoordinator;
 
@@ -99,6 +100,7 @@ static float kTableRefreshInterval = 1;
     [self setUpSubviews];
     [self startServiceSearch];
     [self setupTableHeaderView];
+    [self setupRefreshControl];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -184,6 +186,14 @@ static float kTableRefreshInterval = 1;
     self.servicesTableView.contentInset = UIEdgeInsetsMake(self.headerView.bounds.size.height, 0, 0, 0);
 }
 
+- (void)setupRefreshControl {
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(handleRefreshServices:) forControlEvents:UIControlEventValueChanged];
+    [self.servicesTableView addSubview:self.refreshControl];
+    [self.refreshControl sendSubviewToBack:self.refreshControl];
+    self.refreshControl.bounds = CGRectMake(self.refreshControl.bounds.origin.x, self.refreshControl.bounds.origin.y + 50.0, 100.0, 100.0);
+}
+
 #pragma mark -Lazy Intanstiation
 
 - (NSMutableArray *)allServiceModels {
@@ -209,6 +219,23 @@ static float kTableRefreshInterval = 1;
                                                    presentingViewController:self];
     self.otaUICoordinator.delegate = self;
     [self.otaUICoordinator initiateOTAFlow];
+}
+
+// SLMAIN-333 - This is a workaround to disconnect and reconnect to the peripheral when dynamic services/characteristics are toggled.
+// If this isn't done, services cannot be refreshed more than once.
+- (void)handleRefreshServices: (UIRefreshControl *)sender {
+    void (^serviceSearch)(void) = ^(void){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self startServiceSearch];
+        });
+    };
+
+    if (self.refreshControl == sender) {
+        self.allServiceModels = [[NSMutableArray alloc] init];
+        [self.centralManager disconnectConnectedPeripheral];
+        [self.centralManager connectToDiscoveredPeripheral: [self.centralManager discoveredPeripheralForPeripheral:self.peripheral]];
+        serviceSearch();
+    }
 }
 
 #pragma mark - SILOTAUICoordinatorDelegate
@@ -501,7 +528,6 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self markTableForUpdate];
 }
@@ -523,7 +549,7 @@ static float kTableRefreshInterval = 1;
     NSString *message;
     if (error) {
         NSLog(@"Write failed, restoring backup");
-        message = @"Write failed.";
+        message = [NSString stringWithFormat:@"Write failed. Error: code=%ld \"%@\"", (long)error.code, error.localizedDescription];
     } else {
         NSLog(@"Write successful, updating read value");
         message = @"Write successful!";
@@ -621,7 +647,7 @@ static float kTableRefreshInterval = 1;
 - (SILCharacteristicTableModel *)findCharacteristicModelForCharacteristic:(CBCharacteristic *)characteristic forServiceModel:(SILServiceTableModel *)serviceModel {
     if (serviceModel) {
         for (SILCharacteristicTableModel *characteristicModel in serviceModel.characteristicModels) {
-            if ([characteristicModel.characteristic.UUID isEqual:characteristic.UUID]) {
+            if ([characteristicModel.characteristic isEqual:characteristic]) {
                 return characteristicModel;
             }
         }
@@ -705,6 +731,7 @@ static float kTableRefreshInterval = 1;
     if (!self.tableRefreshTimer) {
         [self refreshTable];
         [self startRefreshTimer];
+        [self.refreshControl endRefreshing];
     }
 }
 

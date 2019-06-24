@@ -45,7 +45,13 @@
 }
 
 - (NSString *)uuidString {
-    return self.service.UUID.UUIDString;
+    NSString *uuidString = [self.service.UUID.UUIDString uppercaseString];
+    
+    if ([uuidString hasPrefix:@"0000"] && [uuidString hasSuffix:@"-0000-1000-8000-00805F9B34FB"]) {
+        uuidString = [uuidString substringWithRange:NSMakeRange(4, 4)];
+    }
+    
+    return uuidString;
 }
 
 @end

@@ -33,11 +33,17 @@ static CGFloat characteristicProperyViewWidth = 30.0;
 @property (weak, nonatomic) IBOutlet UIView *writeNoResponsePropertyView;
 @property (weak, nonatomic) IBOutlet UIView *indicatePropertyView;
 @property (weak, nonatomic) IBOutlet UIView *notifyPropertyView;
-@property (weak, nonatomic) IBOutlet UIButton *readButton;
-@property (weak, nonatomic) IBOutlet UIButton *writeButton;
-@property (weak, nonatomic) IBOutlet UIButton *indicateButton;
-@property (weak, nonatomic) IBOutlet UIButton *notifyButton;
-@property (weak, nonatomic) IBOutlet UIButton *writeNoResponseButton;
+@property (weak, nonatomic) IBOutlet UIImageView *readImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *writeImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *writeNoResponseImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *indicateImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *notifyImageView;
+@property (weak, nonatomic) IBOutlet UIButton *readPropertyButton;
+@property (weak, nonatomic) IBOutlet UIButton *writePropertyButton;
+@property (weak, nonatomic) IBOutlet UIButton *writeNoResponsePropertyButton;
+@property (weak, nonatomic) IBOutlet UIButton *notifyPropertyButton;
+@property (weak, nonatomic) IBOutlet UIButton *indicatePropertyButton;
+
 @property (strong, nonatomic) NSArray *allPropertyViews;
 @property (strong, nonatomic) NSArray *allActiveProperties;
 
@@ -84,6 +90,8 @@ static CGFloat characteristicProperyViewWidth = 30.0;
 }
 
 - (void)configurePropertyViewsForProperties:(NSArray *)properties {
+    [self layoutIfNeeded];
+
     for (UIView *view in self.allPropertyViews) {
         [view setHidden:YES];
     }
@@ -92,23 +100,43 @@ static CGFloat characteristicProperyViewWidth = 30.0;
     for (SILDebugProperty *property in properties) {
         id propertyKey = property.keysForActivation.firstObject;
         if ([propertyKey isEqual:@(CBCharacteristicPropertyRead)]) {
-            [self.readPropertyView setHidden:NO];
             activePropertiesCount += 1;
+            [self.readPropertyView setHidden:NO];
+            [self.readPropertyButton setHidden:NO];
+
+            self.readPropertyButton.frame = CGRectMake(0, 0, self.readImageView.frame.size.width + 25, self.readImageView.frame.size.height + 25);
+            self.readPropertyButton.center = [self.contentView convertPoint:self.readPropertyView.center fromView:self.propertyButtonsStackView];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWrite)]) {
+            activePropertiesCount += 1;
             hasWriteProperty = true;
             [self.writePropertyView setHidden:NO];
-            activePropertiesCount += 1;
+            [self.writePropertyButton setHidden:NO];
+
+            self.writePropertyButton.frame = CGRectMake(0, 0, self.writeImageView.frame.size.width + 25, self.writeImageView.frame.size.height + 25);
+            self.writePropertyButton.center = [self.contentView convertPoint:self.writePropertyView.center fromView:self.propertyButtonsStackView];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
             if (!hasWriteProperty) {
-                [self.writeNoResponsePropertyView setHidden:NO];
                 activePropertiesCount += 1;
+                [self.writeNoResponsePropertyView setHidden:NO];
+                [self.writeNoResponsePropertyButton setHidden:NO];
+
+                self.writeNoResponsePropertyButton.frame = CGRectMake(0, 0, self.writeNoResponsePropertyButton.frame.size.width + 25, self.writeNoResponsePropertyButton.frame.size.height + 25);
+                self.writeNoResponsePropertyButton.center = [self.contentView convertPoint:self.writeNoResponsePropertyView.center fromView:self.propertyButtonsStackView];
             }
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyIndicate)]) {
+            activePropertiesCount += 1;
             [self.indicatePropertyView setHidden:NO];
-            activePropertiesCount += 1;
+            [self.indicatePropertyButton setHidden:NO];
+            
+            self.indicatePropertyButton.frame = CGRectMake(0, 0, self.indicateImageView.frame.size.width + 25, self.indicateImageView.frame.size.height + 25);
+            self.indicatePropertyButton.center = [self.contentView convertPoint:self.indicatePropertyView.center fromView:self.propertyButtonsStackView];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyNotify)]) {
-            [self.notifyPropertyView setHidden:NO];
             activePropertiesCount += 1;
+            [self.notifyPropertyView setHidden:NO];
+            [self.notifyPropertyButton setHidden:NO];
+
+            self.notifyPropertyButton.frame = CGRectMake(0, 0, self.notifyImageView.frame.size.width + 25, self.notifyImageView.frame.size.height + 25);
+            self.notifyPropertyButton.center = [self.contentView convertPoint:self.notifyPropertyView.center fromView:self.propertyButtonsStackView];
         }
     }
     CGFloat cumulativeWidthOfButtons = (CGFloat)(characteristicProperyViewWidth * activePropertiesCount);
@@ -127,60 +155,65 @@ static CGFloat characteristicProperyViewWidth = 30.0;
     self.viewMoreChevron.image = [UIImage imageNamed: expanded ? @"chevron_expanded" : @"chevron_collapsed"];
 }
 
--(void)togglePropertyEnabledIfExpanded {
+- (void)togglePropertyEnabledIfExpanded {
     BOOL expanded = self.characteristicTableModel.isExpanded;
     BOOL isNotifying = [[self.characteristic valueForKey:@"notifying"] boolValue];
     for (SILDebugProperty *property in self.allActiveProperties) {
         if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyRead)]) {
             NSString *readImageString = expanded ? @"PropertyReadEnabled" : @"PropertyReadDisabled";
-            [self.readButton setBackgroundImage:[UIImage imageNamed:readImageString] forState:UIControlStateNormal];
-            [self.readButton setEnabled:expanded];
+            self.readImageView.image = [UIImage imageNamed:readImageString];
+            [self.readPropertyView setUserInteractionEnabled:expanded];
+            [self.readPropertyButton setUserInteractionEnabled:expanded];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWrite)]) {
             NSString *writeImageString = expanded ? @"PropertyWriteEnabled" : @"PropertyWriteDisabled";
-            [self.writeButton setBackgroundImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-            [self.writeButton setEnabled: expanded];
+            self.writeImageView.image = [UIImage imageNamed:writeImageString];
+            [self.writePropertyView setUserInteractionEnabled:expanded];
+            [self.writePropertyButton setUserInteractionEnabled:expanded];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
             NSString *writeImageString = expanded ? @"PropertyWriteNoResponseEnabled" : @"PropertyWriteNoResponseDisabled";
-            [self.writeNoResponseButton setBackgroundImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-            [self.writeNoResponseButton setEnabled:expanded];
+            self.writeNoResponseImageView.image = [UIImage imageNamed:writeImageString];
+            [self.writeImageView setUserInteractionEnabled:expanded];
+            [self.writeNoResponsePropertyButton setUserInteractionEnabled:expanded];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyIndicate)]) {
             NSString *indicateImageString = (expanded && isNotifying) ? @"PropertyIndicateEnabled" : @"PropertyIndicateDisabled";
-            [self.indicateButton setBackgroundImage:[UIImage imageNamed:indicateImageString] forState:UIControlStateNormal];
-            [self.indicateButton setEnabled:expanded];
+            self.indicateImageView.image = [UIImage imageNamed:indicateImageString];
+            [self.indicatePropertyView setUserInteractionEnabled:expanded];
+            [self.indicatePropertyButton setUserInteractionEnabled:expanded];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyNotify)]) {
             NSString *notifyImageString = (expanded && isNotifying) ? @"PropertyNotifyEnabled" : @"PropertyNotifyDisabled";
-            [self.notifyButton setBackgroundImage:[UIImage imageNamed:notifyImageString] forState:UIControlStateNormal];
-            [self.notifyButton setEnabled:expanded];
+            self.notifyImageView.image = [UIImage imageNamed:notifyImageString];
+            [self.notifyPropertyView setUserInteractionEnabled:expanded];
+            [self.notifyPropertyButton setUserInteractionEnabled:expanded];
         }
     }
 }
 
 #pragma mark - Button Actions
 
-- (IBAction)didTapReadButton:(UIButton *)sender {
-    [self.delegate cell:self didRequestReadForCharacteristic:self.characteristic];
+- (IBAction)handleReadViewTap:(id)sender {
+ [self.delegate cell:self didRequestReadForCharacteristic:self.characteristic];
 }
 
-- (IBAction)didTapWriteButton:(UIButton *)sender {
+- (IBAction)handleWriteViewTap:(id)sender {
     [self.delegate cell:self didRequestWriteForCharacteristic:self.characteristic];
 }
 
-- (IBAction)didTapWriteNoResponseButton:(UIButton *)sender {
+- (IBAction)handleWriteNoResponseViewTap:(id)sender {
     [self.delegate cell:self didRequestWriteNoResponseForCharacteristic:self.characteristic];
 }
 
-- (IBAction)didTapIndicateButton:(UIButton *)sender {
+- (IBAction)handleIndicateViewTap:(id)sender {
     BOOL newNotifyingValue = ![[self.characteristic valueForKey:@"notifying"] boolValue];
     [self.delegate cell:self didRequestIndicateForCharacteristic:self.characteristic withValue:newNotifyingValue];
     NSString *notifyImageString = newNotifyingValue ? @"PropertyIndicateEnabled" : @"PropertyIndicateDisabled";
-    [self.indicateButton setBackgroundImage:[UIImage imageNamed:notifyImageString] forState:UIControlStateNormal];
+    self.indicateImageView.image = [UIImage imageNamed:notifyImageString];
 }
 
-- (IBAction)didTapNotifyButton:(UIButton *)sender {
+- (IBAction)handleNotifyViewTap:(id)sender {
     BOOL newNotifyingValue = ![[self.characteristic valueForKey:@"notifying"] boolValue];
     [self.delegate cell:self didRequestNotifyForCharacteristic:self.characteristic withValue:newNotifyingValue];
     NSString *notifyImageString = newNotifyingValue ? @"PropertyNotifyEnabled" : @"PropertyNotifyDisabled";
-    [self.notifyButton setBackgroundImage:[UIImage imageNamed:notifyImageString] forState:UIControlStateNormal];
+    self.notifyImageView.image = [UIImage imageNamed:notifyImageString];
 }
 
 @end

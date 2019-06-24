@@ -35,9 +35,6 @@ NSTimeInterval const SILBeaconRegistryTimeoutThreshold = 5.0;
     NSMutableArray *timeoutBeaconKeys = [NSMutableArray array];
     for (NSString *beaconKey in self.beaconEntries) {
         SILBeaconRegistryEntry *entry = self.beaconEntries[beaconKey];
-        if (entry.beacon.beacon) {
-            continue;
-        }
         if (![entry.RSSIMeasurementTable hasRSSIMeasurementInPastTimeInterval:SILBeaconRegistryTimeoutThreshold]) {
             [timeoutBeaconKeys addObject:beaconKey];
         }

@@ -48,7 +48,7 @@ const CGFloat kInactivePriority = 1;
             [weakSelf layoutIfNeeded];
         } completion:^(BOOL finished) {
             if (displayTime > 0) {
-                [self hideBarAnimation:weakSelf duration:revealTime delay:displayTime];
+                [weakSelf hideBarAnimation:weakSelf duration:revealTime delay:displayTime];
             } else {
                 weakSelf.isAnimating = NO;
             }
@@ -63,12 +63,14 @@ const CGFloat kInactivePriority = 1;
 }
 
 - (void)hideBarAnimation:(SILAlertBarView *)alertBarView duration:(CGFloat)duration delay:(CGFloat)delayTime {
-    [UIView animateWithDuration:duration delay:delayTime options:UIViewAnimationOptionCurveLinear animations:^{
-        alertBarView.alertBarRevealConstraint.priority = kInactivePriority;
-        [alertBarView layoutIfNeeded];
-    } completion:^(BOOL finished){
-        alertBarView.isAnimating = NO;
-    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            alertBarView.alertBarRevealConstraint.priority = kInactivePriority;
+            [alertBarView layoutIfNeeded];
+        } completion:^(BOOL finished){
+            alertBarView.isAnimating = NO;
+        }];
+    });
 }
 
 @end

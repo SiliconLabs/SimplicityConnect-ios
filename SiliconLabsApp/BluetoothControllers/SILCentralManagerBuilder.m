@@ -23,8 +23,10 @@
                              ];
             break;
         case SILAppTypeConnectedLighting:
-            serviceUUIDs = @[[CBUUID UUIDWithString:SILServiceNumberConnectedLightingZigbee],
-                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingProprietary]];
+            serviceUUIDs = @[[CBUUID UUIDWithString:SILServiceNumberConnectedLightingConnect],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingProprietary],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingThread],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingZigbee],];
             break;
         default:
             break;

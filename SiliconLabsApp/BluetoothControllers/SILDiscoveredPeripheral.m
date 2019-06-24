@@ -36,23 +36,40 @@
     self.advertisedServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey];
     self.txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey];
     self.isConnectable = [advertisementData[CBAdvertisementDataIsConnectable] boolValue];
+    self.manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey];
     
     [self.RSSIMeasurementTable addRSSIMeasurement:RSSI];
+    [self.delegate peripheral:self didUpdateWithAdvertisementData:advertisementData andRSSI:RSSI];
 }
 
 - (BOOL)isBlueGeckoBeacon {
-    return [self.peripheral.name hasPrefix:@"BG"] ||
-           [self.peripheral.name rangeOfString:@"Blue Gecko"].location != NSNotFound;
+    return self.peripheral.name && ([self.peripheral.name hasPrefix:@"BG"] ||
+           [self.peripheral.name rangeOfString:@"Blue Gecko"].location != NSNotFound);
 }
 
-- (BOOL)isDMPConnectedLightZigbee {
-    CBUUID *lightService = [CBUUID UUIDWithString:SILServiceNumberConnectedLightingZigbee];
-    return [self.advertisedServiceUUIDs containsObject:lightService];
+- (BOOL)isDMPConnectedLightConnect {
+    return [self isContainService:SILServiceNumberConnectedLightingConnect];
 }
 
 - (BOOL)isDMPConnectedLightProprietary {
-    CBUUID *lightService = [CBUUID UUIDWithString:SILServiceNumberConnectedLightingProprietary];
-    return [self.advertisedServiceUUIDs containsObject:lightService];
+    return [self isContainService:SILServiceNumberConnectedLightingProprietary];
+}
+
+- (BOOL)isDMPConnectedLightThread {
+    return [self isContainService:SILServiceNumberConnectedLightingThread];
+}
+
+- (BOOL)isDMPConnectedLightZigbee {
+    return [self isContainService:SILServiceNumberConnectedLightingZigbee];
+}
+
+- (BOOL)isRangeTest {
+    return [self isContainService:SILServiceNumberRangeTest];
+}
+
+- (BOOL)isContainService:(NSString *)serviceUUID {
+    CBUUID * const service = [CBUUID UUIDWithString:serviceUUID];
+    return [self.advertisedServiceUUIDs containsObject:service];
 }
 
 @end

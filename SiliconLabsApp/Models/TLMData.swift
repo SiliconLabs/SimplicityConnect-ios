@@ -8,6 +8,7 @@
 
 import Foundation
 
+@objcMembers
 final class TLMData: NSObject {
     var batteryVolts: Double
     var temperature: Double

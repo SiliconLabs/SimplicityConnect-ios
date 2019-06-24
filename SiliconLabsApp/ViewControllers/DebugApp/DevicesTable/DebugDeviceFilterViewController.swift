@@ -15,6 +15,7 @@ protocol DebugDeviceFilterViewControllerDelegate: class {
 }
 
 @objc(SILDebugDeviceFilterViewController)
+@objcMembers
 final class DebugDeviceFilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TextFieldTableViewCellDelegate, RSSISliderTableViewCellDelegate {
 
     // MARK: - Properties
@@ -133,7 +134,7 @@ final class DebugDeviceFilterViewController: UIViewController, UITableViewDataSo
             return 92
         }
 
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

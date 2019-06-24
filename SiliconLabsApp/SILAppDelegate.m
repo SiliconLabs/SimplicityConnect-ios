@@ -9,8 +9,6 @@
 #import "SILAppDelegate.h"
 #import "SILAppearance.h"
 #import "SILAppSelectionViewController.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 
 @interface SILAppDelegate ()
 
@@ -30,8 +28,6 @@
     self.window.rootViewController = nc;
 
     [self.window makeKeyAndVisible];
-    
-    [Fabric with:@[CrashlyticsKit]];
 
     return YES;
 }

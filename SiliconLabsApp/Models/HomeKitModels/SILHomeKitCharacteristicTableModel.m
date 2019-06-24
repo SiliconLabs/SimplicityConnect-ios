@@ -15,7 +15,6 @@
 #import "SILBluetoothFieldModel.h"
 #import "SILCharacteristicFieldBuilder.h"
 #import "SILBluetoothModelManager.h"
-#import <Crashlytics/Crashlytics.h>
 
 @interface SILHomeKitCharacteristicTableModel()
 @property (strong, nonatomic) SILCharacteristicFieldBuilder *fieldBuilder;
@@ -84,14 +83,11 @@
         self.lastReadValue = characteristic.value;
         NSInteger readIndex = 0;
         
-        [CrashlyticsKit setObjectValue:self.bluetoothModel.name forKey:@"characteristic_name"];
-        [CrashlyticsKit setObjectValue:characteristic.value forKey:@"characteristic_value"];
         for (NSObject<SILCharacteristicFieldRow> *fieldRowModel in self.fieldTableRowModels) {
             NSString *fieldRequirement = fieldRowModel.fieldModel.requirement;
             fieldRowModel.delegate = self;
             if (!fieldRequirement || [self.requirementsMet containsObject:fieldRequirement]) {
                 fieldRowModel.requirementsSatisfied = YES;
-                [CrashlyticsKit setObjectValue:@(readIndex) forKey:@"read_index"];
                 NSInteger readLength = [fieldRowModel consumeValue:self.lastReadValue fromIndex:readIndex];
                 readIndex += readLength;
             } else {

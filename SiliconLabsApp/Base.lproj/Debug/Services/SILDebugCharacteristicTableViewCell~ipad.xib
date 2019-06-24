@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -32,7 +32,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OOe-k0-okz">
-                        <rect key="frame" x="432" y="18" width="255" height="60"/>
+                        <rect key="frame" x="420" y="18" width="255" height="60"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="9kA-XS-uRv" userLabel="Buttons Stack View">
                                 <rect key="frame" x="0.0" y="0.0" width="255" height="60"/>
@@ -46,24 +46,26 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0qY-Yd-Nbd">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PropertyReadDisabled" translatesAutoresizingMaskIntoConstraints="NO" id="MrD-mx-wnz">
                                                 <rect key="frame" x="2.5" y="15" width="30" height="30"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="0gE-rw-Pe7"/>
-                                                    <constraint firstAttribute="height" constant="30" id="HJ7-Mn-kLY"/>
+                                                    <constraint firstAttribute="width" constant="30" id="BfZ-Hc-CuQ"/>
+                                                    <constraint firstAttribute="height" constant="30" id="mGZ-c6-jwt"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="PropertyReadDisabled"/>
-                                                <connections>
-                                                    <action selector="didTapReadButton:" destination="mgA-HS-x5s" eventType="touchUpInside" id="f2X-IB-VLT"/>
-                                                </connections>
-                                            </button>
+                                            </imageView>
                                         </subviews>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
-                                            <constraint firstItem="0qY-Yd-Nbd" firstAttribute="centerX" secondItem="Hrq-47-OIy" secondAttribute="centerX" id="7nN-9l-KYX"/>
-                                            <constraint firstItem="ZWT-ex-Bi2" firstAttribute="top" secondItem="0qY-Yd-Nbd" secondAttribute="bottom" constant="-2" id="9mi-R6-Waw"/>
-                                            <constraint firstItem="0qY-Yd-Nbd" firstAttribute="centerY" secondItem="Hrq-47-OIy" secondAttribute="centerY" id="J3S-Ea-mho"/>
-                                            <constraint firstItem="ZWT-ex-Bi2" firstAttribute="centerX" secondItem="0qY-Yd-Nbd" secondAttribute="centerX" id="X48-kf-Teb"/>
+                                            <constraint firstItem="MrD-mx-wnz" firstAttribute="centerY" secondItem="Hrq-47-OIy" secondAttribute="centerY" id="Qh4-VC-Erd"/>
+                                            <constraint firstItem="MrD-mx-wnz" firstAttribute="centerX" secondItem="Hrq-47-OIy" secondAttribute="centerX" id="iXf-Dk-2Mn"/>
                                             <constraint firstAttribute="height" constant="60" id="mKA-pz-8g2"/>
+                                            <constraint firstItem="ZWT-ex-Bi2" firstAttribute="top" secondItem="MrD-mx-wnz" secondAttribute="bottom" constant="-2" id="pv7-xQ-Jyg"/>
+                                            <constraint firstItem="ZWT-ex-Bi2" firstAttribute="centerX" secondItem="MrD-mx-wnz" secondAttribute="centerX" id="qyF-ex-DGK"/>
                                             <constraint firstAttribute="width" constant="35" id="rtZ-16-nk5"/>
                                         </constraints>
                                     </view>
@@ -76,57 +78,61 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jd-Yh-pv1">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PropertyWriteDisabled" translatesAutoresizingMaskIntoConstraints="NO" id="XjZ-Ny-JGh">
                                                 <rect key="frame" x="2.5" y="15" width="30" height="30"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="UP1-j4-lir"/>
-                                                    <constraint firstAttribute="height" constant="30" id="rOE-fb-6rP"/>
+                                                    <constraint firstAttribute="width" constant="30" id="DhJ-sF-vUz"/>
+                                                    <constraint firstAttribute="height" constant="30" id="ZpM-WW-X6Z"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="PropertyWriteDisabled"/>
-                                                <connections>
-                                                    <action selector="didTapWriteButton:" destination="mgA-HS-x5s" eventType="touchUpInside" id="NJ3-1Z-B3Y"/>
-                                                </connections>
-                                            </button>
+                                            </imageView>
                                         </subviews>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="AcH-pr-eBh"/>
-                                            <constraint firstItem="XuZ-JP-Skk" firstAttribute="top" secondItem="0jd-Yh-pv1" secondAttribute="bottom" id="RfH-qA-9ab"/>
-                                            <constraint firstItem="0jd-Yh-pv1" firstAttribute="centerY" secondItem="DGL-cw-CyC" secondAttribute="centerY" id="aMQ-9X-wX5"/>
+                                            <constraint firstItem="XjZ-Ny-JGh" firstAttribute="centerY" secondItem="DGL-cw-CyC" secondAttribute="centerY" id="CiG-o0-VBo"/>
+                                            <constraint firstItem="XjZ-Ny-JGh" firstAttribute="centerX" secondItem="DGL-cw-CyC" secondAttribute="centerX" id="P3m-f2-ty5"/>
                                             <constraint firstAttribute="width" constant="35" id="lUc-58-6CG"/>
-                                            <constraint firstItem="XuZ-JP-Skk" firstAttribute="centerX" secondItem="0jd-Yh-pv1" secondAttribute="centerX" id="tuX-Ax-2yS"/>
-                                            <constraint firstItem="0jd-Yh-pv1" firstAttribute="centerX" secondItem="DGL-cw-CyC" secondAttribute="centerX" id="vKV-5e-HZ6"/>
+                                            <constraint firstItem="XuZ-JP-Skk" firstAttribute="centerX" secondItem="XjZ-Ny-JGh" secondAttribute="centerX" id="mwR-kT-Zgo"/>
+                                            <constraint firstItem="XuZ-JP-Skk" firstAttribute="top" secondItem="XjZ-Ny-JGh" secondAttribute="bottom" id="qPS-U4-2fV"/>
                                         </constraints>
                                     </view>
                                     <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ft4-w5-kEk" userLabel="Write No Response Property View">
                                         <rect key="frame" x="110" y="0.0" width="35" height="60"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write No Response" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Jb7-tM-cSQ">
-                                                <rect key="frame" x="0.0" y="42" width="31" height="18"/>
+                                                <rect key="frame" x="0.0" y="38" width="31" height="22"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xNi-eG-aSB">
-                                                <rect key="frame" x="2.5" y="15" width="30" height="30"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PropertyWriteNoResponseDisabled" translatesAutoresizingMaskIntoConstraints="NO" id="16I-Bk-S1M">
+                                                <rect key="frame" x="2" y="12" width="30" height="30"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="Pzg-GF-prI"/>
-                                                    <constraint firstAttribute="width" constant="30" id="x2C-ut-JTf"/>
+                                                    <constraint firstAttribute="height" constant="30" id="C4U-Vt-Bub"/>
+                                                    <constraint firstAttribute="width" constant="30" id="yEf-8Z-VSu"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="PropertyWriteNoResponseDisabled"/>
-                                                <connections>
-                                                    <action selector="didTapWriteNoResponseButton:" destination="mgA-HS-x5s" eventType="touchUpInside" id="1zq-24-q6K"/>
-                                                </connections>
-                                            </button>
+                                            </imageView>
                                         </subviews>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="Jb7-tM-cSQ" secondAttribute="bottom" id="9KU-gf-5G7"/>
                                             <constraint firstItem="Jb7-tM-cSQ" firstAttribute="leading" secondItem="Ft4-w5-kEk" secondAttribute="leading" id="MHZ-sZ-6DN"/>
-                                            <constraint firstItem="xNi-eG-aSB" firstAttribute="centerY" secondItem="Ft4-w5-kEk" secondAttribute="centerY" id="OLv-bn-35N"/>
+                                            <constraint firstItem="Jb7-tM-cSQ" firstAttribute="top" secondItem="16I-Bk-S1M" secondAttribute="bottom" constant="-4" id="Prl-xM-Fa2"/>
                                             <constraint firstAttribute="width" constant="35" id="idw-tA-RTV"/>
-                                            <constraint firstItem="Jb7-tM-cSQ" firstAttribute="top" secondItem="xNi-eG-aSB" secondAttribute="bottom" constant="-3" id="jyd-xP-CjH"/>
                                             <constraint firstAttribute="trailing" secondItem="Jb7-tM-cSQ" secondAttribute="trailing" constant="4" id="kbc-mM-LOS"/>
+                                            <constraint firstItem="16I-Bk-S1M" firstAttribute="top" secondItem="Ft4-w5-kEk" secondAttribute="top" constant="12" id="lwJ-XE-tis"/>
                                             <constraint firstAttribute="height" constant="60" id="t9u-s3-76Q"/>
-                                            <constraint firstItem="xNi-eG-aSB" firstAttribute="centerX" secondItem="Ft4-w5-kEk" secondAttribute="centerX" id="zKO-PE-efL"/>
+                                            <constraint firstItem="16I-Bk-S1M" firstAttribute="centerX" secondItem="Ft4-w5-kEk" secondAttribute="centerX" id="w5c-KP-MG6"/>
                                         </constraints>
                                     </view>
                                     <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Bj-Mb-8sv" userLabel="Indicate Property View">
@@ -138,25 +144,27 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aLv-gJ-b5I">
-                                                <rect key="frame" x="2.5" y="15" width="30" height="30"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PropertyIndicateDisabled" translatesAutoresizingMaskIntoConstraints="NO" id="mjB-74-jiH">
+                                                <rect key="frame" x="2" y="15" width="30" height="30"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="Byi-5Y-hhl"/>
-                                                    <constraint firstAttribute="height" constant="30" id="kNl-O7-fQw"/>
+                                                    <constraint firstAttribute="width" constant="30" id="SoE-2r-gU3"/>
+                                                    <constraint firstAttribute="height" constant="30" id="cLE-Ps-UX4"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="PropertyIndicateDisabled"/>
-                                                <connections>
-                                                    <action selector="didTapIndicateButton:" destination="mgA-HS-x5s" eventType="touchUpInside" id="z7U-yb-IOf"/>
-                                                </connections>
-                                            </button>
+                                            </imageView>
                                         </subviews>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
-                                            <constraint firstItem="aLv-gJ-b5I" firstAttribute="centerY" secondItem="1Bj-Mb-8sv" secondAttribute="centerY" id="CTk-3x-zzw"/>
+                                            <constraint firstItem="uat-vg-lFJ" firstAttribute="centerX" secondItem="mjB-74-jiH" secondAttribute="centerX" id="1fh-mu-lrb"/>
+                                            <constraint firstItem="mjB-74-jiH" firstAttribute="centerX" secondItem="1Bj-Mb-8sv" secondAttribute="centerX" id="7xG-ND-kVM"/>
                                             <constraint firstAttribute="width" constant="35" id="GHw-if-0sT"/>
                                             <constraint firstAttribute="height" constant="60" id="Sfi-Pl-m4P"/>
-                                            <constraint firstItem="uat-vg-lFJ" firstAttribute="top" secondItem="aLv-gJ-b5I" secondAttribute="bottom" constant="-2" id="U2E-4E-qXc"/>
-                                            <constraint firstItem="uat-vg-lFJ" firstAttribute="centerX" secondItem="aLv-gJ-b5I" secondAttribute="centerX" id="bHV-pN-n10"/>
-                                            <constraint firstItem="aLv-gJ-b5I" firstAttribute="centerX" secondItem="1Bj-Mb-8sv" secondAttribute="centerX" id="vbA-7V-TrC"/>
+                                            <constraint firstItem="uat-vg-lFJ" firstAttribute="top" secondItem="mjB-74-jiH" secondAttribute="bottom" constant="-2" id="cik-GO-bYf"/>
+                                            <constraint firstItem="mjB-74-jiH" firstAttribute="centerY" secondItem="1Bj-Mb-8sv" secondAttribute="centerY" id="ejK-M2-SkJ"/>
                                         </constraints>
                                     </view>
                                     <view tag="5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QbD-Wq-Qt1" userLabel="Notify Property View">
@@ -168,24 +176,26 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MgX-hS-8Ls">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PropertyNotifyDisabled" translatesAutoresizingMaskIntoConstraints="NO" id="XtB-cf-Igz">
                                                 <rect key="frame" x="2.5" y="15" width="30" height="30"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="T79-4v-tcg"/>
-                                                    <constraint firstAttribute="height" constant="30" id="vUy-pv-upY"/>
+                                                    <constraint firstAttribute="width" constant="30" id="7HH-S7-XPU"/>
+                                                    <constraint firstAttribute="height" constant="30" id="fky-y6-Q0b"/>
                                                 </constraints>
-                                                <state key="normal" backgroundImage="PropertyNotifyDisabled"/>
-                                                <connections>
-                                                    <action selector="didTapNotifyButton:" destination="mgA-HS-x5s" eventType="touchUpInside" id="Qgs-SR-ODb"/>
-                                                </connections>
-                                            </button>
+                                            </imageView>
                                         </subviews>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
-                                            <constraint firstItem="cCS-fr-1hK" firstAttribute="centerX" secondItem="MgX-hS-8Ls" secondAttribute="centerX" id="36Q-Hf-9l3"/>
-                                            <constraint firstItem="cCS-fr-1hK" firstAttribute="top" secondItem="MgX-hS-8Ls" secondAttribute="bottom" constant="-2" id="8t7-lb-spG"/>
-                                            <constraint firstItem="MgX-hS-8Ls" firstAttribute="centerX" secondItem="QbD-Wq-Qt1" secondAttribute="centerX" id="Hlu-S3-gMX"/>
                                             <constraint firstAttribute="height" constant="60" id="QA0-kg-OOH"/>
-                                            <constraint firstItem="MgX-hS-8Ls" firstAttribute="centerY" secondItem="QbD-Wq-Qt1" secondAttribute="centerY" id="Zzo-eq-nQT"/>
+                                            <constraint firstItem="XtB-cf-Igz" firstAttribute="centerX" secondItem="QbD-Wq-Qt1" secondAttribute="centerX" id="UL2-Ik-itX"/>
+                                            <constraint firstItem="cCS-fr-1hK" firstAttribute="centerX" secondItem="XtB-cf-Igz" secondAttribute="centerX" id="Ug5-iQ-4Df"/>
+                                            <constraint firstItem="XtB-cf-Igz" firstAttribute="centerY" secondItem="QbD-Wq-Qt1" secondAttribute="centerY" id="d3e-3P-fU6"/>
+                                            <constraint firstItem="cCS-fr-1hK" firstAttribute="top" secondItem="XtB-cf-Igz" secondAttribute="bottom" constant="-2" id="v9W-zx-tez"/>
                                             <constraint firstAttribute="width" constant="35" id="vS0-I3-7e2"/>
                                         </constraints>
                                     </view>
@@ -200,25 +210,25 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OX3935" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="p47-p7-ofq">
-                        <rect key="frame" x="326" y="28" width="98" height="16.5"/>
+                        <rect key="frame" x="326" y="31" width="86" height="16.5"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Characteristic One" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="142" translatesAutoresizingMaskIntoConstraints="NO" id="tap-oE-Ckr">
-                        <rect key="frame" x="24" y="28" width="142" height="20"/>
+                        <rect key="frame" x="24" y="31" width="142" height="20"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                         <color key="textColor" red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q5J-Qc-hBf">
-                        <rect key="frame" x="326" y="47.5" width="29" height="14"/>
+                        <rect key="frame" x="326" y="50.5" width="29" height="14"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="3j8-AY-y8x">
-                        <rect key="frame" x="180" y="34" width="13" height="8"/>
+                        <rect key="frame" x="180" y="37" width="13" height="8"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="8" id="7B1-lw-SK4"/>
                             <constraint firstAttribute="width" constant="13" id="JxC-cA-2PH"/>
@@ -271,22 +281,22 @@
                 <outlet property="characteristicNameLabel" destination="tap-oE-Ckr" id="9Bz-eC-UeX"/>
                 <outlet property="characteristicUuidLabel" destination="p47-p7-ofq" id="TAH-ty-Wdy"/>
                 <outlet property="iPadBottomDividerLeadingConstraint" destination="g8w-yy-BZz" id="blM-Wi-IJU"/>
-                <outlet property="indicateButton" destination="aLv-gJ-b5I" id="wGZ-Il-keQ"/>
+                <outlet property="indicateImageView" destination="mjB-74-jiH" id="VyV-i0-QtZ"/>
                 <outlet property="indicatePropertyView" destination="1Bj-Mb-8sv" id="q5J-w7-wvs"/>
-                <outlet property="notifyButton" destination="MgX-hS-8Ls" id="8tD-0E-aTk"/>
+                <outlet property="notifyImageView" destination="XtB-cf-Igz" id="fec-g3-zwF"/>
                 <outlet property="notifyPropertyView" destination="QbD-Wq-Qt1" id="Y0A-A8-ie5"/>
                 <outlet property="propertiesContainerView" destination="OOe-k0-okz" id="gBU-CG-4Fc"/>
                 <outlet property="propertyButtonsStackView" destination="9kA-XS-uRv" id="gID-pr-yzh"/>
-                <outlet property="readButton" destination="0qY-Yd-Nbd" id="fUe-bf-gcs"/>
+                <outlet property="readImageView" destination="MrD-mx-wnz" id="avW-dG-oKE"/>
                 <outlet property="readPropertyView" destination="Hrq-47-OIy" id="udh-TR-Mxj"/>
                 <outlet property="topSeparatorView" destination="af2-pB-hof" id="xGs-gU-2fR"/>
                 <outlet property="viewMoreChevron" destination="3j8-AY-y8x" id="mNr-KK-hrJ"/>
-                <outlet property="writeButton" destination="0jd-Yh-pv1" id="XMX-e1-eoz"/>
-                <outlet property="writeNoResponseButton" destination="xNi-eG-aSB" id="O2d-ZF-ghx"/>
+                <outlet property="writeImageView" destination="XjZ-Ny-JGh" id="hIP-2i-fCY"/>
+                <outlet property="writeNoResponseImageView" destination="16I-Bk-S1M" id="wet-2M-zhp"/>
                 <outlet property="writeNoResponsePropertyView" destination="Ft4-w5-kEk" id="ymL-Ig-qjx"/>
                 <outlet property="writePropertyView" destination="DGL-cw-CyC" id="ORA-Ot-hCf"/>
             </connections>
-            <point key="canvasLocation" x="763.5" y="354.5"/>
+            <point key="canvasLocation" x="763" y="351"/>
         </tableViewCell>
     </objects>
     <resources>

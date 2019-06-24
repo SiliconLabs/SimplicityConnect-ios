@@ -12,27 +12,30 @@
 @implementation SILApp
 
 + (NSArray *)allApps {
-    NSMutableArray *allApps = [[NSMutableArray alloc] init];
 #if WIRELESS
-    return @[[self connectedLightningApp],
+    return @[
+             [self rangeTestApp],
+             [self connectedLightningApp],
              [self bluetoothBeaconingApp],
-             [self bluetoothBrowserApp]];
+             [self bluetoothBrowserApp],
+             ];
 #else
-    allApps = [@[[self healthThermometerApp],
-                 [self bluetoothBeaconingApp],
-                 [self keyFobApp],
-                 [self bluetoothBrowserApp]] mutableCopy];
+    return @[
+             [self healthThermometerApp],
+             [self bluetoothBeaconingApp],
+             [self keyFobApp],
+             [self bluetoothBrowserApp],
 #if ENABLE_HOMEKIT
-    [allApps addObject:[self homekitApp]];
+             [self homekitApp],
 #endif
-    return [NSArray arrayWithArray:allApps];
+             ];
 #endif
 }
 
 + (SILApp *)connectedLightningApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeConnectedLighting
                                      title:@"Connected Lighting Demo"
-                               description:@"Dynamic multiprotocol application showcasing simultaneous operation of Bluetooth plus Zigbee or Proprietary Sub-GHz on the Wireless Gecko SoC"
+                               description:@"Dynamic multiprotocol application for Wireless Gecko SoCs showcasing Bluetooth operating simultaneously with other wireless protocols"
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeConnectedLighting];
 }
@@ -75,6 +78,14 @@
                                description:@"View info about nearby HomeKit devices and their properties."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeKitDebug];
+}
+
++ (SILApp *)rangeTestApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeRangeTest
+                                     title:@"Range Test Demo"
+                               description:@"Evaluate the link budget and communication range of the Wireless Gecko SoCs using various wireless radio configurations"
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeRangeTestDemo];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

@@ -8,6 +8,7 @@
 
 import Foundation
 
+@objcMembers
 final class EddystoneBeacon: NSObject {
     private(set) var url: URL?
     private(set) var namespace: String?

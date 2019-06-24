@@ -14,8 +14,11 @@ NSString * const SILServiceNumberTXPower = @"1804";
 NSString * const SILServiceNumberHealthThermometer = @"1809";
 NSString * const SILServiceNumberHeartRate = @"180D";
 NSString * const SILServiceNumberHumanInterfaceDevice = @"1812";
-NSString * const SILServiceNumberConnectedLightingZigbee = @"BAE55B96-7D19-458D-970C-50613D801BC9";
+NSString * const SILServiceNumberConnectedLightingConnect = @"62792313-ADF2-4FC9-974D-FAB9DDF2622C";
 NSString * const SILServiceNumberConnectedLightingProprietary = @"63f596e4-b583-4078-bfc3-b04225378713";
+NSString * const SILServiceNumberConnectedLightingThread = @"dd1c077d-d306-4b30-846a-4f55cc35767a";
+NSString * const SILServiceNumberConnectedLightingZigbee = @"BAE55B96-7D19-458D-970C-50613D801BC9";
+NSString * const SILServiceNumberRangeTest = @"530AA649-17E6-4D62-9F20-9E393B177E63";
 
 NSString * const SILCharacteristicNumberAlertLevel = @"2A06";
 NSString * const SILCharacteristicNumberTXPowerLevel = @"2A07";

@@ -21,7 +21,7 @@ typedef NS_ENUM(int, SILLightState) {
 
 typedef NS_ENUM(int, SILSwitchSource) {
     SILConnectedLightSwitchSourceBluetooth = 0,
-    SILConnectedLightSwitchSourceZigbeeOrProprietary = 1,
+    SILConnectedLightSwitchSourceZigbeeOrConnectOrProprietary = 1,
     SILConnectedLightSwitchSourceLightBoard = 2,
 };
 
@@ -33,6 +33,8 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
 @interface SILConnectedLightingViewController () <CBPeripheralDelegate, UIGestureRecognizerDelegate> {
     NSTimer *scheduleReadTimer;
     BOOL isConnected;
+    BOOL isDMPConnect;
+    BOOL isDMPThread;
     BOOL isDMPZigbee;
     CBCharacteristic *lightStateCharacteristic;
     CBCharacteristic *switchSourceCharacteristic;
@@ -51,7 +53,7 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
 @implementation SILConnectedLightingViewController
 
 - (uint8_t)byteFromData:(NSData *)data {
-    uint8_t byte;
+    uint8_t byte = -1;
     int size = sizeof(uint8_t);
     if (sizeof(data) >= size) {
         [data getBytes:&byte length:size];
@@ -60,16 +62,17 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
 }
 
 - (NSString *)hexStringForData:(NSData *)value {
-    NSMutableString *hexString = [[NSMutableString alloc] initWithString:@""];
-    if (value.length) {
-        const unsigned char *valueBuffer = value.bytes;
-        for (unsigned index = 0; index < value.length; index++) {
-            [hexString appendFormat:@"%02lX", (unsigned long)valueBuffer[index]];
-            if (index + 1 < value.length) {
-                [hexString appendString:@":"];
-            }
+    NSMutableString * const hexString = [[NSMutableString alloc] initWithString:@""];
+    const unsigned char *valueBuffer = value.bytes;
+    
+    for (long index = value.length - 1; index >= 0; --index) {
+        [hexString appendFormat:@"%02lX", (unsigned long)valueBuffer[index]];
+        
+        if (index - 1 >= 0) {
+            [hexString appendString:@":"];
         }
     }
+    
     return [hexString copy];
 }
 
@@ -100,15 +103,27 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
             NSLog(@"Source Bluetooth");
             self.lastEventSourceImageView.image = [UIImage imageNamed:@"iconBluetooth"];
             break;
-        case SILConnectedLightSwitchSourceZigbeeOrProprietary:
-            NSLog(@"Source Zigbee");
-            if (isDMPZigbee) {
-                self.lastEventSourceImageView.image = [UIImage imageNamed:@"iconZigbee"];
+        case SILConnectedLightSwitchSourceZigbeeOrConnectOrProprietary: {
+            NSString *imageName = nil;
+            
+            if (isDMPConnect) {
+                NSLog(@"Source Connect");
+                imageName = @"iconBleConnect";
+            } else if (isDMPThread) {
+                NSLog(@"Source Thread");
+                imageName = @"iconThread";
+            } else if (isDMPZigbee) {
+                NSLog(@"Source Zigbee");
+                imageName = @"iconZigbee";
             } else {
-                self.lastEventSourceImageView.image = [UIImage imageNamed:@"iconProprietary"];
+                NSLog(@"Source Proprietary");
+                imageName = @"iconProprietary";
             }
+            
+            self.lastEventSourceImageView.image = [UIImage imageNamed:imageName];
             [self scheduleRecoveryRead];
             break;
+        }
         case SILConnectedLightSwitchSourceLightBoard:
             NSLog(@"Source LightBoard");
             self.lastEventSourceImageView.image = nil;
@@ -185,6 +200,8 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
     self.feedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
     
     SILDiscoveredPeripheral *discoveredPeripheral = [self.centralManager discoveredPeripheralForPeripheral:self.connectedPeripheral];
+    isDMPConnect = discoveredPeripheral.isDMPConnectedLightConnect;
+    isDMPThread = discoveredPeripheral.isDMPConnectedLightThread;
     isDMPZigbee = discoveredPeripheral.isDMPConnectedLightZigbee;
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapLightStateImageView)];
