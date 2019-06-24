@@ -10,5 +10,6 @@
 @class SILEnumerationFieldRowModel;
 
 @interface SILDebugCharacteristicEnumerationFieldTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *writeChevronImageView;
 - (void)configureWithEnumerationModel:(SILEnumerationFieldRowModel *)enumerationModel;
 @end

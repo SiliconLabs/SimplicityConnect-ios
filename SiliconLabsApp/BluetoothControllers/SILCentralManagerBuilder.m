@@ -22,6 +22,12 @@
                              [CBUUID UUIDWithString:@"FFF0"], // Temporarily added to support connecting to 3rd Party Thermometer...
                              ];
             break;
+        case SILAppTypeConnectedLighting:
+            serviceUUIDs = @[[CBUUID UUIDWithString:SILServiceNumberConnectedLightingConnect],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingProprietary],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingThread],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingZigbee],];
+            break;
         default:
             break;
     }

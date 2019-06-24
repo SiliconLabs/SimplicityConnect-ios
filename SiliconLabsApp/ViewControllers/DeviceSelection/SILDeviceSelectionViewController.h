@@ -7,16 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SILDeviceSelectionViewModel.h"
 @class SILCentralManager;
 @class CBPeripheral;
-@class SILApp;
 @protocol SILDeviceSelectionViewControllerDelegate;
 
 @interface SILDeviceSelectionViewController : UIViewController
 
 @property (weak, nonatomic) id<SILDeviceSelectionViewControllerDelegate> delegate;
+@property (strong, nonatomic) SILDeviceSelectionViewModel *viewModel;
 @property (strong, nonatomic) SILCentralManager *centralManager;
-@property (strong, nonatomic) SILApp *app;
+
+- (instancetype)initWithDeviceSelectionViewModel:(SILDeviceSelectionViewModel *)viewModel;
 
 @end
 

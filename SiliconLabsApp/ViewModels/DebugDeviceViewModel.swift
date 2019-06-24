@@ -22,6 +22,7 @@ protocol DebugDeviceViewModelDelegate: class {
 }
 
 @objc(SILDebugDeviceViewModel)
+@objcMembers
 final class DebugDeviceViewModel: NSObject {
 
     // MARK: - Properties

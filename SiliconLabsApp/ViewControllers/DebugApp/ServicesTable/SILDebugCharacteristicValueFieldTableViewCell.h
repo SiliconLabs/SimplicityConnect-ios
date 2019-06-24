@@ -14,6 +14,7 @@
 @interface SILDebugCharacteristicValueFieldTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *typeLabel;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (strong, nonatomic) id<SILCharacteristicEditEnablerDelegate> editDelegate;
 - (void)configureWithValueModel:(SILValueFieldRowModel *)valueModel;
 @end

@@ -72,22 +72,27 @@ static const CGFloat kConnectAnimationDuration = 1.2f;
     self.leftwayLeadingConstraint.constant = self.rightwayTrailingConstraint.constant = centerPosition;
     self.leftwayIndicatorImageView.alpha = self.rightwayIndicatorImageView.alpha = 0.75f;
     self.leftwayIndicatorImageView.hidden = self.rightwayIndicatorImageView.hidden = NO;
-    __weak SILActivityBarViewController *weakSelf = self;
     [self.view layoutIfNeeded];
+    
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:kScanAnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        weakSelf.leftwayIndicatorImageView.alpha = self.rightwayIndicatorImageView.alpha = 1;
-        weakSelf.leftwayLeadingConstraint.constant = -CGRectGetWidth(self.leftwayIndicatorImageView.bounds);
-        weakSelf.rightwayTrailingConstraint.constant = -CGRectGetWidth(self.rightwayIndicatorImageView.bounds);
-        [weakSelf.view layoutIfNeeded];
+        __strong typeof(self) self = weakSelf;
+        
+        self.leftwayIndicatorImageView.alpha = self.rightwayIndicatorImageView.alpha = 1;
+        self.leftwayLeadingConstraint.constant = -CGRectGetWidth(self.leftwayIndicatorImageView.bounds);
+        self.rightwayTrailingConstraint.constant = -CGRectGetWidth(self.rightwayIndicatorImageView.bounds);
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        weakSelf.leftwayIndicatorImageView.hidden = self.rightwayIndicatorImageView.hidden = YES;
-        weakSelf.leftwayLeadingConstraint.constant = self.rightwayTrailingConstraint.constant = originalPosition;
-        [weakSelf.view layoutIfNeeded];
-        if (weakSelf.activityState == SILActivityBarStateScanning) {
-            [weakSelf repeatingScanningAnimation];
+        __strong typeof(self) self = weakSelf;
+        
+        self.leftwayIndicatorImageView.hidden = self.rightwayIndicatorImageView.hidden = YES;
+        self.leftwayLeadingConstraint.constant = self.rightwayTrailingConstraint.constant = originalPosition;
+        [self.view layoutIfNeeded];
+        if (self.activityState == SILActivityBarStateScanning) {
+            [self repeatingScanningAnimation];
         } else {
-            [weakSelf.leftwayIndicatorImageView.layer removeAllAnimations];
-            [weakSelf.rightwayIndicatorImageView.layer removeAllAnimations];
+            [self.leftwayIndicatorImageView.layer removeAllAnimations];
+            [self.rightwayIndicatorImageView.layer removeAllAnimations];
         }
     }];
 }
@@ -103,19 +108,25 @@ static const CGFloat kConnectAnimationDuration = 1.2f;
     CGFloat originalPosition = CGRectGetWidth(self.view.bounds) + CGRectGetWidth(self.rightwayIndicatorImageView.bounds);
     self.rightwayIndicatorImageView.hidden = NO;
     [self.view setNeedsLayout];
-    __weak SILActivityBarViewController *weakSelf = self;
+    
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:kConnectAnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        weakSelf.rightwayTrailingConstraint.constant = -CGRectGetWidth(self.rightwayIndicatorImageView.bounds);
-        [weakSelf.view layoutIfNeeded];
+        __strong typeof(self) self = weakSelf;
+        
+        self.rightwayTrailingConstraint.constant = -CGRectGetWidth(self.rightwayIndicatorImageView.bounds);
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        weakSelf.rightwayIndicatorImageView.hidden = YES;
-        weakSelf.rightwayTrailingConstraint.constant = originalPosition;
-        [weakSelf.view layoutIfNeeded];
-        if (weakSelf.activityState == SILActivityBarStateConnecting) {
-            [weakSelf repeatingConnectingAnimation];
+        __strong typeof(self) self = weakSelf;
+        
+        self.rightwayIndicatorImageView.hidden = YES;
+        self.rightwayTrailingConstraint.constant = originalPosition;
+        [self.view layoutIfNeeded];
+        
+        if (self.activityState == SILActivityBarStateConnecting) {
+            [self repeatingConnectingAnimation];
         } else {
-            [weakSelf.leftwayIndicatorImageView.layer removeAllAnimations];
-            [weakSelf.rightwayIndicatorImageView.layer removeAllAnimations];;
+            [self.leftwayIndicatorImageView.layer removeAllAnimations];
+            [self.rightwayIndicatorImageView.layer removeAllAnimations];;
         }
     }];
 }

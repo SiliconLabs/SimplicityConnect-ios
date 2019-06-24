@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSArray *fieldTableRowModels;
 @property (strong, nonatomic) NSArray *descriptorModels;
 @property (nonatomic, readonly) BOOL canWrite;
+@property (nonatomic) BOOL isUnknown;
 
 - (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic;
 - (NSString *)name;

@@ -1,9 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -11,42 +20,37 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="60.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AtO-zN-4aI" userLabel="Separator">
                         <rect key="frame" x="16" y="0.0" width="288" height="1"/>
-                        <animations/>
-                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="txe-k3-x3e"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Current Enumeration Value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="272" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
                         <rect key="frame" x="16" y="11" width="272" height="25"/>
-                        <animations/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enumeration" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="272" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-q1-Cq4" userLabel="Subtitle">
                         <rect key="frame" x="16" y="36" width="272" height="14"/>
-                        <animations/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right_chevron" translatesAutoresizingMaskIntoConstraints="NO" id="DfL-lM-NNO">
                         <rect key="frame" x="296" y="24" width="8" height="13"/>
-                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="8" id="q1X-1j-NsQ"/>
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yDG-HL-DSh" userLabel="Left Border">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                        <animations/>
-                        <color key="backgroundColor" red="0.85098040103912354" green="0.85098040103912354" blue="0.85098040103912354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="12" id="Fkf-4J-Yqq">
                                 <variation key="heightClass=regular-widthClass=regular" constant="1"/>
@@ -65,8 +69,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4fP-sH-nzM" userLabel="Right Border">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                        <animations/>
-                        <color key="backgroundColor" red="0.85098040103912354" green="0.85098040103912354" blue="0.85098040103912354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="7" id="lsg-Qi-DFi">
                                 <variation key="heightClass=regular-widthClass=regular" constant="1"/>
@@ -84,8 +87,7 @@
                         </variation>
                     </view>
                 </subviews>
-                <animations/>
-                <color key="backgroundColor" red="0.98039215803146362" green="0.98039215803146362" blue="0.98039215803146362" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <color key="backgroundColor" red="0.97530043125152588" green="0.97527122497558594" blue="0.9752877950668335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="gVo-q1-Cq4" secondAttribute="bottom" constant="11" id="9Bl-uM-NcK"/>
                     <constraint firstAttribute="trailing" secondItem="AtO-zN-4aI" secondAttribute="trailing" constant="16" id="B3F-JC-QEJ">
@@ -121,12 +123,12 @@
                         <exclude reference="4fP-sH-nzM"/>
                     </mask>
                     <mask key="constraints">
-                        <exclude reference="PUl-dT-dKT"/>
-                        <exclude reference="RyI-Lf-kJt"/>
-                        <exclude reference="eXD-2g-oj0"/>
                         <exclude reference="LwF-r3-cW4"/>
                         <exclude reference="UQi-nu-JY1"/>
                         <exclude reference="a8u-OI-dc3"/>
+                        <exclude reference="PUl-dT-dKT"/>
+                        <exclude reference="RyI-Lf-kJt"/>
+                        <exclude reference="eXD-2g-oj0"/>
                     </mask>
                 </variation>
                 <variation key="heightClass=regular-widthClass=regular">
@@ -135,16 +137,15 @@
                         <include reference="4fP-sH-nzM"/>
                     </mask>
                     <mask key="constraints">
-                        <include reference="PUl-dT-dKT"/>
-                        <include reference="RyI-Lf-kJt"/>
-                        <include reference="eXD-2g-oj0"/>
                         <include reference="LwF-r3-cW4"/>
                         <include reference="UQi-nu-JY1"/>
                         <include reference="a8u-OI-dc3"/>
+                        <include reference="PUl-dT-dKT"/>
+                        <include reference="RyI-Lf-kJt"/>
+                        <include reference="eXD-2g-oj0"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
-            <animations/>
             <constraints>
                 <constraint firstItem="AtO-zN-4aI" firstAttribute="top" secondItem="KGk-i7-Jjw" secondAttribute="top" id="sMM-kA-6SY"/>
             </constraints>
@@ -152,7 +153,7 @@
                 <outlet property="enumerationTypeLabel" destination="gVo-q1-Cq4" id="bTO-UC-JPy"/>
                 <outlet property="enumerationValueLabel" destination="LeD-xP-tdg" id="zK3-lN-kDc"/>
                 <outlet property="topSeparatorView" destination="AtO-zN-4aI" id="bkH-OK-ihQ"/>
-                <outlet property="writeChevronImageView" destination="DfL-lM-NNO" id="bbJ-cs-Xzs"/>
+                <outlet property="writeChevronImageView" destination="DfL-lM-NNO" id="uHI-Az-Zgx"/>
             </connections>
             <point key="canvasLocation" x="698" y="414.5"/>
         </tableViewCell>

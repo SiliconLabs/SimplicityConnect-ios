@@ -23,6 +23,7 @@ extern NSString * const SILImageNameHomeThermometer;
 extern NSString * const SILImageNameHomeDebug;
 extern NSString * const SILImageNameHomeKitDebug;
 extern NSString * const SILImageNameHomeConnectedLighting;
+extern NSString * const SILImageNameHomeRangeTestDemo;
 
 extern NSString * const SILImageNameKeyFOBGood;
 extern NSString * const SILImageNameKeyFOBAverage;

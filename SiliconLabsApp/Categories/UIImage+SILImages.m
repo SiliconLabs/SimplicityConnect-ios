@@ -23,6 +23,7 @@ NSString * const SILImageNameHomeThermometer = @"HomeThermometer";
 NSString * const SILImageNameHomeDebug = @"HomeDebug";
 NSString * const SILImageNameHomeKitDebug = @"HomeKitDebug";
 NSString * const SILImageNameHomeConnectedLighting = @"HomeConnectedLighting";
+NSString * const SILImageNameHomeRangeTestDemo = @"HomeRangeTestDemo";
 
 NSString * const SILImageNameKeyFOBGood = @"KeyFOBGood";
 NSString * const SILImageNameKeyFOBAverage = @"KeyFOBAverage";

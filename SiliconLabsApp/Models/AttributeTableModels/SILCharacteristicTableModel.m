@@ -13,8 +13,6 @@
 #import "SILBluetoothModelManager.h"
 #import "SILUUIDProvider.h"
 
-#import <Crashlytics/Crashlytics.h>
-
 @interface SILCharacteristicTableModel()
 @property (strong, nonatomic) SILCharacteristicFieldBuilder *fieldBuilder;
 @property (strong, nonatomic) NSMutableArray *requirementsMet;
@@ -42,6 +40,7 @@
         self.writeWithResponse = self.characteristic.properties & CBCharacteristicPropertyWrite;
         self.writeNoResponse = self.characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse;
         self.canWrite =  self.writeWithResponse || self.writeNoResponse;
+        self.isUnknown = NO;
     }
     return self;
 }
@@ -93,14 +92,11 @@
         self.lastReadValue = characteristic.value;
         NSInteger readIndex = 0;
         
-        [CrashlyticsKit setObjectValue:self.bluetoothModel.name forKey:@"characteristic_name"];
-        [CrashlyticsKit setObjectValue:characteristic.value forKey:@"characteristic_value"];
         for (NSObject<SILCharacteristicFieldRow> *fieldRowModel in self.fieldTableRowModels) {
             NSString *fieldRequirement = fieldRowModel.fieldModel.requirement;
             fieldRowModel.delegate = self;
             if (!fieldRequirement || [self.requirementsMet containsObject:fieldRequirement]) {
                 fieldRowModel.requirementsSatisfied = YES;
-                [CrashlyticsKit setObjectValue:@(readIndex) forKey:@"read_index"];
                 NSInteger readLength = [fieldRowModel consumeValue:self.lastReadValue fromIndex:readIndex];
                 readIndex += readLength;
             } else {
@@ -114,14 +110,7 @@
 
 - (void)setIfAllowedFullWriteValue:(NSData *)value {
     if (!self.bluetoothModel) {
-        if (self.lastReadValue.length > 0) {
-            NSMutableData *sizedData = [NSMutableData dataWithLength:self.lastReadValue.length];
-            NSData *writableData = value.length <= sizedData.length ? value : [value subdataWithRange:NSMakeRange(0, sizedData.length)];
-            [sizedData replaceBytesInRange:NSMakeRange(0, value.length) withBytes:writableData.bytes];
-            self.writeValue = sizedData;
-        } else {
-            self.writeValue = value;
-        }
+        self.writeValue = value;
     }
 }
 
@@ -155,6 +144,7 @@
 }
 
 - (BOOL)isUnknown {
+    self.isUnknown = YES;
     return self.bluetoothModel == nil && self.fieldTableRowModels.count == 0;
 }
 

@@ -94,10 +94,10 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 #pragma mark - Presentation
 
 - (void)presentDeviceSelectionViewController:(BOOL)animated {
-    SILDeviceSelectionViewController *selectionViewController = [[SILDeviceSelectionViewController alloc] init];
+    SILDeviceSelectionViewModel *viewModel = [[SILDeviceSelectionViewModel alloc] initWithAppType:self.app];
+    SILDeviceSelectionViewController *selectionViewController = [[SILDeviceSelectionViewController alloc] initWithDeviceSelectionViewModel:viewModel];
     selectionViewController.centralManager = self.centralManager;
     selectionViewController.delegate = self;
-    selectionViewController.app = self.app;
 
     self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:selectionViewController
                                                                                  presentingViewController:self

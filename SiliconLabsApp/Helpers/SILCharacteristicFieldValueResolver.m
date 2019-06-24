@@ -7,7 +7,6 @@
 //
 
 #import "SILCharacteristicFieldValueResolver.h"
-#import <Crashlytics/Crashlytics.h>
 
 typedef NS_ENUM(NSInteger, AppMode) {
     AppMode32Bit,
@@ -126,7 +125,6 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
 #pragma mark - Read
 
 - (NSString *)readValueString:(NSData *)value forFormat:(NSString *)format {
-    [CrashlyticsKit setObjectValue:value forKey:@"field_value"];
     if (value.length == 0) {
         return FieldReadErrorMessage;
     }

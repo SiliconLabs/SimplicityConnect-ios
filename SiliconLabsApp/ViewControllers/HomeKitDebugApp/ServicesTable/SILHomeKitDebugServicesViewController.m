@@ -50,7 +50,6 @@
 #import "SILEncodingPseudoFieldRowModel.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "SILActivityBarViewController.h"
-#import <Crashlytics/Crashlytics.h>
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
 #import "CBPeripheral+Services.h"
@@ -532,7 +531,6 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self markTableForUpdate];
 }

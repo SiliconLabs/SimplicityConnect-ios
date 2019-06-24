@@ -1,36 +1,33 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '8.0'
+platform :ios, '9.3'
 
 inhibit_all_warnings!
 use_frameworks!
 
 def shared_pods
-    pod 'Crashlytics'
+    pod 'ActionSheetPicker-3.0', '~> 2.3.0'
+    pod 'ChameleonFramework', '~> 2.1.0'
+    pod 'Charts', '~> 3.3.0'
     pod 'Eddystone', :git => 'https://github.com/IntrepidPursuits/eddystone-ios.git', :branch => 'nservidio/add-properties-to-Generic'
-    pod 'Fabric'
-    pod 'IP-UIKit-Wisdom'
-    pod 'KVOController'
-    pod 'MZTimerLabel'
-    pod 'PureLayout', '~> 3.0'
-    pod 'SVProgressHUD'
-    pod 'UICircularProgressRing'
-    pod 'WYPopoverController', '~> 0.2.0'
-    pod 'XMLDictionary'
+    pod 'IP-UIKit-Wisdom', '~> 0.0.10'
+    pod 'KVOController', '~> 1.2.0'
+    pod 'MZTimerLabel', '~> 0.5.4'
+    pod 'PureLayout', '~> 3.1.4'
+    pod 'SVProgressHUD', '~> 2.2.5'
+    pod 'UICircularProgressRing', '~> 4.1.0'
+    pod 'WYPopoverController', '~> 0.2.2'
+    pod 'XMLDictionary', '~> 1.4.1'
 end
 
-target 'SiliconLabsApp' do
+target 'BlueGecko' do
    shared_pods
 end
 
-target 'SiliconLabsAppWithoutHomeKit’ do
+target 'BlueGeckoWithHomeKit' do
    shared_pods
 end
 
-post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-            config.build_settings['SWIFT_VERSION'] = '3.0'
-        end
-    end
+target 'WirelessGecko' do
+   shared_pods
 end

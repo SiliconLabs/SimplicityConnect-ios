@@ -14,7 +14,8 @@ typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppTypeRetailBeacon,
     SILAppTypeKeyFob,
     SILAppTypeDebug,
-    SILAppTypeHomeKitDebug
+    SILAppTypeHomeKitDebug,
+    SILAppTypeRangeTest
 };
 
 @interface SILApp : NSObject

@@ -8,6 +8,7 @@
 
 #import "SILDiscoveredPeripheral.h"
 #import "SILRSSIMeasurementTable.h"
+#import "SILConstants.h"
 
 @interface SILDiscoveredPeripheral ()
 
@@ -35,13 +36,40 @@
     self.advertisedServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey];
     self.txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey];
     self.isConnectable = [advertisementData[CBAdvertisementDataIsConnectable] boolValue];
+    self.manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey];
     
     [self.RSSIMeasurementTable addRSSIMeasurement:RSSI];
+    [self.delegate peripheral:self didUpdateWithAdvertisementData:advertisementData andRSSI:RSSI];
 }
 
 - (BOOL)isBlueGeckoBeacon {
-    return [self.peripheral.name hasPrefix:@"BG"] ||
-           [self.peripheral.name rangeOfString:@"Blue Gecko"].location != NSNotFound;
+    return self.peripheral.name && ([self.peripheral.name hasPrefix:@"BG"] ||
+           [self.peripheral.name rangeOfString:@"Blue Gecko"].location != NSNotFound);
+}
+
+- (BOOL)isDMPConnectedLightConnect {
+    return [self isContainService:SILServiceNumberConnectedLightingConnect];
+}
+
+- (BOOL)isDMPConnectedLightProprietary {
+    return [self isContainService:SILServiceNumberConnectedLightingProprietary];
+}
+
+- (BOOL)isDMPConnectedLightThread {
+    return [self isContainService:SILServiceNumberConnectedLightingThread];
+}
+
+- (BOOL)isDMPConnectedLightZigbee {
+    return [self isContainService:SILServiceNumberConnectedLightingZigbee];
+}
+
+- (BOOL)isRangeTest {
+    return [self isContainService:SILServiceNumberRangeTest];
+}
+
+- (BOOL)isContainService:(NSString *)serviceUUID {
+    CBUUID * const service = [CBUUID UUIDWithString:serviceUUID];
+    return [self.advertisedServiceUUIDs containsObject:service];
 }
 
 @end

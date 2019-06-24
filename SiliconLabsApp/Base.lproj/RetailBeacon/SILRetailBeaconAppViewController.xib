@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,8 +13,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILRetailBeaconAppViewController">
             <connections>
                 <outlet property="beaconListTableView" destination="E0x-Li-r2x" id="fZz-qN-osX"/>
+                <outlet property="bottomScanningImageButton" destination="q81-Vb-R4H" id="cJz-zu-tVY"/>
                 <outlet property="bottomScanningImageView" destination="OYw-Ku-QOv" id="HFe-7Q-cmw"/>
                 <outlet property="bottomScanningLabel" destination="6QK-Qm-m9A" id="D5o-Bo-Bb5"/>
+                <outlet property="footerHeightConstraint" destination="KUG-Bb-BZP" id="UpU-cS-UuH"/>
                 <outlet property="loadingImageView" destination="4yI-LE-5Bq" id="AiD-N5-6FW"/>
                 <outlet property="loadingView" destination="CTu-hE-DHs" id="T3q-je-fqh"/>
                 <outlet property="view" destination="V5w-TJ-t3n" id="3aQ-OL-a0Z"/>
@@ -59,7 +61,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BNe-6S-I16" userLabel="Body View">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             <subviews>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-Li-r2x" userLabel="Beacon details table">
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-Li-r2x" userLabel="Beacon details table">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="619"/>
                                     <color key="backgroundColor" red="0.92941176470588238" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <connections>
@@ -105,55 +107,67 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Z3-DX-WyO" userLabel="Footer View">
                             <rect key="frame" x="0.0" y="619" width="375" height="48"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4b-Gq-nHp" userLabel="Footer Divider">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                    <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Juq-UP-LFf" userLabel="Footer Container View">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="48"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RetailSmallRadar" translatesAutoresizingMaskIntoConstraints="NO" id="OYw-Ku-QOv" userLabel="Bottom Scanning Radial">
+                                            <rect key="frame" x="8" y="8" width="32" height="32"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="OYw-Ku-QOv" secondAttribute="height" multiplier="1:1" id="Q3e-j3-8F4"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Still scanning..." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="6QK-Qm-m9A">
+                                            <rect key="frame" x="56" y="14" width="263" height="21"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                            <color key="textColor" red="0.40261614322662354" green="0.39476463198661804" blue="0.39494368433952332" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="heightClass=regular-widthClass=regular">
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
+                                            </variation>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q81-Vb-R4H">
+                                            <rect key="frame" x="335" y="8" width="32" height="32"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="q81-Vb-R4H" secondAttribute="height" multiplier="1:1" id="TFK-IR-bum"/>
+                                            </constraints>
+                                            <state key="normal" image="cancelScanning"/>
+                                            <connections>
+                                                <action selector="didTapScanningToggleButton:" destination="-1" eventType="touchUpInside" id="SSp-uL-7zX"/>
+                                            </connections>
+                                        </button>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iFX-ui-fvf" userLabel="Footer Divider View">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                            <color key="backgroundColor" red="0.81568627449999997" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="Ybm-tc-DRW"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.8784313725490196" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="1" id="UmR-f6-yxs">
-                                            <variation key="heightClass=regular-widthClass=compact" constant="1"/>
-                                        </constraint>
+                                        <constraint firstItem="iFX-ui-fvf" firstAttribute="top" secondItem="Juq-UP-LFf" secondAttribute="top" id="2uA-Ph-ThK"/>
+                                        <constraint firstItem="iFX-ui-fvf" firstAttribute="leading" secondItem="Juq-UP-LFf" secondAttribute="leading" id="LYK-9s-4E5"/>
+                                        <constraint firstItem="OYw-Ku-QOv" firstAttribute="top" secondItem="Juq-UP-LFf" secondAttribute="top" constant="8" id="Muf-RZ-Xld"/>
+                                        <constraint firstItem="q81-Vb-R4H" firstAttribute="leading" secondItem="6QK-Qm-m9A" secondAttribute="trailing" constant="16" id="P29-ty-FU3"/>
+                                        <constraint firstItem="OYw-Ku-QOv" firstAttribute="leading" secondItem="Juq-UP-LFf" secondAttribute="leading" constant="8" id="YPj-g2-IED"/>
+                                        <constraint firstAttribute="trailing" secondItem="q81-Vb-R4H" secondAttribute="trailing" constant="8" id="e8e-PT-wsQ"/>
+                                        <constraint firstItem="6QK-Qm-m9A" firstAttribute="leading" secondItem="OYw-Ku-QOv" secondAttribute="trailing" constant="16" id="hu5-ou-FVw"/>
+                                        <constraint firstAttribute="bottom" secondItem="q81-Vb-R4H" secondAttribute="bottom" constant="8" id="kIJ-gS-kOV"/>
+                                        <constraint firstAttribute="height" constant="48" id="lDb-2h-JyC"/>
+                                        <constraint firstAttribute="trailing" secondItem="iFX-ui-fvf" secondAttribute="trailing" id="sn8-0n-lgY"/>
+                                        <constraint firstItem="6QK-Qm-m9A" firstAttribute="centerY" secondItem="OYw-Ku-QOv" secondAttribute="centerY" id="wkZ-ZT-vfY"/>
+                                        <constraint firstItem="q81-Vb-R4H" firstAttribute="top" secondItem="Juq-UP-LFf" secondAttribute="top" constant="8" id="zGh-Zn-7dy"/>
                                     </constraints>
-                                    <variation key="heightClass=regular-widthClass=compact">
-                                        <mask key="constraints">
-                                            <include reference="UmR-f6-yxs"/>
-                                        </mask>
-                                    </variation>
                                 </view>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RetailSmallRadar" translatesAutoresizingMaskIntoConstraints="NO" id="OYw-Ku-QOv" userLabel="Bottom Scanning Radial">
-                                    <rect key="frame" x="8" y="8" width="32" height="32"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" secondItem="OYw-Ku-QOv" secondAttribute="height" multiplier="1:1" id="Q3e-j3-8F4"/>
-                                    </constraints>
-                                </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Still scanning..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QK-Qm-m9A">
-                                    <rect key="frame" x="56" y="13.5" width="122.5" height="21"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                    <color key="textColor" red="0.40261614322662354" green="0.39476463198661804" blue="0.39494368433952332" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <nil key="highlightedColor"/>
-                                    <variation key="heightClass=regular-widthClass=regular">
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                    </variation>
-                                </label>
                             </subviews>
                             <color key="backgroundColor" red="0.8784313725490196" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstItem="OYw-Ku-QOv" firstAttribute="top" secondItem="8Z3-DX-WyO" secondAttribute="top" constant="8" id="1k1-Mu-O6N">
-                                    <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                                </constraint>
                                 <constraint firstAttribute="height" constant="48" id="KUG-Bb-BZP">
                                     <variation key="heightClass=regular-widthClass=regular" constant="96"/>
                                 </constraint>
-                                <constraint firstItem="OYw-Ku-QOv" firstAttribute="leading" secondItem="8Z3-DX-WyO" secondAttribute="leading" constant="8" id="Mud-Md-YBQ">
-                                    <variation key="heightClass=regular-widthClass=regular" constant="28"/>
-                                </constraint>
-                                <constraint firstItem="b4b-Gq-nHp" firstAttribute="top" secondItem="8Z3-DX-WyO" secondAttribute="top" id="Xdq-uc-4e8"/>
-                                <constraint firstAttribute="bottom" secondItem="OYw-Ku-QOv" secondAttribute="bottom" constant="8" id="d4K-Ia-D5g">
-                                    <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                                </constraint>
-                                <constraint firstItem="6QK-Qm-m9A" firstAttribute="centerY" secondItem="OYw-Ku-QOv" secondAttribute="centerY" id="mlh-Jh-Hb9"/>
-                                <constraint firstItem="b4b-Gq-nHp" firstAttribute="leading" secondItem="8Z3-DX-WyO" secondAttribute="leading" id="uNk-nx-Lhv"/>
-                                <constraint firstItem="6QK-Qm-m9A" firstAttribute="leading" secondItem="OYw-Ku-QOv" secondAttribute="trailing" constant="16" id="yT9-NX-538"/>
-                                <constraint firstAttribute="trailing" secondItem="b4b-Gq-nHp" secondAttribute="trailing" id="zXJ-Fc-Cu6"/>
+                                <constraint firstItem="Juq-UP-LFf" firstAttribute="leading" secondItem="8Z3-DX-WyO" secondAttribute="leading" id="fT3-yG-tKt"/>
+                                <constraint firstAttribute="trailing" secondItem="Juq-UP-LFf" secondAttribute="trailing" id="qhj-VB-69e"/>
+                                <constraint firstItem="Juq-UP-LFf" firstAttribute="top" secondItem="8Z3-DX-WyO" secondAttribute="top" id="xlH-x9-akC"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -181,11 +195,12 @@
                 <constraint firstItem="qRi-nu-LHi" firstAttribute="top" secondItem="V5w-TJ-t3n" secondAttribute="top" id="woD-cH-8wY"/>
                 <constraint firstAttribute="bottom" secondItem="CTu-hE-DHs" secondAttribute="bottom" id="xls-Di-uix"/>
             </constraints>
-            <point key="canvasLocation" x="552" y="431"/>
+            <point key="canvasLocation" x="198.5" y="469.5"/>
         </view>
     </objects>
     <resources>
         <image name="RetailBigRadar" width="190" height="190"/>
         <image name="RetailSmallRadar" width="32" height="32"/>
+        <image name="cancelScanning" width="200" height="200"/>
     </resources>
 </document>

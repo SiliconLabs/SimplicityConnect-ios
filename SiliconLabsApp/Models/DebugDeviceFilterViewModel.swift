@@ -24,8 +24,8 @@ final class DebugDeviceFilterViewModel {
         case rssi(greaterThan: Int)
 
         // Ensures that the filter Set will never have more than 1 type of filter in the set.
-        var hashValue: Int {
-            return FilterType.allTypes.filter({ self ~= $0 }).first?.hashValue ?? 0
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(FilterType.allTypes.filter({ self ~= $0 }).first?.hashValue ?? 0)
         }
 
         static func ==(lhs: DebugDeviceFilterViewModel.Filter, rhs: DebugDeviceFilterViewModel.Filter) -> Bool {

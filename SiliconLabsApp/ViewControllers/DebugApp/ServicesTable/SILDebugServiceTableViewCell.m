@@ -33,6 +33,7 @@
 }
 
 - (void)configureWithServiceModel:(SILServiceTableModel *)serviceTableModel {
+    [self updateChevronImageForExpanded:serviceTableModel.isExpanded];
     self.serviceNameLabel.text = [serviceTableModel name];
     self.serviceUuidLabel.text = [serviceTableModel uuidString] ?: @"";
     self.topSeparatorView.hidden = serviceTableModel.hideTopSeparator;
@@ -63,10 +64,11 @@
 
 - (void)expandIfAllowed:(BOOL)isExpanding {
     self.bottomSeparatorView.hidden = !isExpanding;
-    [UIView animateWithDuration:0.3 animations:^{
-        CGFloat angle = isExpanding ? M_PI : 0;
-        self.viewMoreChevron.transform = CGAffineTransformMakeRotation(angle);
-    }];
+    [self updateChevronImageForExpanded:isExpanding];
+}
+
+- (void)updateChevronImageForExpanded:(BOOL)expanded {
+    self.viewMoreChevron.image = [UIImage imageNamed: expanded ? @"chevron_expanded" : @"chevron_collapsed"];
 }
 
 @end

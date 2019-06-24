@@ -41,7 +41,6 @@
 #import "SILEncodingPseudoFieldRowModel.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "SILActivityBarViewController.h"
-#import <Crashlytics/Crashlytics.h>
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
 #import "CBPeripheral+Services.h"
@@ -58,7 +57,7 @@ static float kOnPriority = 999;
 static float kOffPriority = 1;
 static float kTableRefreshInterval = 1;
 
-@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate>
+@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate>
 
 @property (weak, nonatomic) IBOutlet SILAlertBarView *alertBarView;
 @property (weak, nonatomic) IBOutlet UIView *activityBarViewControllerContainer;
@@ -68,6 +67,8 @@ static float kTableRefreshInterval = 1;
 
 @property (nonatomic) BOOL tableNeedsRefresh;
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
+
+@property (nonatomic) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) SILOTAUICoordinator *otaUICoordinator;
 
@@ -82,12 +83,6 @@ static float kTableRefreshInterval = 1;
 @property (strong, nonatomic) WYPopoverController *popoverController;
 
 @property (strong, nonatomic) SILDebugHeaderView *headerView;
-@property (strong, nonatomic) SILDebugServiceTableViewCell *sizingServiceCell;
-@property (strong, nonatomic) SILDebugCharacteristicTableViewCell *sizingCharacterisiticCell;
-@property (strong, nonatomic) SILDebugCharacteristicValueFieldTableViewCell *sizingCharacterisitcValueFieldCell;
-@property (strong, nonatomic) SILDebugCharacteristicToggleFieldTableViewCell *sizingCharacteristicToggleCell;
-@property (strong, nonatomic) SILDebugCharacteristicEnumerationFieldTableViewCell *sizingCharacteristicEnumerationCell;
-@property (strong, nonatomic) SILDebugCharacteristicEncodingFieldTableViewCell *sizingCharacteristicEncodingCell;
 @property (strong, nonatomic) SILActivityBarViewController *activityBarViewController;
 
 @end
@@ -105,6 +100,7 @@ static float kTableRefreshInterval = 1;
     [self setUpSubviews];
     [self startServiceSearch];
     [self setupTableHeaderView];
+    [self setupRefreshControl];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -126,27 +122,21 @@ static float kTableRefreshInterval = 1;
 -(void)registerNibsAndSetUpSizing {
     NSString *serviceCellClassString = NSStringFromClass([SILDebugServiceTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:serviceCellClassString bundle:nil] forCellReuseIdentifier:serviceCellClassString];
-    self.sizingServiceCell = (SILDebugServiceTableViewCell *)[self.view initWithNibNamed:serviceCellClassString];
     
     NSString *characteristicCellClassString = NSStringFromClass([SILDebugCharacteristicTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicCellClassString bundle:nil] forCellReuseIdentifier:characteristicCellClassString];
-    self.sizingCharacterisiticCell = (SILDebugCharacteristicTableViewCell *)[self.view initWithNibNamed:characteristicCellClassString];
     
     NSString *characteristicValueFieldCellClassString = NSStringFromClass([SILDebugCharacteristicValueFieldTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicValueFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicValueFieldCellClassString];
-    self.sizingCharacterisitcValueFieldCell = (SILDebugCharacteristicValueFieldTableViewCell *)[self.view initWithNibNamed:characteristicValueFieldCellClassString];
     
     NSString *characteristicToggleFieldCellClassString = NSStringFromClass([SILDebugCharacteristicToggleFieldTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicToggleFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicToggleFieldCellClassString];
-    self.sizingCharacteristicToggleCell = (SILDebugCharacteristicToggleFieldTableViewCell *)[self.view initWithNibNamed:characteristicToggleFieldCellClassString];
     
     NSString *characteristicEnumerationFieldCellClassString = NSStringFromClass([SILDebugCharacteristicEnumerationFieldTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicEnumerationFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicEnumerationFieldCellClassString];
-    self.sizingCharacteristicEnumerationCell = (SILDebugCharacteristicEnumerationFieldTableViewCell *)[self.view initWithNibNamed:characteristicEnumerationFieldCellClassString];
     
     NSString *characteristicEncodingFieldCellClassString = NSStringFromClass([SILDebugCharacteristicEncodingFieldTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicEncodingFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicEncodingFieldCellClassString];
-    self.sizingCharacteristicEncodingCell = (SILDebugCharacteristicEncodingFieldTableViewCell *)[self.view initWithNibNamed:characteristicEncodingFieldCellClassString];
     
     NSString *spacerCellClassString = NSStringFromClass([SILDebugSpacerTableViewCell class]);
     [self.servicesTableView registerNib:[UINib nibWithNibName:spacerCellClassString bundle:nil] forCellReuseIdentifier:spacerCellClassString];
@@ -196,6 +186,14 @@ static float kTableRefreshInterval = 1;
     self.servicesTableView.contentInset = UIEdgeInsetsMake(self.headerView.bounds.size.height, 0, 0, 0);
 }
 
+- (void)setupRefreshControl {
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(handleRefreshServices:) forControlEvents:UIControlEventValueChanged];
+    [self.servicesTableView addSubview:self.refreshControl];
+    [self.refreshControl sendSubviewToBack:self.refreshControl];
+    self.refreshControl.bounds = CGRectMake(self.refreshControl.bounds.origin.x, self.refreshControl.bounds.origin.y + 50.0, 100.0, 100.0);
+}
+
 #pragma mark -Lazy Intanstiation
 
 - (NSMutableArray *)allServiceModels {
@@ -221,6 +219,23 @@ static float kTableRefreshInterval = 1;
                                                    presentingViewController:self];
     self.otaUICoordinator.delegate = self;
     [self.otaUICoordinator initiateOTAFlow];
+}
+
+// SLMAIN-333 - This is a workaround to disconnect and reconnect to the peripheral when dynamic services/characteristics are toggled.
+// If this isn't done, services cannot be refreshed more than once.
+- (void)handleRefreshServices: (UIRefreshControl *)sender {
+    void (^serviceSearch)(void) = ^(void){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self startServiceSearch];
+        });
+    };
+
+    if (self.refreshControl == sender) {
+        self.allServiceModels = [[NSMutableArray alloc] init];
+        [self.centralManager disconnectConnectedPeripheral];
+        [self.centralManager connectToDiscoveredPeripheral: [self.centralManager discoveredPeripheralForPeripheral:self.peripheral]];
+        serviceSearch();
+    }
 }
 
 #pragma mark - SILOTAUICoordinatorDelegate
@@ -289,7 +304,7 @@ static float kTableRefreshInterval = 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self configuredCellForIndexPath:indexPath tableView:tableView isSizing:NO];
+    return [self configuredCellForIndexPath:indexPath tableView:tableView];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -304,18 +319,6 @@ static float kTableRefreshInterval = 1;
         }
     }
     
-    if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SILDebugCharacteristicEncodingFieldTableViewCell class]]) {
-        SILEncodingPseudoFieldRowModel *model = self.modelsToDisplay[indexPath.row];
-        [self displayCharacteristicEncoding:model.parentCharacteristicModel canEdit:model.parentCharacteristicModel.canWrite];
-    }
-    
-    if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SILDebugCharacteristicEnumerationFieldTableViewCell class]]) {
-        SILEnumerationFieldRowModel *enumerationModel = self.modelsToDisplay[indexPath.row];
-        if (enumerationModel.parentCharacteristicModel.canWrite) {
-            [self displayEnumerationDetails:enumerationModel];
-        }
-    }
-    
     if ([self.modelsToDisplay[indexPath.row] respondsToSelector:@selector(canExpand)]) {
         id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
         if ([model canExpand]) {
@@ -325,12 +328,6 @@ static float kTableRefreshInterval = 1;
         }
         [self refreshTable];
     }
-}
-
-//Necessary for iOS7
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [self configuredCellForIndexPath:indexPath tableView:tableView isSizing:YES];
-    return [cell autoLayoutHeight];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -345,29 +342,32 @@ static float kTableRefreshInterval = 1;
 
 #pragma mark - Configure Cells
 
-- (SILDebugServiceTableViewCell *)serviceCellWithModel:(SILServiceTableModel *)serviceTableModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
-    SILDebugServiceTableViewCell *serviceCell = isSizing ? self.sizingServiceCell : (SILDebugServiceTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugServiceTableViewCell class])];
+- (SILDebugServiceTableViewCell *)serviceCellWithModel:(SILServiceTableModel *)serviceTableModel forTable:(UITableView *)tableView {
+    SILDebugServiceTableViewCell *serviceCell = (SILDebugServiceTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugServiceTableViewCell class])];
     [serviceCell configureWithServiceModel:serviceTableModel];
     return serviceCell;
 }
 
-- (SILDebugCharacteristicTableViewCell *)characteristicCellWithModel:(SILCharacteristicTableModel *)characteristicTableModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
-    SILDebugCharacteristicTableViewCell *characteristicCell = isSizing ? self.sizingCharacterisiticCell : (SILDebugCharacteristicTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicTableViewCell class])];
+- (SILDebugCharacteristicTableViewCell *)characteristicCellWithModel:(SILCharacteristicTableModel *)characteristicTableModel forTable:(UITableView *)tableView {
+    SILDebugCharacteristicTableViewCell *characteristicCell = (SILDebugCharacteristicTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicTableViewCell class])];
     [characteristicCell configureWithCharacteristicModel:characteristicTableModel];
+    characteristicCell.delegate = self;
     return characteristicCell;
 }
 
-- (SILDebugCharacteristicEnumerationFieldTableViewCell *)enumerationFieldCellWithModel:(SILEnumerationFieldRowModel *)enumerationFieldModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
-    SILDebugCharacteristicEnumerationFieldTableViewCell *enumerationFieldCell = isSizing ? self.sizingCharacteristicEnumerationCell : (SILDebugCharacteristicEnumerationFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicEnumerationFieldTableViewCell class])];
+- (SILDebugCharacteristicEnumerationFieldTableViewCell *)enumerationFieldCellWithModel:(SILEnumerationFieldRowModel *)enumerationFieldModel forTable:(UITableView *)tableView {
+    SILDebugCharacteristicEnumerationFieldTableViewCell *enumerationFieldCell = (SILDebugCharacteristicEnumerationFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicEnumerationFieldTableViewCell class])];
     [enumerationFieldCell configureWithEnumerationModel:enumerationFieldModel];
+    enumerationFieldCell.writeChevronImageView.hidden = YES;
     return enumerationFieldCell;
 }
 
-- (SILDebugCharacteristicEncodingFieldTableViewCell *)encodingFieldCellWithModel:(SILEncodingPseudoFieldRowModel *)encodingFieldModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
-    SILDebugCharacteristicEncodingFieldTableViewCell *cell = isSizing ? self.sizingCharacteristicEncodingCell : (SILDebugCharacteristicEncodingFieldTableViewCell *) [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicEncodingFieldTableViewCell class])];
+- (SILDebugCharacteristicEncodingFieldTableViewCell *)encodingFieldCellWithModel:(SILEncodingPseudoFieldRowModel *)encodingFieldModel forTable:(UITableView *)tableView {
+    SILDebugCharacteristicEncodingFieldTableViewCell *cell = (SILDebugCharacteristicEncodingFieldTableViewCell *) [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicEncodingFieldTableViewCell class])];
     NSData* subjectData = [encodingFieldModel dataForField];
     
-    cell.editLabel.hidden = !encodingFieldModel.parentCharacteristicModel.canWrite;
+    //Hidden is set to YES in the Bluetooth Browser feature after adding button properties SLMAIN-276. Hidden state was left conditional in HomeKit feature.
+    cell.editLabel.hidden = YES;
     cell.hexValueLabel.text = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:subjectData];
     cell.asciiValueLabel.text = [[[SILCharacteristicFieldValueResolver sharedResolver] asciiStringForData:subjectData] stringByReplacingOccurrencesOfString:@"\0" withString:@""];
     cell.decimalValueLabel.text = [[SILCharacteristicFieldValueResolver sharedResolver] decimalStringForData:subjectData];
@@ -377,16 +377,18 @@ static float kTableRefreshInterval = 1;
     return cell;
 }
 
-- (SILDebugCharacteristicToggleFieldTableViewCell *)toggleFieldCellWithModel:(SILBitRowModel *)toggleFieldModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
-    SILDebugCharacteristicToggleFieldTableViewCell *toggleFieldCell = isSizing ? self.sizingCharacteristicToggleCell : (SILDebugCharacteristicToggleFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicToggleFieldTableViewCell class])];
+- (SILDebugCharacteristicToggleFieldTableViewCell *)toggleFieldCellWithModel:(SILBitRowModel *)toggleFieldModel forTable:(UITableView *)tableView {
+    SILDebugCharacteristicToggleFieldTableViewCell *toggleFieldCell = (SILDebugCharacteristicToggleFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicToggleFieldTableViewCell class])];
     [toggleFieldCell configureWithBitRowModel:toggleFieldModel];
     toggleFieldCell.editDelegate = self;
     return toggleFieldCell;
 }
 
-- (SILDebugCharacteristicValueFieldTableViewCell *)valueFieldCellWithModel:(SILValueFieldRowModel *)valueFieldModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
-    SILDebugCharacteristicValueFieldTableViewCell *valueFieldCell = isSizing ? self.sizingCharacterisitcValueFieldCell : (SILDebugCharacteristicValueFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicValueFieldTableViewCell class])];
+- (SILDebugCharacteristicValueFieldTableViewCell *)valueFieldCellWithModel:(SILValueFieldRowModel *)valueFieldModel forTable:(UITableView *)tableView {
+    SILDebugCharacteristicValueFieldTableViewCell *valueFieldCell = (SILDebugCharacteristicValueFieldTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicValueFieldTableViewCell class])];
     [valueFieldCell configureWithValueModel:valueFieldModel];
+    //Hidden is set to YES in the Bluetooth Browser feature after adding button properties SLMAIN-276. Hidden state was left conditional in HomeKit feature.
+    valueFieldCell.editButton.hidden = YES;
     valueFieldCell.editDelegate = self;
     return valueFieldCell;
 }
@@ -454,6 +456,44 @@ static float kTableRefreshInterval = 1;
     self.popoverController = nil;
 }
 
+#pragma mark - SILDebugCharacteristicCellDelegate
+
+- (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestReadForCharacteristic:(CBCharacteristic *)characteristic {
+    [self.peripheral readValueForCharacteristic:characteristic];
+}
+
+- (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestWriteForCharacteristic:(CBCharacteristic *)characteristic {
+    if (cell.characteristicTableModel.isUnknown) {
+        SILEncodingPseudoFieldRowModel *model = [[SILEncodingPseudoFieldRowModel alloc]initForCharacteristicModel:cell.characteristicTableModel];
+        [self displayCharacteristicEncoding:model.parentCharacteristicModel canEdit:model.parentCharacteristicModel.canWrite];
+    } else {
+        id<SILCharacteristicFieldRow> model = cell.characteristicTableModel.fieldTableRowModels.firstObject;
+        [self performWriteActionForCharacteristicFieldRow:model];
+    }
+}
+
+- (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestWriteNoResponseForCharacteristic:(CBCharacteristic *)characteristic {
+    id<SILCharacteristicFieldRow> model = cell.characteristicTableModel.fieldTableRowModels.firstObject;
+    [self performWriteActionForCharacteristicFieldRow:model];
+}
+
+- (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestNotifyForCharacteristic:(CBCharacteristic *)characteristic withValue:(BOOL)value {
+    [self.peripheral setNotifyValue:value forCharacteristic:characteristic];
+}
+
+- (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestIndicateForCharacteristic:(CBCharacteristic *)characteristic withValue:(BOOL)value {
+    [self.peripheral setNotifyValue:value forCharacteristic:characteristic];
+}
+
+- (void)performWriteActionForCharacteristicFieldRow:(id<SILCharacteristicFieldRow>)characteristicFieldRow {
+    if ([characteristicFieldRow isKindOfClass:[SILEnumerationFieldRowModel class]]) {
+        [self displayEnumerationDetails:characteristicFieldRow];
+    } else if ([characteristicFieldRow isKindOfClass:[SILValueFieldRowModel class]]) {
+        [self displayValueEditor:characteristicFieldRow];
+    }
+}
+
+
 #pragma mark - CBPeripheralDelegate
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -481,7 +521,6 @@ static float kTableRefreshInterval = 1;
     for (CBCharacteristic *characteristic in service.characteristics) {
         [self addOrUpdateModelForCharacteristic:characteristic forService:service];
         [peripheral readValueForCharacteristic:characteristic];
-        [peripheral setNotifyValue:YES forCharacteristic:characteristic];
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
     }
     [self markTableForUpdate];
@@ -489,7 +528,6 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self markTableForUpdate];
 }
@@ -511,7 +549,7 @@ static float kTableRefreshInterval = 1;
     NSString *message;
     if (error) {
         NSLog(@"Write failed, restoring backup");
-        message = @"Write failed.";
+        message = [NSString stringWithFormat:@"Write failed. Error: code=%ld \"%@\"", (long)error.code, error.localizedDescription];
     } else {
         NSLog(@"Write successful, updating read value");
         message = @"Write successful!";
@@ -609,7 +647,7 @@ static float kTableRefreshInterval = 1;
 - (SILCharacteristicTableModel *)findCharacteristicModelForCharacteristic:(CBCharacteristic *)characteristic forServiceModel:(SILServiceTableModel *)serviceModel {
     if (serviceModel) {
         for (SILCharacteristicTableModel *characteristicModel in serviceModel.characteristicModels) {
-            if ([characteristicModel.characteristic.UUID isEqual:characteristic.UUID]) {
+            if ([characteristicModel.characteristic isEqual:characteristic]) {
                 return characteristicModel;
             }
         }
@@ -655,14 +693,14 @@ static float kTableRefreshInterval = 1;
         [displayArray addObject:characteristicModel];
         
         if (characteristicModel.isExpanded) {
-            [self buildDisplayCharacteristicFields:displayArray forCharacterisitcModel:characteristicModel];
+            [self buildDisplayCharacteristicFields:displayArray forCharacteristicModel:characteristicModel];
         }
         
         firstCharacteristic = NO;
     }
 }
 
-- (void)buildDisplayCharacteristicFields:(NSMutableArray *)displayArray forCharacterisitcModel:(SILCharacteristicTableModel *)characteristicModel {
+- (void)buildDisplayCharacteristicFields:(NSMutableArray *)displayArray forCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel {
     bool firstField = YES;
     if ([characteristicModel isUnknown]) {
         // We are unknown. But lets display our encoding information as if we were a field.
@@ -693,6 +731,7 @@ static float kTableRefreshInterval = 1;
     if (!self.tableRefreshTimer) {
         [self refreshTable];
         [self startRefreshTimer];
+        [self.refreshControl endRefreshing];
     }
 }
 
@@ -702,7 +741,7 @@ static float kTableRefreshInterval = 1;
     self.tableNeedsRefresh = NO;
 }
 
-- (UITableViewCell *)configuredCellForIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView isSizing:(BOOL)isSizing {
+- (UITableViewCell *)configuredCellForIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView {
     if ([self.modelsToDisplay[indexPath.row] isEqual:kSpacerCellIdentifieer]) {
         SILDebugSpacerTableViewCell *spacerCell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugSpacerTableViewCell class])];
         return spacerCell;
@@ -710,20 +749,20 @@ static float kTableRefreshInterval = 1;
     
     id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
     if ([model isKindOfClass:[SILServiceTableModel class]]) {
-        return [self serviceCellWithModel:model forTable:tableView isSizing:isSizing];
+        return [self serviceCellWithModel:model forTable:tableView];
     } else if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
         SILCharacteristicTableModel *characteristicTableModel = (SILCharacteristicTableModel *)model;
-        return [self characteristicCellWithModel:characteristicTableModel forTable:tableView isSizing:isSizing];
+        return [self characteristicCellWithModel:characteristicTableModel forTable:tableView];
     } else {
         id<SILCharacteristicFieldRow> fieldModel = self.modelsToDisplay[indexPath.row];
         if ([model isKindOfClass:[SILEnumerationFieldRowModel class]]) {
-            return [self enumerationFieldCellWithModel:fieldModel forTable:tableView isSizing:isSizing];
+            return [self enumerationFieldCellWithModel:fieldModel forTable:tableView];
         } else if ([model isKindOfClass:[SILBitRowModel class]]) {
-            return [self toggleFieldCellWithModel:fieldModel forTable:tableView isSizing:isSizing];
+            return [self toggleFieldCellWithModel:fieldModel forTable:tableView];
         } else if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
-            return [self encodingFieldCellWithModel:fieldModel forTable:tableView isSizing:isSizing];
+            return [self encodingFieldCellWithModel:fieldModel forTable:tableView];
         } else {
-            return [self valueFieldCellWithModel:fieldModel forTable:tableView isSizing:isSizing];
+            return [self valueFieldCellWithModel:fieldModel forTable:tableView];
         }
     }
 }

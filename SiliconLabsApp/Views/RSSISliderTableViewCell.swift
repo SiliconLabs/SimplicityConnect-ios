@@ -108,7 +108,7 @@ final class RSSISliderTableViewCell: UITableViewCell {
         setup()
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         slider = GradientSlider(colors: sliderColors)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setup()
@@ -180,7 +180,7 @@ final class RSSISliderTableViewCell: UITableViewCell {
         currentRSSIValueLabel.bottomAnchor.constraint(equalTo: topView.bottomAnchor).isActive = true
         currentRSSIValueLabel.leadingAnchor.constraint(equalTo: rssiLabel.trailingAnchor, constant: 8).isActive = true
 
-        currentRSSIValueLabel.setContentHuggingPriority(240, for: .horizontal)
+        currentRSSIValueLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 240), for: .horizontal)
     }
 
     private func setupSliderView() {
@@ -202,7 +202,7 @@ final class RSSISliderTableViewCell: UITableViewCell {
         slider.maximumValue = 0
         slider.value = -100
         slider.addTarget(self, action: #selector(rssiSliderValueDidChange(slider:)), for: .valueChanged)
-        slider.addTarget(self, action: #selector(rssiSliderWasHighlighted(slider:)), for: UIControlEvents.allTouchEvents)
+        slider.addTarget(self, action: #selector(rssiSliderWasHighlighted(slider:)), for: UIControl.Event.allTouchEvents)
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.setThumbImage(disabledKnobImage, for: .normal)
         slider.setThumbImage(enabledKnobImage, for: .highlighted)

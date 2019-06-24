@@ -10,8 +10,8 @@
 #import "SILKeyValueViewModel.h"
 #import "SILOTAFirmwareFile.h"
 
-static NSString * const kSILKeyNameForPartialOTA = @"APP";
-static NSString * const kSILKeyNameForFullOTA = @"STACK";
+static NSString * const kSILKeyNameForPartialOTA = @"APPLICATION";
+static NSString * const kSILKeyNameForFullOTA = @"APPLOADER";
 
 @interface SILOTAFirmwareUpdateViewModel ()
 
@@ -40,7 +40,7 @@ static NSString * const kSILKeyNameForFullOTA = @"STACK";
     fileViewModel.valueString = self.otaFirmwareUpdate.appFile.fileURL.absoluteString;
     fileViewModel.keyString = kSILKeyNameForPartialOTA;
     [mutableFileViewModels addObject:fileViewModel];
-
+    
     if (self.otaFirmwareUpdate.updateMode == SILOTAModeFull) {
         SILKeyValueViewModel *fileViewModel = [SILKeyValueViewModel new];
         fileViewModel.valueString = self.otaFirmwareUpdate.stackFile.fileURL.absoluteString;
@@ -52,8 +52,15 @@ static NSString * const kSILKeyNameForFullOTA = @"STACK";
 }
 
 - (BOOL)shouldEnableStartOTAButton {
-    return (self.updateMode == SILOTAModePartial && self.otaFirmwareUpdate.appFile != nil) ||
-    (self.updateMode == SILOTAModeFull && self.otaFirmwareUpdate.appFile != nil && self.otaFirmwareUpdate.stackFile != nil);
+    const BOOL isPartialMode = self.updateMode == SILOTAModePartial;
+    const BOOL isFullMode = self.updateMode == SILOTAModeFull;
+    const BOOL isStackFileDefined = self.otaFirmwareUpdate.stackFile != nil;
+    const BOOL isAppFileDefined = self.otaFirmwareUpdate.appFile != nil;
+    const BOOL shouldEnableStartButtonForPartialMode = isPartialMode && isAppFileDefined;
+    const BOOL shouldEnableStartButtonForFullMode = isFullMode && isStackFileDefined && isAppFileDefined;
+    const BOOL shouldEnableStartButton = shouldEnableStartButtonForPartialMode || shouldEnableStartButtonForFullMode;
+    
+    return shouldEnableStartButton;
 }
 
 - (void)setUpdateMode:(SILOTAMode)updateMode {
@@ -77,12 +84,7 @@ static NSString * const kSILKeyNameForFullOTA = @"STACK";
 #pragma mark - Helper methods
 
 - (SILOTAFirmwareFile *)firmwareFileWithFileURL:(NSURL *)url {
-    if (url != nil) {
-        return [[SILOTAFirmwareFile alloc] initWithFileURL:url];
-    } else {
-        return nil;
-    }
-
+    return url == nil ? nil : [[SILOTAFirmwareFile alloc] initWithFileURL:url];
 }
 
 @end

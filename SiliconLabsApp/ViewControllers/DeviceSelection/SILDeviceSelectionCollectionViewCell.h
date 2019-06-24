@@ -13,6 +13,7 @@ extern NSString * const SILDeviceSelectionCollectionViewCellIdentifier;
 @interface SILDeviceSelectionCollectionViewCell : UICollectionViewCell
 
 @property (weak , nonatomic) IBOutlet UIImageView *signalImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *dmpTypeImageView;
 @property (weak , nonatomic) IBOutlet UILabel *deviceNameLabel;
 
 @end

@@ -27,22 +27,31 @@
 #define IS_IOS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
 CGFloat const SILRetailBeaconAppRefreshRate = 1.0;
-
+CGFloat const kIBeaconDMPZigbeeMajorNumber = 256.0f;
+CGFloat const kIBeaconDMPProprietaryMajorNumber = 512.0f;
 CGFloat const kIBeaconMajorNumber = 34987.0f;
 CGFloat const kIBeaconMinorNumber = 1025.0f;
 CGFloat const kAltBeaconMfgId = 0x0047;
-
 CGFloat const kBeaconListTableViewCellRowHeight = 80.0;
 
 NSString * const kIBeaconUUIDString = @"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0";
+NSString * const kIBeaconDMPUUIDString = @"0047E70A-5DC1-4725-8799-830544AE04F6";
 NSString * const kAltBeaconUUIDString = @"511AB500511AB500511AB500511AB500";
 NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
+NSString * const kIBeaconDMPZigbeeIdentifier = @"com.silabs.retailbeacon.dmpZigbee";
+NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dmpProprietary";
+NSString * const kScanningForBeacons = @"Scanning for beacons...";
+NSString * const kAdditionalBeacons = @"Scanning for additional beacons...";
+NSString * const kScanForNewBeacons = @"Scan for new beacons";
 
 @interface SILRetailBeaconAppViewController () <CBCentralManagerDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, EddystoneScannerDelegate, WYPopoverControllerDelegate, SILRetailBeaconDetailsViewControllerDelegate>
 
 @property (nonatomic, strong) SILBeaconRegistry *beaconRegistry;
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CLBeaconRegion *beaconRegion;
+@property (nonatomic, strong) CLBeaconRegion *dmpZigbeeBeaconRegion;
+@property (nonatomic, strong) CLBeaconRegion *dmpProprietaryBeaconRegion;
+@property (nonatomic, strong) NSArray<CLBeaconRegion *> *regions;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (nonatomic, assign) BOOL isScanning;
@@ -54,9 +63,13 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
 @property (weak, nonatomic) IBOutlet UITableView *beaconListTableView;
 @property (weak, nonatomic) IBOutlet UIImageView *loadingImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *bottomScanningImageView;
+@property (weak, nonatomic) IBOutlet UIButton *bottomScanningImageButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *footerHeightConstraint;
 @property (strong, nonatomic) EddystoneScanner *eddystoneScanner;
 
 @property (strong, nonatomic) WYPopoverController *devicePopoverController;
+
+@property (assign, nonatomic) BOOL firstLayout;
 
 @end
 
@@ -68,7 +81,10 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
     [super viewDidLoad];
     
     self.title = self.app.title;
+    self.firstLayout = YES;
+    self.bottomScanningLabel.text = kScanningForBeacons;
     self.beaconRegistry = [[SILBeaconRegistry alloc] init];
+
     [self startScanningImages];
     
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self
@@ -84,6 +100,15 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
     [super viewDidAppear:animated];
     
     [self startTimers];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    BOOL deviceIsIPhoneX = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone && UIScreen.mainScreen.nativeBounds.size.height == 2436);
+    if (deviceIsIPhoneX && self.firstLayout) {
+        self.footerHeightConstraint.constant = 75;
+        self.firstLayout = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -107,14 +132,19 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
 - (void)setUpBeaconMonitoring {
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    
+
+    [self.locationManager requestAlwaysAuthorization];
+
     NSUUID *iBeaconUUID = [[NSUUID alloc] initWithUUIDString:kIBeaconUUIDString];
-    
+    NSUUID *iBeaconDMPUUID = [[NSUUID alloc] initWithUUIDString:kIBeaconDMPUUIDString];
     self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:iBeaconUUID major:kIBeaconMajorNumber minor:kIBeaconMinorNumber identifier:kIBeaconIdentifier];
-    if (IS_IOS_8_OR_LATER) {
-        [self.locationManager requestAlwaysAuthorization];
+    self.dmpZigbeeBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:iBeaconDMPUUID major:kIBeaconDMPZigbeeMajorNumber identifier:kIBeaconDMPZigbeeIdentifier];
+    self.dmpProprietaryBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:iBeaconDMPUUID major:kIBeaconDMPProprietaryMajorNumber identifier:kIBeaconDMPProprietaryIdentifier];
+    self.regions = @[self.beaconRegion, self.dmpZigbeeBeaconRegion, self.dmpProprietaryBeaconRegion];
+    
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        [self.locationManager startRangingBeaconsInRegion:beaconRegion];
     }
-    [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
 }
 
 - (void)setUpTable {
@@ -180,23 +210,21 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
 
 - (void)reloadData {
     BOOL beaconFound = [self.beaconRegistry beaconRegistryEntries].count > 0;
-    
+
     if (beaconFound) {
-        self.loadingView.alpha = 0.0;
-        [self updateBeaconList];
-    } else {
-        self.loadingView.alpha = 1.0;
+        if (self.isScanning) {
+            self.bottomScanningLabel.text = kAdditionalBeacons;
+        }
     }
+
+    [self updateBeaconList];
 }
 
 - (void)startScanningImages {
-    [self.loadingView.superview bringSubviewToFront:self.loadingView];
-    [UIView addContinuousRotationAnimationToLayer:self.loadingImageView.layer withFullRotationDuration:2 forKey:@"rotationAnimation"];
     [UIView addContinuousRotationAnimationToLayer:self.bottomScanningImageView.layer withFullRotationDuration:2 forKey:@"rotationAnimation"];
 }
 
 - (void)pauseScanningImages {
-    [self.loadingImageView.layer removeAllAnimations];
     [self.bottomScanningImageView.layer removeAllAnimations];
 }
 
@@ -217,6 +245,22 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
 }
 
 #pragma mark - Scanning
+
+- (IBAction)didTapScanningToggleButton:(UIButton *)sender {
+    if (self.isScanning) {
+        [self stopScanning];
+        [self pauseScanningImages];
+    } else {
+        self.beaconRegistry = [[SILBeaconRegistry alloc] init];
+        [self.beaconListTableView reloadData];
+        [self startScanning];
+        [self startScanningImages];
+    }
+    self.bottomScanningLabel.text = self.isScanning ? kScanningForBeacons : kScanForNewBeacons;
+    self.bottomScanningImageView.alpha = self.isScanning ? 1.0 : 0.0;
+    NSString *imageString = self.isScanning ? @"cancelScanning" : @"startScanning";
+    [self.bottomScanningImageButton setImage:[UIImage imageNamed:imageString] forState: UIControlStateNormal];
+}
 
 - (void)startScanning {
     if (!self.isScanning) {
@@ -257,13 +301,19 @@ NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
 #pragma mark - CLLocationManagerDelegate
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
-    [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        if ([beaconRegion isEqual:region]) {
+           [self.locationManager startRangingBeaconsInRegion:beaconRegion];
+        }
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
-    [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
-    if ([self.beaconRegion isEqual:region]) {
-        [self.beaconRegistry removeIBeaconEntriesWithUUID:self.beaconRegion.proximityUUID];
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        if ([beaconRegion isEqual:region]) {
+            [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+            [self.beaconRegistry removeIBeaconEntriesWithUUID:beaconRegion.proximityUUID];
+        }
     }
 }
 

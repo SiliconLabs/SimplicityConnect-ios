@@ -14,8 +14,6 @@
 #import "SILCentralManager.h"
 #import "SILSegmentedControl.h"
 #import "UIImage+SILImages.h"
-#import "SILApp.h"
-#import "SILApp+AttributedProfiles.h"
 #import "SILConstants.h"
 #import "SILRSSIMeasurementTable.h"
 #import "UIColor+SILColors.h"
@@ -35,13 +33,9 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 @property (weak, nonatomic) IBOutlet UILabel *appShowcaseLabel;
 @property (weak, nonatomic) IBOutlet UILabel *selectDeviceLabel;
 @property (weak, nonatomic) IBOutlet SILSegmentedControl *typeControl;
-
-@property (strong, nonatomic) NSMutableArray *discoveredEFRDevices;
-@property (strong, nonatomic) NSMutableArray *discoveredOtherDevices;
-@property (strong, nonatomic) SILDiscoveredPeripheral *connectingPeripheral;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *firstSegmentIndicatorTrailingContstraint;
 
 @property (strong, nonatomic) NSTimer *reloadDataTimer;
-@property (assign, nonatomic) BOOL hasDataChanged;
 @property (assign, nonatomic) BOOL isObserving;
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
 
@@ -51,38 +45,17 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 
 @implementation SILDeviceSelectionViewController
 
-#pragma mark - Device Filtering
-
-- (void)updateDiscoveredPeripherals {
-    NSArray *discoveredPeripherals = [self.centralManager discoveredPeripherals];
-
-    self.discoveredEFRDevices = [NSMutableArray array];
-    self.discoveredOtherDevices = [NSMutableArray array];
-
-    for (SILDiscoveredPeripheral *discoveredPeripheral in discoveredPeripherals) {
-        if ([discoveredPeripheral isBlueGeckoBeacon]) {
-            [self.discoveredEFRDevices addObject:discoveredPeripheral];
-        } else {
-            [self.discoveredOtherDevices addObject:discoveredPeripheral];
-        }
-    }
-
-    self.hasDataChanged = YES;
+- (instancetype)initWithDeviceSelectionViewModel:(SILDeviceSelectionViewModel *)viewModel {
+    self = [super init];
+    self.viewModel = viewModel;
+    return self;
 }
 
-- (NSArray *)discoveredDevices {
-    if (self.typeControl.selectedIndex == SILDeviceTypeControlTypeEFR) {
-        return self.discoveredEFRDevices;
-    } else {
-        return self.discoveredOtherDevices;
-    }
-}
+#pragma mark - Actions
 
 - (IBAction)typeControlValueDidChange:(id)sender {
     [self.deviceCollectionView reloadData];
 }
-
-#pragma mark - Button Actions
 
 - (void)didTapCancelButton:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -98,14 +71,32 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 
 - (void)setupTypeControl {
     [self.typeControl addTarget:self action:@selector(typeControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    
+    NSArray *tabs = [self.viewModel availableTabs];
+    self.typeControl.firstSegmentLabel.text = tabs.firstObject;
+    if (tabs.count > 1) {
+        self.typeControl.secondSegmentLabel.text = [tabs objectAtIndex:1];
+    } else {
+        [self hideOtherTab];
+    }
+}
+
+- (void)hideOtherTab {
+    [self.typeControl.secondSegmentView setHidden:true];
+    CGFloat trailingContstraint;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        trailingContstraint = 88.5;
+    } else {
+        trailingContstraint = 79;
+    }
+    self.firstSegmentIndicatorTrailingContstraint.constant = trailingContstraint;
 }
 
 - (void)setupTextLabels {
-    self.appTitleLabel.text = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? self.app.title : [self.app.title uppercaseString];
-
-    self.appDescriptionLabel.text = self.app.appDescription;
-
-    self.appShowcaseLabel.attributedText = [self.app showcasedProfilesAttributedStringWithUserInterfaceIdiom:UI_USER_INTERFACE_IDIOM()];
+    self.appTitleLabel.text = [self.viewModel appTitleLabelString];
+    self.appDescriptionLabel.text = [self.viewModel appDescriptionString];
+    self.appShowcaseLabel.attributedText = [self.viewModel appShowcaseLabelString];
+    self.selectDeviceLabel.text = [self.viewModel selectDeviceString];
 }
 
 #pragma mark - UIViewController Methods
@@ -149,16 +140,42 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.discoveredDevices.count;
+    return [self.viewModel discoveredDevicesForIndex:self.typeControl.selectedIndex].count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SILDeviceSelectionCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SILDeviceSelectionCollectionViewCellIdentifier
                                                                            forIndexPath:indexPath];
-    SILDiscoveredPeripheral *discoveredPeripheral = self.discoveredDevices[indexPath.row];
+
+    NSArray *discovered = [self.viewModel discoveredDevicesForIndex:self.typeControl.selectedIndex];
+    SILDiscoveredPeripheral *discoveredPeripheral = discovered[indexPath.row];
 
     cell.deviceNameLabel.text = discoveredPeripheral.advertisedLocalName;
-
+    
+    if ([cell.deviceNameLabel.text length] == 0) {
+        cell.deviceNameLabel.text = @"<unknown>";
+    }
+    
+    if (self.viewModel.app.appType == SILAppTypeConnectedLighting) {
+        NSString *dmpImage;
+        
+        if (discoveredPeripheral.isDMPConnectedLightConnect) {
+            dmpImage = @"iconBleConnect";
+        } else if (discoveredPeripheral.isDMPConnectedLightThread) {
+            dmpImage = @"iconThread";
+        } else if (discoveredPeripheral.isDMPConnectedLightZigbee) {
+            dmpImage = @"iconZigbee";
+        } else {
+            dmpImage = @"iconProprietary";
+        }
+        
+        cell.dmpTypeImageView.hidden = NO;
+        cell.dmpTypeImageView.image = [UIImage imageNamed:dmpImage];
+    } else {
+        cell.dmpTypeImageView.hidden = YES;
+        cell.dmpTypeImageView.image = nil;
+    }
+    
     NSInteger smoothedRSSIValue = [[discoveredPeripheral.RSSIMeasurementTable averageRSSIMeasurementInPastTimeInterval:SILDeviceSelectionViewControllerReloadThreshold] integerValue];
     if (smoothedRSSIValue > SILConstantsStrongSignalThreshold) {
         cell.signalImageView.image = [UIImage imageNamed:SILImageNameBTStrong];
@@ -176,8 +193,9 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 
-    self.connectingPeripheral = self.discoveredDevices[indexPath.row];
-    [self.centralManager connectToDiscoveredPeripheral:self.connectingPeripheral];
+    NSArray *discovered = [self.viewModel discoveredDevicesForIndex:self.typeControl.selectedIndex];
+    self.viewModel.connectingPeripheral = discovered[indexPath.row];
+    [self.centralManager connectToDiscoveredPeripheral:self.viewModel.connectingPeripheral];
     [SVProgressHUD showWithStatus:@"Connecting..."];
 }
 
@@ -212,10 +230,10 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 }
 
 - (void)reloadDataIfNecessary {
-    if (self.hasDataChanged) {
-        self.hasDataChanged = NO;
+    if (self.viewModel.hasDataChanged) {
+        self.viewModel.hasDataChanged = NO;
 
-        [self updateDiscoveredPeripherals];
+        [self.viewModel updateDiscoveredPeripheralsWithDiscoveredPeripherals:[self.centralManager discoveredPeripherals]];
         [self.deviceCollectionView reloadData];
     }
 }
@@ -255,21 +273,21 @@ typedef NS_ENUM(NSInteger, SILDeviceTypeControlType) {
 }
 
 - (void)handleCentralManagerDidUpdateDiscoveredPeripheralsNotification:(NSNotification *)notification {
-    self.hasDataChanged = YES;
+    self.viewModel.hasDataChanged = YES;
 }
 
 - (void)handleCentralManagerDidConnectPeripheralNotification:(NSNotification *)notification {
-    if (self.connectingPeripheral) {
+    if (self.viewModel.connectingPeripheral) {
         [SVProgressHUD showSuccessWithStatus:@"Connection Successful!"];
-        [self.delegate deviceSelectionViewController:self didSelectPeripheral:self.connectingPeripheral.peripheral];
-        self.connectingPeripheral = nil;
+        [self.delegate deviceSelectionViewController:self didSelectPeripheral:self.viewModel.connectingPeripheral.peripheral];
+        self.viewModel.connectingPeripheral = nil;
     }
 }
 
 - (void)handleCentralManagerDidFailToConnectPeripheralNotification:(NSNotification *)notification {
-    if (self.connectingPeripheral) {
+    if (self.viewModel.connectingPeripheral) {
         [SVProgressHUD showErrorWithStatus:@"Failed to connect..."];
-        self.connectingPeripheral = nil;
+        self.viewModel.connectingPeripheral = nil;
     }
 }
 

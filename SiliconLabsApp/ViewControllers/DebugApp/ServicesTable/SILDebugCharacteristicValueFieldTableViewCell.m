@@ -13,7 +13,6 @@
 
 @interface SILDebugCharacteristicValueFieldTableViewCell()
 @property (weak, nonatomic) IBOutlet UIView *topSeparatorView;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (strong, nonatomic) SILValueFieldRowModel *valueModel;
 @end
 
@@ -23,6 +22,7 @@
     self.valueModel = valueModel;
     self.valueLabel.text = [valueModel primaryTitle] ?: @"Unknown Value";
     self.typeLabel.text = [valueModel secondaryTitle] ?: @"";
+    //Hidden is set to YES in the Bluetooth Browser feature after adding button properties SLMAIN-276. Hidden state was left conditional in HomeKit feature.
     self.editButton.hidden = !valueModel.parentCharacteristicModel.canWrite;
     self.topSeparatorView.hidden = valueModel.hideTopSeparator;
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];

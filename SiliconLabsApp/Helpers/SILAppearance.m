@@ -22,9 +22,7 @@
 }
 
 + (void)setupNavigationBarAppearance {
-    if ([[UINavigationBar appearance] respondsToSelector:@selector(setTranslucent:)]) {
-        [[UINavigationBar appearance] setTranslucent:NO];
-    }
+    [[UINavigationBar appearance] setTranslucent:NO];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setBarTintColor:[UIColor clearColor]];
     [[UINavigationBar appearance] setBackgroundImage:[UIImage sil_imageWithColor:[UIColor sil_siliconLabsRedColor]] forBarMetrics:UIBarMetricsDefault];
