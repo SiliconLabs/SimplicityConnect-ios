@@ -27,7 +27,7 @@
     return self;
 }
 
-- (NSData *)dataForField {
+- (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error {
     return [[self.parentCharacteristicModel characteristic] value];
 }
 

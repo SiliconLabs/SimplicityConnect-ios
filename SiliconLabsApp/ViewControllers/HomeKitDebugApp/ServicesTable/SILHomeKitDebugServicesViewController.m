@@ -50,6 +50,7 @@
 #import "SILEncodingPseudoFieldRowModel.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "SILActivityBarViewController.h"
+#import <Crashlytics/Crashlytics.h>
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
 #import "CBPeripheral+Services.h"
@@ -416,8 +417,9 @@ static float kTableRefreshInterval = 1;
 }
 
 - (SILDebugCharacteristicEncodingFieldTableViewCell *)encodingFieldCellWithModel:(SILEncodingPseudoFieldRowModel *)encodingFieldModel forTable:(UITableView *)tableView isSizing:(BOOL)isSizing {
+    NSError *dataError = nil;
     SILDebugCharacteristicEncodingFieldTableViewCell *cell = isSizing ? self.sizingCharacteristicEncodingCell : (SILDebugCharacteristicEncodingFieldTableViewCell *) [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicEncodingFieldTableViewCell class])];
-    NSData* subjectData = [encodingFieldModel dataForField];
+    NSData* subjectData = [encodingFieldModel dataForFieldWithError:&dataError];
     
     cell.editLabel.hidden = !encodingFieldModel.parentCharacteristicModel.canWrite;
     cell.hexValueLabel.text = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:subjectData];
@@ -487,7 +489,7 @@ static float kTableRefreshInterval = 1;
     }];
 }
 
-- (void)didSaveCharacteristic:(SILCharacteristicTableModel *)characteristicModel withAction:(void (^)(void))saveActionBlock {
+- (void)saveCharacteristic:(SILCharacteristicTableModel *)characteristicModel withAction:(void (^)(void))updateModel error:(NSError *__autoreleasing *)error {
 //    SILCharacteristicTableModel *backupCharacteristic = characteristicModel;
 //    NSLog(@"Backup data: %@", [backupCharacteristic dataToWrite]);
 //    saveActionBlock();
@@ -531,6 +533,7 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self markTableForUpdate];
 }

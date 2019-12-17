@@ -83,12 +83,12 @@
     return bitFieldData.length;
 }
 
-- (NSData *)dataForField {
-    NSMutableData *bitFieldData = [NSMutableData new];
-    
+- (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error {
+    NSMutableData * const bitFieldData = [NSMutableData new];
+    const NSUInteger bitCount = [[SILCharacteristicFieldValueResolver sharedResolver] bitCountForFormat:self.fieldModel.format];
     uint8_t resultBuffer = 0;
-    NSUInteger bitCount = [[SILCharacteristicFieldValueResolver sharedResolver] bitCountForFormat:self.fieldModel.format];
     NSInteger bitIndex = bitCount - 1;
+    
     while (bitIndex >= 0) {
         int bit = 0;
         if (bitIndex < self.bitRowFields.count) {

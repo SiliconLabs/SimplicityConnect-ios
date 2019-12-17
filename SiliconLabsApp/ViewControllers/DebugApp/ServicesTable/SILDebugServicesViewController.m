@@ -41,6 +41,7 @@
 #import "SILEncodingPseudoFieldRowModel.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "SILActivityBarViewController.h"
+#import <Crashlytics/Crashlytics.h>
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
 #import "CBPeripheral+Services.h"
@@ -363,12 +364,13 @@ static float kTableRefreshInterval = 1;
 }
 
 - (SILDebugCharacteristicEncodingFieldTableViewCell *)encodingFieldCellWithModel:(SILEncodingPseudoFieldRowModel *)encodingFieldModel forTable:(UITableView *)tableView {
+    NSError *dataError = nil;
     SILDebugCharacteristicEncodingFieldTableViewCell *cell = (SILDebugCharacteristicEncodingFieldTableViewCell *) [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicEncodingFieldTableViewCell class])];
-    NSData* subjectData = [encodingFieldModel dataForField];
+    NSData* subjectData = [encodingFieldModel dataForFieldWithError:&dataError];
     
     //Hidden is set to YES in the Bluetooth Browser feature after adding button properties SLMAIN-276. Hidden state was left conditional in HomeKit feature.
     cell.editLabel.hidden = YES;
-    cell.hexValueLabel.text = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:subjectData];
+    cell.hexValueLabel.text = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:subjectData decimalExponent:0];
     cell.asciiValueLabel.text = [[[SILCharacteristicFieldValueResolver sharedResolver] asciiStringForData:subjectData] stringByReplacingOccurrencesOfString:@"\0" withString:@""];
     cell.decimalValueLabel.text = [[SILCharacteristicFieldValueResolver sharedResolver] decimalStringForData:subjectData];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -437,16 +439,49 @@ static float kTableRefreshInterval = 1;
     }];
 }
 
-- (void)didSaveCharacteristic:(SILCharacteristicTableModel *)characteristicModel withAction:(void (^)(void))saveActionBlock {
-    SILCharacteristicTableModel *backupCharacteristic = characteristicModel;
-    NSLog(@"Backup data: %@", [backupCharacteristic dataToWrite]);
-    saveActionBlock();
-    NSLog(@"Writin data: %@", [characteristicModel dataToWrite]);
-    if ([characteristicModel dataToWrite]) {
-        [characteristicModel writeIfAllowedToPeripheral:self.peripheral];
+- (void)saveCharacteristic:(SILCharacteristicTableModel *)characteristicModel error:(NSError *__autoreleasing *)error {
+    if (!(*error)) {
+        [characteristicModel writeIfAllowedToPeripheral:self.peripheral error:error];
     }
-    NSLog(@"Restoring as backup in case of write failure %@", [backupCharacteristic dataToWrite]);
-    characteristicModel = backupCharacteristic;
+    
+    if (*error) {
+        *error = [NSError errorWithDomain:(*error).domain code:(*error).code userInfo:@{
+            NSUnderlyingErrorKey: *error,
+            NSLocalizedDescriptionKey: [self prepareErrorDescription:*error],
+        }];
+    }
+}
+
+- (NSString *)prepareErrorDescription:(NSError *)error {
+    NSString * const errorKind = error.userInfo[@"errorKind"];
+    
+    if ([@"Parse" isEqualToString:errorKind]) {
+        return [self prepareParseErrorDescription:error];
+    } else if ([@"Range" isEqualToString:errorKind]) {
+        return [self prepareRangeErrorDescription:error];
+    }
+    
+    return @"Unknown error";
+}
+
+- (NSString *)prepareParseErrorDescription:(NSError *)error {
+    return @"Input parsing error";
+}
+
+- (NSString *)prepareRangeErrorDescription:(NSError *)error {
+    NSNumber * minRange = error.userInfo[@"minRange"];
+    NSNumber * maxRange = error.userInfo[@"maxRange"];
+    NSNumber * const valueExponent = error.userInfo[@"valueExponent"];
+    
+    if (valueExponent && ![valueExponent isEqualToNumber:@0]) {
+        NSDecimalNumber * const minDecNumber = [NSDecimalNumber decimalNumberWithDecimal:[minRange decimalValue]];
+        minRange = [minDecNumber decimalNumberByMultiplyingByPowerOf10:[valueExponent shortValue]];
+        
+        NSDecimalNumber * const maxDecNumber = [NSDecimalNumber decimalNumberWithDecimal:[maxRange decimalValue]];
+        maxRange = [maxDecNumber decimalNumberByMultiplyingByPowerOf10:[valueExponent shortValue]];
+    }
+
+    return [NSString stringWithFormat:@"Value out of range (%@, %@)", minRange.stringValue, maxRange.stringValue];
 }
 
 #pragma mark - WYPopoverControllerDelegate
@@ -528,6 +563,7 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self markTableForUpdate];
 }

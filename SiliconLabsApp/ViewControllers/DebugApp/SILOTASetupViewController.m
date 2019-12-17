@@ -28,7 +28,7 @@ static NSString * const kSILOTAChooseFileCTA = @"CHOOSE FILE";
 @interface SILOTASetupViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate,
 SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuDelegate>
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *otaTypeSegmentedControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *otaMethodSegmentedControl;
 @property (weak, nonatomic) IBOutlet UITableView *fileSelectionTableView;
 @property (weak, nonatomic) IBOutlet UIButton *startOTAButton;
 @property (weak, nonatomic) IBOutlet SILOTAHUDView *hudView;
@@ -96,16 +96,8 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
     [self.delegate otaSetupViewControllerDidCancel:self];
 }
 
-- (IBAction)didSelectOTATypeSegment:(UISegmentedControl *)sender {
-    self.firmwareUpdateViewModel.updateMode = ([sender selectedSegmentIndex] == 1) ? SILOTAModeFull : SILOTAModePartial;
-}
-
-- (IBAction)didTapPartialOTAButton:(id)sender {
-    self.firmwareUpdateViewModel.updateMode = SILOTAModePartial;
-}
-
-- (IBAction)didTapFullOTAButton:(id)sender {
-    self.firmwareUpdateViewModel.updateMode = SILOTAModeFull;
+- (IBAction)didSelectOTAMethodSegment:(UISegmentedControl *)sender {
+    self.firmwareUpdateViewModel.updateMethod = ([sender selectedSegmentIndex] == 1) ? SILOTAMethodFull : SILOTAMethodPartial;
 }
 
 - (IBAction)didTapStartOTAButton:(id)sender {
@@ -115,8 +107,8 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
 #pragma mark - Helpers
 
 - (void)configureUIForFirmwareUpdateViewModel:(SILOTAFirmwareUpdateViewModel *)firmwareUpdateViewModel {
-    SILOTAMode otaMode = firmwareUpdateViewModel.updateMode;
-    self.otaTypeSegmentedControl.selectedSegmentIndex = (otaMode == SILOTAModePartial) ? 0 : 1;
+    const SILOTAMethod otaMethod = firmwareUpdateViewModel.updateMethod;
+    self.otaMethodSegmentedControl.selectedSegmentIndex = (otaMethod == SILOTAMethodPartial) ? 0 : 1;
     self.startOTAButton.enabled = firmwareUpdateViewModel.shouldEnableStartOTAButton;
     [self.fileSelectionTableView reloadData];
 }
@@ -164,6 +156,10 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
     
     self.lastSelectedCell = [tableView cellForRowAtIndexPath:indexPath];
     [self beginDocumentPickFlow];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return tableView.frame.size.height / 2 - 8;
 }
 
 - (void)beginDocumentPickFlow {
@@ -276,7 +272,7 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
 #pragma mark - SILPopoverViewControllerSizeConstraints
 
 - (CGSize)popoverIPhoneSize {
-    return CGSizeMake(300.0, 352.0);
+    return CGSizeMake(300.0, 382.0);
 }
 
 #pragma Helpers

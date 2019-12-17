@@ -32,20 +32,18 @@
       <Description>Defined per Service specification.</Description>
     </Field>
     <Field name="Request Op Code">
-      <InformativeText>The Request Op Code is a sub field of the Parameter Value for "Response Code" Op Code.
-      <br>
+      <InformativeText>
+	  The Request Op Code is a sub field of the Parameter Value for "Response Code" Op Code.
       C1: This Field is Mandatory for "Response Code" Op Code, otherwise this field is Excluded.
-      </br>      
       </InformativeText>
       <Requirement>C1</Requirement>
       <Format>uint8</Format>
       <Description>Refer to the Op Code table above for additional information on the possible values for this field.</Description>
     </Field>
     <Field name="Response Value">
-      <InformativeText>The Response Value is a sub field of the Parameter Value for "Response Code" Op Code
-      <br>
+      <InformativeText>
+	  The Response Value is a sub field of the Parameter Value for "Response Code" Op Code
       C1: This Field is Mandatory for "Response Code" Op Code, otherwise this field is Excluded.
-      </br>  
       </InformativeText>
       <Requirement>C1</Requirement>
       <Format>uint8</Format>
@@ -59,18 +57,14 @@
           </Enumerations>
     </Field>
     <Field name="Response Parameter">
-      <InformativeText>The Response Parameter is a sub field of the Parameter Value for "Response Code" Op Code.
-      <br>
-	C2:This Field is Optional for "Response Code" Op Code, otherwise this field is Excluded.
-      </br>
+      <InformativeText>
+	  The Response Parameter is a sub field of the Parameter Value for "Response Code" Op Code.
+	  C2:This Field is Optional for "Response Code" Op Code, otherwise this field is Excluded.
       </InformativeText>
       <Requirement>C2</Requirement>
       <Format>variable</Format>
       <Description>Note: The Response Parameter Value of the response to the Control Point is a variable length field to allow a list of different values defined by the Service Specification.</Description>
     </Field>
   </Value>
-  <Note>        
-       The fields in the above table, reading from top to bottom, are shown in the order of LSO to MSO, where LSO = Least Significant Octet and MSO = Most Significant Octet.
-       The Least Significant Octet represents the eight bits numbered 0 to 7.
-    </Note>
+  <Note>The fields in the above table, reading from top to bottom, are shown in the order of LSO to MSO, where LSO = Least Significant Octet and MSO = Most Significant Octet. The Least Significant Octet represents the eight bits numbered 0 to 7.</Note>
 </Characteristic>

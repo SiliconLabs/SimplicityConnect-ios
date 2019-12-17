@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Created with Liquid XML Studio Developer Edition 8.1.7.2743 (http://www.liquid-technologies.com) -->
 <!-- Copyright 2011 Bluetooth SIG, Inc. All rights reserved. -->
-<Descriptor xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/descriptor.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="org.bluetooth.descriptor.valid_range" uuid="2906" name="Valid Range">
+<Descriptor xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/descriptor.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="org.bluetooth.descriptor.valid_range" uuid="2906" name="Valid Range" last-modified="2013-11-22">
   <InformativeText>
     <Abstract>
     The Characteristic Valid Range descriptor is used for defining the range of a characteristics. Two mandatory fields are contained (upper and lower bounds) which define the range.            
@@ -27,12 +27,12 @@ When used with the Measurement Interval characteristic, the Valid Range descript
     <Field name="Lower inclusive value">
       <InformativeText>The lower bound is the same format as the characteristic the descriptor describes.</InformativeText>
       <Requirement>Mandatory</Requirement>
-      <Format>Format of the characteristic</Format>
+      <Format>characteristic</Format>
     </Field>
     <Field name="Upper inclusive value">
       <InformativeText>The upper bound is the same format as the characteristic the descriptor describes.</InformativeText>
       <Requirement>Mandatory</Requirement>
-      <Format> Format of the characteristic</Format>
+      <Format>characteristic</Format>
     </Field>
   </Value>
 </Descriptor>

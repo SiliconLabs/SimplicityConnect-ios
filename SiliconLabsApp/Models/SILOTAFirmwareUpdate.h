@@ -9,15 +9,21 @@
 #import <Foundation/Foundation.h>
 @class SILOTAFirmwareFile;
 
+typedef NS_ENUM(NSInteger, SILOTAMethod) {
+    SILOTAMethodPartial,
+    SILOTAMethodFull
+};
+
 typedef NS_ENUM(NSInteger, SILOTAMode) {
-    SILOTAModePartial,
-    SILOTAModeFull
+    SILOTAModeReliability,
+    SILOTAModeSpeed
 };
 
 @interface SILOTAFirmwareUpdate : NSObject
 
 @property (strong, nonatomic) SILOTAFirmwareFile *appFile;
 @property (strong, nonatomic) SILOTAFirmwareFile *stackFile;
+@property (nonatomic) SILOTAMethod updateMethod;
 @property (nonatomic) SILOTAMode updateMode;
 
 @end

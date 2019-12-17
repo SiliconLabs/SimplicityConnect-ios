@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 @class SILValueFieldRowModel, SILCharacteristicTableModel;
 
-
 @protocol SILCharacteristicEditEnablerDelegate <NSObject>
+
 - (void)beginValueEditWithValue:(SILValueFieldRowModel *)valueModel;
-///@discussion: the save action block is the code tht should modify the model state, before that state is written to device
-- (void)didSaveCharacteristic:(SILCharacteristicTableModel *)characteristicModel withAction:(void (^)(void))saveActionBlock;
+- (void)saveCharacteristic:(SILCharacteristicTableModel *)characteristicModel error:(NSError **)error;
+
 @end

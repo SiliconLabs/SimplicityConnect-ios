@@ -101,6 +101,7 @@ const NSString * kTypeAttributeKey = @"_type";
     fieldModel.minimum = [xmlDict[@"Minimum"] integerValue];
     fieldModel.maximum = [xmlDict[@"Maximum"] integerValue];
     fieldModel.reference = xmlDict[@"Reference"];
+    fieldModel.decimalExponent = [xmlDict[@"DecimalExponent"] integerValue];
     
     NSArray *bitModels = [self arrayForDictionary:xmlDict[@"BitField"] keyPath:@"Bit" selector:@selector(buildBitFromXmlDictionary:)];
     if (bitModels) {
@@ -179,15 +180,44 @@ const NSString * kTypeAttributeKey = @"_type";
 }
 
 - (NSString *)bestAvailableSummary:(NSDictionary *)xmlDict {
-    if ([xmlDict[@"InformativeText"] isKindOfClass:[NSString class]]) {
-        return xmlDict[@"InformativeText"];
-    } else if ([xmlDict valueForKeyPath:@"InformativeText.Summary"]) {
-        return [xmlDict valueForKeyPath:@"InformativeText.Summary"];
-    } else if ([xmlDict valueForKeyPath:@"InformativeText.Abstract"]) {
-        return [xmlDict valueForKeyPath:@"InformativeText.Abstract"];
-    } else {
-        return nil;
+    NSString * const informativeTextKey = @"InformativeText";
+    const id informativeTextNode = xmlDict[informativeTextKey];
+    NSString * result = nil;
+    
+    if ([informativeTextNode isKindOfClass:[NSString class]]) {
+        result = informativeTextNode;
+    } else if ([informativeTextNode isKindOfClass:[NSDictionary class]]) {
+        result = [self bestAvailableSummaryInDictionaryNode:informativeTextNode];
+    } else if ([informativeTextNode isKindOfClass:[NSArray class]]) {
+        result = [self bestAvailableSummaryInArrayNode:informativeTextNode];
     }
+    
+    return result;
+}
+
+- (NSString *)bestAvailableSummaryInArrayNode:(NSArray *)arrayNode {
+    for (id singleNode in arrayNode) {
+        if ([singleNode isKindOfClass:[NSString class]]) {
+            return singleNode;
+        } else if ([singleNode isKindOfClass:[NSDictionary class]]) {
+            return [self bestAvailableSummaryInDictionaryNode:singleNode];
+        }
+    }
+    
+    return nil;
+}
+
+- (NSString *)bestAvailableSummaryInDictionaryNode:(NSDictionary *)dictionaryNode {
+    NSString * const summaryKey = @"Summary";
+    NSString * const abstractKey = @"Abstract";
+
+    if (dictionaryNode[summaryKey]) {
+        return dictionaryNode[summaryKey];
+    } else if (dictionaryNode[abstractKey]) {
+        return dictionaryNode[abstractKey];
+    }
+    
+    return nil;
 }
 
 - (NSArray *)arrayForDictionary:(NSDictionary *)xmlDict keyPath:(NSString *)keyPath selector:(SEL)modelMaker {

@@ -33,6 +33,7 @@ NSString * const kDecimal = @"DECIMAL";
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UILabel *serviceNameTitle;
 @property (weak, nonatomic) IBOutlet UIView *propertiesContainerView;
+@property (weak, nonatomic) IBOutlet UILabel *invalidInputLabel;
 
 @property (nonatomic) BOOL canEdit;
 @end
@@ -57,6 +58,7 @@ NSString * const kDecimal = @"DECIMAL";
     [self registerNibs];
     [self setUpText];
     [self setupForIdiom];
+    self.invalidInputLabel.hidden = YES;
 }
 
 - (CGSize)preferredContentSize {
@@ -108,8 +110,7 @@ NSString * const kDecimal = @"DECIMAL";
 
 //Necessary for iOS7
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self configureCell:self.sizingEncodingCell atIndexPath:indexPath];
-    return [self.sizingEncodingCell autoLayoutHeight];
+    return tableView.frame.size.height / self.encodingTypes.count - 8;
 }
 
 #pragma mark - Configure cell
@@ -128,7 +129,7 @@ NSString * const kDecimal = @"DECIMAL";
         if (![encodingCell isEqual:self.sizingEncodingCell]) {
             self.hexField = encodingCell.valueTextField;
         }
-        encodedValue = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:self.encodingData];
+        encodedValue = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:self.encodingData decimalExponent:0];
     } else if ([type isEqual:kAscii]) {
         if (![encodingCell isEqual:self.sizingEncodingCell]) {
             self.asciiField = encodingCell.valueTextField;
@@ -148,49 +149,52 @@ NSString * const kDecimal = @"DECIMAL";
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSLog(@"Replacement String: %@ for rangeloc:%lu for rangelen:%lu", string, (unsigned long)range.location, (unsigned long)range.length);
-    BOOL change;
-    if ([string isEqualToString:@"\b"] || [string isEqualToString:@""]) {
-        change = YES;
-    } else if ([textField isEqual:self.hexField]) {
-        change = [self shouldChangeHexCharactersInRange:range replacementString:string];
+    
+    const BOOL isSpecialCharacter = [string isEqualToString:@"\b"] || [string isEqualToString:@""];
+    const BOOL isHexField = [textField isEqual:self.hexField];
+    const BOOL isDecimalField = [textField isEqual:self.decimalField];
+    const BOOL isOtherField = !isHexField && ! isDecimalField;
+    const BOOL shouldChangeHexField = isHexField && [self shouldChangeHexCharactersInRange:range replacementString:string];
+    const BOOL shouldChangeDecimalField = isDecimalField && [self shouldChangeDecimalCharactersInRange:range replacementString:string];
+    const BOOL shouldRefreshUI = isSpecialCharacter || isOtherField || (isHexField && shouldChangeHexField) || (isDecimalField && shouldChangeDecimalField);
+    
+    if (!shouldRefreshUI) {
+        return NO;
+    }
+    
+    NSError * dataError = nil;
+    NSString * const latestString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    SILCharacteristicFieldValueResolver * const resolver = [SILCharacteristicFieldValueResolver sharedResolver];
+    
+    if ([textField isEqual:self.hexField]) {
+        self.encodingData = [resolver dataForHexString:latestString decimalExponent:0 error:&dataError];
+        if (self.encodingData) {
+            self.asciiField.text = [resolver asciiStringForData:self.encodingData];
+            self.decimalField.text = [resolver decimalStringForData:self.encodingData];
+        }
     } else if ([textField isEqual:self.asciiField]){
-        change = YES;
+        self.encodingData = [resolver dataForAsciiString:latestString];
+        if (self.encodingData) {
+            self.hexField.text = [resolver hexStringForData:self.encodingData decimalExponent:0];
+            self.decimalField.text = [resolver decimalStringForData:self.encodingData];
+        }
     } else if ([textField isEqual:self.decimalField]){
-        change = [self shouldChangeDecimalCharactersInRange:range replacementString:string];
-    } else {
-        change = YES;
-    }
-    
-    if (change) {
-        NSString *latestString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        if ([textField isEqual:self.hexField]) {
-            self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:latestString];
-            if (self.encodingData) {
-                self.asciiField.text = [[SILCharacteristicFieldValueResolver sharedResolver] asciiStringForData:self.encodingData];
-                self.decimalField.text = [[SILCharacteristicFieldValueResolver sharedResolver] decimalStringForData:self.encodingData];
-            }
-        } else if ([textField isEqual:self.asciiField]){
-            self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForAsciiString:latestString];
-            if (self.encodingData) {
-                self.hexField.text = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:self.encodingData];
-                self.decimalField.text = [[SILCharacteristicFieldValueResolver sharedResolver] decimalStringForData:self.encodingData];
-            }
-        } else if ([textField isEqual:self.decimalField]){
-            self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForDecimalString:latestString];
-            if (self.encodingData) {
-                self.hexField.text = [[SILCharacteristicFieldValueResolver sharedResolver] hexStringForData:self.encodingData];
-                self.asciiField.text = [[SILCharacteristicFieldValueResolver sharedResolver] asciiStringForData:self.encodingData];
-            }
-        }
-        
-        if ([latestString isEqualToString:@""]) {
-            self.hexField.text = latestString;
-            self.asciiField.text = latestString;
-            self.decimalField.text = latestString;
+        self.encodingData = [resolver dataForDecimalString:latestString];
+        if (self.encodingData) {
+            self.hexField.text = [resolver hexStringForData:self.encodingData decimalExponent:0];
+            self.asciiField.text = [resolver asciiStringForData:self.encodingData];
         }
     }
     
-    return change && self.canEdit;
+    if ([latestString isEqualToString:@""]) {
+        self.hexField.text = latestString;
+        self.asciiField.text = latestString;
+        self.decimalField.text = latestString;
+    }
+    
+    self.invalidInputLabel.hidden = YES;
+    
+    return self.canEdit;
 }
 
 #pragma mark - IBActions
@@ -200,11 +204,20 @@ NSString * const kDecimal = @"DECIMAL";
 }
 
 - (IBAction)didTapSave:(UIButton *)sender {
-    [self.editDelegate didSaveCharacteristic:self.characteristicModel withAction:^{
-        self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:self.hexField.text];
-        [self.characteristicModel setIfAllowedFullWriteValue:self.encodingData];
+    NSError * error = nil;
+    NSData * const backupValue = [self.characteristicModel dataToWriteWithError:&error];
+    
+    self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:self.hexField.text decimalExponent:0 error:&error];
+    [self.characteristicModel setIfAllowedFullWriteValue:self.encodingData];
+    [self.editDelegate saveCharacteristic:self.characteristicModel error:&error];
+    
+    if (error != nil) {
+        [self.characteristicModel setIfAllowedFullWriteValue:backupValue];
+        self.invalidInputLabel.text = error.localizedDescription;
+        self.invalidInputLabel.hidden = NO;
+    } else {
         [self.popoverDelegate didClosePopoverViewController:self];
-    }];
+    }
 }
 
 #pragma mark - Text Field Value

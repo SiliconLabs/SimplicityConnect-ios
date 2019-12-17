@@ -543,6 +543,9 @@
 		49FB4BED1E7A2EC200223F3E /* SILPopoverViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FB4BEB1E7A2EC200223F3E /* SILPopoverViewController.xib */; };
 		49FB4BF11E7A33C900223F3E /* SILOTAProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FB4BEF1E7A33C900223F3E /* SILOTAProgressViewController.m */; };
 		49FB4BF21E7A33C900223F3E /* SILOTAProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FB4BF01E7A33C900223F3E /* SILOTAProgressViewController.xib */; };
+		4D8E8168238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8E8167238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m */; };
+		4D8E8169238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8E8167238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m */; };
+		4D8E816A238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8E8167238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m */; };
 		4D9E26202212BFB200617DBA /* SILRangeTestBoardFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E261F2212BFB100617DBA /* SILRangeTestBoardFeatures.swift */; };
 		4D9E26212212BFB200617DBA /* SILRangeTestBoardFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E261F2212BFB100617DBA /* SILRangeTestBoardFeatures.swift */; };
 		4D9E26222212BFB200617DBA /* SILRangeTestBoardFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E261F2212BFB100617DBA /* SILRangeTestBoardFeatures.swift */; };
@@ -888,6 +891,8 @@
 		4CA68516D3541CFE58D83A14 /* Pods-SiliconLabsAppWithoutHomeKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SiliconLabsAppWithoutHomeKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SiliconLabsAppWithoutHomeKit/Pods-SiliconLabsAppWithoutHomeKit.debug.xcconfig"; sourceTree = "<group>"; };
 		4D6925E6228453B800E7F015 /* Entitlements.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Entitlements.entitlements; sourceTree = "<group>"; };
 		4D6925EB2284549A00E7F015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4D8E8166238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILCharacteristicFieldValueResolverContext.h; sourceTree = "<group>"; };
+		4D8E8167238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILCharacteristicFieldValueResolverContext.m; sourceTree = "<group>"; };
 		4D9E261F2212BFB100617DBA /* SILRangeTestBoardFeatures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SILRangeTestBoardFeatures.swift; sourceTree = "<group>"; };
 		4D9E26242212CA7000617DBA /* SILRangeTestBoardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRangeTestBoardInfo.swift; sourceTree = "<group>"; };
 		5D477CF57EA327218A303591 /* Pods-SiliconLabsAppWithoutHomeKit Dev.release-wireless-gecko.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SiliconLabsAppWithoutHomeKit Dev.release-wireless-gecko.xcconfig"; path = "Pods/Target Support Files/Pods-SiliconLabsAppWithoutHomeKit Dev/Pods-SiliconLabsAppWithoutHomeKit Dev.release-wireless-gecko.xcconfig"; sourceTree = "<group>"; };
@@ -1845,6 +1850,8 @@
 				E642661F1A855DA8006C6B2F /* SILWeakTargetWrapper.m */,
 				0702AB2A1BDFEE35009527B0 /* SILCharacteristicFieldValueResolver.h */,
 				0702AB2B1BDFEE35009527B0 /* SILCharacteristicFieldValueResolver.m */,
+				4D8E8166238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.h */,
+				4D8E8167238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m */,
 				DC380D4F1E8A9FAA00898C12 /* EXTKeyPathCoding.h */,
 				DC380D501E8A9FFD00898C12 /* metamacros.h */,
 			);
@@ -2039,6 +2046,7 @@
 				0C2FCB961F9A542300F4F259 /* Frameworks */,
 				0C2FCB9C1F9A542300F4F259 /* Resources */,
 				0C2FCBD31F9A542300F4F259 /* [CP] Embed Pods Frameworks */,
+				0C2FCBD21F9A542300F4F259 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2058,6 +2066,7 @@
 				0F4E518A21525FDC00F58ACE /* Frameworks */,
 				0F4E519021525FDC00F58ACE /* Resources */,
 				0F4E51C621525FDC00F58ACE /* [CP] Embed Pods Frameworks */,
+				0F4E51C521525FDC00F58ACE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2077,6 +2086,7 @@
 				E6CAA21D1A64011900A49DAF /* Frameworks */,
 				E6CAA21E1A64011900A49DAF /* Resources */,
 				2647BDE6F2DEEDB67778BAD3 /* [CP] Embed Pods Frameworks */,
+				071C49B01C33273E003F80B8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2373,6 +2383,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		071C49B01C33273E003F80B8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" d4644999f9acaab70a6af52eebed37881b8dc107 3ac40070001448c72125e7becb3d822cc0a1f74a30c6327231b6eb046bdd7e4e";
+		};
 		0C2FCB011F9A542300F4F259 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2390,6 +2413,19 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		0C2FCBD21F9A542300F4F259 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" d4644999f9acaab70a6af52eebed37881b8dc107 3ac40070001448c72125e7becb3d822cc0a1f74a30c6327231b6eb046bdd7e4e\n";
 		};
 		0C2FCBD31F9A542300F4F259 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2448,6 +2484,19 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		0F4E51C521525FDC00F58ACE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" d4644999f9acaab70a6af52eebed37881b8dc107 3ac40070001448c72125e7becb3d822cc0a1f74a30c6327231b6eb046bdd7e4e\n";
 		};
 		0F4E51C621525FDC00F58ACE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2610,6 +2659,7 @@
 				0C2FCB391F9A542300F4F259 /* EddystoneScanner.swift in Sources */,
 				0C2FCB3A1F9A542300F4F259 /* SILDebugCharacteristicEncodingViewController.m in Sources */,
 				0C2FCB3B1F9A542300F4F259 /* SILAppDelegate.m in Sources */,
+				4D8E8168238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */,
 				0C2FCB3C1F9A542300F4F259 /* SILHeartRateMeasurement.m in Sources */,
 				0C2FCB3D1F9A542300F4F259 /* SILApp+AttributedProfiles.m in Sources */,
 				0C2FCB3E1F9A542300F4F259 /* SILOTAFirmwareFile.m in Sources */,
@@ -2767,6 +2817,7 @@
 				0F4E512A21525FDC00F58ACE /* EddystoneScanner.swift in Sources */,
 				0F4E512B21525FDC00F58ACE /* SILDebugCharacteristicEncodingViewController.m in Sources */,
 				0F4E512C21525FDC00F58ACE /* SILAppDelegate.m in Sources */,
+				4D8E816A238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */,
 				0F4E512D21525FDC00F58ACE /* SILHeartRateMeasurement.m in Sources */,
 				0F4E512E21525FDC00F58ACE /* SILApp+AttributedProfiles.m in Sources */,
 				0F4E512F21525FDC00F58ACE /* SILOTAFirmwareFile.m in Sources */,
@@ -2897,6 +2948,7 @@
 				AAD9E9321F279A670054C387 /* DebugDeviceFilterViewController.swift in Sources */,
 				0755DCFB1BCFEE5D0003886D /* SILDebugAdvDetailCollectionViewCell.m in Sources */,
 				E6CFEB271A686DC000F216AB /* SILHealthThermometerAppViewController.m in Sources */,
+				4D8E8169238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */,
 				E64266231A8565BA006C6B2F /* SILProximityCalculator.m in Sources */,
 				0752B7821BDEEC2C0064CBF0 /* SILDoubleKeyDictionaryPair.m in Sources */,
 				79C036211EC5F29500EF179B /* HMService+SILHelpers.m in Sources */,
@@ -3109,6 +3161,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "Blue Gecko";
@@ -3116,8 +3169,9 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/BlueGecko.pch";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3141,14 +3195,16 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "Blue Gecko";
 				ENABLE_BITCODE = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/BlueGecko.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3182,7 +3238,7 @@
 				);
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/WirelessGecko/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.WirelessGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3217,7 +3273,7 @@
 					"WIRELESS=1",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/WirelessGecko/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.WirelessGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3360,7 +3416,7 @@
 					"ENABLE_HOMEKIT=1",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGeckoWithHomeKit/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3396,7 +3452,7 @@
 					"ENABLE_HOMEKIT=1",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGeckoWithHomeKit/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";

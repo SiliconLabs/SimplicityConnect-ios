@@ -68,9 +68,8 @@
 }
 
 //BitField takes care of this for us
-- (NSData *)dataForField {
+- (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error {
     return nil;
 }
-
 
 @end

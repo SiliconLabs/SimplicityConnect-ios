@@ -8,18 +8,32 @@
 
 #import "SILUUIDProvider.h"
 
+@implementation SILUUIDProvider (OTA)
+
 NSString * const kSILOtaServiceUUIDString = @"1d14d6ee-fd63-4fa1-bfa4-8f47b42119f0";
 NSString * const kSILOtaCharacteristicDataUUIDString = @"984227f3-34fc-4045-a5d0-2c581f81a153";
 NSString * const kSILOtaCharacteristicControlUUIDString = @"f7bf3564-fb6d-4e53-88a4-5e37e0326063";
 NSString * const kSILOtaCharacteristicFirmwareVersionUUIDString = @"4f4a2368-8cca-451e-bfff-cf0e2ee23e9f";
 NSString * const kSILOtaCharacteristicOtaVersionUUIDString = @"4cc07bcf-0868-4b32-9dad-ba4cc41e5316";
-static NSDictionary *kSILOtaServiceAndCharacteristicNamesForUUIDs = nil;
+
+- (CBUUID *)otaServiceUUID {
+    return [CBUUID UUIDWithString:kSILOtaServiceUUIDString];
+}
+
+- (CBUUID *)otaCharacteristicDataUUID {
+    return [CBUUID UUIDWithString:kSILOtaCharacteristicDataUUIDString];
+}
+
+- (CBUUID *)otaCharacteristicControlUUID {
+    return [CBUUID UUIDWithString:kSILOtaCharacteristicControlUUIDString];
+}
+
+@end
 
 @interface SILUUIDProvider ()
 
-@property (strong, nonatomic, readwrite) CBUUID *otaServiceUUID;
-@property (strong, nonatomic, readwrite) CBUUID *otaCharacteristicDataUUID;
-@property (strong, nonatomic, readwrite) CBUUID *otaCharacteristicControlUUID;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *predefinedServicesNames;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *predefinedCharacteristicsNames;
 
 @end
 
@@ -34,38 +48,36 @@ static NSDictionary *kSILOtaServiceAndCharacteristicNamesForUUIDs = nil;
     return sharedProvider;
 }
 
-- (CBUUID *)otaServiceUUID {
-    if (_otaServiceUUID == nil) {
-        _otaServiceUUID = [CBUUID UUIDWithString:kSILOtaServiceUUIDString];
+- (instancetype)init {
+    if (self = [super init]) {
+        [self preparePredefinedServicesNames];
+        [self preparePredefinedCharacteristicsNames];
     }
-    return _otaServiceUUID;
+    
+    return self;
 }
 
-- (CBUUID *)otaCharacteristicDataUUID {
-    if (_otaCharacteristicDataUUID == nil) {
-        _otaCharacteristicDataUUID = [CBUUID UUIDWithString:kSILOtaCharacteristicDataUUIDString];
-    }
-    return _otaCharacteristicDataUUID;
+- (void)preparePredefinedServicesNames {
+    _predefinedServicesNames = @{
+        kSILOtaServiceUUIDString : @"OTA Service",
+    };
 }
 
-- (CBUUID *)otaCharacteristicControlUUID {
-    if (_otaCharacteristicControlUUID == nil) {
-        _otaCharacteristicControlUUID = [CBUUID UUIDWithString:kSILOtaCharacteristicControlUUIDString];
-    }
-    return _otaCharacteristicControlUUID;
+- (void)preparePredefinedCharacteristicsNames {
+    _predefinedCharacteristicsNames = @{
+        kSILOtaCharacteristicDataUUIDString : @"OTA Data",
+        kSILOtaCharacteristicControlUUIDString : @"OTA Control",
+        kSILOtaCharacteristicFirmwareVersionUUIDString : @"OTA Firmware Version",
+        kSILOtaCharacteristicOtaVersionUUIDString : @"OTA Version",
+    };
 }
 
-+ (NSString *)predefinedNameForServiceOrCharacteristicUUID:(NSString*)uuid {
-    if (!kSILOtaServiceAndCharacteristicNamesForUUIDs) {
-        kSILOtaServiceAndCharacteristicNamesForUUIDs = @{
-                                                 kSILOtaServiceUUIDString : @"OTA Service",
-                                                 kSILOtaCharacteristicDataUUIDString : @"OTA Data",
-                                                 kSILOtaCharacteristicControlUUIDString : @"OTA Control",
-                                                 kSILOtaCharacteristicFirmwareVersionUUIDString : @"OTA Firmware Version",
-                                                 kSILOtaCharacteristicOtaVersionUUIDString : @"OTA Version"
-                                                 };
-    }
-    return kSILOtaServiceAndCharacteristicNamesForUUIDs[[uuid lowercaseString]];
+- (NSString *)predefinedNameForServiceUUID:(NSString*)uuid {
+    return self.predefinedServicesNames[[uuid lowercaseString]];
+}
+
+-(NSString *)predefinedNameForCharacteristicUUID:(NSString *)uuid {
+    return self.predefinedCharacteristicsNames[[uuid lowercaseString]];
 }
 
 @end

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- <?xml-stylesheet type="text/xsl" href="FieldBasedDisplay.xslt"?> -->
-<!-- Created with Liquid XML Studio Designer Edition 9.1.10.3537 (http://www.liquid-technologies.com) -->
-<!--Copyright 2011 Bluetooth SIG, Inc. All rights reserved.-->
-<Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Cycling Power Feature" type="org.bluetooth.characteristic.cycling_power_feature" uuid="2A65" last-modified="2013-05-13" approved="Yes">
+<!--Copyright 2016 Bluetooth SIG, Inc. All rights reserved.-->
+<Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Cycling Power Feature" type="org.bluetooth.characteristic.cycling_power_feature" uuid="2A65" last-modified="2016-05-03" approved="Yes">
   <InformativeText>
     <Summary>The CP Feature characteristic is used to report a list of features supported by the device.</Summary>
   </InformativeText>
@@ -125,11 +124,25 @@
             <Enumeration key="1" value="True" />
           </Enumerations>
         </Bit>
-        <ReservedForFutureUse index="19" size="13" />
+        <Bit index="19" size="1" name="Enhanced Offset Compensation Supported">
+          <Enumerations>
+            <Enumeration key="0" value="False" />
+            <Enumeration key="1" value="True" />
+          </Enumerations>
+        </Bit>
+        <Bit index="20" size="2" name="Distribute System Support">
+          <Enumerations>
+            <Enumeration key="0" value="Unspecified (legacy sensor)" />
+            <Enumeration key="1" value="Not for use in a distributed system" />
+            <Enumeration key="2" value="Can be used in a distributed system" />
+            <Enumeration key="3" value="RFU" />
+          </Enumerations>
+        </Bit>
+        <ReservedForFutureUse index="22" size="10" />
       </BitField>
     </Field>
   </Value>
-  <Note>        
+  <Note>
         The fields in the above table, reading from top to bottom, are shown in the order of LSO to MSO, where LSO = Least Significant Octet and MSO = Most Significant Octet. 
         The Least Significant Octet represents the eight bits numbered 0 to 7.
     </Note>

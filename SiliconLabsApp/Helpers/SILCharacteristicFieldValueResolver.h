@@ -10,19 +10,21 @@
 
 extern NSString * const FieldReadErrorMessage;
 
+@class SILBluetoothFieldModel;
+
 @interface SILCharacteristicFieldValueResolver : NSObject
 
 + (instancetype)sharedResolver;
-- (NSString *)readValueString:(NSData *)value forFormat:(NSString *)format;
-- (NSData *)dataForValueString:(NSString *)string asFormat:(NSString *)format;
+- (NSString *)readValueString:(NSData *)value withFieldModel:(SILBluetoothFieldModel *)fieldModel;
+- (NSData *)dataForValueString:(NSString *)string withFieldModel:(SILBluetoothFieldModel *)fieldModel error:(NSError *__autoreleasing *)error;
 - (NSArray *)binaryArrayFromValue:(NSData *)value forFormat:(NSString *)format;
 - (NSData *)subsectionOfData:(NSData *)value fromIndex:(NSInteger)index forFormat:(NSString *)format;
-- (NSString *)hexStringForData:(NSData *)value;
+- (NSString *)hexStringForData:(NSData *)value decimalExponent:(NSInteger)decimalExponent;
 - (BOOL)isLegalHexString:(NSString *)hexPairString length:(NSUInteger)length;
 - (NSString *)asciiStringForData:(NSData *)value;
 - (NSString *)decimalStringForData:(NSData *)value;
 - (BOOL)isLegalDecimalString:(NSString *)decimalString;
-- (NSData *)dataForHexString:(NSString *)hexString;
+- (NSData *)dataForHexString:(NSString *)hexString decimalExponent:(NSInteger)decimalExponent error:(NSError *__autoreleasing *)error;
 - (NSData *)dataForAsciiString:(NSString *)asciiString;
 - (NSData *)dataForDecimalString:(NSString *)decimalString;
 - (NSUInteger)bitCountForFormat:(NSString *)format;

@@ -14,6 +14,7 @@
 @interface SILValueFieldEditorViewController ()
 @property (strong, nonatomic) SILValueFieldRowModel *valueModel;
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
+@property (weak, nonatomic) IBOutlet UILabel *invalidInputLabel;
 @end
 
 @implementation SILValueFieldEditorViewController
@@ -32,6 +33,7 @@
     self.generalTitle.text = self.valueModel.parentCharacteristicModel.bluetoothModel.name;
     self.specificTitle.text = self.valueModel.fieldModel.name;
     self.valueTextField.borderStyle = UITextBorderStyleNone;
+    self.invalidInputLabel.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -48,15 +50,28 @@
 
 #pragma mark - IBActions
 
+- (IBAction)inputValueChanged:(UITextField *)sender {
+    self.invalidInputLabel.hidden = YES;
+}
+
 - (IBAction)didTapCancel:(UIButton *)sender {
     [self.popoverDelegate didClosePopoverViewController:self];
 }
 
 - (IBAction)didTapSave:(UIButton *)sender {
-    [self.editDelegate didSaveCharacteristic:self.valueModel.parentCharacteristicModel withAction:^{
-        self.valueModel.primaryValue = self.valueTextField.text;
+    NSError * saveError = nil;
+    NSString * const backupValue = self.valueModel.primaryValue;
+    
+    self.valueModel.primaryValue = self.valueTextField.text;
+    [self.editDelegate saveCharacteristic:self.valueModel.parentCharacteristicModel error:&saveError];
+    
+    if (saveError != nil) {
+        self.valueModel.primaryValue = backupValue;
+        self.invalidInputLabel.text = saveError.localizedDescription;
+        self.invalidInputLabel.hidden = NO;
+    } else {
         [self.popoverDelegate didClosePopoverViewController:self];
-    }];
+    }
 }
 
 @end

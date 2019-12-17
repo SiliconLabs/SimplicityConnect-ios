@@ -45,6 +45,8 @@ SILOTAFirmwareUpdateManagerDelegate>
 
 @property (weak, nonatomic) HMAccessory *accessory;
 
+@property (nonatomic) SILOTAMode otaMode;
+
 @end
 
 @implementation SILOTAUICoordinator
@@ -61,6 +63,7 @@ SILOTAFirmwareUpdateManagerDelegate>
                                                                                 centralManager:centralManager];
         self.otaFirmwareUpdateManager.delegate = self;
         self.presentingViewController = presentingViewController;
+        self.otaMode = SILOTAModeReliability;
     }
     return self;
 }
@@ -78,6 +81,7 @@ SILOTAFirmwareUpdateManagerDelegate>
                                                                             centralManager:centralManager];
         _otaFirmwareUpdateManager.delegate = self;
         _presentingViewController = presentingViewController;
+        _otaMode = SILOTAModeReliability;
     }
     return self;
 }
@@ -219,6 +223,7 @@ SILOTAFirmwareUpdateManagerDelegate>
 - (void)otaSetupViewControllerEnterDFUModeForFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
     [SVProgressHUD show];
     
+    self.otaMode = firmwareUpdate.updateMode;
     __weak SILOTAUICoordinator *weakSelf = self;
     [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:YES
                                                                 progress:^(SILDFUStatus status) {
@@ -246,8 +251,8 @@ SILOTAFirmwareUpdateManagerDelegate>
 }
 
 - (void)otaSetupViewControllerDidInitiateFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
-    const BOOL isFullUpdate = firmwareUpdate.updateMode == SILOTAModeFull;
-    const BOOL isPartialUpdate = firmwareUpdate.updateMode == SILOTAModePartial;
+    const BOOL isFullUpdate = firmwareUpdate.updateMethod == SILOTAMethodFull;
+    const BOOL isPartialUpdate = firmwareUpdate.updateMethod == SILOTAMethodPartial;
     
     if (!(isFullUpdate || isPartialUpdate)) {
         return;
@@ -302,12 +307,12 @@ SILOTAFirmwareUpdateManagerDelegate>
     self.progressViewModel.uploadType = @"APP";
     self.progressViewModel.uploadingFile = YES;
     [self.otaFirmwareUpdateManager uploadFile:firmwareUpdate.appFile
-                                         progress:^(NSInteger bytes, double fraction) {
-                                             [weakSelf handleFileUploadProgress:fraction uploadedBytes:bytes];
-                                         }
-                                       completion:^void(CBPeripheral *peripheral, NSError *error) {
-                                           [weakSelf handleAppFileUploadCompletionForPeripheral:peripheral error:error];
-                                       }];
+                                     progress:^(NSInteger bytes, double fraction) {
+                                                [weakSelf handleFileUploadProgress:fraction uploadedBytes:bytes];
+                                              }
+                                   completion:^(CBPeripheral *peripheral, NSError *error) {
+                                                [weakSelf handleAppFileUploadCompletionForPeripheral:peripheral error:error];
+                                              }];
 }
 
 - (void)handleStackFileUploadCompletionForPeripheral:(CBPeripheral *)peripheral error:(NSError *)error withFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
@@ -351,6 +356,9 @@ SILOTAFirmwareUpdateManagerDelegate>
 
 #pragma mark - SILOTAFirmwareUpdateManagerDelegate 
 
+- (CBCharacteristicWriteType)characteristicWriteType {
+    return self.otaMode == SILOTAModeReliability ? CBCharacteristicWriteWithResponse : CBCharacteristicWriteWithoutResponse;
+}
 
 - (void)firmwareUpdateManagerDidUnexpectedlyDisconnectFromPeripheral:(SILOTAFirmwareUpdateManager *)firmwareUpdateManager
                                                            withError:(NSError *)error {

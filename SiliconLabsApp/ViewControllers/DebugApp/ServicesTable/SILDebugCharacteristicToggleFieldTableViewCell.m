@@ -42,9 +42,15 @@
 }
 
 - (IBAction)didChangeValue:(UISwitch *)sender {
-    [self.editDelegate didSaveCharacteristic:self.model.parentCharacteristicModel withAction:^{
-        self.model.toggleState = @(sender.on);
-    }];
+    NSError * saveError = nil;
+    NSNumber * const backupValue = self.model.toggleState;
+    
+    self.model.toggleState = @(sender.on);
+    [self.editDelegate saveCharacteristic:self.model.parentCharacteristicModel error:&saveError];
+    
+    if (saveError != nil) {
+        self.model.toggleState = backupValue;
+    }
 }
 
 @end

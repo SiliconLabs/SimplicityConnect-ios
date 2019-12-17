@@ -21,16 +21,15 @@
 @property (strong, nonatomic) NSArray *fieldTableRowModels;
 @property (strong, nonatomic) NSArray *descriptorModels;
 @property (nonatomic, readonly) BOOL canWrite;
-@property (nonatomic) BOOL isUnknown;
+@property (nonatomic, readonly) BOOL isUnknown;
 
 - (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic;
 - (NSString *)name;
 - (void)updateRead:(CBCharacteristic *)characteristic;
 - (void)setIfAllowedFullWriteValue:(NSData *)value;
-///@discussion won't write to peripheral if this model cannot write
-- (void)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral;
 - (void)updateWithField:(id<SILCharacteristicFieldRow>)fieldModel;
-- (NSData *)dataToWrite;
+///@discussion won't write to peripheral if this model cannot write
+- (void)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral error:(NSError * __autoreleasing *)error;
+- (NSData *)dataToWriteWithError:(NSError * __autoreleasing *)error;
 
-- (BOOL)isUnknown;
 @end

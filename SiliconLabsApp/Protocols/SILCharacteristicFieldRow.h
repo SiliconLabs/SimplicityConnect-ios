@@ -22,6 +22,6 @@
 - (NSString *)primaryTitle;
 - (NSString *)secondaryTitle;
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index; //return read length
-- (NSData *)dataForField;
+- (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error;
 
 @end

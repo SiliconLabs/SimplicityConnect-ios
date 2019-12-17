@@ -15,7 +15,6 @@
     <Requirement subProcedure="Indications">C.1</Requirement>
     <Requirement subProcedure="Read Characteristic Descriptors">Mandatory</Requirement>
     <Requirement subProcedure="Write Characteristic Descriptors">Mandatory</Requirement>
-    <!--<b>C1:Mandatory if the Cycling Power Control Point characteristic is supported, otherwise excluded for this service</b>-->
   </GATTRequirements>
   <Note>C1: Mandatory if the Cycling Power Control Point characteristic is supported, otherwise excluded for this service.</Note>
   <Transports>
@@ -24,9 +23,7 @@
     <HighSpeed>true</HighSpeed>
   </Transports>
   <ErrorCodes>
-    <ErrorCode name="Inappopropriate Connection Parameters" code="0x80">
-            The notifications of the Cycling Power Vector characteristic cannot be sent due to inappropriate connection parameters.
-		</ErrorCode>
+    <ErrorCode name="Inappopropriate Connection Parameters" code="0x80">The notifications of the Cycling Power Vector characteristic cannot be sent due to inappropriate connection parameters.</ErrorCode>
   </ErrorCodes>
   <Characteristics>
     <Characteristic type="org.bluetooth.characteristic.cycling_power_measurement" name="Cycling Power Measurement">

@@ -2,12 +2,8 @@
 <!-- Copyright 2011 Bluetooth SIG, Inc. All rights reserved. -->
 <Service xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/service.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Glucose" type="org.bluetooth.service.glucose" uuid="1808" last-modified="2012-1-17" approved="Yes">
 	<InformativeText>
-     <Abstract>
-           This service exposes glucose and other data from a glucose sensor for use in consumer and professional healthcare applications.
-		</Abstract>
-        <Summary>            
-            The Glucose Service exposes glucose and other data related to a glucose sensor for consumer and professional healthcare applications.
-		</Summary>
+     <Abstract>This service exposes glucose and other data from a glucose sensor for use in consumer and professional healthcare applications.</Abstract>
+        <Summary>The Glucose Service exposes glucose and other data related to a glucose sensor for consumer and professional healthcare applications.</Summary>
 	</InformativeText>
 	<Dependencies>
 		<Dependency>This service has no dependencies on other GATT-based services.</Dependency>
@@ -27,9 +23,7 @@
 	
 	<Characteristics>
 		<Characteristic name="Glucose Measurement" type="org.bluetooth.characteristic.glucose_measurement">
-			<InformativeText>
-               The Glucose Measurement characteristic is used to send glucose measurements.
-	        </InformativeText>		
+			<InformativeText>The Glucose Measurement characteristic is used to send glucose measurements.</InformativeText>		
 			<Requirement>Mandatory</Requirement>
 			<Properties>
 				<Read>Excluded</Read>
@@ -54,9 +48,7 @@
          </Characteristic>
         
         <Characteristic name="Glucose Measurement Context" type="org.bluetooth.characteristic.glucose_measurement_context">
-			<InformativeText>
-                The Glucose Measurement Context characteristic is used to send additional contextual information relative to a Glucose Measurement characteristic.
-            </InformativeText>		
+			<InformativeText>The Glucose Measurement Context characteristic is used to send additional contextual information relative to a Glucose Measurement characteristic.</InformativeText>		
 			<Requirement>Optional</Requirement>
 			<Properties>
 				<Read>Excluded</Read>
@@ -81,9 +73,7 @@
         </Characteristic>
                 
        <Characteristic name="Glucose Feature" type="org.bluetooth.characteristic.glucose_feature">
-			<InformativeText>
-                The Glucose Feature characteristic is used to describe the supported features of the Server.
-            </InformativeText>		
+			<InformativeText>The Glucose Feature characteristic is used to describe the supported features of the Server.</InformativeText>		
 			<Requirement>Mandatory</Requirement>
 			<Properties>
 				<Read>Mandatory</Read>
@@ -100,10 +90,10 @@
         
         <Characteristic name="Record Access Control Point" type="org.bluetooth.characteristic.record_access_control_point">
 			<InformativeText>
-               <p>This Record Access Control Point (RACP) characteristic value consists of the following fields to use for patient record access management.</p>
-                <p>•	Op Code (Request/Response code)</p>
-                <p>•	Operator (specifies how the Operand is applied)</p>
-                <p>•	Operand (parameters)</p>
+               This Record Access Control Point (RACP) characteristic value consists of the following fields to use for patient record access management.
+               - Op Code (Request/Response code)
+               - Operator (specifies how the Operand is applied)
+               - Operand (parameters)
             </InformativeText>		
 			<Requirement>Mandatory</Requirement>
 			<Properties>

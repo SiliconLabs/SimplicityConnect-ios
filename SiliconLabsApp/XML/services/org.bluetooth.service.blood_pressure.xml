@@ -2,12 +2,8 @@
 <!-- Copyright 2011 Bluetooth SIG, Inc. All rights reserved. -->
 <Service xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/service.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Blood Pressure" type="org.bluetooth.service.blood_pressure" uuid="1810">
 	<InformativeText>
-     <Abstract>
-           This service exposes blood pressure and other data from a blood pressure monitor intended for healthcare applications.
-		</Abstract>
-        <Summary>            
-            The BLOOD PRESSURE Service exposes blood pressure and other data related to a blood pressure monitor.
-		</Summary>
+     <Abstract>This service exposes blood pressure and other data from a blood pressure monitor intended for healthcare applications.</Abstract>
+        <Summary>The BLOOD PRESSURE Service exposes blood pressure and other data related to a blood pressure monitor.</Summary>
 	</InformativeText>
 	<Dependencies>
 		<Dependency>This service has no dependencies on other GATT-based services.</Dependency>
@@ -25,9 +21,7 @@
 	
 	<Characteristics>
 		<Characteristic name="Blood Pressure Measurement" type="org.bluetooth.characteristic.blood_pressure_measurement">
-			<InformativeText>
-               The BLOOD PRESSURE MEASUREMENT characteristic is used to send a Blood Pressure measurement. 
-	        </InformativeText>		
+			<InformativeText>The BLOOD PRESSURE MEASUREMENT characteristic is used to send a Blood Pressure measurement.</InformativeText>		
 			<Requirement>Mandatory</Requirement>
 			<Properties>
 				<Read>Excluded</Read>
@@ -52,9 +46,7 @@
          </Characteristic>
         
         <Characteristic name="Intermediate Cuff Pressure" type="org.bluetooth.characteristic.intermediate_cuff_pressure">
-			<InformativeText>
-                The INTERMEDIATE CUFF PRESSURE characteristic is used to send intermediate Cuff Pressure values to a device for display purposes while the measurement is in progress.
-            </InformativeText>		
+			<InformativeText>The INTERMEDIATE CUFF PRESSURE characteristic is used to send intermediate Cuff Pressure values to a device for display purposes while the measurement is in progress.</InformativeText>		
 			<Requirement>Optional</Requirement>
 			<Properties>
 				<Read>Excluded</Read>
@@ -79,9 +71,7 @@
         </Characteristic>
                 
        <Characteristic name="Blood Pressure Feature" type="org.bluetooth.characteristic.blood_pressure_feature">
-			<InformativeText>
-                The Blood Pressure Feature characteristic is used to describe the supported features of the Blood Pressure Sensor.
-            </InformativeText>		
+			<InformativeText>The Blood Pressure Feature characteristic is used to describe the supported features of the Blood Pressure Sensor.</InformativeText>		
 			<Requirement>Mandatory</Requirement>
 			<Properties>
 				<Read>Mandatory</Read>

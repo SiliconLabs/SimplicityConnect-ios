@@ -3,14 +3,10 @@
 <Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Alert Category ID Bit Mask" type="org.bluetooth.characteristic.alert_category_id_bit_mask" 
 uuid="2A42">
 	<InformativeText>
-        <Abstract>            
-        Categories of alerts/messages.
-		</Abstract>
-        <Summary>
-        The value of the characteristic is a bit mask implemented as an array of unsigned 8 bit integers. The Alert Category ID Bit Mask characteristic defines one bit for each predefined category ID.    
-		</Summary>
+        <Abstract>Categories of alerts/messages.</Abstract>
+        <Summary>The value of the characteristic is a bit mask implemented as an array of unsigned 8 bit integers. The Alert Category ID Bit Mask characteristic defines one bit for each predefined category ID.</Summary>
         <Examples> 
-            <Example>The value 0x03 is interpreted as “Simple Alert and Email bits set”</Example>
+            <Example>The value 0x03 is interpreted as "Simple Alert and Email bits set"</Example>
 		</Examples>
 	</InformativeText>
 	<Value>
@@ -93,10 +89,6 @@ uuid="2A42">
             </BitField>
         </Field>
 	</Value>
-    <Note>
-        If second octet is not present it is interpreted as all 0’es
-	</Note>
-     <Note>
-        The fields in the above table are in the order of LSO to MSO. Where LSO = Least Significant Octet and MSO = Most Significant Octet.
-	</Note>
+    <Note>If second octet is not present it is interpreted as all 0'es</Note>
+    <Note>The fields in the above table are in the order of LSO to MSO. Where LSO = Least Significant Octet and MSO = Most Significant Octet.</Note>
 </Characteristic>

@@ -15,7 +15,7 @@
         <Requirement subProcedure="Read Characteristic Descriptors">Mandatory</Requirement>
         <Requirement subProcedure="Write Characteristic Descriptors">Mandatory</Requirement>
      </GATTRequirements>
-    <Note>C.1: Mandatory if the LN Control Point characteristic is supported, otherwise excluded for this service. </Note>
+    <Note>C.1: Mandatory if the LN Control Point characteristic is supported, otherwise excluded for this service.</Note>
     <Transports>
         <Classic>true</Classic>
         <LowEnergy>true</LowEnergy>
@@ -74,9 +74,6 @@
 			</Properties>
             </Characteristic>
         <Characteristic type="org.bluetooth.characteristic.ln_control_point" name="LN Control Point">
-           <!-- <InformativeText>
-                C1:Mandatory if at least one LN Control Point procedure is supported, otherwise excluded.
-			</InformativeText>-->
             <Requirement>Optional</Requirement>
             <Properties>
                 <Read>Excluded</Read>
@@ -100,9 +97,7 @@
             </Descriptors>
             </Characteristic>
        <Characteristic type="org.bluetooth.characteristic.navigation" name="Navigation">
-        <InformativeText>
-                C2: Mandatory if the Navigation feature is supported, otherwise excluded.
-			</InformativeText>    
+        <InformativeText>C2: Mandatory if the Navigation feature is supported, otherwise excluded.</InformativeText>    
         <Requirement>C2</Requirement>
             <Properties>
                 <Read>Excluded</Read>

@@ -26,7 +26,6 @@ static CGFloat characteristicProperyViewWidth = 30.0;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicUuidLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *viewMoreChevron;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iPadBottomDividerLeadingConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *propertyButtonsStackViewWidthConstraint;
 
 @property (weak, nonatomic) IBOutlet UIView *readPropertyView;
 @property (weak, nonatomic) IBOutlet UIView *writePropertyView;
@@ -44,7 +43,7 @@ static CGFloat characteristicProperyViewWidth = 30.0;
 @property (weak, nonatomic) IBOutlet UIButton *notifyPropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *indicatePropertyButton;
 
-@property (strong, nonatomic) NSArray *allPropertyViews;
+@property (strong, nonatomic) IBOutletCollection(UIView) NSArray<UIView *> * allPropertyViews;
 @property (strong, nonatomic) NSArray *allActiveProperties;
 
 @property (strong, nonatomic) CBCharacteristic *characteristic;
@@ -57,7 +56,6 @@ static CGFloat characteristicProperyViewWidth = 30.0;
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor sil_lightGreyColor];
-    self.allPropertyViews = @[self.readPropertyView, self.writePropertyView, self.writeNoResponsePropertyView, self.indicatePropertyView, self.notifyPropertyView];
 }
 
 - (void)configureWithCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel {
@@ -95,53 +93,31 @@ static CGFloat characteristicProperyViewWidth = 30.0;
     for (UIView *view in self.allPropertyViews) {
         [view setHidden:YES];
     }
-    int activePropertiesCount = 0;
+    
     BOOL hasWriteProperty = false;
+    
     for (SILDebugProperty *property in properties) {
         id propertyKey = property.keysForActivation.firstObject;
         if ([propertyKey isEqual:@(CBCharacteristicPropertyRead)]) {
-            activePropertiesCount += 1;
             [self.readPropertyView setHidden:NO];
             [self.readPropertyButton setHidden:NO];
-
-            self.readPropertyButton.frame = CGRectMake(0, 0, self.readImageView.frame.size.width + 25, self.readImageView.frame.size.height + 25);
-            self.readPropertyButton.center = [self.contentView convertPoint:self.readPropertyView.center fromView:self.propertyButtonsStackView];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWrite)]) {
-            activePropertiesCount += 1;
             hasWriteProperty = true;
             [self.writePropertyView setHidden:NO];
             [self.writePropertyButton setHidden:NO];
-
-            self.writePropertyButton.frame = CGRectMake(0, 0, self.writeImageView.frame.size.width + 25, self.writeImageView.frame.size.height + 25);
-            self.writePropertyButton.center = [self.contentView convertPoint:self.writePropertyView.center fromView:self.propertyButtonsStackView];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
             if (!hasWriteProperty) {
-                activePropertiesCount += 1;
                 [self.writeNoResponsePropertyView setHidden:NO];
                 [self.writeNoResponsePropertyButton setHidden:NO];
-
-                self.writeNoResponsePropertyButton.frame = CGRectMake(0, 0, self.writeNoResponsePropertyButton.frame.size.width + 25, self.writeNoResponsePropertyButton.frame.size.height + 25);
-                self.writeNoResponsePropertyButton.center = [self.contentView convertPoint:self.writeNoResponsePropertyView.center fromView:self.propertyButtonsStackView];
             }
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyIndicate)]) {
-            activePropertiesCount += 1;
             [self.indicatePropertyView setHidden:NO];
             [self.indicatePropertyButton setHidden:NO];
-            
-            self.indicatePropertyButton.frame = CGRectMake(0, 0, self.indicateImageView.frame.size.width + 25, self.indicateImageView.frame.size.height + 25);
-            self.indicatePropertyButton.center = [self.contentView convertPoint:self.indicatePropertyView.center fromView:self.propertyButtonsStackView];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyNotify)]) {
-            activePropertiesCount += 1;
             [self.notifyPropertyView setHidden:NO];
             [self.notifyPropertyButton setHidden:NO];
-
-            self.notifyPropertyButton.frame = CGRectMake(0, 0, self.notifyImageView.frame.size.width + 25, self.notifyImageView.frame.size.height + 25);
-            self.notifyPropertyButton.center = [self.contentView convertPoint:self.notifyPropertyView.center fromView:self.propertyButtonsStackView];
         }
     }
-    CGFloat cumulativeWidthOfButtons = (CGFloat)(characteristicProperyViewWidth * activePropertiesCount);
-    CGFloat cumulativeWidthOfSpacing = (CGFloat)(self.propertyButtonsStackView.spacing * (MAX(activePropertiesCount, 1) - 1));
-    self.propertyButtonsStackViewWidthConstraint.constant = cumulativeWidthOfButtons + cumulativeWidthOfSpacing;
 }
 
 #pragma mark - SILGenericAttributeTableCell
@@ -158,6 +134,7 @@ static CGFloat characteristicProperyViewWidth = 30.0;
 - (void)togglePropertyEnabledIfExpanded {
     BOOL expanded = self.characteristicTableModel.isExpanded;
     BOOL isNotifying = [[self.characteristic valueForKey:@"notifying"] boolValue];
+    
     for (SILDebugProperty *property in self.allActiveProperties) {
         if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyRead)]) {
             NSString *readImageString = expanded ? @"PropertyReadEnabled" : @"PropertyReadDisabled";
@@ -191,7 +168,7 @@ static CGFloat characteristicProperyViewWidth = 30.0;
 #pragma mark - Button Actions
 
 - (IBAction)handleReadViewTap:(id)sender {
- [self.delegate cell:self didRequestReadForCharacteristic:self.characteristic];
+    [self.delegate cell:self didRequestReadForCharacteristic:self.characteristic];
 }
 
 - (IBAction)handleWriteViewTap:(id)sender {

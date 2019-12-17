@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright 2011 Bluetooth SIG, Inc. All rights reserved.-->
-<Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Sensor Location" type="org.bluetooth.characteristic.sensor_location" uuid="2A5D" last-modified="2013-02-05" approved="Yes">
+<Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Sensor Location" type="org.bluetooth.characteristic.sensor_location" uuid="2A5D" last-modified="2016-03-01" approved="Yes">
     <InformativeText>
         <Summary>
             The Sensor Location characteristic is used to expose the location of the sensor.
@@ -26,7 +26,9 @@
                 <Enumeration key="12" value="Rear Wheel" />
                 <Enumeration key="13" value="Rear Hub" />
                 <Enumeration key="14" value="Chest" />
-                <ReservedForFutureUse start="15" end="255" />
+                <Enumeration key="15" value="Spider" />
+                <Enumeration key="16" value="Chain Ring" />
+                <ReservedForFutureUse start="17" end="255" />
             </Enumerations>
         </Field>
     </Value>

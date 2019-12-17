@@ -41,7 +41,7 @@ static NSString * const kSILKeyNameForFullOTA = @"APPLOADER";
     fileViewModel.keyString = kSILKeyNameForPartialOTA;
     [mutableFileViewModels addObject:fileViewModel];
     
-    if (self.otaFirmwareUpdate.updateMode == SILOTAModeFull) {
+    if (self.otaFirmwareUpdate.updateMethod == SILOTAMethodFull) {
         SILKeyValueViewModel *fileViewModel = [SILKeyValueViewModel new];
         fileViewModel.valueString = self.otaFirmwareUpdate.stackFile.fileURL.absoluteString;
         fileViewModel.keyString = kSILKeyNameForFullOTA;
@@ -52,8 +52,8 @@ static NSString * const kSILKeyNameForFullOTA = @"APPLOADER";
 }
 
 - (BOOL)shouldEnableStartOTAButton {
-    const BOOL isPartialMode = self.updateMode == SILOTAModePartial;
-    const BOOL isFullMode = self.updateMode == SILOTAModeFull;
+    const BOOL isPartialMode = self.updateMethod == SILOTAMethodPartial;
+    const BOOL isFullMode = self.updateMethod == SILOTAMethodFull;
     const BOOL isStackFileDefined = self.otaFirmwareUpdate.stackFile != nil;
     const BOOL isAppFileDefined = self.otaFirmwareUpdate.appFile != nil;
     const BOOL shouldEnableStartButtonForPartialMode = isPartialMode && isAppFileDefined;
@@ -61,6 +61,12 @@ static NSString * const kSILKeyNameForFullOTA = @"APPLOADER";
     const BOOL shouldEnableStartButton = shouldEnableStartButtonForPartialMode || shouldEnableStartButtonForFullMode;
     
     return shouldEnableStartButton;
+}
+
+- (void)setUpdateMethod:(SILOTAMethod)updateMethod {
+    _updateMethod = updateMethod;
+    self.otaFirmwareUpdate.updateMethod = updateMethod;
+    [self.delegate firmwareViewModelDidUpdate:self];
 }
 
 - (void)setUpdateMode:(SILOTAMode)updateMode {

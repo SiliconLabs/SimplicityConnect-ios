@@ -30,7 +30,9 @@
     if (_bluetoothModel.name) {
         return _bluetoothModel.name;
     }
-    NSString* predefinedName = [SILUUIDProvider predefinedNameForServiceOrCharacteristicUUID:[self uuidString]];
+    
+    NSString * const predefinedName = [[SILUUIDProvider sharedProvider] predefinedNameForServiceUUID:[self uuidString]];
+
     return predefinedName ?: @"Unknown Service";
 }
 

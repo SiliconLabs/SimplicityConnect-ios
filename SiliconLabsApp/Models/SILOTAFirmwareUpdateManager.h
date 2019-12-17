@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, SILDFUStatus) {
 
 @protocol SILOTAFirmwareUpdateManagerDelegate <NSObject>
 
+- (CBCharacteristicWriteType)characteristicWriteType;
 - (void)firmwareUpdateManagerDidUnexpectedlyDisconnectFromPeripheral:(SILOTAFirmwareUpdateManager *)firmwareUpdateManager
                                                            withError:(NSError *)error;
 

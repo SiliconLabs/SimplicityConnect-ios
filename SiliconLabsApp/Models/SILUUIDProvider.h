@@ -6,17 +6,25 @@
 //  Copyright © 2017 SiliconLabs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreBluetooth/CoreBluetooth.h>
-
-extern NSString * const kSILOtaServiceUUIDString;
-extern NSString * const kSILOtaCharacteristicDataUUIDString;
-extern NSString * const kSILOtaCharacteristicControlUUIDString;
+@import Foundation;
+@import CoreBluetooth;
 
 @interface SILUUIDProvider : NSObject
 
 + (instancetype)sharedProvider;
-+ (NSString*)predefinedNameForServiceOrCharacteristicUUID:(NSString*)uuid;
+- (instancetype)init NS_UNAVAILABLE;
+- (NSString *)predefinedNameForServiceUUID:(NSString *)uuid;
+- (NSString *)predefinedNameForCharacteristicUUID:(NSString *)uuid;
+
+@end
+
+@interface SILUUIDProvider (OTA)
+
+extern NSString * const kSILOtaServiceUUIDString;
+extern NSString * const kSILOtaCharacteristicDataUUIDString;
+extern NSString * const kSILOtaCharacteristicControlUUIDString;
+extern NSString * const kSILOtaCharacteristicFirmwareVersionUUIDString;
+extern NSString * const kSILOtaCharacteristicOtaVersionUUIDString;
 
 @property (strong, nonatomic, readonly) CBUUID *otaServiceUUID;
 @property (strong, nonatomic, readonly) CBUUID *otaCharacteristicDataUUID;

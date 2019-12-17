@@ -118,10 +118,17 @@
 }
 
 - (IBAction)didTapSave:(UIButton *)sender {
-    [self.editDelegate didSaveCharacteristic:self.enumerationModel.parentCharacteristicModel withAction:^{
-        self.enumerationModel.activeValue = self.valueToSet;
+    NSError * saveError = nil;
+    const NSInteger backupValue = self.enumerationModel.activeValue;
+    
+    self.enumerationModel.activeValue = self.valueToSet;
+    [self.editDelegate saveCharacteristic:self.enumerationModel.parentCharacteristicModel error:&saveError];
+    
+    if (saveError != nil) {
+        self.enumerationModel.activeValue = backupValue;
+    } else {
         [self.popoverDelegate didClosePopoverViewController:self];
-    }];
+    }
 }
 
 @end

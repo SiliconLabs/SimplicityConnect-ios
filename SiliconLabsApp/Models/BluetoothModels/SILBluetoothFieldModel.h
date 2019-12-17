@@ -21,6 +21,7 @@
 @property (nonatomic) NSInteger minimum;
 @property (nonatomic) NSInteger maximum;
 @property (strong, nonatomic) NSArray *enumerations;
+@property (nonatomic) NSInteger decimalExponent;
 @property (strong, nonatomic) SILBluetoothBitFieldModel *bitfield;
 
 - (instancetype)initWithName:(NSString *)name unit:(NSString *)unit format:(NSString *)format requires:(NSString *)requirement;

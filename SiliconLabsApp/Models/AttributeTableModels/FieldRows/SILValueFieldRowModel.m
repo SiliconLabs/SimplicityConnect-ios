@@ -42,18 +42,21 @@
     return self.fieldModel.name;
 }
 
-
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
-    NSData *fieldData = [[SILCharacteristicFieldValueResolver sharedResolver] subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];
-    NSString *readValue = [[SILCharacteristicFieldValueResolver sharedResolver] readValueString:fieldData forFormat:self.fieldModel.format];
+    SILCharacteristicFieldValueResolver * const valueResolver = [SILCharacteristicFieldValueResolver sharedResolver];
+    NSData * const fieldData = [valueResolver subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];
+    NSString * const readValue = [valueResolver readValueString:fieldData withFieldModel:self.fieldModel];
     self.primaryValue = readValue;
     self.readData = fieldData;
     [self.delegate didMeetRequirement:self.fieldModel.requirement];
     return fieldData.length;
 }
 
-- (NSData *)dataForField {
-    self.writeData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:self.primaryValue asFormat:self.fieldModel.format];
+- (NSData *)dataForFieldWithError:(NSError *__autoreleasing *)error {
+    SILCharacteristicFieldValueResolver * const valueResolver = [SILCharacteristicFieldValueResolver sharedResolver];
+
+    self.writeData = [valueResolver dataForValueString:self.primaryValue withFieldModel:self.fieldModel error:error];
+    
     return self.writeData ?: self.readData;
 }
 

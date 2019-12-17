@@ -52,7 +52,7 @@
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
     if (self.fieldModel.format) {
         NSData *fieldData = [[SILCharacteristicFieldValueResolver sharedResolver] subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];
-        NSInteger readValue = [[[SILCharacteristicFieldValueResolver sharedResolver] readValueString:fieldData forFormat:self.fieldModel.format] integerValue];
+        NSInteger readValue = [[[SILCharacteristicFieldValueResolver sharedResolver] readValueString:fieldData withFieldModel:self.fieldModel] integerValue];
         self.activeValue = readValue;
         self.readData = fieldData;
         [self.delegate didMeetRequirement:self.fieldModel.requirement];
@@ -63,8 +63,8 @@
     }
 }
 
-- (NSData *)dataForField {
-    self.writeData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:[@(self.activeValue) stringValue] asFormat:self.fieldModel.format];
+- (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error {
+    self.writeData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:[@(self.activeValue) stringValue] withFieldModel:self.fieldModel error:error];
     return self.writeData ?: self.readData;
 }
 

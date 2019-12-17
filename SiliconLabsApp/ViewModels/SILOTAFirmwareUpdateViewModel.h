@@ -20,6 +20,7 @@
 @property (weak, nonatomic) id<SILOTAFirmwareUpdateViewModelDelegate> delegate;
 @property (strong, nonatomic, readonly) NSArray<SILKeyValueViewModel *> *fileViewModels;
 @property (nonatomic, readonly) BOOL shouldEnableStartOTAButton;
+@property (nonatomic) SILOTAMethod updateMethod;
 @property (nonatomic) SILOTAMode updateMode;
 @property (strong, nonatomic) NSURL *appFileURL;
 @property (strong, nonatomic) NSURL *stackFileURL;
