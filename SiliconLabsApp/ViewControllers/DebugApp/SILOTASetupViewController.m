@@ -29,6 +29,7 @@ static NSString * const kSILOTAChooseFileCTA = @"CHOOSE FILE";
 SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuDelegate>
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *otaMethodSegmentedControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *otaModeSegmentedControl;
 @property (weak, nonatomic) IBOutlet UITableView *fileSelectionTableView;
 @property (weak, nonatomic) IBOutlet UIButton *startOTAButton;
 @property (weak, nonatomic) IBOutlet SILOTAHUDView *hudView;
@@ -100,6 +101,10 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
     self.firmwareUpdateViewModel.updateMethod = ([sender selectedSegmentIndex] == 1) ? SILOTAMethodFull : SILOTAMethodPartial;
 }
 
+- (IBAction)didSelectOTAModeSegment:(UISegmentedControl *)sender {
+    self.firmwareUpdateViewModel.updateMode = ([sender selectedSegmentIndex] == 1) ? SILOTAModeSpeed : SILOTAModeReliability;
+}
+
 - (IBAction)didTapStartOTAButton:(id)sender {
     [self.delegate otaSetupViewControllerEnterDFUModeForFirmwareUpdate:self.firmwareUpdateViewModel.otaFirmwareUpdate];
 }
@@ -108,7 +113,9 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
 
 - (void)configureUIForFirmwareUpdateViewModel:(SILOTAFirmwareUpdateViewModel *)firmwareUpdateViewModel {
     const SILOTAMethod otaMethod = firmwareUpdateViewModel.updateMethod;
+    const SILOTAMode otaMode = firmwareUpdateViewModel.updateMode;
     self.otaMethodSegmentedControl.selectedSegmentIndex = (otaMethod == SILOTAMethodPartial) ? 0 : 1;
+    self.otaModeSegmentedControl.selectedSegmentIndex = (otaMode == SILOTAModeReliability) ? 0 : 1;
     self.startOTAButton.enabled = firmwareUpdateViewModel.shouldEnableStartOTAButton;
     [self.fileSelectionTableView reloadData];
 }

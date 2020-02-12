@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,6 +12,7 @@
                 <outlet property="fileSelectionTableView" destination="Uju-fv-EeI" id="8Xt-Cd-8lK"/>
                 <outlet property="hudView" destination="5yN-eK-7ac" id="IkB-3T-A8L"/>
                 <outlet property="otaMethodSegmentedControl" destination="jCO-h4-C6j" id="CmT-Zv-vFB"/>
+                <outlet property="otaModeSegmentedControl" destination="5lv-4H-luq" id="Fhf-Jd-DBz"/>
                 <outlet property="startOTAButton" destination="h0r-z8-LOc" id="j9A-3B-i58"/>
                 <outlet property="view" destination="q9h-tL-CcT" id="YvX-Bv-UgQ"/>
             </connections>
@@ -37,7 +38,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jCO-h4-C6j" userLabel="OTA Type Selector">
-                            <rect key="frame" x="236" y="10.5" width="117" height="30"/>
+                            <rect key="frame" x="194" y="10.5" width="159" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="29" id="OvU-Fm-UVx"/>
                             </constraints>
@@ -67,8 +68,41 @@
                         <constraint firstAttribute="height" constant="1" id="QBh-TV-Y3O"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XMm-v1-5gI" userLabel="Mode View">
+                    <rect key="frame" x="0.0" y="139" width="375" height="50"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MODE" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhO-HP-XGH" userLabel="Mode Label">
+                            <rect key="frame" x="22" y="18" width="36.5" height="14.5"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="12"/>
+                            <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5lv-4H-luq" userLabel="OTA Type Selector">
+                            <rect key="frame" x="194" y="10.5" width="159" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="29" id="U7k-Bj-5pZ"/>
+                            </constraints>
+                            <segments>
+                                <segment title="Reliability"/>
+                                <segment title="Speed"/>
+                            </segments>
+                            <color key="tintColor" red="0.84313725490000002" green="0.1215686275" blue="0.1647058824" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="didSelectOTAModeSegment:" destination="-1" eventType="valueChanged" id="9B8-IW-7bG"/>
+                            </connections>
+                        </segmentedControl>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="jhO-HP-XGH" firstAttribute="centerY" secondItem="XMm-v1-5gI" secondAttribute="centerY" id="5i0-bA-zcX"/>
+                        <constraint firstAttribute="height" constant="50" id="gYn-dq-w95"/>
+                        <constraint firstAttribute="trailing" secondItem="5lv-4H-luq" secondAttribute="trailing" constant="22" id="hOA-Io-lWf"/>
+                        <constraint firstItem="jhO-HP-XGH" firstAttribute="leading" secondItem="XMm-v1-5gI" secondAttribute="leading" constant="22" id="tdO-IH-o9H"/>
+                        <constraint firstItem="5lv-4H-luq" firstAttribute="centerY" secondItem="XMm-v1-5gI" secondAttribute="centerY" id="vBo-Al-Wce"/>
+                    </constraints>
+                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Uju-fv-EeI">
-                    <rect key="frame" x="0.0" y="138" width="375" height="480"/>
+                    <rect key="frame" x="0.0" y="189" width="375" height="429"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="YCf-OX-DhQ"/>
@@ -106,9 +140,13 @@
                 <constraint firstItem="5RX-lV-GVk" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="14K-5h-XDs"/>
                 <constraint firstAttribute="trailing" secondItem="Uju-fv-EeI" secondAttribute="trailing" id="1Og-Sz-mhJ"/>
                 <constraint firstItem="CeB-9b-WdH" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" constant="35" id="4VQ-Hf-SWv"/>
+                <constraint firstItem="XMm-v1-5gI" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="5dE-Xc-FYz"/>
                 <constraint firstItem="UAd-aO-xfC" firstAttribute="width" secondItem="h0r-z8-LOc" secondAttribute="width" id="79G-1x-9la"/>
                 <constraint firstAttribute="trailing" secondItem="5yN-eK-7ac" secondAttribute="trailing" id="9Du-aC-BYk"/>
                 <constraint firstItem="5RX-lV-GVk" firstAttribute="top" secondItem="5yN-eK-7ac" secondAttribute="bottom" id="JPw-W1-4rV"/>
+                <constraint firstItem="jCO-h4-C6j" firstAttribute="width" secondItem="5lv-4H-luq" secondAttribute="width" id="KU6-Z8-219"/>
+                <constraint firstItem="XMm-v1-5gI" firstAttribute="top" secondItem="CeB-9b-WdH" secondAttribute="bottom" id="Pnp-qU-ixk"/>
+                <constraint firstItem="Uju-fv-EeI" firstAttribute="top" secondItem="XMm-v1-5gI" secondAttribute="bottom" id="UbD-Ne-p27"/>
                 <constraint firstItem="Uju-fv-EeI" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="XVH-Gf-Mh0"/>
                 <constraint firstItem="h0r-z8-LOc" firstAttribute="centerY" secondItem="UAd-aO-xfC" secondAttribute="centerY" id="apd-gh-Slp"/>
                 <constraint firstAttribute="trailing" secondItem="5RX-lV-GVk" secondAttribute="trailing" id="bpt-gs-NWg"/>
@@ -120,9 +158,9 @@
                 <constraint firstItem="UAd-aO-xfC" firstAttribute="top" secondItem="Uju-fv-EeI" secondAttribute="bottom" constant="1" id="nwd-SG-olU"/>
                 <constraint firstAttribute="trailing" secondItem="CeB-9b-WdH" secondAttribute="trailing" constant="35" id="qVh-lz-B72"/>
                 <constraint firstAttribute="bottom" secondItem="UAd-aO-xfC" secondAttribute="bottom" id="sRA-RK-0hf"/>
-                <constraint firstItem="Uju-fv-EeI" firstAttribute="top" secondItem="CeB-9b-WdH" secondAttribute="top" id="vIo-xK-q4I"/>
                 <constraint firstItem="h0r-z8-LOc" firstAttribute="leading" secondItem="UAd-aO-xfC" secondAttribute="trailing" constant="1" id="wdk-Il-RRJ"/>
                 <constraint firstAttribute="trailing" secondItem="h0r-z8-LOc" secondAttribute="trailing" id="xaK-09-9ED"/>
+                <constraint firstAttribute="trailing" secondItem="XMm-v1-5gI" secondAttribute="trailing" id="ySd-FW-7uY"/>
             </constraints>
             <point key="canvasLocation" x="32.799999999999997" y="52.623688155922046"/>
         </view>

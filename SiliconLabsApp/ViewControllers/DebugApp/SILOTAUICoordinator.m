@@ -31,6 +31,7 @@ static NSString * const kSILFirmwareUpdateBGErrCommandTooLong = @"Command too lo
 static NSString * const kSILFirmwareUpdateBGErrInvalidFileFormat = @"Invalid file format";
 static NSString * const kSILFirmwareUpdateBGErrUnspecified = @"Unspecified error";
 static NSString * const kSILFirmwareUpdateBGErrUnknown = @"Unspecified error";
+static NSString * const kSILDeviceInOTAModeName = @"OTA";
 
 @interface SILOTAUICoordinator () <SILOTASetupViewControllerDelegate, SILOTAProgressViewControllerDelegate,
 SILOTAFirmwareUpdateManagerDelegate>
@@ -225,6 +226,7 @@ SILOTAFirmwareUpdateManagerDelegate>
     
     self.otaMode = firmwareUpdate.updateMode;
     __weak SILOTAUICoordinator *weakSelf = self;
+    [self reupdateDeviceInOtaMode];
     [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:YES
                                                                 progress:^(SILDFUStatus status) {
                                                                     [SVProgressHUD setStatus:[weakSelf stringForDFUStatus:status]];
@@ -241,6 +243,12 @@ SILOTAFirmwareUpdateManagerDelegate>
                                                                          }
                                                                      });
                                                                 }];
+}
+
+- (void)reupdateDeviceInOtaMode {
+    if ([self.peripheral.name isEqualToString:kSILDeviceInOTAModeName]) {
+         [self.otaFirmwareUpdateManager disconnectConnectedPeripheral];
+     }
 }
 
 - (void)otaSetupViewControllerDidCancel:(SILOTASetupViewController *)controller {
