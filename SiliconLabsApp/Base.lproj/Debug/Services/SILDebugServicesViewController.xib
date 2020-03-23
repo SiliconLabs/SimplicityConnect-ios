@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,13 +28,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="debug_scanning" translatesAutoresizingMaskIntoConstraints="NO" id="JCk-dg-bSl" userLabel="Scanning image">
-                    <rect key="frame" x="108" y="90" width="160" height="160"/>
+                    <rect key="frame" x="107.5" y="90" width="160" height="160"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="JCk-dg-bSl" secondAttribute="height" id="RZE-Xu-xj1"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading GATT Information..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="12" preferredMaxLayoutWidth="291" translatesAutoresizingMaskIntoConstraints="NO" id="h43-go-6qz" userLabel="Looking for devices">
-                    <rect key="frame" x="60" y="302" width="255" height="29"/>
+                    <rect key="frame" x="60" y="302" width="255" height="28.5"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="24"/>
                     <color key="textColor" red="0.40392156862745099" green="0.396078431372549" blue="0.396078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -62,7 +59,7 @@
                     <rect key="frame" x="0.0" y="586" width="375" height="32"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aeR-bm-27N" userLabel="Message container">
-                            <rect key="frame" x="85" y="0.0" width="206" height="32"/>
+                            <rect key="frame" x="84.5" y="0.0" width="206" height="32"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="debug_error" translatesAutoresizingMaskIntoConstraints="NO" id="1dJ-LV-fN8">
                                     <rect key="frame" x="8" y="6" width="20" height="20"/>
@@ -129,7 +126,7 @@
                 <constraint firstItem="2AN-G2-do7" firstAttribute="top" secondItem="WOk-Nc-MKW" secondAttribute="bottom" priority="1" constant="-32" id="u8g-MX-JLg"/>
                 <constraint firstAttribute="trailing" secondItem="2AN-G2-do7" secondAttribute="trailing" id="zb3-4i-tlv"/>
             </constraints>
-            <point key="canvasLocation" x="243" y="429"/>
+            <point key="canvasLocation" x="244" y="356"/>
         </view>
         <customObject id="DBJ-Xk-0u2" customClass="SILRoundedViewBehaviour">
             <connections>

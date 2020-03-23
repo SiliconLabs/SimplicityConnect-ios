@@ -128,6 +128,7 @@ const float kFilterBarHeightExpanded = 81.0f;
     [super viewWillDisappear:animated];
     self.viewModel.observing = NO;
     [self filterArrowViewFadeIn:NO];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -149,7 +150,7 @@ const float kFilterBarHeightExpanded = 81.0f;
 #pragma mark - Actions
 
 - (void)filterBarButtonItemTapped {
-    SILDebugDeviceFilterViewController *filterViewController = [[SILDebugDeviceFilterViewController alloc] initWithQuery:self.viewModel.searchQuery rssi:self.viewModel.currentMinRSSI];
+    SILDebugDeviceFilterViewController *filterViewController = [[SILDebugDeviceFilterViewController alloc] initWithQuery:self.viewModel.searchByDeviceName rssi:self.viewModel.currentMinRSSI];
     filterViewController.delegate = self;
     self.filterPopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:filterViewController
                                                                                  presentingViewController:self
@@ -243,7 +244,7 @@ const float kFilterBarHeightExpanded = 81.0f;
 }
 
 - (void)textFieldTextDidChange:(UITextField *)textField {
-    self.viewModel.searchQuery = textField.text;
+    self.viewModel.searchByDeviceName = textField.text;
     [self refreshTable];
 }
 
@@ -555,6 +556,5 @@ const float kFilterBarHeightExpanded = 81.0f;
         self.filterPopoverController = nil;
     }];
 }
-
 
 @end

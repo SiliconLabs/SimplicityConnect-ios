@@ -49,7 +49,6 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
                                ];
     } else {
         compatibleServices = @[
-                               @([discoveredPeripheral isBlueGeckoBeacon]),
                                @([discoveredPeripheral isDMPConnectedLightConnect]),
                                @([discoveredPeripheral isDMPConnectedLightProprietary]),
                                @([discoveredPeripheral isDMPConnectedLightThread]),
@@ -85,7 +84,7 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 
 - (NSArray *)availableTabs {
     if (self.app.appType == SILAppTypeHealthThermometer) {
-        return @[@"Blue Geckos", @"Other"];
+        return @[@"EFR", @"Other"];
     } else if (self.app.appType == SILAppTypeConnectedLighting || self.app.appType == SILAppTypeRangeTest) {
         return @[@"Wireless Gecko"];
     } else {

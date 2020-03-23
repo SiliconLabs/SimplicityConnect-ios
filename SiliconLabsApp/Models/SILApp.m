@@ -11,30 +11,21 @@
 
 @implementation SILApp
 
-+ (NSArray *)allApps {
-#if WIRELESS
++ (NSArray *)demoApps {
     return @[
-             [self rangeTestApp],
-             [self connectedLightningApp],
-             [self bluetoothBeaconingApp],
-             [self bluetoothBrowserApp],
-             ];
-#else
+                [self healthThermometerApp],
+            ];
+}
+
++ (NSArray *)developApps {
     return @[
-             [self healthThermometerApp],
-             [self bluetoothBeaconingApp],
-             [self keyFobApp],
-             [self bluetoothBrowserApp],
-#if ENABLE_HOMEKIT
-             [self homekitApp],
-#endif
-             ];
-#endif
+                [self bluetoothBrowserApp],
+            ];
 }
 
 + (SILApp *)connectedLightningApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeConnectedLighting
-                                     title:@"Connected Lighting Demo"
+                                     title:@"Connected Lighting"
                                description:@"Dynamic multiprotocol application for Wireless Gecko SoCs showcasing Bluetooth operating simultaneously with other wireless protocols"
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeConnectedLighting];
@@ -43,7 +34,7 @@
 + (SILApp *)healthThermometerApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeHealthThermometer
                                      title:@"Health Thermometer"
-                               description:@"View current and saved thermometer readings."
+                               description:@"View readings from the health thermometer service."
                          showcasedProfiles:@{ @"HTP" : @"­Health Thermometer Profile" }
                                  imageName:SILImageNameHomeThermometer];
 }
@@ -53,20 +44,12 @@
                               title:@"Bluetooth Beaconing"
                         description:@"Identify and detect Apple iBeacons and Google EddyStone beacons."
                   showcasedProfiles:@{}
-                          imageName:SILImageNameHomeRetailBeacon];
-}
-
-+ (SILApp *)keyFobApp {
-    return  [[SILApp alloc] initWithAppType:SILAppTypeKeyFob
-                                      title:@"Key Fobs"
-                                description:@"Detect and find Key Fobs via intelligent alerts."
-                          showcasedProfiles:@{ @"FMP" : @"­Find Me"}
-                                  imageName:SILImageNameHomeKeyFOB];
+                          imageName:SILImageNameHomeHelp];
 }
 
 + (SILApp *)bluetoothBrowserApp {
-    return [[SILApp alloc] initWithAppType:SILAppTypeDebug
-                                     title:@"Bluetooth Browser"
+    return [[SILApp alloc] initWithAppType:SILAppBluetoothBrowser
+                                     title:@"Browser"
                                description:@"View info about nearby devices and their properties."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeDebug];
@@ -82,7 +65,7 @@
 
 + (SILApp *)rangeTestApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeRangeTest
-                                     title:@"Range Test Demo"
+                                     title:@"Range Test"
                                description:@"Evaluate the link budget and communication range of the Wireless Gecko SoCs using various wireless radio configurations"
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeRangeTestDemo];

@@ -18,7 +18,7 @@
 
 NSString * const kHex = @"HEX";
 NSString * const kAscii = @"ASCII";
-NSString * const kDecimal = @"DECIMAL";
+NSString * const kDecimal = @"Decimal";
 
 @interface SILDebugCharacteristicEncodingViewController ()
 @property (strong, nonatomic) SILCharacteristicTableModel *characteristicModel;
@@ -30,7 +30,7 @@ NSString * const kDecimal = @"DECIMAL";
 @property (strong, nonatomic) UITextField *hexField;
 @property (strong, nonatomic) UITextField *asciiField;
 @property (strong, nonatomic) UITextField *decimalField;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UILabel *serviceNameTitle;
 @property (weak, nonatomic) IBOutlet UIView *propertiesContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *invalidInputLabel;
@@ -65,7 +65,7 @@ NSString * const kDecimal = @"DECIMAL";
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return CGSizeMake(540, 495);
     } else {
-        return CGSizeMake(296, 312);
+        return CGSizeMake(308, 312);
     }
 }
 
@@ -79,9 +79,9 @@ NSString * const kDecimal = @"DECIMAL";
 
 - (void)setUpText {
     self.specificTitle.text = [self.characteristicModel uuidString];
-    self.generalTitle.text = @"Unknown Characteristic";
-    self.serviceNameTitle.text = @"Unknown Service";
-    self.saveButton.enabled = self.canEdit;
+    self.generalTitle.text = [self.characteristicModel name];
+    self.serviceNameTitle.text = @"";
+    self.sendButton.enabled = self.canEdit;
 }
 
 - (void)setupForIdiom {
@@ -147,6 +147,21 @@ NSString * const kDecimal = @"DECIMAL";
 
 #pragma mark - UITextFieldDelegate
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    [self setupKeyboardFor:textField];
+    return true;
+}
+
+- (void)setupKeyboardFor:(UITextField*)textField {
+    if ([textField isEqual:self.hexField]) {
+        self.hexField.keyboardType = UIKeyboardTypeDefault;
+    } else if ([textField isEqual:self.decimalField]) {
+        self.decimalField.keyboardType = UIKeyboardTypeNumberPad;
+    } else {
+        self.asciiField.keyboardType = UIKeyboardTypeASCIICapable;
+    }
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSLog(@"Replacement String: %@ for rangeloc:%lu for rangelen:%lu", string, (unsigned long)range.location, (unsigned long)range.length);
     
@@ -179,6 +194,11 @@ NSString * const kDecimal = @"DECIMAL";
             self.decimalField.text = [resolver decimalStringForData:self.encodingData];
         }
     } else if ([textField isEqual:self.decimalField]){
+        if (latestString.length > 3) {
+            if (![string isEqualToString:@""]) {
+                return NO;
+            }
+        }
         self.encodingData = [resolver dataForDecimalString:latestString];
         if (self.encodingData) {
             self.hexField.text = [resolver hexStringForData:self.encodingData decimalExponent:0];
@@ -199,11 +219,13 @@ NSString * const kDecimal = @"DECIMAL";
 
 #pragma mark - IBActions
 
-- (IBAction)didTapCancel:(UIButton *)sender {
-    [self.popoverDelegate didClosePopoverViewController:self];
+- (IBAction)clearButtonWasTapped:(id)sender {
+    self.hexField.text = @"";
+    self.asciiField.text = @"";
+    self.decimalField.text = @"";
 }
 
-- (IBAction)didTapSave:(UIButton *)sender {
+- (IBAction)sendButtonWasTapped:(id)sender {
     NSError * error = nil;
     NSData * const backupValue = [self.characteristicModel dataToWriteWithError:&error];
     
@@ -219,6 +241,7 @@ NSString * const kDecimal = @"DECIMAL";
         [self.popoverDelegate didClosePopoverViewController:self];
     }
 }
+
 
 #pragma mark - Text Field Value
 

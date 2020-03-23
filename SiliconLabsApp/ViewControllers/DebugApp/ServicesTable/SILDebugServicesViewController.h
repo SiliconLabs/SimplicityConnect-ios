@@ -13,4 +13,6 @@
 @interface SILDebugServicesViewController : UIViewController
 @property (strong, nonatomic) CBPeripheral *peripheral;
 @property (strong, nonatomic) SILCentralManager *centralManager;
+@property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
+
 @end

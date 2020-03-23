@@ -23,10 +23,7 @@
     [super viewDidLoad];
     NSString * const version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
-    self.descriptionTextView.text =
-    @"Quickly deliver multiprotocol applications using Silicon Labs Wireless Gecko energy-friendly system-on-chip (SoC) devices and modules running the Silicon Labs’ wireless protocols software stacks.\n\
-\n\
-For more information visit: www.silabs.com/products/wireless";
+    self.descriptionTextView.text = NSLocalizedString(@"app_info", @"");
     [self.descriptionTextView setTextContainerInset:UIEdgeInsetsZero];
     [self.descriptionTextView.textContainer setLineFragmentPadding:0];
     
@@ -41,9 +38,9 @@ For more information visit: www.silabs.com/products/wireless";
 
 - (CGSize)preferredContentSize {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return CGSizeMake(540, 390);
+        return CGSizeMake(600, 600);
     } else {
-        return CGSizeMake(296, 350);
+        return CGSizeMake(300, 500);
     }
 }
 

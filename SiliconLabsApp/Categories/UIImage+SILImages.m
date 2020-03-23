@@ -17,19 +17,13 @@ NSString * const SILImageNameBTWeak = @"BTWeak";
 NSString * const SILImageNameHomeHelp = @"HomeHelp";
 NSString * const SILImageNameHomeKeyFOB = @"HomeKeyFOB";
 NSString * const SILImageNameHomeRemoteKeyboard = @"HomeRemoteKeyboard";
-NSString * const SILImageNameHomeRetailBeacon = @"HomeRetailBeacon";
+NSString * const SILImageNameHomeRetailBeacon = @"cancelScanning";
 NSString * const SILImageNameHomeSmartWatch = @"HomeSmartWatch";
-NSString * const SILImageNameHomeThermometer = @"HomeThermometer";
-NSString * const SILImageNameHomeDebug = @"HomeDebug";
+NSString * const SILImageNameHomeThermometer = @"thermometer";
+NSString * const SILImageNameHomeDebug = @"browser";
 NSString * const SILImageNameHomeKitDebug = @"HomeKitDebug";
-NSString * const SILImageNameHomeConnectedLighting = @"HomeConnectedLighting";
+NSString * const SILImageNameHomeConnectedLighting = @"light";
 NSString * const SILImageNameHomeRangeTestDemo = @"HomeRangeTestDemo";
-
-NSString * const SILImageNameKeyFOBGood = @"KeyFOBGood";
-NSString * const SILImageNameKeyFOBAverage = @"KeyFOBAverage";
-NSString * const SILImageNameKeyFOBWeak = @"KeyFOBWeak";
-NSString * const SILImageNameKeyFOBLEDLight = @"KeyFOBLEDLight";
-NSString * const SILImageNameKeyFOBLED = @"KeyFOBLED";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";
@@ -47,12 +41,17 @@ NSString * const SILImageNameWatchPhoneCall = @"WatchPhoneCall";
 NSString * const SILImageNameWatchSuccess = @"WatchSuccess";
 
 NSString * const SILImageNamePropertyBroadcast = @"HomePropertyBroadcast";
-NSString * const SILImageNamePropertyRead = @"HomePropertyRead";
-NSString * const SILImageNamePropertyNotify = @"HomePropertyNotify";
-NSString * const SILImageNamePropertyIndicate = @"HomePropertyIndicate";
-NSString * const SILImageNamePropertyWrite = @"HomePropertyWrite";
+NSString * const SILImageNamePropertyRead = @"icon - read";
+NSString * const SILImageNamePropertyReadDisabled = @"PropertyReadDisabled";
+NSString * const SILImageNamePropertyWrite = @"icon - edit";
+NSString * const SILImageNamePropertyWriteDisabled = @"editGrey";
+NSString * const SILImageNamePropertyWriteNoResponse = @"WriteNoResponse";
+NSString * const SILImageNamePropertyWriteNoResponseDisabled = @"PropertyWriteNoResponseDisabled";
+NSString * const SILImageNamePropertyNotify = @"icon - notify";
+NSString * const SILImageNamePropertyNotifyDisabled = @"notifyGrey";
+NSString * const SILImageNamePropertyIndicate = @"icon - indicate";
+NSString * const SILImageNamePropertyIndicateDisabled = @"indicateGrey";
 NSString * const SILImageNamePropertySignedWrite = @"HomePropertySignedWrite";
-NSString * const SILImageNamePropertyWriteNoResponse = @"HomePropertyWriteNoResponse";
 NSString * const SILImageNamePropertyExtended = @"HomePropertyExtended";
 
 NSString * const SILImageNameBeaconTypeBlueGecko = @"BGBeacon";
@@ -63,3 +62,27 @@ NSString * const SILImageNameBeaconTypeEddystone = @"EddystoneBeacon";
 NSString * const SILImageNameBeaconRangeImmediate = @"BeaconImmediate";
 NSString * const SILImageNameBeaconRangeNear = @"BeaconNear";
 NSString * const SILImageNameBeaconRangeFar = @"BeaconFar";
+
+NSString * const SILImageHomeTabBarDemoOff = @"demoOff";
+NSString * const SILImageHomeTabBarDemoOn = @"demoOn";
+NSString * const SILImageHomeTabBarDevelopOff = @"developOff";
+NSString * const SILImageHomeTabBarDevelopOn = @"developOn";
+
+NSString * const SILImageHelpTile = @"help";
+
+NSString * const SILImageLogOff = @"logOff";
+NSString * const SILImageLogOn = @"logOn";
+NSString * const SILImageConnectOff = @"connectOff";
+NSString * const SILImageConnectOn = @"connectOn";
+NSString * const SILImageSearchOff = @"searchOff";
+NSString * const SILImageSearchOn = @"searchOn";
+NSString * const SILImageConnectable = @"connectable";
+NSString * const SILImageRSSI = @"rssi";
+NSString * const SILImageBeacon = @"beacon";
+NSString * const SILImageFavouriteOff = @"favouriteOff";
+NSString * const SILImageFavouriteOn = @"favouriteOn";
+NSString * const SILImageLoading = @"BTStrong";
+NSString * const SILImageEmptyView = @"debug_not_found";
+NSString * const SILImageExitView = @"exitView";
+NSString * const SILImageChevronCollapsed = @"chevron_collapsed";
+NSString * const SILImageChevronExpanded = @"chevron_expanded";

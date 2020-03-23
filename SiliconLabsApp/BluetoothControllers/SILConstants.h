@@ -33,3 +33,12 @@ extern NSInteger const SILConstantsStrongSignalThreshold;
 extern NSInteger const SILConstantsMediumSignalThreshold;
 
 extern NSInteger const SILConstantsTxPowerDefault;
+
+extern NSInteger const SILLargeFontSizeIphones;
+extern NSInteger const SILLargeFontSizeIpads;
+extern NSInteger const SILMediumFontSizeIphones;
+extern NSInteger const SILMediumFontSizeIpads;
+extern NSInteger const SILSmallFontSizeIphones;
+extern NSInteger const SILSmallFontSizeIpads;
+extern NSInteger const SILNavigationBarTitleFontSize;
+extern NSInteger const SILScanningButtonTitleFontSize;

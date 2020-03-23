@@ -14,6 +14,11 @@ PODS:
   - KVOController (1.2.0)
   - MZTimerLabel (0.5.4)
   - PureLayout (3.1.4)
+  - Realm (4.3.2):
+    - Realm/Headers (= 4.3.2)
+  - Realm/Headers (4.3.2)
+  - RealmSwift (4.3.2):
+    - Realm (= 4.3.2)
   - SVProgressHUD (2.2.5)
   - UICircularProgressRing (4.1.0)
   - WYPopoverController (0.2.2)
@@ -30,13 +35,15 @@ DEPENDENCIES:
   - KVOController (~> 1.2.0)
   - MZTimerLabel (~> 0.5.4)
   - PureLayout (~> 3.1.4)
+  - Realm (~> 4.3.2)
+  - RealmSwift
   - SVProgressHUD (~> 2.2.5)
   - UICircularProgressRing (~> 4.1.0)
   - WYPopoverController (~> 0.2.2)
   - XMLDictionary (~> 1.4.1)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - ActionSheetPicker-3.0
     - ChameleonFramework
     - Charts
@@ -46,6 +53,8 @@ SPEC REPOS:
     - KVOController
     - MZTimerLabel
     - PureLayout
+    - Realm
+    - RealmSwift
     - SVProgressHUD
     - UICircularProgressRing
     - WYPopoverController
@@ -64,7 +73,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: eef157d75e151f255c5333d26656c7fbfe905a51
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
-  Charts: ec1f57f9340054155691e84d4544a1d239d382c5
+  Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Eddystone: a56b4cb97540f43617d6fc488a9ff75eab1d66a4
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
@@ -72,11 +81,13 @@ SPEC CHECKSUMS:
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   MZTimerLabel: cd9bfb9304540ef2a9e163384fca9c978f0dbf83
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
+  Realm: 5e92902e2875dff4bb0fd02f67bb737c3d5db2bc
+  RealmSwift: 9a360fc7bae04fc2e308a34fbd899d5faa2d6b22
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   UICircularProgressRing: 5a32c01f54474571b1e66e8fa050c0f83d6d981b
   WYPopoverController: 00d879c25bddd1fd873dcc21aa98c8308d7f1555
   XMLDictionary: fa07b6ff422b3a91d47a5de9bc82e3fc04fbd167
 
-PODFILE CHECKSUM: 1421e826c6b548160567fbec1fae0bf55f9277b7
+PODFILE CHECKSUM: 2c4307b5fdc69d190078ca339757cbf3833d671b
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

@@ -20,6 +20,8 @@ def shared_pods
     pod 'UICircularProgressRing', '~> 4.1.0'
     pod 'WYPopoverController', '~> 0.2.2'
     pod 'XMLDictionary', '~> 1.4.1'
+    pod 'Realm', '~> 4.3.2'
+    pod 'RealmSwift'
 end
 
 target 'BlueGecko' do

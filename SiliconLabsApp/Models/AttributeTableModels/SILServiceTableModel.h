@@ -16,6 +16,7 @@
 @property (strong, nonatomic) CBService *service;
 @property (strong, nonatomic) SILBluetoothServiceModel *bluetoothModel;
 @property (strong, nonatomic) NSArray *characteristicModels; //of SILCharacteristicTableModels
+@property (nonatomic) Boolean isMappable;
 
 - (instancetype)initWithService:(CBService *)service;
 - (NSString *)name;

@@ -32,7 +32,7 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 - (nonnull NSArray<SILDiscoveredPeripheral *> *)discoveredPeripherals;
 - (nullable SILDiscoveredPeripheral *)discoveredPeripheralForPeripheral:(nonnull CBPeripheral *)peripheral;
 
-- (void)insertOrUpdateDiscoveredPeripheral:(nonnull CBPeripheral *)peripheral advertisementData:(nullable NSDictionary *)advertisementData RSSI:(nullable NSNumber *)RSSI;
+- (void)insertOrUpdateDiscoveredPeripheral:(nonnull CBPeripheral *)peripheral advertisementData:(nullable NSDictionary *)advertisementData RSSI:(nullable NSNumber *)RSSI andDiscoveringTimestamp:(long long)timestamp;
 
 - (BOOL)canConnectToDiscoveredPeripheral:(nonnull SILDiscoveredPeripheral *)discoveredPeripheral;
 - (void)connectToDiscoveredPeripheral:(nonnull SILDiscoveredPeripheral *)discoveredPeripheral;
@@ -41,5 +41,7 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 
 - (void)addScanForPeripheralsObserver:(nonnull id)observer selector:(nonnull SEL)aSelector;
 - (void)removeScanForPeripheralsObserver:(nonnull id)observer;
+
+- (void)disconnectFromPeripheral:(CBPeripheral *)peripheral;
 
 @end

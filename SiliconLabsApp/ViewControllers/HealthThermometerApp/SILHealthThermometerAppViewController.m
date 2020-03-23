@@ -39,18 +39,12 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 @property (weak, nonatomic) IBOutlet UILabel *recentTemperatureDecimalLabel;
 @property (weak, nonatomic) IBOutlet UILabel *recentTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *recentTypeLabel;
-@property (weak, nonatomic) IBOutlet UIButton *changeButton;
-@property (weak, nonatomic) IBOutlet UIButton *clearButton;
-@property (weak, nonatomic) IBOutlet UIButton *addButton;
 @property (weak, nonatomic) IBOutlet UICollectionView *measurementCollectionView;
+@property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
+@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
+@property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
 @property (weak, nonatomic) IBOutlet SILSegmentedControl *typeControl;
 @property (assign, nonatomic) BOOL isConnected;
-
-- (IBAction)didTapChangeButton:(id)sender;
-- (IBAction)didTapClearButton:(id)sender;
-- (IBAction)didTapAddButton:(id)sender;
-
-- (IBAction)typeControlValueDidChange:(id)sender;
 
 @end
 
@@ -83,7 +77,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     if (animated) {
         NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.measurementCollectionView insertItemsAtIndexPaths:@[newIndexPath]];
-        [self.measurementCollectionView scrollToItemAtIndexPath:newIndexPath
+      [self.measurementCollectionView scrollToItemAtIndexPath:newIndexPath
                                                atScrollPosition:UICollectionViewScrollPositionRight
                                                        animated:YES];
     } else {
@@ -107,51 +101,27 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 
 #pragma mark - Button Actions
 
-- (IBAction)didTapChangeButton:(id)sender {
-    [self disconnectPeripheral];
-    [self resetConnectedPeripheralData];
-    [self presentDeviceSelectionViewController:YES];
-}
-
-- (IBAction)didTapClearButton:(id)sender {
-    [self.temperatureMeasurements removeAllObjects];
-    [self.measurementCollectionView reloadData];
-}
-
-- (IBAction)didTapAddButton:(id)sender {
-    if (self.recentTemperatureMeasurement) {
-        if(![self.temperatureMeasurements containsObject:self.recentTemperatureMeasurement]) {
-            [self addTemperatureMeasurement:self.recentTemperatureMeasurement animated:YES];
-        }
-    }
-}
-
-- (IBAction)typeControlValueDidChange:(id)sender {
-    [self reloadData];
+- (IBAction)typeControlWasTapped:(id)sender {
+     [self reloadData];
 }
 
 #pragma mark - Setup
 
 - (void)setup {
-    self.title = self.app.title;
-
     [self setupCustomBackButton];
     [self setupDeviceInfo];
     [self setupTypeControl];
     [self setupMeasurementCollectionView];
-
+    [self setupNavigationBar];
     [self updateRecentMeasurement];
 }
 
 - (void)setupDeviceInfo {
     self.deviceNameLabel.text = self.connectedPeripheral.name;
-
-    self.changeButton.layer.borderColor = [UIColor sil_siliconLabsRedColor].CGColor;
-    self.changeButton.layer.borderWidth = 2.0;
 }
 
 - (void)setupTypeControl {
-    [self.typeControl addTarget:self action:@selector(typeControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    [self.typeControl addTarget:self action:@selector(typeControlWasTapped:) forControlEvents:UIControlEventValueChanged];
 
     if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)) {
         self.typeControl.firstSegmentLabel.text = @"F";
@@ -173,6 +143,22 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
         self.typeControl.selectedIndicatorColor = [UIColor sil_siliconLabsRedColor];
         self.typeControl.unselectedIndicatorColor = [UIColor sil_silverColor];
     }
+}
+
+- (void)setupNavigationBar {
+    [self setupNavigationBarBackgroundColor];
+    [self setupNavigatioBarTitleLabel];
+}
+
+- (void)setupNavigationBarBackgroundColor {
+    _aboveSpaceAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+    _navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+}
+
+- (void)setupNavigatioBarTitleLabel {
+    _navigationBarTitleLabel.font = [UIFont robotoMediumWithSize:SILNavigationBarTitleFontSize];
+    _navigationBarTitleLabel.textColor = [UIColor sil_backgroundColor];
+    _navigationBarTitleLabel.adjustsFontSizeToFitWidth = YES;
 }
 
 - (void)setupMeasurementCollectionView {
@@ -253,18 +239,11 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     }
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.temperatureMeasurements = [NSMutableArray array];
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     [self setup];
+    self.temperatureMeasurements = [NSMutableArray array];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -281,6 +260,8 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
         [SVProgressHUD showErrorWithStatus:@"Disconnecting Thermometer..."];
         [self disconnectPeripheral];
     }
+    
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)dealloc {
@@ -352,8 +333,12 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 - (void)handleCentralManagerDidDisconnectPeripheralNotification:(NSNotification *)notification {
     [self disconnectPeripheral];
     [self resetConnectedPeripheralData];
-    [self presentDeviceSelectionViewController:YES];
-    [SVProgressHUD showErrorWithStatus:@"Thermometer Disconnected..."];
+    [self postNotIntentionallyBackFromThermometerNotification];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)postNotIntentionallyBackFromThermometerNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NotIntentionallyBackFromThermometer" object:self userInfo:nil];
 }
 
 #pragma mark - CBPeripheralDelegate
@@ -409,12 +394,18 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     } else {
         temperatureRange = NSMakeRange(0, 50);
     }
-    [cell  configureWithTemperatureMeasurement:temperatureMeasurement
+    
+    cell.SILBarGraphCollectionViewCellMaxBarRatio = [self calculateRatio];
+    [cell configureWithTemperatureMeasurement:temperatureMeasurement
                                   isFahrenheit:self.displayInFahrenheit
                                          range:temperatureRange];
     cell.alpha = 1.0 - (0.05 * indexPath.row);
 
     return cell;
+}
+
+- (CGFloat)calculateRatio {
+    return self.measurementCollectionView.frame.size.height / self.view.frame.size.height;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -452,6 +443,10 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     self.devicePopoverController = nil;
 
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)backButtonWasTapped:(id)sender {
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 @end

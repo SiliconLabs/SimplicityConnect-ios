@@ -88,6 +88,7 @@ static NSInteger const kTableViewEdgePaddingPrime = 36;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self unregisterForHomeKitNotifications];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark - Setup
