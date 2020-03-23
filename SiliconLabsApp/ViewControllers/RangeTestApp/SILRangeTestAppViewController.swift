@@ -86,6 +86,11 @@ class SILRangeTestAppViewController: UIViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.popViewController(animated: false)
+    }
+    
     private func prepareUI() {
         let isRxMode = viewModel.mode == .RX
         let isTxMode = viewModel.mode == .TX

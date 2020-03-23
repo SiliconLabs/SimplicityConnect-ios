@@ -11,18 +11,55 @@
 @implementation UIColor (SILColors)
 
 + (UIColor *)sil_siliconLabsRedColor {
-    return [UIColor colorWithRed:215.0f / 255.0f
-                           green:31.0f / 255.0f
+    return [UIColor colorWithRed:217.0f / 255.0f
+                           green:30.0f / 255.0f
                             blue:42.0f / 255.0f
                            alpha:1.0f];
 }
 
 + (UIColor *)sil_regularBlueColor {
     return [UIColor colorWithRed:0.0f / 255.0f
-                           green:153.0f / 255.0f
-                            blue:232.0f / 255.0f
+                           green:134.0f / 255.0f
+                            blue:217.0f / 255.0f
                            alpha:1.0f];
 }
+
++ (UIColor *)sil_cardBackgroundColor {
+    return [UIColor colorWithRed:255.0f / 255.0f
+                           green:255.0f / 255.0f
+                            blue:255.0f / 255.0f
+                           alpha:1.0f];
+}
+
++ (UIColor *)sil_backgroundColor {
+    return [UIColor colorWithRed:236.0f / 255.0f
+                           green:236.0f / 255.0f
+                            blue:236.0f / 255.0f
+                           alpha:1.0f];
+}
+
++ (UIColor *)sil_secondaryBackgroundColor {
+    return [UIColor colorWithRed:204.0f / 255.0f
+                           green:204.0f / 255.0f
+                            blue:204.0f / 255.0f
+                           alpha:1.0f];
+}
+
++ (UIColor *)sil_subtleTextColor {
+    return [UIColor colorWithRed:124.0f / 255.0f
+                           green:124.0f / 255.0f
+                            blue:124.0f / 255.0f
+                           alpha:1.0f];
+}
+
++ (UIColor *)sil_primaryTextColor {
+    return [UIColor colorWithRed:51.0f / 255.0f
+                           green:51.0f / 255.0f
+                            blue:51.0f / 255.0f
+                           alpha:1.0f];
+}
+
+#pragma mark - Old colors
 
 + (UIColor *)sil_strongBlueColor {
     return [UIColor colorWithRed:0.0f / 255.0f

@@ -12,6 +12,12 @@
 
 + (UIColor *)sil_siliconLabsRedColor;
 + (UIColor *)sil_regularBlueColor;
++ (UIColor *)sil_cardBackgroundColor;
++ (UIColor *)sil_backgroundColor;
++ (UIColor *)sil_secondaryBackgroundColor;
++ (UIColor *)sil_subtleTextColor;
++ (UIColor *)sil_primaryTextColor;
+
 + (UIColor *)sil_strongBlueColor;
 + (UIColor *)sil_lightBlueColor;
 + (UIColor *)sil_lineGreyColor;

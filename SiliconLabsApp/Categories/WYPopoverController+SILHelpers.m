@@ -26,8 +26,8 @@
                                                              delegate:(id<WYPopoverControllerDelegate>)delegate {
     WYPopoverController *popoverController = [[WYPopoverController alloc] initWithContentViewController:contentViewController];
     popoverController.delegate = delegate;
-    popoverController.theme.outerCornerRadius = 2;
-    popoverController.theme.innerCornerRadius = 0;
+    popoverController.theme.outerCornerRadius = 16;
+    popoverController.theme.innerCornerRadius = 16;
     popoverController.theme.arrowHeight = 0;
     popoverController.theme.overlayColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.35];
     popoverController.theme.outerShadowBlurRadius = 5.0f;

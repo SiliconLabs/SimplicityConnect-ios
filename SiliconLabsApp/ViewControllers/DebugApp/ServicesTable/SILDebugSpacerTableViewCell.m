@@ -8,6 +8,7 @@
 
 #import "SILDebugSpacerTableViewCell.h"
 #import "UIColor+SILColors.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface SILDebugSpacerTableViewCell()
 @property (weak, nonatomic) IBOutlet UIView *spacerView;
@@ -17,7 +18,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.spacerView.backgroundColor = [UIColor sil_bgGreyColor];
 }
 
 @end

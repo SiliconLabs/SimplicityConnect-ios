@@ -47,9 +47,16 @@
 #import "CBPeripheral+Services.h"
 #import "SILUUIDProvider.h"
 #import "SILOTAUICoordinator.h"
+#import "SILLogDataModel.h"
+#import "SILConnectedPeripheralDataModel.h"
+#import "BlueGecko.pch"
+#import "SILBrowserLogViewController.h"
+#import "SILBrowserConnectionsViewController.h"
+#import "UIImage+SILImages.h"
+#import "SILBrowserConnectionsViewModel.h"
 
-static NSInteger const kTableViewEdgePadding = 36;
 static NSString * const kSpacerCellIdentifieer = @"spacer";
+static NSString * const kCornersCellIdentifieer = @"corners";
 static NSString * const kOTAButtonTitle = @"OTA";
 static NSString * const kUnknownPeripheralName = @"Unknown";
 static NSString * const kScanningForPeripheralsMessage = @"Loading...";
@@ -58,7 +65,13 @@ static float kOnPriority = 999;
 static float kOffPriority = 1;
 static float kTableRefreshInterval = 1;
 
-@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate>
+@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate>
+
+@property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *deviceUuidLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *rssiImageView;
 
 @property (weak, nonatomic) IBOutlet SILAlertBarView *alertBarView;
 @property (weak, nonatomic) IBOutlet UIView *activityBarViewControllerContainer;
@@ -68,23 +81,31 @@ static float kTableRefreshInterval = 1;
 
 @property (nonatomic) BOOL tableNeedsRefresh;
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
+@property (strong, nonatomic) NSTimer *rssiTimer;
 
 @property (nonatomic) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) SILOTAUICoordinator *otaUICoordinator;
-
+@property (weak, nonatomic) IBOutlet UIView *discoveredDevicesView;
 @property (weak, nonatomic) IBOutlet UILabel *disconnectedMessageLabel;
-@property (weak, nonatomic) IBOutlet UITableView *servicesTableView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *servicesTableViewTrailingConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *servicesTableViewLeadingConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *servicesTableViewTopConstraint;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *disconnectedBarHideConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *disconnectedBarRevealConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *activityBarViewControllerHideConstraint;
 @property (strong, nonatomic) WYPopoverController *popoverController;
-
+@property (weak, nonatomic) IBOutlet UIView *presentationView;
 @property (strong, nonatomic) SILDebugHeaderView *headerView;
 @property (strong, nonatomic) SILActivityBarViewController *activityBarViewController;
+@property (weak, nonatomic) IBOutlet UIButton *otaButton;
+@property (weak, nonatomic) IBOutlet UIView *aboveSpaceSaveAreaView;
+@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
+@property (weak, nonatomic) IBOutlet UIButton *connectionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *logButton;
+@property (weak, nonatomic) IBOutlet UIView *expandableControllerView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *expandableControllerHeight;
+@property UIViewController* expandingViewController;
+@property UIVisualEffectView* effectView;
+@property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
 
 @end
 
@@ -94,70 +115,124 @@ static float kTableRefreshInterval = 1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [_otaButton setHidden:YES];
     [self registerForNotifications];
     [self registerNibsAndSetUpSizing];
-    [self setupActivityBarViewController];
-    [self setUpServicesTableView];
-    [self setUpSubviews];
+    //[self setupActivityBarViewController];
+    //[self setUpSubviews];
     [self startServiceSearch];
-    [self setupTableHeaderView];
     [self setupRefreshControl];
+    [self setupNavigationBar];
+    [self setupLogButton];
+    [self setupConnectionsButton];
+    _connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:@"ReloadConnectionsTableView" object:nil];
+    [self updateConnectionsButtonTitle];
+    [_rssiLabel setHidden:YES];
+    [_rssiImageView setHidden:YES];
 }
 
-- (void)didMoveToParentViewController:(UIViewController *)parent {
-    if (![parent isEqual:self.parentViewController]) {
-        [self.centralManager disconnectConnectedPeripheral];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.deviceNameLabel.text = self.peripheral.name;
+    [self installRSSITimer];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self dismissPopoverIfExist];
+}
+
+- (void)dismissPopoverIfExist {
+    if (self.popoverController) {
+        [self.popoverController dismissPopoverAnimated:YES];
     }
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+- (void)installRSSITimer {
+    __weak SILDebugServicesViewController *blocksafeSelf = self;
+    _rssiTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer){ [blocksafeSelf.peripheral readRSSI]; }];
+}
 
-    CGRect headerFrame = self.headerView.frame;
-    headerFrame.size.width = self.view.bounds.size.width;
-    self.headerView.frame = headerFrame;
+- (IBAction)backButtonWasTapped:(id)sender {
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
+- (IBAction)otaButtonWasTapped:(id)sender {
+    self.isUpdatingFirmware = YES;
+    self.otaUICoordinator = [[SILOTAUICoordinator alloc] initWithPeripheral:self.peripheral
+                                                             centralManager:self.centralManager
+                                                   presentingViewController:self];
+    self.otaUICoordinator.delegate = self;
+    [self.otaUICoordinator initiateOTAFlow];
+}
+
+- (void)setupNavigationBar {
+    _aboveSpaceSaveAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+    _navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+}
+
+- (void)setupLogButton {
+    UIEdgeInsets const ImageInsetsForLogButton = {0, 16, 0 ,8};
+    UIEdgeInsets const TitleEdgeInsetsForLogButton = {0, 20., 0, 0};
+    [_logButton setTintColor:[UIColor clearColor]];
+    [_logButton setImage:[[UIImage imageNamed:SILImageLogOff] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState: UIControlStateNormal];
+    [_logButton setImage:[[UIImage imageNamed:SILImageLogOn] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+    _logButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    _logButton.imageEdgeInsets = ImageInsetsForLogButton;
+    [_logButton setTitleEdgeInsets:TitleEdgeInsetsForLogButton];
+    _logButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    _logButton.titleLabel.font = [UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]];
+    [_logButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
+    [_logButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateSelected];
+}
+
+- (void)setupConnectionsButton {
+    UIEdgeInsets const ImageInsetsForConnectionsButton = {0, 8, 0 ,8};
+    UIEdgeInsets const TitleEdgeInsetsForConnectionsButton = {0, 8, 0, 0};
+    [_connectionsButton setTintColor:[UIColor clearColor]];
+    [_connectionsButton setImage:[[UIImage imageNamed:SILImageConnectOff] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [_connectionsButton setImage:[[UIImage imageNamed:SILImageConnectOn] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+    _connectionsButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    _connectionsButton.imageEdgeInsets = ImageInsetsForConnectionsButton;
+    [_connectionsButton setTitleEdgeInsets:TitleEdgeInsetsForConnectionsButton];
+    _connectionsButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    _connectionsButton.titleLabel.font = [UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]];
+    [_connectionsButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
+    [_connectionsButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateSelected];
+}
+
+- (void)updateConnectionsButtonTitle {
+    NSUInteger connections = [self.connectionsViewModel.peripherals count];
+    NSMutableString* connectionsText = [[NSMutableString alloc] initWithFormat: @"%lu", (unsigned long)connections];
+    [connectionsText appendString:@" Connections"];
+    [_connectionsButton setTitle:connectionsText forState:UIControlStateNormal];
+    [_connectionsButton setTitle:connectionsText forState:UIControlStateSelected];
 }
 
 #pragma mark - setup
 
--(void)registerNibsAndSetUpSizing {
-    NSString *serviceCellClassString = NSStringFromClass([SILDebugServiceTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:serviceCellClassString bundle:nil] forCellReuseIdentifier:serviceCellClassString];
+- (void)registerNibsAndSetUpSizing {
+    //NSString *serviceCellClassString = NSStringFromClass([SILDebugServiceTableViewCell class]);
+    //[self.tableView registerNib:[UINib nibWithNibName:serviceCellClassString bundle:nil] forCellReuseIdentifier:serviceCellClassString];
     
-    NSString *characteristicCellClassString = NSStringFromClass([SILDebugCharacteristicTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicCellClassString bundle:nil] forCellReuseIdentifier:characteristicCellClassString];
+    //NSString *characteristicCellClassString = NSStringFromClass([SILDebugCharacteristicTableViewCell class]);
+    //[self.tableView registerNib:[UINib nibWithNibName:characteristicCellClassString bundle:nil] //forCellReuseIdentifier:characteristicCellClassString];
     
     NSString *characteristicValueFieldCellClassString = NSStringFromClass([SILDebugCharacteristicValueFieldTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicValueFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicValueFieldCellClassString];
+    [self.tableView registerNib:[UINib nibWithNibName:characteristicValueFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicValueFieldCellClassString];
     
     NSString *characteristicToggleFieldCellClassString = NSStringFromClass([SILDebugCharacteristicToggleFieldTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicToggleFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicToggleFieldCellClassString];
+    [self.tableView registerNib:[UINib nibWithNibName:characteristicToggleFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicToggleFieldCellClassString];
     
     NSString *characteristicEnumerationFieldCellClassString = NSStringFromClass([SILDebugCharacteristicEnumerationFieldTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicEnumerationFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicEnumerationFieldCellClassString];
+    [self.tableView registerNib:[UINib nibWithNibName:characteristicEnumerationFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicEnumerationFieldCellClassString];
     
     NSString *characteristicEncodingFieldCellClassString = NSStringFromClass([SILDebugCharacteristicEncodingFieldTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:characteristicEncodingFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicEncodingFieldCellClassString];
+    [self.tableView registerNib:[UINib nibWithNibName:characteristicEncodingFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicEncodingFieldCellClassString];
     
     NSString *spacerCellClassString = NSStringFromClass([SILDebugSpacerTableViewCell class]);
-    [self.servicesTableView registerNib:[UINib nibWithNibName:spacerCellClassString bundle:nil] forCellReuseIdentifier:spacerCellClassString];
-}
-
-- (void)setUpServicesTableView {
-    self.servicesTableView.rowHeight = UITableViewAutomaticDimension;
-    self.servicesTableView.sectionHeaderHeight = 40;
-    self.servicesTableView.hidden = YES;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.servicesTableViewLeadingConstraint.constant = kTableViewEdgePadding;
-        self.servicesTableViewTrailingConstraint.constant = kTableViewEdgePadding;
-        self.servicesTableView.estimatedRowHeight = 96;
-        self.servicesTableViewTopConstraint.constant = kTableViewEdgePadding;
-    } else {
-        self.servicesTableViewLeadingConstraint.constant = 0;
-        self.servicesTableViewTrailingConstraint.constant = 0;
-        self.servicesTableViewTopConstraint.constant = 0;
-        self.servicesTableView.estimatedRowHeight = 100;
-    }
+    [self.tableView registerNib:[UINib nibWithNibName:spacerCellClassString bundle:nil] forCellReuseIdentifier:spacerCellClassString];
 }
 
 - (void)setUpSubviews {
@@ -178,19 +253,10 @@ static float kTableRefreshInterval = 1;
     [self.activityBarViewController.view autoPinEdgesToSuperviewEdges];
 }
 
-- (void)setupTableHeaderView {
-    self.headerView = (SILDebugHeaderView *)[self.view initWithNibNamed:NSStringFromClass([SILDebugHeaderView class])];
-    self.headerView.headerLabel.text = @"SERVICES";
-    self.headerView.hidden = YES;
-    [self.view addSubview:self.headerView];
-
-    self.servicesTableView.contentInset = UIEdgeInsetsMake(self.headerView.bounds.size.height, 0, 0, 0);
-}
-
 - (void)setupRefreshControl {
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(handleRefreshServices:) forControlEvents:UIControlEventValueChanged];
-    [self.servicesTableView addSubview:self.refreshControl];
+    [self.tableView addSubview:self.refreshControl];
     [self.refreshControl sendSubviewToBack:self.refreshControl];
     self.refreshControl.bounds = CGRectMake(self.refreshControl.bounds.origin.x, self.refreshControl.bounds.origin.y + 50.0, 100.0, 100.0);
 }
@@ -211,30 +277,163 @@ static float kTableRefreshInterval = 1;
     return _modelsToDisplay;
 }
 
-#pragma mark - Actions
+#pragma mark - Expandable Controllers
 
-- (void)didTapOTABarButtonItem {
-    self.isUpdatingFirmware = YES;
-    self.otaUICoordinator = [[SILOTAUICoordinator alloc] initWithPeripheral:self.peripheral
-                                                             centralManager:self.centralManager
-                                                   presentingViewController:self];
-    self.otaUICoordinator.delegate = self;
-    [self.otaUICoordinator initiateOTAFlow];
+- (IBAction)connectionsButtonTapped:(id)sender {
+    if (_connectionsButton.isSelected == NO) {
+        BOOL anyButtonSelected = [self isAnyButtonSelected];
+        [self prepareSceneDependOnButtonSelection:anyButtonSelected];
+    
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppBluetoothBrowser" bundle:nil];
+        SILBrowserConnectionsViewController* connectionVC = [storyboard instantiateViewControllerWithIdentifier:@"Connections"];
+    
+        [self insertIntoContainerExpandableController:connectionVC];
+        [self animateExpandableViewControllerIfNeeded:anyButtonSelected];
+        connectionVC.delegate = self;
+        self.expandingViewController = connectionVC;
+        
+        [_connectionsButton setSelected:YES];
+    }
 }
+
+- (IBAction)logButtonWasTapped:(id)sender {
+    if (_logButton.isSelected == NO) {
+        BOOL anyButtonSelected = [self isAnyButtonSelected];
+        [self prepareSceneDependOnButtonSelection:anyButtonSelected];
+        
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppBluetoothBrowser" bundle:nil];
+        SILBrowserLogViewController* logVC = [storyboard instantiateViewControllerWithIdentifier:@"Log"];
+    
+        [self insertIntoContainerExpandableController:logVC];
+        [self animateExpandableViewControllerIfNeeded:anyButtonSelected];
+        logVC.delegate = self;
+        self.expandingViewController = logVC;
+        
+        [_logButton setSelected:YES];
+    }
+}
+
+- (BOOL)isAnyButtonSelected {
+    return ! (_logButton.isSelected == NO && _connectionsButton.isSelected == NO);
+}
+
+- (void)deselectAllButtons {
+    [_logButton setSelected:NO];
+    [_connectionsButton setSelected:NO];
+}
+
+- (void)prepareSceneDependOnButtonSelection:(BOOL)anyButtonSelected {
+    if (anyButtonSelected) {
+        [self prepareSceneForChangeExpandableView];
+    } else {
+        [self prepareSceneForExpandableView];
+    }
+    
+    [self customizeExpandableViewAppearance];
+}
+
+- (void)prepareSceneForChangeExpandableView {
+    [self deselectAllButtons];
+    [self removeExpandableViewController];
+}
+
+- (void)prepareSceneForExpandableView {
+    if (_expandingViewController != nil) {
+        [self prepareSceneForRemoveExpandingController];
+    }
+    
+    [self attachBlurEffectView];
+}
+
+- (void)customizeExpandableViewAppearance {
+    self.cornerRadius = 20.0;
+    self.expandableControllerHeight.constant = self.presentationView.frame.size.height * 0.9;
+}
+
+- (void)customizeSceneWithoutExpandableViewContoller {
+    self.cornerRadius = 0.0;
+    self.expandableControllerHeight.constant = 0;
+}
+
+- (void)removeExpandableViewController {
+    [self willMoveToParentViewController:nil];
+    [self.expandingViewController.view removeFromSuperview];
+    [self.expandingViewController removeFromParentViewController];
+    self.expandingViewController = nil;
+}
+
+- (void)insertIntoContainerExpandableController:(UIViewController*)viewController {
+    [self addChildViewController:viewController];
+    [self.expandableControllerView addSubview:viewController.view];
+    viewController.view.frame = self.expandableControllerView.frame;
+    viewController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [viewController didMoveToParentViewController:self];
+    
+    [self.view setNeedsUpdateConstraints];
+}
+
+- (void)animateExpandableViewControllerIfNeeded:(BOOL)anyButtonSelected {
+    if (!anyButtonSelected) {
+        [self animateExpandableViewController];
+    }
+}
+
+- (void)animateExpandableViewController {
+    [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionTransitionCurlDown animations:^{
+            [self.view layoutIfNeeded];
+    } completion:nil];
+}
+
+- (void)prepareSceneForRemoveExpandingController {
+    [self deselectAllButtons];
+    [self removeExpandableViewController];
+    [self customizeSceneWithoutExpandableViewContoller];
+    [self animateExpandableViewController];
+    [self removeBlurEffectView];
+}
+
+- (void)attachBlurEffectView {
+    UIBlurEffect* blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    _effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    _effectView.frame = self.presentationView.frame;
+    [self.discoveredDevicesView addSubview:_effectView];
+}
+
+- (void)removeBlurEffectView {
+    [_effectView removeFromSuperview];
+}
+
+- (void)setCornerRadius:(CGFloat)cornerRadius {
+    if (_cornerRadius != cornerRadius) {
+        _cornerRadius = cornerRadius;
+        [self adjustView];
+    }
+}
+
+- (void)adjustView {
+    if (_expandableControllerView != nil) {
+        self.expandableControllerView.layer.cornerRadius = _cornerRadius;
+        self.expandableControllerView.layer.maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner;
+        self.expandableControllerView.clipsToBounds = YES;
+    }
+}
+
+#pragma mark - Actions
 
 // SLMAIN-333 - This is a workaround to disconnect and reconnect to the peripheral when dynamic services/characteristics are toggled.
 // If this isn't done, services cannot be refreshed more than once.
 - (void)handleRefreshServices: (UIRefreshControl *)sender {
-    void (^serviceSearch)(void) = ^(void){
+    void (^serviceSearch)(void) = ^(void) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [self startServiceSearch];
+            [self->_tableView setHidden:NO];
         });
     };
 
     if (self.refreshControl == sender) {
         self.allServiceModels = [[NSMutableArray alloc] init];
-        [self.centralManager disconnectConnectedPeripheral];
         [self.centralManager connectToDiscoveredPeripheral: [self.centralManager discoveredPeripheralForPeripheral:self.peripheral]];
+        [_tableView setHidden:YES];
         serviceSearch();
     }
 }
@@ -298,15 +497,43 @@ static float kTableRefreshInterval = 1;
     }
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.modelsToDisplay.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self configuredCellForIndexPath:indexPath tableView:tableView];
+    if ([self.modelsToDisplay[indexPath.row] isEqual:kCornersCellIdentifieer]) {
+        SILBottomCornersCell *spacerCell = [tableView dequeueReusableCellWithIdentifier:@"SILBottomCornersCell"];
+        return spacerCell;
+    }
+    if ([self.modelsToDisplay[indexPath.row] isEqual:kSpacerCellIdentifieer]) {
+        SILDebugSpacerTableViewCell *spacerCell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugSpacerTableViewCell class])];
+        return spacerCell;
+    }
+    
+    id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
+    if ([model isKindOfClass:[SILServiceTableModel class]]) {
+        return [self serviceCellWithModel:model forTable:tableView];
+    } else if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
+        SILCharacteristicTableModel *characteristicTableModel = (SILCharacteristicTableModel *)model;
+        return [self characteristicCellWithModel:characteristicTableModel forTable:tableView];
+    } else {
+        id<SILCharacteristicFieldRow> fieldModel = self.modelsToDisplay[indexPath.row];
+        if ([model isKindOfClass:[SILEnumerationFieldRowModel class]]) {
+            return [self enumerationFieldCellWithModel:fieldModel forTable:tableView];
+        } else if ([model isKindOfClass:[SILBitRowModel class]]) {
+            return [self toggleFieldCellWithModel:fieldModel forTable:tableView];
+        } else if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
+            return [self encodingFieldCellWithModel:fieldModel forTable:tableView];
+        } else {
+            return [self valueFieldCellWithModel:fieldModel forTable:tableView];
+        }
+    }
 }
+
+#pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SILDebugCharacteristicTableViewCell class]]) {
@@ -331,6 +558,40 @@ static float kTableRefreshInterval = 1;
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.modelsToDisplay[indexPath.row] isEqual:kSpacerCellIdentifieer]) {
+        return 10;
+    }
+    if ([self.modelsToDisplay[indexPath.row] isEqual:kCornersCellIdentifieer]) {
+        return 10;
+    }
+    
+    id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
+    if ([model isKindOfClass:[SILServiceTableModel class]]) {
+        return 106.0;
+    } else if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
+        SILCharacteristicTableModel* modelCharacteristic = (SILCharacteristicTableModel*)model;
+        NSInteger descriptors = modelCharacteristic.descriptorModels.count;
+        if (descriptors == 0) {
+            return 109.0;
+        } else {
+            return 109.0 + (descriptors + 1) * 16.0;
+        }
+    } else {
+        if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
+            return 230.0;
+        }
+        return 81.0;
+    }
+}
+
+#pragma mark - SILServiceCellDelegate
+
+- (void)showMoreInfoForCell:(SILServiceCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -343,9 +604,17 @@ static float kTableRefreshInterval = 1;
 
 #pragma mark - Configure Cells
 
-- (SILDebugServiceTableViewCell *)serviceCellWithModel:(SILServiceTableModel *)serviceTableModel forTable:(UITableView *)tableView {
-    SILDebugServiceTableViewCell *serviceCell = (SILDebugServiceTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugServiceTableViewCell class])];
-    [serviceCell configureWithServiceModel:serviceTableModel];
+- (SILServiceCell *)serviceCellWithModel:(SILServiceTableModel *)serviceTableModel forTable:(UITableView *)tableView {
+    SILServiceCell *serviceCell = (SILServiceCell *)[tableView dequeueReusableCellWithIdentifier:@"SILServiceCell"];
+    serviceCell.delegate = self;
+    //[self updateChevronImageForExpanded:serviceTableModel.isExpanded];
+    [serviceCell.nameEditButton setHidden:!serviceTableModel.isMappable];
+    serviceCell.serviceNameLabel.text = [serviceTableModel name];
+    serviceCell.serviceUuidLabel.text = [serviceTableModel uuidString] ?: @"";
+    //self.topSeparatorView.hidden = serviceTableModel.hideTopSeparator;
+    [serviceCell configureAsExpandanble:[serviceTableModel canExpand]];
+    [serviceCell customizeMoreInfoText:serviceTableModel.isExpanded];
+    [serviceCell layoutIfNeeded];
     return serviceCell;
 }
 
@@ -353,6 +622,7 @@ static float kTableRefreshInterval = 1;
     SILDebugCharacteristicTableViewCell *characteristicCell = (SILDebugCharacteristicTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicTableViewCell class])];
     [characteristicCell configureWithCharacteristicModel:characteristicTableModel];
     characteristicCell.delegate = self;
+    [characteristicCell.nameEditButton setHidden:!characteristicTableModel.isMappable];
     return characteristicCell;
 }
 
@@ -425,6 +695,13 @@ static float kTableRefreshInterval = 1;
     SILDebugCharacteristicEncodingViewController *encodingViewController = [[SILDebugCharacteristicEncodingViewController alloc] initWithCharacteristicTableModel:characteristicModel canEdit:canEdit];
     encodingViewController.popoverDelegate = self;
     encodingViewController.editDelegate = self;
+    encodingViewController.view.layer.cornerRadius = 16.0;
+    encodingViewController.view.layer.masksToBounds = TRUE;
+    self.popoverController.contentViewController.view.layer.cornerRadius = 16.0;
+    self.popoverController.contentViewController.view.layer.masksToBounds = TRUE;
+    WYPopoverBackgroundView* appearance = [WYPopoverBackgroundView appearance];
+    [appearance setOuterCornerRadius:16.0];
+    [appearance setInnerCornerRadius:16.0];
     self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:encodingViewController
                                                                              presentingViewController:self
                                                                                              delegate:self
@@ -436,6 +713,7 @@ static float kTableRefreshInterval = 1;
 - (void)didClosePopoverViewController:(SILDebugPopoverViewController *)popoverViewController {
     [self.popoverController dismissPopoverAnimated:YES completion:^{
         self.popoverController = nil;
+        [self.tableView reloadData];
     }];
 }
 
@@ -491,6 +769,20 @@ static float kTableRefreshInterval = 1;
     self.popoverController = nil;
 }
 
+#pragma mark - SILMapCellDelegate
+
+- (void)editNameWithCell:(UITableViewCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
+    SILMapNameEditorViewController *nameEditor = [[SILMapNameEditorViewController alloc] init];
+    nameEditor.model = model;
+    nameEditor.popoverDelegate = self;
+    self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:nameEditor
+    presentingViewController:self
+                    delegate:self
+                    animated:YES];
+}
+
 #pragma mark - SILDebugCharacteristicCellDelegate
 
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestReadForCharacteristic:(CBCharacteristic *)characteristic {
@@ -523,16 +815,14 @@ static float kTableRefreshInterval = 1;
 - (void)performWriteActionForCharacteristicFieldRow:(id<SILCharacteristicFieldRow>)characteristicFieldRow {
     if ([characteristicFieldRow isKindOfClass:[SILEnumerationFieldRowModel class]]) {
         [self displayEnumerationDetails:characteristicFieldRow];
-    } else if ([characteristicFieldRow isKindOfClass:[SILValueFieldRowModel class]]) {
+    } else {
         [self displayValueEditor:characteristicFieldRow];
     }
 }
 
-
 #pragma mark - CBPeripheralDelegate
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
-    [self hideActivityBarViewController];
     NSString* title;
     SILDiscoveredPeripheral* discoveredPeripheral = [self.centralManager discoveredPeripheralForPeripheral:self.peripheral];
     if (discoveredPeripheral) {
@@ -542,14 +832,14 @@ static float kTableRefreshInterval = 1;
         title = self.peripheral.name ?: kUnknownPeripheralName;
     }
     self.title = title;
-
-    self.servicesTableView.hidden = NO;
+    self.tableView.hidden = NO;
     self.headerView.hidden = NO;
     for (CBService *service in peripheral.services) {
         [self addOrUpdateModelForService:service];
         [peripheral discoverCharacteristics:nil forService:service];
     }
     [self markTableForUpdate];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverServices: " andPeripheral:peripheral andError:error]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
@@ -559,13 +849,15 @@ static float kTableRefreshInterval = 1;
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
     }
     [self markTableForUpdate];
-    [self configureNavigationItemWithPeripheral:peripheral];
+    [self configureOtaButtonWithPeripheral:peripheral];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverCharacteristics: " andPeripheral:peripheral andError:error]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self markTableForUpdate];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didUpdateValueForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -574,11 +866,13 @@ static float kTableRefreshInterval = 1;
         [peripheral readValueForDescriptor:descriptor];
     }
     [self markTableForUpdate];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverDescriptorsForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
     [self addOrUpdateModelForDescriptor:descriptor forCharacteristic:descriptor.characteristic];
     [self markTableForUpdate];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didUpdateValueForDescriptor: " andDescriptor:descriptor andPeripheral:peripheral andError:error]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -586,12 +880,22 @@ static float kTableRefreshInterval = 1;
     if (error) {
         NSLog(@"Write failed, restoring backup");
         message = [NSString stringWithFormat:@"Write failed. Error: code=%ld \"%@\"", (long)error.code, error.localizedDescription];
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didWriteValueForCharacteristic: Write failed, restoring backup " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
     } else {
         NSLog(@"Write successful, updating read value");
         message = @"Write successful!";
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didWriteValueForCharacteristic: Write successful! " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
     }
     [peripheral readValueForCharacteristic:characteristic];
     [self.alertBarView revealAlertBarWithMessage:message revealTime:0.4 displayTime:3];
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
+    [_rssiLabel setHidden:NO];
+    [_rssiImageView setHidden:NO];
+    NSMutableString* rssiDescription = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@", RSSI]];
+    [rssiDescription appendString:@" dBm"];
+    _rssiLabel.text = rssiDescription;
 }
 
 #pragma mark - Add or Update Attribute Models
@@ -613,7 +917,6 @@ static float kTableRefreshInterval = 1;
     BOOL addedCharacteristic = NO;
     SILServiceTableModel *serviceModel = [self findServiceModelForService:service];
     SILCharacteristicTableModel *characteristicModel = [self findCharacteristicModelForCharacteristic:characteristic forServiceModel:serviceModel];
-    
     if (serviceModel) {
         NSMutableArray *mutableCharacteristicModels = [serviceModel.characteristicModels mutableCopy] ?: [NSMutableArray new];
         if (!characteristicModel) {
@@ -716,6 +1019,7 @@ static float kTableRefreshInterval = 1;
             [self buildDisplayCharacteristics:displayArray forServiceModel:serviceModel];
         }
         firstService = NO;
+        [displayArray addObject:kCornersCellIdentifieer];
         [displayArray addObject:kSpacerCellIdentifieer];
     }
     
@@ -773,51 +1077,50 @@ static float kTableRefreshInterval = 1;
 
 - (void)refreshTable {
     self.modelsToDisplay = [self buildDisplayArray];
-    [self.servicesTableView reloadData];
+    [self.tableView reloadData];
     self.tableNeedsRefresh = NO;
 }
 
-- (UITableViewCell *)configuredCellForIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView {
-    if ([self.modelsToDisplay[indexPath.row] isEqual:kSpacerCellIdentifieer]) {
-        SILDebugSpacerTableViewCell *spacerCell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugSpacerTableViewCell class])];
-        return spacerCell;
-    }
-    
-    id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
-    if ([model isKindOfClass:[SILServiceTableModel class]]) {
-        return [self serviceCellWithModel:model forTable:tableView];
-    } else if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
-        SILCharacteristicTableModel *characteristicTableModel = (SILCharacteristicTableModel *)model;
-        return [self characteristicCellWithModel:characteristicTableModel forTable:tableView];
+- (void)configureOtaButtonWithPeripheral:(CBPeripheral *)peripheral {
+    if ([peripheral hasOTAService]) {
+        [_otaButton setHidden:NO];
     } else {
-        id<SILCharacteristicFieldRow> fieldModel = self.modelsToDisplay[indexPath.row];
-        if ([model isKindOfClass:[SILEnumerationFieldRowModel class]]) {
-            return [self enumerationFieldCellWithModel:fieldModel forTable:tableView];
-        } else if ([model isKindOfClass:[SILBitRowModel class]]) {
-            return [self toggleFieldCellWithModel:fieldModel forTable:tableView];
-        } else if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
-            return [self encodingFieldCellWithModel:fieldModel forTable:tableView];
-        } else {
-            return [self valueFieldCellWithModel:fieldModel forTable:tableView];
-        }
+        [_otaButton setHidden:YES];
     }
 }
 
-- (void)configureNavigationItemWithPeripheral:(CBPeripheral *)peripheral {
-    UIBarButtonItem *otaBarButtonItem;
-    if ([peripheral hasOTAService]) {
-        otaBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:kOTAButtonTitle
-                                                            style:UIBarButtonItemStylePlain
-                                                           target:self
-                                                           action:@selector(didTapOTABarButtonItem)];
-    }
-    [self.navigationItem setRightBarButtonItem:otaBarButtonItem];
+- (void)postRegisterLogNotification:(NSString*)description {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RegisterLog" object:self userInfo:@{ @"description" : description}];
 }
 
 #pragma mark - dealloc
 
 - (void)dealloc {
     [self removeTimer];
+}
+
+#pragma mark - SILBrowserLogViewControllerDelegate
+
+- (void)logViewBackButtonPressed {
+    [self prepareSceneForRemoveExpandingController];
+}
+
+#pragma mark - SILBrowserConnectionViewControllerDelegate
+
+- (void)connectionsViewBackButtonPressed {
+    [self prepareSceneForRemoveExpandingController];
+}
+
+- (void)presentDetailsViewControllerForIndex:(NSInteger)index {
+    SILConnectedPeripheralDataModel* connectedPeripheral = _connectionsViewModel.peripherals[index];
+    _peripheral = connectedPeripheral.peripheral;
+    [self.refreshControl removeFromSuperview];
+    self.refreshControl = nil;
+    [self viewDidLoad];
+    [self viewWillAppear:YES];
+    [self viewDidAppear:YES];
+    [self prepareSceneForRemoveExpandingController];
+    [self.connectionsViewModel updateConnectionsView:index];
 }
 
 @end

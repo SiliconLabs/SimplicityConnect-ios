@@ -115,6 +115,7 @@ NSString * const kScanForNewBeacons = @"Scan for new beacons";
     [super viewWillDisappear:animated];
     
     [self stopTimers];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
@@ -284,7 +285,7 @@ NSString * const kScanForNewBeacons = @"Scan for new beacons";
 #pragma mark - CBCentralManagerDelegate
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
-    if ([central state] == CBCentralManagerStatePoweredOn) {
+    if (central.state == CBManagerStatePoweredOn) {
         [self startScanning];
     } else {
         [self stopScanning];

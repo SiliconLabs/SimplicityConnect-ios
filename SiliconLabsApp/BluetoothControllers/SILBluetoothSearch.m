@@ -43,7 +43,7 @@
     self.connecting = NO;
     self.peripheral = nil;
 
-    if (self.centralManager.state == CBCentralManagerStatePoweredOn) {
+    if (self.centralManager.state == CBManagerStatePoweredOn) {
         [self.centralManager scanForPeripheralsWithServices:@[] options: @{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
     }
 

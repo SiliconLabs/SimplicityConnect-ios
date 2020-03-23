@@ -33,3 +33,14 @@ NSInteger const SILConstantsStrongSignalThreshold = -50;
 NSInteger const SILConstantsMediumSignalThreshold = -80;
 
 NSInteger const SILConstantsTxPowerDefault = -40;
+
+NSInteger const SILLargeFontSizeIphones = 18;
+NSInteger const SILLargeFontSizeIpads = 22;
+NSInteger const SILMediumFontSizeIphones = 14;
+NSInteger const SILMediumFontSizeIpads = 20;
+NSInteger const SILSmallFontSizeIphones = 12;
+NSInteger const SILSmallFontSizeIpads = 20;
+NSInteger const SILNavigationBarTitleFontSize = 34;
+NSInteger const SILScanningButtonTitleFontSize = 18;
+
+CGFloat const SILCornerRadius = 20.0;

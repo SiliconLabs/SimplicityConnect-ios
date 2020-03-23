@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SILBeaconTypeTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eddystone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eRy-l3-EKT" userLabel="Beacon Type Name">
+                        <rect key="frame" x="8" y="0.0" width="81.5" height="44"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beaconCheckmark" translatesAutoresizingMaskIntoConstraints="NO" id="aWz-yA-FwD" userLabel="Checkmark Image">
+                        <rect key="frame" x="296" y="14" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="AiX-aX-bbd"/>
+                            <constraint firstAttribute="width" secondItem="aWz-yA-FwD" secondAttribute="height" multiplier="1:1" id="ZZx-ke-fUu"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="aWz-yA-FwD" secondAttribute="trailing" constant="8" id="8b4-2r-kRq"/>
+                    <constraint firstItem="eRy-l3-EKT" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="Ssl-ze-ojL"/>
+                    <constraint firstItem="eRy-l3-EKT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="gzJ-SZ-RSi"/>
+                    <constraint firstItem="aWz-yA-FwD" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="jJi-tW-a7J"/>
+                    <constraint firstItem="eRy-l3-EKT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="pQD-EF-Kaj"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="beaconTypeName" destination="eRy-l3-EKT" id="9Sn-Oc-XXl"/>
+                <outlet property="checkmarkImage" destination="aWz-yA-FwD" id="Bd0-IO-93N"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="153"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="beaconCheckmark" width="17" height="13"/>
+    </resources>
+</document>

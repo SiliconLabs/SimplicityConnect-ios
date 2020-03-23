@@ -12,4 +12,16 @@ extension Int {
     var number: NSNumber {
         return NSNumber(value: self)
     }
+    
+    var indexPath: IndexPath {
+        return IndexPath(row: self, section: 0)
+    }
+    
+    var indexPaths: [IndexPath] {
+        var indexPaths = [IndexPath]()
+        for i in 0..<self {
+            indexPaths.append(i.indexPath)
+        }
+        return indexPaths
+    }
 }

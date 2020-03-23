@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,25 +13,23 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="619" height="61"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AtO-zN-4aI" userLabel="Separator">
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AtO-zN-4aI" userLabel="Separator">
                         <rect key="frame" x="16" y="0.0" width="587" height="1"/>
-                        <animations/>
-                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.81568627450980391" green="0.81568627450980391" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="txe-k3-x3e"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Toggle Value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" preferredMaxLayoutWidth="231" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" text="Toggle Value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" preferredMaxLayoutWidth="231" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
                         <rect key="frame" x="16" y="11" width="530" height="17"/>
-                        <animations/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="ZKe-CF-DCe"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -38,35 +37,31 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="751" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" preferredMaxLayoutWidth="236" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-q1-Cq4" userLabel="Subtitle">
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.34000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="751" misplaced="YES" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" preferredMaxLayoutWidth="236" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-q1-Cq4" userLabel="Subtitle">
                         <rect key="frame" x="16" y="28" width="535" height="22"/>
-                        <animations/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Det-5z-3aV" userLabel="Writable Switch">
+                    <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Det-5z-3aV" userLabel="Writable Switch">
                         <rect key="frame" x="554" y="15" width="51" height="31"/>
-                        <animations/>
-                        <color key="onTintColor" red="0.79607843137254897" green="0.0039215686274509803" blue="0.12941176470588237" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="onTintColor" red="0.79607843137254897" green="0.0039215686274509803" blue="0.12941176470588237" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <connections>
                             <action selector="didChangeValue:" destination="KGk-i7-Jjw" eventType="valueChanged" id="aCT-5t-2yH"/>
                         </connections>
                     </switch>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="44" translatesAutoresizingMaskIntoConstraints="NO" id="x9P-mS-BnE" userLabel="Non-writable State">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="State" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="44" translatesAutoresizingMaskIntoConstraints="NO" id="x9P-mS-BnE" userLabel="Non-writable State">
                         <rect key="frame" x="559" y="21" width="44" height="19"/>
-                        <animations/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="FSg-zT-3Y3"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0qK-EA-3aZ" userLabel="Left Border">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                        <animations/>
-                        <color key="backgroundColor" red="0.85098040103912354" green="0.85098040103912354" blue="0.85098040103912354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="240" id="wnd-Cr-beZ">
                                 <variation key="heightClass=regular-widthClass=regular" constant="1"/>
@@ -85,8 +80,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cdf-G5-O1E" userLabel="Right Border">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                        <animations/>
-                        <color key="backgroundColor" red="0.85098040103912354" green="0.85098040103912354" blue="0.85098040103912354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="240" id="bqY-ox-qlt">
                                 <variation key="heightClass=regular-widthClass=regular" constant="1"/>
@@ -104,8 +98,7 @@
                         </variation>
                     </view>
                 </subviews>
-                <animations/>
-                <color key="backgroundColor" red="0.98039215803146362" green="0.98039215803146362" blue="0.98039215803146362" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="cdf-G5-O1E" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="-33" id="7lP-xd-Su7">
                         <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
@@ -174,7 +167,6 @@
                     </mask>
                 </variation>
             </tableViewCellContentView>
-            <animations/>
             <constraints>
                 <constraint firstItem="AtO-zN-4aI" firstAttribute="top" secondItem="KGk-i7-Jjw" secondAttribute="top" id="sMM-kA-6SY"/>
             </constraints>

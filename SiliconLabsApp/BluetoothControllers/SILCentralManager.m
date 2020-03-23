@@ -8,12 +8,15 @@
 
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "SILCentralManager.h"
+#import "SILBrowserConnectionsViewModel.h"
 #import "SILDiscoveredPeripheral.h"
 #import "NSError+SILHelpers.h"
 #import "SILWeakTargetWrapper.h"
 #import "SILRSSIMeasurementTable.h"
+#import "SILLogDataModel.h"
 #import "SILWeakNotificationPair.h"
 #import "SILConstants.h"
+#import "NSString+SILBrowserNotifications.h"
 #if ENABLE_HOMEKIT
 #import <HomeKit/HomeKit.h>
 #endif
@@ -40,7 +43,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 @property (strong, nonatomic) NSTimer *connectionTimeoutTimer;
 @property (strong, nonatomic) CBPeripheral *connectingPeripheral;
 @property (strong, nonatomic) CBPeripheral *disconnectingPeripheral;
-
+@property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
 @property (strong, nonatomic) NSMutableArray *scanForPeripheralsObservers;
 
 @end
@@ -60,6 +63,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
         self.scanForPeripheralsObservers = [NSMutableArray array];
         self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
         [self setupNotifications];
+        self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
     }
     return self;
 }
@@ -97,14 +101,15 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 #pragma mark - Discovering Peripherals
 
-- (void)insertOrUpdateDiscoveredPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
+- (void)insertOrUpdateDiscoveredPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI andDiscoveringTimestamp:(long long)timestamp {
     SILDiscoveredPeripheral *discoveredPeripheral = self.discoveredPeripheralMapping[peripheral.identifier];
     if (discoveredPeripheral) {
-        [discoveredPeripheral updateWithAdvertisementData:advertisementData RSSI:RSSI];
+        [discoveredPeripheral updateWithAdvertisementData:advertisementData RSSI:RSSI andDiscoveringTimestamp:timestamp];
     } else {
         discoveredPeripheral = [[SILDiscoveredPeripheral alloc] initWithPeripheral:peripheral
                                                                  advertisementData:advertisementData
-                                                                              RSSI:RSSI];
+                                                                                  RSSI:RSSI
+                                                           andDiscoveringTimestamp:timestamp];
         self.discoveredPeripheralMapping[peripheral.identifier] = discoveredPeripheral;
     }
     [self postDidUpdateDiscoveredPeripheralsNotification];
@@ -227,7 +232,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 #pragma mark - Scanning
 
 - (BOOL)shouldScanForDevices {
-    return (([self.centralManager state] == CBCentralManagerStatePoweredOn) &&
+    return ((self.centralManager.state == CBManagerStatePoweredOn) &&
             (self.scanForPeripheralsObservers.count > 0));
 }
 
@@ -240,7 +245,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (void)startScanning {
-    if ([self.centralManager state] == CBCentralManagerStatePoweredOn) {
+    if (self.centralManager.state == CBManagerStatePoweredOn) {
         if (!self.isScanning) {
             self.isScanning = YES;
 
@@ -270,7 +275,8 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     if (peripheral.identifier) {
-        [self insertOrUpdateDiscoveredPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI];
+        long long timestampInterval = (long long)([[NSDate date] timeIntervalSince1970] * 1000000000);
+        [self insertOrUpdateDiscoveredPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI andDiscoveringTimestamp:timestampInterval];
     }
 }
 
@@ -284,6 +290,8 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
                                                       userInfo:@{
                                                                  SILCentralManagerPeripheralKey : peripheral
                                                                  }];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didConnectPeripheral: " andPeripheral:peripheral andError:nil]];
+    [self.connectionsViewModel addNewConnectedPeripheral:peripheral];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -291,29 +299,32 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     NSLog(@"error: %@", error);
     [self removeUnfiredConnectionTimeoutTimer];
     [self handleConnectionFailureWithError:error];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didFailToConnectPeripheral: " andPeripheral:peripheral andError:error]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"didDisconnectPeripheral: %@", peripheral.name);
     NSLog(@"error: %@", error);
-
     if (self.connectedPeripheral && [self.connectedPeripheral isEqual:peripheral]) {
         self.connectedPeripheral = nil;
 
+        NSMutableDictionary *userInfo = nil;
         if(self.disconnectingPeripheral) {
             self.disconnectingPeripheral = nil;
         } else {
-            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+            userInfo = [NSMutableDictionary dictionary];
             userInfo[SILCentralManagerPeripheralKey] = peripheral;
             if (error) {
                 userInfo[SILCentralManagerErrorKey] = error;
             }
-
-            [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerDidDisconnectPeripheralNotification
-                                                                object:self
-                                                              userInfo:userInfo];
         }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerDidDisconnectPeripheralNotification
+                                                            object:self
+                                                          userInfo:userInfo];
     }
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDisconnectPeripheral: " andPeripheral:peripheral andError:error]];
+    [self postDeleteDisconnectedPeripheral:peripheral];
 }
 
 #pragma mark - Notifications
@@ -354,6 +365,14 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     [self.scanForPeripheralsObservers removeObjectsInArray:pairsToRemove];
 
     [self toggleScanning];
+}
+
+- (void)postRegisterLogNotification:(NSString*)description {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationRegisterLog object:self userInfo:@{ SILNotificationKeyDescription : description}];
+}
+
+- (void)postDeleteDisconnectedPeripheral:(CBPeripheral*)peripheral {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDeleteDisconnectedPeripheral object:self userInfo:@{ SILNotificationKeyUUID: peripheral.identifier.UUIDString}];
 }
 
 @end

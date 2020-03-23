@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSArray *descriptorModels;
 @property (nonatomic, readonly) BOOL canWrite;
 @property (nonatomic, readonly) BOOL isUnknown;
+@property (nonatomic) Boolean isMappable;
 
 - (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic;
 - (NSString *)name;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="29" id="KGk-i7-Jjw" customClass="SILBrowserLogTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Callback) Successful" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wGn-CY-Q0h" userLabel="Log Description">
+                        <rect key="frame" x="126" y="4" width="186" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="top" verticalHuggingPriority="251" text="13:39:45.416" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QwG-ax-ccG" userLabel="Log Data Time Information">
+                        <rect key="frame" x="16" y="4" width="120" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="e6j-gh-ICt"/>
+                            <constraint firstAttribute="width" constant="120" id="qra-xa-m7h">
+                                <variation key="heightClass=regular-widthClass=regular" constant="170"/>
+                            </constraint>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="QwG-ax-ccG" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="B6D-Si-iL5"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="wGn-CY-Q0h" secondAttribute="bottom" constant="4" id="FGm-kD-0v7"/>
+                    <constraint firstAttribute="trailing" secondItem="QwG-ax-ccG" secondAttribute="trailing" priority="900" constant="202" id="HhN-If-tqc"/>
+                    <constraint firstItem="wGn-CY-Q0h" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="Hxb-Bm-IwV"/>
+                    <constraint firstItem="wGn-CY-Q0h" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="126" id="Pdn-kg-Q3R">
+                        <variation key="heightClass=regular-widthClass=regular" constant="176"/>
+                    </constraint>
+                    <constraint firstAttribute="trailing" secondItem="wGn-CY-Q0h" secondAttribute="trailing" constant="8" id="U6H-Km-wzz"/>
+                    <constraint firstItem="QwG-ax-ccG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="cFR-Yd-yoe"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="logDataTimeInformationLabel" destination="QwG-ax-ccG" id="NnX-gA-PfG"/>
+                <outlet property="logDescriptionLabel" destination="wGn-CY-Q0h" id="DiT-Es-hPd"/>
+            </connections>
+            <point key="canvasLocation" x="134.78260869565219" y="136.94196428571428"/>
+        </tableViewCell>
+    </objects>
+</document>

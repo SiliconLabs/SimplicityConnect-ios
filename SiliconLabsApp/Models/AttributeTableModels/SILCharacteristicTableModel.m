@@ -12,6 +12,8 @@
 #import "SILCharacteristicFieldBuilder.h"
 #import "SILBluetoothModelManager.h"
 #import "SILUUIDProvider.h"
+#import "SILLogDataModel.h"
+#import "BlueGecko.pch"
 
 #import <Crashlytics/Crashlytics.h>
 
@@ -30,6 +32,7 @@
 
 @synthesize isExpanded;
 @synthesize hideTopSeparator;
+@synthesize isMappable;
 
 - (instancetype)initWithCharacteristic:(CBCharacteristic *)characteristic {
     self = [super init];
@@ -42,6 +45,7 @@
         self.writeWithResponse = self.characteristic.properties & CBCharacteristicPropertyWrite;
         self.writeNoResponse = self.characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse;
         self.canWrite = self.writeWithResponse || self.writeNoResponse;
+        self.isMappable = NO;
     }
     return self;
 }
@@ -53,7 +57,17 @@
     
     NSString* predefinedName = [[SILUUIDProvider sharedProvider] predefinedNameForCharacteristicUUID:[self uuidString]];
     
-    return predefinedName ?: @"Unknown Characteristic";
+    return predefinedName ?: self.mappedName;
+}
+
+- (NSString *)mappedName {
+    [self setIsMappable:YES];
+    NSString * const mappedName = [SILCharacteristicMap getWith:self.uuidString].name;
+    return mappedName ?: [self setMappable];
+}
+
+- (NSString *)setMappable {
+    return @"Unknown Characteristic";
 }
 
 - (BOOL)isUnknown {
@@ -127,6 +141,7 @@
 - (void)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral error:(NSError * __autoreleasing *)error {
     if (!self.canWrite) {
         *error = [NSError errorWithDomain:@"Characteristic is not writable" code:-1 userInfo:nil];
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: Characteristic is not writable " andPeripheral:peripheral andError:*error]];
         return;
     }
     
@@ -136,12 +151,14 @@
     
     if (!dataToWrite) {
         *error = [NSError errorWithDomain:@"Data is out of range" code:-1 userInfo:nil];
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: Data is out of range " andPeripheral:peripheral andError:*error]];
         return;
     }
     
     const CBCharacteristicWriteType writeType = self.writeWithResponse ? CBCharacteristicWriteWithResponse : CBCharacteristicWriteWithoutResponse;
     
     [peripheral writeValue:dataToWrite forCharacteristic:self.characteristic type:writeType];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: " andPeripheral:peripheral andError:*error]];
 }
 
 - (NSData *)dataToWriteWithError:(NSError * __autoreleasing *)error {
@@ -172,6 +189,10 @@
     NSString * const fieldRequirement = fieldModel.fieldModel.requirement;
     
     return fieldRequirement && [self.requirementsMet containsObject:fieldRequirement];
+}
+
+- (void)postRegisterLogNotification:(NSString*)description {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RegisterLog" object:self userInfo:@{ @"description" : description}];
 }
 
 @end

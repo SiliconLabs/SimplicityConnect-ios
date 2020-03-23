@@ -894,9 +894,6 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
         const unsigned char *valueBuffer = value.bytes;
         for (unsigned index = 0; index < value.length; index++) {
             [hexString appendFormat:@"%02lX", (unsigned long)valueBuffer[index]];
-            if (index + 1 < value.length) {
-                [hexString appendString:kHexDeilimiter];
-            }
         }
     }
     return [hexString copy];
@@ -929,7 +926,7 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
 
 ///@return nil if poorly formatted string
 - (NSData *)dataForHexString:(NSString *)hexString decimalExponent:(NSInteger)decimalExponent error:(NSError *__autoreleasing *)error {
-    NSArray * const hexPairs = [hexString componentsSeparatedByString:kHexDeilimiter];
+    NSArray<NSString*>* hexPairs = [self parseIntoTwoCharactersSubstrings:hexString];
     NSMutableData * const data = [NSMutableData new];
     
     for (NSUInteger pairIndex = 0; pairIndex < hexPairs.count; pairIndex++) {
@@ -949,6 +946,28 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
         }
     }
     return [data copy];
+}
+
+- (NSArray<NSString*>*)parseIntoTwoCharactersSubstrings:(NSString*)hexString {
+    NSMutableArray<NSString*>* hexPairs = [[NSMutableArray alloc] init];
+    
+    NSMutableString* tmp = nil;
+    for (int i = 0; i < hexString.length; i++) {
+        NSString* currentCharacher = [NSString stringWithFormat: @"%C", [hexString characterAtIndex:i]];
+        if (i % 2 == 0) {
+            tmp = [[NSMutableString alloc] initWithString:currentCharacher];
+        } else {
+            [tmp appendString:currentCharacher];
+            [hexPairs addObject:tmp];
+            tmp = nil;
+        }
+    }
+
+    if (tmp != nil) {
+        [hexPairs addObject:tmp];
+    }
+    
+    return hexPairs;
 }
 
 - (BOOL)isLegalHexString:(NSString *)hexPairString length:(NSUInteger)length {

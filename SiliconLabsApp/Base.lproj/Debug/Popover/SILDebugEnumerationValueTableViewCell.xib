@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -16,22 +17,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="269" translatesAutoresizingMaskIntoConstraints="NO" id="aMm-P6-hQw" userLabel="Enumeration Value">
-                        <rect key="frame" x="22" y="13" width="269" height="19"/>
-                        <animations/>
+                        <rect key="frame" x="22" y="13" width="261" height="19"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                        <color key="textColor" red="0.31372550129890442" green="0.30588236451148987" blue="0.30588236451148987" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="textColor" red="0.24601632356643677" green="0.23908400535583496" blue="0.23924079537391663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" translatesAutoresizingMaskIntoConstraints="NO" id="tca-Kj-WPY">
-                        <rect key="frame" x="299" y="17" width="13" height="10"/>
-                        <animations/>
+                        <rect key="frame" x="291" y="17" width="13" height="10"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="13" id="Hj4-ag-OYD"/>
                             <constraint firstAttribute="height" constant="10" id="ZBp-2P-H46"/>
                         </constraints>
                     </imageView>
                 </subviews>
-                <animations/>
                 <constraints>
                     <constraint firstItem="tca-Kj-WPY" firstAttribute="leading" secondItem="aMm-P6-hQw" secondAttribute="trailing" constant="8" id="Dp6-2x-wgb"/>
                     <constraint firstItem="tca-Kj-WPY" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="GxE-AQ-uey"/>
@@ -41,11 +39,11 @@
                     <constraint firstAttribute="trailingMargin" secondItem="tca-Kj-WPY" secondAttribute="trailing" id="xlB-A5-uRQ"/>
                 </constraints>
             </tableViewCellContentView>
-            <animations/>
             <connections>
                 <outlet property="activeCheckImageView" destination="tca-Kj-WPY" id="xy4-m0-J5e"/>
                 <outlet property="valueLabel" destination="aMm-P6-hQw" id="Tp6-w6-1Fk"/>
             </connections>
+            <point key="canvasLocation" x="26" y="52"/>
         </tableViewCell>
     </objects>
     <resources>

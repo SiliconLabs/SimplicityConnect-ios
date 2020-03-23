@@ -11,8 +11,6 @@
 
 NSString * const SILBarGraphCollectionViewCellIdentifier = @"SILBarGraphCollectionViewCellIdentifier";
 
-CGFloat const SILBarGraphCollectionViewCellMaxBarRatio = 0.8;
-
 @interface SILBarGraphCollectionViewCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
@@ -87,7 +85,7 @@ CGFloat const SILBarGraphCollectionViewCellMaxBarRatio = 0.8;
 
     double normalizedTemperature = (boundedTemperature - self.range.location) / self.range.length;
 
-    double scaledTemperature = SILBarGraphCollectionViewCellMaxBarRatio * normalizedTemperature;
+    double scaledTemperature = _SILBarGraphCollectionViewCellMaxBarRatio * normalizedTemperature;
 
     CGFloat valueHeight = self.contentView.frame.size.height * scaledTemperature;
     self.valueViewHeightConstraint.constant = valueHeight;

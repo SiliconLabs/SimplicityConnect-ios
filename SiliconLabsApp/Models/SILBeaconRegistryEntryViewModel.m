@@ -36,9 +36,6 @@ CGFloat const SILRetailBeaconAppDistanceInterval = 5.0;
 - (SILBeaconViewModel *)beaconViewModelForBeacon:(SILBeacon *)beacon {
     SILBeaconViewModel *viewModel = nil;
     switch (beacon.type) {
-        case SILBeaconTypeBlueGecko:
-            viewModel = [[SILBGBeaconViewModel alloc] initWithBeacon:beacon];
-            break;
         case SILBeaconTypeIBeacon:
             viewModel = [[SILIBeaconViewModel alloc] initWithBeacon:beacon];
             break;

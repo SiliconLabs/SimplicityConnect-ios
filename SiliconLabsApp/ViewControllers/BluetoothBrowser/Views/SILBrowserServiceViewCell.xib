@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" indentationWidth="10" reuseIdentifier="SILBrowserServiceViewCell" rowHeight="76" id="KGk-i7-Jjw" customClass="SILBrowserServiceViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="378" height="76"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="378" height="76"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lYj-Zz-iHF" userLabel="Canvas">
+                        <rect key="frame" x="0.0" y="0.0" width="378" height="76"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mjq-sw-YdJ" userLabel="UUID">
+                                <rect key="frame" x="16" y="40" width="346" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="sM4-xh-yWH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L26-zd-ynC" userLabel="Name">
+                                <rect key="frame" x="16" y="17" width="346" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="r8r-nT-GSH"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="L26-zd-ynC" secondAttribute="trailing" constant="16" id="2zn-ug-8gW"/>
+                            <constraint firstAttribute="trailing" secondItem="mjq-sw-YdJ" secondAttribute="trailing" constant="16" id="Nog-Ys-II5"/>
+                            <constraint firstItem="L26-zd-ynC" firstAttribute="top" secondItem="lYj-Zz-iHF" secondAttribute="top" constant="17" id="Qst-nM-J2X"/>
+                            <constraint firstItem="mjq-sw-YdJ" firstAttribute="leading" secondItem="lYj-Zz-iHF" secondAttribute="leading" constant="16" id="aaS-N0-cXc"/>
+                            <constraint firstItem="L26-zd-ynC" firstAttribute="leading" secondItem="lYj-Zz-iHF" secondAttribute="leading" constant="16" id="fFL-zm-74D"/>
+                            <constraint firstItem="mjq-sw-YdJ" firstAttribute="top" secondItem="L26-zd-ynC" secondAttribute="bottom" constant="4" id="mDP-bO-bc3"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="lYj-Zz-iHF" secondAttribute="trailing" id="CNu-UF-c4B"/>
+                    <constraint firstItem="lYj-Zz-iHF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Pce-pX-zAY"/>
+                    <constraint firstItem="lYj-Zz-iHF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="bfF-RT-tqo"/>
+                    <constraint firstAttribute="bottom" secondItem="lYj-Zz-iHF" secondAttribute="bottom" id="jBW-9a-hX4"/>
+                </constraints>
+            </tableViewCellContentView>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="isLastInSection" value="NO"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="serviceNameLabel" destination="L26-zd-ynC" id="iIP-dU-DNQ"/>
+                <outlet property="serviceUUIDLabel" destination="mjq-sw-YdJ" id="tPO-o4-Igt"/>
+            </connections>
+            <point key="canvasLocation" x="34" y="-46"/>
+        </tableViewCell>
+    </objects>
+</document>

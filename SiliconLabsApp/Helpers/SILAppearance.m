@@ -29,15 +29,15 @@
 
 
     [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor whiteColor],
-                                                           NSFontAttributeName: [UIFont helveticaNeueMediumWithSize:17.0],
+                                                           NSForegroundColorAttributeName: [UIColor sil_bgWhiteColor],
+                                                           NSFontAttributeName: [UIFont robotoRegularWithSize:17.0],
                                                            }];
 }
 
 + (void)setupBarButtonItemAppearance {
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{
-                                                          NSForegroundColorAttributeName: [UIColor whiteColor],
-                                                          NSFontAttributeName: [UIFont helveticaNeueWithSize:17.0],
+                                                          NSForegroundColorAttributeName: [UIColor sil_bgWhiteColor],
+                                                          NSFontAttributeName: [UIFont robotoRegularWithSize: 17.0],
                                                           }
                                                 forState:UIControlStateNormal];
 }

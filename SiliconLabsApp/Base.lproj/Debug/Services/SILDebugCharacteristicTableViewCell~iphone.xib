@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -59,9 +59,6 @@
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCL-h3-rLo">
                                                 <rect key="frame" x="0.0" y="0.0" width="42" height="60"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <connections>
-                                                    <action selector="handleReadViewTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="c1u-8y-s3B"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <accessibility key="accessibilityConfiguration">
@@ -103,9 +100,6 @@
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v2f-gx-Qad">
                                                 <rect key="frame" x="0.0" y="0.0" width="42" height="60"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <connections>
-                                                    <action selector="handleWriteViewTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="suU-wq-MOL"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <accessibility key="accessibilityConfiguration">
@@ -191,9 +185,6 @@
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rsi-u5-iIj">
                                                 <rect key="frame" x="0.0" y="0.0" width="42" height="60"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <connections>
-                                                    <action selector="handleIndicateViewTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OTd-ua-Jfu"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <accessibility key="accessibilityConfiguration">
@@ -235,9 +226,6 @@
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsd-2u-NlZ">
                                                 <rect key="frame" x="0.0" y="0.0" width="42" height="60"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <connections>
-                                                    <action selector="handleNotifyViewTap:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="wt8-g3-H3X"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <accessibility key="accessibilityConfiguration">
@@ -319,15 +307,12 @@
                 <outlet property="characteristicNameLabel" destination="Y0e-sT-YSN" id="Bc5-Ci-tyP"/>
                 <outlet property="characteristicUuidLabel" destination="9kC-t3-kaU" id="0MV-ZE-YCx"/>
                 <outlet property="indicateImageView" destination="toh-Kj-mal" id="QLX-Wb-JAe"/>
-                <outlet property="indicatePropertyButton" destination="Rsi-u5-iIj" id="UKo-99-A9u"/>
                 <outlet property="indicatePropertyView" destination="ae5-V6-EGp" id="cLa-qh-UHU"/>
                 <outlet property="notifyImageView" destination="VL1-dV-cYv" id="Y0G-Af-RC8"/>
-                <outlet property="notifyPropertyButton" destination="dsd-2u-NlZ" id="7hW-fH-4Xl"/>
                 <outlet property="notifyPropertyView" destination="1ol-zH-aJB" id="WTR-6R-3BP"/>
                 <outlet property="propertiesContainerView" destination="rSA-OB-j8k" id="ZrQ-8L-qwZ"/>
                 <outlet property="propertyButtonsStackView" destination="vvE-pp-3Wg" id="Gyw-kt-8tP"/>
                 <outlet property="readImageView" destination="VLt-mJ-bqH" id="HwY-K5-S12"/>
-                <outlet property="readPropertyButton" destination="OCL-h3-rLo" id="fJg-tE-xwn"/>
                 <outlet property="readPropertyView" destination="X2z-fa-6rK" id="Vuc-bR-hjb"/>
                 <outlet property="topSeparatorView" destination="F2s-8V-ptU" id="Ufv-ae-LLc"/>
                 <outlet property="viewMoreChevron" destination="cNk-Qj-QQM" id="sHD-iM-eXX"/>
@@ -335,7 +320,6 @@
                 <outlet property="writeNoResponseImageView" destination="gyp-96-b04" id="G7a-Mb-rIL"/>
                 <outlet property="writeNoResponsePropertyButton" destination="sKG-h0-ryU" id="hoT-aD-oo9"/>
                 <outlet property="writeNoResponsePropertyView" destination="qkw-uC-UGA" id="a5V-83-Mgb"/>
-                <outlet property="writePropertyButton" destination="v2f-gx-Qad" id="ZNg-my-03u"/>
                 <outlet property="writePropertyView" destination="Tj0-Al-c1U" id="1Ci-Gh-Sef"/>
                 <outletCollection property="allPropertyViews" destination="X2z-fa-6rK" id="Pz7-U9-RMP"/>
                 <outletCollection property="allPropertyViews" destination="Tj0-Al-c1U" id="aap-Oe-I4H"/>
@@ -347,11 +331,11 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="PropertyIndicateDisabled" width="96" height="96"/>
-        <image name="PropertyNotifyDisabled" width="96" height="96"/>
-        <image name="PropertyReadDisabled" width="96" height="96"/>
-        <image name="PropertyWriteDisabled" width="96" height="96"/>
-        <image name="PropertyWriteNoResponseDisabled" width="512" height="512"/>
+        <image name="PropertyIndicateDisabled" width="30" height="30"/>
+        <image name="PropertyNotifyDisabled" width="30" height="30"/>
+        <image name="PropertyReadDisabled" width="30" height="30"/>
+        <image name="PropertyWriteDisabled" width="30" height="30"/>
+        <image name="PropertyWriteNoResponseDisabled" width="30" height="30"/>
         <image name="chevron_collapsed" width="14" height="9"/>
     </resources>
 </document>

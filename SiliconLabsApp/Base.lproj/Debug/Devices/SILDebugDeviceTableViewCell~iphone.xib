@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +20,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="465" height="99"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wAO-h1-LOW" userLabel="mid view">
-                                <rect key="frame" x="207" y="38" width="50" height="23"/>
+                                <rect key="frame" x="207.5" y="38" width="50" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="23" id="Zxm-ud-cBa"/>
                                     <constraint firstAttribute="width" constant="50" id="wUo-ed-cx7"/>
@@ -62,7 +58,7 @@
                                 </constraints>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="debug_loading_spinner" translatesAutoresizingMaskIntoConstraints="NO" id="cXo-5U-bsL" userLabel="Connecting Spinner">
-                                <rect key="frame" x="146" y="15.5" width="24" height="24"/>
+                                <rect key="frame" x="146" y="16" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="26v-Yh-ZMg"/>
                                     <constraint firstAttribute="width" secondItem="cXo-5U-bsL" secondAttribute="height" multiplier="1:1" id="TjE-c9-Bg8"/>
@@ -129,7 +125,7 @@
                         </variation>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JAn-Fx-mYF" userLabel="Bottom Divider">
-                        <rect key="frame" x="0.0" y="100" width="465" height="1"/>
+                        <rect key="frame" x="7" y="100" width="451" height="1"/>
                         <color key="backgroundColor" red="0.81568627449999997" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="NcG-yP-5Vm"/>
@@ -156,7 +152,7 @@
                 <outlet property="topContainerView" destination="Pji-9J-X2t" id="HKq-xR-uFd"/>
                 <outlet property="uuidLabel" destination="Pzg-LX-zF0" id="pKr-Lg-ySY"/>
             </connections>
-            <point key="canvasLocation" x="450.5" y="328.5"/>
+            <point key="canvasLocation" x="145" y="203"/>
         </tableViewCell>
     </objects>
     <resources>

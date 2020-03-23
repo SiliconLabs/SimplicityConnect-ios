@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SILDebugProperty.h"
 #import "SILGenericAttributeTableCell.h"
+#import "BlueGecko.pch"
 
 @class SILDebugCharacteristicTableViewCell;
 @class SILCharacteristicTableModel;
@@ -16,7 +17,7 @@
 @class SILHomeKitCharacteristicTableModel;
 #endif
 
-@protocol SILDebugCharacteristicCellDelegate <NSObject>
+@protocol SILDebugCharacteristicCellDelegate <NSObject, SILMapCellDelegate>
 
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestReadForCharacteristic:(CBCharacteristic *)characteristic;
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestWriteForCharacteristic:(CBCharacteristic *)characteristic;
@@ -26,9 +27,10 @@
 
 @end
 
-@interface SILDebugCharacteristicTableViewCell : UITableViewCell <SILGenericAttributeTableCell>
+@interface SILDebugCharacteristicTableViewCell : UITableViewCell <SILGenericAttributeTableCell, SILMapCellProtocol>
 @property (weak, nonatomic) id<SILDebugCharacteristicCellDelegate> delegate;
 @property (weak, nonatomic) SILCharacteristicTableModel *characteristicTableModel;
+@property (weak, nonatomic) IBOutlet UIButton *nameEditButton;
 
 - (void)configureWithCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel;
 #if ENABLE_HOMEKIT

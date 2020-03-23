@@ -1,14 +1,14 @@
 //
 //  SILAppSelectionViewController.m
-//  SiliconLabsApp
+//  BlueGecko
 //
-//  Created by Colden Prime on 1/13/15.
-//  Copyright (c) 2015 SiliconLabs. All rights reserved.
+//  Created by Kamil Czajka on 17/12/2019.
+//  Copyright © 2019 SiliconLabs. All rights reserved.
 //
 
 #import "SILAppSelectionViewController.h"
 #import "SILApp.h"
-#import "SILAppSelectionTableViewCell.h"
+#import "SILAppSelectionCollectionViewCell.h"
 #import "SILDeviceSelectionViewController.h"
 #import "SILCentralManagerBuilder.h"
 #import "SILHealthThermometerAppViewController.h"
@@ -17,11 +17,13 @@
 #import <WYPopoverController/WYPopoverController.h>
 #import "WYPopoverController+SILHelpers.h"
 #import "SILApp+AttributedProfiles.h"
-#import "SILAppSelectionHelpViewController.h"
-#import "SILKeyFobViewController.h"
 #import "SILCalibrationViewController.h"
 #import "SILBluetoothModelManager.h"
 #import "SILBluetoothXMLParser.h"
+#import "UIImage+SILImages.h"
+#import "SILBluetoothBrowserViewController.h"
+#import "SILAppSelectionHelpViewController.h"
+#import "SILConstants.h"
 #if WIRELESS
 #import "SILConnectedLightingViewController.h"
 #endif
@@ -29,28 +31,130 @@
 #import "SILHomeKitDebugDeviceViewController.h"
 #endif
 
-@interface SILAppSelectionViewController () <UITableViewDataSource, UITableViewDelegate, SILDeviceSelectionViewControllerDelegate, SILAppSelectionHelpViewControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate, WYPopoverControllerDelegate>
+@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionHelpViewControllerDelegate>
 
-@property (strong, nonatomic) NSArray *appsArray;
+@property (strong, nonatomic) IBOutlet UIView *allSpace;
 @property (strong, nonatomic) WYPopoverController *devicePopoverController;
-
-@property (weak, nonatomic) IBOutlet UITableView *appTableView;
-@property (weak, nonatomic) IBOutlet UILabel *helpLabel;
-
-- (IBAction)didTapHelpButton:(id)sender;
-
+@property (weak, nonatomic) IBOutlet UIStackView *tilesSpace;
+@property (weak, nonatomic) IBOutlet UIView* appsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *appCollectionView;
+@property (weak, nonatomic) IBOutlet UIView *selectedIndicatorView;
+@property (weak, nonatomic) IBOutlet UIView *unselectedIndicatorView;
+@property (weak, nonatomic) IBOutlet UIView *afterSelectedIndicatiorView;
+@property (weak, nonatomic) IBOutlet UIImageView *infoImage;
+@property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
+@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
+@property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beforeSelectedConstraintIphone;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *afterSelectedConstraintIphone;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beforeSelectedConstraintIpad;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *afterSelectedConstraintIpad;
+@property BOOL isDisconnectedIntentionally;
 @end
 
 @implementation SILAppSelectionViewController
 
-- (void)presentCalibrationViewController:(BOOL)animated {
-    SILCalibrationViewController *calibrationViewController = [[SILCalibrationViewController alloc] init];
-
-    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:calibrationViewController
-                                                                                 presentingViewController:self
-                                                                                                 delegate:self
-                                                                                                 animated:YES];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self setupAppCollectionView];
+    [self setupSelectionIndicator];
+    [self setupBackground];
+    [self setupNavigationBar];
+    [self addObseverForNotIntentionallyBackFromThermometer];
+    _isDisconnectedIntentionally = NO;
+    [[SILBluetoothModelManager sharedManager] populateModels];
 }
+
+#pragma mark - Setup View (viewDidLoad)
+
+- (void)setupAppCollectionView {
+    [self registerNibs];
+    [self setupAppCollectionViewDelegates];
+    [self setupAppCollectionViewAppearance];
+}
+
+- (void)registerNibs {
+      [self.appCollectionView registerNib:[UINib nibWithNibName:NSStringFromClass([SILAppSelectionCollectionViewCell class]) bundle:nil] forCellWithReuseIdentifier:NSStringFromClass([SILAppSelectionCollectionViewCell class])];
+}
+
+- (void)setupAppCollectionViewDelegates {
+    self.appCollectionView.dataSource = self;
+    self.appCollectionView.delegate = self;
+}
+
+- (void)setupAppCollectionViewAppearance {
+    self.appCollectionView.backgroundColor = [UIColor sil_backgroundColor];
+    self.appCollectionView.alwaysBounceVertical = YES;
+}
+
+- (void)setupSelectionIndicator {
+    _selectedIndicatorView.backgroundColor = [UIColor sil_strongBlueColor];
+    _unselectedIndicatorView.backgroundColor = [UIColor sil_backgroundColor];
+    _afterSelectedIndicatiorView.backgroundColor = [UIColor sil_backgroundColor];
+}
+
+- (void)setupBackground {
+    _allSpace.backgroundColor = [UIColor sil_backgroundColor];
+    _appsView.backgroundColor = [UIColor sil_backgroundColor];
+}
+
+- (void)setupNavigationBar {
+    [self setupNavigationBarBackgroundColor];
+    [self setupNavigatioBarTitleLabel];
+    [self addGestureRecognizerForInfoImage];
+}
+
+- (void)setupNavigationBarBackgroundColor {
+    _aboveSpaceAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+    _navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+}
+
+- (void)setupNavigatioBarTitleLabel {
+    _navigationBarTitleLabel.font = [UIFont robotoMediumWithSize:SILNavigationBarTitleFontSize];
+    _navigationBarTitleLabel.textColor = [UIColor sil_backgroundColor];
+}
+
+- (void)addGestureRecognizerForInfoImage {
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedInfoImage:)];
+    [_infoImage addGestureRecognizer:tap];
+}
+
+- (void)tappedInfoImage:(UIGestureRecognizer *)gestureRecognizer {
+        [self presentAppSelectionHelpViewController:YES];
+}
+
+#pragma mark - Setup View (viewDidAppear)
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self setConstraintsForSelectionIndicator];
+    [self postClearBluetoothBrowserNotification];
+    if (_isDisconnectedIntentionally) {
+        [self showThermometerPopover];
+    }
+}
+
+- (void)setConstraintsForSelectionIndicator {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [NSLayoutConstraint deactivateConstraints:@[_beforeSelectedConstraintIpad, _afterSelectedConstraintIpad]];
+        [NSLayoutConstraint activateConstraints:@[_beforeSelectedConstraintIphone, _afterSelectedConstraintIphone]];
+    } else {
+        [NSLayoutConstraint deactivateConstraints:@[_beforeSelectedConstraintIphone, _afterSelectedConstraintIphone]];
+        [NSLayoutConstraint activateConstraints:@[_beforeSelectedConstraintIpad, _afterSelectedConstraintIpad]];
+    }
+    [self.view layoutIfNeeded];
+}
+
+- (void)postClearBluetoothBrowserNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DisconnectAllPeripheral" object:self userInfo:nil];
+}
+
+- (void)addObseverForNotIntentionallyBackFromThermometer {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setIsDisconnectedIntentionallyFlag) name:@"NotIntentionallyBackFromThermometer" object:nil];
+}
+
+# pragma mark - Applications
 
 - (void)presentDeviceSelectionViewControllerWithApp:(SILApp *)app animated:(BOOL)animated {
     SILDeviceSelectionViewModel *viewModel = [[SILDeviceSelectionViewModel alloc] initWithAppType:app];
@@ -78,20 +182,13 @@
                                                                                                  animated:YES];
 }
 
-- (void)presentAppSelectionHelpViewController:(BOOL)animated {
-    SILAppSelectionHelpViewController *helpViewController = [[SILAppSelectionHelpViewController alloc] init];
-    helpViewController.delegate = self;
+- (void)presentCalibrationViewController:(BOOL)animated {
+    SILCalibrationViewController *calibrationViewController = [[SILCalibrationViewController alloc] init];
 
-    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:helpViewController
+    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:calibrationViewController
                                                                                  presentingViewController:self
                                                                                                  delegate:self
                                                                                                  animated:YES];
-}
-
-- (void)showKeyFobAppWithApp:(SILApp *)app animated:(BOOL)animated {
-    SILKeyFobViewController *appViewController = [[SILKeyFobViewController alloc] init];
-    appViewController.app = app;
-    [self.navigationController pushViewController:appViewController animated:animated];
 }
 
 - (void)showRetailBeaconAppWithApp:(SILApp *)app animated:(BOOL)animated  {
@@ -100,10 +197,14 @@
     [self.navigationController pushViewController:appViewController animated:animated];
 }
 
-- (void)showDebugWithApp:(SILApp *)app animated:(BOOL)animated {
-    SILDebugDeviceViewController *appViewController = [[SILDebugDeviceViewController alloc] init];
-    appViewController.app = app;
-    [self.navigationController pushViewController:appViewController animated:animated];
+- (void)showBluetoothBrowserWithApp:(SILApp *)app animated:(BOOL)animated {
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppBluetoothBrowser" bundle:nil];
+    SILBluetoothBrowserViewController* controller = [storyboard instantiateInitialViewController];
+    [self.navigationController pushViewController:controller animated:animated];
+    
+    //SILDebugDeviceViewController *appViewController = [[SILDebugDeviceViewController alloc] init];
+    //appViewController.app = app;
+    //[self.navigationController pushViewController:appViewController animated:animated];
 }
 
 - (void)showHomeKitDebugWithApp:(SILApp *)app animated:(BOOL)animated {
@@ -136,11 +237,8 @@
         case SILAppTypeRetailBeacon:
             [self showRetailBeaconAppWithApp:app animated:YES];
             break;
-        case SILAppTypeKeyFob:
-            [self showKeyFobAppWithApp:app animated:YES];
-            break;
-        case SILAppTypeDebug:
-            [self showDebugWithApp:app animated:YES];
+        case SILAppBluetoothBrowser:
+            [self showBluetoothBrowserWithApp:app animated:YES];
             break;
         case SILAppTypeHomeKitDebug:
             [self showHomeKitDebugWithApp:app animated:YES];
@@ -152,92 +250,59 @@
 
 #pragma mark - Help button
 
-- (void)setupHelpBar {
-    self.helpLabel.text = @"Learn more about Silicon Labs Wireless Gecko dynamic multiprotocol applications";
-}
-
-- (IBAction)didTapHelpButton:(id)sender {
+- (void)helpTileTapped:(UITapGestureRecognizer*)recognizer {
     [self presentAppSelectionHelpViewController:YES];
 }
 
-#pragma mark - Secret Button
+#pragma mark - Collection View for Applications
 
-- (void)setupSecretButton {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    [button setTitle:@"Calibration" forState:UIControlStateHighlighted];
-    [button sizeToFit];
-    [button addTarget:self action:@selector(didTapSecretButton:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-}
-
-- (void)didTapSecretButton:(id)sender {
-    [self presentCalibrationViewController:YES];
-}
-
-#pragma mark - UIViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = @"Bluetooth Applications";
-
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? @"Application List" : @" "
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self.navigationController
-                                                                            action:@selector(popNavigationItemAnimated:)];
-    [self.appTableView registerNib:[UINib nibWithNibName:NSStringFromClass([SILAppSelectionTableViewCell class]) bundle:nil]
-              forCellReuseIdentifier:NSStringFromClass([SILAppSelectionTableViewCell class])];
-    self.appsArray = [SILApp allApps];
-    [self setupHelpBar];
-    [self setupSecretButton];
-    
-    [[SILBluetoothModelManager sharedManager] populateModels];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.appsArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SILAppSelectionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILAppSelectionTableViewCell class])
-                                                                          forIndexPath:indexPath];
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
 
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                           cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    SILAppSelectionCollectionViewCell *cell =  [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([SILAppSelectionCollectionViewCell class]) forIndexPath:indexPath];
+    
     SILApp *app = self.appsArray[indexPath.row];
-    cell.titleLabel.text = app.title;
-    cell.descriptionLabel.text = app.appDescription;
-    cell.profileLabel.attributedText = [app showcasedProfilesAttributedStringWithUserInterfaceIdiom:UI_USER_INTERFACE_IDIOM()];;
-    cell.iconImageView.image = [UIImage imageNamed:app.imageName];
-
+    [cell setFieldsInCell:app];
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return CGRectGetHeight(self.appTableView.bounds) / self.appsArray.count;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat cellsInRow = 2.0;
+    CGFloat minimumLineSpacing = 16.0;
+    CGFloat width = floor((self.appCollectionView.frame.size.width - self.appCollectionView.contentInset.left - self.appCollectionView.contentInset.right - self.appCollectionView.alignmentRectInsets.left - self.appCollectionView.alignmentRectInsets.right) / cellsInRow) - minimumLineSpacing;
+      
+    CGFloat height = 162.0;
+    return CGSizeMake(width, height);
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    SILApp *app = self.appsArray[indexPath.row];
-
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    SILApp* app = self.appsArray[indexPath.row];
     [self didSelectApp:app];
 }
 
-#pragma mark - SILDeviceSelectionViewControllerDelegate
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsZero;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 8.0;
+}
 
 - (void)deviceSelectionViewController:(SILDeviceSelectionViewController *)viewController didSelectPeripheral:(CBPeripheral *)peripheral {
     [self.devicePopoverController dismissPopoverAnimated:YES completion:^{
         self.devicePopoverController = nil;
 
         if (viewController.viewModel.app.appType == SILAppTypeHealthThermometer) {
-            SILHealthThermometerAppViewController *appViewController = [[SILHealthThermometerAppViewController alloc] init];
-            appViewController.centralManager = viewController.centralManager;
-            appViewController.app = viewController.viewModel.app;
-            appViewController.connectedPeripheral = peripheral;
-            [self.navigationController pushViewController:appViewController animated:YES];
+            [self runHealthThermometer:viewController forPeripheral:peripheral];
         } else if (viewController.viewModel.app.appType == SILAppTypeConnectedLighting) {
 #if WIRELESS
             SILConnectedLightingViewController *appViewController = [[SILConnectedLightingViewController alloc] init];
@@ -258,6 +323,43 @@
       [self.devicePopoverController dismissPopoverAnimated:YES completion:nil];
 }
 
+- (void)runHealthThermometer:(SILDeviceSelectionViewController*)viewController forPeripheral:(CBPeripheral*)peripheral {
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppTypeHealthThermometer" bundle:nil];
+    UIViewController* controller = [storyboard instantiateInitialViewController];
+    
+    if ([controller isKindOfClass:[SILHealthThermometerAppViewController class]]) {
+        SILHealthThermometerAppViewController* healthThermometerController = (SILHealthThermometerAppViewController*) controller;
+        healthThermometerController.centralManager = viewController.centralManager;
+        healthThermometerController.app = viewController.viewModel.app;
+        healthThermometerController.connectedPeripheral = peripheral;
+        [self.navigationController pushViewController:healthThermometerController animated:YES];
+    }
+}
+
+#pragma mark - SILRangeTestModeSelectionViewControllerDelegate
+
+-(void)didRangeTestModeSelectedForApp:(SILApp *)app peripheral:(SILRangeTestPeripheral *)peripheral andBoardInfo:(SILRangeTestBoardInfo *)boardInfo selectedMode:(enum SILRangeTestMode)mode {
+    [self.devicePopoverController dismissPopoverAnimated:YES completion:^{
+        self.devicePopoverController = nil;
+        [self showRangeTestWithApp:app forPeripheral:peripheral andBoardInfo:boardInfo withMode:mode animated:YES];
+    }];
+}
+
+- (void)didDismissRangeTestModeSelectionViewController {
+    [self.devicePopoverController dismissPopoverAnimated:YES completion:nil];
+    self.devicePopoverController = nil;
+}
+
+- (void)presentAppSelectionHelpViewController:(BOOL)animated {
+    SILAppSelectionHelpViewController *helpViewController = [[SILAppSelectionHelpViewController alloc] init];
+    helpViewController.delegate = self;
+
+    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:helpViewController
+                                                                                 presentingViewController:self
+                                                                                                 delegate:self
+                                                                                                 animated:YES];
+}
+
 #pragma mark - SILAppSelectionHelpViewControllerDelegate
 
 - (void)didFinishHelpWithAppSelectionHelpViewController:(SILAppSelectionHelpViewController *)helpViewController {
@@ -273,18 +375,14 @@
     self.devicePopoverController = nil;
 }
 
-#pragma mark - SILRangeTestModeSelectionViewControllerDelegate
-
--(void)didRangeTestModeSelectedForApp:(SILApp *)app peripheral:(SILRangeTestPeripheral *)peripheral andBoardInfo:(SILRangeTestBoardInfo *)boardInfo selectedMode:(enum SILRangeTestMode)mode {
-    [self.devicePopoverController dismissPopoverAnimated:YES completion:^{
-        self.devicePopoverController = nil;
-        [self showRangeTestWithApp:app forPeripheral:peripheral andBoardInfo:boardInfo withMode:mode animated:YES];
-    }];
+- (void)setIsDisconnectedIntentionallyFlag {
+    _isDisconnectedIntentionally = YES;
 }
 
-- (void)didDismissRangeTestModeSelectionViewController {
-    [self.devicePopoverController dismissPopoverAnimated:YES completion:nil];
-    self.devicePopoverController = nil;
+- (void)showThermometerPopover {
+    NSArray<SILApp*>* app = [SILApp demoApps];
+    [self presentDeviceSelectionViewControllerWithApp:app[0] animated:YES];
+    _isDisconnectedIntentionally = NO;
 }
 
 @end

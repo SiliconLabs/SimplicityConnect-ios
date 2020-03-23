@@ -13,6 +13,8 @@ extern NSString * const SILBarGraphCollectionViewCellIdentifier;
 
 @interface SILBarGraphCollectionViewCell : UICollectionViewCell
 
+@property (assign, nonatomic) CGFloat SILBarGraphCollectionViewCellMaxBarRatio;
+
 - (void)configureWithTemperatureMeasurement:(SILTemperatureMeasurement *)temperatureMeasurement
                                isFahrenheit:(BOOL)isFahrenheit
                                       range:(NSRange)range;
