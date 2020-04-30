@@ -16,6 +16,7 @@
 #import "UIView+NibInitable.h"
 #import "SILDiscoveredPeripheralDisplayData.h"
 #import "SILAdvertisementDataViewModel.h"
+#import "SILBluetoothBrowser+Constants.h"
 
 @interface SILDebugAdvDetailsViewController ()
 @property (strong, nonatomic) SILDiscoveredPeripheralDisplayDataViewModel *peripheralViewModel;
@@ -39,7 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self registerNibs];
-    self.generalTitle.text = self.peripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral.name ?: @"Unknown";
+    self.generalTitle.text = self.peripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral.name ?: DefaultDeviceName;
 }
 
 #pragma mark - Setup 

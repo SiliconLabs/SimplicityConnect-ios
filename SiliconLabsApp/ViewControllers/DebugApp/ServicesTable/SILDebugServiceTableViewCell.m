@@ -35,7 +35,7 @@
 - (void)configureWithServiceModel:(SILServiceTableModel *)serviceTableModel {
     [self updateChevronImageForExpanded:serviceTableModel.isExpanded];
     self.serviceNameLabel.text = [serviceTableModel name];
-    self.serviceUuidLabel.text = [serviceTableModel uuidString] ?: @"";
+    self.serviceUuidLabel.text = [serviceTableModel hexUuidString] ?: @"";
     self.topSeparatorView.hidden = serviceTableModel.hideTopSeparator;
     [self configureAsExpandanble:[serviceTableModel canExpand]];
     [self layoutIfNeeded];

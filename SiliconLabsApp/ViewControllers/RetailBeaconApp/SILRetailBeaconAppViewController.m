@@ -23,23 +23,24 @@
 #import "SILDoubleKeyDictionaryPair.h"
 #import "SILRetailBeaconDetailsViewController.h"
 #import "WYPopoverController+SILHelpers.h"
+#import "SILCentralManager.h"
 
 #define IS_IOS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
 CGFloat const SILRetailBeaconAppRefreshRate = 1.0;
-CGFloat const kIBeaconDMPZigbeeMajorNumber = 256.0f;
-CGFloat const kIBeaconDMPProprietaryMajorNumber = 512.0f;
-CGFloat const kIBeaconMajorNumber = 34987.0f;
-CGFloat const kIBeaconMinorNumber = 1025.0f;
-CGFloat const kAltBeaconMfgId = 0x0047;
+extern CGFloat const kIBeaconDMPZigbeeMajorNumber;
+extern CGFloat const kIBeaconDMPProprietaryMajorNumber;
+extern CGFloat const kIBeaconMajorNumber;
+extern CGFloat const kIBeaconMinorNumber;
+extern CGFloat const kAltBeaconMfgId;
 CGFloat const kBeaconListTableViewCellRowHeight = 80.0;
 
-NSString * const kIBeaconUUIDString = @"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0";
-NSString * const kIBeaconDMPUUIDString = @"0047E70A-5DC1-4725-8799-830544AE04F6";
-NSString * const kAltBeaconUUIDString = @"511AB500511AB500511AB500511AB500";
-NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
-NSString * const kIBeaconDMPZigbeeIdentifier = @"com.silabs.retailbeacon.dmpZigbee";
-NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dmpProprietary";
+extern NSString * const kIBeaconUUIDString;
+extern NSString * const kIBeaconDMPUUIDString;
+extern NSString * const kAltBeaconUUIDString;
+extern NSString * const kIBeaconIdentifier;
+extern NSString * const kIBeaconDMPZigbeeIdentifier;
+extern NSString * const kIBeaconDMPProprietaryIdentifier;
 NSString * const kScanningForBeacons = @"Scanning for beacons...";
 NSString * const kAdditionalBeacons = @"Scanning for additional beacons...";
 NSString * const kScanForNewBeacons = @"Scan for new beacons";

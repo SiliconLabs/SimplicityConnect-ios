@@ -8,6 +8,7 @@
 
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "SILDescriptorTableModel.h"
+#import "SILBluetoothBrowser+Constants.h"
 
 @implementation SILDescriptorTableModel
 
@@ -33,8 +34,17 @@
     //can't expand
 }
 
-- (NSString *)uuidString {
+- (NSString *)hexUuidString {
+    return [self.descriptor getHexUuidValue];
+}
+
+- (NSString*)uuidString {
     return self.descriptor.UUID.UUIDString;
 }
+
+- (NSString *)name {
+    return EmptyText;
+}
+
 
 @end

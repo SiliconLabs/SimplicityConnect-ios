@@ -10,6 +10,7 @@
 #import "SILValueFieldRowModel.h"
 #import "SILCharacteristicTableModel.h"
 #import "SILBluetoothCharacteristicModel.h"
+#import "SILBluetoothBrowser+Constants.h"
 
 @interface SILValueFieldEditorViewController ()
 @property (strong, nonatomic) SILValueFieldRowModel *valueModel;
@@ -44,7 +45,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return CGSizeMake(500, 300);
     } else {
-        return CGSizeMake(300, 200);
+        return CGSizeMake(300, 220);
     }
 }
 
@@ -59,19 +60,31 @@
 }
 
 - (IBAction)didTapSave:(UIButton *)sender {
+    if (self.valueTextField.text.length == 0) {
+        [self dislayErrorMessage:CannotWriteEmptyTextToCharacteristic];
+    } else {
+        NSString * const backupValue = self.valueModel.primaryValue;
+        NSError * const saveError = [self tryToSaveValueInCharacteristic];
+        if (saveError != nil) {
+            self.valueModel.primaryValue = backupValue;
+            [self dislayErrorMessage:saveError.localizedDescription];
+        } else {
+            [self.popoverDelegate didClosePopoverViewController:self];
+        }
+    }
+}
+
+- (void)dislayErrorMessage:(NSString*)message {
+    self.invalidInputLabel.text = message;
+    self.invalidInputLabel.hidden = NO;
+}
+
+- (NSError*)tryToSaveValueInCharacteristic {
     NSError * saveError = nil;
-    NSString * const backupValue = self.valueModel.primaryValue;
-    
     self.valueModel.primaryValue = self.valueTextField.text;
     [self.editDelegate saveCharacteristic:self.valueModel.parentCharacteristicModel error:&saveError];
     
-    if (saveError != nil) {
-        self.valueModel.primaryValue = backupValue;
-        self.invalidInputLabel.text = saveError.localizedDescription;
-        self.invalidInputLabel.hidden = NO;
-    } else {
-        [self.popoverDelegate didClosePopoverViewController:self];
-    }
+    return saveError;
 }
 
 @end

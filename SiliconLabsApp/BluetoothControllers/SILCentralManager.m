@@ -7,6 +7,7 @@
 //
 
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <CoreLocation/CoreLocation.h>
 #import "SILCentralManager.h"
 #import "SILBrowserConnectionsViewModel.h"
 #import "SILDiscoveredPeripheral.h"
@@ -29,6 +30,18 @@ NSString * const SILCentralManagerDiscoveredPeripheralsKey = @"SILCentralManager
 NSString * const SILCentralManagerPeripheralKey = @"SILCentralManagerPeripheralKey";
 NSString * const SILCentralManagerErrorKey = @"SILCentralManagerErrorKey";
 
+NSString * const kIBeaconUUIDString = @"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0";
+NSString * const kIBeaconDMPUUIDString = @"0047E70A-5DC1-4725-8799-830544AE04F6";
+NSString * const kAltBeaconUUIDString = @"511AB500511AB500511AB500511AB500";
+CGFloat const kIBeaconMajorNumber = 34987.0f;
+CGFloat const kIBeaconMinorNumber = 1025.0f;
+NSString * const kIBeaconIdentifier = @"com.silabs.retailbeacon";
+CGFloat const kIBeaconDMPZigbeeMajorNumber = 256.0f;
+CGFloat const kIBeaconDMPProprietaryMajorNumber = 512.0f;
+NSString * const kIBeaconDMPZigbeeIdentifier = @"com.silabs.retailbeacon.dmpZigbee";
+NSString * const kIBeaconDMPProprietaryIdentifier = @"com.silabs.retailbeacon.dmpProprietary";
+CGFloat const kAltBeaconMfgId = 0x0047;
+
 NSTimeInterval const SILCentralManagerDiscoveryTimeoutThreshold = 5.0;
 NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
@@ -45,6 +58,9 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 @property (strong, nonatomic) CBPeripheral *disconnectingPeripheral;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
 @property (strong, nonatomic) NSMutableArray *scanForPeripheralsObservers;
+
+@property (nonatomic, strong) NSArray<CLBeaconRegion *> *regions;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -63,15 +79,38 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
         self.scanForPeripheralsObservers = [NSMutableArray array];
         self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
         [self setupNotifications];
+        [self setupBeaconMonitoring];
         self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
     }
     return self;
+}
+
+- (void)setupBeaconMonitoring {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    NSUUID *iBeaconUUID = [[NSUUID alloc] initWithUUIDString:kIBeaconUUIDString];
+    CLBeaconRegion* beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:iBeaconUUID identifier:kIBeaconIdentifier];
+    self.regions = @[beaconRegion];
+}
+
+- (void)startRanging {
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        [self.locationManager startRangingBeaconsInRegion:beaconRegion];
+    }
+}
+
+- (void)stopRanging {
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+    }
 }
 
 - (void)dealloc {
     [self.discoveryTimeoutTimer invalidate];
     [self.connectionTimeoutTimer invalidate];
     [self.centralManager stopScan];
+    [self stopRanging];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
 }
 
@@ -80,7 +119,8 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (SILDiscoveredPeripheral *)discoveredPeripheralForPeripheral:(CBPeripheral *)peripheral {
-    return self.discoveredPeripheralMapping[peripheral.identifier];
+    NSString* peripheralIdentifier = [SILDiscoveredPeripheralIdentifierProvider provideKeyForCBPeripheral:peripheral];
+    return self.discoveredPeripheralMapping[peripheralIdentifier];
 }
 
 #pragma MARK: - Notifications
@@ -101,8 +141,9 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 #pragma mark - Discovering Peripherals
 
-- (void)insertOrUpdateDiscoveredPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI andDiscoveringTimestamp:(long long)timestamp {
-    SILDiscoveredPeripheral *discoveredPeripheral = self.discoveredPeripheralMapping[peripheral.identifier];
+- (void)insertOrUpdateDiscoveredPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI andDiscoveringTimestamp:(double)timestamp {
+    NSString* peripheralIdentifier = [SILDiscoveredPeripheralIdentifierProvider provideKeyForCBPeripheral:peripheral];
+    SILDiscoveredPeripheral *discoveredPeripheral = self.discoveredPeripheralMapping[peripheralIdentifier];
     if (discoveredPeripheral) {
         [discoveredPeripheral updateWithAdvertisementData:advertisementData RSSI:RSSI andDiscoveringTimestamp:timestamp];
     } else {
@@ -110,13 +151,13 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
                                                                  advertisementData:advertisementData
                                                                                   RSSI:RSSI
                                                            andDiscoveringTimestamp:timestamp];
-        self.discoveredPeripheralMapping[peripheral.identifier] = discoveredPeripheral;
+        self.discoveredPeripheralMapping[peripheralIdentifier] = discoveredPeripheral;
     }
     [self postDidUpdateDiscoveredPeripheralsNotification];
 }
 
 - (void)removeDiscoveredPeripheral:(SILDiscoveredPeripheral *)discoveredPeripheral {
-    [self.discoveredPeripheralMapping removeObjectForKey:discoveredPeripheral.peripheral.identifier];
+    [self.discoveredPeripheralMapping removeObjectForKey:discoveredPeripheral.identityKey];
     [self postDidUpdateDiscoveredPeripheralsNotification];
 }
 
@@ -148,7 +189,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     for (SILDiscoveredPeripheral *discoveredPeripheral in [self discoveredPeripherals]) {
         if (![discoveredPeripheral.RSSIMeasurementTable hasRSSIMeasurementInPastTimeInterval:SILCentralManagerDiscoveryTimeoutThreshold]) {
             didRemovePeripherals = YES;
-            [self.discoveredPeripheralMapping removeObjectForKey:discoveredPeripheral.peripheral.identifier];
+            [self.discoveredPeripheralMapping removeObjectForKey:discoveredPeripheral.identityKey];
         }
     }
     if (didRemovePeripherals) {
@@ -159,7 +200,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 #pragma mark - Connecting Peripherals
 
 - (BOOL)canConnectToDiscoveredPeripheral:(SILDiscoveredPeripheral *)discoveredPeripheral {
-    return (self.discoveredPeripheralMapping[discoveredPeripheral.peripheral.identifier] != nil);
+    return (self.discoveredPeripheralMapping[discoveredPeripheral.identityKey] != nil);
 }
 
 - (void)connectToDiscoveredPeripheral:(SILDiscoveredPeripheral *)discoveredPeripheral {
@@ -254,6 +295,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
             [self.centralManager scanForPeripheralsWithServices:self.serviceUUIDs
                                                         options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
         }
+        [self startRanging];
     }
 }
 
@@ -264,6 +306,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
         [self stopDiscoveryTimeoutTimer];
         [self filterDiscoveredPeripheralByTimeout];
         [self.centralManager stopScan];
+        [self stopRanging];
     }
 }
 
@@ -274,10 +317,34 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
-    if (peripheral.identifier) {
-        long long timestampInterval = (long long)([[NSDate date] timeIntervalSince1970] * 1000000000);
-        [self insertOrUpdateDiscoveredPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI andDiscoveringTimestamp:timestampInterval];
+    if (![self isProbablyIBeacon:advertisementData]) {
+        if (peripheral.identifier) {
+            double timestamp = [self getTimestampWithAdvertisementData:advertisementData];
+            [self insertOrUpdateDiscoveredPeripheral:peripheral advertisementData:advertisementData RSSI:RSSI andDiscoveringTimestamp:timestamp];
+        }
     }
+}
+
+- (BOOL)isProbablyIBeacon:(NSDictionary*)advertisementData {
+    if ([advertisementData.allKeys containsObject:CBAdvertisementDataManufacturerDataKey]) {
+        return NO;
+    } else {
+        if ([advertisementData[CBAdvertisementDataIsConnectable] boolValue] == YES) {
+            return NO;
+        }
+        return YES;
+    }
+}
+
+- (double)getTimestampWithAdvertisementData:(NSDictionary *)advertisementData {
+    double timestamp = 0;
+    if (@available(iOS 13, *)) {
+        NSString* stringValue = advertisementData[@"kCBAdvDataTimestamp"];
+        timestamp = [stringValue doubleValue];
+    } else {
+        timestamp = [[NSDate date] timeIntervalSinceReferenceDate];
+    }
+    return timestamp;
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
@@ -373,6 +440,53 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 - (void)postDeleteDisconnectedPeripheral:(CBPeripheral*)peripheral {
     [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDeleteDisconnectedPeripheral object:self userInfo:@{ SILNotificationKeyUUID: peripheral.identifier.UUIDString}];
+}
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        if ([beaconRegion isEqual:region]) {
+           [self.locationManager startRangingBeaconsInRegion:beaconRegion];
+        }
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+    for (CLBeaconRegion *beaconRegion in self.regions) {
+        if ([beaconRegion isEqual:region]) {
+            [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+        }
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region {
+    for (CLBeacon *foundBeacon in beacons) {
+        if (foundBeacon.rssi != 0) {
+            [self insertOrUpdateDiscoveredIBeacon:foundBeacon];
+        }
+    }
+}
+
+- (void)insertOrUpdateDiscoveredIBeacon:(CLBeacon*)iBeacon {
+    NSString* iBeaconIdentifier = [SILDiscoveredPeripheralIdentifierProvider provideKeyForCLBeacon:iBeacon];
+    double timestamp = [self getTimestamptForIBeacons:iBeacon];
+    SILDiscoveredPeripheral* discoveredPeripheral = self.discoveredPeripheralMapping[iBeaconIdentifier];
+    if (discoveredPeripheral) {
+        [discoveredPeripheral updateWithIBeacon:iBeacon andDiscoveringTimestamp:timestamp];
+    } else {
+        discoveredPeripheral = [[SILDiscoveredPeripheral alloc] initWithIBeacon:iBeacon andDiscoveringTimestamp:timestamp];
+        self.discoveredPeripheralMapping[iBeaconIdentifier] = discoveredPeripheral;
+    }
+    [self postDidUpdateDiscoveredPeripheralsNotification];
+}
+
+- (double)getTimestamptForIBeacons:(CLBeacon*)iBeacon {
+    if (@available(iOS 13.0, *)) {
+        return [iBeacon.timestamp timeIntervalSinceReferenceDate];
+    } else {
+        return [[NSDate date] timeIntervalSinceReferenceDate];
+    }
 }
 
 @end

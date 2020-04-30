@@ -10,10 +10,10 @@
 #import "SILBluetoothModelManager.h"
 
 NSString * const kAdModelTypeUUID = @"UUID";
-NSString * const kAdModelTypeRSSI = @"RSSI";
 NSString * const kAdModelTypeName = @"LOCAL NAME";
-NSString * const kAdModelTypeConnect = @"CAN CONNECT";
 NSString * const kAdModelTypePower = @"POWER LEVEL";
+NSString * const kAdModelTypeMajor = @"MAJOR";
+NSString * const kAdModelTypeMinor = @"MINOR";
 
 @interface SILAdvertisementDataViewModel ()
 
@@ -69,8 +69,8 @@ NSString * const kAdModelTypePower = @"POWER LEVEL";
         case AdModelTypeName:
             typeString = kAdModelTypeName;
             break;
-        case AdModelTypeRSSI:
-            typeString = kAdModelTypeRSSI;
+        case AdModelTypeMajor:
+            typeString = kAdModelTypeMajor;
             break;
         case AdModelTypeUUID:
             typeString = kAdModelTypeUUID;
@@ -78,8 +78,8 @@ NSString * const kAdModelTypePower = @"POWER LEVEL";
         case AdModelTypePower:
             typeString = kAdModelTypePower;
             break;
-        case AdModelTypeConnect:
-            typeString = kAdModelTypeConnect;
+        case AdModelTypeMinor:
+            typeString = kAdModelTypeMinor;
             break;
         case AdModelTypeServiceUUID:
             typeString = [self typeStringForServiceUUIDValue:_advertisementDataModel.value];

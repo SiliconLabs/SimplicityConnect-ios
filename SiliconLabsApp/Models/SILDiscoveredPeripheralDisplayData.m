@@ -37,7 +37,7 @@
 
 - (NSArray *)advertisementDataModelsForDevicesTable {
     if (_advertisementDataModelsForDevicesTable == nil) {
-        _advertisementDataModelsForDevicesTable = [self advertisementDataModelsExcept:@[@(AdModelTypeUUID), @(AdModelTypeName), @(AdModelTypeRSSI), @(AdModelTypeServiceUUID)]];
+        _advertisementDataModelsForDevicesTable = [self advertisementDataModelsExcept:@[@(AdModelTypeUUID), @(AdModelTypeName), @(AdModelTypeServiceUUID)]];
     }
     return _advertisementDataModelsForDevicesTable;
 }
@@ -52,6 +52,15 @@
 #pragma mark - Helpers
 
 - (NSArray *)advertisementDataModelsForPeripheral:(SILDiscoveredPeripheral *)device {
+    if (device.peripheral != nil) {
+        return [self adverisementDataModelsForCBPeripheral:device];
+    } else {
+        return [self advertisementDataModelsForCLBeacon:device];
+    }
+    return nil;
+}
+
+- (NSArray*)adverisementDataModelsForCBPeripheral:(SILDiscoveredPeripheral*)device {
     NSMutableArray *mutableAdvModels = [[NSMutableArray alloc] init];
 
     SILAdvertisementDataModel *uuidModel = [[SILAdvertisementDataModel alloc] initWithValue:device.peripheral.identifier.UUIDString type:AdModelTypeUUID];
@@ -62,27 +71,51 @@
         [mutableAdvModels addObject:uuidModel];
     }
 
-    SILAdvertisementDataModel *rssiModel = [[SILAdvertisementDataModel alloc] initWithValue:[device.RSSIMeasurementTable.lastRSSIMeasurement stringValue] type:AdModelTypeRSSI];
-    [mutableAdvModels addObject:rssiModel];
-
     if (device.advertisedLocalName) {
         SILAdvertisementDataModel *nameModel = [[SILAdvertisementDataModel alloc] initWithValue:device.advertisedLocalName
                                                                                            type:AdModelTypeName];
         [mutableAdvModels addObject:nameModel];
     }
 
-    SILAdvertisementDataModel *connectModel = [[SILAdvertisementDataModel alloc] initWithValue:(device.isConnectable ? @"YES" : @"NO")
-                                                                                          type:AdModelTypeConnect];
-    [mutableAdvModels addObject:connectModel];
-
     if (device.txPowerLevel) {
         SILAdvertisementDataModel *powerModel = [[SILAdvertisementDataModel alloc] initWithValue:[device.txPowerLevel stringValue]
                                                                                             type:AdModelTypePower];
         [mutableAdvModels addObject:powerModel];
     }
+    
+    return mutableAdvModels;
+}
+
+- (NSArray*)advertisementDataModelsForCLBeacon:(SILDiscoveredPeripheral*)device {
+    NSMutableArray *mutableAdvModels = [[NSMutableArray alloc] init];
+    SILBeacon* beacon = device.beacon;
+    
+    SILAdvertisementDataModel *uuidModel = [[SILAdvertisementDataModel alloc] initWithValue:beacon.UUIDString type:AdModelTypeUUID];
+    [mutableAdvModels addObject:uuidModel];
+
+    if (beacon.major) {
+        NSString* majorStringValue = [NSString stringWithFormat:@"%hu", beacon.major];
+        SILAdvertisementDataModel *majorModel = [[SILAdvertisementDataModel alloc] initWithValue:majorStringValue
+                                                                                            type:AdModelTypeMajor];
+        [mutableAdvModels addObject:majorModel];
+    }
+    
+    if (beacon.minor) {
+        NSString* minorStringValue = [NSString stringWithFormat:@"%hu", beacon.minor];
+        SILAdvertisementDataModel *minorModel = [[SILAdvertisementDataModel alloc] initWithValue:minorStringValue
+                                                                                            type:AdModelTypeMinor];
+        [mutableAdvModels addObject:minorModel];
+    }
+    
+    if (beacon.name) {
+        SILAdvertisementDataModel *nameModel = [[SILAdvertisementDataModel alloc] initWithValue:device.advertisedLocalName
+                                                                                           type:AdModelTypeName];
+        [mutableAdvModels addObject:nameModel];
+    }
 
     return mutableAdvModels;
 }
+
 
 - (NSArray *)advertisementDataModelsExcept:(NSArray *)exlcudeTypes {
     NSMutableArray *filteredModels = [[NSMutableArray alloc] init];

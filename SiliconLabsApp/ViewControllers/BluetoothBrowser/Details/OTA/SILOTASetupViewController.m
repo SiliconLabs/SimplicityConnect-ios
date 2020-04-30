@@ -26,7 +26,7 @@ static NSString * const kSILOTABadExtensionActionTitle = @"OK";
 static NSString * const kSILOTAChooseFileCTA = @"CHOOSE FILE";
 
 @interface SILOTASetupViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate,
-SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuDelegate>
+SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *otaMethodSegmentedControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *otaModeSegmentedControl;
@@ -39,8 +39,6 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
 @property (nonatomic) SILOTAFileSelecting fileSelecting;
 
 @property (weak, nonatomic) SILTextFieldEntryCell *lastSelectedCell;
-
-@property (nonatomic) BOOL isDocumentPickFlowInProgress;
 
 @end
 
@@ -67,14 +65,9 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
     _hudView.peripheralNameLabel.text = [_hudPeripheralViewModel peripheralName];
     _hudView.peripheralIdentifierLabel.text = [_hudPeripheralViewModel peripheralIdentifier];
     _hudView.mtuValueLabel.text = [_hudPeripheralViewModel peripheralMaximumWriteValueLength];
-    _isDocumentPickFlowInProgress = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    if (self.isDocumentPickFlowInProgress) {
-        [SILAppearance setupAppearance];
-    }
-    
     [super viewWillDisappear:animated];
 }
 
@@ -170,70 +163,21 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
 }
 
 - (void)beginDocumentPickFlow {
-    if (@available(iOS 11, *)) {
-        [UINavigationBar appearance].tintColor = [UIView new].tintColor;
-        [[UIBarButtonItem appearance] setTitleTextAttributes:@{
-                                                               NSForegroundColorAttributeName: [UIView new].tintColor,
-                                                               NSFontAttributeName: [UIFont helveticaNeueWithSize:17.0],
-                                                               }
-                                                    forState:UIControlStateNormal];
-        [self presentDocumentPickerViewController];
-    } else {
-        [[UINavigationBar appearance] setTranslucent:YES];
-        [UINavigationBar appearance].tintColor = [UIView new].tintColor;
-        [UINavigationBar appearance].barTintColor = UIColor.whiteColor;
-        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-        [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                               NSForegroundColorAttributeName: [UIColor blackColor],
-                                                               NSFontAttributeName: [UIFont helveticaNeueMediumWithSize:17.0],
-                                                               }];
-        [self presentDocumentMenuViewControllerFromView:self.lastSelectedCell.chooseFileLabel];
-    }
-}
-
-- (void)endDocumentPickFlow {
-    self.isDocumentPickFlowInProgress = NO;
-    [SILAppearance setupAppearance];
-}
-
-- (void)presentDocumentMenuViewControllerFromView:(UIView *)view {
-    UIDocumentMenuViewController *documentMenuViewController = [[UIDocumentMenuViewController alloc]
-                                                                initWithDocumentTypes:@[kSILDocumentTypes]
-                                                                inMode:UIDocumentPickerModeImport];
-    documentMenuViewController.delegate = self;
-    
-    if (documentMenuViewController.popoverPresentationController != nil) {
-        documentMenuViewController.popoverPresentationController.sourceView = view;
-        documentMenuViewController.popoverPresentationController.sourceRect = view.bounds;
-    }
-    
-    [self presentViewController:documentMenuViewController animated:YES completion:^{
-        self.isDocumentPickFlowInProgress = YES;
-    }];
+    [self presentDocumentPickerViewController];
 }
 
 - (void)presentDocumentPickerViewController {
-    UIDocumentPickerViewController *documentPickerViewController = [[UIDocumentPickerViewController alloc]
+    SILDocumentPickerViewController *documentPickerViewController = [[SILDocumentPickerViewController alloc]
                                                                     initWithDocumentTypes:@[kSILDocumentTypes]
                                                                     inMode:UIDocumentPickerModeImport];
 
-    [self presentDocumentPickerViewController:documentPickerViewController];
-}
-
-- (void)presentDocumentPickerViewController:(UIDocumentPickerViewController *)documentPickerViewController {
     documentPickerViewController.delegate = self;
     documentPickerViewController.modalPresentationStyle = UIModalPresentationFormSheet;
     
-    [self presentViewController:documentPickerViewController animated:YES completion: ^{
-        self.isDocumentPickFlowInProgress = YES;
-    }];
+    [self presentViewController:documentPickerViewController animated:YES completion:nil];
 }
 
 #pragma mark - UIDocumentPickerDelegate
-
-- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
-    [self handleDocumentPicker:controller didPickDocumentsAtURL:url];
-}
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     [self handleDocumentPicker:controller didPickDocumentsAtURL:urls.firstObject];
@@ -262,18 +206,10 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
     } else if (self.fileSelecting == SILOTAFileSelectingStack) {
         self.firmwareUpdateViewModel.stackFileURL = url;
     }
-    
-    [self endDocumentPickFlow];
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
-    [self endDocumentPickFlow];
-}
-
-#pragma mark - UIDocumentMenuDelegate
-
-- (void)documentMenu:(UIDocumentMenuViewController *)documentMenu didPickDocumentPicker:(UIDocumentPickerViewController *)documentPickerViewController {
-    [self presentDocumentPickerViewController:documentPickerViewController];
+    
 }
 
 #pragma mark - SILPopoverViewControllerSizeConstraints
@@ -282,7 +218,7 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate, UIDocumentMenuD
     return CGSizeMake(300.0, 382.0);
 }
 
-#pragma Helpers
+#pragma mark - Helpers
 
 - (BOOL)validExtensionForURL:(NSURL *)url {
     NSString *ext = [url pathExtension];

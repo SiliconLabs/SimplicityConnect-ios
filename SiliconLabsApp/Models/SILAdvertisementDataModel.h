@@ -11,10 +11,10 @@
 typedef NS_ENUM(NSInteger, AdModelType) {
     AdModelTypeUUID,
     AdModelTypeServiceUUID,
-    AdModelTypeRSSI,
     AdModelTypeName,
-    AdModelTypeConnect,
-    AdModelTypePower
+    AdModelTypePower,
+    AdModelTypeMajor,
+    AdModelTypeMinor
 };
 
 @interface SILAdvertisementDataModel : NSObject

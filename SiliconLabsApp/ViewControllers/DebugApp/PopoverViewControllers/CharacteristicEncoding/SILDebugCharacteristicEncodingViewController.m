@@ -15,6 +15,7 @@
 #import "SILDebugCharacteristicPropertyView.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "UIView+NibInitable.h"
+#import "SILBluetoothBrowser+Constants.h"
 
 NSString * const kHex = @"HEX";
 NSString * const kAscii = @"ASCII";
@@ -78,7 +79,7 @@ NSString * const kDecimal = @"Decimal";
 }
 
 - (void)setUpText {
-    self.specificTitle.text = [self.characteristicModel uuidString];
+    self.specificTitle.text = [self.characteristicModel hexUuidString];
     self.generalTitle.text = [self.characteristicModel name];
     self.serviceNameTitle.text = @"";
     self.sendButton.enabled = self.canEdit;
@@ -220,28 +221,48 @@ NSString * const kDecimal = @"Decimal";
 #pragma mark - IBActions
 
 - (IBAction)clearButtonWasTapped:(id)sender {
-    self.hexField.text = @"";
-    self.asciiField.text = @"";
-    self.decimalField.text = @"";
+    self.hexField.text = EmptyText;
+    self.asciiField.text = EmptyText;
+    self.decimalField.text = EmptyText;
 }
 
 - (IBAction)sendButtonWasTapped:(id)sender {
-    NSError * error = nil;
-    NSData * const backupValue = [self.characteristicModel dataToWriteWithError:&error];
-    
-    self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:self.hexField.text decimalExponent:0 error:&error];
-    [self.characteristicModel setIfAllowedFullWriteValue:self.encodingData];
-    [self.editDelegate saveCharacteristic:self.characteristicModel error:&error];
-    
-    if (error != nil) {
-        [self.characteristicModel setIfAllowedFullWriteValue:backupValue];
-        self.invalidInputLabel.text = error.localizedDescription;
-        self.invalidInputLabel.hidden = NO;
+    if (self.hexField.text.length == 0) {
+        [self dislayErrorMessage:CannotWriteEmptyTextToCharacteristic];
     } else {
-        [self.popoverDelegate didClosePopoverViewController:self];
+        NSError * dataError = nil;
+        NSData * const backupValue = [self.characteristicModel dataToWriteWithError:&dataError];
+        
+        if (dataError == nil) {
+            NSError* saveError = [self tryToSaveValueInCharacteristic];
+            if (saveError != nil) {
+                [self.characteristicModel setIfAllowedFullWriteValue:backupValue];
+                [self dislayErrorMessage:saveError.localizedDescription];
+            } else {
+                [self.popoverDelegate didClosePopoverViewController:self];
+            }
+        }
     }
 }
 
+- (void)dislayErrorMessage:(NSString*)message {
+    self.invalidInputLabel.text = message;
+    self.invalidInputLabel.hidden = NO;
+}
+
+- (NSError*)tryToSaveValueInCharacteristic {
+    NSError * saveError = nil;
+
+    self.encodingData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:self.hexField.text decimalExponent:0 error:&saveError];
+    [self.characteristicModel setIfAllowedFullWriteValue:self.encodingData];
+    [self.editDelegate saveCharacteristic:self.characteristicModel error:&saveError];
+    
+    return saveError;
+}
+
+- (IBAction)exitButtonWasTapped:(id)sender {
+    [self.popoverDelegate didClosePopoverViewController:self];
+}
 
 #pragma mark - Text Field Value
 

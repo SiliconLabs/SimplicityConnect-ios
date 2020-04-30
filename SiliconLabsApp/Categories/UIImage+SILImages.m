@@ -41,16 +41,16 @@ NSString * const SILImageNameWatchPhoneCall = @"WatchPhoneCall";
 NSString * const SILImageNameWatchSuccess = @"WatchSuccess";
 
 NSString * const SILImageNamePropertyBroadcast = @"HomePropertyBroadcast";
-NSString * const SILImageNamePropertyRead = @"icon - read";
-NSString * const SILImageNamePropertyReadDisabled = @"PropertyReadDisabled";
-NSString * const SILImageNamePropertyWrite = @"icon - edit";
-NSString * const SILImageNamePropertyWriteDisabled = @"editGrey";
+NSString * const SILImageNamePropertyRead = @"Read";
+NSString * const SILImageNamePropertyReadDisabled = @"ReadDisabled";
+NSString * const SILImageNamePropertyWrite = @"Edit";
+NSString * const SILImageNamePropertyWriteDisabled = @"EditDisabled";
 NSString * const SILImageNamePropertyWriteNoResponse = @"WriteNoResponse";
-NSString * const SILImageNamePropertyWriteNoResponseDisabled = @"PropertyWriteNoResponseDisabled";
-NSString * const SILImageNamePropertyNotify = @"icon - notify";
-NSString * const SILImageNamePropertyNotifyDisabled = @"notifyGrey";
-NSString * const SILImageNamePropertyIndicate = @"icon - indicate";
-NSString * const SILImageNamePropertyIndicateDisabled = @"indicateGrey";
+NSString * const SILImageNamePropertyWriteNoResponseDisabled = @"WriteNoResponseDisabled";
+NSString * const SILImageNamePropertyNotify = @"Notify";
+NSString * const SILImageNamePropertyNotifyDisabled = @"NotifyDisabled";
+NSString * const SILImageNamePropertyIndicate = @"Indicate";
+NSString * const SILImageNamePropertyIndicateDisabled = @"IndicateDisabled";
 NSString * const SILImageNamePropertySignedWrite = @"HomePropertySignedWrite";
 NSString * const SILImageNamePropertyExtended = @"HomePropertyExtended";
 

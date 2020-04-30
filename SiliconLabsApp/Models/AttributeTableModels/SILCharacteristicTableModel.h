@@ -32,5 +32,6 @@
 ///@discussion won't write to peripheral if this model cannot write
 - (void)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral error:(NSError * __autoreleasing *)error;
 - (NSData *)dataToWriteWithError:(NSError * __autoreleasing *)error;
+- (void)readCharacteristicIfAllowed;
 
 @end

@@ -14,12 +14,8 @@
 #import "SILDescriptorTableModel.h"
 #import "SILDebugServiceTableViewCell.h"
 #import "SILDebugCharacteristicTableViewCell.h"
-#import "SILDebugProperty.h"
 #import "SILDebugHeaderView.h"
 #import "SILDiscoveredPeripheral.h"
-#import "UIView+NibInitable.h"
-#import "UIColor+SILColors.h"
-#import "SILAlertBarView.h"
 #import "SILBluetoothModelManager.h"
 #import "SILCharacteristicFieldBuilder.h"
 #import "SILEnumerationFieldRowModel.h"
@@ -39,8 +35,6 @@
 #import "SILCharacteristicEditEnabler.h"
 #import "SILValueFieldEditorViewController.h"
 #import "SILEncodingPseudoFieldRowModel.h"
-#import "UITableViewCell+SILHelpers.h"
-#import "SILActivityBarViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
@@ -54,48 +48,35 @@
 #import "SILBrowserConnectionsViewController.h"
 #import "UIImage+SILImages.h"
 #import "SILBrowserConnectionsViewModel.h"
+#import "NSString+SILBrowserNotifications.h"
+#import "SILBluetoothBrowserExpandableViewManager.h"
+#import "SILBluetoothBrowser+Constants.h"
 
 static NSString * const kSpacerCellIdentifieer = @"spacer";
 static NSString * const kCornersCellIdentifieer = @"corners";
 static NSString * const kOTAButtonTitle = @"OTA";
-static NSString * const kUnknownPeripheralName = @"Unknown";
 static NSString * const kScanningForPeripheralsMessage = @"Loading...";
 
-static float kOnPriority = 999;
-static float kOffPriority = 1;
 static float kTableRefreshInterval = 1;
 
 @interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *deviceUuidLabel;
-
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *rssiImageView;
-
-@property (weak, nonatomic) IBOutlet SILAlertBarView *alertBarView;
-@property (weak, nonatomic) IBOutlet UIView *activityBarViewControllerContainer;
 @property (strong, nonatomic) NSMutableArray *allServiceModels;
 @property (strong, nonatomic) NSArray *modelsToDisplay;
 @property (nonatomic) BOOL isUpdatingFirmware;
-
 @property (nonatomic) BOOL tableNeedsRefresh;
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
 @property (strong, nonatomic) NSTimer *rssiTimer;
-
 @property (nonatomic) UIRefreshControl *refreshControl;
-
 @property (strong, nonatomic) SILOTAUICoordinator *otaUICoordinator;
 @property (weak, nonatomic) IBOutlet UIView *discoveredDevicesView;
-@property (weak, nonatomic) IBOutlet UILabel *disconnectedMessageLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *disconnectedBarHideConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *disconnectedBarRevealConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *activityBarViewControllerHideConstraint;
 @property (strong, nonatomic) WYPopoverController *popoverController;
 @property (weak, nonatomic) IBOutlet UIView *presentationView;
 @property (strong, nonatomic) SILDebugHeaderView *headerView;
-@property (strong, nonatomic) SILActivityBarViewController *activityBarViewController;
 @property (weak, nonatomic) IBOutlet UIButton *otaButton;
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceSaveAreaView;
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
@@ -103,9 +84,8 @@ static float kTableRefreshInterval = 1;
 @property (weak, nonatomic) IBOutlet UIButton *logButton;
 @property (weak, nonatomic) IBOutlet UIView *expandableControllerView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *expandableControllerHeight;
-@property UIViewController* expandingViewController;
-@property UIVisualEffectView* effectView;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
+@property (strong, nonatomic) SILBluetoothBrowserExpandableViewManager* browserExpandableViewManager;
 
 @end
 
@@ -118,18 +98,15 @@ static float kTableRefreshInterval = 1;
     [_otaButton setHidden:YES];
     [self registerForNotifications];
     [self registerNibsAndSetUpSizing];
-    //[self setupActivityBarViewController];
-    //[self setUpSubviews];
     [self startServiceSearch];
     [self setupRefreshControl];
     [self setupNavigationBar];
-    [self setupLogButton];
-    [self setupConnectionsButton];
-    _connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:@"ReloadConnectionsTableView" object:nil];
+    [self setupBrowserExpandableViewManager];
+    [self setupButtonsTabBar];
+    [self setupConnectionsViewModel];
+    [self addObserverForUpdateConnectionsButtonTitle];
     [self updateConnectionsButtonTitle];
-    [_rssiLabel setHidden:YES];
-    [_rssiImageView setHidden:YES];
+    [self hideRSSIView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -149,11 +126,6 @@ static float kTableRefreshInterval = 1;
     }
 }
 
-- (void)installRSSITimer {
-    __weak SILDebugServicesViewController *blocksafeSelf = self;
-    _rssiTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer){ [blocksafeSelf.peripheral readRSSI]; }];
-}
-
 - (IBAction)backButtonWasTapped:(id)sender {
     [self.navigationController popViewControllerAnimated:NO];
 }
@@ -168,57 +140,25 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)setupNavigationBar {
-    _aboveSpaceSaveAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-    _navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+    self.aboveSpaceSaveAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
+    self.navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
 }
 
-- (void)setupLogButton {
-    UIEdgeInsets const ImageInsetsForLogButton = {0, 16, 0 ,8};
-    UIEdgeInsets const TitleEdgeInsetsForLogButton = {0, 20., 0, 0};
-    [_logButton setTintColor:[UIColor clearColor]];
-    [_logButton setImage:[[UIImage imageNamed:SILImageLogOff] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState: UIControlStateNormal];
-    [_logButton setImage:[[UIImage imageNamed:SILImageLogOn] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
-    _logButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    _logButton.imageEdgeInsets = ImageInsetsForLogButton;
-    [_logButton setTitleEdgeInsets:TitleEdgeInsetsForLogButton];
-    _logButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    _logButton.titleLabel.font = [UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]];
-    [_logButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
-    [_logButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateSelected];
+- (void)setupBrowserExpandableViewManager {
+    self.cornerRadius = CornerRadiusStandardValue;
+    self.browserExpandableViewManager = [[SILBluetoothBrowserExpandableViewManager alloc] initWithOwnerViewController:self];
+    [self.browserExpandableViewManager setReferenceForPresentationView:self.presentationView andDiscoveredDevicesView:self.discoveredDevicesView];
+    [self.browserExpandableViewManager setReferenceForExpandableControllerView:self.expandableControllerView andExpandableControllerHeight:self.expandableControllerHeight];
+    [self.browserExpandableViewManager setValueForCornerRadius:self.cornerRadius];
 }
-
-- (void)setupConnectionsButton {
-    UIEdgeInsets const ImageInsetsForConnectionsButton = {0, 8, 0 ,8};
-    UIEdgeInsets const TitleEdgeInsetsForConnectionsButton = {0, 8, 0, 0};
-    [_connectionsButton setTintColor:[UIColor clearColor]];
-    [_connectionsButton setImage:[[UIImage imageNamed:SILImageConnectOff] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    [_connectionsButton setImage:[[UIImage imageNamed:SILImageConnectOn] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
-    _connectionsButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    _connectionsButton.imageEdgeInsets = ImageInsetsForConnectionsButton;
-    [_connectionsButton setTitleEdgeInsets:TitleEdgeInsetsForConnectionsButton];
-    _connectionsButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-    _connectionsButton.titleLabel.font = [UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]];
-    [_connectionsButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
-    [_connectionsButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateSelected];
-}
-
-- (void)updateConnectionsButtonTitle {
-    NSUInteger connections = [self.connectionsViewModel.peripherals count];
-    NSMutableString* connectionsText = [[NSMutableString alloc] initWithFormat: @"%lu", (unsigned long)connections];
-    [connectionsText appendString:@" Connections"];
-    [_connectionsButton setTitle:connectionsText forState:UIControlStateNormal];
-    [_connectionsButton setTitle:connectionsText forState:UIControlStateSelected];
+ 
+- (void)setupButtonsTabBar {
+    [self.browserExpandableViewManager setupButtonsTabBarWithLog:self.logButton connections:self.connectionsButton];
 }
 
 #pragma mark - setup
 
 - (void)registerNibsAndSetUpSizing {
-    //NSString *serviceCellClassString = NSStringFromClass([SILDebugServiceTableViewCell class]);
-    //[self.tableView registerNib:[UINib nibWithNibName:serviceCellClassString bundle:nil] forCellReuseIdentifier:serviceCellClassString];
-    
-    //NSString *characteristicCellClassString = NSStringFromClass([SILDebugCharacteristicTableViewCell class]);
-    //[self.tableView registerNib:[UINib nibWithNibName:characteristicCellClassString bundle:nil] //forCellReuseIdentifier:characteristicCellClassString];
-    
     NSString *characteristicValueFieldCellClassString = NSStringFromClass([SILDebugCharacteristicValueFieldTableViewCell class]);
     [self.tableView registerNib:[UINib nibWithNibName:characteristicValueFieldCellClassString bundle:nil] forCellReuseIdentifier:characteristicValueFieldCellClassString];
     
@@ -235,22 +175,9 @@ static float kTableRefreshInterval = 1;
     [self.tableView registerNib:[UINib nibWithNibName:spacerCellClassString bundle:nil] forCellReuseIdentifier:spacerCellClassString];
 }
 
-- (void)setUpSubviews {
-    self.title = self.peripheral.name ?: kUnknownPeripheralName;
-    self.activityBarViewControllerHideConstraint.priority = kOffPriority;
-    [self.activityBarViewController scanningAnimationWithMessage:kScanningForPeripheralsMessage];
-    [self.alertBarView configureLabel:self.disconnectedMessageLabel revealConstraint:self.disconnectedBarRevealConstraint hideConstraint:self.disconnectedBarHideConstraint];
-}
-
 - (void)startServiceSearch {
     self.peripheral.delegate = self;
     [self.peripheral discoverServices:nil];
-}
-
-- (void)setupActivityBarViewController {
-    self.activityBarViewController = [[SILActivityBarViewController alloc] init];
-    [self ip_addChildViewController:self.activityBarViewController toView:self.activityBarViewControllerContainer];
-    [self.activityBarViewController.view autoPinEdgesToSuperviewEdges];
 }
 
 - (void)setupRefreshControl {
@@ -259,6 +186,15 @@ static float kTableRefreshInterval = 1;
     [self.tableView addSubview:self.refreshControl];
     [self.refreshControl sendSubviewToBack:self.refreshControl];
     self.refreshControl.bounds = CGRectMake(self.refreshControl.bounds.origin.x, self.refreshControl.bounds.origin.y + 50.0, 100.0, 100.0);
+}
+
+- (void)setupConnectionsViewModel {
+    self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
+}
+
+- (void)hideRSSIView {
+    [self.rssiLabel setHidden:YES];
+    [self.rssiImageView setHidden:YES];
 }
 
 #pragma mark -Lazy Intanstiation
@@ -280,141 +216,16 @@ static float kTableRefreshInterval = 1;
 #pragma mark - Expandable Controllers
 
 - (IBAction)connectionsButtonTapped:(id)sender {
-    if (_connectionsButton.isSelected == NO) {
-        BOOL anyButtonSelected = [self isAnyButtonSelected];
-        [self prepareSceneDependOnButtonSelection:anyButtonSelected];
-    
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppBluetoothBrowser" bundle:nil];
-        SILBrowserConnectionsViewController* connectionVC = [storyboard instantiateViewControllerWithIdentifier:@"Connections"];
-    
-        [self insertIntoContainerExpandableController:connectionVC];
-        [self animateExpandableViewControllerIfNeeded:anyButtonSelected];
-        connectionVC.delegate = self;
-        self.expandingViewController = connectionVC;
-        
-        [_connectionsButton setSelected:YES];
+    SILBrowserConnectionsViewController* connectionsVC = [self.browserExpandableViewManager connectionsButtonWasTappedAction];
+    if (connectionsVC.delegate == nil) {
+        connectionsVC.delegate = self;
     }
 }
 
 - (IBAction)logButtonWasTapped:(id)sender {
-    if (_logButton.isSelected == NO) {
-        BOOL anyButtonSelected = [self isAnyButtonSelected];
-        [self prepareSceneDependOnButtonSelection:anyButtonSelected];
-        
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppBluetoothBrowser" bundle:nil];
-        SILBrowserLogViewController* logVC = [storyboard instantiateViewControllerWithIdentifier:@"Log"];
-    
-        [self insertIntoContainerExpandableController:logVC];
-        [self animateExpandableViewControllerIfNeeded:anyButtonSelected];
+    SILBrowserLogViewController* logVC = [self.browserExpandableViewManager logButtonWasTappedAction];
+    if (logVC.delegate == nil) {
         logVC.delegate = self;
-        self.expandingViewController = logVC;
-        
-        [_logButton setSelected:YES];
-    }
-}
-
-- (BOOL)isAnyButtonSelected {
-    return ! (_logButton.isSelected == NO && _connectionsButton.isSelected == NO);
-}
-
-- (void)deselectAllButtons {
-    [_logButton setSelected:NO];
-    [_connectionsButton setSelected:NO];
-}
-
-- (void)prepareSceneDependOnButtonSelection:(BOOL)anyButtonSelected {
-    if (anyButtonSelected) {
-        [self prepareSceneForChangeExpandableView];
-    } else {
-        [self prepareSceneForExpandableView];
-    }
-    
-    [self customizeExpandableViewAppearance];
-}
-
-- (void)prepareSceneForChangeExpandableView {
-    [self deselectAllButtons];
-    [self removeExpandableViewController];
-}
-
-- (void)prepareSceneForExpandableView {
-    if (_expandingViewController != nil) {
-        [self prepareSceneForRemoveExpandingController];
-    }
-    
-    [self attachBlurEffectView];
-}
-
-- (void)customizeExpandableViewAppearance {
-    self.cornerRadius = 20.0;
-    self.expandableControllerHeight.constant = self.presentationView.frame.size.height * 0.9;
-}
-
-- (void)customizeSceneWithoutExpandableViewContoller {
-    self.cornerRadius = 0.0;
-    self.expandableControllerHeight.constant = 0;
-}
-
-- (void)removeExpandableViewController {
-    [self willMoveToParentViewController:nil];
-    [self.expandingViewController.view removeFromSuperview];
-    [self.expandingViewController removeFromParentViewController];
-    self.expandingViewController = nil;
-}
-
-- (void)insertIntoContainerExpandableController:(UIViewController*)viewController {
-    [self addChildViewController:viewController];
-    [self.expandableControllerView addSubview:viewController.view];
-    viewController.view.frame = self.expandableControllerView.frame;
-    viewController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    [viewController didMoveToParentViewController:self];
-    
-    [self.view setNeedsUpdateConstraints];
-}
-
-- (void)animateExpandableViewControllerIfNeeded:(BOOL)anyButtonSelected {
-    if (!anyButtonSelected) {
-        [self animateExpandableViewController];
-    }
-}
-
-- (void)animateExpandableViewController {
-    [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionTransitionCurlDown animations:^{
-            [self.view layoutIfNeeded];
-    } completion:nil];
-}
-
-- (void)prepareSceneForRemoveExpandingController {
-    [self deselectAllButtons];
-    [self removeExpandableViewController];
-    [self customizeSceneWithoutExpandableViewContoller];
-    [self animateExpandableViewController];
-    [self removeBlurEffectView];
-}
-
-- (void)attachBlurEffectView {
-    UIBlurEffect* blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    _effectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    _effectView.frame = self.presentationView.frame;
-    [self.discoveredDevicesView addSubview:_effectView];
-}
-
-- (void)removeBlurEffectView {
-    [_effectView removeFromSuperview];
-}
-
-- (void)setCornerRadius:(CGFloat)cornerRadius {
-    if (_cornerRadius != cornerRadius) {
-        _cornerRadius = cornerRadius;
-        [self adjustView];
-    }
-}
-
-- (void)adjustView {
-    if (_expandableControllerView != nil) {
-        self.expandableControllerView.layer.cornerRadius = _cornerRadius;
-        self.expandableControllerView.layer.maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner;
-        self.expandableControllerView.clipsToBounds = YES;
     }
 }
 
@@ -426,14 +237,14 @@ static float kTableRefreshInterval = 1;
     void (^serviceSearch)(void) = ^(void) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [self startServiceSearch];
-            [self->_tableView setHidden:NO];
+            [self.tableView setHidden:NO];
         });
     };
 
     if (self.refreshControl == sender) {
         self.allServiceModels = [[NSMutableArray alloc] init];
         [self.centralManager connectToDiscoveredPeripheral: [self.centralManager discoveredPeripheralForPeripheral:self.peripheral]];
-        [_tableView setHidden:YES];
+        [self.tableView setHidden:YES];
         serviceSearch();
     }
 }
@@ -442,18 +253,6 @@ static float kTableRefreshInterval = 1;
 
 - (void)otaUICoordinatorDidFishishOTAFlow:(SILOTAUICoordinator *)coordinator {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - Activity Bar
-
-- (void)hideActivityBarViewController {
-    __weak SILDebugServicesViewController *weakSelf = self;
-    [self.view layoutIfNeeded];
-    [UIView animateWithDuration:0.5 animations:^{
-        weakSelf.activityBarViewControllerHideConstraint.priority = kOnPriority;
-        [weakSelf.view layoutIfNeeded];
-        [weakSelf.view updateConstraints];
-    }];
 }
 
 #pragma mark - Notifications
@@ -465,6 +264,10 @@ static float kTableRefreshInterval = 1;
                                                object:self.centralManager];
 }
 
+- (void)addObserverForUpdateConnectionsButtonTitle {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:SILNotificationReloadConnectionsTableView object:nil];
+}
+
 #pragma mark - Notification Methods
 
 - (void)didDisconnectPeripheralNotifcation:(NSNotification *)notification {
@@ -473,7 +276,12 @@ static float kTableRefreshInterval = 1;
     }
 }
 
-#pragma mark - Table Timer
+- (void)updateConnectionsButtonTitle {
+    NSUInteger connections = [self.connectionsViewModel.peripherals count];
+    [self.browserExpandableViewManager updateConnectionsButtonTitle:connections];
+}
+
+#pragma mark - Timers
 
 - (void)startRefreshTimer {
     self.tableRefreshTimer = [NSTimer scheduledTimerWithTimeInterval:kTableRefreshInterval
@@ -495,6 +303,12 @@ static float kTableRefreshInterval = 1;
         [self.tableRefreshTimer invalidate];
         self.tableRefreshTimer = nil;
     }
+}
+
+- (void)installRSSITimer {
+    __weak SILDebugServicesViewController *blocksafeSelf = self;
+    self.rssiTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer){ [blocksafeSelf.peripheral readRSSI];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -538,6 +352,7 @@ static float kTableRefreshInterval = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SILDebugCharacteristicTableViewCell class]]) {
         SILCharacteristicTableModel *characteristicModel = self.modelsToDisplay[indexPath.row];
+        [characteristicModel readCharacteristicIfAllowed];
         if ([characteristicModel isUnknown]) {
             [characteristicModel toggleExpansionIfAllowed];
             id<SILGenericAttributeTableCell> cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -560,26 +375,26 @@ static float kTableRefreshInterval = 1;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.modelsToDisplay[indexPath.row] isEqual:kSpacerCellIdentifieer]) {
-        return 10;
+        return 24.0;
     }
     if ([self.modelsToDisplay[indexPath.row] isEqual:kCornersCellIdentifieer]) {
-        return 10;
+        return 16.0;
     }
     
     id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
     if ([model isKindOfClass:[SILServiceTableModel class]]) {
-        return 106.0;
+        return 104.0;
     } else if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
         SILCharacteristicTableModel* modelCharacteristic = (SILCharacteristicTableModel*)model;
         NSInteger descriptors = modelCharacteristic.descriptorModels.count;
         if (descriptors == 0) {
-            return 109.0;
+            return 107.0;
         } else {
-            return 109.0 + (descriptors + 1) * 16.0;
+            return 107.0 + (descriptors + 1) * 18.0;
         }
     } else {
         if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
-            return 230.0;
+            return 228.0;
         }
         return 81.0;
     }
@@ -607,11 +422,9 @@ static float kTableRefreshInterval = 1;
 - (SILServiceCell *)serviceCellWithModel:(SILServiceTableModel *)serviceTableModel forTable:(UITableView *)tableView {
     SILServiceCell *serviceCell = (SILServiceCell *)[tableView dequeueReusableCellWithIdentifier:@"SILServiceCell"];
     serviceCell.delegate = self;
-    //[self updateChevronImageForExpanded:serviceTableModel.isExpanded];
     [serviceCell.nameEditButton setHidden:!serviceTableModel.isMappable];
     serviceCell.serviceNameLabel.text = [serviceTableModel name];
-    serviceCell.serviceUuidLabel.text = [serviceTableModel uuidString] ?: @"";
-    //self.topSeparatorView.hidden = serviceTableModel.hideTopSeparator;
+    serviceCell.serviceUuidLabel.text = [serviceTableModel hexUuidString] ?: @"";
     [serviceCell configureAsExpandanble:[serviceTableModel canExpand]];
     [serviceCell customizeMoreInfoText:serviceTableModel.isExpanded];
     [serviceCell layoutIfNeeded];
@@ -695,13 +508,13 @@ static float kTableRefreshInterval = 1;
     SILDebugCharacteristicEncodingViewController *encodingViewController = [[SILDebugCharacteristicEncodingViewController alloc] initWithCharacteristicTableModel:characteristicModel canEdit:canEdit];
     encodingViewController.popoverDelegate = self;
     encodingViewController.editDelegate = self;
-    encodingViewController.view.layer.cornerRadius = 16.0;
+    encodingViewController.view.layer.cornerRadius = CornerRadiusStandardValue;
     encodingViewController.view.layer.masksToBounds = TRUE;
-    self.popoverController.contentViewController.view.layer.cornerRadius = 16.0;
+    self.popoverController.contentViewController.view.layer.cornerRadius = CornerRadiusStandardValue;
     self.popoverController.contentViewController.view.layer.masksToBounds = TRUE;
     WYPopoverBackgroundView* appearance = [WYPopoverBackgroundView appearance];
-    [appearance setOuterCornerRadius:16.0];
-    [appearance setInnerCornerRadius:16.0];
+    [appearance setOuterCornerRadius:CornerRadiusStandardValue];
+    [appearance setInnerCornerRadius:CornerRadiusStandardValue];
     self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:encodingViewController
                                                                              presentingViewController:self
                                                                                              delegate:self
@@ -774,8 +587,34 @@ static float kTableRefreshInterval = 1;
 - (void)editNameWithCell:(UITableViewCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     id<SILGenericAttributeTableModel> model = self.modelsToDisplay[indexPath.row];
+    if ([model isKindOfClass:[SILServiceTableModel class]]) {
+        [self editNameForService:model];
+    } else if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
+        [self editNameForCharacteristic:model];
+    }
+}
+
+- (void)editNameForService:(SILServiceTableModel*)model {
     SILMapNameEditorViewController *nameEditor = [[SILMapNameEditorViewController alloc] init];
-    nameEditor.model = model;
+    SILServiceMap* serviceModel = [SILServiceMap getWith:model.uuidString];
+    if (serviceModel == nil) {
+        serviceModel = [SILServiceMap createWith:model.name uuid:model.uuidString];
+    }
+    nameEditor.model = serviceModel;
+    nameEditor.popoverDelegate = self;
+    self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:nameEditor
+    presentingViewController:self
+                    delegate:self
+                    animated:YES];
+}
+
+- (void)editNameForCharacteristic:(SILCharacteristicTableModel*)model {
+    SILMapNameEditorViewController *nameEditor = [[SILMapNameEditorViewController alloc] init];
+    SILCharacteristicMap* characteristicModel = [SILCharacteristicMap getWith:model.uuidString];
+    if (characteristicModel == nil) {
+        characteristicModel = [SILCharacteristicMap createWith:model.name uuid:model.uuidString];
+    }
+    nameEditor.model = characteristicModel;
     nameEditor.popoverDelegate = self;
     self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:nameEditor
     presentingViewController:self
@@ -829,7 +668,7 @@ static float kTableRefreshInterval = 1;
         title = discoveredPeripheral.advertisedLocalName;
     }
     if (!title) {
-        title = self.peripheral.name ?: kUnknownPeripheralName;
+        title = self.peripheral.name ?: DefaultDeviceName;
     }
     self.title = title;
     self.tableView.hidden = NO;
@@ -845,7 +684,6 @@ static float kTableRefreshInterval = 1;
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     for (CBCharacteristic *characteristic in service.characteristics) {
         [self addOrUpdateModelForCharacteristic:characteristic forService:service];
-        [peripheral readValueForCharacteristic:characteristic];
         [peripheral discoverDescriptorsForCharacteristic:characteristic];
     }
     [self markTableForUpdate];
@@ -863,7 +701,6 @@ static float kTableRefreshInterval = 1;
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     for (CBDescriptor *descriptor in characteristic.descriptors) {
         [self addOrUpdateModelForDescriptor:descriptor forCharacteristic:characteristic];
-        [peripheral readValueForDescriptor:descriptor];
     }
     [self markTableForUpdate];
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverDescriptorsForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
@@ -887,15 +724,14 @@ static float kTableRefreshInterval = 1;
         [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didWriteValueForCharacteristic: Write successful! " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
     }
     [peripheral readValueForCharacteristic:characteristic];
-    [self.alertBarView revealAlertBarWithMessage:message revealTime:0.4 displayTime:3];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
-    [_rssiLabel setHidden:NO];
-    [_rssiImageView setHidden:NO];
+    [self.rssiLabel setHidden:NO];
+    [self.rssiImageView setHidden:NO];
     NSMutableString* rssiDescription = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@", RSSI]];
     [rssiDescription appendString:@" dBm"];
-    _rssiLabel.text = rssiDescription;
+    self.rssiLabel.text = rssiDescription;
 }
 
 #pragma mark - Add or Update Attribute Models
@@ -1027,21 +863,17 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)buildDisplayCharacteristics:(NSMutableArray *)displayArray forServiceModel:(SILServiceTableModel *)serviceModel {
-    bool firstCharacteristic = YES;
     for (SILCharacteristicTableModel *characteristicModel in serviceModel.characteristicModels) {
-        characteristicModel.hideTopSeparator = firstCharacteristic;
+        characteristicModel.hideTopSeparator = NO;
         [displayArray addObject:characteristicModel];
         
         if (characteristicModel.isExpanded) {
             [self buildDisplayCharacteristicFields:displayArray forCharacteristicModel:characteristicModel];
         }
-        
-        firstCharacteristic = NO;
     }
 }
 
 - (void)buildDisplayCharacteristicFields:(NSMutableArray *)displayArray forCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel {
-    bool firstField = YES;
     if ([characteristicModel isUnknown]) {
         // We are unknown. But lets display our encoding information as if we were a field.
         [displayArray addObject:[[SILEncodingPseudoFieldRowModel alloc] initForCharacteristicModel:characteristicModel]];
@@ -1049,14 +881,13 @@ static float kTableRefreshInterval = 1;
         for (id<SILCharacteristicFieldRow> fieldModel in characteristicModel.fieldTableRowModels) {
             [fieldModel setParentCharacteristicModel:characteristicModel];
             if ([fieldModel requirementsSatisfied]) {
-                fieldModel.hideTopSeparator = firstField;
+                fieldModel.hideTopSeparator = NO;
                 if ([fieldModel isKindOfClass:[SILBitFieldFieldModel class]]) {
                     SILBitFieldFieldModel *bitFieldModel = fieldModel;
                     [displayArray addObjectsFromArray:[bitFieldModel bitRowModels]];
                 } else {
                     [displayArray addObject:fieldModel];
                 }
-                firstField = NO;
             } else {
                 NSLog(@"Requirements not met for %@", characteristicModel.bluetoothModel.name);
             }
@@ -1083,14 +914,14 @@ static float kTableRefreshInterval = 1;
 
 - (void)configureOtaButtonWithPeripheral:(CBPeripheral *)peripheral {
     if ([peripheral hasOTAService]) {
-        [_otaButton setHidden:NO];
+        [self.otaButton setHidden:NO];
     } else {
-        [_otaButton setHidden:YES];
+        [self.otaButton setHidden:YES];
     }
 }
 
 - (void)postRegisterLogNotification:(NSString*)description {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RegisterLog" object:self userInfo:@{ @"description" : description}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationRegisterLog object:self userInfo:@{ SILNotificationKeyDescription : description}];
 }
 
 #pragma mark - dealloc
@@ -1102,24 +933,24 @@ static float kTableRefreshInterval = 1;
 #pragma mark - SILBrowserLogViewControllerDelegate
 
 - (void)logViewBackButtonPressed {
-    [self prepareSceneForRemoveExpandingController];
+    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
 }
 
 #pragma mark - SILBrowserConnectionViewControllerDelegate
 
 - (void)connectionsViewBackButtonPressed {
-    [self prepareSceneForRemoveExpandingController];
+    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
 }
 
 - (void)presentDetailsViewControllerForIndex:(NSInteger)index {
-    SILConnectedPeripheralDataModel* connectedPeripheral = _connectionsViewModel.peripherals[index];
-    _peripheral = connectedPeripheral.peripheral;
+    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
+    SILConnectedPeripheralDataModel* connectedPeripheral = self.connectionsViewModel.peripherals[index];
+    self.peripheral = connectedPeripheral.peripheral;
     [self.refreshControl removeFromSuperview];
     self.refreshControl = nil;
     [self viewDidLoad];
     [self viewWillAppear:YES];
     [self viewDidAppear:YES];
-    [self prepareSceneForRemoveExpandingController];
     [self.connectionsViewModel updateConnectionsView:index];
 }
 

@@ -92,13 +92,15 @@
 
 - (void)fillBeaconTypesArray {
     SILBrowserBeaconType* unknown = [[SILBrowserBeaconType alloc] initWithName:SILBeaconUnspecified andSelection:NO];
+    SILBrowserBeaconType* iBeacon = [[SILBrowserBeaconType alloc] initWithName:SILBeaconIBeacon andSelection:NO];
     SILBrowserBeaconType* altBeacon = [[SILBrowserBeaconType alloc] initWithName:SILBeaconAltBeacon andSelection:NO];
     SILBrowserBeaconType* eddystone = [[SILBrowserBeaconType alloc] initWithName:SILBeaconEddystone andSelection:NO];
-    [_beaconTypes addObjectsFromArray:@[unknown, altBeacon, eddystone]];
+    [_beaconTypes addObjectsFromArray:@[unknown, iBeacon, altBeacon, eddystone]];
 }
 
 - (void)initNewBeaconTypes:(NSArray<SILBrowserBeaconType*>*)oldBeaconTypes {
     SILBrowserBeaconType* unknown = [[SILBrowserBeaconType alloc] initWithName:SILBeaconUnspecified andSelection:NO];
+    SILBrowserBeaconType* iBeacon = [[SILBrowserBeaconType alloc] initWithName:SILBeaconIBeacon andSelection:NO];
     SILBrowserBeaconType* altBeacon = [[SILBrowserBeaconType alloc] initWithName:SILBeaconAltBeacon andSelection:NO];
     SILBrowserBeaconType* eddystone = [[SILBrowserBeaconType alloc] initWithName:SILBeaconEddystone andSelection:NO];
    
@@ -106,14 +108,17 @@
         [unknown modifySelection];
     }
     if (oldBeaconTypes[1].isSelected) {
-        [altBeacon modifySelection];
+        [iBeacon modifySelection];
     }
     if (oldBeaconTypes[2].isSelected) {
+        [altBeacon modifySelection];
+    }
+    if (oldBeaconTypes[3].isSelected) {
         [eddystone modifySelection];
     }
     
     _beaconTypes = [[NSMutableArray alloc] init];
-    [_beaconTypes addObjectsFromArray:@[unknown, altBeacon, eddystone]];
+    [_beaconTypes addObjectsFromArray:@[unknown, iBeacon, altBeacon, eddystone]];
 }
 
 # pragma mark - Observers
@@ -206,6 +211,7 @@
         [_savedSearches addObject:saveSearch];
         [self updateSavedSearches:[_savedSearches count] - 1];
         [self saveSearchInRealmDatabase:saveSearch];
+        [self setIsActiveFilterFromSavedSearches:YES];
     }
     [self initNewBeaconTypes:_beaconTypes];
     [self postSavedSearchesTableViewNotification];

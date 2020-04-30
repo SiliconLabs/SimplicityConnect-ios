@@ -18,6 +18,8 @@
 #import "SILPopoverViewController.h"
 #import "SILOTAProgressViewController.h"
 
+#define OTA_TTL 30
+
 static NSString * const kSILDFUStatusRebootingString = @"Rebooting...";
 static NSString * const kSILDFUStatusWaitingString = @"Waiting...";
 static NSString * const kSILDFUStatusConnectingString = @"Attempting Connection...";
@@ -48,6 +50,8 @@ SILOTAFirmwareUpdateManagerDelegate>
 @property (weak, nonatomic) HMAccessory *accessory;
 
 @property (nonatomic) SILOTAMode otaMode;
+
+@property (strong, nonatomic) NSTimer *otaTTL;
 
 @end
 
@@ -230,12 +234,14 @@ SILOTAFirmwareUpdateManagerDelegate>
     self.otaMode = firmwareUpdate.updateMode;
     __weak SILOTAUICoordinator *weakSelf = self;
     [self reupdateDeviceInOtaMode];
+    [self scheduleOtaTTL];
     [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:YES
                                                                 progress:^(SILDFUStatus status) {
                                                                     [SVProgressHUD setStatus:[weakSelf stringForDFUStatus:status]];
                                                                 } completion:^(CBPeripheral *peripheral, NSError *error) {
                                                                      dispatch_async(dispatch_get_main_queue(), ^{
                                                                          [SVProgressHUD dismiss];
+                                                                         [self.otaTTL invalidate];
                                                                          if (error == nil) {
                                                                              weakSelf.peripheral = peripheral;
                                                                              [weakSelf otaSetupViewControllerDidInitiateFirmwareUpdate:firmwareUpdate];
@@ -246,6 +252,23 @@ SILOTAFirmwareUpdateManagerDelegate>
                                                                          }
                                                                      });
                                                                 }];
+}
+
+- (void)scheduleOtaTTL {
+    _otaTTL = [NSTimer scheduledTimerWithTimeInterval:OTA_TTL repeats:NO block:^(NSTimer * _Nonnull timer) {
+        [self.otaFirmwareUpdateManager endCycleDevice];
+        [SVProgressHUD dismiss];
+        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+        [self.presentingViewController.navigationController popViewControllerAnimated:YES];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"dismiss", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"device_is_not_responding", nil) preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:action];
+        [self.presentingViewController presentViewController:alertController animated:TRUE completion:^{
+            
+        }];
+    }];
 }
 
 - (void)reupdateDeviceInOtaMode {

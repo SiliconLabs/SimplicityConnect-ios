@@ -9,6 +9,7 @@
 #import "SILAppSelectionCollectionViewCell.h"
 #import "UIColor+SILColors.h"
 #import "SILApp.h"
+#import "SILBluetoothBrowser+Constants.h"
 
 @implementation SILAppSelectionCollectionViewCell
 
@@ -68,7 +69,7 @@
 
 - (void)setupCellRoundedAppearance {
     self.layer.masksToBounds = YES;
-    self.layer.cornerRadius = 20;
+    self.layer.cornerRadius = CornerRadiusStandardValue;
 }
 
 - (void)prepareForReuse {
@@ -84,8 +85,8 @@
 - (void)setFieldsInCell:(SILApp*)appData {
     self.titleLabel.text = appData.title;
     self.descriptionLabel.text = appData.appDescription;
-    self.profileKeyLabel.text = @"";
-    self.profileValueLabel.text = @"";
+    self.profileKeyLabel.text = EmptyText;
+    self.profileValueLabel.text = EmptyText;
     self.iconImageView.image = [UIImage imageNamed:appData.imageName];
 }
 

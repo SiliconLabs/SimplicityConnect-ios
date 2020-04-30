@@ -17,13 +17,15 @@
 
 @implementation SILHomeTabBarViewController
 
-CGFloat const VerticalOffsetForText = -16.0;
+CGFloat const VerticalOffsetForText = -12.0;
 CGFloat const HorizontalOffsetForText = 0.0;
 NSInteger const SystemVersion = 13.0;
+NSUInteger const DevelopTabIndex = 1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupTabsAppearance];
+    [self setDevelopTabAsDefault];
 }
 
 - (void)setupTabsAppearance {
@@ -65,6 +67,10 @@ NSInteger const SystemVersion = 13.0;
 
 - (BOOL)isIPadOS12 {
     return ([[[UIDevice currentDevice] systemVersion] floatValue] < SystemVersion && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+}
+
+- (void)setDevelopTabAsDefault {
+    self.selectedIndex = DevelopTabIndex;
 }
 
 @end

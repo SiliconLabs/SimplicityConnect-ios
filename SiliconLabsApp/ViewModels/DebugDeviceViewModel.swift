@@ -31,12 +31,14 @@ final class DebugDeviceViewModel: NSObject {
 
     let centralManager = SILCentralManager(serviceUUIDs: [])
     private var discoveredPeripherals: [SILDiscoveredPeripheral] = []
-    private(set) var allDiscoveredPeripheralsViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
+    private var allDiscoveredPeripheralsViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
     private(set) var discoveredPeripheralsViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
+    private var replacementDiscoveredPeripheralViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
     var connectedPeripheral: CBPeripheral? = nil
     private(set) var isConnecting: [CBPeripheral : Bool] = [:]
+    var didStopScanning = false
     var isContentAvailable: Bool {
-        return discoveredPeripherals.count > 0
+        return discoveredPeripherals.count > 0 || didStopScanning
     }
     var observing = false
 
@@ -80,26 +82,6 @@ final class DebugDeviceViewModel: NSObject {
         guard let peripheral = connectedPeripheral else { return nil }
         let peripheralName = peripheral.name ?? "Unknown"
         return "Disconnected from \(peripheralName)"
-    }
-
-    var isFilterApplied: Bool {
-        if searchByDeviceName != nil || currentMinRSSI != nil {
-            return true
-        }
-        return false
-    }
-
-    var filterDescription: String? {
-        var descriptors = [String]()
-        if let searchByDeviceName = searchByDeviceName {
-            descriptors.append(searchByDeviceName)
-        }
-
-        if let currentMinRSSI = currentMinRSSI {
-            descriptors.append("\(currentMinRSSI) RSSI")
-        }
-        
-        return descriptors.joined(separator: ", ")
     }
 
     // MARK: - Lifecycle
@@ -163,23 +145,42 @@ final class DebugDeviceViewModel: NSObject {
         self.currentMinRSSI = minRSSI
     }
 
-    // MARK: Scanning
+    // MARK: - Scanning
 
     func startScanning() {
         centralManager.addScan(forPeripheralsObserver: self, selector: #selector(didReceiveScanForPeripheralChange))
+        preparePeripheralsForCalculatingAdvertisingIntervals()
     }
 
-    func stopScanning() {
+    func stopScanning(visibleCellsCount: Int) {
+        didStopScanning = visibleCellsCount > 0
         centralManager.removeScan(forPeripheralsObserver: self)
-        discoveredPeripherals = centralManager.discoveredPeripherals()
+        discoveredPeripherals = []
     }
 
     @objc private func didReceiveScanForPeripheralChange() {
         discoveredPeripherals = centralManager.discoveredPeripherals()
     }
 
-    // MARK: Private implementation
+    func refreshDiscoveredPeripheralViewModels() {
+        let peripheralViewModels = discoverForCurrentArrayPeripheralDevices()
+        
+        if didStopScanning {
+           performActionsForStopScanningWasTapped(peripheralViewModels)
+        } else {
+            addNewDevicesIfNeed(peripheralViewModels)
+            removeDiscoveredDevicesIfNeed()
+        }
+    }
+    
+    // MARK: - Private implementation
 
+    private func preparePeripheralsForCalculatingAdvertisingIntervals() {
+        for peripheral in discoveredPeripherals {
+            peripheral.resetLastTimestampValue()
+        }
+    }
+    
     private func registerNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(didConnectPeripheral(notification:)), name: .SILCentralManagerDidConnectPeripheral, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didDisconnectPeripheral(notification:)), name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
@@ -192,14 +193,61 @@ final class DebugDeviceViewModel: NSObject {
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
     }
-
-    func refreshDiscoveredPeripheralViewModels() {
-        let peripheralViewModels = discoverForCurrentArrayPeripheralDevices()
-        
-        addNewDevicesIfNeed(peripheralViewModels)
-        
-        removeDiscoveredDevicesIfNeed()
+    
+    // MARK: - Stop Scanning Was Tapped Case
+    // There is huge possibility that Core Bluetooth is building peripherals arrays from scratch because of scanning was stopped on too long (more than 5 seconds)
+    
+    private func performActionsForStopScanningWasTapped(_ peripheralViewModels: [SILDiscoveredPeripheralDisplayDataViewModel]) {
+        if replacementDiscoveredPeripheralViewModels.isEmpty {
+            fillReplacementDiscoveredPeripheralViewModel(peripheralViewModels)
+        } else {
+            if isEqualToReplacementPeripheralsViewModel(peripheralViewModels) {
+                replaceDevicesIfNeed(replacementDiscoveredPeripheralViewModels)
+                removeDiscoveredDevicesIfNeed()
+                replacementDiscoveredPeripheralViewModels = []
+            } else {
+                fillReplacementDiscoveredPeripheralViewModel(peripheralViewModels)
+            }
+        }
     }
+    
+    private func fillReplacementDiscoveredPeripheralViewModel(_ peripheralViewModels: [SILDiscoveredPeripheralDisplayDataViewModel]) {
+        replacementDiscoveredPeripheralViewModels = peripheralViewModels
+    }
+    
+    private func isEqualToReplacementPeripheralsViewModel(_ discoveredPeripherals: [SILDiscoveredPeripheralDisplayDataViewModel]) -> Bool {
+        for peripheral in discoveredPeripherals {
+            if !arrayContainDevice(peripheral, in: replacementDiscoveredPeripheralViewModels) {
+                return false
+            }
+        }
+        
+        return true
+    }
+      
+    private func replaceDevicesIfNeed(_ replaceViewModels: [SILDiscoveredPeripheralDisplayDataViewModel]) {
+        for (index, peripheral) in allDiscoveredPeripheralsViewModels.enumerated() {
+            if arrayContainDevice(peripheral, in: allDiscoveredPeripheralsViewModels) {
+                if let firstIndex = firstIndexOfReplacement(device: peripheral) {
+                    let replacement = replaceViewModels[firstIndex]
+                    if (allDiscoveredPeripheralsViewModels[index].discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite) {
+                        replacement.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite = true
+                    }
+                    allDiscoveredPeripheralsViewModels[index] = replacement
+                }
+            }
+        }
+    }
+    
+    private func firstIndexOfReplacement(device: SILDiscoveredPeripheralDisplayDataViewModel) -> Int? {
+        let firstIndex = replacementDiscoveredPeripheralViewModels.firstIndex(where: {  $0.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey == device.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
+        })
+        
+        return firstIndex
+    }
+    
+    // MARK: - Usual case
+    // (scanning is running currently)
     
     private func discoverForCurrentArrayPeripheralDevices() -> [SILDiscoveredPeripheralDisplayDataViewModel] {
         var peripheralViewModels = [SILDiscoveredPeripheralDisplayDataViewModel]()
@@ -220,7 +268,7 @@ final class DebugDeviceViewModel: NSObject {
     
     private func addNewDevicesIfNeed(_ peripheralViewModels: [SILDiscoveredPeripheralDisplayDataViewModel]) {
         for peripheralDevice in peripheralViewModels {
-            if !arrayContainDevice(device: peripheralDevice) {
+            if !arrayContainDevice(peripheralDevice, in: allDiscoveredPeripheralsViewModels) {
                 if (SILFavoritePeripheral.isFavorite(peripheralDevice)) {
                     peripheralDevice.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite = true
                     allDiscoveredPeripheralsViewModels.insert(peripheralDevice, at: 0)
@@ -239,14 +287,18 @@ final class DebugDeviceViewModel: NSObject {
         filterByBeaconTypes()
         filterByIsFavourite()
         filterByIsConnectable()
-        postReloadBrowserTable()
+        if didStopScanning {
+            postCellsForVisibleRows()
+            didStopScanning = false
+        } else {
+            postReloadBrowserTable()
+        }
     }
+
+    // MARK: - Filtering
     
     private func setupDeviceForFilter() {
-        discoveredPeripheralsViewModels = allDiscoveredPeripheralsViewModels.sorted {
-            $0.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite &&
-            !$1.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite
-        }
+        discoveredPeripheralsViewModels = allDiscoveredPeripheralsViewModels
     }
     
     private func filterByCurrentMinRSSI() {
@@ -308,23 +360,18 @@ final class DebugDeviceViewModel: NSObject {
                 connectablePredicate.evaluate(with: $0) }
         }
     }
-    
-    private func arrayContainDevice(device: SILDiscoveredPeripheralDisplayDataViewModel) -> Bool {
-        let deviceUUID = device.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral.identifier
-        for discoveredDevice in allDiscoveredPeripheralsViewModels {
-            if discoveredDevice.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral.identifier == deviceUUID {
-                return true
-            }
-        }
         
-        return false
-    }
+    // MARK: - Post Notifications
     
     private func postReloadBrowserTable() {
         NotificationCenter.default.post(name: Notification.Name(SILNotificationReloadBrowserTable), object: nil)
     }
+    
+    private func postCellsForVisibleRows() {
+        NotificationCenter.default.post(name: Notification.Name(SILNotificationCellsForVisibleRows), object: nil)
+    }
 
-    // MARK: Notifcation Methods
+    // MARK: - Notifcation Methods
 
     @objc private func didConnectPeripheral(notification: Notification) {
         guard observing else { return }
@@ -351,4 +398,14 @@ final class DebugDeviceViewModel: NSObject {
         }
         delegate?.didFailToConnect(to: peripheral)
     }
+    
+    // MARK: - Utils
+    
+    private func arrayContainDevice(_ device: SILDiscoveredPeripheralDisplayDataViewModel, in collection: [SILDiscoveredPeripheralDisplayDataViewModel]) -> Bool {
+        let containDevice = collection.contains(where: {  $0.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey == device.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
+        })
+        
+        return containDevice
+    }
+      
 }

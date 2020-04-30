@@ -19,3 +19,4 @@
 #import "SILDebugPopoverViewController.h"
 #import "UIColor+SILColors.h"
 #import "NSString+SILBrowserNotifications.h"
+#import "SILBluetoothBrowser+Constants.h"

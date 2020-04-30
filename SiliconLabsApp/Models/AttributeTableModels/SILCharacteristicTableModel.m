@@ -84,7 +84,11 @@
     self.isExpanded = !self.isExpanded;
 }
 
-- (NSString *)uuidString {
+- (NSString *)hexUuidString {
+    return [self.characteristic getHexUuidValue];
+}
+
+- (NSString*)uuidString {
     return self.characteristic.UUID.UUIDString;
 }
 
@@ -97,6 +101,12 @@
 }
 
 #pragma mark - Read
+
+- (void)readCharacteristicIfAllowed {
+    if ((self.characteristic.properties & CBCharacteristicPropertyRead) == CBCharacteristicPropertyRead) {
+        [self.characteristic.service.peripheral readValueForCharacteristic:self.characteristic];
+    }
+}
 
 - (void)updateWithField:(id<SILCharacteristicFieldRow>)fieldModel {
     NSMutableArray *fields = [[NSMutableArray alloc] initWithArray:self.fieldTableRowModels];

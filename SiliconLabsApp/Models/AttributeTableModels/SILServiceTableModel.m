@@ -59,14 +59,13 @@
     self.isExpanded = !self.isExpanded;
 }
 
-- (NSString *)uuidString {
-    NSString *uuidString = [self.service.UUID.UUIDString uppercaseString];
-    
-    if ([uuidString hasPrefix:@"0000"] && [uuidString hasSuffix:@"-0000-1000-8000-00805F9B34FB"]) {
-        uuidString = [uuidString substringWithRange:NSMakeRange(4, 4)];
-    }
-    
-    return uuidString;
+- (NSString *)hexUuidString {
+    return [self.service getHexUuidValue];
+
+}
+
+- (NSString*)uuidString {
+    return self.service.UUID.UUIDString;
 }
 
 @end

@@ -20,7 +20,7 @@ extern NSString * _Nonnull const SILCentralManagerDiscoveredPeripheralsKey;
 extern NSString * _Nonnull const SILCentralManagerPeripheralKey;
 extern NSString * _Nonnull const SILCentralManagerErrorKey;
 
-@interface SILCentralManager : NSObject <CBCentralManagerDelegate>
+@interface SILCentralManager : NSObject <CBCentralManagerDelegate, CLLocationManagerDelegate>
 
 @property (nonnull, strong, nonatomic, readonly) NSArray *serviceUUIDs;
 @property (nonnull, strong, nonatomic) CBCentralManager *centralManager;
@@ -32,7 +32,7 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 - (nonnull NSArray<SILDiscoveredPeripheral *> *)discoveredPeripherals;
 - (nullable SILDiscoveredPeripheral *)discoveredPeripheralForPeripheral:(nonnull CBPeripheral *)peripheral;
 
-- (void)insertOrUpdateDiscoveredPeripheral:(nonnull CBPeripheral *)peripheral advertisementData:(nullable NSDictionary *)advertisementData RSSI:(nullable NSNumber *)RSSI andDiscoveringTimestamp:(long long)timestamp;
+- (void)insertOrUpdateDiscoveredPeripheral:(nonnull CBPeripheral *)peripheral advertisementData:(nullable NSDictionary *)advertisementData RSSI:(nullable NSNumber *)RSSI andDiscoveringTimestamp:(double)timestamp;
 
 - (BOOL)canConnectToDiscoveredPeripheral:(nonnull SILDiscoveredPeripheral *)discoveredPeripheral;
 - (void)connectToDiscoveredPeripheral:(nonnull SILDiscoveredPeripheral *)discoveredPeripheral;

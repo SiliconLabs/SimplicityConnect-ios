@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class SILBrowserButton: UIButton {
 
-    @IBInspectable var cornerRadius: CGFloat = 4
+    @IBInspectable var cornerRadius: CGFloat = CornerRadiusForButtons
     
     override func draw(_ rect: CGRect) {
         self.layer.cornerRadius = cornerRadius

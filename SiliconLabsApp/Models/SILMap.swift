@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 
+@objc
 public protocol SILMap: class {
     dynamic var uuid: String { get set }
     dynamic var name: String { get set }

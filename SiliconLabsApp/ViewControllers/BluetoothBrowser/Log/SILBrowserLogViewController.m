@@ -42,6 +42,12 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
     [self setupViewModel];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.viewModel.shouldScrollDownLogs = YES;
+    [self scrollToBottomIfNeeded];
+}
+
 - (void)setupFilterLogViewContainer {
     [_filterLogViewContainer setHidden:YES];
     _filterLogViewHeight.constant = 0;
@@ -72,7 +78,7 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
 }
 
 - (void)setAppearanceForShareButton {
-    _shareButton.layer.cornerRadius = 10.0;
+    _shareButton.layer.cornerRadius = CornerRadiusForButtons;
     [_shareButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
     _shareButton.titleLabel.textColor = [UIColor sil_backgroundColor];
     _shareButton.imageEdgeInsets = ImageInsetsForShareButton;
@@ -148,10 +154,33 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
 
 - (void)reloadLogTableView {
     [_logTableView reloadData];
+    [self scrollToBottomIfNeeded];
+}
+
+- (void)scrollToBottomIfNeeded {
+    NSUInteger logsCount = [_viewModel.logs count];
+    if (self.viewModel.shouldScrollDownLogs && logsCount > 0) {
+        NSIndexPath* destinationIndexPath = [NSIndexPath indexPathForRow:[_viewModel.logs count] - 1 inSection:0];
+        [_logTableView scrollToRowAtIndexPath:destinationIndexPath
+            atScrollPosition:UITableViewScrollPositionBottom
+            animated:YES];
+    }
 }
 
 - (IBAction)clearLogButtonƒWasTapped:(id)sender {
     [_viewModel clearLogs];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.viewModel.shouldScrollDownLogs = NO;
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    self.viewModel.shouldScrollDownLogs = [self isLastDetectedRowVisible];
+}
+
+- (BOOL)isLastDetectedRowVisible {
+    return self.logTableView.indexPathsForVisibleRows.lastObject.row + 1 == self.viewModel.logs.count;
 }
 
 @end

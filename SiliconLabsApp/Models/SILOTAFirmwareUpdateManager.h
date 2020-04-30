@@ -33,6 +33,7 @@ typedef NS_ENUM(NSInteger, SILDFUStatus) {
 - (void)cycleDeviceWithInitiationByteSequence:(BOOL)initiatingByteSequence
                                      progress:(void(^)(SILDFUStatus status))progress
                                    completion:(void(^)(CBPeripheral *peripheral, NSError *error))completion;
+- (void)endCycleDevice;
 - (void)uploadFile:(SILOTAFirmwareFile *)file
           progress:(void(^)(NSInteger bytes, double fraction))progress
         completion:(void(^)(CBPeripheral *peripheral, NSError *error))completion;

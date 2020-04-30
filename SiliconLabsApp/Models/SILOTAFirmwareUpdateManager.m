@@ -139,6 +139,10 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
     });
 }
 
+- (void)endCycleDevice {
+    [self.centralManager removeScanForPeripheralsObserver:self];
+}
+
 - (void)searchHandlerForOTADevice {
     if (self.didDiscoverOTADevice) { return; }
     

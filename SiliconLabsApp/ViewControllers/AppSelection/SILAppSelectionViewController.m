@@ -13,7 +13,6 @@
 #import "SILCentralManagerBuilder.h"
 #import "SILHealthThermometerAppViewController.h"
 #import "SILRetailBeaconAppViewController.h"
-#import "SILDebugDeviceViewController.h"
 #import <WYPopoverController/WYPopoverController.h>
 #import "WYPopoverController+SILHelpers.h"
 #import "SILApp+AttributedProfiles.h"
@@ -22,8 +21,9 @@
 #import "SILBluetoothXMLParser.h"
 #import "UIImage+SILImages.h"
 #import "SILBluetoothBrowserViewController.h"
-#import "SILAppSelectionHelpViewController.h"
+#import "SILAppSelectionInfoViewController.h"
 #import "SILConstants.h"
+#import "SILBluetoothBrowser+Constants.h"
 #if WIRELESS
 #import "SILConnectedLightingViewController.h"
 #endif
@@ -31,7 +31,7 @@
 #import "SILHomeKitDebugDeviceViewController.h"
 #endif
 
-@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionHelpViewControllerDelegate>
+@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *allSpace;
 @property (strong, nonatomic) WYPopoverController *devicePopoverController;
@@ -121,7 +121,7 @@
 }
 
 - (void)tappedInfoImage:(UIGestureRecognizer *)gestureRecognizer {
-        [self presentAppSelectionHelpViewController:YES];
+        [self presentAppSelectionInfoViewController:YES];
 }
 
 #pragma mark - Setup View (viewDidAppear)
@@ -201,10 +201,6 @@
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"SILAppBluetoothBrowser" bundle:nil];
     SILBluetoothBrowserViewController* controller = [storyboard instantiateInitialViewController];
     [self.navigationController pushViewController:controller animated:animated];
-    
-    //SILDebugDeviceViewController *appViewController = [[SILDebugDeviceViewController alloc] init];
-    //appViewController.app = app;
-    //[self.navigationController pushViewController:appViewController animated:animated];
 }
 
 - (void)showHomeKitDebugWithApp:(SILApp *)app animated:(BOOL)animated {
@@ -248,10 +244,10 @@
     }
 }
 
-#pragma mark - Help button
+#pragma mark - Info button
 
-- (void)helpTileTapped:(UITapGestureRecognizer*)recognizer {
-    [self presentAppSelectionHelpViewController:YES];
+- (void)infoTileTapped:(UITapGestureRecognizer*)recognizer {
+    [self presentAppSelectionInfoViewController:YES];
 }
 
 #pragma mark - Collection View for Applications
@@ -350,19 +346,19 @@
     self.devicePopoverController = nil;
 }
 
-- (void)presentAppSelectionHelpViewController:(BOOL)animated {
-    SILAppSelectionHelpViewController *helpViewController = [[SILAppSelectionHelpViewController alloc] init];
-    helpViewController.delegate = self;
+- (void)presentAppSelectionInfoViewController:(BOOL)animated {
+    SILAppSelectionInfoViewController *infoViewController = [[SILAppSelectionInfoViewController alloc] init];
+    infoViewController.delegate = self;
 
-    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:helpViewController
+    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:infoViewController
                                                                                  presentingViewController:self
                                                                                                  delegate:self
                                                                                                  animated:YES];
 }
 
-#pragma mark - SILAppSelectionHelpViewControllerDelegate
+#pragma mark - SILAppSelectionInfoViewControllerDelegate
 
-- (void)didFinishHelpWithAppSelectionHelpViewController:(SILAppSelectionHelpViewController *)helpViewController {
+- (void)didFinishInfoWithAppSelectionInfoViewController:(SILAppSelectionInfoViewController *)infoViewController {
     [self.devicePopoverController dismissPopoverAnimated:YES completion:^{
         self.devicePopoverController = nil;
     }];
@@ -384,5 +380,7 @@
     [self presentDeviceSelectionViewControllerWithApp:app[0] animated:YES];
     _isDisconnectedIntentionally = NO;
 }
+
+
 
 @end

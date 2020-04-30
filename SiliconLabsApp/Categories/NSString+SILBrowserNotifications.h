@@ -20,6 +20,7 @@ extern NSString * const SILNotificationReloadLogTableView;
 extern NSString * const SILNotificationDisconnectPeripheral;
 extern NSString * const SILNotificationDeleteDisconnectedPeripheral;
 extern NSString * const SILNotificationDisconnectAllPeripheral;
+extern NSString * const SILNotificationCellsForVisibleRows;
 
 extern NSString * const SILNotificationKeyIndex;
 extern NSString * const SILNotificationKeyUUID;

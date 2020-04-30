@@ -10,7 +10,7 @@
 
 @implementation SILUITabBar
 
-CGFloat const DefaultHeight = 87.0;
+CGFloat const DefaultHeight = 70.0;
 
 - (instancetype)init {
     self = [super init];

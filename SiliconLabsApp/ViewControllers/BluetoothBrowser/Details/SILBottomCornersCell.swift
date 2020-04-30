@@ -13,7 +13,7 @@ class SILBottomCornersCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.clipsToBounds = true
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = CornerRadiusStandardValue
         self.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMaxXMaxYCorner]
     }
     

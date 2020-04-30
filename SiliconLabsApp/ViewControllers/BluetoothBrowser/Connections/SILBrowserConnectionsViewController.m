@@ -36,6 +36,7 @@
 
 - (IBAction)disconnectAllTapped:(id)sender {
     [_viewModel disconnectAllPeripheral];
+    [_delegate connectionsViewBackButtonPressed];
 }
 
 - (void)registerNibs {
@@ -55,7 +56,7 @@
 }
 
 - (void)setAppearanceForDisconnectAllButton {
-    _disconnectAllButton.layer.cornerRadius = 10.0;
+    _disconnectAllButton.layer.cornerRadius = CornerRadiusForButtons;
     [_disconnectAllButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getSmallFontSize]]];
     _disconnectAllButton.titleLabel.textColor = [UIColor sil_backgroundColor];
     _disconnectAllButton.backgroundColor = [UIColor sil_siliconLabsRedColor];

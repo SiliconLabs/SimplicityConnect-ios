@@ -23,7 +23,8 @@
 @property (class, nonatomic, assign, readonly) NSString* connectableDevice;
 @property (class, nonatomic, assign, readonly) NSString* nonConnectableDevice;
 
-
+@property (strong, nonatomic) NSString* identityKey;
+@property (strong, nonatomic) NSUUID* uuid;
 @property (strong, nonatomic) CBPeripheral *peripheral;
 @property (strong, nonatomic) SILRSSIMeasurementTable *RSSIMeasurementTable;
 @property (strong, nonatomic) NSString *advertisedLocalName;
@@ -32,7 +33,7 @@
 @property (strong, nonatomic) NSData *manufacturerData;
 @property (strong, nonatomic) SILBeacon* beacon;
 @property (nonatomic) BOOL isFavourite;
-@property long long advertisingInterval;
+@property double advertisingInterval;
 
 @property (nonatomic, weak) id<SILDiscoveredPeripheralDelegate> delegate;
 
@@ -46,12 +47,13 @@
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                  advertisementData:(NSDictionary *)advertisementData
                               RSSI:(NSNumber *)RSSI
-                andDiscoveringTimestamp:(long long)timestamp;
-
+                andDiscoveringTimestamp:(double)timestamp;
 - (void)updateWithAdvertisementData:(NSDictionary *)advertisementData
                                          RSSI:(NSNumber *)RSSI
-                andDiscoveringTimestamp:(long long)timestamp;
-
+                andDiscoveringTimestamp:(double)timestamp;
+- (instancetype)initWithIBeacon:(CLBeacon*)iBeacon andDiscoveringTimestamp:(double)timestamp;
+- (void)updateWithIBeacon:(CLBeacon*)iBeacon andDiscoveringTimestamp:(double)timestamp;
 - (NSString *)rssiDescription;
+- (void)resetLastTimestampValue;
 
 @end

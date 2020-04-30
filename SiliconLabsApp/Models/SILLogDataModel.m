@@ -27,7 +27,7 @@
 - (NSString*)getCurrentTime {
     NSDate *today = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm:ss.mmm"];
+    [dateFormatter setDateFormat:@"HH:mm:ss.SSS"];
     NSString *currentTime = [dateFormatter stringFromDate:today];
     return currentTime;
 }

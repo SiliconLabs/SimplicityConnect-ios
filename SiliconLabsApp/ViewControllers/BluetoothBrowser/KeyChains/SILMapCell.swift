@@ -11,6 +11,7 @@ import UIKit
 @objc
 protocol SILMapCellDelegate {
     @objc func editName(cell: UITableViewCell)
+    @objc optional func delete(cell: UITableViewCell)
 }
 
 @objc
@@ -29,5 +30,27 @@ class SILMapCell: SILCell, SILMapCellProtocol {
         nameLabel.text = ""
         uuidLabel.text = ""
     }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupTapGestureForNameLabel()
+    }
+    
+    private func setupTapGestureForNameLabel() {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(callEditNameDelegateMethod))
+        nameLabel.isUserInteractionEnabled = true
+        nameLabel.addGestureRecognizer(tapRecognizer)
+    }
 
+    @IBAction func editButtonWasTapped(_ sender: UIButton) {
+        callEditNameDelegateMethod()
+    }
+    
+    @IBAction func deleteButtonWasTapped(_ sender: UIButton) {
+        delegate.delete!(cell: self)
+    }
+    
+    @objc private func callEditNameDelegateMethod() {
+        delegate.editName(cell: self)
+    }
 }

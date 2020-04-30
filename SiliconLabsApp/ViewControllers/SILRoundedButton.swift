@@ -12,7 +12,7 @@ import UIKit
 class SILRoundedButton: UIButton {
 
     override func draw(_ rect: CGRect) {
-        self.layer.cornerRadius = 4.0
+        self.layer.cornerRadius = CornerRadiusForButtons
         self.layer.masksToBounds = true
     }
     

@@ -57,7 +57,7 @@
                                                                 </constraints>
                                                                 <state key="normal" image="icon - dictionary - book"/>
                                                                 <connections>
-                                                                    <segue destination="S7Z-Us-KTr" kind="presentation" id="BUY-s1-14G"/>
+                                                                    <segue destination="S7Z-Us-KTr" kind="show" id="BUY-s1-14G"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -128,7 +128,7 @@
                                                             <action selector="filterButtonTapped:" destination="htA-Ar-Ec7" eventType="touchUpInside" id="UEk-j3-48l"/>
                                                         </connections>
                                                     </button>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon - edit" translatesAutoresizingMaskIntoConstraints="NO" id="sA9-L6-bLU" userLabel="Filter Image">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Edit" translatesAutoresizingMaskIntoConstraints="NO" id="sA9-L6-bLU" userLabel="Filter Image">
                                                         <rect key="frame" x="377" y="0.0" width="21" height="21"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="21" id="tzS-dW-Hmo"/>
@@ -175,7 +175,7 @@
                                                                                     <rect key="frame" x="0.0" y="0.0" width="374" height="127"/>
                                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                                     <subviews>
-                                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jsd-Ri-A7z" customClass="SILCanvasView" customModule="BlueGecko" customModuleProvider="target">
+                                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jsd-Ri-A7z">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="127"/>
                                                                                             <subviews>
                                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BGX-XXX1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qII-Te-8cq">
@@ -392,7 +392,6 @@
                                                                                     <outlet property="beaconImageView" destination="dE4-a7-byj" id="Frg-G9-Zh2"/>
                                                                                     <outlet property="beaconLabel" destination="gSS-H3-hrI" id="7BC-dh-int"/>
                                                                                     <outlet property="btImageView" destination="W6B-qy-T9k" id="wyN-Vs-v59"/>
-                                                                                    <outlet property="canvas" destination="jsd-Ri-A7z" id="u4z-ps-LPA"/>
                                                                                     <outlet property="connectButton" destination="KRn-Wy-DJd" id="nyM-VE-hnT"/>
                                                                                     <outlet property="connectButtonWidth" destination="TS0-11-I7J" id="55v-87-10j"/>
                                                                                     <outlet property="connectableLabel" destination="aOk-zO-GHE" id="ITH-XD-Bd0"/>
@@ -416,6 +415,13 @@
                                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pQa-FK-JAL" userLabel="Canvas">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="76"/>
                                                                                             <subviews>
+                                                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3I2-E2-9fA" userLabel="Top Separator View">
+                                                                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="1"/>
+                                                                                                    <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                    <constraints>
+                                                                                                        <constraint firstAttribute="height" constant="1" id="khp-6q-lAt"/>
+                                                                                                    </constraints>
+                                                                                                </view>
                                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xll-yy-vAp" userLabel="UUID">
                                                                                                     <rect key="frame" x="16" y="40" width="342" height="19"/>
                                                                                                     <constraints>
@@ -439,9 +445,12 @@
                                                                                             <constraints>
                                                                                                 <constraint firstItem="mUf-ZT-PrU" firstAttribute="leading" secondItem="pQa-FK-JAL" secondAttribute="leading" constant="16" id="7zS-wm-vLf"/>
                                                                                                 <constraint firstAttribute="trailing" secondItem="mUf-ZT-PrU" secondAttribute="trailing" constant="16" id="Bv3-GJ-8tF"/>
+                                                                                                <constraint firstItem="3I2-E2-9fA" firstAttribute="leading" secondItem="pQa-FK-JAL" secondAttribute="leading" id="MdC-fl-dVy"/>
+                                                                                                <constraint firstAttribute="trailing" secondItem="3I2-E2-9fA" secondAttribute="trailing" id="Scv-cZ-wJW"/>
                                                                                                 <constraint firstItem="Xll-yy-vAp" firstAttribute="leading" secondItem="pQa-FK-JAL" secondAttribute="leading" constant="16" id="V7O-bs-EGB"/>
                                                                                                 <constraint firstItem="mUf-ZT-PrU" firstAttribute="top" secondItem="pQa-FK-JAL" secondAttribute="top" constant="17" id="jfo-dT-r8w"/>
                                                                                                 <constraint firstItem="Xll-yy-vAp" firstAttribute="top" secondItem="mUf-ZT-PrU" secondAttribute="bottom" constant="4" id="l6e-LD-v4A"/>
+                                                                                                <constraint firstItem="3I2-E2-9fA" firstAttribute="top" secondItem="pQa-FK-JAL" secondAttribute="top" id="oYf-dL-cIZ"/>
                                                                                                 <constraint firstAttribute="trailing" secondItem="Xll-yy-vAp" secondAttribute="trailing" constant="16" id="smN-aH-NfC"/>
                                                                                             </constraints>
                                                                                         </view>
@@ -464,23 +473,44 @@
                                                                             <outlet property="delegate" destination="htA-Ar-Ec7" id="Z8t-eG-eAz"/>
                                                                         </connections>
                                                                     </tableView>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BTStrong" translatesAutoresizingMaskIntoConstraints="NO" id="oHc-jd-mYp" userLabel="Empty Image View">
-                                                                        <rect key="frame" x="132" y="241" width="150" height="150"/>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CMs-5G-emG" userLabel="No Devices Found Stack View">
+                                                                        <rect key="frame" x="57" y="231" width="300" height="170"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jgo-j3-l2S" userLabel="No Devices Found Image View">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="141"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BTStrong" id="oHc-jd-mYp" userLabel="Empty Image View">
+                                                                                        <rect key="frame" x="75" y="-35" width="150" height="150"/>
+                                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="width" secondItem="oHc-jd-mYp" secondAttribute="height" multiplier="1:1" id="9E4-9s-KIY"/>
+                                                                                            <constraint firstAttribute="width" constant="150" id="g1C-VF-ebG"/>
+                                                                                        </constraints>
+                                                                                    </imageView>
+                                                                                </subviews>
+                                                                            </view>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Looking for nearby devices..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DYw-SX-SLm">
+                                                                                <rect key="frame" x="0.0" y="141" width="300" height="29"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" secondItem="oHc-jd-mYp" secondAttribute="height" multiplier="1:1" id="9E4-9s-KIY"/>
-                                                                            <constraint firstAttribute="width" constant="150" id="g1C-VF-ebG"/>
+                                                                            <constraint firstAttribute="width" constant="300" id="dC6-uF-K3Z"/>
+                                                                            <constraint firstAttribute="height" constant="170" id="irc-9i-XhL"/>
                                                                         </constraints>
-                                                                    </imageView>
+                                                                    </stackView>
                                                                 </subviews>
                                                                 <color key="backgroundColor" red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <constraints>
                                                                     <constraint firstItem="huc-iN-eY1" firstAttribute="leading" secondItem="mmJ-dg-Dyq" secondAttribute="leading" id="64h-gA-dTX"/>
-                                                                    <constraint firstItem="oHc-jd-mYp" firstAttribute="centerX" secondItem="mmJ-dg-Dyq" secondAttribute="centerX" id="Bdh-d0-mBs"/>
+                                                                    <constraint firstItem="CMs-5G-emG" firstAttribute="centerX" secondItem="mmJ-dg-Dyq" secondAttribute="centerX" id="7hW-YT-c5c"/>
                                                                     <constraint firstItem="huc-iN-eY1" firstAttribute="centerX" secondItem="mmJ-dg-Dyq" secondAttribute="centerX" id="I4i-jo-WUC"/>
                                                                     <constraint firstAttribute="bottom" secondItem="huc-iN-eY1" secondAttribute="bottom" id="OUb-fe-hL8"/>
-                                                                    <constraint firstItem="oHc-jd-mYp" firstAttribute="centerY" secondItem="mmJ-dg-Dyq" secondAttribute="centerY" id="P4d-Dv-KkV"/>
                                                                     <constraint firstAttribute="trailing" secondItem="huc-iN-eY1" secondAttribute="trailing" id="Ry5-4x-hU3"/>
                                                                     <constraint firstItem="huc-iN-eY1" firstAttribute="top" secondItem="mmJ-dg-Dyq" secondAttribute="top" id="fMC-mu-k8s"/>
+                                                                    <constraint firstItem="CMs-5G-emG" firstAttribute="centerY" secondItem="mmJ-dg-Dyq" secondAttribute="centerY" id="pru-9t-A8A"/>
                                                                 </constraints>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIr-Td-yCl" userLabel="Scanning Button">
@@ -566,13 +596,15 @@
                         <outlet property="browserTableView" destination="huc-iN-eY1" id="xaL-AT-5Zs"/>
                         <outlet property="connectionsButton" destination="ah0-gv-OZM" id="jVu-il-M8S"/>
                         <outlet property="discoveredDevicesView" destination="QvJ-0t-qnm" id="GB2-iz-h3o"/>
-                        <outlet property="emptyImageView" destination="oHc-jd-mYp" id="CI7-5n-4FL"/>
                         <outlet property="expandableControllerHeight" destination="tzv-a1-5P4" id="gTY-hF-DBq"/>
                         <outlet property="expandableControllerView" destination="m6D-fb-bwy" id="bcm-9y-Ihl"/>
                         <outlet property="filterButton" destination="Ust-Ka-7jV" id="YRH-xP-Amc"/>
                         <outlet property="logButton" destination="fve-O0-iTS" id="6CX-eK-rZX"/>
                         <outlet property="navigationBarTitleLabel" destination="npK-eI-zJW" id="qcT-96-qhP"/>
                         <outlet property="navigationBarView" destination="fy5-9Z-W8l" id="g1K-JF-K5i"/>
+                        <outlet property="noDevicesFoundImageView" destination="oHc-jd-mYp" id="CI7-5n-4FL"/>
+                        <outlet property="noDevicesFoundLabel" destination="DYw-SX-SLm" id="Gnz-bg-tgB"/>
+                        <outlet property="noDevicesFoundView" destination="CMs-5G-emG" id="W9d-rE-7Pd"/>
                         <outlet property="presentationView" destination="MW9-lN-Pgh" id="Srx-qt-YFo"/>
                         <outlet property="scanningButton" destination="eGY-mi-1GU" id="gTI-D7-TV2"/>
                         <outlet property="tableLeftInset" destination="64h-gA-dTX" id="Dkz-yG-Nwl"/>
@@ -586,7 +618,9 @@
         <!--SILKeychain-->
         <scene sceneID="Cco-4k-h9c">
             <objects>
-                <viewControllerPlaceholder storyboardName="SILKeychain" id="S7Z-Us-KTr" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="SILKeychain" id="S7Z-Us-KTr" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="v41-au-GH7"/>
+                </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fsL-iM-gmd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="659" y="-45"/>
@@ -1490,6 +1524,7 @@
                                                     <constraint firstAttribute="height" constant="16" id="kck-Ri-vHT"/>
                                                 </constraints>
                                             </imageView>
+>>>>>>> BTAPP-718-reskining-browser
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="SZH-Gq-0va" firstAttribute="height" secondItem="8u8-Nt-aNc" secondAttribute="height" constant="-4" id="Mem-3t-WOu"/>
@@ -1603,13 +1638,13 @@
     </scenes>
     <resources>
         <image name="BTStrong" width="47" height="47"/>
+        <image name="Edit" width="30" height="30"/>
         <image name="beacon" width="14.5" height="18"/>
         <image name="chevron_collapsed" width="14" height="9"/>
         <image name="clock" catalog="system" width="64" height="60"/>
         <image name="exitView" width="24" height="24"/>
         <image name="icon - bluetooth" width="17" height="19.5"/>
         <image name="icon - dictionary - book" width="21" height="24"/>
-        <image name="icon - edit" width="18" height="18"/>
         <image name="icon - star - off" width="18" height="17"/>
         <image name="icon - star - on" width="18" height="17"/>
         <image name="left_chevron" width="8" height="13"/>

@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic, readwrite) NSString *filterLogText;
 @property (strong, nonatomic, readwrite) NSMutableArray<SILLogDataModel*>* logs;
+@property (nonatomic, readwrite) BOOL shouldScrollDownLogs;
 
 + (instancetype)sharedInstance;
 - (void)clearLogs;

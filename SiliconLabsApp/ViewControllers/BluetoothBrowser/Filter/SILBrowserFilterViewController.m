@@ -206,8 +206,11 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [self manageClearImageState:textView];
 }
 
-
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if (text.length == 0) {
+          return YES;
+    }
+    
     if ([text isEqualToString:DiscardKeybordText]) {
         [self updateSearchTextViewModels];
         [textView resignFirstResponder];
@@ -215,9 +218,7 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     }
     
     if ([textView isEqual:_searchByRawAdvertisementDataTextView]) {
-        if ([self isHexNumberInString:text] == false) {
-            return NO;
-        }
+        return [self isHexNumberInString:text];
     }
     
     return YES;
@@ -497,7 +498,7 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 }
 
 - (void)setAppearanceForSearchButton {
-    _searchButton.layer.cornerRadius = 10.0;
+    _searchButton.layer.cornerRadius = CornerRadiusForButtons;
     [_searchButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
     _searchButton.titleLabel.textColor = [UIColor sil_backgroundColor];
 }
@@ -561,12 +562,9 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 # pragma mark - Hex Number Checker
 
 - (BOOL)isHexNumberInString:(NSString*)text {
-    NSInteger asciiValue = [text characterAtIndex:FirstIndex];
-    if (((asciiValue >= ASCIICodeFor0 && asciiValue <= ASCIICodeFor9) || (asciiValue >= ASCIICodeForA && asciiValue <= ASCIICodeForF))) {
-        return YES;
-    }
-    
-    return NO;
+    NSString* const HexsNumbersPattern = @"[0-9A-F]";
+    NSRange range = [text rangeOfString:HexsNumbersPattern options:NSRegularExpressionSearch];
+    return range.location != NSNotFound;
 }
 
 @end

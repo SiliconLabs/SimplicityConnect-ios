@@ -12,7 +12,6 @@ import UIKit
 @objcMembers
 class SILBrowserDeviceViewCell: SILCell {
     
-    @IBOutlet weak var canvas: SILCanvasView!
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var favouritesButton: UIButton!
     @IBOutlet weak var connectButton: SILBrowserButton!

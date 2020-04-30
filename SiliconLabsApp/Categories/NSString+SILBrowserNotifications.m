@@ -20,6 +20,7 @@ NSString * const SILNotificationReloadLogTableView = @"ReloadLogTableView";
 NSString * const SILNotificationDisconnectPeripheral = @"DisconnectPeripheral";
 NSString * const SILNotificationDeleteDisconnectedPeripheral = @"DeleteDisconnectedPeripheral";
 NSString * const SILNotificationDisconnectAllPeripheral = @"DisconnectAllPeripheral";
+NSString * const SILNotificationCellsForVisibleRows = @"CellsForVisibleRows";
 
 NSString * const SILNotificationKeyIndex = @"index";
 NSString * const SILNotificationKeyUUID = @"uuid";

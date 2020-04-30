@@ -14,7 +14,7 @@ class SILCell: UITableViewCell {
         didSet {
             if self.isRounded == true {
                 self.clipsToBounds = true
-                self.layer.cornerRadius = 10
+                self.layer.cornerRadius = CornerRadiusStandardValue
             } else {
                 self.layer.cornerRadius = 0
             }
@@ -38,7 +38,7 @@ class SILCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = CornerRadiusStandardValue
     }
 
 }

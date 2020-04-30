@@ -11,22 +11,25 @@
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
         </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILMapNameEditorViewController" customModule="BlueGecko" customModuleProvider="target">
             <connections>
+                <outlet property="cancelButton" destination="ZpR-4m-sQI" id="IH2-ND-naJ"/>
                 <outlet property="invalidInputLabel" destination="dHU-0D-WjK" id="Zpo-4r-upw"/>
                 <outlet property="modelNameLabel" destination="gsr-nI-9lW" id="yF0-Jc-YCJ"/>
                 <outlet property="modelUuidLabel" destination="0Bs-Nt-LE9" id="EUa-Fp-z8b"/>
                 <outlet property="nameField" destination="5Os-OH-INL" id="KCW-ij-lv6"/>
-                <outlet property="resetButton" destination="ZpR-4m-sQI" id="IH2-ND-naJ"/>
                 <outlet property="saveButton" destination="1HO-Rv-IuO" id="gnP-YJ-C3B"/>
                 <outlet property="view" destination="gEa-fx-fhm" id="8p1-Tq-Z4w"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="gEa-fx-fhm">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="180"/>
+            <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U9f-PS-M1o" userLabel="Header">
@@ -37,7 +40,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="8NZ-Bh-0RT"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
                             <color key="textColor" red="0.2470588235" green="0.23921568630000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -46,7 +49,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="28" id="25U-Bi-zlk"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                             <color key="textColor" red="0.4039215686" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -63,14 +66,14 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TTf-VS-zg3" userLabel="Field container">
-                    <rect key="frame" x="0.0" y="72" width="300" height="60"/>
+                    <rect key="frame" x="0.0" y="72" width="300" height="70"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter a value for this field" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Os-OH-INL">
                             <rect key="frame" x="16" y="10" width="268" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="32" id="i5n-TY-9fH"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zd8-i6-RQ4" userLabel="Baseline">
@@ -80,13 +83,13 @@
                                 <constraint firstAttribute="height" constant="1" id="CHp-z2-FYp"/>
                             </constraints>
                         </view>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invalid input" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHU-0D-WjK">
-                            <rect key="frame" x="16" y="42" width="78" height="17"/>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name field cannot be empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHU-0D-WjK">
+                            <rect key="frame" x="16" y="50" width="238" height="20"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="17" id="Dcc-zx-NBV"/>
-                                <constraint firstAttribute="width" constant="78" id="zoA-rH-LBe"/>
+                                <constraint firstAttribute="height" constant="20" id="Dcc-zx-NBV"/>
+                                <constraint firstAttribute="width" constant="238" id="zoA-rH-LBe"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                             <color key="textColor" red="0.73333333329999995" green="0.14901960780000001" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -95,7 +98,7 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Zd8-i6-RQ4" secondAttribute="trailing" constant="16" id="0Jx-79-aLQ"/>
                         <constraint firstAttribute="trailing" secondItem="5Os-OH-INL" secondAttribute="trailing" constant="16" id="5Em-FP-8sL"/>
-                        <constraint firstItem="dHU-0D-WjK" firstAttribute="top" secondItem="5Os-OH-INL" secondAttribute="bottom" id="DWD-sX-2cR"/>
+                        <constraint firstItem="dHU-0D-WjK" firstAttribute="top" secondItem="5Os-OH-INL" secondAttribute="bottom" constant="8" id="DWD-sX-2cR"/>
                         <constraint firstItem="Zd8-i6-RQ4" firstAttribute="top" secondItem="5Os-OH-INL" secondAttribute="bottom" id="Hme-kP-hKZ"/>
                         <constraint firstItem="dHU-0D-WjK" firstAttribute="leading" secondItem="TTf-VS-zg3" secondAttribute="leading" constant="16" id="N2d-bh-xly"/>
                         <constraint firstItem="5Os-OH-INL" firstAttribute="top" secondItem="TTf-VS-zg3" secondAttribute="top" constant="10" id="XDN-BX-JRZ"/>
@@ -104,16 +107,16 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5hZ-46-jnS" userLabel="Bottom Bar">
-                    <rect key="frame" x="0.0" y="132" width="300" height="48"/>
+                    <rect key="frame" x="0.0" y="142" width="300" height="48"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dxa-2h-yEO">
-                            <rect key="frame" x="90" y="-1" width="120" height="50"/>
+                            <rect key="frame" x="90" y="0.0" width="120" height="48"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-Vp-lxn">
-                                    <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="60" height="48"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZpR-4m-sQI" userLabel="Cancel Button">
-                                            <rect key="frame" x="1" y="12" width="50" height="26"/>
+                                            <rect key="frame" x="2" y="11" width="50" height="26"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="26" id="7X2-VX-e0T"/>
                                                 <constraint firstAttribute="width" constant="50" id="S7Q-W0-Y6d"/>
@@ -124,21 +127,20 @@
                                             </state>
                                             <connections>
                                                 <action selector="cancel:" destination="-1" eventType="touchUpInside" id="x1P-TT-X3B"/>
-                                                <action selector="reset:" destination="-1" eventType="touchUpInside" id="jKn-4f-25B"/>
                                             </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     <constraints>
                                         <constraint firstItem="ZpR-4m-sQI" firstAttribute="centerY" secondItem="hcD-Vp-lxn" secondAttribute="centerY" id="5e2-gj-6fn"/>
-                                        <constraint firstAttribute="trailing" secondItem="ZpR-4m-sQI" secondAttribute="trailing" constant="9" id="YXr-Mi-bTk"/>
+                                        <constraint firstAttribute="trailing" secondItem="ZpR-4m-sQI" secondAttribute="trailing" constant="8" id="YXr-Mi-bTk"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REI-ox-SSv">
-                                    <rect key="frame" x="60" y="0.0" width="60" height="50"/>
+                                    <rect key="frame" x="60" y="0.0" width="60" height="48"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1HO-Rv-IuO" userLabel="Save Button" customClass="SILRoundedButton" customModule="BlueGecko" customModuleProvider="target">
-                                            <rect key="frame" x="9" y="12" width="50" height="26"/>
+                                            <rect key="frame" x="8" y="11" width="50" height="26"/>
                                             <color key="backgroundColor" red="0.0" green="0.52549019610000003" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="26" id="2k9-p4-ocS"/>
@@ -156,7 +158,7 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     <constraints>
                                         <constraint firstItem="1HO-Rv-IuO" firstAttribute="centerY" secondItem="REI-ox-SSv" secondAttribute="centerY" id="NRn-nA-Br8"/>
-                                        <constraint firstItem="1HO-Rv-IuO" firstAttribute="leading" secondItem="REI-ox-SSv" secondAttribute="leading" constant="9" id="k0y-I2-VmO"/>
+                                        <constraint firstItem="1HO-Rv-IuO" firstAttribute="leading" secondItem="REI-ox-SSv" secondAttribute="leading" constant="8" id="k0y-I2-VmO"/>
                                     </constraints>
                                 </view>
                             </subviews>
@@ -176,7 +178,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="J7N-rl-3ce"/>
-                        <constraint firstItem="dxa-2h-yEO" firstAttribute="top" secondItem="5hZ-46-jnS" secondAttribute="top" constant="-1" id="Rv9-1e-8JD"/>
+                        <constraint firstItem="dxa-2h-yEO" firstAttribute="top" secondItem="5hZ-46-jnS" secondAttribute="top" id="Rv9-1e-8JD"/>
                         <constraint firstItem="dxa-2h-yEO" firstAttribute="centerY" secondItem="5hZ-46-jnS" secondAttribute="centerY" id="d2G-kZ-ILQ"/>
                         <constraint firstItem="dxa-2h-yEO" firstAttribute="centerX" secondItem="5hZ-46-jnS" secondAttribute="centerX" id="rH3-tL-x4m"/>
                     </constraints>

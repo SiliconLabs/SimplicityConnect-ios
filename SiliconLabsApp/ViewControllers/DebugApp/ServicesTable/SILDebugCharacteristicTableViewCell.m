@@ -48,6 +48,7 @@ NSString * const KVONotifyingName = @"notifying";
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    [self addGestureRecognizerForCharacteristicNameLabel];
 }
 
 - (void)configureWithCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel {
@@ -56,7 +57,7 @@ NSString * const KVONotifyingName = @"notifying";
     self.characteristic = characteristicModel.characteristic;
     [self.nameEditButton setHidden:!characteristicModel.isMappable];
     self.characteristicNameLabel.text = [characteristicModel name];
-    self.characteristicUuidLabel.text = [characteristicModel uuidString] ?: EmptyText;
+    self.characteristicUuidLabel.text = [characteristicModel hexUuidString] ?: EmptyText;
     if (characteristicModel.descriptorModels.count == 0) {
         [self.descriptorsView setHidden:YES];
     } else {
@@ -76,11 +77,23 @@ NSString * const KVONotifyingName = @"notifying";
     for (SILDescriptorTableModel* descriptor in descriptorsModel) {
         [text appendString:[[NSString alloc] initWithFormat:@"%@", descriptor.descriptor.UUID]];
         [text appendString:@" (UUID: "];
-        [text appendString:[[NSString alloc] initWithFormat:@"%@", descriptor.descriptor.UUID.UUIDString]];
+        [text appendString:[[NSString alloc] initWithFormat:@"%@", descriptor.hexUuidString]];
         [text appendString:@")\n"];
     }
     
     return [[NSString alloc] initWithString:text];
+}
+
+- (void)addGestureRecognizerForCharacteristicNameLabel {
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(characteristicNameLabelWasTapped)];
+    [self.characteristicNameLabel setUserInteractionEnabled:YES];
+    [self.characteristicNameLabel addGestureRecognizer:tap];
+}
+
+- (void)characteristicNameLabelWasTapped {
+    if (![self.nameEditButton isHidden]) {
+        [self.delegate editNameWithCell:self];
+    }
 }
 
 #if ENABLE_HOMEKIT

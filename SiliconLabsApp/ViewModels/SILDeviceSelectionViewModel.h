@@ -13,19 +13,12 @@
 @interface SILDeviceSelectionViewModel : NSObject
 
 @property (strong, nonatomic) SILApp *app;
-@property (strong, nonatomic) NSMutableArray *discoveredCompatibleDevices;
-@property (strong, nonatomic) NSMutableArray *discoveredOtherDevices;
+@property (strong, nonatomic) NSArray<SILDiscoveredPeripheral*>* discoveredDevices;
 @property (strong, nonatomic) SILDiscoveredPeripheral *connectingPeripheral;
 @property (assign, nonatomic) BOOL hasDataChanged;
 
 - (instancetype)initWithAppType:(SILApp *)app;
-- (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray *)discoveredPeripherals;
-- (NSArray *)discoveredDevicesForIndex:(NSInteger)index;
-- (NSArray *)availableTabs;
+- (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals;
 - (NSString *)selectDeviceString;
-- (NSString *)appTitleLabelString;
-- (NSString *)appDescriptionString;
-- (NSAttributedString *)appShowcaseLabelString;
-
 
 @end

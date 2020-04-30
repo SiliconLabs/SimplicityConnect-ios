@@ -21,9 +21,8 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.clipsToBounds = true
-        self.layer.cornerRadius = 10
-        self.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+        setupAppearance()
+        addGestureRecognizerForServiceNameLabel()
     }
     
     override func prepareForReuse() {
@@ -33,6 +32,18 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    private func setupAppearance() {
+        self.clipsToBounds = true
+        self.layer.cornerRadius = CornerRadiusStandardValue
+        self.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+    }
+    
+    private func addGestureRecognizerForServiceNameLabel() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(serviceNameLabelWasTapped))
+        self.serviceNameLabel.isUserInteractionEnabled = true
+        self.serviceNameLabel.addGestureRecognizer(tap)
     }
 
     @IBAction func moreInfo(_ sender: UIButton) {
@@ -52,7 +63,13 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
     }
     
     @IBAction func editName(_ sender: UIButton) {
-        delegate?.editName(cell: self)
+        delegate.editName(cell: self)
+    }
+    
+    @objc func serviceNameLabelWasTapped() {
+        if !nameEditButton.isHidden {
+            delegate.editName(cell: self)
+        }
     }
     
     internal func customizeMoreInfoText(_ isExpanding: Bool) {

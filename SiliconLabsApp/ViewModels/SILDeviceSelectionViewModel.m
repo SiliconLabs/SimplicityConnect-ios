@@ -20,98 +20,43 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
     return self;
 }
 
-- (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray *)discoveredPeripherals {
-    self.discoveredCompatibleDevices = [NSMutableArray array];
-    self.discoveredOtherDevices = [NSMutableArray array];
-    
-    for (SILDiscoveredPeripheral *discoveredPeripheral in discoveredPeripherals) {
-        const BOOL isCompatibleDevice = [self isCompatibleDevice:discoveredPeripheral];
-        
-        if (isCompatibleDevice) {
-            [self.discoveredCompatibleDevices addObject:discoveredPeripheral];
-        } else {
-            [self.discoveredOtherDevices addObject:discoveredPeripheral];
-        }
-    }
-    
-    [self sortDiscoveredDevices:self.discoveredCompatibleDevices];
-    [self sortDiscoveredDevices:self.discoveredOtherDevices];
-    
+- (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
+    self.discoveredDevices = [self sortedDiscoveredDevices:[self removeNonConnectableDevices:discoveredPeripherals]];
     self.hasDataChanged = YES;
 }
 
-- (BOOL)isCompatibleDevice:(SILDiscoveredPeripheral *)discoveredPeripheral {
-    NSArray * compatibleServices;
-    
-    if (self.app.appType == SILAppTypeRangeTest) {
-        compatibleServices = @[
-                               @([discoveredPeripheral isRangeTest]),
-                               ];
-    } else {
-        compatibleServices = @[
-                               @([discoveredPeripheral isDMPConnectedLightConnect]),
-                               @([discoveredPeripheral isDMPConnectedLightProprietary]),
-                               @([discoveredPeripheral isDMPConnectedLightThread]),
-                               @([discoveredPeripheral isDMPConnectedLightZigbee]),
-                               ];
-    }
-    
-    return [compatibleServices containsObject:@(YES)];
+- (NSArray<SILDiscoveredPeripheral*>*)removeNonConnectableDevices:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
+    NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"isConnectable == YES"];
+    return [discoveredPeripherals filteredArrayUsingPredicate:filterPredicate];
 }
 
-- (void)sortDiscoveredDevices:(NSMutableArray*)devices {
-    [devices sortUsingComparator:^NSComparisonResult(SILDiscoveredPeripheral* obj1, SILDiscoveredPeripheral* obj2) {
-        NSString *nameOfObj1 = obj1.advertisedLocalName;
-        NSString *nameOfObj2 = obj2.advertisedLocalName;
-        
-        if (nameOfObj1 != nil) {
-            return [nameOfObj1 localizedCaseInsensitiveCompare:nameOfObj2];
-        } else if (nameOfObj2 != nil) {
-            return [nameOfObj2 localizedCaseInsensitiveCompare:nameOfObj1];
-        } else {
-            return NSOrderedSame;
-        }
+- (NSArray<SILDiscoveredPeripheral*>*)sortedDiscoveredDevices:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
+    return [discoveredPeripherals sortedArrayUsingComparator:^NSComparisonResult(SILDiscoveredPeripheral* obj1, SILDiscoveredPeripheral* obj2) {
+        return [self compareFirstPeripheral:obj1 withSecondPeripheral:obj2];
     }];
 }
 
-- (NSArray *)discoveredDevicesForIndex:(NSInteger)index {
-    if (index == 0) {
-        return self.discoveredCompatibleDevices;
+- (NSInteger)compareFirstPeripheral:(SILDiscoveredPeripheral*)obj1 withSecondPeripheral:(SILDiscoveredPeripheral*)obj2 {
+    NSString *nameOfObj1 = obj1.advertisedLocalName;
+    NSString *nameOfObj2 = obj2.advertisedLocalName;
+    
+    if (nameOfObj1 != nil) {
+        return [nameOfObj1 localizedCaseInsensitiveCompare:nameOfObj2];
+    } else if (nameOfObj2 != nil) {
+        return [nameOfObj2 localizedCaseInsensitiveCompare:nameOfObj1];
     } else {
-        return self.discoveredOtherDevices;
-    }
-}
-
-- (NSArray *)availableTabs {
-    if (self.app.appType == SILAppTypeHealthThermometer) {
-        return @[@"EFR", @"Other"];
-    } else if (self.app.appType == SILAppTypeConnectedLighting || self.app.appType == SILAppTypeRangeTest) {
-        return @[@"Wireless Gecko"];
-    } else {
-        return @[@""];
+        return NSOrderedSame;
     }
 }
 
 - (NSString *)selectDeviceString {
     if (self.app.appType == SILAppTypeHealthThermometer) {
-        return @"Select a Bluetooth Smart Device";
+        return @"Select a Bluetooth Device";
     } else if (self.app.appType == SILAppTypeConnectedLighting || self.app.appType == SILAppTypeRangeTest) {
         return @"Select a Wireless Gecko Device";
     } else {
         return @"";
     }
-}
-
-- (NSString *)appTitleLabelString {
-    return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? self.app.title : [self.app.title uppercaseString];
-}
-
-- (NSString *)appDescriptionString {
-    return self.app.appDescription;
-}
-
-- (NSAttributedString *)appShowcaseLabelString {
-    return [self.app showcasedProfilesAttributedStringWithUserInterfaceIdiom:UI_USER_INTERFACE_IDIOM()];
 }
 
 @end

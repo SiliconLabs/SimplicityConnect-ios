@@ -28,7 +28,7 @@
     self.deviceNameLabel.textColor = [UIColor sil_primaryTextColor];
     self.deviceNameLabel.adjustsFontSizeToFitWidth = YES;
     
-    self.disconnectButton.layer.cornerRadius = 10.0;
+    self.disconnectButton.layer.cornerRadius = CornerRadiusForButtons;
     self.disconnectButton.titleLabel.font = [UIFont robotoMediumWithSize:[UIFont getSmallFontSize]];
     self.disconnectButton.backgroundColor = [UIColor sil_siliconLabsRedColor];
     self.disconnectButton.titleLabel.textColor = [UIColor sil_backgroundColor];

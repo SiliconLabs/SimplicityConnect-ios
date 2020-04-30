@@ -16,5 +16,7 @@
 - (BOOL)canExpand;
 - (void)toggleExpansionIfAllowed;
 - (NSString *)uuidString;
+- (NSString *)hexUuidString;
+- (NSString *)name;
 
 @end
