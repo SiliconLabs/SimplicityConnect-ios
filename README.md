@@ -11,7 +11,7 @@ The app is divided into two main functional areas, the demo and the develop view
 
 The demo view lists a number of demos that are meant for quickly testing some of the sample apps in the Silicon Labs Bluetooth SDK. The currently supported demos are:
 
-- **Health Thermometer demo:** Connects to an EFR32/BGM device running the soc-thermometer sample application from the Bluetooth SDK and displays the temperature read from the SI7021 sensor on the WSTK mainboard.
+- **Health Thermometer demo:** Connects to an EFR32/BGM device running the soc-thermometer sample application from the Bluetooth SDK and displays the temperature read from the SI7021 sensor on the WSTK mainboard. 
 
 The develop view contains functionalities focused on helping developers create and troubleshoot their Bluetooth applications based on EFR32/BGM devices. The currently supported functionalities are:
 
@@ -27,7 +27,7 @@ The develop view contains functionalities focused on helping developers create a
     - Device name
     - Raw advertisement data
     - RSSI
-    - Beacon type (iBeacon, Eddystone, AtlBeacon)
+    - Beacon type (iBeacon, Eddystone, AltBeacon)
     - Favorites only
     - Connectable only
   - Option to save filters for later use

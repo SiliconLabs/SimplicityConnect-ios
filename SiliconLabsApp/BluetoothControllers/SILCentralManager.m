@@ -326,14 +326,25 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (BOOL)isProbablyIBeacon:(NSDictionary*)advertisementData {
-    if ([advertisementData.allKeys containsObject:CBAdvertisementDataManufacturerDataKey]) {
-        return NO;
-    } else {
-        if ([advertisementData[CBAdvertisementDataIsConnectable] boolValue] == YES) {
+    const NSArray* nonIBeaconKeys = @[CBAdvertisementDataManufacturerDataKey,
+                                      CBAdvertisementDataLocalNameKey,
+                                      CBAdvertisementDataServiceDataKey,
+                                      CBAdvertisementDataServiceUUIDsKey,
+                                      CBAdvertisementDataOverflowServiceUUIDsKey,
+                                      CBAdvertisementDataTxPowerLevelKey,
+                                      CBAdvertisementDataSolicitedServiceUUIDsKey];
+    
+    for (int i = 0; i < nonIBeaconKeys.count; i++) {
+        if ([advertisementData.allKeys containsObject:nonIBeaconKeys[i]]) {
             return NO;
         }
-        return YES;
     }
+    
+    if ([advertisementData[CBAdvertisementDataIsConnectable] boolValue] == YES) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (double)getTimestampWithAdvertisementData:(NSDictionary *)advertisementData {
