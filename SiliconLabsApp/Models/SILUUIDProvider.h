@@ -21,13 +21,13 @@
 @interface SILUUIDProvider (OTA)
 
 extern NSString * const kSILOtaServiceUUIDString;
-extern NSString * const kSILOtaCharacteristicDataUUIDString;
-extern NSString * const kSILOtaCharacteristicControlUUIDString;
-extern NSString * const kSILOtaCharacteristicFirmwareVersionUUIDString;
+extern NSString * const kSILOtaCharacteristicOTADataAttributeUUIDString;
+extern NSString * const kSILOtaCharacteristicOTAControlAttributeUUIDString;
+extern NSString * const kSILOtaCharacteristicAppLoaderVersionUUIDString;
 extern NSString * const kSILOtaCharacteristicOtaVersionUUIDString;
 
 @property (strong, nonatomic, readonly) CBUUID *otaServiceUUID;
-@property (strong, nonatomic, readonly) CBUUID *otaCharacteristicDataUUID;
-@property (strong, nonatomic, readonly) CBUUID *otaCharacteristicControlUUID;
+@property (strong, nonatomic, readonly) CBUUID *otaCharacteristicOTADataAttributeUUID;
+@property (strong, nonatomic, readonly) CBUUID *otaCharacteristicOTAControlAttributeUUID;
 
 @end

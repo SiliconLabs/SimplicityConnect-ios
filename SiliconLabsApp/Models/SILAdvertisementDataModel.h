@@ -9,12 +9,18 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, AdModelType) {
-    AdModelTypeUUID,
-    AdModelTypeServiceUUID,
-    AdModelTypeName,
-    AdModelTypePower,
-    AdModelTypeMajor,
-    AdModelTypeMinor
+    AdModelTypeSolicitedServiceUUIDs16Bit,
+    AdModelTypeSolicitedServiceUUIDs128Bit,
+    AdModelTypeAdvertisedServiceUUIDs16Bit,
+    AdModelTypeAdvertisedServiceUUIDs32Bit,
+    AdModelTypeAdvertisedServiceUUIDs128Bit,
+    AdModelTypeCompleteLocalName,
+    AdModelTypeTXPowerLevel,
+    AdModelTypeManufacturerData,
+    AdModelTypeDataServiceData,
+    AdModelTypeIBeacon,
+    AdModelTypeAltBeacon,
+    AdModelTypeEddystoneBeacon
 };
 
 @interface SILAdvertisementDataModel : NSObject

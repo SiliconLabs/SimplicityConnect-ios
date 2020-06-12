@@ -20,8 +20,13 @@ extern NSString * const SILNotificationReloadLogTableView;
 extern NSString * const SILNotificationDisconnectPeripheral;
 extern NSString * const SILNotificationDeleteDisconnectedPeripheral;
 extern NSString * const SILNotificationDisconnectAllPeripheral;
+extern NSString * const SILNotificationFailedToConnectPeripheral;
 extern NSString * const SILNotificationCellsForVisibleRows;
+extern NSString * const SILNotificationDisplayToastRequest;
+extern NSString * const SILNotificationDisplayToastResponse;
 
 extern NSString * const SILNotificationKeyIndex;
 extern NSString * const SILNotificationKeyUUID;
 extern NSString * const SILNotificationKeyDescription;
+extern NSString * const SILNotificationKeyError;
+extern NSString * const SILNotificationKeyPeripheralName;

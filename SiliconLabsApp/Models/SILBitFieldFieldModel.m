@@ -69,6 +69,10 @@
     return @"Bit field Secondary";
 }
 
+- (void)clearValues {
+    [self consumeValue:[[NSData alloc] init] fromIndex:0];
+}
+
 
 //Consume a single bit value
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {

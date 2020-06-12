@@ -14,6 +14,7 @@
 #import "SILUUIDProvider.h"
 #import "SILLogDataModel.h"
 #import "BlueGecko.pch"
+#import "SILEncodingPseudoFieldRowModel.h"
 
 #import <Crashlytics/Crashlytics.h>
 
@@ -82,6 +83,10 @@
 
 - (void)toggleExpansionIfAllowed {
     self.isExpanded = !self.isExpanded;
+}
+
+- (void)expandFieldIfNeeded {
+    self.isExpanded = YES;
 }
 
 - (NSString *)hexUuidString {
@@ -203,6 +208,17 @@
 
 - (void)postRegisterLogNotification:(NSString*)description {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"RegisterLog" object:self userInfo:@{ @"description" : description}];
+}
+
+- (BOOL)clearModel {
+    if (self.isUnknown) {
+        return NO;
+    }
+    for (id<SILCharacteristicFieldRow> fieldRow in self.fieldTableRowModels) {        
+        [fieldRow clearValues];
+    }
+    
+    return YES;
 }
 
 @end

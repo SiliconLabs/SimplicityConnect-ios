@@ -20,6 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [SILAppearance setupAppearance];
     [Fabric with:@[CrashlyticsKit]];
+    [SILRealmConfiguration updateRealmConfigurationIfNeeded];
     return YES;
 }
 

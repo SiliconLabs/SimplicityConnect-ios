@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SILBrowserFilterViewModel : NSObject
 
 @property (strong, nonatomic, readwrite) NSString *searchByDeviceName;
-@property (strong, nonatomic, readwrite) NSString *searchByRawAdvertisingData;
 @property (nonatomic, readwrite) NSInteger dBmValue;
 @property (nonatomic, readwrite) BOOL isBeaconTypeExpanded;
 @property (nonatomic, readwrite) BOOL isFavouriteFilterSet;

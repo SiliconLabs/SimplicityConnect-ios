@@ -25,6 +25,7 @@
     if ([viewController isKindOfClass:[SILAppSelectionViewController class]]) {
         SILAppSelectionViewController* developController = viewController;
         developController.appsArray = [SILApp developApps];
+        developController.isDisconnectedIntentionally = NO;
     }
 }
 

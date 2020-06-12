@@ -59,7 +59,7 @@ static NSString * const kScanningForPeripheralsMessage = @"Loading...";
 
 static float kTableRefreshInterval = 1;
 
-@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate>
+@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
@@ -77,7 +77,7 @@ static float kTableRefreshInterval = 1;
 @property (strong, nonatomic) WYPopoverController *popoverController;
 @property (weak, nonatomic) IBOutlet UIView *presentationView;
 @property (strong, nonatomic) SILDebugHeaderView *headerView;
-@property (weak, nonatomic) IBOutlet UIButton *otaButton;
+@property (weak, nonatomic) IBOutlet UIButton *menuButton;
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceSaveAreaView;
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIButton *connectionsButton;
@@ -86,6 +86,8 @@ static float kTableRefreshInterval = 1;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *expandableControllerHeight;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
 @property (strong, nonatomic) SILBluetoothBrowserExpandableViewManager* browserExpandableViewManager;
+@property (weak, nonatomic) IBOutlet UIView *menuContainer;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *menuOptionHeight;
 
 @end
 
@@ -95,7 +97,8 @@ static float kTableRefreshInterval = 1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [_otaButton setHidden:YES];
+    [self.menuButton setHidden:YES];
+    [self.menuContainer setHidden:YES];
     [self registerForNotifications];
     [self registerNibsAndSetUpSizing];
     [self startServiceSearch];
@@ -107,6 +110,7 @@ static float kTableRefreshInterval = 1;
     [self addObserverForUpdateConnectionsButtonTitle];
     [self updateConnectionsButtonTitle];
     [self hideRSSIView];
+    self.isUpdatingFirmware = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -118,6 +122,7 @@ static float kTableRefreshInterval = 1;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissPopoverIfExist];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dismissPopoverIfExist {
@@ -130,14 +135,15 @@ static float kTableRefreshInterval = 1;
     [self.navigationController popViewControllerAnimated:NO];
 }
 
-- (IBAction)otaButtonWasTapped:(id)sender {
+- (void)performOTAAction {
     self.isUpdatingFirmware = YES;
     self.otaUICoordinator = [[SILOTAUICoordinator alloc] initWithPeripheral:self.peripheral
-                                                             centralManager:self.centralManager
-                                                   presentingViewController:self];
+                                                            centralManager:self.centralManager
+                                                       presentingViewController:self];
     self.otaUICoordinator.delegate = self;
     [self.otaUICoordinator initiateOTAFlow];
 }
+
 
 - (void)setupNavigationBar {
     self.aboveSpaceSaveAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
@@ -154,6 +160,16 @@ static float kTableRefreshInterval = 1;
  
 - (void)setupButtonsTabBar {
     [self.browserExpandableViewManager setupButtonsTabBarWithLog:self.logButton connections:self.connectionsButton];
+}
+
+- (void)setIsUpdatingFirmware:(BOOL)isUpdatingFirmware {
+    _isUpdatingFirmware = isUpdatingFirmware;
+    if (_isUpdatingFirmware == NO) {
+        [self addObserverForDisplayToastResponse];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDisplayToastRequest object:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:SILNotificationDisplayToastResponse object:nil];
+    }
 }
 
 #pragma mark - setup
@@ -213,6 +229,43 @@ static float kTableRefreshInterval = 1;
     return _modelsToDisplay;
 }
 
+#pragma mark - Menu
+
+- (IBAction)menuButtonWasTapped:(id)sender {
+    [self showMenu];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"OpenMenuSegue"]) {
+        SILDebugServicesMenuViewController* menuVC = (SILDebugServicesMenuViewController*) segue.destinationViewController;
+        menuVC.delegate = self;
+        [menuVC addMenuOptionWithTitle:@"OTA DFU" completion:^{
+            [self performOTAAction];
+        }];
+        self.menuOptionHeight.constant = [menuVC getMenuOptionHeight];
+    }
+}
+
+- (void)performActionForMenuOptionUsing:(void (^ NS_NOESCAPE)(void))completion {
+    [self hideMenu];
+    completion();
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    [self hideMenu];
+}
+
+- (void)showMenu {
+    [self.menuContainer setHidden:NO];
+    self.tableView.userInteractionEnabled = NO;
+}
+
+- (void)hideMenu {
+    [self.menuContainer setHidden:YES];
+    self.tableView.userInteractionEnabled = YES;
+}
+
 #pragma mark - Expandable Controllers
 
 - (IBAction)connectionsButtonTapped:(id)sender {
@@ -253,6 +306,11 @@ static float kTableRefreshInterval = 1;
 
 - (void)otaUICoordinatorDidFishishOTAFlow:(SILOTAUICoordinator *)coordinator {
     [self.navigationController popViewControllerAnimated:YES];
+    self.isUpdatingFirmware = NO;
+}
+
+- (void)otaUICoordinatorDidCancelOTAFlow:(SILOTAUICoordinator *)coordinator {
+    self.isUpdatingFirmware = NO;
 }
 
 #pragma mark - Notifications
@@ -268,11 +326,26 @@ static float kTableRefreshInterval = 1;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:SILNotificationReloadConnectionsTableView object:nil];
 }
 
+- (void)addObserverForDisplayToastResponse {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayToast:) name:SILNotificationDisplayToastResponse object:nil];
+}
+
+- (void)displayToast:(NSNotification*)notification {
+    NSString* ErrorMessage = notification.userInfo[SILNotificationKeyDescription];
+    [self showToastWithMessage:ErrorMessage toastType:ToastTypeDisconnectionError completion:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDisplayToastRequest object:nil];
+    }];
+}
+
 #pragma mark - Notification Methods
 
 - (void)didDisconnectPeripheralNotifcation:(NSNotification *)notification {
-    if (!self.isUpdatingFirmware) {
-        [self.navigationController popViewControllerAnimated:YES];
+    NSString* uuid = (NSString*)notification.userInfo[SILNotificationKeyUUID];
+    
+    if ([uuid isEqualToString:self.peripheral.identifier.UUIDString]) {
+        if (!self.isUpdatingFirmware) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -352,7 +425,6 @@ static float kTableRefreshInterval = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SILDebugCharacteristicTableViewCell class]]) {
         SILCharacteristicTableModel *characteristicModel = self.modelsToDisplay[indexPath.row];
-        [characteristicModel readCharacteristicIfAllowed];
         if ([characteristicModel isUnknown]) {
             [characteristicModel toggleExpansionIfAllowed];
             id<SILGenericAttributeTableCell> cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -625,10 +697,33 @@ static float kTableRefreshInterval = 1;
 #pragma mark - SILDebugCharacteristicCellDelegate
 
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestReadForCharacteristic:(CBCharacteristic *)characteristic {
+    BOOL isPerformed = [cell.characteristicTableModel clearModel];
+    if (!isPerformed) {
+        [self performManualClearingValuesIntoEncodingFieldTableViewCell:characteristic];
+    } else {
+        [self refreshTable];
+    }
     [self.peripheral readValueForCharacteristic:characteristic];
 }
 
+- (void)performManualClearingValuesIntoEncodingFieldTableViewCell:(CBCharacteristic*)characteristic {
+    for (id<SILGenericAttributeTableModel> model in self.modelsToDisplay) {
+        if ([model isKindOfClass:[SILCharacteristicTableModel class]]) {
+            SILCharacteristicTableModel* characteristicModel = (SILCharacteristicTableModel*)model;
+            if ([characteristicModel isUnknown] && characteristicModel.characteristic == characteristic) {
+                NSUInteger index = [self.modelsToDisplay indexOfObject:model] + 1;
+                SILDebugCharacteristicTableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+                if ([cell isKindOfClass:[SILDebugCharacteristicEncodingFieldTableViewCell class]]) {
+                    SILDebugCharacteristicEncodingFieldTableViewCell* encodingCell = (SILDebugCharacteristicEncodingFieldTableViewCell*)cell;
+                    [encodingCell clearValues];
+                }
+            }
+        }
+    }
+}
+
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestWriteForCharacteristic:(CBCharacteristic *)characteristic {
+    [self refreshTable];
     if (cell.characteristicTableModel.isUnknown) {
         SILEncodingPseudoFieldRowModel *model = [[SILEncodingPseudoFieldRowModel alloc]initForCharacteristicModel:cell.characteristicTableModel];
         [self displayCharacteristicEncoding:model.parentCharacteristicModel canEdit:model.parentCharacteristicModel.canWrite];
@@ -694,7 +789,7 @@ static float kTableRefreshInterval = 1;
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
-    [self markTableForUpdate];
+    [self refreshTable];
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didUpdateValueForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
 }
 
@@ -732,6 +827,20 @@ static float kTableRefreshInterval = 1;
     NSMutableString* rssiDescription = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@", RSSI]];
     [rssiDescription appendString:@" dBm"];
     self.rssiLabel.text = rssiDescription;
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    NSLog(@"%@", error);
+    if (error == nil) {
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didUpdateNotificationStateForCharacteristic: Successful! " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
+    } else {
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didUpdateNotificationStateForCharacteristic: Failed! " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
+        
+        SILGattPropertiesErrorToastModel* errorToast = [[SILGattPropertiesErrorToastModel alloc] initWithPeripheralName:peripheral.name errorCode:error.code];
+        NSString* ErrorMessage = [errorToast getErrorMessageForToast];
+        [self showToastWithMessage:ErrorMessage toastType:ToastTypeGattPropertiesError completion:^{}];
+    }    
+    [self refreshTable];
 }
 
 #pragma mark - Add or Update Attribute Models
@@ -914,9 +1023,9 @@ static float kTableRefreshInterval = 1;
 
 - (void)configureOtaButtonWithPeripheral:(CBPeripheral *)peripheral {
     if ([peripheral hasOTAService]) {
-        [self.otaButton setHidden:NO];
+        [self.menuButton setHidden:NO];
     } else {
-        [self.otaButton setHidden:YES];
+        [self.menuButton setHidden:YES];
     }
 }
 
@@ -948,6 +1057,7 @@ static float kTableRefreshInterval = 1;
     self.peripheral = connectedPeripheral.peripheral;
     [self.refreshControl removeFromSuperview];
     self.refreshControl = nil;
+    self.allServiceModels = nil;
     [self viewDidLoad];
     [self viewWillAppear:YES];
     [self viewDidAppear:YES];

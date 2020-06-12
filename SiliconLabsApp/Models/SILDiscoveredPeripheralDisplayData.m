@@ -15,7 +15,6 @@
 @interface SILDiscoveredPeripheralDisplayData ()
 
 @property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataModel *> *advertisementDataModels;
-@property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataModel *> *advertisementDataModelsForDevicesTable;
 @property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataModel *> *advertisementDataModelsForInfoView;
 
 @end
@@ -34,13 +33,6 @@
 }
 
 #pragma mark - Properties
-
-- (NSArray *)advertisementDataModelsForDevicesTable {
-    if (_advertisementDataModelsForDevicesTable == nil) {
-        _advertisementDataModelsForDevicesTable = [self advertisementDataModelsExcept:@[@(AdModelTypeUUID), @(AdModelTypeName), @(AdModelTypeServiceUUID)]];
-    }
-    return _advertisementDataModelsForDevicesTable;
-}
 
 - (NSArray *)advertisementDataModelsForInfoView {
     if (_advertisementDataModelsForInfoView == nil) {
@@ -61,58 +53,54 @@
 }
 
 - (NSArray*)adverisementDataModelsForCBPeripheral:(SILDiscoveredPeripheral*)device {
-    NSMutableArray *mutableAdvModels = [[NSMutableArray alloc] init];
-
-    SILAdvertisementDataModel *uuidModel = [[SILAdvertisementDataModel alloc] initWithValue:device.peripheral.identifier.UUIDString type:AdModelTypeUUID];
-    [mutableAdvModels addObject:uuidModel];
-
-    for (CBUUID *serviceUUID in device.advertisedServiceUUIDs) {
-        SILAdvertisementDataModel *uuidModel = [[SILAdvertisementDataModel alloc] initWithValue:serviceUUID.UUIDString type:AdModelTypeServiceUUID];
-        [mutableAdvModels addObject:uuidModel];
-    }
-
-    if (device.advertisedLocalName) {
-        SILAdvertisementDataModel *nameModel = [[SILAdvertisementDataModel alloc] initWithValue:device.advertisedLocalName
-                                                                                           type:AdModelTypeName];
-        [mutableAdvModels addObject:nameModel];
-    }
-
-    if (device.txPowerLevel) {
-        SILAdvertisementDataModel *powerModel = [[SILAdvertisementDataModel alloc] initWithValue:[device.txPowerLevel stringValue]
-                                                                                            type:AdModelTypePower];
-        [mutableAdvModels addObject:powerModel];
-    }
-    
-    return mutableAdvModels;
+    SILAdTypeCBPeripheralDecoder* decoder = [[SILAdTypeCBPeripheralDecoder alloc] initWithPeripheral:device];
+    return [decoder decode];
 }
 
 - (NSArray*)advertisementDataModelsForCLBeacon:(SILDiscoveredPeripheral*)device {
     NSMutableArray *mutableAdvModels = [[NSMutableArray alloc] init];
+    NSMutableString* iBeaconDataString = [[NSMutableString alloc] init];
     SILBeacon* beacon = device.beacon;
-    
-    SILAdvertisementDataModel *uuidModel = [[SILAdvertisementDataModel alloc] initWithValue:beacon.UUIDString type:AdModelTypeUUID];
-    [mutableAdvModels addObject:uuidModel];
-
-    if (beacon.major) {
-        NSString* majorStringValue = [NSString stringWithFormat:@"%hu", beacon.major];
-        SILAdvertisementDataModel *majorModel = [[SILAdvertisementDataModel alloc] initWithValue:majorStringValue
-                                                                                            type:AdModelTypeMajor];
-        [mutableAdvModels addObject:majorModel];
-    }
-    
+    BOOL isFirst = YES;
     if (beacon.minor) {
+        [iBeaconDataString appendString:@"Minor: "];
         NSString* minorStringValue = [NSString stringWithFormat:@"%hu", beacon.minor];
-        SILAdvertisementDataModel *minorModel = [[SILAdvertisementDataModel alloc] initWithValue:minorStringValue
-                                                                                            type:AdModelTypeMinor];
-        [mutableAdvModels addObject:minorModel];
+        [iBeaconDataString appendString:minorStringValue];
+        isFirst = NO;
+    }
+    if (beacon.major) {
+        if (isFirst == YES) {
+            isFirst = NO;
+        } else {
+            [iBeaconDataString appendString:@"\n"];
+        }
+        [iBeaconDataString appendString:@"Major: "];
+        NSString* majorStringValue = [NSString stringWithFormat:@"%hu", beacon.major];
+        [iBeaconDataString appendString:majorStringValue];
+    }
+    if (beacon.UUIDString) {
+        if (isFirst == YES) {
+            isFirst = NO;
+        } else {
+            [iBeaconDataString appendString:@"\n"];
+        }
+        [iBeaconDataString appendString:@"UUID: "];
+        [iBeaconDataString appendString:beacon.UUIDString];
     }
     
-    if (beacon.name) {
-        SILAdvertisementDataModel *nameModel = [[SILAdvertisementDataModel alloc] initWithValue:device.advertisedLocalName
-                                                                                           type:AdModelTypeName];
-        [mutableAdvModels addObject:nameModel];
+    if (beacon.beacon.proximity && beacon.beacon.accuracy) {
+        if (isFirst == YES) {
+            isFirst = NO;
+        } else {
+            [iBeaconDataString appendString:@"\n"];
+        }
+        [iBeaconDataString appendFormat:@"Distance from iBeacon: "];
+        [iBeaconDataString appendFormat:@"%ld +/- %.2f meters", (long)beacon.beacon.proximity, beacon.beacon.accuracy];
     }
-
+    
+    SILAdvertisementDataModel* iBeaconModel = [[SILAdvertisementDataModel alloc] initWithValue:iBeaconDataString type:AdModelTypeIBeacon];
+    [mutableAdvModels addObject:iBeaconModel];
+    
     return mutableAdvModels;
 }
 

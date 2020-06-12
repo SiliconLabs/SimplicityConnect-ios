@@ -24,7 +24,6 @@
 @property (weak, nonatomic) IBOutlet UIStackView *propertyButtonsStackView;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicUuidLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *viewMoreChevron;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iPadBottomDividerLeadingConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *descriptorsTextLabel;
 @property (weak, nonatomic) IBOutlet UIView *descriptorsView;
@@ -43,8 +42,6 @@
 
 @implementation SILDebugCharacteristicTableViewCell
 
-NSString * const KVONotifyingName = @"notifying";
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -52,7 +49,6 @@ NSString * const KVONotifyingName = @"notifying";
 }
 
 - (void)configureWithCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel {
-    [self updateChevronImageForExpanded:characteristicModel.isExpanded];
     self.characteristicTableModel = characteristicModel;
     self.characteristic = characteristicModel.characteristic;
     [self.nameEditButton setHidden:!characteristicModel.isMappable];
@@ -65,10 +61,9 @@ NSString * const KVONotifyingName = @"notifying";
         self.descriptorsTextLabel.text = [self getDescriptorsText:characteristicModel.descriptorModels];
     }
     self.topSeparatorView.hidden = characteristicModel.hideTopSeparator;
-    [self configureAsExpandable:[characteristicModel canExpand] || [characteristicModel isUnknown]];
     self.allActiveProperties = [SILDebugProperty getActivePropertiesFrom:characteristicModel.characteristic.properties];
     [self configurePropertyViewsForProperties:self.allActiveProperties];
-    [self togglePropertyEnabledIfExpanded];
+    [self toggleProperties];
     [self layoutIfNeeded];
 }
 
@@ -107,10 +102,6 @@ NSString * const KVONotifyingName = @"notifying";
 }
 #endif
 
-- (void)configureAsExpandable:(BOOL)canExpand {
-    self.viewMoreChevron.hidden = !canExpand;
-}
-
 - (void)configurePropertyViewsForProperties:(NSArray *)properties {
     [self layoutIfNeeded];
 
@@ -137,70 +128,48 @@ NSString * const KVONotifyingName = @"notifying";
 #pragma mark - SILGenericAttributeTableCell
 
 - (void)expandIfAllowed:(BOOL)isExpanding {
-    [self togglePropertyEnabledIfExpanded];
-    [self updateChevronImageForExpanded:isExpanding];
+    [self toggleProperties];
 }
 
-- (void)updateChevronImageForExpanded:(BOOL)expanded {
-    self.viewMoreChevron.image = [UIImage imageNamed: expanded ? SILImageChevronExpanded : SILImageChevronCollapsed];
-}
-
-- (void)togglePropertyEnabledIfExpanded {
-    BOOL expanded = self.characteristicTableModel.isExpanded;
-    BOOL isNotifying = [[self.characteristic valueForKey:KVONotifyingName] boolValue];
+- (void)toggleProperties {
+    BOOL isNotifying = [self.characteristic isNotifying];
         
     for (SILDebugProperty *property in self.allActiveProperties) {
         if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyRead)]) {
-            [self.readPropertyButton setUserInteractionEnabled:expanded];
-            [self readButtonAppearanceWithCondition:expanded];
+            [self readButtonAppearance];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWrite)]) {
-            [self.writePropertyButton setUserInteractionEnabled:expanded];
-            [self writeButtonAppearanceWithCondition:expanded];
+            [self writeButtonAppearance];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
-            [self.writeNoResponsePropertyButton setUserInteractionEnabled:expanded];
-            [self writeNoResponseButtonAppearanceWithCondition:expanded];
+            [self writeNoResponseButtonAppearance];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyIndicate)]) {
-            [self.indicatePropertyButton setUserInteractionEnabled:expanded];
-            [self indicateButtonAppearanceWithCondition:(expanded && isNotifying)];
+            [self indicateButtonAppearanceWithCondition:isNotifying];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyNotify)]) {
-            [self.notifyPropertyButton setUserInteractionEnabled:expanded];
-            [self notifyButtonAppearanceWithCondition:(expanded && isNotifying)];
+            [self notifyButtonAppearanceWithCondition:isNotifying];
         }
     }
 }
 
 #pragma mark - Buttons Appearance
-- (void)readButtonAppearanceWithCondition:(BOOL)condition {
-    NSString *readImageString = condition ? SILImageNamePropertyRead : SILImageNamePropertyReadDisabled;
+
+- (void)readButtonAppearance {
+    NSString *readImageString = SILImageNamePropertyReadDisabled;
     self.readPropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.readPropertyButton setImage:[UIImage imageNamed:readImageString] forState:UIControlStateNormal];
-    if (condition) {
-        [self.readPropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
-    } else {
-        [self.readPropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
-    }
+    [self.readPropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
 }
 
-- (void)writeButtonAppearanceWithCondition:(BOOL)condition {
-    NSString *writeImageString = condition ? SILImageNamePropertyWrite : SILImageNamePropertyWriteDisabled;
+- (void)writeButtonAppearance {
+    NSString *writeImageString = SILImageNamePropertyWriteDisabled;
     self.writePropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.writePropertyButton setImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-    if (condition) {
-        [self.writePropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
-    } else {
-        [self.writePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
-    }
+    [self.writePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
 }
 
-- (void)writeNoResponseButtonAppearanceWithCondition:(BOOL)condition {
-    NSString *writeImageString = condition ? SILImageNamePropertyWriteNoResponse : SILImageNamePropertyWriteNoResponseDisabled;
+- (void)writeNoResponseButtonAppearance {
+    NSString *writeImageString = SILImageNamePropertyWriteNoResponseDisabled;
     self.writeNoResponsePropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.writeNoResponsePropertyButton setImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-    if (condition) {
-        [self.writeNoResponsePropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
-    } else {
-        [self.writeNoResponsePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
-    }
+    [self.writeNoResponsePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
 }
 
 - (void)indicateButtonAppearanceWithCondition:(BOOL)condition {
@@ -228,27 +197,36 @@ NSString * const KVONotifyingName = @"notifying";
 #pragma mark - Button Actions
 
 - (IBAction)handleReadViewTap:(id)sender {
+    [self.characteristicTableModel expandFieldIfNeeded];
     [self.delegate cell:self didRequestReadForCharacteristic:self.characteristic];
 }
 
 - (IBAction)handleWriteViewTap:(id)sender {
+    [self.characteristicTableModel expandFieldIfNeeded];
     [self.delegate cell:self didRequestWriteForCharacteristic:self.characteristic];
 }
 
 - (IBAction)handleWriteNoResponseViewTap:(id)sender {
+    [self.characteristicTableModel expandFieldIfNeeded];
     [self.delegate cell:self didRequestWriteNoResponseForCharacteristic:self.characteristic];
 }
 
 - (IBAction)handleIndicateViewTap:(id)sender {
-    BOOL newNotifyingValue = ![[self.characteristic valueForKey:KVONotifyingName] boolValue];
-    [self.delegate cell:self didRequestIndicateForCharacteristic:self.characteristic withValue:newNotifyingValue];
+    BOOL newNotifyingValue = ![self.characteristic isNotifying];
     [self indicateButtonAppearanceWithCondition:newNotifyingValue];
+    if (newNotifyingValue) {
+        [self.characteristicTableModel expandFieldIfNeeded];
+    }
+    [self.delegate cell:self didRequestIndicateForCharacteristic:self.characteristic withValue:newNotifyingValue];
 }
 
 - (IBAction)handleNotifyViewTap:(id)sender {
-    BOOL newNotifyingValue = ![[self.characteristic valueForKey:KVONotifyingName] boolValue];
-    [self.delegate cell:self didRequestNotifyForCharacteristic:self.characteristic withValue:newNotifyingValue];
+    BOOL newNotifyingValue = ![self.characteristic isNotifying];
     [self notifyButtonAppearanceWithCondition:newNotifyingValue];
+    if (newNotifyingValue) {
+        [self.characteristicTableModel expandFieldIfNeeded];
+    }
+    [self.delegate cell:self didRequestNotifyForCharacteristic:self.characteristic withValue:newNotifyingValue];
 }
 
 - (IBAction)editName:(UIButton *)sender {

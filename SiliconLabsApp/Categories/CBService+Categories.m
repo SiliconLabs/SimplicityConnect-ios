@@ -27,7 +27,7 @@
 }
 
 - (CBCharacteristic *)otaDataCharacteristic {
-    return [self characteristicForUUID:[SILUUIDProvider sharedProvider].otaCharacteristicDataUUID];
+    return [self characteristicForUUID:[SILUUIDProvider sharedProvider].otaCharacteristicOTADataAttributeUUID];
 }
 
 - (BOOL)hasOTAControlCharacteristic {
@@ -35,7 +35,7 @@
 }
 
 - (CBCharacteristic *)otaControlCharacteristic {
-    return [self characteristicForUUID:[SILUUIDProvider sharedProvider].otaCharacteristicControlUUID];
+    return [self characteristicForUUID:[SILUUIDProvider sharedProvider].otaCharacteristicOTAControlAttributeUUID];
 }
 
 @end

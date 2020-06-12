@@ -43,7 +43,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *logButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
-@property (weak, nonatomic) IBOutlet UIImageView *activeFilterImage;
 @property (weak, nonatomic) IBOutlet UIButton *scanningButton;
 @property (weak, nonatomic) IBOutlet UIImageView *noDevicesFoundImageView;
 @property (weak, nonatomic) IBOutlet UIStackView *noDevicesFoundView;
@@ -54,6 +53,7 @@
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
 @property (strong, nonatomic) SILDebugDeviceViewModel *browserViewModel;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
+@property (strong, nonatomic) SILBrowserFilterViewModel* filterViewModel;
 @property (strong, nonatomic) NSIndexPath *connectingCellIndexPath;
 @property (nonatomic) BOOL isScanning;
 @property (nonatomic) NSMutableArray<NSString*>* expandSections;
@@ -77,20 +77,20 @@ CGFloat const tableInset = 16;
     [self setupBrowserExpandableViewManager];
     [self setupButtonsTabBar];
     [self setupScanningButton];
-    [self registerForApplicationWillResignActiveNotification];
     [self setupBrowserViewModel];
     [self installViewModelsForExpandableViews];
     [self setupBackgroundForScanning:YES];
     [self setScanningButtonAppearanceWithScanning:_isScanning];
-    [self addObservers];
-    [self updateConnectionsButtonTitle];
     [self setupBrowserTableViewAppearance];
+    [self clearViewModelsForExpandableViews];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.browserViewModel.observing = YES;
     [self manageScannerState];
+    [self addObservers];
+    [self updateConnectionsButtonTitle];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -105,6 +105,7 @@ CGFloat const tableInset = 16;
     self.browserViewModel.observing = NO;
     [self setScannerStateWhenControllerIsDisappeared];
     [self.browserViewModel clearIsConnectingDirectory];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Setup
@@ -149,7 +150,7 @@ CGFloat const tableInset = 16;
 }
  
 - (void)setupButtonsTabBar {
-    [self.browserExpandableViewManager setupButtonsTabBarWithLog:self.logButton connections:self.connectionsButton filter:self.filterButton andActiveFilterImage:self.activeFilterImage];
+    [self.browserExpandableViewManager setupButtonsTabBarWithLog:self.logButton connections:self.connectionsButton filter:self.filterButton andFilterIsActive:[self.filterViewModel isFilterActive]];
 }
 
 - (void)setupScanningButton {
@@ -170,11 +171,9 @@ CGFloat const tableInset = 16;
 }
 
 - (void)installViewModelsForExpandableViews {
-    SILBrowserLogViewModel* browserLog = [SILBrowserLogViewModel sharedInstance];
     self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
     self.connectionsViewModel.centralManager = self.browserViewModel.centralManager;
-    [self.connectionsViewModel disconnectAllPeripheral];
-    [browserLog clearLogs];
+    self.filterViewModel = [SILBrowserFilterViewModel sharedInstance];
 }
 
 - (void)setupBackgroundForScanning:(BOOL)scanning {
@@ -189,6 +188,8 @@ CGFloat const tableInset = 16;
 - (void)addObservers {
     [self addObserversForReloadBrowserTableView];
     [self addObserverForReloadConnectionsButtonTitle];
+    [self addObserverForDisplayToastResponse];
+    [self registerForApplicationWillResignActiveNotification];
 }
 
 - (void)addObserversForReloadBrowserTableView {
@@ -208,6 +209,17 @@ CGFloat const tableInset = 16;
 - (void)updateConnectionsButtonTitle {
     NSUInteger connections = [self.connectionsViewModel.peripherals count];
     [self.browserExpandableViewManager updateConnectionsButtonTitle:connections];
+}
+
+- (void)addObserverForDisplayToastResponse {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayToast:) name:SILNotificationDisplayToastResponse object:nil];
+}
+
+- (void)displayToast:(NSNotification*)notification {
+    NSString* ErrorMessage = notification.userInfo[SILNotificationKeyDescription];
+    [self showToastWithMessage:ErrorMessage toastType:ToastTypeDisconnectionError completion:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDisplayToastRequest object:nil];
+    }];
 }
 
 #pragma mark - SILDebugDeviceViewModelDelegate
@@ -266,10 +278,10 @@ CGFloat const tableInset = 16;
         }
         return cell;
     } else {
-        SILBrowserServiceViewCell *cell = [tableView
+        SILBrowserDeviceAdTypeViewCell *cell = [tableView
                                            dequeueReusableCellWithIdentifier:SILClassBrowserServiceViewCell
                                            forIndexPath:indexPath];
-        [self configureServiceCell:cell atIndexPath:indexPath];
+        [self configureAdTypeCell:cell atIndexPath:indexPath];
         if (@available(iOS 13, *)) {} else {
             if ([tableView numberOfRowsInSection:indexPath.section]-1 == indexPath.row) {
                 cell.isRounded = YES;
@@ -328,11 +340,11 @@ CGFloat const tableInset = 16;
     }
 }
 
-- (void)configureServiceCell:(SILBrowserServiceViewCell*)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureAdTypeCell:(SILBrowserDeviceAdTypeViewCell*)cell atIndexPath:(NSIndexPath *)indexPath {
     SILDiscoveredPeripheralDisplayDataViewModel *discoveredPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
     SILAdvertisementDataViewModel *detailModel = discoveredPeripheralViewModel.advertisementDataViewModelsForInfoView[indexPath.row-1];
-    cell.serviceNameLabel.text = detailModel.typeString;
-    cell.serviceUUIDLabel.text = detailModel.valueString;
+    cell.adTypeNameLabel.text = detailModel.typeString;
+    cell.adTypeValueLabel.text = detailModel.valueString;
 }
 
 - (BOOL)isConnectedPeripheral:(SILDiscoveredPeripheral*)peripheral {
@@ -363,7 +375,7 @@ CGFloat const tableInset = 16;
     if (indexPath.row == 0) {
         return 121.0;
     }
-    return 76.0;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -584,11 +596,7 @@ CGFloat const tableInset = 16;
 }
 
 - (void)manageAppearanceOfActiveFilterImage:(SILBrowserFilterViewModel*)filterViewModel {
-    if ([filterViewModel isFilterActive]) {
-        [self.activeFilterImage setHidden:NO];
-    } else {
-        [self.activeFilterImage setHidden:YES];
-    }
+    [self.browserExpandableViewManager updateFilterIsActiveFilter:[filterViewModel isFilterActive]];
 }
 
 - (void)filterBrowser:(SILBrowserFilterViewModel*)filterViewModel {
@@ -604,11 +612,6 @@ CGFloat const tableInset = 16;
          self.browserViewModel.searchByDeviceName = filterViewModel.searchByDeviceName;
      } else {
          self.browserViewModel.searchByDeviceName = nil;
-     }
-     if (![filterViewModel.searchByRawAdvertisingData isEqualToString:EmptyText]) {
-         self.browserViewModel.searchByAdvertisingData = filterViewModel.searchByRawAdvertisingData;
-     } else {
-         self.browserViewModel.searchByAdvertisingData = nil;
      }
      self.browserViewModel.currentMinRSSI = [NSNumber numberWithInteger:filterViewModel.dBmValue];
      self.browserViewModel.beaconTypes = filterViewModel.beaconTypes;
@@ -639,6 +642,7 @@ CGFloat const tableInset = 16;
     detailsVC.centralManager = self.browserViewModel.centralManager;
     [self updateCellsWithConnecting:connectedPeripheral.peripheral];
     [self removeUnfiredTimers];
+    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
     [self.navigationController pushViewController:detailsVC animated:YES];
 }
 
@@ -650,7 +654,15 @@ CGFloat const tableInset = 16;
 
 - (IBAction)backToDevelopWasTapped:(id)sender {
     [self stopScanningAction];
+    [self.connectionsViewModel disconnectAllPeripheral];
     [self.navigationController popViewControllerAnimated:NO];
+}
+
+- (void)clearViewModelsForExpandableViews {
+    [self.connectionsViewModel clearViewModelData];
+    [self.filterViewModel clearViewModelData];
+    SILBrowserLogViewModel* browserLog = [SILBrowserLogViewModel sharedInstance];
+    [browserLog clearLogs];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

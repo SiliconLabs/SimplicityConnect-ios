@@ -20,12 +20,13 @@
 - (void)setReferenceForPresentationView:(UIView*)presentationView andDiscoveredDevicesView:(UIView*)discoveredDevicesView;
 - (void)setReferenceForExpandableControllerView:(UIView*)expandableControllerView andExpandableControllerHeight:(NSLayoutConstraint*)expandableControllerHeight;
 - (void)setupButtonsTabBarWithLog:(UIButton*)logButton connections:(UIButton*)connectionsButton;
-- (void)setupButtonsTabBarWithLog:(UIButton*)logButton connections:(UIButton*)connectionsButton filter:(UIButton*)filterButton andActiveFilterImage:(UIImageView*)activeImageView;
+- (void)setupButtonsTabBarWithLog:(UIButton*)logButton connections:(UIButton*)connectionsButton filter:(UIButton*)filterButton andFilterIsActive:(BOOL)isActive;
 - (SILBrowserLogViewController*)logButtonWasTappedAction;
 - (SILBrowserConnectionsViewController*)connectionsButtonWasTappedAction;
 - (SILBrowserFilterViewController*)filterButtonWasTappedAction;
 - (void)removeExpandingControllerIfNeeded;
 - (void)updateConnectionsButtonTitle:(NSUInteger)connections;
+- (void)updateFilterIsActiveFilter:(BOOL)isActiveFilter;
 
 @end
 

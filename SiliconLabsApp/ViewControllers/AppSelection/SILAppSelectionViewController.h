@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SILAppSelectionViewController : UIViewController
 
 @property (strong, nonatomic) NSArray *appsArray;
+@property BOOL isDisconnectedIntentionally;
 
 @end
 

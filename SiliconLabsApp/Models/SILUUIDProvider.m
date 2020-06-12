@@ -11,21 +11,23 @@
 @implementation SILUUIDProvider (OTA)
 
 NSString * const kSILOtaServiceUUIDString = @"1d14d6ee-fd63-4fa1-bfa4-8f47b42119f0";
-NSString * const kSILOtaCharacteristicDataUUIDString = @"984227f3-34fc-4045-a5d0-2c581f81a153";
-NSString * const kSILOtaCharacteristicControlUUIDString = @"f7bf3564-fb6d-4e53-88a4-5e37e0326063";
-NSString * const kSILOtaCharacteristicFirmwareVersionUUIDString = @"4f4a2368-8cca-451e-bfff-cf0e2ee23e9f";
+NSString * const kSILOtaCharacteristicOTADataAttributeUUIDString = @"984227f3-34fc-4045-a5d0-2c581f81a153";
+NSString * const kSILOtaCharacteristicOTAControlAttributeUUIDString = @"f7bf3564-fb6d-4e53-88a4-5e37e0326063";
+NSString * const kSILOtaCharacteristicAppLoaderVersionUUIDString = @"4f4a2368-8cca-451e-bfff-cf0e2ee23e9f";
 NSString * const kSILOtaCharacteristicOtaVersionUUIDString = @"4cc07bcf-0868-4b32-9dad-ba4cc41e5316";
+NSString * const kSILOtaCharacteristicGeckoBootloarderVersionUUIDString = @"25f05c0a-e917-46e9-b2a5-aa2be1245afe";
+NSString * const kSILOtaCharacteristicApplicationVersionUUIDString = @"0d77cc11-4ac1-49f2-bfa9-cd96ac7a92f8";
 
 - (CBUUID *)otaServiceUUID {
     return [CBUUID UUIDWithString:kSILOtaServiceUUIDString];
 }
 
-- (CBUUID *)otaCharacteristicDataUUID {
-    return [CBUUID UUIDWithString:kSILOtaCharacteristicDataUUIDString];
+- (CBUUID *)otaCharacteristicOTADataAttributeUUID {
+    return [CBUUID UUIDWithString:kSILOtaCharacteristicOTADataAttributeUUIDString];
 }
 
-- (CBUUID *)otaCharacteristicControlUUID {
-    return [CBUUID UUIDWithString:kSILOtaCharacteristicControlUUIDString];
+- (CBUUID *)otaCharacteristicOTAControlAttributeUUID {
+    return [CBUUID UUIDWithString:kSILOtaCharacteristicOTAControlAttributeUUIDString];
 }
 
 @end
@@ -65,10 +67,12 @@ NSString * const kSILOtaCharacteristicOtaVersionUUIDString = @"4cc07bcf-0868-4b3
 
 - (void)preparePredefinedCharacteristicsNames {
     _predefinedCharacteristicsNames = @{
-        kSILOtaCharacteristicDataUUIDString : @"OTA Data",
-        kSILOtaCharacteristicControlUUIDString : @"OTA Control",
-        kSILOtaCharacteristicFirmwareVersionUUIDString : @"OTA Firmware Version",
-        kSILOtaCharacteristicOtaVersionUUIDString : @"OTA Version",
+        kSILOtaCharacteristicOTADataAttributeUUIDString : @"OTA Data Attribute",
+        kSILOtaCharacteristicOTAControlAttributeUUIDString : @"OTA Control Attribute",
+        kSILOtaCharacteristicAppLoaderVersionUUIDString : @"AppLoader version",
+        kSILOtaCharacteristicOtaVersionUUIDString : @"OTA version",
+        kSILOtaCharacteristicGeckoBootloarderVersionUUIDString : @"Gecko Bootloarder version",
+        kSILOtaCharacteristicApplicationVersionUUIDString : @"Application version"
     };
 }
 

@@ -47,6 +47,10 @@
     return self.fieldModel.name;
 }
 
+- (void)clearValues {
+    self.toggleValue = @"";
+}
+
 
 //@discussion current implementation has this called by SILBitFieldFieldModel, which handles correct length
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {

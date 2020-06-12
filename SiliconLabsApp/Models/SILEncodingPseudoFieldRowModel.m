@@ -39,4 +39,8 @@
     return @"";
 }
 
+- (void)clearValues {
+    
+}
+
 @end

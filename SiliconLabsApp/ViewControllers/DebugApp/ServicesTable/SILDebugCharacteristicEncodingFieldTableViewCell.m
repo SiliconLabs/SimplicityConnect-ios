@@ -30,4 +30,10 @@
     }
 }
 
+- (void)clearValues {
+    self.hexValueLabel.text = @"";
+    self.asciiValueLabel.text = @"";
+    self.decimalValueLabel.text = @"";
+}
+
 @end

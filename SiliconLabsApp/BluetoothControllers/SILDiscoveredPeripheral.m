@@ -24,7 +24,7 @@
 NSString* const RSSIAppendingString = @" RSSI";
 NSString* const ConnectableDevice = @"Connectable";
 NSString* const NonConnectableDevice = @"Non-connectable";
-
+NSString* const EddystoneService = @"FEAA";
 + (NSString *)connectableDevice { return ConnectableDevice; }
 + (NSString *)nonConnectableDevice { return NonConnectableDevice; }
 
@@ -51,13 +51,15 @@ NSString* const NonConnectableDevice = @"Non-connectable";
 - (void)updateWithAdvertisementData:(NSDictionary *)advertisementData
                                RSSI:(NSNumber *)RSSI
         andDiscoveringTimestamp:(double)timestamp {
-    self.advertisedLocalName = advertisementData[CBAdvertisementDataLocalNameKey] ?: self.peripheral.name;
+    self.advertisedLocalName = advertisementData[CBAdvertisementDataLocalNameKey];
     self.advertisedServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey];
     self.txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey];
     if (!self.isConnectable) {
         self.isConnectable = [advertisementData[CBAdvertisementDataIsConnectable] boolValue];
     }
     self.manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey];
+    self.solicitedServiceUUIDs = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey];
+    self.dataServiceData = advertisementData[CBAdvertisementDataServiceDataKey];
     self.beacon = [self parseBeaconData:advertisementData];
     if ([self isCorrectAdvertisingPacket:timestamp]) {
         self.packetReceivedCount++;
@@ -112,6 +114,9 @@ NSString* const NonConnectableDevice = @"Non-connectable";
         if (error == nil) {
             return beacon;
         }
+    } else if ([self hasEddystoneService]) {
+        SILBeacon* eddystoneBeacon = [SILBeacon beaconWithEddystone:self.dataServiceData[[CBUUID UUIDWithString:EddystoneService]]];
+        return eddystoneBeacon;
     }
     
     SILBeacon* unknownBeacon = [[SILBeacon alloc] init];
@@ -178,6 +183,10 @@ NSString* const NonConnectableDevice = @"Non-connectable";
 
 - (BOOL)isRangeTest {
     return [self isContainService:SILServiceNumberRangeTest];
+}
+
+- (BOOL)hasEddystoneService {
+    return [self isContainService:EddystoneService];
 }
 
 - (BOOL)isContainService:(NSString *)serviceUUID {

@@ -21,7 +21,6 @@
 @property (strong, nonatomic) UIButton* logButton;
 @property (strong, nonatomic) UIButton* connectionsButton;
 @property (strong, nonatomic) UIButton* filterButton;
-@property (strong, nonatomic) UIImageView* activeFilterImageView;
 @property (strong, nonatomic) NSLayoutConstraint* expandableControllerHeight;
 @property (strong, nonatomic) UIView* expandableControllerView;
 @property (strong, nonatomic) UIViewController* expandingViewController;
@@ -51,14 +50,13 @@
     [self setupConnectionButton];
 }
 
-- (void)setupButtonsTabBarWithLog:(UIButton*)logButton connections:(UIButton*)connectionsButton filter:(UIButton*)filterButton andActiveFilterImage:(UIImageView*)activeImageView {
+- (void)setupButtonsTabBarWithLog:(UIButton*)logButton connections:(UIButton*)connectionsButton filter:(UIButton*)filterButton andFilterIsActive:(BOOL)isActive {
     self.logButton = logButton;
     self.connectionsButton = connectionsButton;
     self.filterButton = filterButton;
-    self.activeFilterImageView = activeImageView;
     [self setupLogButton];
     [self setupConnectionButton];
-    [self setupFilterButton];
+    [self setupFilterButtonWhereIsFilterActive:isActive];
 }
 
 - (void)setReferenceForPresentationView:(UIView*)presentationView andDiscoveredDevicesView:(UIView*)discoveredDevicesView {
@@ -152,6 +150,14 @@
     [self.connectionsButton setTitle:connectionsText forState:UIControlStateSelected];
 }
 
+- (void)updateFilterIsActiveFilter:(BOOL)isActiveFiter {
+    if (isActiveFiter) {
+        [self setupImagesForActiveFilter];
+    } else {
+        [self setupImagesForInactiveFilter];
+    }
+}
+
 #pragma mark - Private Functions
 
 - (void)setupLogButton {
@@ -186,13 +192,12 @@
     [self.connectionsButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateSelected];
 }
 
-- (void)setupFilterButton {
+- (void)setupFilterButtonWhereIsFilterActive:(BOOL)isFilterActive {
     UIEdgeInsets const ImageInsetsForFilterButton = {0, 8, 0 ,12};
     UIEdgeInsets const TitleEdgeInsetsForFilterButton = {0, 8, 0, 8};
     
     [self.filterButton setTintColor:[UIColor clearColor]];
-    [self.filterButton setImage:[[UIImage imageNamed:SILImageSearchOff] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    [self.filterButton setImage:[[UIImage imageNamed:SILImageSearchOn] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+    [self updateFilterIsActiveFilter:isFilterActive];
     self.filterButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.filterButton.imageEdgeInsets = ImageInsetsForFilterButton;
     [self.filterButton setTitleEdgeInsets:TitleEdgeInsetsForFilterButton];
@@ -200,7 +205,17 @@
     self.filterButton.titleLabel.font = [UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]];
     [self.filterButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
     [self.filterButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateSelected];
-    [self.activeFilterImageView setHidden:YES];
+
+}
+
+- (void)setupImagesForInactiveFilter {
+    [self.filterButton setImage:[[UIImage imageNamed:SILImageFilterOff] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [self.filterButton setImage:[[UIImage imageNamed:SILImageFilterOffSelected] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+}
+
+- (void)setupImagesForActiveFilter {
+    [self.filterButton setImage:[[UIImage imageNamed:SILImageFilterOn] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [self.filterButton setImage:[[UIImage imageNamed:SILImageFilterOnSelected] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
 }
 
 - (BOOL)isAnyButtonSelected {

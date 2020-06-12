@@ -378,31 +378,30 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     [self removeUnfiredConnectionTimeoutTimer];
     [self handleConnectionFailureWithError:error];
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didFailToConnectPeripheral: " andPeripheral:peripheral andError:error]];
+    [self postFailedToConnectPeripheral:peripheral andError:error];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"didDisconnectPeripheral: %@", peripheral.name);
     NSLog(@"error: %@", error);
-    if (self.connectedPeripheral && [self.connectedPeripheral isEqual:peripheral]) {
-        self.connectedPeripheral = nil;
-
-        NSMutableDictionary *userInfo = nil;
-        if(self.disconnectingPeripheral) {
-            self.disconnectingPeripheral = nil;
-        } else {
-            userInfo = [NSMutableDictionary dictionary];
-            userInfo[SILCentralManagerPeripheralKey] = peripheral;
-            if (error) {
-                userInfo[SILCentralManagerErrorKey] = error;
-            }
-        }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerDidDisconnectPeripheralNotification
-                                                            object:self
-                                                          userInfo:userInfo];
+    
+    BOOL wasConnected = [self.connectionsViewModel isConnectedPeripheral:peripheral];
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[SILCentralManagerPeripheralKey] = peripheral;
+    userInfo[SILNotificationKeyUUID] = peripheral.identifier.UUIDString;
+    if (error) {
+        userInfo[SILCentralManagerErrorKey] = error;
     }
+        
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerDidDisconnectPeripheralNotification
+                                                        object:self
+                                                        userInfo:userInfo];
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDisconnectPeripheral: " andPeripheral:peripheral andError:error]];
-    [self postDeleteDisconnectedPeripheral:peripheral];
+    if (wasConnected) {
+        [self postDeleteDisconnectedPeripheral:peripheral andError:error];
+    } else {
+        [self postFailedToConnectPeripheral:peripheral andError:error];
+    }
 }
 
 #pragma mark - Notifications
@@ -446,11 +445,29 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (void)postRegisterLogNotification:(NSString*)description {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationRegisterLog object:self userInfo:@{ SILNotificationKeyDescription : description}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationRegisterLog
+                                                        object:self
+                                                      userInfo:@{
+                                                          SILNotificationKeyDescription : description
+                                                      }];
 }
 
-- (void)postDeleteDisconnectedPeripheral:(CBPeripheral*)peripheral {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDeleteDisconnectedPeripheral object:self userInfo:@{ SILNotificationKeyUUID: peripheral.identifier.UUIDString}];
+- (void)postDeleteDisconnectedPeripheral:(CBPeripheral*)peripheral andError:(NSError*)error {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDeleteDisconnectedPeripheral
+                                                        object:self
+                                                      userInfo:@{
+                                                          SILNotificationKeyUUID: peripheral.identifier.UUIDString,
+                                                          SILNotificationKeyError: [NSString stringWithFormat:@"%ld", (long)error.code]
+                                                      }];
+}
+
+- (void)postFailedToConnectPeripheral:(CBPeripheral*)peripheral andError:(NSError*)error {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationFailedToConnectPeripheral
+                                                        object:self
+                                                      userInfo:@{
+                                                          SILNotificationKeyPeripheralName: peripheral.name,
+                                                          SILNotificationKeyError: [NSString stringWithFormat:@"%ld", (long)error.code]
+                                                      }];
 }
 
 #pragma mark - CLLocationManagerDelegate

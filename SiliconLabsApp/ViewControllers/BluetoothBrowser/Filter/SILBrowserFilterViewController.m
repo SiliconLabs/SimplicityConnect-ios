@@ -17,10 +17,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
-@property (weak, nonatomic) IBOutlet UITextView *searchByRawAdvertisementDataTextView;
 @property (weak, nonatomic) IBOutlet UITextView *searchByDeviceNameTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *clearTextImageByDeviceName;
-@property (weak, nonatomic) IBOutlet UIImageView *clearTextImageByAdvertisementData;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
 @property (weak, nonatomic) IBOutlet UILabel *beaconTypeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minRangeLabel;
@@ -29,8 +27,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *savedSearchesLabel;
 @property (weak, nonatomic) IBOutlet UISlider *dBmSlider;
 @property (weak, nonatomic) IBOutlet UIView *seachByDeviceNameView;
-@property (weak, nonatomic) IBOutlet UIView *searchByRawAdvertisementDataView;
-@property (weak, nonatomic) IBOutlet UITextView *hexTextView;
 @property (weak, nonatomic) IBOutlet UILabel *favouriteAreaTitleLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *favouriteSwitch;
 @property (weak, nonatomic) IBOutlet UIButton *beaconTypeAreaButton;
@@ -46,9 +42,7 @@
 
 @implementation SILBrowserFilterViewController
 
-NSString* const HexTextView = @"0x";
 NSString* const SearchByDeviceNamePlaceholder = @"Search by device name";
-NSString* const SearchByRawAdvertisementDataPlaceholder = @"Search by raw advertising data";
 NSString* const DiscardKeybordText = @"\n";
 NSInteger const ASCIICodeFor0 = 48;
 NSInteger const ASCIICodeFor9 = 57;
@@ -99,34 +93,10 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 #pragma mark - Appearance for Searching View
 
 - (void)setAppearanceForSeachingView {
-    [self setAppearanceForSearchingByRawAdvertisement];
     [self setAppearanceForSearchingByDeviceName];
     [self setBackgroundAppearance];
     [self setupGesturesForClearImages];
     [self hideClearButtons];
-}
-
-- (void)setAppearanceForSearchingByRawAdvertisement {
-    [self setAppearanceForRawAdvertisementDataTextView];
-    [self setAppearanceForHexTextView];
-}
-
-- (void)setAppearanceForRawAdvertisementDataTextView {
-    _searchByRawAdvertisementDataTextView.textContainer.maximumNumberOfLines = 1;
-    _searchByRawAdvertisementDataTextView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
-    _searchByRawAdvertisementDataTextView.delegate = self;
-    [_searchByRawAdvertisementDataTextView setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
-    _searchByRawAdvertisementDataTextView.textColor = [UIColor sil_subtleTextColor];
-    _searchByRawAdvertisementDataTextView.text = SearchByRawAdvertisementDataPlaceholder;
-    _searchByRawAdvertisementDataTextView.autocorrectionType = UITextAutocorrectionTypeNo;
-}
-
-- (void)setAppearanceForHexTextView {
-    _hexTextView.textContainer.maximumNumberOfLines = 1;
-    _hexTextView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
-    [_hexTextView setFont:[UIFont robotoBoldWithSize:[UIFont getMiddleFontSize]]];
-    _hexTextView.textColor = [UIColor sil_primaryTextColor];
-    _hexTextView.text = HexTextView;
 }
 
 - (void)setAppearanceForSearchingByDeviceName {
@@ -142,13 +112,10 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 - (void)setBackgroundAppearance {
     _seachByDeviceNameView.backgroundColor = [UIColor sil_backgroundColor];
     _seachByDeviceNameView.layer.cornerRadius = 10.0;
-    _searchByRawAdvertisementDataView.backgroundColor = [UIColor sil_backgroundColor];
-    _searchByRawAdvertisementDataView.layer.cornerRadius = 10.0;
 }
 
 - (void)setupGesturesForClearImages {
     [self setupGestureForClearImageDeviceName];
-    [self setupGestureForClearImageAdvertisementData];
 }
 
 - (void)setupGestureForClearImageDeviceName {
@@ -165,39 +132,16 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [self hideClearImageForDeviceName];
 }
 
-- (void)setupGestureForClearImageAdvertisementData {
-    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(performClearActionForAdvertisementDataView:)];
-    [_clearTextImageByAdvertisementData addGestureRecognizer:tap];
-}
-
-- (void)performClearActionForAdvertisementDataView:(UIGestureRecognizer*)gestureRecognizer {
-    _searchByRawAdvertisementDataTextView.text = EmptyText;
-    _viewModel.searchByRawAdvertisingData = EmptyText;
-    if ([_searchByRawAdvertisementDataTextView isFirstResponder] == false) {
-       [self textViewDidEndEditing:_searchByRawAdvertisementDataTextView];
-    }
-    [self hideClearImageForAdvertisementData];
-}
-
 - (void)hideClearButtons {
     [self hideClearImageForDeviceName];
-    [self hideClearImageForAdvertisementData];
 }
 
 - (void)hideClearImageForDeviceName {
     [_clearTextImageByDeviceName setHidden:YES];
 }
 
-- (void)hideClearImageForAdvertisementData {
-    [_clearTextImageByAdvertisementData setHidden:YES];
-}
-
 - (void)showClearImageForDeviceName {
     [_clearTextImageByDeviceName setHidden:NO];
-}
-
-- (void)showClearImageForAdvertisementData {
-    [_clearTextImageByAdvertisementData setHidden:NO];
 }
 
 # pragma mark - TextViewDelegate
@@ -217,19 +161,12 @@ NSString* const StarterRSSIValue = @"-100 dBm";
         return NO;
     }
     
-    if ([textView isEqual:_searchByRawAdvertisementDataTextView]) {
-        return [self isHexNumberInString:text];
-    }
-    
     return YES;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([textView isEqual:_searchByDeviceNameTextView]) {
         [self discardPlaceholderIfNeededForDeviceNameTextView];
-    }
-    if ([textView isEqual:_searchByRawAdvertisementDataTextView]) {
-        [self discardPlaceholderIfNeededForRawAdvertisementDataTextView];
     }
     
     [self manageClearImageState:textView];
@@ -239,9 +176,6 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 - (void)manageClearImageState:(UITextView*)textView {
     if ([textView isEqual:_searchByDeviceNameTextView]) {
         [self manageClearImageStateForDeviceNameTextView];
-    }
-    if ([textView isEqual:_searchByRawAdvertisementDataTextView]) {
-        [self manageClearImageStateForAdvertisementData];
     }
 }
 
@@ -253,32 +187,15 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     }
 }
 
-- (void)manageClearImageStateForAdvertisementData {
-    if (([_searchByRawAdvertisementDataTextView.text isEqualToString:EmptyText] || [_searchByRawAdvertisementDataTextView.text isEqualToString:SearchByRawAdvertisementDataPlaceholder]) == false) {
-        [self showClearImageForAdvertisementData];
-    } else {
-        [self hideClearImageForAdvertisementData];
-    }
-}
-
 - (void)discardPlaceholderIfNeededForDeviceNameTextView {
     if ([_searchByDeviceNameTextView.text isEqualToString:SearchByDeviceNamePlaceholder]) {
          _searchByDeviceNameTextView.text = EmptyText;
      }
 }
 
-- (void)discardPlaceholderIfNeededForRawAdvertisementDataTextView {
-    if ([_searchByRawAdvertisementDataTextView.text isEqualToString:SearchByRawAdvertisementDataPlaceholder]) {
-           _searchByRawAdvertisementDataTextView.text = EmptyText;
-       }
-}
-
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView isEqual:_searchByDeviceNameTextView]) {
         [self setPlaceholderIfNeededForDeviceNameTextView];
-    }
-    if ([textView isEqual:_searchByRawAdvertisementDataTextView]) {
-        [self setPlaceholderIfNeededForRawAdvertisementDataTextView];
     }
 
     [textView resignFirstResponder];
@@ -290,23 +207,11 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     }
 }
 
-- (void)setPlaceholderIfNeededForRawAdvertisementDataTextView {
-    if ([_searchByRawAdvertisementDataTextView.text isEqualToString:EmptyText]) {
-        _searchByRawAdvertisementDataTextView.text = SearchByRawAdvertisementDataPlaceholder;
-    }
-}
-
 - (void)updateSearchTextViewModels {
     if ([self.searchByDeviceNameTextView.text isEqualToString:SearchByDeviceNamePlaceholder]) {
         self.viewModel.searchByDeviceName = EmptyText;
     } else {
         self.viewModel.searchByDeviceName = self.searchByDeviceNameTextView.text;
-    }
-    
-    if ([self.searchByRawAdvertisementDataTextView.text isEqualToString:SearchByRawAdvertisementDataPlaceholder]) {
-        self.viewModel.searchByRawAdvertisingData = EmptyText;
-    } else {
-        self.viewModel.searchByRawAdvertisingData = self.searchByRawAdvertisementDataTextView.text;
     }
 }
 
@@ -549,22 +454,11 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 
 - (void)updateFilterViewValues {
     _searchByDeviceNameTextView.text = _viewModel.searchByDeviceName;
-    _searchByRawAdvertisementDataTextView.text = _viewModel.searchByRawAdvertisingData;
     _dBmSlider.value = _viewModel.dBmValue;
     _favouriteSwitch.on = _viewModel.isFavouriteFilterSet;
     _connectableSwitch.on = _viewModel.isConnectableFilterSet;
     [self textViewDidEndEditing:_searchByDeviceNameTextView];
-    [self textViewDidEndEditing:_searchByRawAdvertisementDataTextView];
     [self manageClearImageState:_searchByDeviceNameTextView];
-    [self manageClearImageState:_searchByRawAdvertisementDataTextView];
-}
-
-# pragma mark - Hex Number Checker
-
-- (BOOL)isHexNumberInString:(NSString*)text {
-    NSString* const HexsNumbersPattern = @"[0-9A-F]";
-    NSRange range = [text rangeOfString:HexsNumbersPattern options:NSRegularExpressionSearch];
-    return range.location != NSNotFound;
 }
 
 @end

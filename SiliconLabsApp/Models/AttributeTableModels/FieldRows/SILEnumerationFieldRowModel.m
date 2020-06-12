@@ -49,6 +49,10 @@
     return self.fieldModel.name;
 }
 
+- (void)clearValues {
+    [self consumeValue:[[NSData alloc] init] fromIndex:0];
+}
+
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
     if (self.fieldModel.format) {
         NSData *fieldData = [[SILCharacteristicFieldValueResolver sharedResolver] subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];

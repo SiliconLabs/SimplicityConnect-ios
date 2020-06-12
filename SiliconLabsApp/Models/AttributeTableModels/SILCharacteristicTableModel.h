@@ -33,5 +33,7 @@
 - (void)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral error:(NSError * __autoreleasing *)error;
 - (NSData *)dataToWriteWithError:(NSError * __autoreleasing *)error;
 - (void)readCharacteristicIfAllowed;
+- (BOOL)clearModel;
+- (void)expandFieldIfNeeded;
 
 @end

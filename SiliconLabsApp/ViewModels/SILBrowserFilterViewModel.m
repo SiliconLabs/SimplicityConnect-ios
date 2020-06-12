@@ -53,7 +53,6 @@
 
 - (void)setDefaultValues {
     self.searchByDeviceName = EmptyText;
-    self.searchByRawAdvertisingData = EmptyText;
     self.dBmValue = DefaultDBMValue;
     self.isBeaconTypeExpanded = NO;
     self.isFavouriteFilterSet = NO;
@@ -69,7 +68,6 @@
 
 - (void)clearViewModelData {
     self.searchByDeviceName = EmptyText;
-    self.searchByRawAdvertisingData = EmptyText;
     self.dBmValue = DefaultDBMValue;
     self.isConnectableFilterSet = NO;
     self.isFavouriteFilterSet = NO;
@@ -81,7 +79,6 @@
 
 - (void)returnStateFrom:(SILBrowserSavedSearches*)savedSearch {
     self.searchByDeviceName = savedSearch.searchByDeviceNameText;
-    self.searchByRawAdvertisingData = savedSearch.searchByRawAdvetisingDataText;
     self.dBmValue = savedSearch.dBmValue;
     self.isFavouriteFilterSet = savedSearch.isFavourite;
     self.isConnectableFilterSet = savedSearch.isConnectable;
@@ -168,13 +165,6 @@
     }
 }
 
-- (void)setSearchByRawAdvertisingData:(NSString *)searchByRawAdvertisingData {
-    if (_searchByRawAdvertisingData != searchByRawAdvertisingData) {
-        _searchByRawAdvertisingData = searchByRawAdvertisingData;
-        [self changeStateOfIsActiveFilterFromSavedSearchesIfNeeded];
-    }
-}
-
 - (void)setDBmValue:(NSInteger)dBmValue {
     if (_dBmValue != dBmValue) {
         _dBmValue = dBmValue;
@@ -206,7 +196,7 @@
 #pragma mark - Saving Search
 
 - (void)saveCurrentFilterDataToSavedSearches {
-    SILBrowserSavedSearches* saveSearch = [[SILBrowserSavedSearches alloc] initWithSearchByDeviceNameText:_searchByDeviceName searchByRawAdveritisingDataText:_searchByRawAdvertisingData dBmValue:_dBmValue beaconTypes:_beaconTypes isFavourite:_isFavouriteFilterSet isConnectable:_isConnectableFilterSet andIsSelected:NO];
+    SILBrowserSavedSearches* saveSearch = [[SILBrowserSavedSearches alloc] initWithSearchByDeviceNameText:_searchByDeviceName dBmValue:_dBmValue beaconTypes:_beaconTypes isFavourite:_isFavouriteFilterSet isConnectable:_isConnectableFilterSet andIsSelected:NO];
     if ([self isUniqueSavedSearches:saveSearch]) {
         [_savedSearches addObject:saveSearch];
         [self updateSavedSearches:[_savedSearches count] - 1];
@@ -220,7 +210,7 @@
 - (void)saveSearchInRealmDatabase:(SILBrowserSavedSearches*)savedSearch {
     SILSavedSearchesRealmModel* saveSearchRealm = [[SILSavedSearchesRealmModel alloc] init];
     saveSearchRealm.searchByDeviceName = savedSearch.searchByDeviceNameText;
-    saveSearchRealm.searchByAdvertisingData = savedSearch.searchByRawAdvetisingDataText;
+ //   saveSearchRealm.searchByAdvertisingData = savedSearch.searchByRawAdvetisingDataText;
     saveSearchRealm.dBmValue = savedSearch.dBmValue;
     saveSearchRealm.isFavouriteSetFilter = savedSearch.isFavourite;
     saveSearchRealm.isConnectableSetFilter = savedSearch.isConnectable;
@@ -245,9 +235,6 @@
 
 - (BOOL)isEqualTwoSavedSearches:(SILBrowserSavedSearches*)savedSearch andSecond:(SILBrowserSavedSearches*)savedSearch2 {
     if (![savedSearch.searchByDeviceNameText isEqualToString:savedSearch2.searchByDeviceNameText]) {
-        return NO;
-    }
-    if (![savedSearch.searchByRawAdvetisingDataText isEqualToString:savedSearch2.searchByRawAdvetisingDataText]) {
         return NO;
     }
     if (savedSearch.dBmValue != savedSearch2.dBmValue) {
@@ -327,7 +314,7 @@
         SILBrowserBeaconType* beacon = [[SILBrowserBeaconType alloc] initWithName:savedSearchBeacon.beaconName andSelection:savedSearchBeacon.isSelected];
         [beaconTypes addObject:beacon];
     }
-    SILBrowserSavedSearches* browserSavedSearch = [[SILBrowserSavedSearches alloc] initWithSearchByDeviceNameText:savedSearchRealm.searchByDeviceName searchByRawAdveritisingDataText:savedSearchRealm.searchByAdvertisingData dBmValue:savedSearchRealm.dBmValue beaconTypes:beaconTypes isFavourite:savedSearchRealm.isFavouriteSetFilter isConnectable:savedSearchRealm.isConnectableSetFilter andIsSelected:NO];
+    SILBrowserSavedSearches* browserSavedSearch = [[SILBrowserSavedSearches alloc] initWithSearchByDeviceNameText:savedSearchRealm.searchByDeviceName dBmValue:savedSearchRealm.dBmValue beaconTypes:beaconTypes isFavourite:savedSearchRealm.isFavouriteSetFilter isConnectable:savedSearchRealm.isConnectableSetFilter andIsSelected:NO];
     return browserSavedSearch;
 }
 
@@ -335,9 +322,6 @@
 
 - (BOOL)isFilterActive {
     if (![_searchByDeviceName isEqual:EmptyText]) {
-        return YES;
-    }
-    if (![_searchByRawAdvertisingData isEqual:EmptyText]) {
         return YES;
     }
     if (_dBmValue != DefaultDBMValue) {
@@ -389,14 +373,7 @@
         [stringRepresentation appendString:savedSearches.searchByDeviceNameText];
         [stringRepresentation appendString:QuoteText];
     }
-    
-    if (![savedSearches.searchByRawAdvetisingDataText isEqual:EmptyText]) {
-        [stringRepresentation appendString:SearchByPacketContent];
-        [stringRepresentation appendString:QuoteText];
-        [stringRepresentation appendString:savedSearches.searchByRawAdvetisingDataText];
-        [stringRepresentation appendString:QuoteText];
-    }
-    
+        
     if (savedSearches.isFavourite) {
         [stringRepresentation appendString:OnlyFavouritesTitle];
     }

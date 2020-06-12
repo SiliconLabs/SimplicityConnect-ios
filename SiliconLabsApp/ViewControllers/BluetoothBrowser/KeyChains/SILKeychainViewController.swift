@@ -18,6 +18,7 @@ class SILKeychainViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableLeftInset: NSLayoutConstraint!
     @IBOutlet weak var tableRightInset: NSLayoutConstraint!
+    @IBOutlet weak var infoImage: UIImageView!
     
     var popoverController: WYPopoverController?
     var realmCharacteristicsNotificationToken: NotificationToken? = nil
@@ -55,8 +56,19 @@ class SILKeychainViewController: UIViewController {
         super.viewDidLoad()
         setupNotificationToken()
         setupTableViewInsets()
+        setupInfoImage()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addObserverForDisplayToastResponse()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+        
     private func setupNotificationToken() {
         if self.characteristics != nil {
             setupCharacteristicsNotificationTokenIfNeeded()
@@ -101,6 +113,30 @@ class SILKeychainViewController: UIViewController {
         } else {
             tableLeftInset.constant = tableInset
             tableRightInset.constant = -tableInset
+        }
+    }
+    
+    private func setupInfoImage() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedInfoImage(_:)))
+        self.infoImage.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func tappedInfoImage(_ regognizer: UIGestureRecognizer) {
+        let storyboard = UIStoryboard(name: "SILKeychain", bundle: nil)
+        if let infoViewController = storyboard.instantiateViewController(withIdentifier: "KeychainInfo") as? SILKeychainInfoViewController {
+            infoViewController.delegate = self
+            self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: infoViewController, presenting:self, delegate:self as? WYPopoverControllerDelegate, animated:true)
+        }
+    }
+    
+    private func addObserverForDisplayToastResponse() {
+        NotificationCenter.default.addObserver(self, selector:#selector(displayToast(_:)), name: NSNotification.Name(rawValue: SILNotificationDisplayToastResponse), object: nil)
+    }
+    
+    @objc private func displayToast(_ notification: Notification) {
+        let ErrorMessage = notification.userInfo?[SILNotificationKeyDescription] as? String ?? ""
+        self.showToast(message: ErrorMessage, toastType: .disconnectionError) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: SILNotificationDisplayToastRequest), object: nil)
         }
     }
     
@@ -206,6 +242,14 @@ extension SILKeychainViewController : SILDebugPopoverViewControllerDelegate {
             nameEditor.model = realmModel
             nameEditor.popoverDelegate = self
             self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: nameEditor, presenting:self, delegate:self as? WYPopoverControllerDelegate, animated:true)
+        }
+    }
+}
+
+extension SILKeychainViewController : SILKeychainInfoViewContollerDelegate {
+    func shouldCloseInfoViewController(_ infoViewController: SILKeychainInfoViewController) {
+        self.popoverController?.dismissPopover(animated: true) {
+            self.popoverController = nil
         }
     }
 }

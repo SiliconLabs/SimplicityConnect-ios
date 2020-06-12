@@ -22,6 +22,8 @@
 - (void)disconnectAllPeripheral;
 - (void)updateConnectionsView:(NSInteger)index;
 - (void)connectionsViewOnDetailsScreen:(BOOL)isDetailsScreen;
+- (BOOL)isConnectedPeripheral:(CBPeripheral*)peripheral;
+- (void)clearViewModelData;
 
 @end
 

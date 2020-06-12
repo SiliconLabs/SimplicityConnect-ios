@@ -18,13 +18,12 @@ RLM_ARRAY_TYPE(SILBeaconTypeRealmModel)
 @interface SILSavedSearchesRealmModel : RLMObject
 
 @property NSString* searchByDeviceName;
-@property NSString* searchByAdvertisingData;
 @property NSInteger dBmValue;
 @property RLMArray<SILBeaconTypeRealmModel *><SILBeaconTypeRealmModel>* beaconTypes;
 @property BOOL isFavouriteSetFilter;
 @property BOOL isConnectableSetFilter;
 
-- (instancetype)initWithSearchByDeviceNameText:(NSString*)searchByDeviceNameText searchByRawAdveritisingDataText:(NSString*)searchByAdvertisingDataText dBmValue:(NSInteger)dBmValue beaconTypes:(RLMArray<SILBeaconTypeRealmModel*>*)beaconTypes isFavourite:(BOOL)isFavourite andIsConnectable:(BOOL)isConnectable;
+- (instancetype)initWithSearchByDeviceNameText:(NSString*)searchByDeviceNameText dBmValue:(NSInteger)dBmValue beaconTypes:(RLMArray<SILBeaconTypeRealmModel*>*)beaconTypes isFavourite:(BOOL)isFavourite andIsConnectable:(BOOL)isConnectable;
 
 @end
 

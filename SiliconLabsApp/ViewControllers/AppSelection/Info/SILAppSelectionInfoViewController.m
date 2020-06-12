@@ -40,7 +40,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return CGSizeMake(600, 600);
     } else {
-        return CGSizeMake(300, 500);
+        return CGSizeMake(300, 520);
     }
 }
 

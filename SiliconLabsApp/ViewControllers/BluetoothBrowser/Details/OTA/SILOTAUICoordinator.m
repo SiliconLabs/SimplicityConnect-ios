@@ -18,8 +18,6 @@
 #import "SILPopoverViewController.h"
 #import "SILOTAProgressViewController.h"
 
-#define OTA_TTL 30
-
 static NSString * const kSILDFUStatusRebootingString = @"Rebooting...";
 static NSString * const kSILDFUStatusWaitingString = @"Waiting...";
 static NSString * const kSILDFUStatusConnectingString = @"Attempting Connection...";
@@ -33,6 +31,8 @@ static NSString * const kSILFirmwareUpdateBGErrCommandTooLong = @"Command too lo
 static NSString * const kSILFirmwareUpdateBGErrInvalidFileFormat = @"Invalid file format";
 static NSString * const kSILFirmwareUpdateBGErrUnspecified = @"Unspecified error";
 static NSString * const kSILFirmwareUpdateBGErrUnknown = @"Unspecified error";
+static NSString * const kSILDeviceIsNotResponding = @"Device is not responding";
+static NSString * const kSILCouldNotFindDeviceAdvertising = @"Could not find device advertising";
 static NSString * const kSILDeviceInOTAModeName = @"OTA";
 
 @interface SILOTAUICoordinator () <SILOTASetupViewControllerDelegate, SILOTAProgressViewControllerDelegate,
@@ -180,7 +180,12 @@ SILOTAFirmwareUpdateManagerDelegate>
 
     UIAlertAction *action = [self alertActionForError:error];
     [alert addAction:action];
-    [self.presentingViewController presentViewController:alert animated:animated completion:nil];
+
+    [self.presentingViewController presentViewController:alert animated:animated completion:^{
+        [self.otaTTL invalidate];
+        [SVProgressHUD dismiss];
+    }];
+
 }
 
 - (NSString *)underlyingSILErrorMessageForError:(NSError *)error withUnderlyingError:(NSError *)underlyingError {
@@ -233,8 +238,7 @@ SILOTAFirmwareUpdateManagerDelegate>
     
     self.otaMode = firmwareUpdate.updateMode;
     __weak SILOTAUICoordinator *weakSelf = self;
-    [self reupdateDeviceInOtaMode];
-    [self scheduleOtaTTL];
+    [self scheduleOtaTTLWithInitiationByteSequence:YES];
     [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:YES
                                                                 progress:^(SILDFUStatus status) {
                                                                     [SVProgressHUD setStatus:[weakSelf stringForDFUStatus:status]];
@@ -254,27 +258,25 @@ SILOTAFirmwareUpdateManagerDelegate>
                                                                 }];
 }
 
-- (void)scheduleOtaTTL {
-    _otaTTL = [NSTimer scheduledTimerWithTimeInterval:OTA_TTL repeats:NO block:^(NSTimer * _Nonnull timer) {
+- (void)scheduleOtaTTLWithInitiationByteSequence:(BOOL)withInitiationByteSequence {
+    const NSUInteger TimeToFindApploader = 10;
+    const NSUInteger TimeToSearchAdvertising = 5;
+    NSTimeInterval otaTTL = withInitiationByteSequence ? TimeToFindApploader : TimeToSearchAdvertising;
+    NSString* errorMessage = withInitiationByteSequence ? kSILDeviceIsNotResponding : kSILCouldNotFindDeviceAdvertising;
+    self.otaTTL = [NSTimer scheduledTimerWithTimeInterval:otaTTL repeats:NO block:^(NSTimer * _Nonnull timer) {
         [self.otaFirmwareUpdateManager endCycleDevice];
         [SVProgressHUD dismiss];
         [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
         [self.presentingViewController.navigationController popViewControllerAnimated:YES];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"dismiss", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:kSILOKButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
         }];
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"device_is_not_responding", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:kSILFirmwareUpdateUnknownErrorTitle message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
         [alertController addAction:action];
         [self.presentingViewController presentViewController:alertController animated:TRUE completion:^{
             
         }];
     }];
-}
-
-- (void)reupdateDeviceInOtaMode {
-    if ([self.peripheral.name isEqualToString:kSILDeviceInOTAModeName]) {
-         [self.otaFirmwareUpdateManager disconnectConnectedPeripheral];
-     }
 }
 
 - (void)otaSetupViewControllerDidCancel:(SILOTASetupViewController *)controller {
@@ -356,12 +358,13 @@ SILOTAFirmwareUpdateManagerDelegate>
         [self handleError:error];
         return;
     }
-    
+    [self scheduleOtaTTLWithInitiationByteSequence:NO];
     [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:NO
                                                                 progress:^(SILDFUStatus status) {
                                                                     [weakSelf handleCycleDeviceProgress:status];
                                                                 }
                                                               completion:^(CBPeripheral *peripheral, NSError *error) {
+                                                                    [self.otaTTL invalidate];
                                                                     dispatch_async(dispatch_get_main_queue(), ^{
                                                                         [weakSelf handleCycleDeviceCompletionForPeripheral:peripheral error:error withFirmwareUpdate:firmwareUpdate];
                                                                     });

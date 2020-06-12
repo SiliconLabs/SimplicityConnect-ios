@@ -15,7 +15,6 @@
 
 @property (strong, nonatomic) SILDiscoveredPeripheral *discoveredPeripheral;
 @property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataModel *> *advertisementDataModels;
-@property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataModel *> *advertisementDataModelsForDevicesTable;
 @property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataModel *> *advertisementDataModelsForInfoView;
 
 - (instancetype)initWithDiscoveredPeripheral:(SILDiscoveredPeripheral *)discoveredPeripheral;

@@ -16,12 +16,11 @@
 
 @implementation SILSavedSearchesRealmModel
 
-- (instancetype)initWithSearchByDeviceNameText:(NSString*)searchByDeviceNameText searchByRawAdveritisingDataText:(NSString*)searchByAdvertisingDataText dBmValue:(NSInteger)dBmValue beaconTypes:(RLMArray<SILBeaconTypeRealmModel*>*)beaconTypes isFavourite:(BOOL)isFavourite andIsConnectable:(BOOL)isConnectable {
+- (instancetype)initWithSearchByDeviceNameText:(NSString*)searchByDeviceNameText dBmValue:(NSInteger)dBmValue beaconTypes:(RLMArray<SILBeaconTypeRealmModel*>*)beaconTypes isFavourite:(BOOL)isFavourite andIsConnectable:(BOOL)isConnectable {
     self = [super self];
     
     if (self) {
         self.searchByDeviceName = searchByDeviceNameText;
-        self.searchByAdvertisingData = searchByAdvertisingDataText;
         self.dBmValue = dBmValue;
         self.beaconTypes = beaconTypes;
         self.isFavouriteSetFilter = isFavourite;

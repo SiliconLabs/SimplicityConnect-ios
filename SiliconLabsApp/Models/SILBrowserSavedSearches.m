@@ -12,7 +12,6 @@
 @interface SILBrowserSavedSearches ()
 
 @property (strong, nonatomic, readwrite) NSString *searchByDeviceNameText;
-@property (strong, nonatomic, readwrite) NSString *searchByRawAdvetisingDataText;
 @property (nonatomic, readwrite) NSInteger dBmValue;
 @property (strong, nonatomic, readwrite) NSArray<SILBrowserBeaconType*>* beaconTypes;
 @property (nonatomic, readwrite) BOOL isFavourite;
@@ -23,11 +22,10 @@
 
 @implementation SILBrowserSavedSearches : NSObject
 
-- (instancetype)initWithSearchByDeviceNameText:(NSString*)searchByDeviceNameText searchByRawAdveritisingDataText:(NSString*)searchByRawAdvetisingDataText dBmValue:(NSInteger)dBmValue beaconTypes:(NSArray<SILBrowserBeaconType*>*)beaconTypes isFavourite:(BOOL)isFavourite isConnectable:(BOOL)isConnectable andIsSelected:(BOOL)isSelected {
+- (instancetype)initWithSearchByDeviceNameText:(NSString*)searchByDeviceNameText dBmValue:(NSInteger)dBmValue beaconTypes:(NSArray<SILBrowserBeaconType*>*)beaconTypes isFavourite:(BOOL)isFavourite isConnectable:(BOOL)isConnectable andIsSelected:(BOOL)isSelected {
     self = [super init];
     if (self) {
         self.searchByDeviceNameText = searchByDeviceNameText;
-        self.searchByRawAdvetisingDataText = searchByRawAdvetisingDataText;
         self.dBmValue = dBmValue;
         self.beaconTypes = beaconTypes;
         self.isFavourite = isFavourite;

@@ -17,6 +17,15 @@ typedef NS_ENUM(NSInteger, SILBeaconType) {
     SILBeaconTypeEddystone
 };
 
+typedef NS_ENUM(NSInteger, SILEddystoneBeaconType) {
+    SILEddystoneBeaconTypeUnspecified,
+    SILEddystoneBeaconTypeUID,
+    SILEddystoneBeaconTypeURL,
+    SILEddystoneBeaconTypeTLMUnencrypted,
+    SILEddystoneBeaconTypeTLMEncrypted,
+    SILEddystoneBeaconTypeEID
+};
+
 extern NSString * const SILBeaconUnspecified;
 extern NSString * const SILBeaconIBeacon;
 extern NSString * const SILBeaconAltBeacon;
@@ -31,15 +40,18 @@ extern NSString * const SILBeaconEddystone;
 @property (assign, nonatomic) int8_t calibrationPower;
 @property (strong, nonatomic) NSNumber *txPower;
 @property (strong, nonatomic) CLBeacon *beacon; //used by iBeacons
+@property (strong, nonatomic) NSString *manufacturerID; // used by AltBeacons
 @property (strong, nonatomic) NSNumber *refRSSI; //used by AltBeacons
 @property (strong, nonatomic) NSString *beaconNamespace; //used by Eddystone
 @property (strong, nonatomic) NSString *instance; //used by Eddystone
 @property (strong, nonatomic) NSURL *url; //used by Eddystone
 @property (strong, nonatomic) TLMData *tlmData; //used by Eddystone
 @property (nonatomic) SILBeaconType type;
+@property (nonatomic) SILEddystoneBeaconType eddystoneBeaconType; // used by Eddystone
+@property (nonatomic) NSData* eddystoneData; // used by Eddystone
 
 + (instancetype)beaconWithAdvertisment:(NSDictionary *)advertisement name:(NSString *)name error:(NSError **)error;
 + (instancetype)beaconWithIBeacon:(CLBeacon *)beacon;
-+ (instancetype)beaconWithEddystone:(EddystoneBeacon *)eddystone;
++ (instancetype)beaconWithEddystone:(NSData*)eddystoneServiceData;
 
 @end

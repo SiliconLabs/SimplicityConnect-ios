@@ -15,6 +15,8 @@
 @interface SILBrowserConnectionsViewModel ()
 
 @property (strong, nonatomic, readwrite) NSMutableArray<SILConnectedPeripheralDataModel*>* allPeripherals;
+@property (strong, nonatomic, readwrite) NSMutableArray<SILDisconnectionToastModel*>* toastsToDisplayList;
+@property (strong, nonatomic) NSTimer* toastsToDisplayChecker;
 
 @end
 
@@ -36,9 +38,13 @@
     if (self) {
         self.allPeripherals = [[NSMutableArray alloc] init];
         self.peripherals = [_allPeripherals copy];
+        self.toastsToDisplayList = [[NSMutableArray alloc] init];
+        self.toastsToDisplayChecker = [self setupToastToDisplayChecker];
         [self addObserverForDisconnectPeripheral];
         [self addObserverForDeleteDisconnectedPeripheral];
         [self addObserverForDisconnectAllPeripheral];
+        [self addObserverForDisplayToastRequest];
+        [self addObserverForFailedToConnectPeripheral];
     }
     return self;
 }
@@ -55,6 +61,23 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectAllPeripheral) name:SILNotificationDisconnectAllPeripheral object:nil];
 }
 
+- (void)addObserverForDisplayToastRequest {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayToastIfNeeded) name:SILNotificationDisplayToastRequest object:nil];
+}
+
+- (void)addObserverForFailedToConnectPeripheral {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addFailedConnectionToastToDisplay:) name:SILNotificationFailedToConnectPeripheral object:nil];
+}
+
+- (NSTimer*)setupToastToDisplayChecker {
+    return [NSTimer scheduledTimerWithTimeInterval:1.0f repeats:YES block:^(NSTimer * _Nonnull timer) {
+        if (self.toastsToDisplayList.count > 0) {
+            [self displayToastIfNeeded];
+            [self.toastsToDisplayChecker invalidate];
+        }
+    }];
+}
+
 - (void)addNewConnectedPeripheral:(CBPeripheral*)peripheral {
     if ([self isUniquePeripheral:peripheral]) {
         SILConnectedPeripheralDataModel* connectedPeripheral = [[SILConnectedPeripheralDataModel alloc] initWithPeripheral:peripheral andIsSelected:NO];
@@ -69,10 +92,6 @@
     for (SILConnectedPeripheralDataModel* connectedPeripheral in _allPeripherals) {
         [_centralManager disconnectFromPeripheral:connectedPeripheral.peripheral];
     }
-    
-    _allPeripherals = [[NSMutableArray alloc] init];
-    _peripherals = [_allPeripherals copy];
-    [self postReloadConnectionTableViewNotification];
 }
 
 - (void)disconnectPeripheral:(NSNotification*)notification {
@@ -82,9 +101,6 @@
     
     SILConnectedPeripheralDataModel* connectedPeripheral = _peripherals[index];
     [_centralManager disconnectFromPeripheral:connectedPeripheral.peripheral];
-    [_allPeripherals removeObjectAtIndex:index];
-    _peripherals = [_allPeripherals copy];
-    [self postReloadConnectionTableViewNotification];
 }
 
 - (void)postReloadConnectionTableViewNotification {
@@ -107,11 +123,16 @@
 - (void)deleteDisconnectedPeripheral:(NSNotification*)notification {
     NSDictionary* userInfo = notification.userInfo;
     NSString* uuid = (NSString*)userInfo[SILNotificationKeyUUID];
+    NSString* errorCodeString = (NSString*)userInfo[SILNotificationKeyError];
+    int errorCode = [errorCodeString intValue];
     
     for (SILConnectedPeripheralDataModel* connectedPeripheral in _peripherals) {
         if ([connectedPeripheral.peripheral.identifier.UUIDString isEqualToString:uuid]) {
-            [_allPeripherals removeObject:connectedPeripheral];
-            _peripherals = [_allPeripherals copy];
+            [self.allPeripherals removeObject:connectedPeripheral];
+            self.peripherals = [self.allPeripherals copy];
+            if (errorCode != 0) {
+                [self.toastsToDisplayList addObject:[[SILDisconnectionToastModel alloc] initWithPeripheralName:connectedPeripheral.peripheral.name errorCode:errorCode peripheralWasConnected:YES]];
+            }
         }
     }
     
@@ -132,6 +153,38 @@
     if (isDetailsScreen == NO) {
         [self updateConnectionsView:NoDeviceFoundedIndex];
     }
+}
+
+- (void)clearViewModelData {
+    self.allPeripherals = [[NSMutableArray alloc] init];
+    self.peripherals = [[NSArray alloc] init];
+}
+
+- (void)displayToastIfNeeded {
+    if (self.toastsToDisplayList.count > 0) {
+        SILDisconnectionToastModel* toastToShow = [self.toastsToDisplayList objectAtIndex:0];
+        NSString* ErrorMessage = [toastToShow getErrorMessageForToast];
+        [self.toastsToDisplayList removeObjectAtIndex:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDisplayToastResponse
+                                                            object:self
+                                                          userInfo: @{
+                                                              SILNotificationKeyDescription : ErrorMessage
+                                                          }];
+    } else {
+        self.toastsToDisplayChecker = [self setupToastToDisplayChecker];
+    }
+}
+
+- (BOOL)isConnectedPeripheral:(CBPeripheral*)peripheral {
+    return ![self isUniquePeripheral:peripheral];
+}
+
+- (void)addFailedConnectionToastToDisplay:(NSNotification*)notification {
+    NSDictionary* userInfo = notification.userInfo;
+    NSString* peripheralName = (NSString*)userInfo[SILNotificationKeyPeripheralName];
+    NSString* errorCodeString = (NSString*)userInfo[SILNotificationKeyError];
+    int errorCode = [errorCodeString intValue];
+    [self.toastsToDisplayList addObject:[[SILDisconnectionToastModel alloc] initWithPeripheralName:peripheralName errorCode:errorCode peripheralWasConnected:NO]];
 }
 
 @end

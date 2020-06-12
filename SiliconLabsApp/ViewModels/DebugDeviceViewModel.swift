@@ -80,7 +80,7 @@ final class DebugDeviceViewModel: NSObject {
     
     var peripheralDisconnectedMessage: String? {
         guard let peripheral = connectedPeripheral else { return nil }
-        let peripheralName = peripheral.name ?? "Unknown"
+        let peripheralName = peripheral.name ?? DefaultDeviceName
         return "Disconnected from \(peripheralName)"
     }
 

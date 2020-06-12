@@ -42,6 +42,10 @@
     return self.fieldModel.name;
 }
 
+- (void)clearValues {
+    self.primaryValue = @"";
+}
+
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
     SILCharacteristicFieldValueResolver * const valueResolver = [SILCharacteristicFieldValueResolver sharedResolver];
     NSData * const fieldData = [valueResolver subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];

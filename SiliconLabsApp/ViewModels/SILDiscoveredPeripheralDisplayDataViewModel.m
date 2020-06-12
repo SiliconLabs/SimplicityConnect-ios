@@ -14,7 +14,6 @@
 
 @property (strong, nonatomic, readwrite) SILDiscoveredPeripheralDisplayData *discoveredPeripheralDisplayData;
 @property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
-@property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModelsForDevicesTable;
 @property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModelsForInfoView;
 
 @end
@@ -33,13 +32,6 @@
 }
 
 #pragma mark - Properties
-
-- (NSArray *)advertisementDataViewModelsForDevicesTable {
-    if (_advertisementDataViewModelsForDevicesTable == nil) {
-        _advertisementDataViewModelsForDevicesTable = [self advertisementDataViewModelsForadvertisementDataModels:_discoveredPeripheralDisplayData.advertisementDataModelsForDevicesTable];
-    }
-    return _advertisementDataViewModelsForDevicesTable;
-}
 
 - (NSArray *)advertisementDataViewModelsForInfoView {
     if (_advertisementDataViewModelsForInfoView == nil) {

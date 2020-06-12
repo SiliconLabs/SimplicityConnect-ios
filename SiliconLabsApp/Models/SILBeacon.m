@@ -14,11 +14,11 @@
 
 uint16_t const kBlueGeckoAltBeaconCode = 0xBEAC;
 uint16_t const kSilabsMfgId = 0x0047;
-uint16_t const kEddystoneBeaconCode = 0xAAFE;
+uint16_t const kEddystoneBeaconCode = 0xFEAA;
 
 NSString * const SILBeaconUnspecified = @"Unspecified";
 NSString * const SILBeaconIBeacon = @"iBeacon";
-NSString * const SILBeaconAltBeacon = @"Alt Beacon";
+NSString * const SILBeaconAltBeacon = @"AltBeacon";
 NSString * const SILBeaconEddystone = @"Eddystone";
 
 @implementation SILBeacon
@@ -41,22 +41,11 @@ NSString * const SILBeaconEddystone = @"Eddystone";
     if (beaconCode == kBlueGeckoAltBeaconCode && mfgId == kSilabsMfgId) {
         beacon = [SILBeacon altBeaconWithManufacturingData:manufacturerData txPower:txPower error:error];
         beacon.name = SILBeaconAltBeacon;
-    } else if (beaconCode == kEddystoneBeaconCode) {
-        beacon = [SILBeacon eddystoneBeacon];
-        beacon.name = SILBeaconEddystone;
     } else {
         beacon = [SILBeacon bgBeaconWithManufacturingData:manufacturerData error:error];
         beacon.name = SILBeaconUnspecified;
     }
     beacon.txPower = txPower;
-    return beacon;
-}
-
-+ (instancetype)eddystoneBeacon {
-    SILBeacon* beacon = [[SILBeacon alloc] init];
-    beacon.type = SILBeaconTypeEddystone;
-    beacon.name = SILBeaconEddystone;
-    
     return beacon;
 }
 
@@ -77,24 +66,40 @@ NSString * const SILBeaconEddystone = @"Eddystone";
     return beacon;
 }
 
-+ (instancetype)beaconWithEddystone:(EddystoneBeacon *)eddystone {
-    if (!eddystone) {
-        return nil;
-    }
-
-    SILBeacon *beacon = [[SILBeacon alloc] init];
-
-    beacon.UUIDString = [eddystone.namespace stringByAppendingString:eddystone.instance];
-    beacon.beaconNamespace = eddystone.namespace;
-    beacon.instance = eddystone.instance;
-    beacon.type = SILBeaconTypeEddystone;
-    beacon.url = eddystone.url;
-    beacon.tlmData = eddystone.tlmData;
-    beacon.calibrationPower = eddystone.rssi;
-    beacon.txPower = @(eddystone.txPower);
-    // TODO: Replace with actual name.
++ (instancetype)beaconWithEddystone:(NSData *)eddystoneServiceData {
+    SILBeacon* beacon = [[SILBeacon alloc] init];
+    
     beacon.name = @"Eddystone";
-
+    beacon.type = SILBeaconTypeEddystone;
+    
+    uint8_t *dataPointer = (uint8_t *)eddystoneServiceData.bytes;
+    
+    switch (dataPointer[0]) {
+        case 0x00:
+            beacon.eddystoneBeaconType = SILEddystoneBeaconTypeUID;
+            break;
+        case 0x10:
+            beacon.eddystoneBeaconType = SILEddystoneBeaconTypeURL;
+            break;
+        case 0x20:
+            if (dataPointer[1] == 0x00) {
+                beacon.eddystoneBeaconType = SILEddystoneBeaconTypeTLMUnencrypted;
+            } else if (dataPointer[1] == 0x01) {
+                beacon.eddystoneBeaconType = SILEddystoneBeaconTypeTLMEncrypted;
+            } else {
+                beacon.eddystoneBeaconType = SILEddystoneBeaconTypeUnspecified;
+            }
+            break;
+        case 0x30:
+            beacon.eddystoneBeaconType = SILEddystoneBeaconTypeEID;
+            break;
+        default:
+            beacon.eddystoneBeaconType = SILEddystoneBeaconTypeUnspecified;
+            break;
+    }
+    
+    beacon.eddystoneData = eddystoneServiceData;
+    
     return beacon;
 }
 
@@ -165,11 +170,16 @@ NSString * const SILBeaconEddystone = @"Eddystone";
     }
 
     uint8_t *dataPointer = (uint8_t *)data.bytes;
-    dataPointer += 4; //skip mfg and beacon code
+    NSMutableString *manufactuterIDString = [[NSMutableString alloc] initWithString:@"0x"];
+    [manufactuterIDString appendFormat:@"%02hhX", dataPointer[1]];
+    [manufactuterIDString appendFormat:@"%02hhX", dataPointer[0]];
+    beacon.manufacturerID = [manufactuterIDString copy];
+    
+    dataPointer += 4; //skip beacon code
 
     NSMutableString *mutableUUIDString = [[NSMutableString alloc] initWithString:@"0x"];
     for (int i = 0; i < 20; i++) {
-        [mutableUUIDString appendFormat:@"%02x", dataPointer[0]];
+        [mutableUUIDString appendFormat:@"%02hhX", dataPointer[0]];
         dataPointer++;
     }
     beacon.UUIDString = [mutableUUIDString copy];

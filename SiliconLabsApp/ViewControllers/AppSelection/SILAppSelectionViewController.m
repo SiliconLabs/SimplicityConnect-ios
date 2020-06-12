@@ -49,7 +49,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *afterSelectedConstraintIphone;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *beforeSelectedConstraintIpad;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *afterSelectedConstraintIpad;
-@property BOOL isDisconnectedIntentionally;
 @end
 
 @implementation SILAppSelectionViewController

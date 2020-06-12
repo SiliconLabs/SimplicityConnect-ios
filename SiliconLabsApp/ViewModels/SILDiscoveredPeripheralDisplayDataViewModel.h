@@ -15,7 +15,6 @@
 
 @property (strong, nonatomic, readonly) SILDiscoveredPeripheralDisplayData *discoveredPeripheralDisplayData;
 @property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
-@property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModelsForDevicesTable;
 @property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModelsForInfoView;
 
 - (instancetype)initWithDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheralDisplayData *)discoveredPeripheralDisplayData;

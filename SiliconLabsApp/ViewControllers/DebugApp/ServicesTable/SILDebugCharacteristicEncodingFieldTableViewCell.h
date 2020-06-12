@@ -13,4 +13,5 @@
 @property(weak, nonatomic) IBOutlet UILabel *asciiValueLabel;
 @property(weak, nonatomic) IBOutlet UILabel *decimalValueLabel;
 @property(weak, nonatomic) IBOutlet UILabel* editLabel;
+- (void)clearValues;
 @end

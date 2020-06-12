@@ -41,28 +41,28 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wP-by-Y4V" userLabel="RSSI View">
-                                        <rect key="frame" x="306" y="38" width="100" height="26"/>
+                                        <rect key="frame" x="306" y="35" width="100" height="29"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rssi" translatesAutoresizingMaskIntoConstraints="NO" id="zi9-G7-H8b" userLabel="RSSI Image View">
-                                                <rect key="frame" x="0.0" y="4" width="18" height="18"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="18" id="4h7-XB-n7F"/>
-                                                    <constraint firstAttribute="width" secondItem="zi9-G7-H8b" secondAttribute="height" multiplier="1:1" id="Yxe-Of-yhP"/>
-                                                </constraints>
-                                            </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-100 dBm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsa-dY-xxL" userLabel="RSSI Value">
-                                                <rect key="frame" x="26" y="2.5" width="77" height="21.5"/>
+                                                <rect key="frame" x="29" y="7.5" width="77" height="21.5"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                                                 <color key="textColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rssiWhite" translatesAutoresizingMaskIntoConstraints="NO" id="zi9-G7-H8b" userLabel="RSSI Image View">
+                                                <rect key="frame" x="0.0" y="6" width="21" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="zi9-G7-H8b" secondAttribute="height" multiplier="1:1" id="Yxe-Of-yhP"/>
+                                                </constraints>
+                                            </imageView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="gsa-dY-xxL" firstAttribute="centerY" secondItem="3wP-by-Y4V" secondAttribute="centerY" id="4TD-KT-3Md"/>
-                                            <constraint firstItem="zi9-G7-H8b" firstAttribute="centerY" secondItem="3wP-by-Y4V" secondAttribute="centerY" id="LPl-IV-MYv"/>
+                                            <constraint firstItem="zi9-G7-H8b" firstAttribute="centerY" secondItem="3wP-by-Y4V" secondAttribute="centerY" constant="2" id="LPl-IV-MYv"/>
+                                            <constraint firstItem="zi9-G7-H8b" firstAttribute="height" secondItem="3wP-by-Y4V" secondAttribute="height" multiplier="0.724138" id="Oau-F0-vQO"/>
                                             <constraint firstAttribute="width" constant="100" id="f8u-LZ-h3Y"/>
                                             <constraint firstItem="zi9-G7-H8b" firstAttribute="leading" secondItem="3wP-by-Y4V" secondAttribute="leading" id="mT1-Ai-eBj"/>
                                             <constraint firstItem="gsa-dY-xxL" firstAttribute="leading" secondItem="zi9-G7-H8b" secondAttribute="trailing" constant="8" id="sxD-hI-jBy"/>
+                                            <constraint firstAttribute="bottom" secondItem="gsa-dY-xxL" secondAttribute="bottom" id="wnx-TF-jYf"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Nr-m3-DJA">
@@ -79,14 +79,17 @@
                                             <action selector="backButtonWasTapped:" destination="mkA-d8-NQG" eventType="touchUpInside" id="W1K-J0-sJ2"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kp9-0u-0fh">
-                                        <rect key="frame" x="365" y="0.0" width="34" height="34"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
-                                        <state key="normal" title="OTA">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kp9-0u-0fh" userLabel="Menu Button">
+                                        <rect key="frame" x="376" y="0.0" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="Fos-rw-VMV"/>
+                                            <constraint firstAttribute="width" secondItem="kp9-0u-0fh" secondAttribute="height" multiplier="1:1" id="gGZ-OA-WlK"/>
+                                        </constraints>
+                                        <state key="normal" image="MenuIcon">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="otaButtonWasTapped:" destination="mkA-d8-NQG" eventType="touchUpInside" id="jbV-nc-yKz"/>
+                                            <action selector="menuButtonWasTapped:" destination="mkA-d8-NQG" eventType="touchUpInside" id="jbV-nc-yKz"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -97,10 +100,10 @@
                                     <constraint firstItem="kp9-0u-0fh" firstAttribute="top" secondItem="fhg-P2-Dom" secondAttribute="top" id="CTg-hj-EEF"/>
                                     <constraint firstAttribute="height" constant="80" id="CqC-p0-Exa"/>
                                     <constraint firstAttribute="bottom" secondItem="3wP-by-Y4V" secondAttribute="bottom" constant="16" id="GUV-0x-pVA"/>
-                                    <constraint firstAttribute="trailing" secondItem="kp9-0u-0fh" secondAttribute="trailing" constant="15" id="IrM-5h-iuU"/>
+                                    <constraint firstAttribute="trailing" secondItem="kp9-0u-0fh" secondAttribute="trailing" constant="8" id="IrM-5h-iuU"/>
                                     <constraint firstItem="IBT-Xa-f75" firstAttribute="top" secondItem="8Nr-m3-DJA" secondAttribute="bottom" constant="4" id="Sb1-ZB-08S"/>
+                                    <constraint firstItem="3wP-by-Y4V" firstAttribute="centerY" secondItem="IBT-Xa-f75" secondAttribute="centerY" id="b74-mx-uEE"/>
                                     <constraint firstItem="8Nr-m3-DJA" firstAttribute="leading" secondItem="fhg-P2-Dom" secondAttribute="leading" constant="16" id="dPt-RV-vLr"/>
-                                    <constraint firstItem="3wP-by-Y4V" firstAttribute="top" secondItem="kp9-0u-0fh" secondAttribute="bottom" constant="4" id="fGO-hr-WCS"/>
                                     <constraint firstAttribute="trailing" secondItem="3wP-by-Y4V" secondAttribute="trailing" constant="8" id="pCu-yB-Vaj"/>
                                     <constraint firstItem="3wP-by-Y4V" firstAttribute="leading" secondItem="IBT-Xa-f75" secondAttribute="trailing" constant="16" id="zf6-3t-2xx"/>
                                 </constraints>
@@ -285,7 +288,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="vJC-nT-ANd">
                                                                     <rect key="frame" x="16" y="117" width="462" height="24"/>
                                                                     <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rpd-lL-OYe">
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rpd-lL-OYe" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="64" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="24" id="dga-qk-hIZ"/>
@@ -300,7 +303,7 @@
                                                                                 <action selector="handleWriteViewTap:" destination="VKy-Tq-jxD" eventType="touchUpInside" id="RHA-Zq-Y0A"/>
                                                                             </connections>
                                                                         </button>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Umy-NB-9fM">
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Umy-NB-9fM" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
                                                                             <rect key="frame" x="80" y="0.0" width="111" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="24" id="Nvv-gE-mnS"/>
@@ -315,7 +318,7 @@
                                                                                 <action selector="handleWriteNoResponseViewTap:" destination="VKy-Tq-jxD" eventType="touchUpInside" id="WVX-ly-xP5"/>
                                                                             </connections>
                                                                         </button>
-                                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mQp-d7-uRl">
+                                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mQp-d7-uRl" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
                                                                             <rect key="frame" x="207" y="0.0" width="64" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="64" id="LyH-tg-dOK"/>
@@ -330,7 +333,7 @@
                                                                                 <action selector="handleReadViewTap:" destination="VKy-Tq-jxD" eventType="touchUpInside" id="b2f-4O-Svw"/>
                                                                             </connections>
                                                                         </button>
-                                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OoV-hL-VIa">
+                                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OoV-hL-VIa" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
                                                                             <rect key="frame" x="287" y="0.0" width="78" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="78" id="2bX-Ow-3UJ"/>
@@ -345,7 +348,7 @@
                                                                                 <action selector="handleIndicateViewTap:" destination="VKy-Tq-jxD" eventType="touchUpInside" id="Wlk-hN-THg"/>
                                                                             </connections>
                                                                         </button>
-                                                                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pVh-jQ-D0a">
+                                                                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pVh-jQ-D0a" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
                                                                             <rect key="frame" x="381" y="0.0" width="65" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="65" id="1bQ-yc-Zpx"/>
@@ -480,10 +483,21 @@
                                     <constraint firstItem="q15-Wj-dDo" firstAttribute="leading" secondItem="Xe1-Jy-pxc" secondAttribute="leading" id="ind-cr-n6X"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1K6-8J-EfV" userLabel="Menu">
+                                <rect key="frame" x="191" y="44" width="207" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="207" id="Wcj-cM-gMg" userLabel="width = 150"/>
+                                    <constraint firstAttribute="height" constant="30" id="iiV-fD-zDV"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="4eO-XQ-PYe" kind="embed" identifier="OpenMenuSegue" id="jTV-mD-1TY"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Xe1-Jy-pxc" secondAttribute="bottom" id="6DO-xR-lwf"/>
+                            <constraint firstItem="1K6-8J-EfV" firstAttribute="trailing" secondItem="fhg-P2-Dom" secondAttribute="trailing" constant="-16" id="II0-jY-dZc"/>
                             <constraint firstItem="fhg-P2-Dom" firstAttribute="leading" secondItem="WdT-uR-aKU" secondAttribute="leading" id="IcP-2s-a7b"/>
                             <constraint firstItem="VEd-L5-bO5" firstAttribute="trailing" secondItem="fhg-P2-Dom" secondAttribute="trailing" id="J63-OW-lup"/>
                             <constraint firstItem="WdT-uR-aKU" firstAttribute="trailing" secondItem="EGj-ib-akE" secondAttribute="trailing" id="MGi-C6-1oa"/>
@@ -497,6 +511,7 @@
                             <constraint firstItem="WdT-uR-aKU" firstAttribute="top" secondItem="EGj-ib-akE" secondAttribute="top" constant="44" id="dUH-GX-sgR"/>
                             <constraint firstItem="VEd-L5-bO5" firstAttribute="leading" secondItem="fhg-P2-Dom" secondAttribute="leading" id="m1a-vb-wBz"/>
                             <constraint firstItem="Xe1-Jy-pxc" firstAttribute="leading" secondItem="WdT-uR-aKU" secondAttribute="leading" id="pLx-Yh-VmN"/>
+                            <constraint firstItem="1K6-8J-EfV" firstAttribute="top" secondItem="fhg-P2-Dom" secondAttribute="top" id="zmN-ug-0iR"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WdT-uR-aKU"/>
                     </view>
@@ -509,8 +524,10 @@
                         <outlet property="expandableControllerHeight" destination="QAz-fx-ZFo" id="H2u-yD-gUc"/>
                         <outlet property="expandableControllerView" destination="rSy-aS-RSR" id="ghZ-jZ-W5S"/>
                         <outlet property="logButton" destination="YqI-pO-gQO" id="yLR-t0-i5h"/>
+                        <outlet property="menuButton" destination="kp9-0u-0fh" id="rHM-XO-nw2"/>
+                        <outlet property="menuContainer" destination="1K6-8J-EfV" id="ISN-Wx-dvD"/>
+                        <outlet property="menuOptionHeight" destination="iiV-fD-zDV" id="Y5v-pe-Y3W"/>
                         <outlet property="navigationBarView" destination="fhg-P2-Dom" id="1a4-Qn-Ysc"/>
-                        <outlet property="otaButton" destination="kp9-0u-0fh" id="rHM-XO-nw2"/>
                         <outlet property="presentationView" destination="Xe1-Jy-pxc" id="bOc-7J-gbF"/>
                         <outlet property="rssiImageView" destination="zi9-G7-H8b" id="ego-0k-oEi"/>
                         <outlet property="rssiLabel" destination="gsa-dY-xxL" id="y37-AX-xEr"/>
@@ -521,15 +538,46 @@
             </objects>
             <point key="canvasLocation" x="-6652.1739130434789" y="113.16964285714285"/>
         </scene>
+        <!--Menu-->
+        <scene sceneID="t1p-Af-jos">
+            <objects>
+                <viewController title="Menu" id="4eO-XQ-PYe" customClass="SILDebugServicesMenuViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="3Gd-C4-lMI">
+                        <rect key="frame" x="0.0" y="0.0" width="207" height="30"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TdO-sr-yNb" userLabel="Menu Option Table View">
+                                <rect key="frame" x="0.0" y="22" width="207" height="30"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="TdO-sr-yNb" firstAttribute="height" secondItem="z4S-1U-4PS" secondAttribute="height" id="6Zs-wZ-v9D"/>
+                            <constraint firstItem="TdO-sr-yNb" firstAttribute="width" secondItem="z4S-1U-4PS" secondAttribute="width" id="Zpm-TY-YbF"/>
+                            <constraint firstItem="TdO-sr-yNb" firstAttribute="centerX" secondItem="z4S-1U-4PS" secondAttribute="centerX" id="kfb-pd-kNP"/>
+                            <constraint firstItem="TdO-sr-yNb" firstAttribute="centerY" secondItem="z4S-1U-4PS" secondAttribute="centerY" id="vxp-yP-CEY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="z4S-1U-4PS"/>
+                    </view>
+                    <connections>
+                        <outlet property="menuOptionTableView" destination="TdO-sr-yNb" id="DCi-gB-x9P"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qZh-6B-7IB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6036" y="-147"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Edit" width="30" height="30"/>
         <image name="EditDisabled" width="30" height="30"/>
         <image name="Indicate" width="30" height="30"/>
+        <image name="MenuIcon" width="50" height="50"/>
         <image name="Notify" width="30" height="30"/>
         <image name="Read" width="30" height="30"/>
         <image name="WriteNoResponse" width="30" height="30"/>
         <image name="left_chevron" width="8" height="13"/>
-        <image name="rssi" width="21" height="15.5"/>
+        <image name="rssiWhite" width="21" height="15.5"/>
     </resources>
 </document>

@@ -9,11 +9,18 @@
 #import "SILAdvertisementDataViewModel.h"
 #import "SILBluetoothModelManager.h"
 
-NSString * const kAdModelTypeUUID = @"UUID";
-NSString * const kAdModelTypeName = @"LOCAL NAME";
-NSString * const kAdModelTypePower = @"POWER LEVEL";
-NSString * const kAdModelTypeMajor = @"MAJOR";
-NSString * const kAdModelTypeMinor = @"MINOR";
+NSString * const kAdModelTypeAdvertisedServiceUUIDs16Bit = @"List of 16-bit Advertised Service UUIDs";
+NSString * const kAdModelTypeAdvertisedServiceUUIDs32Bit = @"List of 32-bit Advertised Service UUIDs";
+NSString * const kAdModelTypeAdvertisedServiceUUIDs128Bit = @"List of 128-bit Advertised Service UUIDs";
+NSString * const kAdModelTypeSolicitedServiceUUIDs16Bit = @"List of 16-bit Solicited Service UUIDs";
+NSString * const kAdModelTypeSolicitedServiceUUIDs128Bit = @"List of 128-bit Solicited Service UUIDs";
+NSString * const kAdModelTypeName = @"Complete Local Name";
+NSString * const kAdModelTypeTXPowerLevel = @"TX Power Level";
+NSString * const kAdModelTypeManufacturerData = @"Manufacturer Specific Data";
+NSString * const kAdModelTypeDataServiceData = @"Data Service Data";
+NSString * const kAdModelTypeIBeacon = @"iBeacon Data";
+NSString * const kAdModelTypeAltBeacon = @"AltBeacon Data";
+NSString * const kAdModelTypeEddystoneBeacon = @"Eddystone Data";
 
 @interface SILAdvertisementDataViewModel ()
 
@@ -55,34 +62,48 @@ NSString * const kAdModelTypeMinor = @"MINOR";
 
 - (NSString *)valueStringForType:(AdModelType)type {
     NSString *valueString;
-    if (type == AdModelTypeServiceUUID) {
-        valueString = [NSString stringWithFormat:@"0X%@", _advertisementDataModel.value];
-    } else {
-        valueString = _advertisementDataModel.value;
-    }
+    valueString = _advertisementDataModel.value;
     return valueString;
 }
 
 - (NSString *)typeStringForType:(AdModelType)type {
     NSString *typeString;
     switch (type) {
-        case AdModelTypeName:
+        case AdModelTypeCompleteLocalName:
             typeString = kAdModelTypeName;
             break;
-        case AdModelTypeMajor:
-            typeString = kAdModelTypeMajor;
+        case AdModelTypeSolicitedServiceUUIDs16Bit:
+            typeString = kAdModelTypeSolicitedServiceUUIDs16Bit;
             break;
-        case AdModelTypeUUID:
-            typeString = kAdModelTypeUUID;
+        case AdModelTypeSolicitedServiceUUIDs128Bit:
+            typeString = kAdModelTypeSolicitedServiceUUIDs128Bit;
             break;
-        case AdModelTypePower:
-            typeString = kAdModelTypePower;
+        case AdModelTypeTXPowerLevel:
+            typeString = kAdModelTypeTXPowerLevel;
             break;
-        case AdModelTypeMinor:
-            typeString = kAdModelTypeMinor;
+        case AdModelTypeManufacturerData:
+            typeString = kAdModelTypeManufacturerData;
             break;
-        case AdModelTypeServiceUUID:
-            typeString = [self typeStringForServiceUUIDValue:_advertisementDataModel.value];
+        case AdModelTypeAdvertisedServiceUUIDs16Bit:
+            typeString = kAdModelTypeAdvertisedServiceUUIDs16Bit;
+            break;
+        case AdModelTypeAdvertisedServiceUUIDs32Bit:
+            typeString = kAdModelTypeAdvertisedServiceUUIDs32Bit;
+            break;
+        case AdModelTypeAdvertisedServiceUUIDs128Bit:
+            typeString = kAdModelTypeAdvertisedServiceUUIDs128Bit;
+            break;
+        case AdModelTypeDataServiceData:
+            typeString = kAdModelTypeDataServiceData;
+            break;
+        case AdModelTypeIBeacon:
+            typeString = kAdModelTypeIBeacon;
+            break;
+        case AdModelTypeAltBeacon:
+            typeString = kAdModelTypeAltBeacon;
+            break;
+        case AdModelTypeEddystoneBeacon:
+            typeString = kAdModelTypeEddystoneBeacon;
             break;
         default:
             break;
@@ -90,9 +111,5 @@ NSString * const kAdModelTypeMinor = @"MINOR";
     return typeString;
 }
 
-- (NSString *)typeStringForServiceUUIDValue:(NSString *)value {
-    NSString *typeString = [[SILBluetoothModelManager sharedManager] serviceModelForUUIDString:value].name;
-    return typeString != nil ? typeString : @"UNKNOWN SERVICE";
-}
-
 @end
+

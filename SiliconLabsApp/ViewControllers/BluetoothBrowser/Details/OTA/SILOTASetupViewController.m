@@ -62,9 +62,10 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
     [self registerNibs];
     [self configureUIForFirmwareUpdateViewModel:self.firmwareUpdateViewModel];
     [_hudView stateDependentHidden:YES];
-    _hudView.peripheralNameLabel.text = [_hudPeripheralViewModel peripheralName];
+    _hudView.informationLabel.text = [_hudPeripheralViewModel peripheralName];
+    _hudView.otaStatusLabel.text = @"OTA Device Firmware Update";
     _hudView.peripheralIdentifierLabel.text = [_hudPeripheralViewModel peripheralIdentifier];
-    _hudView.mtuValueLabel.text = [_hudPeripheralViewModel peripheralMaximumWriteValueLength];
+    [_hudView.mtuView setHidden:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

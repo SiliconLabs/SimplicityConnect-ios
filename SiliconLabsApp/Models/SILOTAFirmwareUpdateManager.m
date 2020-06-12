@@ -100,11 +100,15 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 }
 
 - (void)didDisconnectFromPeripheral:(NSNotification *)notification {
-    if (self.expectingToDisconnectFromPeripheral) {
-        self.expectingToDisconnectFromPeripheral = NO;
-    } else {
-        NSError *error = [NSError sil_errorWithCode:SILErrorCodeOTADisconnectedFromPeripheral underlyingError:nil];
-        [self.delegate firmwareUpdateManagerDidUnexpectedlyDisconnectFromPeripheral:self withError:error];
+    NSString* uuid = (NSString*)notification.userInfo[SILNotificationKeyUUID];
+    
+    if ([uuid isEqualToString:self.peripheral.identifier.UUIDString]) {
+       if (self.expectingToDisconnectFromPeripheral) {
+           self.expectingToDisconnectFromPeripheral = NO;
+       } else {
+           NSError *error = [NSError sil_errorWithCode:SILErrorCodeOTADisconnectedFromPeripheral underlyingError:nil];
+           [self.delegate firmwareUpdateManagerDidUnexpectedlyDisconnectFromPeripheral:self withError:error];
+       }
     }
 }
 
@@ -134,8 +138,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeUpdatingDFUStatusToWaiting * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         progress(SILDFUStatusWaiting);
-        self.didDiscoverOTADevice = NO;
-        [self.centralManager addScanForPeripheralsObserver:self selector:@selector(searchHandlerForOTADevice)];
+        [self reconnectToOTADevice];
     });
 }
 
@@ -143,20 +146,9 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
     [self.centralManager removeScanForPeripheralsObserver:self];
 }
 
-- (void)searchHandlerForOTADevice {
-    if (self.didDiscoverOTADevice) { return; }
-    
-    for (SILDiscoveredPeripheral *discoveredPeripheral in self.centralManager.discoveredPeripherals) {
-        NSString * const name = discoveredPeripheral.advertisedLocalName;
-        
-        if ([@"OTA" isEqualToString:name]) {
-            self.didDiscoverOTADevice = YES;
-            self.peripheral = discoveredPeripheral.peripheral;
-            [self.centralManager removeScanForPeripheralsObserver:self];
-            [self.centralManager connectToDiscoveredPeripheral:discoveredPeripheral];
-            break;
-        }
-    }
+- (void)reconnectToOTADevice {
+    SILDiscoveredPeripheral* discoveredPeripheral = [self.centralManager discoveredPeripheralForPeripheral:self.peripheral];
+    [self.centralManager connectToDiscoveredPeripheral:discoveredPeripheral];
 }
 
 - (void)uploadFile:(SILOTAFirmwareFile *)file

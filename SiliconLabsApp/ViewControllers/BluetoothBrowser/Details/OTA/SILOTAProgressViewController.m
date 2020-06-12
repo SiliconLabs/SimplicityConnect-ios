@@ -63,7 +63,7 @@ const CGFloat kAngleAtTopWrapAround = 270.0f;
     self.doneButton.enabled = NO;
     self.timerLabel = [[MZTimerLabel alloc] initWithLabel:self.timerDisplayLabel];
     self.timerLabel.timeFormat = kSILTimerFormat;
-    _hudView.peripheralNameLabel.text = [_hudPeripheralViewModel peripheralName];
+    _hudView.informationLabel.text = @"OTA Device Firmware Update";
     _hudView.peripheralIdentifierLabel.text = [_hudPeripheralViewModel peripheralIdentifier];
     _hudView.mtuValueLabel.text = [_hudPeripheralViewModel peripheralMaximumWriteValueLength];
 }

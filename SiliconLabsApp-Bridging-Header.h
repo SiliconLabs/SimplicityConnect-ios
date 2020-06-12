@@ -20,3 +20,5 @@
 #import "UIColor+SILColors.h"
 #import "NSString+SILBrowserNotifications.h"
 #import "SILBluetoothBrowser+Constants.h"
+#import "SILAdvertisementDataModel.h"
+#import "SILBluetoothModelManager.h"

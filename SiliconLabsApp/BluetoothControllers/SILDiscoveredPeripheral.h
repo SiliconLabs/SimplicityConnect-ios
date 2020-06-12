@@ -28,9 +28,11 @@
 @property (strong, nonatomic) CBPeripheral *peripheral;
 @property (strong, nonatomic) SILRSSIMeasurementTable *RSSIMeasurementTable;
 @property (strong, nonatomic) NSString *advertisedLocalName;
-@property (strong, nonatomic) NSArray *advertisedServiceUUIDs;
+@property (strong, nonatomic) NSArray<CBUUID*>* advertisedServiceUUIDs;
 @property (strong, nonatomic) NSNumber *txPowerLevel;
 @property (strong, nonatomic) NSData *manufacturerData;
+@property (strong, nonatomic) NSArray<CBUUID*>* solicitedServiceUUIDs;
+@property (strong, nonatomic) NSDictionary<CBUUID*, NSData*>* dataServiceData;
 @property (strong, nonatomic) SILBeacon* beacon;
 @property (nonatomic) BOOL isFavourite;
 @property double advertisingInterval;
