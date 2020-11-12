@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "SILCharacteristicFieldRow.h"
+#import "SILBitRowModel.h"
 
 @interface SILBitFieldFieldModel : NSObject <SILCharacteristicFieldRow>
 
 @property (strong, nonatomic, readonly) SILBluetoothFieldModel *fieldModel;
 - (instancetype)initBitFieldWithField:(SILBluetoothFieldModel *)fieldModel;
-- (NSArray *)bitRowModels;
+- (NSArray<SILBitRowModel*>*)bitRowModels;
 
 @end

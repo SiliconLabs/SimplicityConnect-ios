@@ -312,11 +312,12 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 
 - (void)writeSingleByteValue:(char)value toCharacteristic:(CBCharacteristic *)characteristic {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        const CBCharacteristicWriteType writeType = self.delegate.characteristicWriteType;
         NSError * error = nil;
         SILCharacteristicTableModel *characteristicTableModel = [[SILCharacteristicTableModel alloc] initWithCharacteristic:characteristic];
         NSData *data = [NSData dataWithBytes:&value length:1];
         [characteristicTableModel setIfAllowedFullWriteValue:data];
-        [characteristicTableModel writeIfAllowedToPeripheral:self.peripheral error:&error];
+        [characteristicTableModel writeIfAllowedToPeripheral:self.peripheral withWriteType:writeType error:&error];
     });
 }
 

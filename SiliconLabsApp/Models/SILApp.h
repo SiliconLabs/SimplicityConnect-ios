@@ -14,7 +14,8 @@ typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppTypeRetailBeacon,
     SILAppBluetoothBrowser,
     SILAppTypeHomeKitDebug,
-    SILAppTypeRangeTest
+    SILAppTypeRangeTest,
+    SILAppTypeAdvertiser
 };
 
 @interface SILApp : NSObject

@@ -24,6 +24,7 @@ NSString * const SILImageNameHomeDebug = @"browser";
 NSString * const SILImageNameHomeKitDebug = @"HomeKitDebug";
 NSString * const SILImageNameHomeConnectedLighting = @"light";
 NSString * const SILImageNameHomeRangeTestDemo = @"HomeRangeTestDemo";
+NSString * const SILImageNameHomeAdvertiser = @"icon - advertiser";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";

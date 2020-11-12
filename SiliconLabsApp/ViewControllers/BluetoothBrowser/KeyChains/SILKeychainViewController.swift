@@ -12,12 +12,8 @@ import RealmSwift
 
 class SILKeychainViewController: UIViewController {
     
-    let tableInset: CGFloat = 16.0
-    
     @IBOutlet weak var segments: SILBrowserSegmentedControl!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var tableLeftInset: NSLayoutConstraint!
-    @IBOutlet weak var tableRightInset: NSLayoutConstraint!
     @IBOutlet weak var infoImage: UIImageView!
     
     var popoverController: WYPopoverController?
@@ -55,7 +51,6 @@ class SILKeychainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNotificationToken()
-        setupTableViewInsets()
         setupInfoImage()
     }
     
@@ -103,16 +98,6 @@ class SILKeychainViewController: UIViewController {
                     self?.tableView.reloadData()
                 }
             }
-        }
-    }
-    
-    private func setupTableViewInsets() {
-        if #available(iOS 13, *) {
-            tableLeftInset.constant = 0
-            tableRightInset.constant = 0
-        } else {
-            tableLeftInset.constant = tableInset
-            tableRightInset.constant = -tableInset
         }
     }
     
@@ -172,6 +157,15 @@ extension SILKeychainViewController: UITableViewDataSource {
         cell.delegate = self
         cell.selectionStyle = .none
         return cell
+    }
+}
+
+extension SILKeychainViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let silCell = cell as! SILCell
+        silCell.addShadowWhenAtBottom()
+        silCell.roundCornersAll()
     }
 }
 

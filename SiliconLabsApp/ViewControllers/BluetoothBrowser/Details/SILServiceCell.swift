@@ -21,7 +21,6 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupAppearance()
         addGestureRecognizerForServiceNameLabel()
     }
     
@@ -32,12 +31,6 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    }
-    
-    private func setupAppearance() {
-        self.clipsToBounds = true
-        self.layer.cornerRadius = CornerRadiusStandardValue
-        self.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
     }
     
     private func addGestureRecognizerForServiceNameLabel() {

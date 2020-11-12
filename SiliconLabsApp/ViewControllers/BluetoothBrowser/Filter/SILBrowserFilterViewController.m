@@ -28,13 +28,15 @@
 @property (weak, nonatomic) IBOutlet UISlider *dBmSlider;
 @property (weak, nonatomic) IBOutlet UIView *seachByDeviceNameView;
 @property (weak, nonatomic) IBOutlet UILabel *favouriteAreaTitleLabel;
-@property (weak, nonatomic) IBOutlet UISwitch *favouriteSwitch;
+@property (weak, nonatomic) IBOutlet SILSwitch *favouriteSwitch;
+
 @property (weak, nonatomic) IBOutlet UIButton *beaconTypeAreaButton;
 @property (weak, nonatomic) IBOutlet UIButton *savedSearchesAreaButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *beaconTypeContainerHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *savedSearchesContainerHeight;
 @property (weak, nonatomic) IBOutlet UILabel *connectableTittleLabel;
-@property (weak, nonatomic) IBOutlet UISwitch *connectableSwitch;
+@property (weak, nonatomic) IBOutlet SILSwitch *connectableSwitch;
+
 
 @property (strong, nonatomic) SILBrowserFilterViewModel* viewModel;
 
@@ -317,7 +319,7 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 
 - (void)setAppearanceForFavouriteArea {
     [self setAppearanceForFavouritesLabel];
-    _favouriteSwitch.on = NO;
+    [self.favouriteSwitch setIsOn: NO];
     [self addGestureToFavouriteSwitch];
 }
 
@@ -330,15 +332,15 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [_favouriteSwitch addTarget:self action:@selector(favouriteSwitchStateChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
-- (void)favouriteSwitchStateChanged:(UISwitch *)sender {
-    self.viewModel.isFavouriteFilterSet = sender.on;
+- (void)favouriteSwitchStateChanged:(SILSwitch *)sender {
+    self.viewModel.isFavouriteFilterSet = sender.isOn;
 }
 
 # pragma mark - Appearance for Connectable Area
 
 - (void)setAppearanceForConnectableArea {
     [self setAppearanceForConnectableLabel];
-    _connectableSwitch.on = NO;
+    [self.connectableSwitch setIsOn: NO];
     [self addGestureToConnectableSwitch];
 }
 
@@ -351,8 +353,8 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [_connectableSwitch addTarget:self action:@selector(connectableSwitchStateChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
-- (void)connectableSwitchStateChanged:(UISwitch *)sender {
-    self.viewModel.isConnectableFilterSet = sender.on;
+- (void)connectableSwitchStateChanged:(SILSwitch *)sender {
+    self.viewModel.isConnectableFilterSet = sender.isOn;
 }
 
 #pragma mark - Appearance for Saved Searches Area
@@ -455,8 +457,8 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 - (void)updateFilterViewValues {
     _searchByDeviceNameTextView.text = _viewModel.searchByDeviceName;
     _dBmSlider.value = _viewModel.dBmValue;
-    _favouriteSwitch.on = _viewModel.isFavouriteFilterSet;
-    _connectableSwitch.on = _viewModel.isConnectableFilterSet;
+    [self.favouriteSwitch setIsOn: _viewModel.isFavouriteFilterSet];
+    [self.connectableSwitch setIsOn: _viewModel.isConnectableFilterSet];
     [self textViewDidEndEditing:_searchByDeviceNameTextView];
     [self manageClearImageState:_searchByDeviceNameTextView];
 }

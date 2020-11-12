@@ -30,6 +30,7 @@
     if (self) {
         self.fieldModel = fieldModel;
         self.requirementsSatisfied = YES; //this is kind of a hack, they have to explicitly be set to NO due to some bug
+        self.primaryValue = @"";
     }
     return self;
 }

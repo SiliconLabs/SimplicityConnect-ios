@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uiP-VV-6br">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uiP-VV-6br">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -75,7 +76,7 @@
                                                         </constraints>
                                                     </stackView>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" systemColor="systemRedColor"/>
                                                 <constraints>
                                                     <constraint firstItem="tQK-ay-mI9" firstAttribute="centerY" secondItem="SaE-cs-mbB" secondAttribute="centerY" id="BY4-pg-xcG"/>
                                                     <constraint firstItem="tQK-ay-mI9" firstAttribute="width" secondItem="SaE-cs-mbB" secondAttribute="width" id="K7o-tF-5fy"/>
@@ -251,7 +252,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="8.5" height="16.5"/>
                                                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                        <color key="textColor" systemColor="darkTextColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                         <variation key="widthClass=compact">
                                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
@@ -320,7 +321,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="10.5" height="16.5"/>
                                                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                        <color key="textColor" systemColor="darkTextColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -537,29 +538,13 @@
                                                             <outlet property="delegate" destination="uiP-VV-6br" id="zRT-og-Jzk"/>
                                                         </connections>
                                                     </collectionView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RnN-wV-7mT">
-                                                        <rect key="frame" x="16" y="441" width="382" height="1"/>
-                                                        <color key="backgroundColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="1" id="8xF-6l-kpD"/>
-                                                        </constraints>
-                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="f1D-fb-XkH" secondAttribute="bottom" id="3db-Nx-jkz"/>
-                                                    <constraint firstAttribute="bottom" secondItem="RnN-wV-7mT" secondAttribute="bottom" constant="77" id="OiA-Qt-i63">
-                                                        <variation key="widthClass=compact" constant="32"/>
-                                                    </constraint>
                                                     <constraint firstItem="f1D-fb-XkH" firstAttribute="top" secondItem="5k1-3h-7sn" secondAttribute="top" id="SEF-NS-ufB"/>
-                                                    <constraint firstItem="RnN-wV-7mT" firstAttribute="leading" secondItem="5k1-3h-7sn" secondAttribute="leading" constant="36" id="TWB-uk-rLL">
-                                                        <variation key="widthClass=compact" constant="16"/>
-                                                    </constraint>
                                                     <constraint firstAttribute="trailing" secondItem="f1D-fb-XkH" secondAttribute="trailing" id="mNU-7U-5GY"/>
                                                     <constraint firstItem="f1D-fb-XkH" firstAttribute="leading" secondItem="5k1-3h-7sn" secondAttribute="leading" id="u7Q-jW-OFL"/>
-                                                    <constraint firstAttribute="trailing" secondItem="RnN-wV-7mT" secondAttribute="trailing" constant="36" id="uyQ-ZJ-m8d">
-                                                        <variation key="widthClass=compact" constant="16"/>
-                                                    </constraint>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -571,10 +556,11 @@
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MFr-x7-OrP" userLabel="Above Space Area View">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" systemColor="systemRedColor"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="hfW-nB-mk6"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="MFr-x7-OrP" firstAttribute="bottom" secondItem="3YN-zm-255" secondAttribute="top" id="CUU-hC-vPD"/>
                             <constraint firstItem="3YN-zm-255" firstAttribute="height" secondItem="hfW-nB-mk6" secondAttribute="height" id="FMi-ax-ktt"/>
@@ -585,7 +571,6 @@
                             <constraint firstItem="3YN-zm-255" firstAttribute="centerY" secondItem="hfW-nB-mk6" secondAttribute="centerY" id="uAx-13-cMS"/>
                             <constraint firstItem="3YN-zm-255" firstAttribute="width" secondItem="hfW-nB-mk6" secondAttribute="width" id="uMt-1l-Os5"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="hfW-nB-mk6"/>
                     </view>
                     <connections>
                         <outlet property="aboveSpaceAreaView" destination="MFr-x7-OrP" id="SAq-54-ARY"/>
@@ -593,6 +578,7 @@
                         <outlet property="measurementCollectionView" destination="f1D-fb-XkH" id="MJa-ly-xeP"/>
                         <outlet property="navigationBarTitleLabel" destination="d69-Aj-YxO" id="BYz-Qk-LMr"/>
                         <outlet property="navigationBarView" destination="SaE-cs-mbB" id="yQK-UV-Kuw"/>
+                        <outlet property="presentationSpace" destination="Jop-fw-utc" id="AWi-EU-ubz"/>
                         <outlet property="recentTemperatureDecimalLabel" destination="Ulu-n8-fM3" id="zgi-dq-1qE"/>
                         <outlet property="recentTemperatureLabel" destination="ERa-s1-KqG" id="TRA-b7-yUa"/>
                         <outlet property="recentTimeLabel" destination="Awz-qv-Jlo" id="zMw-1E-mQl"/>
@@ -607,5 +593,17 @@
     </scenes>
     <resources>
         <image name="left_chevron" width="8" height="13"/>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

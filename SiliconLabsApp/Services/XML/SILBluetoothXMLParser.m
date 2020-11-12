@@ -107,7 +107,15 @@ const NSString * kTypeAttributeKey = @"_type";
     if (bitModels) {
         fieldModel.bitfield = [[SILBluetoothBitFieldModel alloc] initWithBits:bitModels];
     } else {
-        fieldModel.enumerations = [self arrayForDictionary:xmlDict[@"Enumerations"] keyPath:@"Enumeration" selector:@selector(buildEnumerationFromXmlDictionary:)];
+        NSMutableArray* enumerations = [[NSMutableArray alloc] init];
+        [enumerations setArray:[self arrayForDictionary:xmlDict[@"Enumerations"] keyPath:@"Enumeration" selector:@selector(buildEnumerationFromXmlDictionary:)]];
+        if (enumerations.count == 0) {
+            fieldModel.enumerations = nil;
+        } else {
+            [enumerations addObjectsFromArray:[self arrayForDictionary:xmlDict[@"AdditionalValues"] keyPath:@"Enumeration" selector:@selector(buildEnumerationFromXmlDictionary:)]];
+            [enumerations sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"key" ascending:YES]]];
+            fieldModel.enumerations = [enumerations copy];
+        }
     }
     
     return fieldModel;

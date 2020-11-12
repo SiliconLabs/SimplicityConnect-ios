@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,89 +13,102 @@
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="1b6-oi-b0V" customClass="SILAppSelectionCollectionViewCell">
             <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aJd-12-y1v">
+            <collectionViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aJd-12-y1v">
                 <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LO5-Mz-74j" userLabel="Cell">
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6GO-4t-CJg">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lLw-2M-A0Z" userLabel="Image View" customClass="SILRoundedViewBehaviour">
-                                <rect key="frame" x="0.0" y="0.0" width="300" height="105"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LO5-Mz-74j" userLabel="Cell">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qUt-5w-8JF" userLabel="Image">
-                                        <rect key="frame" x="16" y="16" width="81" height="81"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lLw-2M-A0Z" userLabel="Image View" customClass="SILRoundedViewBehaviour">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="105"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qUt-5w-8JF" userLabel="Image">
+                                                <rect key="frame" x="16" y="16" width="81" height="81"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="qUt-5w-8JF" secondAttribute="height" multiplier="1:1" id="hqG-oE-xD6"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="qUt-5w-8JF" secondAttribute="height" multiplier="1:1" id="hqG-oE-xD6"/>
+                                            <constraint firstItem="qUt-5w-8JF" firstAttribute="top" secondItem="lLw-2M-A0Z" secondAttribute="top" constant="16" id="6AO-sx-PP6"/>
+                                            <constraint firstAttribute="bottom" secondItem="qUt-5w-8JF" secondAttribute="bottom" constant="8" id="Mwn-Hh-XcU"/>
+                                            <constraint firstItem="qUt-5w-8JF" firstAttribute="leading" secondItem="lLw-2M-A0Z" secondAttribute="leading" constant="16" id="oAy-Y8-NQQ"/>
                                         </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="qUt-5w-8JF" firstAttribute="top" secondItem="lLw-2M-A0Z" secondAttribute="top" constant="16" id="6AO-sx-PP6"/>
-                                    <constraint firstAttribute="bottom" secondItem="qUt-5w-8JF" secondAttribute="bottom" constant="8" id="Mwn-Hh-XcU"/>
-                                    <constraint firstItem="qUt-5w-8JF" firstAttribute="leading" secondItem="lLw-2M-A0Z" secondAttribute="leading" constant="16" id="oAy-Y8-NQQ"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="roundedView" destination="qUt-5w-8JF" id="4ra-Ld-AQg"/>
-                                </connections>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECo-Eh-6CT" userLabel="Title" customClass="SILUILabels">
-                                <rect key="frame" x="0.0" y="105" width="300" height="45"/>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Znw-Jv-GMT" userLabel="Description" customClass="SILUILabels">
-                                <rect key="frame" x="0.0" y="150" width="300" height="120"/>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="13"/>
-                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u5Z-jL-1sW" userLabel="Showcased Profiles">
-                                <rect key="frame" x="0.0" y="270" width="300" height="30"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mEs-70-5QB" userLabel="Key" customClass="SILUILabels">
-                                        <rect key="frame" x="0.0" y="0.0" width="150" height="30"/>
+                                        <connections>
+                                            <outlet property="roundedView" destination="qUt-5w-8JF" id="4ra-Ld-AQg"/>
+                                        </connections>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECo-Eh-6CT" userLabel="Title" customClass="SILUILabels">
+                                        <rect key="frame" x="0.0" y="105" width="300" height="45"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Znw-Jv-GMT" userLabel="Description" customClass="SILUILabels">
+                                        <rect key="frame" x="0.0" y="150" width="300" height="120"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="13"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPu-mN-HIZ" userLabel="Value" customClass="SILUILabels">
-                                        <rect key="frame" x="150" y="0.0" width="150" height="30"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="13"/>
-                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u5Z-jL-1sW" userLabel="Showcased Profiles">
+                                        <rect key="frame" x="0.0" y="270" width="300" height="30"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Key" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mEs-70-5QB" userLabel="Key" customClass="SILUILabels">
+                                                <rect key="frame" x="0.0" y="0.0" width="150" height="30"/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="13"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPu-mN-HIZ" userLabel="Value" customClass="SILUILabels">
+                                                <rect key="frame" x="150" y="0.0" width="150" height="30"/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="13"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="iPu-mN-HIZ" firstAttribute="width" secondItem="u5Z-jL-1sW" secondAttribute="width" multiplier="1:2" id="7aq-eH-I5H"/>
+                                            <constraint firstItem="mEs-70-5QB" firstAttribute="width" secondItem="u5Z-jL-1sW" secondAttribute="width" multiplier="1:2" id="Grz-V1-kNd"/>
+                                        </constraints>
+                                    </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="iPu-mN-HIZ" firstAttribute="width" secondItem="u5Z-jL-1sW" secondAttribute="width" multiplier="1:2" id="7aq-eH-I5H"/>
-                                    <constraint firstItem="mEs-70-5QB" firstAttribute="width" secondItem="u5Z-jL-1sW" secondAttribute="width" multiplier="1:2" id="Grz-V1-kNd"/>
+                                    <constraint firstItem="Znw-Jv-GMT" firstAttribute="height" secondItem="LO5-Mz-74j" secondAttribute="height" multiplier="0.4" id="XZp-Eg-mci"/>
+                                    <constraint firstItem="u5Z-jL-1sW" firstAttribute="height" secondItem="LO5-Mz-74j" secondAttribute="height" multiplier="0.1" id="YQC-zX-rY7"/>
+                                    <constraint firstItem="ECo-Eh-6CT" firstAttribute="height" secondItem="LO5-Mz-74j" secondAttribute="height" multiplier="0.15" id="jcO-t1-rbc"/>
                                 </constraints>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Znw-Jv-GMT" firstAttribute="height" secondItem="LO5-Mz-74j" secondAttribute="height" multiplier="0.4" id="XZp-Eg-mci"/>
-                            <constraint firstItem="u5Z-jL-1sW" firstAttribute="height" secondItem="LO5-Mz-74j" secondAttribute="height" multiplier="0.1" id="YQC-zX-rY7"/>
-                            <constraint firstItem="ECo-Eh-6CT" firstAttribute="height" secondItem="LO5-Mz-74j" secondAttribute="height" multiplier="0.15" id="jcO-t1-rbc"/>
+                            <constraint firstItem="LO5-Mz-74j" firstAttribute="width" secondItem="6GO-4t-CJg" secondAttribute="width" id="BTF-hH-WX4"/>
+                            <constraint firstItem="LO5-Mz-74j" firstAttribute="height" secondItem="6GO-4t-CJg" secondAttribute="height" id="Gvb-pp-J9C"/>
+                            <constraint firstItem="LO5-Mz-74j" firstAttribute="centerY" secondItem="6GO-4t-CJg" secondAttribute="centerY" id="RBV-8G-if1"/>
+                            <constraint firstItem="LO5-Mz-74j" firstAttribute="centerX" secondItem="6GO-4t-CJg" secondAttribute="centerX" id="bfk-yt-zne"/>
                         </constraints>
-                    </stackView>
+                    </view>
                 </subviews>
-                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="LO5-Mz-74j" firstAttribute="centerX" secondItem="aJd-12-y1v" secondAttribute="centerX" id="Ofs-SW-zFF"/>
-                    <constraint firstItem="LO5-Mz-74j" firstAttribute="height" secondItem="aJd-12-y1v" secondAttribute="height" id="kiW-9R-7qH"/>
-                    <constraint firstItem="LO5-Mz-74j" firstAttribute="centerY" secondItem="aJd-12-y1v" secondAttribute="centerY" id="ovS-1G-uJM"/>
-                    <constraint firstItem="LO5-Mz-74j" firstAttribute="width" secondItem="aJd-12-y1v" secondAttribute="width" id="rAj-Hz-Im4"/>
+                    <constraint firstItem="6GO-4t-CJg" firstAttribute="leading" secondItem="aJd-12-y1v" secondAttribute="leading" id="UN9-Ga-U9B"/>
+                    <constraint firstItem="6GO-4t-CJg" firstAttribute="top" secondItem="aJd-12-y1v" secondAttribute="top" id="hUm-px-HYK"/>
+                    <constraint firstAttribute="bottom" secondItem="6GO-4t-CJg" secondAttribute="bottom" id="unc-nu-rOq"/>
+                    <constraint firstAttribute="trailing" secondItem="6GO-4t-CJg" secondAttribute="trailing" id="zxg-8j-lLu"/>
                 </constraints>
             </collectionViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <size key="customSize" width="300" height="300"/>
             <connections>
                 <outlet property="descriptionLabel" destination="Znw-Jv-GMT" id="OF4-Gp-GQJ"/>
@@ -103,6 +116,7 @@
                 <outlet property="imageView" destination="lLw-2M-A0Z" id="cHR-oY-g1v"/>
                 <outlet property="profileKeyLabel" destination="mEs-70-5QB" id="Yh9-Id-5D4"/>
                 <outlet property="profileValueLabel" destination="iPu-mN-HIZ" id="kQ0-Og-xe0"/>
+                <outlet property="roundedView" destination="6GO-4t-CJg" id="w2k-Uj-GR0"/>
                 <outlet property="titleLabel" destination="ECo-Eh-6CT" id="7h2-7D-iHh"/>
             </connections>
             <point key="canvasLocation" x="89.855072463768124" y="50.223214285714285"/>

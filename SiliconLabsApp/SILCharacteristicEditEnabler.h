@@ -12,6 +12,6 @@
 @protocol SILCharacteristicEditEnablerDelegate <NSObject>
 
 - (void)beginValueEditWithValue:(SILValueFieldRowModel *)valueModel;
-- (void)saveCharacteristic:(SILCharacteristicTableModel *)characteristicModel error:(NSError **)error;
+- (BOOL)saveCharacteristic:(SILCharacteristicTableModel *)characteristicModel withWriteType:(CBCharacteristicWriteType)writeType error:(NSError **)error;
 
 @end

@@ -10,8 +10,9 @@
 #import "UIImage+SILImages.h"
 #import "SILAppSelectionViewController.h"
 #import "SILApp.h"
+#import "SILUITabBar.h"
 
-@interface SILHomeTabBarViewController ()
+@interface SILHomeTabBarViewController () <UITabBarControllerDelegate>
 
 @end
 
@@ -26,6 +27,7 @@ NSUInteger const DevelopTabIndex = 1;
     [super viewDidLoad];
     [self setupTabsAppearance];
     [self setDevelopTabAsDefault];
+    self.delegate = self;
 }
 
 - (void)setupTabsAppearance {
@@ -71,6 +73,16 @@ NSUInteger const DevelopTabIndex = 1;
 
 - (void)setDevelopTabAsDefault {
     self.selectedIndex = DevelopTabIndex;
+}
+
+#pragma mark - UITabBarControllerDelegate
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    UITabBar *tabBar = tabBarController.tabBar;
+    UITabBarItem *item = [tabBarController.tabBar selectedItem];
+    NSUInteger index = [tabBar.items indexOfObject:item];
+    SILUITabBar *silTabBar = (SILUITabBar *)tabBar;
+    [silTabBar setMuliplierForSelectedIndex:index];
 }
 
 @end

@@ -29,8 +29,14 @@
 #import "SILBluetoothBrowserExpandableViewManager.h"
 #import "BlueGecko.pch"
 #import "SILBluetoothBrowser+Constants.h"
+#import "SILRefreshImageView.h"
+#import "SILRefreshImageModel.h"
+#import "UIView+SILShadow.h"
 
-@interface SILBluetoothBrowserViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate, SILDebugDeviceViewModelDelegate, SILBrowserFilterViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILBrowserLogViewControllerDelegate, UIScrollViewDelegate>
+#import "SILExitPopupViewController.h"
+#import "SILBrowserSettings.h"
+
+@interface SILBluetoothBrowserViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate, SILDebugDeviceViewModelDelegate, SILBrowserFilterViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILBrowserLogViewControllerDelegate, WYPopoverControllerDelegate, SILExitPopupViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
@@ -38,8 +44,6 @@
 @property (weak, nonatomic) IBOutlet UIView *presentationView;
 @property (weak, nonatomic) IBOutlet UIView *discoveredDevicesView;
 @property (weak, nonatomic) IBOutlet UITableView *browserTableView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint * tableLeftInset;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint * tableRightInset;
 @property (weak, nonatomic) IBOutlet UIButton *logButton;
 @property (weak, nonatomic) IBOutlet UIButton *connectionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
@@ -49,6 +53,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *noDevicesFoundLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *expandableControllerHeight;
 @property (weak, nonatomic) IBOutlet UIView *expandableControllerView;
+@property (weak, nonatomic) IBOutlet SILRefreshImageView *refreshImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topRefreshImageConstraint;
 
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
 @property (strong, nonatomic) SILDebugDeviceViewModel *browserViewModel;
@@ -58,6 +64,9 @@
 @property (nonatomic) BOOL isScanning;
 @property (nonatomic) NSMutableArray<NSString*>* expandSections;
 @property (nonatomic) SILBluetoothBrowserExpandableViewManager* browserExpandableViewManager;
+@property (strong, nonatomic) WYPopoverController *popoverController;
+@property (weak, nonatomic) IBOutlet UIView *scanningButtonView;
+@property (weak, nonatomic) IBOutlet UIView *topButtonsView;
 
 @end
 
@@ -68,7 +77,6 @@ NSString* const TitleForScanningButtonWhenIsNotScanning = @"Start Scanning";
 long long const ms = 1000;
 NSString* const AppendingMS = @" ms";
 const float TABLE_FRESH_INTERVAL = 2.0f;
-CGFloat const tableInset = 16;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -81,8 +89,9 @@ CGFloat const tableInset = 16;
     [self installViewModelsForExpandableViews];
     [self setupBackgroundForScanning:YES];
     [self setScanningButtonAppearanceWithScanning:_isScanning];
-    [self setupBrowserTableViewAppearance];
     [self clearViewModelsForExpandableViews];
+    [self setupRefreshImageView];
+    [self setupShadows];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -119,17 +128,6 @@ CGFloat const tableInset = 16;
 - (void)setupNavigationBar {
     [self setupNavigationBarBackgroundColor];
     [self setupNavigationBarTitle];
-}
-
-- (void)setupBrowserTableViewAppearance {
-    if (@available(iOS 13, *)) {
-        self.tableLeftInset.constant = 0;
-        self.tableRightInset.constant = 0;
-        self.browserTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    } else {
-        self.tableLeftInset.constant = tableInset;
-        self.tableRightInset.constant = tableInset;
-    }
 }
 
 - (void)setupNavigationBarBackgroundColor {
@@ -222,6 +220,21 @@ CGFloat const tableInset = 16;
     }];
 }
 
+- (void)setupRefreshImageView {
+    self.refreshImageView.model = [[SILRefreshImageModel alloc] initWithConstraint:self.topRefreshImageConstraint
+                                                                     withEmptyView:self.presentationView
+                                                                     withTableView:self.browserTableView
+                                                                 andWithReloadAction: ^{
+                                                                                    [self refreshTableView];
+                                                                                    }];
+    [self.refreshImageView setup];
+}
+
+- (void)setupShadows {
+    [self.scanningButtonView addShadow];
+    [self.topButtonsView addShadow];
+}
+
 #pragma mark - SILDebugDeviceViewModelDelegate
 
 - (void)didConnectToPeripheral:(CBPeripheral *)peripheral {
@@ -270,26 +283,12 @@ CGFloat const tableInset = 16;
                                            dequeueReusableCellWithIdentifier:SILClassBrowserDeviceViewCell
                                            forIndexPath:indexPath];
         [self configureDeviceCell:cell atIndexPath:indexPath];
-        if (@available(iOS 13, *)) {} else {
-            if ([tableView numberOfRowsInSection:indexPath.section] > 1) {
-                cell.isRounded = YES;
-                cell.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
-            }
-        }
         return cell;
     } else {
         SILBrowserDeviceAdTypeViewCell *cell = [tableView
                                            dequeueReusableCellWithIdentifier:SILClassBrowserServiceViewCell
                                            forIndexPath:indexPath];
         [self configureAdTypeCell:cell atIndexPath:indexPath];
-        if (@available(iOS 13, *)) {} else {
-            if ([tableView numberOfRowsInSection:indexPath.section]-1 == indexPath.row) {
-                cell.isRounded = YES;
-                cell.layer.maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
-            } else {
-                cell.isRounded = NO;
-            }
-        }
         return cell;
     }
 }
@@ -378,10 +377,6 @@ CGFloat const tableInset = 16;
     return UITableViewAutomaticDimension;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 16.0;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SILDiscoveredPeripheralDisplayDataViewModel *selectedPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
     NSString* identifier = selectedPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey;
@@ -391,9 +386,43 @@ CGFloat const tableInset = 16;
         [self.expandSections addObject:identifier];
     }
     NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
+    [UIView setAnimationsEnabled:NO];
     [self.browserTableView beginUpdates];
-    [self.browserTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.browserTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
+    [self.browserTableView fixCellBounds];
     [self.browserTableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    SILCell *silCell = (SILCell *)cell;
+    if ([tableView indexPathsForVisibleRows][0] == indexPath) {
+        [tableView bringSubviewToFront:silCell];
+    }
+    if (indexPath.row == 0) {
+        if ([tableView numberOfRowsInSection:indexPath.section] > 1) {
+            [silCell addShadowWhenAtTop];
+            [silCell roundCornersTop];
+        } else {
+            [silCell addShadowWhenAtBottom];
+            [silCell roundCornersAll];
+        }
+    } else {
+        [silCell roundCornersNone];
+        [silCell addShadowWhenInMid];
+        if (([tableView numberOfRowsInSection:indexPath.section] - 1) == indexPath.row) {
+            [silCell roundCornersBottom];
+            [silCell addShadowWhenAtBottom];
+        }
+    }
+    cell.clipsToBounds = NO;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    CGRect size = CGRectMake(tableView.bounds.origin.x, tableView.bounds.origin.y, tableView.bounds.size.width, 20);
+    UIView * view = [[UIView alloc] initWithFrame:size];
+    view.backgroundColor = UIColor.clearColor;
+    return view;
 }
 
 #pragma mark - Expandable Controllers
@@ -653,9 +682,47 @@ CGFloat const tableInset = 16;
 }
 
 - (IBAction)backToDevelopWasTapped:(id)sender {
+    if (![SILBrowserSettings displayExitWarningPopup] && [self.connectionsViewModel areConnections]) {
+        SILExitPopupViewController *exitVC = [[SILExitPopupViewController alloc] init];
+        exitVC.delegate = self;
+        self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:exitVC
+                                                                               presentingViewController:self
+                                                                                               delegate:self
+                                                                                               animated:YES];
+    } else {
+        [self stopScanningAndDisconnectAll];
+    }
+}
+
+- (void)stopScanningAndDisconnectAll {
     [self stopScanningAction];
     [self.connectionsViewModel disconnectAllPeripheral];
     [self.navigationController popViewControllerAnimated:NO];
+}
+
+#pragma mark - WYPopoverControllerDelegate
+
+- (void)popoverControllerDidDismissPopover:(WYPopoverController *)popoverController {
+    [self dismissPopoverViewController];
+}
+
+#pragma mark = SILExitPopupViewControllerDelegate
+
+- (void)cancelWasTappedInExitPopup {
+    [self dismissPopoverViewController];
+}
+
+- (void)okWasTappedInExitPopupWithSwitchState:(BOOL)state {
+    [SILBrowserSettings setDisplayExitWarningPopup:state];
+    [self.popoverController dismissPopoverAnimated:YES completion: ^{
+        self.popoverController = nil;
+        [self stopScanningAndDisconnectAll];
+    }];
+}
+
+- (void)dismissPopoverViewController {
+    [self.popoverController dismissPopoverAnimated:YES completion:nil];
+    self.popoverController = nil;
 }
 
 - (void)clearViewModelsForExpandableViews {
@@ -666,23 +733,23 @@ CGFloat const tableInset = 16;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([self isSignificatantScrollToTop:scrollView]) {
-        [self.browserViewModel stopScanningWithVisibleCellsCount:0];
-        [self removeUnfiredTimers];
-        [self.browserViewModel removeAllDiscoveredPeripherals];
-        [self reloadTable];
-        [self.noDevicesFoundView setHidden:NO];
-        self.isScanning = YES;
-        [self setScanningButtonAppearanceWithScanning:self.isScanning];
-        [self setupBackgroundForScanning:YES];
-        [self startScanning];
+    if (scrollView.contentOffset.y < 0) {
+        scrollView.contentOffset = CGPointZero;
+        [scrollView setScrollEnabled:NO];
     }
 }
 
-- (BOOL)isSignificatantScrollToTop:(UIScrollView*)scrollView {
-    NSInteger SignificantVerticalChangeValue = -50;
-    NSInteger StateChanged = 0;
-    return scrollView.contentOffset.y <= SignificantVerticalChangeValue && scrollView.panGestureRecognizer.state != StateChanged;
+- (void)refreshTableView {
+    [self.browserViewModel stopScanningWithVisibleCellsCount:0];
+    [self removeUnfiredTimers];
+    [self.browserViewModel removeAllDiscoveredPeripherals];
+    [self reloadTable];
+    [self.noDevicesFoundView setHidden:NO];
+    self.isScanning = YES;
+    [self setScanningButtonAppearanceWithScanning:self.isScanning];
+    [self setupBackgroundForScanning:YES];
+    [self startScanning];
 }
+
 
 @end

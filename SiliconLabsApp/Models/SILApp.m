@@ -20,6 +20,7 @@
 + (NSArray *)developApps {
     return @[
                 [self bluetoothBrowserApp],
+                [self advertiserApp],
             ];
 }
 
@@ -69,6 +70,14 @@
                                description:@"Evaluate the link budget and communication range of the Wireless Gecko SoCs using various wireless radio configurations"
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeRangeTestDemo];
+}
+
++ (SILApp *)advertiserApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeAdvertiser
+                                     title:@"Advertiser"
+                               description:@"Utilize this device as a BLE peripheral"
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeAdvertiser];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

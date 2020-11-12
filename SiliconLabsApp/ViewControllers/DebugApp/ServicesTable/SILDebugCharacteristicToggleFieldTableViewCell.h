@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SILCharacteristicEditEnabler.h"
 @class SILBitRowModel;
 
 @interface SILDebugCharacteristicToggleFieldTableViewCell : UITableViewCell
-@property (strong, nonatomic) id<SILCharacteristicEditEnablerDelegate> editDelegate;
 - (void)configureWithBitRowModel:(SILBitRowModel *)bitRowModel;
 @end

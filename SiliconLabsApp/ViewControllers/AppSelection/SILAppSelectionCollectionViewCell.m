@@ -10,6 +10,12 @@
 #import "UIColor+SILColors.h"
 #import "SILApp.h"
 #import "SILBluetoothBrowser+Constants.h"
+#import "UIView+SILShadow.h"
+
+@interface SILAppSelectionCollectionViewCell()
+@property (weak, nonatomic) IBOutlet UIView *roundedView;
+
+@end
 
 @implementation SILAppSelectionCollectionViewCell
 
@@ -26,6 +32,13 @@
     [self setupIconImageView];
     [self setupImageView];
     [self setupCellRoundedAppearance];
+}
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    self.layer.masksToBounds = NO;
+    self.backgroundColor = UIColor.clearColor;
+    [self addShadowWithOffset:SILCellShadowOffset radius:SILCellShadowRadius];
 }
 
 - (void)setupTitleLabel {
@@ -68,8 +81,8 @@
 }
 
 - (void)setupCellRoundedAppearance {
-    self.layer.masksToBounds = YES;
-    self.layer.cornerRadius = CornerRadiusStandardValue;
+    self.roundedView.layer.masksToBounds = YES;
+    self.roundedView.layer.cornerRadius = CornerRadiusStandardValue;
 }
 
 - (void)prepareForReuse {

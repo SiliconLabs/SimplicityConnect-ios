@@ -11,138 +11,81 @@
 @implementation UIColor (SILColors)
 
 + (UIColor *)sil_siliconLabsRedColor {
-    return [UIColor colorWithRed:217.0f / 255.0f
-                           green:30.0f / 255.0f
-                            blue:42.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_siliconLabsRedColor"];
 }
 
 + (UIColor *)sil_regularBlueColor {
-    return [UIColor colorWithRed:0.0f / 255.0f
-                           green:134.0f / 255.0f
-                            blue:217.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_regularBlueColor"];
 }
 
 + (UIColor *)sil_cardBackgroundColor {
-    return [UIColor colorWithRed:255.0f / 255.0f
-                           green:255.0f / 255.0f
-                            blue:255.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_cardBackgroundColor"];
 }
 
 + (UIColor *)sil_backgroundColor {
-    return [UIColor colorWithRed:236.0f / 255.0f
-                           green:236.0f / 255.0f
-                            blue:236.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_backgroundColor"];
 }
 
 + (UIColor *)sil_secondaryBackgroundColor {
-    return [UIColor colorWithRed:204.0f / 255.0f
-                           green:204.0f / 255.0f
-                            blue:204.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_secondaryBackgroundColor"];
 }
 
 + (UIColor *)sil_subtleTextColor {
-    return [UIColor colorWithRed:124.0f / 255.0f
-                           green:124.0f / 255.0f
-                            blue:124.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_subtleTextColor"];
 }
 
 + (UIColor *)sil_primaryTextColor {
-    return [UIColor colorWithRed:51.0f / 255.0f
-                           green:51.0f / 255.0f
-                            blue:51.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_primaryTextColor"];
 }
 
 #pragma mark - Old colors
 
 + (UIColor *)sil_strongBlueColor {
-    return [UIColor colorWithRed:0.0f / 255.0f
-                           green:117.0f / 255.0f
-                            blue:192.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_strongBlueColor"];
 }
 
 + (UIColor *)sil_lightBlueColor {
-    return [UIColor colorWithRed:72.0f / 255.0f
-                           green:194.0f / 255.0f
-                            blue:249.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_lightBlueColor"];
 }
 
 + (UIColor *)sil_lineGreyColor {
-    return [UIColor colorWithRed:217.0f / 255.0f
-                           green:217.0f / 255.0f
-                            blue:217.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_lineGreyColor"];
 }
 
 + (UIColor *)sil_bgGreyColor {
-    return [UIColor colorWithRed:241.0f / 255.0f
-                           green:239.0f / 255.0f
-                            blue:239.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_bgGreyColor"];
 }
 
 + (UIColor *)sil_refreshGreyColor {
-    return [UIColor colorWithRed:230.0f / 255.0f
-                           green:230.0f / 255.0f
-                            blue:230.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_refreshGreyColor"];
 }
 
 + (UIColor *)sil_lightGreyColor {
-    return [UIColor colorWithRed:247.0f / 255.0f
-                           green:247.0f / 255.0f
-                            blue:247.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_lightGreyColor"];
 }
 
 + (UIColor *)sil_bgWhiteColor {
-    return [UIColor colorWithRed:250.0f / 255.0f
-                           green:250.0f / 255.0f
-                            blue:250.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_bgWhiteColor"];
 }
 
 + (UIColor *)sil_silverChaliceColor {
-    return [UIColor colorWithRed:165.0f / 255.0f
-                           green:165.0f / 255.0f
-                            blue:165.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_silverChaliceColor"];
 }
 
 + (UIColor *)sil_boulderColor {
-    return [UIColor colorWithRed:122.0f / 255.0f
-                           green:120.0f / 255.0f
-                            blue:120.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_boulderColor"];
 }
 
 + (UIColor *)sil_masala50pcColor {
-    return [UIColor colorWithRed:79.0f / 255.0f
-                           green:77.0f / 255.0f
-                            blue:77.0f / 255.0f
-                           alpha:0.5f];
+    return [UIColor colorNamed: @"sil_masala50pcColor"];
 }
 
 + (UIColor *)sil_masalaColor {
-    return [UIColor colorWithRed:80.0f / 255.0f
-                           green:78.0f / 255.0f
-                            blue:78.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_masalaColor"];
 }
 
 + (UIColor *)sil_silverColor {
-    return [UIColor colorWithRed:191.0f / 255.0f
-                           green:191.0f / 255.0f
-                            blue:191.0f / 255.0f
-                           alpha:1.0f];
+    return [UIColor colorNamed: @"sil_silverColor"];
 }
 
 @end

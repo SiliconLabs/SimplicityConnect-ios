@@ -24,6 +24,7 @@
 - (void)connectionsViewOnDetailsScreen:(BOOL)isDetailsScreen;
 - (BOOL)isConnectedPeripheral:(CBPeripheral*)peripheral;
 - (void)clearViewModelData;
+- (BOOL)areConnections;
 
 @end
 

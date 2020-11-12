@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *toggleFieldLabel;
 @property (weak, nonatomic) IBOutlet UILabel *toggleCategoryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nonWritableLabel;
-@property (weak, nonatomic) IBOutlet UISwitch *writableSwitch;
 @end
 
 @implementation SILDebugCharacteristicToggleFieldTableViewCell
@@ -31,26 +30,11 @@
     UIColor *stateColor = [bitRowModel.toggleState intValue] ? [UIColor colorWithWhite:0 alpha:0.54] : [UIColor colorWithWhite:0 alpha:0.26];
     self.nonWritableLabel.text = toggleState;
     self.nonWritableLabel.textColor = stateColor;
-    self.nonWritableLabel.hidden = bitRowModel.parentCharacteristicModel.canWrite;
-    
-    self.writableSwitch.on = [bitRowModel.toggleState intValue] > 0;
-    self.writableSwitch.hidden = !bitRowModel.parentCharacteristicModel.canWrite;
-    
+    self.nonWritableLabel.hidden = NO;
+        
     self.topSeparatorView.hidden = bitRowModel.hideTopSeparator;
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [self layoutIfNeeded];
-}
-
-- (IBAction)didChangeValue:(UISwitch *)sender {
-    NSError * saveError = nil;
-    NSNumber * const backupValue = self.model.toggleState;
-    
-    self.model.toggleState = @(sender.on);
-    [self.editDelegate saveCharacteristic:self.model.parentCharacteristicModel error:&saveError];
-    
-    if (saveError != nil) {
-        self.model.toggleState = backupValue;
-    }
 }
 
 @end

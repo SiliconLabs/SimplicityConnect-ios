@@ -24,6 +24,7 @@ extern NSString * const SILImageNameHomeDebug;
 extern NSString * const SILImageNameHomeKitDebug;
 extern NSString * const SILImageNameHomeConnectedLighting;
 extern NSString * const SILImageNameHomeRangeTestDemo;
+extern NSString * const SILImageNameHomeAdvertiser;
 
 extern NSString * const SILImageNameKeyboard;
 extern NSString * const SILImageNameKeyboardCheckmark;

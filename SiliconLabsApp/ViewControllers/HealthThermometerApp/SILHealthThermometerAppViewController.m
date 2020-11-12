@@ -45,6 +45,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 @property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
 @property (weak, nonatomic) IBOutlet SILSegmentedControl *typeControl;
 @property (assign, nonatomic) BOOL isConnected;
+@property (weak, nonatomic) IBOutlet UIStackView *presentationSpace;
 
 @end
 
@@ -148,6 +149,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 - (void)setupNavigationBar {
     [self setupNavigationBarBackgroundColor];
     [self setupNavigatioBarTitleLabel];
+    [self setupNavigationBarShadow];
 }
 
 - (void)setupNavigationBarBackgroundColor {
@@ -159,6 +161,11 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     _navigationBarTitleLabel.font = [UIFont robotoMediumWithSize:SILNavigationBarTitleFontSize];
     _navigationBarTitleLabel.textColor = [UIColor sil_backgroundColor];
     _navigationBarTitleLabel.adjustsFontSizeToFitWidth = YES;
+}
+
+- (void)setupNavigationBarShadow {
+    [self.presentationSpace bringSubviewToFront:self.navigationBarView];
+    [self.navigationBarView addShadow];
 }
 
 - (void)setupMeasurementCollectionView {

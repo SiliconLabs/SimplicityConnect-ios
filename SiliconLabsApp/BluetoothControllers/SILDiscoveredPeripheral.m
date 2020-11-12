@@ -196,9 +196,14 @@ NSString* const EddystoneService = @"FEAA";
 
 - (NSString *)rssiDescription {
     NSString *rssi = [self.RSSIMeasurementTable.lastRSSIMeasurement stringValue];
-    NSMutableString* rssiDescription = [[NSMutableString alloc] initWithString:rssi];
-    [rssiDescription appendString:RSSIAppendingString];
-    return rssiDescription;
+    
+    if (rssi != nil) {
+        NSMutableString* rssiDescription = [[NSMutableString alloc] initWithString:rssi];
+        [rssiDescription appendString:RSSIAppendingString];
+        return rssiDescription;
+    } else {
+        return @"N/A";
+    }
 }
 
 @end

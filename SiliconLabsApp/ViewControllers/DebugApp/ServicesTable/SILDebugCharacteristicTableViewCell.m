@@ -20,16 +20,12 @@
 
 @interface SILDebugCharacteristicTableViewCell()
 @property (weak, nonatomic) IBOutlet UIView *topSeparatorView;
-@property (weak, nonatomic) IBOutlet UIView *propertiesContainerView;
-@property (weak, nonatomic) IBOutlet UIStackView *propertyButtonsStackView;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicUuidLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iPadBottomDividerLeadingConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *descriptorsTextLabel;
 @property (weak, nonatomic) IBOutlet UIView *descriptorsView;
 @property (weak, nonatomic) IBOutlet UIButton *readPropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *writePropertyButton;
-@property (weak, nonatomic) IBOutlet UIButton *writeNoResponsePropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *notifyPropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *indicatePropertyButton;
 
@@ -96,8 +92,6 @@
     self.characteristicNameLabel.text = homeKitCharacteristicModel.name ?: UknownCharacteristicName;
     self.characteristicUuidLabel.text = [homeKitCharacteristicModel uuidString] ?: EmptyText;
     self.topSeparatorView.hidden = homeKitCharacteristicModel.hideTopSeparator;
-    [self.propertiesContainerView setAlpha:0.0];
-    self.propertyButtonsStackViewWidthConstraint.constant = 0.0;
     [self configureAsExpandable:NO];
 }
 #endif
@@ -113,10 +107,9 @@
         id propertyKey = property.keysForActivation.firstObject;
         if ([propertyKey isEqual:@(CBCharacteristicPropertyRead)]) {
             [self.readPropertyButton setHidden:NO];
-        } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWrite)]) {
+        } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWrite)] ||
+                   [propertyKey isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
             [self.writePropertyButton setHidden:NO];
-        } else if ([propertyKey isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
-            [self.writeNoResponsePropertyButton setHidden:NO];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyIndicate)]) {
             [self.indicatePropertyButton setHidden:NO];
         } else if ([propertyKey isEqual:@(CBCharacteristicPropertyNotify)]) {
@@ -137,10 +130,9 @@
     for (SILDebugProperty *property in self.allActiveProperties) {
         if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyRead)]) {
             [self readButtonAppearance];
-        } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWrite)]) {
+        } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWrite)] ||
+                   [property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
             [self writeButtonAppearance];
-        } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyWriteWithoutResponse)]) {
-            [self writeNoResponseButtonAppearance];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyIndicate)]) {
             [self indicateButtonAppearanceWithCondition:isNotifying];
         } else if ([property.keysForActivation.firstObject isEqual:@(CBCharacteristicPropertyNotify)]) {
@@ -165,12 +157,6 @@
     [self.writePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
 }
 
-- (void)writeNoResponseButtonAppearance {
-    NSString *writeImageString = SILImageNamePropertyWriteNoResponseDisabled;
-    self.writeNoResponsePropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.writeNoResponsePropertyButton setImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-    [self.writeNoResponsePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
-}
 
 - (void)indicateButtonAppearanceWithCondition:(BOOL)condition {
     NSString *indicateImageString = condition ? SILImageNamePropertyIndicate : SILImageNamePropertyIndicateDisabled;
@@ -204,11 +190,6 @@
 - (IBAction)handleWriteViewTap:(id)sender {
     [self.characteristicTableModel expandFieldIfNeeded];
     [self.delegate cell:self didRequestWriteForCharacteristic:self.characteristic];
-}
-
-- (IBAction)handleWriteNoResponseViewTap:(id)sender {
-    [self.characteristicTableModel expandFieldIfNeeded];
-    [self.delegate cell:self didRequestWriteNoResponseForCharacteristic:self.characteristic];
 }
 
 - (IBAction)handleIndicateViewTap:(id)sender {

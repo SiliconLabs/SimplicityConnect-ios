@@ -10,7 +10,7 @@ import Foundation
 
 class SILDebugServicesMenuViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var menuOptionTableView: UITableView!
-    @objc var delegate: SILDebugServicesMenuViewControllerDelegate!
+    @objc var delegate: SILDebugServicesMenuViewControllerDelegate?
     var menuOption = [Int : [String : () -> ()]]()
     
     let ReuseIdentifier = "DebugServicesMenuCell"
@@ -20,10 +20,27 @@ class SILDebugServicesMenuViewController : UIViewController, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMenuOptionTableView()
+        updatePreferredContentSize()
+    }
+    
+    private func updatePreferredContentSize() {
+        let width = menuOption.values
+            .map({ $0.keys.first! })
+            .map({ title in
+                return title.size(withAttributes: [
+                    .font: UIFont(name: "Roboto-Regular", size: 17)!
+                    ]).width
+            }).max() ?? 0
+        let widthWithMargin = width + 48
+        let widthNotTooSmall = max(widthWithMargin, 207)
+        let widthNotTooBig = min(widthNotTooSmall, UIScreen.main.bounds.width)
+        
+        preferredContentSize = CGSize(width: widthNotTooBig, height: getMenuOptionHeight())
     }
     
     @objc func addMenuOption(title: String, completion: @escaping () -> ()) {
         menuOption[menuOption.count] = [title : completion]
+        updatePreferredContentSize()
     }
     
     @objc func getMenuOptionHeight() -> CGFloat {
@@ -50,7 +67,14 @@ class SILDebugServicesMenuViewController : UIViewController, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let completion = menuOption[indexPath.row]?.values.first {
-            delegate!.performActionForMenuOption(using: completion)
+            if let delegate = delegate {
+                delegate.performActionForMenuOption(using: completion)
+            } else {
+                DispatchQueue.main.async {
+                    self.dismiss(animated: false, completion: nil)
+                    completion()
+                }
+            }
         }
     }
     

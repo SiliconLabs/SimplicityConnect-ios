@@ -187,4 +187,8 @@
     [self.toastsToDisplayList addObject:[[SILDisconnectionToastModel alloc] initWithPeripheralName:peripheralName errorCode:errorCode peripheralWasConnected:NO]];
 }
 
+- (BOOL)areConnections {
+    return _allPeripherals.count > 0;
+}
+
 @end

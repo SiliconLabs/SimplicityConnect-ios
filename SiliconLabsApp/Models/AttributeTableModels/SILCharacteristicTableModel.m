@@ -153,27 +153,51 @@
     }
 }
 
-- (void)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral error:(NSError * __autoreleasing *)error {
+- (BOOL)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral withWriteType:(CBCharacteristicWriteType)writeType error:(NSError**)error {
     if (!self.canWrite) {
-        *error = [NSError errorWithDomain:@"Characteristic is not writable" code:-1 userInfo:nil];
-        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: Characteristic is not writable " andPeripheral:peripheral andError:*error]];
-        return;
+        if (error != nil) {
+            *error = [NSError errorWithDomain:@"Characteristic is not writable" code:-1 userInfo:nil];
+            [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: Characteristic is not writable " andPeripheral:peripheral andError:*error]];
+        }
+        return NO;
     }
     
     NSData * const dataToWrite = [self dataToWriteWithError:error];
     
-    if (*error) { return; }
+    if (error != nil && *error) { return NO; }
     
     if (!dataToWrite) {
-        *error = [NSError errorWithDomain:@"Data is out of range" code:-1 userInfo:nil];
-        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: Data is out of range " andPeripheral:peripheral andError:*error]];
-        return;
+        if (error != nil) {
+            *error = [NSError errorWithDomain:@"Data is out of range" code:-1 userInfo:nil];
+            [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: Data is out of range " andPeripheral:peripheral andError:*error]];
+        }
+        return NO;
     }
     
-    const CBCharacteristicWriteType writeType = self.writeWithResponse ? CBCharacteristicWriteWithResponse : CBCharacteristicWriteWithoutResponse;
-    
+    writeType = [self checkIfCharacteristicSupportsChosenWriteType:writeType];
     [peripheral writeValue:dataToWrite forCharacteristic:self.characteristic type:writeType];
-    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"OTA writeToPeripheral: " andPeripheral:peripheral andError:*error]];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"writeToPeripheral: " andPeripheral:peripheral andError:*error]];
+    
+    return YES;
+}
+
+- (CBCharacteristicWriteType)checkIfCharacteristicSupportsChosenWriteType:(CBCharacteristicWriteType)writeType {
+    switch (writeType) {
+        case CBCharacteristicWriteWithResponse:
+            if (self.writeWithResponse == NO) {
+                return CBCharacteristicWriteWithoutResponse;
+            }
+            break;
+        case CBCharacteristicWriteWithoutResponse:
+            if (self.writeNoResponse == NO) {
+                return CBCharacteristicWriteWithResponse;
+            }
+            break;
+        default:
+            break;
+    }
+    
+    return writeType;
 }
 
 - (NSData *)dataToWriteWithError:(NSError * __autoreleasing *)error {

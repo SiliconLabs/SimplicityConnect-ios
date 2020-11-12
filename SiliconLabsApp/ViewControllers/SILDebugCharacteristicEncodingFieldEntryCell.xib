@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="40" id="AGq-nN-pHV" customClass="SILDebugCharacteristicEncodingFieldEntryCell">
+            <rect key="frame" x="0.0" y="0.0" width="388" height="40"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AGq-nN-pHV" id="6b3-Xl-0m0">
+                <rect key="frame" x="0.0" y="0.0" width="388" height="40"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ef9-8P-22u">
+                        <rect key="frame" x="10" y="0.0" width="368" height="40"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Sl-8X-Jfl">
+                                <rect key="frame" x="0.0" y="13" width="60" height="14"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="Pz2-LL-7aX"/>
+                                    <constraint firstAttribute="width" constant="60" id="mEb-dX-jxS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
+                                <color key="textColor" name="sil_subtleTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ahi-eK-nsc" userLabel="Paste Button">
+                                <rect key="frame" x="338" y="6" width="30" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="hBL-tQ-3A7"/>
+                                    <constraint firstAttribute="width" secondItem="ahi-eK-nsc" secondAttribute="height" multiplier="15:14" id="iHu-vI-1W1"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="icon - paste"/>
+                                <connections>
+                                    <action selector="pasteButtonClicked:" destination="AGq-nN-pHV" eventType="touchUpInside" id="jzg-HN-Qhj"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tNj-dQ-U6T" customClass="SILEncodingTextField">
+                                <rect key="frame" x="68" y="3" width="262" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ahi-eK-nsc" secondAttribute="trailing" id="65g-2r-TJo"/>
+                            <constraint firstItem="ahi-eK-nsc" firstAttribute="centerY" secondItem="ef9-8P-22u" secondAttribute="centerY" id="Beq-va-yrH"/>
+                            <constraint firstItem="ahi-eK-nsc" firstAttribute="leading" secondItem="tNj-dQ-U6T" secondAttribute="trailing" constant="8" id="Nug-Qd-wBu"/>
+                            <constraint firstItem="8Sl-8X-Jfl" firstAttribute="leading" secondItem="ef9-8P-22u" secondAttribute="leading" id="X90-j8-tki"/>
+                            <constraint firstItem="tNj-dQ-U6T" firstAttribute="leading" secondItem="8Sl-8X-Jfl" secondAttribute="trailing" constant="8" id="dJc-3i-8MO"/>
+                            <constraint firstItem="8Sl-8X-Jfl" firstAttribute="centerY" secondItem="ef9-8P-22u" secondAttribute="centerY" id="hOH-ni-USt"/>
+                            <constraint firstItem="tNj-dQ-U6T" firstAttribute="centerY" secondItem="ef9-8P-22u" secondAttribute="centerY" id="lij-iM-1HE"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" name="sil_bgWhiteColor"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="ef9-8P-22u" secondAttribute="bottom" id="6QV-iy-RXZ"/>
+                    <constraint firstItem="ef9-8P-22u" firstAttribute="top" secondItem="6b3-Xl-0m0" secondAttribute="top" id="CDe-zS-Biq"/>
+                    <constraint firstAttribute="trailing" secondItem="ef9-8P-22u" secondAttribute="trailing" constant="10" id="Imu-mV-oUb"/>
+                    <constraint firstItem="ef9-8P-22u" firstAttribute="leading" secondItem="6b3-Xl-0m0" secondAttribute="leading" constant="10" id="tRH-mc-2sq"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="pasteButton" destination="ahi-eK-nsc" id="Haj-Ly-09N"/>
+                <outlet property="typeLabel" destination="8Sl-8X-Jfl" id="smA-Ai-iQd"/>
+                <outlet property="valueTextField" destination="tNj-dQ-U6T" id="fql-jZ-2hV"/>
+            </connections>
+            <point key="canvasLocation" x="-17.39130434782609" y="114.50892857142857"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon - paste" width="20" height="20"/>
+        <namedColor name="sil_bgWhiteColor">
+            <color red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_subtleTextColor">
+            <color red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

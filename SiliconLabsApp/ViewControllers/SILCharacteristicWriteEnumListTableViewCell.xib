@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="characteristicEnumList" id="KGk-i7-Jjw" customClass="SILCharacteristicWriteEnumListTableViewCell" customModule="BlueGecko" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="7Jg-NP-3cu">
+                        <rect key="frame" x="8" y="0.0" width="304" height="44"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DJE-sM-eVy" userLabel="Field Name">
+                                <rect key="frame" x="0.0" y="0.0" width="152" height="44"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                <color key="textColor" name="sil_subtleTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bG2-dD-lEX">
+                                <rect key="frame" x="156" y="0.0" width="148" height="44"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oNd-S1-S7G" userLabel="Current Selected Value">
+                                        <rect key="frame" x="0.0" y="0.0" width="104" height="44"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                        <color key="textColor" name="sil_primaryTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sck-Hz-sog">
+                                        <rect key="frame" x="104" y="0.0" width="44" height="44"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="6Pg-LN-WFU">
+                                                <rect key="frame" x="29" y="14.5" width="15" height="15"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="6Pg-LN-WFU" secondAttribute="height" multiplier="1:1" id="3Tc-V9-9qh"/>
+                                                    <constraint firstAttribute="width" constant="15" id="ybS-8t-uUg"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Sck-Hz-sog" secondAttribute="height" multiplier="1:1" id="HTc-fr-Dfu"/>
+                                            <constraint firstItem="6Pg-LN-WFU" firstAttribute="centerY" secondItem="Sck-Hz-sog" secondAttribute="centerY" id="aad-8i-UWb"/>
+                                            <constraint firstAttribute="trailing" secondItem="6Pg-LN-WFU" secondAttribute="trailing" id="yxe-rK-xWf"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="DJE-sM-eVy" firstAttribute="width" secondItem="7Jg-NP-3cu" secondAttribute="width" multiplier="0.5" id="3q6-YU-GoN"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" name="sil_bgWhiteColor"/>
+                <constraints>
+                    <constraint firstItem="7Jg-NP-3cu" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-16" id="7Bg-a8-dWe"/>
+                    <constraint firstItem="7Jg-NP-3cu" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="8dB-Qo-9jb"/>
+                    <constraint firstItem="7Jg-NP-3cu" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="fkA-0v-yhX"/>
+                    <constraint firstItem="7Jg-NP-3cu" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="vFE-mz-HRO"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="currentValueTextField" destination="oNd-S1-S7G" id="Uxm-q8-Xyi"/>
+                <outlet property="fieldNameLabel" destination="DJE-sM-eVy" id="BZo-Mu-Isn"/>
+                <outlet property="valueAreaStackView" destination="bG2-dD-lEX" id="mfg-HA-hvI"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="153"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="chevron_collapsed" width="14" height="9"/>
+        <namedColor name="sil_bgWhiteColor">
+            <color red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_primaryTextColor">
+            <color red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_subtleTextColor">
+            <color red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

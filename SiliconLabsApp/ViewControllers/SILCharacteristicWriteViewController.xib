@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILCharacteristicWriteViewController" customModule="BlueGecko" customModuleProvider="target">
+            <connections>
+                <outlet property="characteristicNameLabel" destination="d7N-ka-ONM" id="9q4-7P-kjd"/>
+                <outlet property="characteristicUUIDLabel" destination="ipc-AD-IRp" id="0W3-k9-MoR"/>
+                <outlet property="fieldsTableView" destination="qws-eA-fg0" id="t35-qb-Z9F"/>
+                <outlet property="serviceNameLabel" destination="OOM-9v-f7p" id="d5W-lX-QHN"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="writeCommandView" destination="Rph-6O-QHg" id="dYY-ND-ZMd"/>
+                <outlet property="writeRequestView" destination="nxN-SJ-x1K" id="eH0-iW-cYD"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PeM-XZ-f2P" userLabel="Header">
+                    <rect key="frame" x="0.0" y="44" width="414" height="75.5"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Unknown Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOM-9v-f7p" userLabel="Service Name Label">
+                            <rect key="frame" x="16" y="8" width="94" height="14"/>
+                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
+                            <color key="textColor" name="sil_subtleTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Unknown Characteristic" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="568" translatesAutoresizingMaskIntoConstraints="NO" id="d7N-ka-ONM" userLabel="Characteristic Name Label">
+                            <rect key="frame" x="16" y="26" width="193" height="21"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
+                            <color key="textColor" name="sil_primaryTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Characteristic UUID" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" preferredMaxLayoutWidth="568" translatesAutoresizingMaskIntoConstraints="NO" id="ipc-AD-IRp">
+                            <rect key="frame" x="16" y="51" width="124.5" height="16.5"/>
+                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                            <color key="textColor" name="sil_primaryTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fuA-v0-mpa" userLabel="iPad Characteristic Property Badge Container View">
+                            <rect key="frame" x="225" y="34" width="149" height="37.5"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYP-TA-ePn" userLabel="Exit">
+                            <rect key="frame" x="384" y="8" width="22" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="22" id="ULs-aN-nqJ"/>
+                                <constraint firstAttribute="width" secondItem="EYP-TA-ePn" secondAttribute="height" multiplier="1:1" id="xg9-UK-Dy5"/>
+                            </constraints>
+                            <state key="normal" image="exitView"/>
+                            <connections>
+                                <action selector="exitButtonWasTapped:" destination="-1" eventType="touchUpInside" id="QaY-PO-Ggf"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" name="sil_bgGreyColor"/>
+                    <constraints>
+                        <constraint firstItem="fuA-v0-mpa" firstAttribute="leading" secondItem="d7N-ka-ONM" secondAttribute="trailing" constant="16" id="0f2-V4-ZCn"/>
+                        <constraint firstItem="d7N-ka-ONM" firstAttribute="leading" secondItem="PeM-XZ-f2P" secondAttribute="leading" constant="16" id="0zn-CD-izh"/>
+                        <constraint firstItem="ipc-AD-IRp" firstAttribute="leading" secondItem="PeM-XZ-f2P" secondAttribute="leading" constant="16" id="16a-rt-cky"/>
+                        <constraint firstAttribute="bottom" secondItem="fuA-v0-mpa" secondAttribute="bottom" constant="4" id="1fL-3w-yav"/>
+                        <constraint firstItem="d7N-ka-ONM" firstAttribute="top" secondItem="OOM-9v-f7p" secondAttribute="bottom" constant="4" id="79y-o2-7mq"/>
+                        <constraint firstItem="OOM-9v-f7p" firstAttribute="top" secondItem="PeM-XZ-f2P" secondAttribute="top" constant="8" id="92n-9g-3Tc"/>
+                        <constraint firstItem="EYP-TA-ePn" firstAttribute="top" secondItem="PeM-XZ-f2P" secondAttribute="top" constant="8" id="ESb-f1-zRi"/>
+                        <constraint firstItem="ipc-AD-IRp" firstAttribute="top" secondItem="d7N-ka-ONM" secondAttribute="bottom" constant="4" id="Ee2-rB-mhq"/>
+                        <constraint firstAttribute="trailing" secondItem="fuA-v0-mpa" secondAttribute="trailing" constant="40" id="PJo-7I-YYX"/>
+                        <constraint firstItem="EYP-TA-ePn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="OOM-9v-f7p" secondAttribute="trailing" constant="8" symbolic="YES" id="ZJI-Jp-1I9"/>
+                        <constraint firstItem="OOM-9v-f7p" firstAttribute="leading" secondItem="PeM-XZ-f2P" secondAttribute="leading" constant="16" id="Zw5-3K-67b"/>
+                        <constraint firstAttribute="bottom" secondItem="ipc-AD-IRp" secondAttribute="bottom" constant="8" id="atX-Q5-Jr7"/>
+                        <constraint firstItem="fuA-v0-mpa" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ipc-AD-IRp" secondAttribute="trailing" constant="8" symbolic="YES" id="mL9-o5-dlO"/>
+                        <constraint firstAttribute="trailing" secondItem="EYP-TA-ePn" secondAttribute="trailing" constant="8" id="naf-d2-D1e"/>
+                        <constraint firstItem="fuA-v0-mpa" firstAttribute="top" secondItem="EYP-TA-ePn" secondAttribute="bottom" constant="4" id="wgk-TZ-6sM"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="qws-eA-fg0">
+                    <rect key="frame" x="16" y="127.5" width="382" height="600.5"/>
+                    <color key="backgroundColor" name="sil_bgWhiteColor"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNV-Cl-zve" userLabel="RadioButtons">
+                    <rect key="frame" x="0.0" y="736" width="414" height="70"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tsv-GL-XkN">
+                            <rect key="frame" x="16" y="0.0" width="382" height="70"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxN-SJ-x1K" userLabel="Write Request View" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="382" height="35"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8G-Pq-GzN">
+                                            <rect key="frame" x="0.0" y="7.5" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="a8G-Pq-GzN" secondAttribute="height" multiplier="1:1" id="8Sz-4o-5ST"/>
+                                                <constraint firstAttribute="width" constant="20" id="ZYg-uB-8jB"/>
+                                            </constraints>
+                                            <color key="tintColor" name="sil_siliconLabsRedColor"/>
+                                            <state key="normal" image="radio_button_active"/>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write with response (write request)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lzv-Ue-jvD" userLabel="WriteRequestDescription">
+                                            <rect key="frame" x="28" y="9.5" width="216" height="16.5"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="centerY" secondItem="nxN-SJ-x1K" secondAttribute="centerY" id="a2T-Rt-w36"/>
+                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="leading" secondItem="nxN-SJ-x1K" secondAttribute="leading" id="aZC-Ze-Z47"/>
+                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="centerY" secondItem="Lzv-Ue-jvD" secondAttribute="centerY" id="r87-Ba-fFH"/>
+                                        <constraint firstItem="Lzv-Ue-jvD" firstAttribute="leading" secondItem="a8G-Pq-GzN" secondAttribute="trailing" constant="8" id="rf8-Mb-meg"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="descriptionLabel" destination="Lzv-Ue-jvD" id="y9b-GF-Awy"/>
+                                        <outlet property="radioButton" destination="a8G-Pq-GzN" id="cEM-8D-Gpj"/>
+                                    </connections>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rph-6O-QHg" userLabel="Write Command View" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="35" width="382" height="35"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Snf-cl-ooC">
+                                            <rect key="frame" x="0.0" y="7.5" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="87Q-nF-vvx"/>
+                                                <constraint firstAttribute="width" secondItem="Snf-cl-ooC" secondAttribute="height" multiplier="1:1" id="fyE-hd-9W4"/>
+                                            </constraints>
+                                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="radio_button_selected"/>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write without response (write command)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-e2-Re2" userLabel="WriteCommandDescription">
+                                            <rect key="frame" x="28" y="9.5" width="252.5" height="16.5"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Snf-cl-ooC" firstAttribute="leading" secondItem="Rph-6O-QHg" secondAttribute="leading" id="TEi-MM-GVh"/>
+                                        <constraint firstItem="fPs-e2-Re2" firstAttribute="leading" secondItem="Snf-cl-ooC" secondAttribute="trailing" constant="8" id="ZbT-9K-VFM"/>
+                                        <constraint firstItem="Snf-cl-ooC" firstAttribute="centerY" secondItem="Rph-6O-QHg" secondAttribute="centerY" id="aDG-g5-h9i"/>
+                                        <constraint firstItem="fPs-e2-Re2" firstAttribute="centerY" secondItem="Rph-6O-QHg" secondAttribute="centerY" id="dCJ-JI-vh0"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="descriptionLabel" destination="fPs-e2-Re2" id="tpe-TB-Alf"/>
+                                        <outlet property="radioButton" destination="Snf-cl-ooC" id="sN0-96-THf"/>
+                                    </connections>
+                                </view>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="nxN-SJ-x1K" firstAttribute="height" secondItem="tsv-GL-XkN" secondAttribute="height" multiplier="0.5" id="iHQ-tp-aCf"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="tsv-GL-XkN" firstAttribute="centerX" secondItem="eNV-Cl-zve" secondAttribute="centerX" id="BCa-KL-XUf"/>
+                        <constraint firstItem="tsv-GL-XkN" firstAttribute="width" secondItem="eNV-Cl-zve" secondAttribute="width" constant="-32" id="FyB-5O-66D"/>
+                        <constraint firstAttribute="height" constant="70" id="K2l-Vy-2lr"/>
+                        <constraint firstItem="tsv-GL-XkN" firstAttribute="centerY" secondItem="eNV-Cl-zve" secondAttribute="centerY" id="doV-lu-WrA"/>
+                        <constraint firstItem="tsv-GL-XkN" firstAttribute="height" secondItem="eNV-Cl-zve" secondAttribute="height" id="nd0-GG-vfM"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WWR-hl-Ybc" userLabel="Footer">
+                    <rect key="frame" x="0.0" y="814" width="414" height="48"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="PKX-ns-kh1">
+                            <rect key="frame" x="127" y="0.0" width="160" height="48"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M24-CY-cUW">
+                                    <rect key="frame" x="0.0" y="0.0" width="80" height="48"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQE-5K-9qa" userLabel="Clear Button">
+                                            <rect key="frame" x="0.0" y="6" width="72" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="Tva-lB-tOY"/>
+                                                <constraint firstAttribute="height" constant="36" id="Z99-sm-BDK"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                            <state key="normal" title="Clear">
+                                                <color key="titleColor" name="sil_masalaColor"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="clearButtonWasTapped:" destination="-1" eventType="touchUpInside" id="eqy-iv-RCL"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="bQE-5K-9qa" firstAttribute="leading" secondItem="M24-CY-cUW" secondAttribute="leading" id="FaL-Ew-7aj"/>
+                                        <constraint firstAttribute="trailing" secondItem="bQE-5K-9qa" secondAttribute="trailing" constant="8" id="WyW-85-Sid"/>
+                                        <constraint firstItem="bQE-5K-9qa" firstAttribute="centerY" secondItem="M24-CY-cUW" secondAttribute="centerY" id="xfg-zY-9pu"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgQ-BN-wfM">
+                                    <rect key="frame" x="80" y="0.0" width="80" height="48"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="72k-xN-LUX" userLabel="Send Button" customClass="SILRoundedButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="8" y="6" width="72" height="36"/>
+                                            <color key="backgroundColor" name="sil_regularBlueColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="buO-cT-ISD"/>
+                                                <constraint firstAttribute="height" constant="36" id="gBx-dB-oDu"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                            <state key="normal" title="Send">
+                                                <color key="titleColor" name="sil_bgWhiteColor"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="sendButtonWasTapped:" destination="-1" eventType="touchUpInside" id="6g8-3f-0uw"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="72k-xN-LUX" firstAttribute="centerY" secondItem="bgQ-BN-wfM" secondAttribute="centerY" id="EZi-RY-bLw"/>
+                                        <constraint firstAttribute="trailing" secondItem="72k-xN-LUX" secondAttribute="trailing" id="Xc1-Wf-3uC"/>
+                                        <constraint firstItem="72k-xN-LUX" firstAttribute="leading" secondItem="bgQ-BN-wfM" secondAttribute="leading" constant="8" id="aFZ-eE-zgU"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="M24-CY-cUW" secondAttribute="bottom" id="17D-cI-PbI"/>
+                                <constraint firstItem="bgQ-BN-wfM" firstAttribute="leading" secondItem="M24-CY-cUW" secondAttribute="trailing" id="BdB-18-WHX"/>
+                                <constraint firstItem="M24-CY-cUW" firstAttribute="top" secondItem="PKX-ns-kh1" secondAttribute="top" id="JhD-jc-Hvu"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="160" id="Lmn-Zg-Wj2"/>
+                                <constraint firstAttribute="trailing" secondItem="bgQ-BN-wfM" secondAttribute="trailing" id="NfF-iO-BWz"/>
+                                <constraint firstItem="bgQ-BN-wfM" firstAttribute="top" secondItem="PKX-ns-kh1" secondAttribute="top" id="PnB-g6-zXb"/>
+                                <constraint firstItem="bgQ-BN-wfM" firstAttribute="leading" secondItem="M24-CY-cUW" secondAttribute="trailing" id="SjM-Wj-suz"/>
+                                <constraint firstAttribute="bottom" secondItem="bgQ-BN-wfM" secondAttribute="bottom" id="Z3D-qR-TZ0"/>
+                                <constraint firstItem="M24-CY-cUW" firstAttribute="leading" secondItem="PKX-ns-kh1" secondAttribute="leading" id="cl9-zj-lpj"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="PKX-ns-kh1" firstAttribute="centerX" secondItem="WWR-hl-Ybc" secondAttribute="centerX" id="3bi-jL-Sxy"/>
+                        <constraint firstAttribute="bottom" secondItem="PKX-ns-kh1" secondAttribute="bottom" id="Jmo-L5-Zzg"/>
+                        <constraint firstItem="PKX-ns-kh1" firstAttribute="top" secondItem="WWR-hl-Ybc" secondAttribute="top" id="O8l-M9-Ioc"/>
+                        <constraint firstAttribute="height" constant="48" id="Pv6-o0-uPj"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" name="sil_bgWhiteColor"/>
+            <constraints>
+                <constraint firstItem="qws-eA-fg0" firstAttribute="top" secondItem="PeM-XZ-f2P" secondAttribute="bottom" constant="8" id="3KK-oj-E5l"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="WWR-hl-Ybc" secondAttribute="bottom" id="4ZS-Sz-Lnb"/>
+                <constraint firstItem="PeM-XZ-f2P" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="4dZ-TJ-dcs"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="PeM-XZ-f2P" secondAttribute="trailing" id="AOK-rq-Kpa"/>
+                <constraint firstItem="WWR-hl-Ybc" firstAttribute="top" secondItem="eNV-Cl-zve" secondAttribute="bottom" constant="8" id="Ylc-Zz-vnu"/>
+                <constraint firstItem="WWR-hl-Ybc" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="aAb-RA-2A9"/>
+                <constraint firstItem="PeM-XZ-f2P" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="aR2-9M-lWv"/>
+                <constraint firstItem="qws-eA-fg0" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="bNW-vm-NMf"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="WWR-hl-Ybc" secondAttribute="trailing" id="eMH-kB-gxd"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="eNV-Cl-zve" secondAttribute="trailing" id="kbH-N7-rN0"/>
+                <constraint firstItem="eNV-Cl-zve" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="mgI-nd-BUP"/>
+                <constraint firstItem="eNV-Cl-zve" firstAttribute="top" secondItem="qws-eA-fg0" secondAttribute="bottom" constant="8" id="ujD-RM-XSy"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="qws-eA-fg0" secondAttribute="trailing" constant="16" id="z9D-0m-Eut"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="137.68115942028987" y="152.67857142857142"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="exitView" width="24" height="24"/>
+        <image name="radio_button_active" width="112.5" height="112.5"/>
+        <image name="radio_button_selected" width="112.5" height="112.5"/>
+        <namedColor name="sil_bgGreyColor">
+            <color red="0.94509803921568625" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_bgWhiteColor">
+            <color red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_masalaColor">
+            <color red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_primaryTextColor">
+            <color red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_regularBlueColor">
+            <color red="0.0" green="0.52549019607843139" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_siliconLabsRedColor">
+            <color red="0.85098039215686272" green="0.11764705882352941" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_subtleTextColor">
+            <color red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

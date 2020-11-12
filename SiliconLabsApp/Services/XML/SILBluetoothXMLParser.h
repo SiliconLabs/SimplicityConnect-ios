@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class SILDoubleKeyDictionaryPair;
+#import "SILDoubleKeyDictionaryPair.h"
 
 @interface SILBluetoothXMLParser : NSObject
 

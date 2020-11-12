@@ -24,6 +24,7 @@
 #import "SILAppSelectionInfoViewController.h"
 #import "SILConstants.h"
 #import "SILBluetoothBrowser+Constants.h"
+#import "UIView+SILShadow.h"
 #if WIRELESS
 #import "SILConnectedLightingViewController.h"
 #endif
@@ -38,17 +39,10 @@
 @property (weak, nonatomic) IBOutlet UIStackView *tilesSpace;
 @property (weak, nonatomic) IBOutlet UIView* appsView;
 @property (weak, nonatomic) IBOutlet UICollectionView *appCollectionView;
-@property (weak, nonatomic) IBOutlet UIView *selectedIndicatorView;
-@property (weak, nonatomic) IBOutlet UIView *unselectedIndicatorView;
-@property (weak, nonatomic) IBOutlet UIView *afterSelectedIndicatiorView;
 @property (weak, nonatomic) IBOutlet UIImageView *infoImage;
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beforeSelectedConstraintIphone;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *afterSelectedConstraintIphone;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beforeSelectedConstraintIpad;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *afterSelectedConstraintIpad;
 @end
 
 @implementation SILAppSelectionViewController
@@ -57,12 +51,13 @@
     [super viewDidLoad];
     
     [self setupAppCollectionView];
-    [self setupSelectionIndicator];
     [self setupBackground];
     [self setupNavigationBar];
     [self addObseverForNotIntentionallyBackFromThermometer];
     _isDisconnectedIntentionally = NO;
     [[SILBluetoothModelManager sharedManager] populateModels];
+    [self.allSpace bringSubviewToFront:self.navigationBarView];
+    self.appCollectionView.bounces = NO;
 }
 
 #pragma mark - Setup View (viewDidLoad)
@@ -85,12 +80,6 @@
 - (void)setupAppCollectionViewAppearance {
     self.appCollectionView.backgroundColor = [UIColor sil_backgroundColor];
     self.appCollectionView.alwaysBounceVertical = YES;
-}
-
-- (void)setupSelectionIndicator {
-    _selectedIndicatorView.backgroundColor = [UIColor sil_strongBlueColor];
-    _unselectedIndicatorView.backgroundColor = [UIColor sil_backgroundColor];
-    _afterSelectedIndicatiorView.backgroundColor = [UIColor sil_backgroundColor];
 }
 
 - (void)setupBackground {
@@ -127,22 +116,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self setConstraintsForSelectionIndicator];
     [self postClearBluetoothBrowserNotification];
     if (_isDisconnectedIntentionally) {
         [self showThermometerPopover];
     }
-}
-
-- (void)setConstraintsForSelectionIndicator {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        [NSLayoutConstraint deactivateConstraints:@[_beforeSelectedConstraintIpad, _afterSelectedConstraintIpad]];
-        [NSLayoutConstraint activateConstraints:@[_beforeSelectedConstraintIphone, _afterSelectedConstraintIphone]];
-    } else {
-        [NSLayoutConstraint deactivateConstraints:@[_beforeSelectedConstraintIphone, _afterSelectedConstraintIphone]];
-        [NSLayoutConstraint activateConstraints:@[_beforeSelectedConstraintIpad, _afterSelectedConstraintIpad]];
-    }
-    [self.view layoutIfNeeded];
 }
 
 - (void)postClearBluetoothBrowserNotification {
@@ -202,6 +179,12 @@
     [self.navigationController pushViewController:controller animated:animated];
 }
 
+- (void)showAdvertiserWithApp:(SILApp *)app animated:(BOOL)animated {
+    SILAdvertiserHomeWireframe* wireframe = [SILAdvertiserHomeWireframe new];
+    [self.navigationController pushViewController:wireframe.viewController animated:animated];
+    [wireframe releaseViewController];
+}
+
 - (void)showHomeKitDebugWithApp:(SILApp *)app animated:(BOOL)animated {
 #if ENABLE_HOMEKIT
     SILHomeKitDebugDeviceViewController *appViewController = [[SILHomeKitDebugDeviceViewController alloc] init];
@@ -234,6 +217,9 @@
             break;
         case SILAppBluetoothBrowser:
             [self showBluetoothBrowserWithApp:app animated:YES];
+            break;
+        case SILAppTypeAdvertiser:
+            [self showAdvertiserWithApp:app animated:YES];
             break;
         case SILAppTypeHomeKitDebug:
             [self showHomeKitDebugWithApp:app animated:YES];

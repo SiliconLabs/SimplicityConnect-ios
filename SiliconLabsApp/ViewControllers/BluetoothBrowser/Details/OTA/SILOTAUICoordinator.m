@@ -35,8 +35,7 @@ static NSString * const kSILDeviceIsNotResponding = @"Device is not responding";
 static NSString * const kSILCouldNotFindDeviceAdvertising = @"Could not find device advertising";
 static NSString * const kSILDeviceInOTAModeName = @"OTA";
 
-@interface SILOTAUICoordinator () <SILOTASetupViewControllerDelegate, SILOTAProgressViewControllerDelegate,
-SILOTAFirmwareUpdateManagerDelegate>
+@interface SILOTAUICoordinator () <SILOTASetupViewControllerDelegate, SILOTAProgressViewControllerDelegate, SILOTAFirmwareUpdateManagerDelegate, SILErrorDetailsViewControllerDelegate>
 
 @property (weak, nonatomic) CBPeripheral *peripheral;
 @property (strong, nonatomic) SILOTAFirmwareUpdateManager *otaFirmwareUpdateManager;
@@ -46,7 +45,7 @@ SILOTAFirmwareUpdateManagerDelegate>
 @property (strong, nonatomic) SILOTAProgressViewModel *progressViewModel;
 @property (strong, nonatomic) SILPopoverViewController *popoverViewController;
 @property (strong, nonatomic) SILCentralManager *silCentralManager;
-
+@property (strong, nonatomic) WYPopoverController *popoverController;
 @property (weak, nonatomic) HMAccessory *accessory;
 
 @property (nonatomic) SILOTAMode otaMode;
@@ -159,64 +158,34 @@ SILOTAFirmwareUpdateManagerDelegate>
 }
 
 - (void)presentAlertControllerWithError:(NSError *)error animated:(BOOL)animated {
-    NSString *title;
-    NSString *message;
-
     NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
-    NSString *underlyingSILErrorMessage = [self underlyingSILErrorMessageForError:error withUnderlyingError:underlyingError];
-
-    if (underlyingSILErrorMessage) {
-        title = kSILFirmwareUpdateUnknownErrorTitle;
-        message = underlyingSILErrorMessage;
-
+    
+    if (error.domain == CBATTErrorDomain) {
+        SILErrorDetailsViewController* errorDetailsViewController = [[SILErrorDetailsViewController alloc] initWithError:underlyingError
+                                                                                                            delegate:self];
+    
+        self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:errorDetailsViewController
+                                                                               presentingViewController:self.presentingViewController
+                                                                                               delegate:self.presentingViewController
+                                                                                               animated:YES];
     } else {
-        title = (underlyingError == nil) ? error.localizedDescription : underlyingError.localizedDescription;
-        message = (underlyingError == nil) ? error.localizedRecoverySuggestion : underlyingError.localizedRecoverySuggestion;
+        [self handleNonATTError:error];
     }
+}
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
-                                                                   message:message
+- (void)handleNonATTError:(NSError*)error {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:kSILDeviceIsNotResponding
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
     UIAlertAction *action = [self alertActionForError:error];
     [alert addAction:action];
 
-    [self.presentingViewController presentViewController:alert animated:animated completion:^{
+    [self.presentingViewController presentViewController:alert animated:YES completion:^{
         [self.otaTTL invalidate];
         [SVProgressHUD dismiss];
+        [self.presentingViewController.navigationController popViewControllerAnimated:YES];
     }];
-
-}
-
-- (NSString *)underlyingSILErrorMessageForError:(NSError *)error withUnderlyingError:(NSError *)underlyingError {
-    NSString *message;
-    if (error && underlyingError && error.code == 9) {
-        switch (underlyingError.code) {
-            case 0x80:
-                message = kSILFirmwareUpdateBGErrSecurityImageChecksumError;
-                break;
-            case 0x81:
-                message = kSILFirmwareUpdateBGErrWrongState;
-                break;
-            case 0x82:
-                message = kSILFirmwareUpdateBGErrBuffersFull;
-                break;
-            case 0x83:
-                message = kSILFirmwareUpdateBGErrCommandTooLong;
-                break;
-            case 0x84:
-                message = kSILFirmwareUpdateBGErrInvalidFileFormat;
-                break;
-            case 0x85:
-                message = kSILFirmwareUpdateBGErrUnspecified;
-                break;
-            default:
-                message = kSILFirmwareUpdateBGErrUnknown;
-                break;
-        }
-        return [NSString stringWithFormat:kSILFirmwareUpdateBGErrorMessageFormat, (long)underlyingError.code, message];
-    }
-    return NULL;
 }
 
 - (UIAlertAction *)alertActionForError:(NSError *)error {
@@ -402,6 +371,17 @@ SILOTAFirmwareUpdateManagerDelegate>
                                                            withError:(NSError *)error {
     [self dismissPopoverWithCompletion:^{
         [self presentAlertControllerWithError:error animated:YES];
+    }];
+}
+
+# pragma mark - SILErrorDetailsViewControllerDelegate
+
+- (void)shouldCloseErrorDetailsViewController:(SILErrorDetailsViewController * _Nonnull)errorDetailsViewController {
+    [self.popoverController dismissPopoverAnimated:YES completion:^(void){
+        self.popoverController = nil;
+        [self.otaTTL invalidate];
+        [SVProgressHUD dismiss];
+        [self.presentingViewController.navigationController popViewControllerAnimated:YES];
     }];
 }
 

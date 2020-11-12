@@ -28,17 +28,12 @@ class SILCell: UITableViewCell {
         } else {
             isRounded = true
         }
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         self.layer.cornerRadius = CornerRadiusStandardValue
     }
-
 }

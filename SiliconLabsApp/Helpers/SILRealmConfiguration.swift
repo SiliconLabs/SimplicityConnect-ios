@@ -19,6 +19,9 @@ class SILRealmConfiguration : NSObject {
     // - removed "search by raw advertising data" from Saved Searches's objects
     static let SchemeVersionEFR_2_0_3: UInt64 = 1
     
+    // Added scheme for storing advertisers
+    static let SchemeVersionEFR_2_1_0: UInt64 = 2
+    
     @objc
     static func updateRealmConfigurationIfNeeded() {
         let configuration = Realm.Configuration(
@@ -27,6 +30,7 @@ class SILRealmConfiguration : NSObject {
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_0_3 {
                     SILRealmConfiguration.performUpdateDatabaseForEFR_2_0_3(migration: migration)
                 }
+                if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_1_0 { }
             }
         )
         Realm.Configuration.defaultConfiguration = configuration

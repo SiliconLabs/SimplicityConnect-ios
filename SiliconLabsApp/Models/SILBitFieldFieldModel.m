@@ -49,7 +49,7 @@
     return toggleRows;
 }
 
-- (NSArray *)bitRowModels {
+- (NSArray<SILBitRowModel*>*)bitRowModels {
     BOOL firstBit = YES;
     for (SILBitRowModel *bitModel in self.bitRowFields) {
         [bitModel setParentCharacteristicModel:self.parentCharacteristicModel];

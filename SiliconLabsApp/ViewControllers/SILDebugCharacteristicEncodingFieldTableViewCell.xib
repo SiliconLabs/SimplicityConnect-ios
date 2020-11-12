@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,7 +12,7 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="230" id="KGk-i7-Jjw" customClass="SILDebugCharacteristicEncodingFieldTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="176"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+            <tableViewCellContentView key="contentView" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="176"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -134,88 +134,16 @@
                             <constraint firstItem="V3u-tS-Vu2" firstAttribute="leading" secondItem="FUC-ff-wmA" secondAttribute="trailing" constant="8" id="zpN-3j-aCz"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Eq-uS-thw" userLabel="Left Border">
-                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="8" id="TcY-NO-S7A">
-                                <variation key="heightClass=regular-widthClass=regular" constant="1"/>
-                            </constraint>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="TcY-NO-S7A"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=regular">
-                            <mask key="constraints">
-                                <include reference="TcY-NO-S7A"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QWp-Fv-hX2" userLabel="Right Border">
-                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                        <color key="backgroundColor" red="0.81625092029571533" green="0.81622648239135742" blue="0.81624031066894531" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="8" id="eIJ-K4-BZO">
-                                <variation key="heightClass=regular-widthClass=regular" constant="1"/>
-                            </constraint>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="eIJ-K4-BZO"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=regular">
-                            <mask key="constraints">
-                                <include reference="eIJ-K4-BZO"/>
-                            </mask>
-                        </variation>
-                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="7Eq-uS-thw" secondAttribute="bottom" id="1yO-c5-tHV"/>
-                    <constraint firstAttribute="bottom" secondItem="QWp-Fv-hX2" secondAttribute="bottom" id="8pJ-Q7-0T3"/>
-                    <constraint firstItem="7Eq-uS-thw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="CQv-VG-hrw"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Tmv-24-HWy" secondAttribute="trailing" constant="8" id="Jt8-Qn-2pQ"/>
                     <constraint firstItem="Tmv-24-HWy" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="OZx-f5-D4j"/>
                     <constraint firstItem="Tmv-24-HWy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ZX5-fW-kQN"/>
                     <constraint firstAttribute="trailing" secondItem="ps4-Jk-Q6x" secondAttribute="trailing" id="cB4-jC-NdM"/>
                     <constraint firstItem="ps4-Jk-Q6x" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="eg2-vv-WML"/>
-                    <constraint firstItem="7Eq-uS-thw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="kvD-2D-zki"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Tmv-24-HWy" secondAttribute="bottom" id="mN2-hb-xxS"/>
                     <constraint firstItem="ps4-Jk-Q6x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="uno-yw-rWA"/>
-                    <constraint firstAttribute="trailing" secondItem="QWp-Fv-hX2" secondAttribute="trailing" id="wG7-e5-pfE"/>
-                    <constraint firstItem="QWp-Fv-hX2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="x9G-51-LgT"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="subviews">
-                        <exclude reference="7Eq-uS-thw"/>
-                        <exclude reference="QWp-Fv-hX2"/>
-                    </mask>
-                    <mask key="constraints">
-                        <exclude reference="1yO-c5-tHV"/>
-                        <exclude reference="CQv-VG-hrw"/>
-                        <exclude reference="kvD-2D-zki"/>
-                        <exclude reference="8pJ-Q7-0T3"/>
-                        <exclude reference="wG7-e5-pfE"/>
-                        <exclude reference="x9G-51-LgT"/>
-                    </mask>
-                </variation>
-                <variation key="heightClass=regular-widthClass=regular">
-                    <mask key="subviews">
-                        <include reference="7Eq-uS-thw"/>
-                        <include reference="QWp-Fv-hX2"/>
-                    </mask>
-                    <mask key="constraints">
-                        <include reference="1yO-c5-tHV"/>
-                        <include reference="CQv-VG-hrw"/>
-                        <include reference="kvD-2D-zki"/>
-                        <include reference="8pJ-Q7-0T3"/>
-                        <include reference="wG7-e5-pfE"/>
-                        <include reference="x9G-51-LgT"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>

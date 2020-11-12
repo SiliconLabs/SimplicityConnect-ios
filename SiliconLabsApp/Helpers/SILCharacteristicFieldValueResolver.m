@@ -903,7 +903,14 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
     NSMutableString *asciiString = [[NSMutableString alloc] initWithString:@""];
     if (value.length) {
         NSString *ascii = [[NSString alloc] initWithData:value encoding:NSASCIIStringEncoding];
-        [asciiString appendString:ascii];
+        for(int i = 0; i < ascii.length; i++) {
+            char character = [ascii characterAtIndex:i];
+            if((int) character < 32 || (int) character > 126) {
+                [asciiString appendString:@"\ufffd"];
+            } else {
+                [asciiString appendFormat:@"%c", character];
+            }
+        }
     }
     return [asciiString copy];
 }
@@ -995,6 +1002,12 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
     NSMutableData *data = [NSMutableData new];
     for (NSUInteger decimalIndex = 0; decimalIndex < decimalStrings.count; decimalIndex++) {
         NSString *decimalString = decimalStrings[decimalIndex];
+        if (decimalString.length > 3) {
+            return nil;
+        }
+        if (decimalIndex == decimalStrings.count - 1 && decimalString.length == 0) {
+            continue;
+        }
         int decimalValue;
         NSScanner *decimalScanner = [[NSScanner alloc] initWithString:decimalString];
         BOOL isLegalDecimal = [decimalScanner scanInt:&decimalValue];
