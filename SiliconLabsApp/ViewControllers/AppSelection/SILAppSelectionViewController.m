@@ -25,14 +25,12 @@
 #import "SILConstants.h"
 #import "SILBluetoothBrowser+Constants.h"
 #import "UIView+SILShadow.h"
-#if WIRELESS
 #import "SILConnectedLightingViewController.h"
-#endif
 #if ENABLE_HOMEKIT
 #import "SILHomeKitDebugDeviceViewController.h"
 #endif
 
-@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate>
+@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *allSpace;
 @property (strong, nonatomic) WYPopoverController *devicePopoverController;
@@ -145,19 +143,6 @@
                                                                                                  animated:YES];
 }
 
-- (void)presentRangeTestModeSelectionViewControllerWithApp:(SILApp *)app centralManager:(SILCentralManager*)manager peripheral:(CBPeripheral *)peripheral animated:(BOOL)animated {
-    SILRangeTestModeSelectionViewController *selectionViewController = [[SILRangeTestModeSelectionViewController alloc] init];
-    
-    selectionViewController.app = app;
-    selectionViewController.delegate = self;
-    selectionViewController.peripheral = [[SILRangeTestPeripheral alloc] initWithPeripheral:peripheral andCentralManager:manager];
-    
-    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:selectionViewController
-                                                                                 presentingViewController:self
-                                                                                                 delegate:self
-                                                                                                 animated:YES];
-}
-
 - (void)presentCalibrationViewController:(BOOL)animated {
     SILCalibrationViewController *calibrationViewController = [[SILCalibrationViewController alloc] init];
 
@@ -193,14 +178,9 @@
 #endif
 }
 
-- (void)showRangeTestWithApp:(SILApp *)app forPeripheral:(SILRangeTestPeripheral *)peripheral andBoardInfo:(SILRangeTestBoardInfo *)boardInfo withMode:(SILRangeTestMode)mode animated:(BOOL)animated {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"RangeTestStoryboard" bundle:nil];
+- (void)showRangeTestWithApp:(SILApp *)app animated:(BOOL)animated {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"SILAppTypeRangeTest" bundle:nil];
     SILRangeTestAppViewController *viewController = [storyboard instantiateInitialViewController];
-    SILRangeTestAppViewModel *viewModel = [[SILRangeTestAppViewModel alloc] initWithMode:mode peripheral:peripheral andBoardInfo:boardInfo];
-        
-    viewController.app = app;
-    viewController.viewModel = viewModel;
-
     [self.navigationController pushViewController:viewController animated:animated];
 }
 
@@ -209,8 +189,10 @@
     switch (app.appType) {
         case SILAppTypeConnectedLighting:
         case SILAppTypeHealthThermometer:
-        case SILAppTypeRangeTest:
             [self presentDeviceSelectionViewControllerWithApp:app animated:YES];
+            break;
+        case SILAppTypeRangeTest:
+            [self showRangeTestWithApp:app animated:YES];
             break;
         case SILAppTypeRetailBeacon:
             [self showRetailBeaconAppWithApp:app animated:YES];
@@ -259,7 +241,7 @@
     CGFloat minimumLineSpacing = 16.0;
     CGFloat width = floor((self.appCollectionView.frame.size.width - self.appCollectionView.contentInset.left - self.appCollectionView.contentInset.right - self.appCollectionView.alignmentRectInsets.left - self.appCollectionView.alignmentRectInsets.right) / cellsInRow) - minimumLineSpacing;
       
-    CGFloat height = 162.0;
+    CGFloat height = 182.0;
     return CGSizeMake(width, height);
 }
 
@@ -285,17 +267,10 @@
         if (viewController.viewModel.app.appType == SILAppTypeHealthThermometer) {
             [self runHealthThermometer:viewController forPeripheral:peripheral];
         } else if (viewController.viewModel.app.appType == SILAppTypeConnectedLighting) {
-#if WIRELESS
-            SILConnectedLightingViewController *appViewController = [[SILConnectedLightingViewController alloc] init];
+            SILConnectedLightingViewController *appViewController = [[UIStoryboard storyboardWithName:@"SILAppTypeConnectedLighting" bundle:nil] instantiateInitialViewController];
             appViewController.centralManager = viewController.centralManager;
             appViewController.connectedPeripheral = peripheral;
             [self.navigationController pushViewController:appViewController animated:YES];
-#endif
-        } else if (viewController.viewModel.app.appType == SILAppTypeRangeTest) {
-            [self presentRangeTestModeSelectionViewControllerWithApp:viewController.viewModel.app
-                                                      centralManager:viewController.centralManager
-                                                          peripheral:peripheral
-                                                            animated:YES];
         }
     }];
 }
@@ -315,20 +290,6 @@
         healthThermometerController.connectedPeripheral = peripheral;
         [self.navigationController pushViewController:healthThermometerController animated:YES];
     }
-}
-
-#pragma mark - SILRangeTestModeSelectionViewControllerDelegate
-
--(void)didRangeTestModeSelectedForApp:(SILApp *)app peripheral:(SILRangeTestPeripheral *)peripheral andBoardInfo:(SILRangeTestBoardInfo *)boardInfo selectedMode:(enum SILRangeTestMode)mode {
-    [self.devicePopoverController dismissPopoverAnimated:YES completion:^{
-        self.devicePopoverController = nil;
-        [self showRangeTestWithApp:app forPeripheral:peripheral andBoardInfo:boardInfo withMode:mode animated:YES];
-    }];
-}
-
-- (void)didDismissRangeTestModeSelectionViewController {
-    [self.devicePopoverController dismissPopoverAnimated:YES completion:nil];
-    self.devicePopoverController = nil;
 }
 
 - (void)presentAppSelectionInfoViewController:(BOOL)animated {

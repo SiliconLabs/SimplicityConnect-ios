@@ -15,6 +15,7 @@ NSString * const SILSceneConnectedDevice = @"ConnectedDevice";
 NSString * const SILSceneFilter = @"Filter";
 NSString * const SILSceneConnections = @"Connections";
 NSString * const SILSceneLog = @"Log";
+NSString * const SILSceneSort = @"Sort";
 
 NSString * const SILClassBrowserDeviceViewCell = @"SILBrowserDeviceViewCell";
 NSString * const SILClassBrowserServiceViewCell = @"SILBrowserServiceViewCell";

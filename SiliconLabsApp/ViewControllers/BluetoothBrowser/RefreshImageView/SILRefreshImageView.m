@@ -85,6 +85,10 @@ CGFloat const RefreshTopConstraintMaxValue = 2.5 * RefreshTopConstraintActionVal
     CGFloat duration = fabs(self.gestureLastOffsetValue / velocity.y);
     NSInteger verticalChangeValue = translation.y - _gestureBeganContentOffsetValue;
     CGFloat contentOffsetY = self.model.tableView.contentOffset.y;
+        
+    if (verticalChangeValue < 0) {
+        verticalChangeValue = 0;
+    }
     
     if (contentOffsetY == 0) {
         switch (recognizer.state) {
@@ -95,6 +99,7 @@ CGFloat const RefreshTopConstraintMaxValue = 2.5 * RefreshTopConstraintActionVal
                 break;
                 
             case UIGestureRecognizerStateChanged:
+                [self showAndManageRefreshingImage];
                 self.gestureLastOffsetValue = fabs(verticalChangeValue - self.gestureLastOffsetValue);
                 if (verticalChangeValue <= RefreshTopConstraintMaxValue) {
                     [self animateWithDuration: duration
@@ -109,13 +114,22 @@ CGFloat const RefreshTopConstraintMaxValue = 2.5 * RefreshTopConstraintActionVal
         }
     }
     
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        [self.refreshImageView setHidden:NO];
+    if (recognizer.state == UIGestureRecognizerStateBegan && [self shouldRefreshUI:velocity contentOffsetY:contentOffsetY]) {
+        [self showAndManageRefreshingImage];
         self.gestureBeganContentOffsetValue = contentOffsetY;
         self.gestureLastOffsetValue = contentOffsetY;
         [self.layer removeAllAnimations];
         [self animateRefreshingImageWithDuration:0.1];
     }
+}
+
+- (BOOL)shouldRefreshUI:(CGPoint)velocity contentOffsetY:(CGFloat)contentOffsetY {
+    return velocity.y > 0 && contentOffsetY == 0;
+}
+
+- (void)showAndManageRefreshingImage {
+    [self.model.tableView setScrollEnabled:NO];
+    [self.refreshImageView setHidden:NO];
 }
 
 - (void)animateRefreshingImageWithDuration:(NSTimeInterval)duration {

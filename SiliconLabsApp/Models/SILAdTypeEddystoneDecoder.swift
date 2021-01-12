@@ -16,12 +16,21 @@ class SILAdTypeEddystoneDecoder {
     private let EddystoneTLMLength = (encrypted: 18, unencrypted: 14)
     private let EddystoneEIDLength = 10
     
-    init(eddystoneData: Data) {
-        self.eddystoneData = [UInt8](eddystoneData)
+    init(eddystoneData: Data?) {
+        if let eddystoneData = eddystoneData {
+            self.eddystoneData = [UInt8](eddystoneData)
+        } else {
+            self.eddystoneData = [UInt8]()
+        }
     }
     
     func decode() -> SILAdvertisementDataModel {
         let eddystoneDataString: String
+        
+        if self.eddystoneData.isEmpty {
+            eddystoneDataString = "PARSING ERROR: Unknown type of Eddystone: No data"
+            return SILAdvertisementDataModel(value: eddystoneDataString, type: .eddystoneBeacon)
+        }
         
         switch self.eddystoneData[0] {
         case 0x00:

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IDh-3l-oFd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IDh-3l-oFd">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -118,7 +119,7 @@
                                                     </connections>
                                                 </button>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
                                                 <constraint firstItem="5Fl-4W-IkC" firstAttribute="centerY" secondItem="0mH-1W-cjH" secondAttribute="centerY" id="Aa7-fp-6ry"/>
                                                 <constraint firstItem="7Sc-Ki-YHn" firstAttribute="centerY" secondItem="0mH-1W-cjH" secondAttribute="centerY" id="dyt-P9-Srk"/>
@@ -143,7 +144,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ke-MH-2kv" customClass="SILShadowView">
                                 <rect key="frame" x="0.0" y="124" width="414" height="44"/>
                                 <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Rct-Zy-CPO" customClass="SILBrowserSegmentedControl" customModule="BlueGecko" customModuleProvider="target">
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Rct-Zy-CPO" customClass="SILBrowserMappingsSegmentedControl" customModule="BlueGecko" customModuleProvider="target">
                                         <rect key="frame" x="93.5" y="6.5" width="227" height="32"/>
                                         <segments>
                                             <segment title="Characteristics"/>
@@ -254,6 +255,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="nAD-iR-7Ij"/>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6xr-MH-ZoE" secondAttribute="trailing" id="02W-kc-O82"/>
@@ -271,7 +273,6 @@
                             <constraint firstItem="6xr-MH-ZoE" firstAttribute="top" secondItem="rDO-La-Zov" secondAttribute="top" id="wA6-wz-QGN"/>
                             <constraint firstItem="vpD-Y8-o6X" firstAttribute="top" secondItem="0Ke-MH-2kv" secondAttribute="bottom" id="xmc-2D-1GV"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="nAD-iR-7Ij"/>
                     </view>
                     <connections>
                         <outlet property="infoImage" destination="Tmx-Vo-NU3" id="dg1-a2-Nr9"/>
@@ -295,7 +296,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iDN-iS-NFf">
-                                        <rect key="frame" x="183" y="13.5" width="48" height="21.5"/>
+                                        <rect key="frame" x="183" y="13.5" width="48" height="21"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -314,7 +315,7 @@
                                 <rect key="frame" x="0.0" y="92" width="414" height="722"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ABOUT MAPPINGS DICTIONARY" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lYg-Z1-e4Z">
-                                        <rect key="frame" x="16" y="16" width="173.5" height="14"/>
+                                        <rect key="frame" x="16" y="16" width="173.5" height="14.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
                                         <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -323,7 +324,7 @@
                                         </variation>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4mZ-Ng-uvP">
-                                        <rect key="frame" x="16" y="37" width="382" height="1"/>
+                                        <rect key="frame" x="16" y="37.5" width="382" height="1"/>
                                         <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="rec-ne-A2D">
@@ -332,13 +333,13 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Informations" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9vW-F8-bDp" userLabel="Information Label">
-                                        <rect key="frame" x="16" y="54" width="382" height="16.5"/>
+                                        <rect key="frame" x="16" y="54.5" width="382" height="16.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="4mZ-Ng-uvP" secondAttribute="trailing" constant="16" id="F54-MC-PDK"/>
                                     <constraint firstItem="4mZ-Ng-uvP" firstAttribute="leading" secondItem="lYg-Z1-e4Z" secondAttribute="leading" id="PZe-XD-rWg"/>
@@ -354,7 +355,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ti-1Q-PJK" userLabel="Footer View">
                                 <rect key="frame" x="0.0" y="814" width="414" height="48"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mld-le-GLB">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mld-le-GLB">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                                         <state key="normal" title="OK">
@@ -377,7 +378,8 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Tey-8y-VQz"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="4Ti-1Q-PJK" firstAttribute="leading" secondItem="OWt-ys-D66" secondAttribute="leading" id="6Uh-x1-idd"/>
                             <constraint firstItem="Tey-8y-VQz" firstAttribute="trailing" secondItem="Nz2-Xr-K7W" secondAttribute="trailing" id="C53-49-Nac"/>
@@ -390,7 +392,6 @@
                             <constraint firstItem="4Ti-1Q-PJK" firstAttribute="trailing" secondItem="OWt-ys-D66" secondAttribute="trailing" id="qnG-dX-L5t"/>
                             <constraint firstItem="Nz2-Xr-K7W" firstAttribute="top" secondItem="Tey-8y-VQz" secondAttribute="top" id="sUn-Sj-73n"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="Tey-8y-VQz"/>
                     </view>
                     <connections>
                         <outlet property="informationsLabel" destination="9vW-F8-bDp" id="pGt-GG-xrb"/>
@@ -401,10 +402,18 @@
             <point key="canvasLocation" x="948" y="132"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="Rct-Zy-CPO">
+            <size key="intrinsicContentSize" width="227" height="31"/>
+        </designable>
+    </designables>
     <resources>
         <image name="EditDisabled" width="30" height="30"/>
         <image name="help_white" width="30" height="30"/>
         <image name="left_chevron" width="8" height="13"/>
         <image name="sil_trash" width="30" height="30"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

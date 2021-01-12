@@ -14,7 +14,12 @@
 @interface SILDescriptorTableModel : NSObject <SILGenericAttributeTableModel>
 
 @property (strong, nonatomic) CBDescriptor *descriptor;
+@property (nonatomic) NSInteger valueLinesNumber;
+@property (nonatomic) BOOL shouldReadValue;
 
 - (instancetype)initWithDescriptor:(CBDescriptor *)descriptor;
+- (NSString*)getDescriptorName;
+- (NSString*)getFormattedValue;
+- (NSAttributedString*)getAttributedDescriptor;
 
 @end

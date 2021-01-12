@@ -71,8 +71,14 @@ NSString * const SILBeaconEddystone = @"Eddystone";
     
     beacon.name = @"Eddystone";
     beacon.type = SILBeaconTypeEddystone;
+    beacon.eddystoneData = eddystoneServiceData;
     
     uint8_t *dataPointer = (uint8_t *)eddystoneServiceData.bytes;
+    
+    if (dataPointer == nil) {
+        beacon.eddystoneBeaconType = SILEddystoneBeaconTypeUnspecified;
+        return beacon;
+    }
     
     switch (dataPointer[0]) {
         case 0x00:
@@ -97,9 +103,7 @@ NSString * const SILBeaconEddystone = @"Eddystone";
             beacon.eddystoneBeaconType = SILEddystoneBeaconTypeUnspecified;
             break;
     }
-    
-    beacon.eddystoneData = eddystoneServiceData;
-    
+
     return beacon;
 }
 

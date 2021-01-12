@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSArray<SILDiscoveredPeripheral*>* discoveredDevices;
 @property (strong, nonatomic) SILDiscoveredPeripheral *connectingPeripheral;
 @property (assign, nonatomic) BOOL hasDataChanged;
+@property (nonatomic, copy) BOOL (^filter)(SILDiscoveredPeripheral*);
 
 - (instancetype)initWithAppType:(SILApp *)app;
 - (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals;

@@ -175,11 +175,11 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
     }
 
     @IBAction func onBackTouch(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        viewModel.backToHome()
     }
     
     @IBAction func onSaveTouch(_ sender: UIButton) {
-        viewModel.save(timeString: executionTimeTextField.text)
+        viewModel.save()
     }
     
     @IBAction func didChangeAdvertisingSetName(_ sender: UITextField) {
@@ -226,6 +226,11 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
     @objc func tapTimeLimitView(_ sender: UITapGestureRecognizer?) {
         viewModel.updateExecutionTimeState(isExecutionTime: true)
         viewModel.updateRadioButtons(completion: { [weak self] newState in self?.updateRadioButtons(with: newState)})
+    }
+    
+    
+    @IBAction func didChangeExecutionTime(_ sender: UITextField) {
+        viewModel.updateExecutionTimeString(sender.text)
     }
     
     // MARK: UITableViewDataSource

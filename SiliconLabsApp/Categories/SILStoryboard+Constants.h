@@ -15,6 +15,7 @@ extern NSString * const SILSceneConnectedDevice;
 extern NSString * const SILSceneFilter;
 extern NSString * const SILSceneConnections;
 extern NSString * const SILSceneLog;
+extern NSString * const SILSceneSort;
 
 extern NSString * const SILClassBrowserDeviceViewCell;
 extern NSString * const SILClassBrowserServiceViewCell;

@@ -12,11 +12,13 @@ The app is divided into two main functional areas, the demo and the develop view
 The demo view lists a number of demos that are meant for quickly testing some of the sample apps in the Silicon Labs Bluetooth SDK. The currently supported demos are:
 
 - **Health Thermometer demo:** Connects to an EFR32/BGM device running the soc-thermometer sample application from the Bluetooth SDK and displays the temperature read from the SI7021 sensor on the WSTK mainboard. 
+- **Connect Lighting DMP demo:** Leverages the DMP sample apps to control a DMP light node from both a mobile app as well as the protocol specific switch node (Zigbee, proprietary) while keeping the light status in sync across all devices. 
+- **Range Test demo:** Allows visualizing the RSSI and other RF performance data on the mobile phone while running Range Test sample application on a pair of Silicon Labs radio boards.
 
 The develop view contains functionalities focused on helping developers create and troubleshoot their Bluetooth applications based on EFR32/BGM devices. The currently supported functionalities are:
 
 - **Bluetooth Browser:** This is a generic and powerful tool that allows you to explore the BLE devices around you. Key features of the browser include:
-  - Scan results with rich data set
+  - Scan and sort results with rich data set
     - Connectable/non-connectable
     - Beacon type
     - Advertisement interval
@@ -37,7 +39,7 @@ The develop view contains functionalities focused on helping developers create a
   - Over-the-air (OTA) device firmware upgrade (DFU) with both reliable and speed modes
   - Configurable MTU and connection interval
   - Support for all GATT operations
-  - **Bluetooth Advertiser**: Allows you to create multiple advertisement sets and enable them in parallel
+- **Bluetooth Advertiser**: Allows you to create multiple advertisement sets and enable them in parallel
   - Ability to manually start/stop advertisement, or stop based on time limit
   - Support for multiple AD types
 

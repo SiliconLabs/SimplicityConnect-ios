@@ -48,6 +48,13 @@ class SILAdvertiserDetailsWireframe: SILBaseWireframe, WYPopoverControllerDelega
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
     }
     
+    func presentNonSaveChangesExitWarningPopup(onYes: @escaping (Bool) -> Void, onNo: @escaping () -> ()) {
+        let vc = SILExitAdvertiserPopupViewController()
+        vc.viewModel =  SILExitAdvertiserPopupViewModel(wireframe: self, onYesCallback: onYes, onNoCallback: onNo)
+        
+        popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
+    }
+    
     func presentInvalidTimeToastAlert() {
         presentToastAlert(message: "Invalid Time Limit", toastType: .advertiserTimeLimitError, shouldHasSizeOfText: true, completion: {})
     }

@@ -12,7 +12,6 @@
 #import "SILDeviceSelectionCollectionViewCell.h"
 #import "SILDiscoveredPeripheral.h"
 #import "SILCentralManager.h"
-#import "SILSegmentedControl.h"
 #import "UIImage+SILImages.h"
 #import "SILConstants.h"
 #import "SILRSSIMeasurementTable.h"
@@ -173,8 +172,12 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
                                                  selector:@selector(handleCentralManagerDidFailToConnectPeripheralNotification:)
                                                      name:SILCentralManagerDidFailToConnectPeripheralNotification
                                                    object:self.centralManager];
+        if (self.viewModel.app.appType != SILAppTypeRangeTest) {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleBluetoothDisabledNotification:) name:SILCentralManagerBluetoothDisabledNotification object:self.centralManager];
+            
+        }
     }
-
 }
 
 - (void)unregisterForBluetoothControllerNotifications {
@@ -188,6 +191,11 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
         [[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:SILCentralManagerDidFailToConnectPeripheralNotification
                                                       object:self.centralManager];
+        if (self.viewModel.app.appType != SILAppTypeRangeTest) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:SILCentralManagerBluetoothDisabledNotification
+                                                      object:self.centralManager];
+        }
     }
 }
 
@@ -197,7 +205,7 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 
 - (void)handleCentralManagerDidConnectPeripheralNotification:(NSNotification *)notification {
     if (self.viewModel.connectingPeripheral) {
-        [SVProgressHUD showSuccessWithStatus:@"Connection Successful!"];
+        [SVProgressHUD dismiss];
         [self.delegate deviceSelectionViewController:self didSelectPeripheral:self.viewModel.connectingPeripheral.peripheral];
         self.viewModel.connectingPeripheral = nil;
     }
@@ -208,6 +216,27 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
         [SVProgressHUD showErrorWithStatus:@"Failed to connect..."];
         self.viewModel.connectingPeripheral = nil;
     }
+}
+
+- (void)handleBluetoothDisabledNotification:(NSNotification *)notification {
+    SILBluetoothDisabledAlertObjc* bluetoothDiabledAlert = nil;
+    
+    if (self.viewModel.app.appType == SILAppTypeHealthThermometer) {
+        bluetoothDiabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertHealthThermometer];
+    } else if (self.viewModel.app.appType == SILAppTypeConnectedLighting) {
+        bluetoothDiabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertConnectedLighting];
+    }
+    
+    if (bluetoothDiabledAlert == nil) {
+        return;
+    }
+    
+    [self alertWithOKButtonWithTitle:[bluetoothDiabledAlert getTitle]
+    message:[bluetoothDiabledAlert getMessage] completion:^(UIAlertAction * action) {
+        if ([self.delegate respondsToSelector:@selector(didDismissDeviceSelectionViewController)]) {
+                [self.delegate didDismissDeviceSelectionViewController];
+        }
+    }];
 }
 
 @end

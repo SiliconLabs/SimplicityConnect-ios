@@ -17,6 +17,10 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 - (instancetype)initWithAppType:(SILApp *)app {
     self = [super init];
     self.app = app;
+    self.filter = ^BOOL(SILDiscoveredPeripheral* _) {
+        return YES;
+    };
+    
     return self;
 }
 
@@ -26,7 +30,10 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 }
 
 - (NSArray<SILDiscoveredPeripheral*>*)removeNonConnectableDevices:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
-    NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"isConnectable == YES"];
+    NSPredicate* filterPredicate = [NSPredicate predicateWithBlock:^BOOL(SILDiscoveredPeripheral* evaluatedObject, NSDictionary<NSString *,id>* bindings) {
+        return evaluatedObject.isConnectable && self.filter(evaluatedObject);
+    }];
+    
     return [discoveredPeripherals filteredArrayUsingPredicate:filterPredicate];
 }
 

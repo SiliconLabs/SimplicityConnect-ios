@@ -14,7 +14,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "SILCollectionViewRightAlignedFlowLayout.h"
 #import "UIColor+SILColors.h"
-#import "SILSegmentedControl.h"
+#import "SILThermometerSegmentedControl.h"
 #import "SILDeviceSelectionViewController.h"
 #import "WYPopoverController.h"
 #import "WYPopoverController+SILHelpers.h"
@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
-@property (weak, nonatomic) IBOutlet SILSegmentedControl *typeControl;
+@property (weak, nonatomic) IBOutlet SILThermometerSegmentedControl *typeControl;
 @property (assign, nonatomic) BOOL isConnected;
 @property (weak, nonatomic) IBOutlet UIStackView *presentationSpace;
 

@@ -115,7 +115,7 @@
 		0C2FCB321F9A542300F4F259 /* CBPeripheral+Services.m in Sources */ = {isa = PBXBuildFile; fileRef = 4924BA6A1E7057F800AE9E56 /* CBPeripheral+Services.m */; };
 		0C2FCB331F9A542300F4F259 /* SILDebugProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B8A89B1BC5F872001948C1 /* SILDebugProperty.m */; };
 		0C2FCB341F9A542300F4F259 /* SILPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FB4BEA1E7A2EC200223F3E /* SILPopoverViewController.m */; };
-		0C2FCB351F9A542300F4F259 /* SILSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBEA1A77C75400676C5C /* SILSegmentedControl.m */; };
+		0C2FCB351F9A542300F4F259 /* SILThermometerSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBEA1A77C75400676C5C /* SILThermometerSegmentedControl.m */; };
 		0C2FCB361F9A542300F4F259 /* SILRetailBeaconDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5F62EA1F0A84ED007EDAAC /* SILRetailBeaconDetailsHeaderView.m */; };
 		0C2FCB371F9A542300F4F259 /* SILOTAHUDPeripheralViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4E508D1E92E507004FD829 /* SILOTAHUDPeripheralViewModel.m */; };
 		0C2FCB381F9A542300F4F259 /* SILDebugAdvDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 078138481BE99502001EFE7E /* SILDebugAdvDetailTableViewCell.m */; };
@@ -234,13 +234,10 @@
 		0C2FCBDD1F9A675A00F4F259 /* HomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCACBA3C1EA7A047001039B5 /* HomeKit.framework */; };
 		0C39082B1FA233F900934AD1 /* SILDeviceSelectionViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CC658141F96C3C200953CDC /* SILDeviceSelectionViewModel.m */; };
 		0C3908301FA8AC7A00934AD1 /* SILConnectedLightingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C39082E1FA8AC7A00934AD1 /* SILConnectedLightingViewController.m */; };
-		0C3908311FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C39082F1FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib */; };
 		0C6745FF1FAC033F0032CBF5 /* SILCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A37E401A82809B00510E39 /* SILCentralManager.m */; };
 		0CC658151F96C3C200953CDC /* SILDeviceSelectionViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CC658141F96C3C200953CDC /* SILDeviceSelectionViewModel.m */; };
-		0F34409520AF0E250067397C /* RangeTestStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409420AF0E250067397C /* RangeTestStoryboard.storyboard */; };
-		0F34409620AF0E250067397C /* RangeTestStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409420AF0E250067397C /* RangeTestStoryboard.storyboard */; };
-		0F34409820AF0E570067397C /* SILRangeTestModeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409720AF0E570067397C /* SILRangeTestModeSelectionViewController.xib */; };
-		0F34409920AF0E570067397C /* SILRangeTestModeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409720AF0E570067397C /* SILRangeTestModeSelectionViewController.xib */; };
+		0F34409520AF0E250067397C /* SILAppTypeRangeTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409420AF0E250067397C /* SILAppTypeRangeTest.storyboard */; };
+		0F34409620AF0E250067397C /* SILAppTypeRangeTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409420AF0E250067397C /* SILAppTypeRangeTest.storyboard */; };
 		0F34409B20AF18BA0067397C /* SILRangeTestAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F34409A20AF18BA0067397C /* SILRangeTestAppViewController.swift */; };
 		0F34409C20AF18BA0067397C /* SILRangeTestAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F34409A20AF18BA0067397C /* SILRangeTestAppViewController.swift */; };
 		0F392514214FA15F00D74963 /* SILRangeTestMovingAverageCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFDD024210F09A000CFFB5E /* SILRangeTestMovingAverageCalculator.swift */; };
@@ -293,7 +290,7 @@
 		0F4E512321525FDC00F58ACE /* CBPeripheral+Services.m in Sources */ = {isa = PBXBuildFile; fileRef = 4924BA6A1E7057F800AE9E56 /* CBPeripheral+Services.m */; };
 		0F4E512421525FDC00F58ACE /* SILDebugProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B8A89B1BC5F872001948C1 /* SILDebugProperty.m */; };
 		0F4E512521525FDC00F58ACE /* SILPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FB4BEA1E7A2EC200223F3E /* SILPopoverViewController.m */; };
-		0F4E512621525FDC00F58ACE /* SILSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBEA1A77C75400676C5C /* SILSegmentedControl.m */; };
+		0F4E512621525FDC00F58ACE /* SILThermometerSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBEA1A77C75400676C5C /* SILThermometerSegmentedControl.m */; };
 		0F4E512721525FDC00F58ACE /* SILRetailBeaconDetailsHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5F62EA1F0A84ED007EDAAC /* SILRetailBeaconDetailsHeaderView.m */; };
 		0F4E512821525FDC00F58ACE /* SILOTAHUDPeripheralViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4E508D1E92E507004FD829 /* SILOTAHUDPeripheralViewModel.m */; };
 		0F4E512921525FDC00F58ACE /* SILDebugAdvDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 078138481BE99502001EFE7E /* SILDebugAdvDetailTableViewCell.m */; };
@@ -391,17 +388,15 @@
 		0F4E519121525FDC00F58ACE /* SILOTAProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FB4BF01E7A33C900223F3E /* SILOTAProgressViewController.xib */; };
 		0F4E519221525FDC00F58ACE /* SILDebugDeviceFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAD9E9331F279B910054C387 /* SILDebugDeviceFilterViewController.xib */; };
 		0F4E519321525FDC00F58ACE /* SILBeaconRegistryEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07140FA01BFD80E8001CD217 /* SILBeaconRegistryEntryCell.xib */; };
-		0F4E519421525FDC00F58ACE /* SILConnectedLightingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C39082F1FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib */; };
 		0F4E519521525FDC00F58ACE /* SILDebugDeviceTableViewCell~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078137EC1BE40A8C001EFE7E /* SILDebugDeviceTableViewCell~iphone.xib */; };
 		0F4E519621525FDC00F58ACE /* SILDebugDeviceTableViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078137EB1BE40A8C001EFE7E /* SILDebugDeviceTableViewCell~ipad.xib */; };
 		0F4E519721525FDC00F58ACE /* SILRetailBeaconDetailsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA5F62EC1F0A859F007EDAAC /* SILRetailBeaconDetailsHeaderView.xib */; };
 		0F4E519821525FDC00F58ACE /* SILDebugAdvDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0763AC4A1BFE8F5400EBE94B /* SILDebugAdvDetailTableViewCell.xib */; };
-		0F4E519921525FDC00F58ACE /* SILRangeTestModeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409720AF0E570067397C /* SILRangeTestModeSelectionViewController.xib */; };
 		0F4E519A21525FDC00F58ACE /* SILDebugDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078137ED1BE40A8C001EFE7E /* SILDebugDeviceViewController.xib */; };
 		0F4E519B21525FDC00F58ACE /* SILDebugCharacteristicToggleFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078137FD1BE40AA5001EFE7E /* SILDebugCharacteristicToggleFieldTableViewCell.xib */; };
 		0F4E519C21525FDC00F58ACE /* SILOTAHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCB431121E8315EF00EE94F0 /* SILOTAHUDView.xib */; };
 		0F4E519D21525FDC00F58ACE /* SILDebugCharacteristicValueFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078137FE1BE40AA5001EFE7E /* SILDebugCharacteristicValueFieldTableViewCell.xib */; };
-		0F4E519E21525FDC00F58ACE /* RangeTestStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409420AF0E250067397C /* RangeTestStoryboard.storyboard */; };
+		0F4E519E21525FDC00F58ACE /* SILAppTypeRangeTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F34409420AF0E250067397C /* SILAppTypeRangeTest.storyboard */; };
 		0F4E519F21525FDC00F58ACE /* SILActivityBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 492CA4B01E4E0DD700502AC9 /* SILActivityBarViewController.xib */; };
 		0F4E51A121525FDC00F58ACE /* SILDebugAdvDetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078137E81BE40A8C001EFE7E /* SILDebugAdvDetailCollectionViewCell.xib */; };
 		0F4E51A221525FDC00F58ACE /* SILDebugServiceTableViewCell~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078138021BE40AA5001EFE7E /* SILDebugServiceTableViewCell~iphone.xib */; };
@@ -436,6 +431,15 @@
 		133D396325540A6600BFB484 /* ContextMenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133D396225540A6600BFB484 /* ContextMenuOption.swift */; };
 		133D396D25540B5900BFB484 /* SILContextMenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133D396C25540B5900BFB484 /* SILContextMenuCellView.swift */; };
 		133D39C32554514600BFB484 /* SILAdvertiserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133D39C22554514600BFB484 /* SILAdvertiserNotification.swift */; };
+		1394F95E2566BD4400795E5A /* SILBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1394F95D2566BD4400795E5A /* SILBigButton.swift */; };
+		1394F95F2566BD4400795E5A /* SILBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1394F95D2566BD4400795E5A /* SILBigButton.swift */; };
+		1394F9602566BD4400795E5A /* SILBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1394F95D2566BD4400795E5A /* SILBigButton.swift */; };
+		13ACBA7F256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACBA7E256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift */; };
+		13ACBA80256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACBA7E256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift */; };
+		13ACBA81256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACBA7E256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift */; };
+		13ACBA87256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACBA86256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift */; };
+		13ACBA88256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACBA86256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift */; };
+		13ACBA89256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACBA86256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift */; };
 		19AC27E79B49CB3AD403E6EA /* SILEncodingPseudoFieldRowModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 19AC2956BD095FCA31424BC0 /* SILEncodingPseudoFieldRowModel.m */; };
 		1E113D08244ECD6600442752 /* SILDiscoveredPeripheralIdentifierProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E113D07244ECD6600442752 /* SILDiscoveredPeripheralIdentifierProvider.swift */; };
 		1E1907B123FD850700DD014C /* SILSavedSearchesRealmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1907B023FD850700DD014C /* SILSavedSearchesRealmModel.m */; };
@@ -511,13 +515,14 @@
 		1E26ECD425529C3F002FFAAB /* SILScanResponseValueCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E26ECD325529C3F002FFAAB /* SILScanResponseValueCellView.swift */; };
 		1E2D26D8244050430006B84A /* SILDocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2D26D7244050430006B84A /* SILDocumentPickerViewController.swift */; };
 		1E2D9CAC23BA48D600816EC0 /* SILBluetoothBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2D9CAB23BA48D600816EC0 /* SILBluetoothBrowserViewController.m */; };
+		1E3A15F8258B82EA00776A00 /* SILFilterBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3A15F7258B82EA00776A00 /* SILFilterBarViewModel.swift */; };
+		1E3A15FF258B830B00776A00 /* SILFilterBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3A15FE258B830B00776A00 /* SILFilterBarViewController.swift */; };
 		1E3FC7D8252B5E40002F740D /* UITextField+DoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FC7D7252B5E40002F740D /* UITextField+DoneButton.swift */; };
 		1E48A1E92484E27300C188C0 /* SILAnimatedUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E48A1E82484E27300C188C0 /* SILAnimatedUIButton.swift */; };
 		1E48A1EF2484FC0B00C188C0 /* SILToastModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E48A1EE2484FC0B00C188C0 /* SILToastModelType.swift */; };
 		1E4C37A42429095300C822E4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E4C37A12429095300C822E4 /* Roboto-Bold.ttf */; };
 		1E4C37A52429095300C822E4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E4C37A22429095300C822E4 /* Roboto-Medium.ttf */; };
 		1E4C37A62429095300C822E4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E4C37A32429095300C822E4 /* Roboto-Regular.ttf */; };
-		1E4C37D5242C996400C822E4 /* SILBluetoothBrowserExpandableViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4C37D4242C996400C822E4 /* SILBluetoothBrowserExpandableViewManager.m */; };
 		1E56E9E52416800B00D5B92A /* NSString+SILBrowserNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56E9E42416800B00D5B92A /* NSString+SILBrowserNotifications.m */; };
 		1E56E9E92416934D00D5B92A /* SILBluetoothBrowser+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56E9E82416934D00D5B92A /* SILBluetoothBrowser+Constants.m */; };
 		1E56E9EB2416974500D5B92A /* SILStoryboard+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E56E9EA2416974500D5B92A /* SILStoryboard+Constants.m */; };
@@ -527,7 +532,15 @@
 		1E6AF7FE23CDB31500EE8280 /* SILBrowserLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6AF7FD23CDB31500EE8280 /* SILBrowserLogViewController.m */; };
 		1E6AF80123CDB32800EE8280 /* SILBrowserConnectionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6AF80023CDB32800EE8280 /* SILBrowserConnectionsViewController.m */; };
 		1E6AF80423CDB33600EE8280 /* SILBrowserFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6AF80323CDB33600EE8280 /* SILBrowserFilterViewController.m */; };
+		1E6CBCF12588AE1E00B11648 /* SILExitAdvertiserPopupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6CBCF02588AE1E00B11648 /* SILExitAdvertiserPopupViewModel.swift */; };
+		1E6CBCF92588AE3500B11648 /* SILExitAdvertiserPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6CBCF72588AE3500B11648 /* SILExitAdvertiserPopupViewController.swift */; };
+		1E6CBCFA2588AE3500B11648 /* SILExitAdvertiserPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E6CBCF82588AE3500B11648 /* SILExitAdvertiserPopupViewController.xib */; };
+		1E6CBD402588D23700B11648 /* SILSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6CBD3F2588D23700B11648 /* SILSegmentedControl.swift */; };
+		1E6CBD412588D23700B11648 /* SILSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6CBD3F2588D23700B11648 /* SILSegmentedControl.swift */; };
+		1E6CBD422588D23700B11648 /* SILSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6CBD3F2588D23700B11648 /* SILSegmentedControl.swift */; };
 		1E70A97B240403320021C51B /* SILBrowserConnectionsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E70A97A240403320021C51B /* SILBrowserConnectionsViewModel.m */; };
+		1E8529832591F6480064F419 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E8529822591F6480064F419 /* UIViewController+Alert.swift */; };
+		1E8529C125920C3B0064F419 /* SILBluetoothDisabledAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E8529C025920C3B0064F419 /* SILBluetoothDisabledAlert.swift */; };
 		1E90F5E42473E73E0013AABD /* SILDebugServicesMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E90F5E32473E73E0013AABD /* SILDebugServicesMenuViewController.swift */; };
 		1E90F5E72473E8340013AABD /* SILDebugServicesMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E90F5E52473E8340013AABD /* SILDebugServicesMenuTableViewCell.swift */; };
 		1E90F5E82473E8340013AABD /* SILDebugServicesMenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E90F5E62473E8340013AABD /* SILDebugServicesMenuTableViewCell.xib */; };
@@ -557,7 +570,6 @@
 		1EC92EF723A3957D00FD2219 /* SILAppTypeRetailBeacon.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC92EF623A3957D00FD2219 /* SILAppTypeRetailBeacon.storyboard */; };
 		1EC92EF923A3959200FD2219 /* SILAppBluetoothBrowser.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC92EF823A3959200FD2219 /* SILAppBluetoothBrowser.storyboard */; };
 		1EC92EFB23A395B200FD2219 /* SILAppTypeHomeKitDebug.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC92EFA23A395B200FD2219 /* SILAppTypeHomeKitDebug.storyboard */; };
-		1EC92EFD23A395C200FD2219 /* SILAppTypeRangeTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC92EFC23A395C200FD2219 /* SILAppTypeRangeTest.storyboard */; };
 		1EC92F0623A3962C00FD2219 /* SILHomeTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC92F0523A3962C00FD2219 /* SILHomeTabBarViewController.m */; };
 		1EDA0A09253472990031961D /* SILAttErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0A08253472990031961D /* SILAttErrorModel.swift */; };
 		1EDA0A0B253472B50031961D /* SILErrorDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA0A0A253472B50031961D /* SILErrorDetailsViewModel.swift */; };
@@ -593,6 +605,9 @@
 		1EEFB22A2524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEFB2282524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.swift */; };
 		1EEFB22B2524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EEFB2292524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.xib */; };
 		2B257CB817ADC2635883B007 /* Pods_WirelessGecko.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E1967C516A49F37A0A7B8 /* Pods_WirelessGecko.framework */; };
+		2F0DE91D258B7F4D00BEFF76 /* SILContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0DE91C258B7F4D00BEFF76 /* SILContextMenu.swift */; };
+		2FD579D7257933DD001D7E9E /* NSObject+SILAssociatedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD579D6257933DD001D7E9E /* NSObject+SILAssociatedObject.m */; };
+		2FD579DD2579352C001D7E9E /* UIViewController+SILContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD579DC2579352C001D7E9E /* UIViewController+SILContext.swift */; };
 		491ADCBB1E71EEA300AC2E69 /* SILOTAUICoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 491ADCBA1E71EEA300AC2E69 /* SILOTAUICoordinator.m */; };
 		491ADCBF1E72E58300AC2E69 /* SILOTASetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 491ADCBD1E72E58300AC2E69 /* SILOTASetupViewController.m */; };
 		491ADCC01E72E58300AC2E69 /* SILOTASetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 491ADCBE1E72E58300AC2E69 /* SILOTASetupViewController.xib */; };
@@ -628,7 +643,7 @@
 		4C2CB43E240EBC550079040D /* SILMapNameEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2CB43C240EBC550079040D /* SILMapNameEditorViewController.xib */; };
 		4C3BA285240D558A00CF3268 /* SILKeychain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C3BA284240D558A00CF3268 /* SILKeychain.storyboard */; };
 		4C3BA289240D58DF00CF3268 /* SILKeychainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3BA288240D58DF00CF3268 /* SILKeychainViewController.swift */; };
-		4C3BA28B240D599200CF3268 /* SILBrowserSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3BA28A240D599200CF3268 /* SILBrowserSegmentedControl.swift */; };
+		4C3BA28B240D599200CF3268 /* SILBrowserMappingsSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3BA28A240D599200CF3268 /* SILBrowserMappingsSegmentedControl.swift */; };
 		4C4F2DE124080E50005D43BB /* SILRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F2DE024080E50005D43BB /* SILRoundedButton.swift */; };
 		4C95EB7723FEC8600091FB5A /* SILAppBluetoothBrowserDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C95EB7623FEC8600091FB5A /* SILAppBluetoothBrowserDetails.storyboard */; };
 		4C97A51123E86525000C6894 /* SILBrowserDeviceAdTypeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C97A51023E86525000C6894 /* SILBrowserDeviceAdTypeViewCell.swift */; };
@@ -670,6 +685,10 @@
 		79C40C6D1EC9F59B00B729BF /* SILHomeKitDebugDeviceTableViewCell~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79C40C6B1EC9F59B00B729BF /* SILHomeKitDebugDeviceTableViewCell~iphone.xib */; };
 		79C40C701EC9F6A800B729BF /* SILHomeKitDebugDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C40C6F1EC9F6A800B729BF /* SILHomeKitDebugDeviceTableViewCell.m */; };
 		79E62B4F1ECCA29400344CAA /* SILBluetoothSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E62B4E1ECCA29400344CAA /* SILBluetoothSearch.m */; };
+		8041CCC8256E5A0900C5C368 /* SILDescriptorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8041CCC7256E5A0900C5C368 /* SILDescriptorTableViewCell.swift */; };
+		80521478255A7A510021385F /* SILSortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80521477255A7A510021385F /* SILSortViewController.swift */; };
+		8052147E255A80F40021385F /* SILSortTypeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052147D255A80F40021385F /* SILSortTypeViewCell.swift */; };
+		80521484255A81070021385F /* SILSortModeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80521483255A81070021385F /* SILSortModeViewCell.swift */; };
 		807B139B2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 807B139A2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib */; };
 		807B139C2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 807B139A2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib */; };
 		807B139D2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 807B139A2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib */; };
@@ -679,6 +698,9 @@
 		807B13D7252347390056CFCC /* SILEncodingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 807B13D6252347390056CFCC /* SILEncodingTextField.m */; };
 		807B13D8252347390056CFCC /* SILEncodingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 807B13D6252347390056CFCC /* SILEncodingTextField.m */; };
 		807B13D9252347390056CFCC /* SILEncodingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 807B13D6252347390056CFCC /* SILEncodingTextField.m */; };
+		808B001E255D7B830062E954 /* SILSortViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808B001D255D7B830062E954 /* SILSortViewModel.swift */; };
+		808E0D8A257E1A4400A3E4A8 /* SILBrowserDescriptorValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808E0D89257E1A4400A3E4A8 /* SILBrowserDescriptorValueParser.swift */; };
+		808E0DC0257E42FE00A3E4A8 /* SILDescryptorTypeUUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808E0DBF257E42FE00A3E4A8 /* SILDescryptorTypeUUID.swift */; };
 		8096567B2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8096567A2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib */; };
 		8096567C2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8096567A2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib */; };
 		8096567D2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8096567A2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib */; };
@@ -691,6 +713,7 @@
 		80C6706925516A450083D20C /* SILTimeLimitRadioButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C6706825516A450083D20C /* SILTimeLimitRadioButtonState.swift */; };
 		80C6706A25516A450083D20C /* SILTimeLimitRadioButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C6706825516A450083D20C /* SILTimeLimitRadioButtonState.swift */; };
 		80C6706B25516A450083D20C /* SILTimeLimitRadioButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C6706825516A450083D20C /* SILTimeLimitRadioButtonState.swift */; };
+		80CCC0652564F8780018D649 /* SILBluetoothBrowserExpandableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CCC0642564F8780018D649 /* SILBluetoothBrowserExpandableViewManager.swift */; };
 		9450946334099D8FAA384ABE /* Pods_BlueGeckoWithHomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84342BE824D4F9248E13114A /* Pods_BlueGeckoWithHomeKit.framework */; };
 		9B44734425137C6100355E0A /* Colours.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B44734325137C6100355E0A /* Colours.xcassets */; };
 		9B44734525137C6100355E0A /* Colours.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B44734325137C6100355E0A /* Colours.xcassets */; };
@@ -725,7 +748,6 @@
 		DCB431111E8315CE00EE94F0 /* SILOTAHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = DCB431101E8315CE00EE94F0 /* SILOTAHUDView.m */; };
 		DCB431131E8315EF00EE94F0 /* SILOTAHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCB431121E8315EF00EE94F0 /* SILOTAHUDView.xib */; };
 		DCE784DF1E7AF0930038C87A /* SILBeaconRegistryEntryViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DCE784DE1E7AF0930038C87A /* SILBeaconRegistryEntryViewModel.m */; };
-		E48275BE20D812BE006D1478 /* SILConnectedLightingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C39082F1FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib */; };
 		E607A34E1A8D1F3000DAAFD3 /* SILCalibrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E607A34D1A8D1F3000DAAFD3 /* SILCalibrationViewController.m */; };
 		E607A3511A8D4FD100DAAFD3 /* SILSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = E607A3501A8D4FD100DAAFD3 /* SILSettings.m */; };
 		E607A36C1A9627E600DAAFD3 /* SILTemperatureMeasurementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E607A36B1A9627E600DAAFD3 /* SILTemperatureMeasurementTests.m */; };
@@ -743,7 +765,7 @@
 		E666CBE11A76B67900676C5C /* SILApp+AttributedProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBE01A76B67900676C5C /* SILApp+AttributedProfiles.m */; };
 		E666CBE51A76C0E800676C5C /* SILAppSelectionInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBE41A76C0E800676C5C /* SILAppSelectionInfoViewController.m */; };
 		E666CBE71A77298900676C5C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E666CBE61A77298900676C5C /* QuartzCore.framework */; };
-		E666CBEB1A77C75400676C5C /* SILSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBEA1A77C75400676C5C /* SILSegmentedControl.m */; };
+		E666CBEB1A77C75400676C5C /* SILThermometerSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E666CBEA1A77C75400676C5C /* SILThermometerSegmentedControl.m */; };
 		E6A37E411A82809B00510E39 /* SILCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A37E401A82809B00510E39 /* SILCentralManager.m */; };
 		E6A37E471A82C1C400510E39 /* SILConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = E6A37E461A82C1C400510E39 /* SILConstants.m */; };
 		E6B3EC9C1AADD9BD005A687F /* SILRoundedViewBehaviour.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B3EC9B1AADD9BD005A687F /* SILRoundedViewBehaviour.m */; };
@@ -909,15 +931,13 @@
 		0C2FCBE11F9A7F7700F4F259 /* Entitlements.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Entitlements.entitlements; sourceTree = "<group>"; };
 		0C39082D1FA8AC7A00934AD1 /* SILConnectedLightingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SILConnectedLightingViewController.h; path = ConnectedLightingApp/SILConnectedLightingViewController.h; sourceTree = "<group>"; };
 		0C39082E1FA8AC7A00934AD1 /* SILConnectedLightingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SILConnectedLightingViewController.m; path = ConnectedLightingApp/SILConnectedLightingViewController.m; sourceTree = "<group>"; };
-		0C39082F1FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SILConnectedLightingViewController.xib; path = ConnectedLightingApp/SILConnectedLightingViewController.xib; sourceTree = "<group>"; };
 		0C744A481FB369FD0016B3C5 /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExportOptions.plist; sourceTree = "<group>"; };
 		0CA91D794559B3C4861B03B4 /* Pods-WirelessGecko.release-wireless-gecko.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WirelessGecko.release-wireless-gecko.xcconfig"; path = "Pods/Target Support Files/Pods-WirelessGecko/Pods-WirelessGecko.release-wireless-gecko.xcconfig"; sourceTree = "<group>"; };
 		0CB9F1571F9F7DC60089DC65 /* BlueGeckoWithHomeKit.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlueGeckoWithHomeKit.pch; sourceTree = "<group>"; };
 		0CB9F1581F9F7DE80089DC65 /* BlueGecko.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlueGecko.pch; sourceTree = "<group>"; };
 		0CC658131F96C3C200953CDC /* SILDeviceSelectionViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SILDeviceSelectionViewModel.h; path = ../ViewModels/SILDeviceSelectionViewModel.h; sourceTree = "<group>"; };
 		0CC658141F96C3C200953CDC /* SILDeviceSelectionViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SILDeviceSelectionViewModel.m; path = ../ViewModels/SILDeviceSelectionViewModel.m; sourceTree = "<group>"; };
-		0F34409420AF0E250067397C /* RangeTestStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RangeTestStoryboard.storyboard; sourceTree = "<group>"; };
-		0F34409720AF0E570067397C /* SILRangeTestModeSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SILRangeTestModeSelectionViewController.xib; sourceTree = "<group>"; };
+		0F34409420AF0E250067397C /* SILAppTypeRangeTest.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILAppTypeRangeTest.storyboard; sourceTree = "<group>"; };
 		0F34409A20AF18BA0067397C /* SILRangeTestAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRangeTestAppViewController.swift; sourceTree = "<group>"; };
 		0F3AC36520ADAABF0010091C /* SILRangeTestModeSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRangeTestModeSelectionViewController.swift; sourceTree = "<group>"; };
 		0F3EB6B620C524C30062A7C1 /* SILRangeTestAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRangeTestAppViewModel.swift; sourceTree = "<group>"; };
@@ -936,6 +956,9 @@
 		133D396225540A6600BFB484 /* ContextMenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuOption.swift; sourceTree = "<group>"; };
 		133D396C25540B5900BFB484 /* SILContextMenuCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILContextMenuCellView.swift; sourceTree = "<group>"; };
 		133D39C22554514600BFB484 /* SILAdvertiserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILAdvertiserNotification.swift; sourceTree = "<group>"; };
+		1394F95D2566BD4400795E5A /* SILBigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBigButton.swift; sourceTree = "<group>"; };
+		13ACBA7E256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRangeTestSelectDeviceViewController.swift; sourceTree = "<group>"; };
+		13ACBA86256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRangeTestAppContainerViewController.swift; sourceTree = "<group>"; };
 		14222593B3D5CABF925418CF /* Pods_SiliconLabsApp_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SiliconLabsApp_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		19AC23CE45AA832127AAE6DD /* SILEncodingPseudoFieldRowModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SILEncodingPseudoFieldRowModel.h; sourceTree = "<group>"; };
 		19AC2956BD095FCA31424BC0 /* SILEncodingPseudoFieldRowModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SILEncodingPseudoFieldRowModel.m; sourceTree = "<group>"; };
@@ -1020,14 +1043,14 @@
 		1E2D26D7244050430006B84A /* SILDocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILDocumentPickerViewController.swift; sourceTree = "<group>"; };
 		1E2D9CAA23BA48D600816EC0 /* SILBluetoothBrowserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILBluetoothBrowserViewController.h; sourceTree = "<group>"; };
 		1E2D9CAB23BA48D600816EC0 /* SILBluetoothBrowserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILBluetoothBrowserViewController.m; sourceTree = "<group>"; };
+		1E3A15F7258B82EA00776A00 /* SILFilterBarViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SILFilterBarViewModel.swift; sourceTree = "<group>"; };
+		1E3A15FE258B830B00776A00 /* SILFilterBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SILFilterBarViewController.swift; sourceTree = "<group>"; };
 		1E3FC7D7252B5E40002F740D /* UITextField+DoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+DoneButton.swift"; sourceTree = "<group>"; };
 		1E48A1E82484E27300C188C0 /* SILAnimatedUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILAnimatedUIButton.swift; sourceTree = "<group>"; };
 		1E48A1EE2484FC0B00C188C0 /* SILToastModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILToastModelType.swift; sourceTree = "<group>"; };
 		1E4C37A12429095300C822E4 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		1E4C37A22429095300C822E4 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		1E4C37A32429095300C822E4 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		1E4C37D4242C996400C822E4 /* SILBluetoothBrowserExpandableViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILBluetoothBrowserExpandableViewManager.m; sourceTree = "<group>"; };
-		1E4C37D6242C997B00C822E4 /* SILBluetoothBrowserExpandableViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILBluetoothBrowserExpandableViewManager.h; sourceTree = "<group>"; };
 		1E56E9E42416800B00D5B92A /* NSString+SILBrowserNotifications.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+SILBrowserNotifications.m"; sourceTree = "<group>"; };
 		1E56E9E62416802200D5B92A /* NSString+SILBrowserNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+SILBrowserNotifications.h"; sourceTree = "<group>"; };
 		1E56E9E72416933300D5B92A /* SILBluetoothBrowser+Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SILBluetoothBrowser+Constants.h"; sourceTree = "<group>"; };
@@ -1047,8 +1070,14 @@
 		1E6AF80523CDB3C000EE8280 /* SILBrowserLogViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILBrowserLogViewControllerDelegate.h; sourceTree = "<group>"; };
 		1E6AF80623CDB47500EE8280 /* SILBrowserConnectionsViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILBrowserConnectionsViewControllerDelegate.h; sourceTree = "<group>"; };
 		1E6AF80723CDB4DF00EE8280 /* SILBrowserFilterViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILBrowserFilterViewControllerDelegate.h; sourceTree = "<group>"; };
+		1E6CBCF02588AE1E00B11648 /* SILExitAdvertiserPopupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SILExitAdvertiserPopupViewModel.swift; sourceTree = "<group>"; };
+		1E6CBCF72588AE3500B11648 /* SILExitAdvertiserPopupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SILExitAdvertiserPopupViewController.swift; sourceTree = "<group>"; };
+		1E6CBCF82588AE3500B11648 /* SILExitAdvertiserPopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SILExitAdvertiserPopupViewController.xib; sourceTree = "<group>"; };
+		1E6CBD3F2588D23700B11648 /* SILSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSegmentedControl.swift; sourceTree = "<group>"; };
 		1E70A97A240403320021C51B /* SILBrowserConnectionsViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILBrowserConnectionsViewModel.m; sourceTree = "<group>"; };
 		1E70A97C240403470021C51B /* SILBrowserConnectionsViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILBrowserConnectionsViewModel.h; sourceTree = "<group>"; };
+		1E8529822591F6480064F419 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		1E8529C025920C3B0064F419 /* SILBluetoothDisabledAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBluetoothDisabledAlert.swift; sourceTree = "<group>"; };
 		1E90F5E32473E73E0013AABD /* SILDebugServicesMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILDebugServicesMenuViewController.swift; sourceTree = "<group>"; };
 		1E90F5E52473E8340013AABD /* SILDebugServicesMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILDebugServicesMenuTableViewCell.swift; sourceTree = "<group>"; };
 		1E90F5E62473E8340013AABD /* SILDebugServicesMenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SILDebugServicesMenuTableViewCell.xib; sourceTree = "<group>"; };
@@ -1087,7 +1116,6 @@
 		1EC92EF623A3957D00FD2219 /* SILAppTypeRetailBeacon.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILAppTypeRetailBeacon.storyboard; sourceTree = "<group>"; };
 		1EC92EF823A3959200FD2219 /* SILAppBluetoothBrowser.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILAppBluetoothBrowser.storyboard; sourceTree = "<group>"; };
 		1EC92EFA23A395B200FD2219 /* SILAppTypeHomeKitDebug.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILAppTypeHomeKitDebug.storyboard; sourceTree = "<group>"; };
-		1EC92EFC23A395C200FD2219 /* SILAppTypeRangeTest.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILAppTypeRangeTest.storyboard; sourceTree = "<group>"; };
 		1EC92F0423A3962C00FD2219 /* SILHomeTabBarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILHomeTabBarViewController.h; sourceTree = "<group>"; };
 		1EC92F0523A3962C00FD2219 /* SILHomeTabBarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILHomeTabBarViewController.m; sourceTree = "<group>"; };
 		1EDA0A08253472990031961D /* SILAttErrorModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SILAttErrorModel.swift; sourceTree = "<group>"; };
@@ -1135,6 +1163,10 @@
 		1EEFB2282524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILCharacteristicWriteEnumOptionsTableViewCell.swift; sourceTree = "<group>"; };
 		1EEFB2292524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SILCharacteristicWriteEnumOptionsTableViewCell.xib; sourceTree = "<group>"; };
 		257E756EE6E82EC7E361629D /* Pods-SiliconLabsApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SiliconLabsApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SiliconLabsApp/Pods-SiliconLabsApp.debug.xcconfig"; sourceTree = "<group>"; };
+		2F0DE91C258B7F4D00BEFF76 /* SILContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILContextMenu.swift; sourceTree = "<group>"; };
+		2FD579D5257933DD001D7E9E /* NSObject+SILAssociatedObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+SILAssociatedObject.h"; sourceTree = "<group>"; };
+		2FD579D6257933DD001D7E9E /* NSObject+SILAssociatedObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SILAssociatedObject.m"; sourceTree = "<group>"; };
+		2FD579DC2579352C001D7E9E /* UIViewController+SILContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+SILContext.swift"; sourceTree = "<group>"; };
 		40F66980CDB9137B6A8DE02E /* Pods-Wireless Gecko.debug-wireless-gecko.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wireless Gecko.debug-wireless-gecko.xcconfig"; path = "Pods/Target Support Files/Pods-Wireless Gecko/Pods-Wireless Gecko.debug-wireless-gecko.xcconfig"; sourceTree = "<group>"; };
 		426AC50AF4550762BDD32A6E /* Pods_SiliconLabsApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SiliconLabsApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4491900FB788A5F0E74824C6 /* Pods-BlueGecko.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlueGecko.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BlueGecko/Pods-BlueGecko.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1195,7 +1227,7 @@
 		4C2CB43C240EBC550079040D /* SILMapNameEditorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SILMapNameEditorViewController.xib; sourceTree = "<group>"; };
 		4C3BA284240D558A00CF3268 /* SILKeychain.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILKeychain.storyboard; sourceTree = "<group>"; };
 		4C3BA288240D58DF00CF3268 /* SILKeychainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILKeychainViewController.swift; sourceTree = "<group>"; };
-		4C3BA28A240D599200CF3268 /* SILBrowserSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBrowserSegmentedControl.swift; sourceTree = "<group>"; };
+		4C3BA28A240D599200CF3268 /* SILBrowserMappingsSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBrowserMappingsSegmentedControl.swift; sourceTree = "<group>"; };
 		4C4F2DE024080E50005D43BB /* SILRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRoundedButton.swift; sourceTree = "<group>"; };
 		4C95EB7623FEC8600091FB5A /* SILAppBluetoothBrowserDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SILAppBluetoothBrowserDetails.storyboard; sourceTree = "<group>"; };
 		4C97A51023E86525000C6894 /* SILBrowserDeviceAdTypeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBrowserDeviceAdTypeViewCell.swift; sourceTree = "<group>"; };
@@ -1255,16 +1287,25 @@
 		79E62B4E1ECCA29400344CAA /* SILBluetoothSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SILBluetoothSearch.m; sourceTree = "<group>"; };
 		7AAD8E27028334FE640216CD /* Pods_SiliconLabsAppWithoutHomeKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SiliconLabsAppWithoutHomeKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D7E90CFE18ED0DFB6F387D5 /* Pods-SiliconLabsAppWithoutHomeKit Dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SiliconLabsAppWithoutHomeKit Dev.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SiliconLabsAppWithoutHomeKit Dev/Pods-SiliconLabsAppWithoutHomeKit Dev.debug.xcconfig"; sourceTree = "<group>"; };
+		800E3A8C25627DA300A55565 /* SILSortOption.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILSortOption.h; sourceTree = "<group>"; };
+		8041CCC7256E5A0900C5C368 /* SILDescriptorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILDescriptorTableViewCell.swift; sourceTree = "<group>"; };
+		80521477255A7A510021385F /* SILSortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortViewController.swift; sourceTree = "<group>"; };
+		8052147D255A80F40021385F /* SILSortTypeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortTypeViewCell.swift; sourceTree = "<group>"; };
+		80521483255A81070021385F /* SILSortModeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortModeViewCell.swift; sourceTree = "<group>"; };
 		807B139A2523355A0056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SILDebugCharacteristicEncodingFieldEntryCell.xib; sourceTree = "<group>"; };
 		807B13A6252335A50056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILDebugCharacteristicEncodingFieldEntryCell.h; sourceTree = "<group>"; };
 		807B13A7252335A50056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILDebugCharacteristicEncodingFieldEntryCell.m; sourceTree = "<group>"; };
 		807B13D5252347390056CFCC /* SILEncodingTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILEncodingTextField.h; sourceTree = "<group>"; };
 		807B13D6252347390056CFCC /* SILEncodingTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILEncodingTextField.m; sourceTree = "<group>"; };
+		808B001D255D7B830062E954 /* SILSortViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortViewModel.swift; sourceTree = "<group>"; };
+		808E0D89257E1A4400A3E4A8 /* SILBrowserDescriptorValueParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBrowserDescriptorValueParser.swift; sourceTree = "<group>"; };
+		808E0DBF257E42FE00A3E4A8 /* SILDescryptorTypeUUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILDescryptorTypeUUID.swift; sourceTree = "<group>"; };
 		8096567A2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SILDebugCharacteristicEncodingFieldView.xib; sourceTree = "<group>"; };
 		809656822524A71C000E98F5 /* SILDebugCharacteristicEncodingFieldView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SILDebugCharacteristicEncodingFieldView.h; sourceTree = "<group>"; };
 		809656832524A71C000E98F5 /* SILDebugCharacteristicEncodingFieldView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILDebugCharacteristicEncodingFieldView.m; sourceTree = "<group>"; };
 		80C67058255169950083D20C /* SILRadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILRadioButton.swift; sourceTree = "<group>"; };
 		80C6706825516A450083D20C /* SILTimeLimitRadioButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILTimeLimitRadioButtonState.swift; sourceTree = "<group>"; };
+		80CCC0642564F8780018D649 /* SILBluetoothBrowserExpandableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILBluetoothBrowserExpandableViewManager.swift; sourceTree = "<group>"; };
 		84342BE824D4F9248E13114A /* Pods_BlueGeckoWithHomeKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlueGeckoWithHomeKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A73A6BB1453DAE49320F05E /* Pods-SiliconLabsAppWithoutHomeKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SiliconLabsAppWithoutHomeKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SiliconLabsAppWithoutHomeKit/Pods-SiliconLabsAppWithoutHomeKit.release.xcconfig"; sourceTree = "<group>"; };
 		8E2432EAF11ADE0582587F26 /* Pods-SiliconLabsApp Dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SiliconLabsApp Dev.release.xcconfig"; path = "Pods/Target Support Files/Pods-SiliconLabsApp Dev/Pods-SiliconLabsApp Dev.release.xcconfig"; sourceTree = "<group>"; };
@@ -1354,8 +1395,8 @@
 		E666CBE31A76C0E800676C5C /* SILAppSelectionInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SILAppSelectionInfoViewController.h; sourceTree = "<group>"; };
 		E666CBE41A76C0E800676C5C /* SILAppSelectionInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SILAppSelectionInfoViewController.m; sourceTree = "<group>"; };
 		E666CBE61A77298900676C5C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		E666CBE91A77C75400676C5C /* SILSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SILSegmentedControl.h; sourceTree = "<group>"; };
-		E666CBEA1A77C75400676C5C /* SILSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SILSegmentedControl.m; sourceTree = "<group>"; };
+		E666CBE91A77C75400676C5C /* SILThermometerSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SILThermometerSegmentedControl.h; sourceTree = "<group>"; };
+		E666CBEA1A77C75400676C5C /* SILThermometerSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SILThermometerSegmentedControl.m; sourceTree = "<group>"; };
 		E6A37E3F1A82809B00510E39 /* SILCentralManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SILCentralManager.h; sourceTree = "<group>"; };
 		E6A37E401A82809B00510E39 /* SILCentralManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SILCentralManager.m; sourceTree = "<group>"; };
 		E6A37E451A82C1C400510E39 /* SILConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SILConstants.h; sourceTree = "<group>"; };
@@ -1552,6 +1593,7 @@
 		07B1AD741BFCFF6900D4D454 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				808B001B255D7B540062E954 /* BluetoothBrowser */,
 				1E26ECA025501A0A002FFAAB /* Advertiser */,
 				1EDA0A0A253472B50031961D /* SILErrorDetailsViewModel.swift */,
 				49BB94B01E68F2DC0068670E /* SILAdvertisementDataViewModel.h */,
@@ -1629,6 +1671,7 @@
 		07B8A8AB1BCD4D6E001948C1 /* ServicesTable */ = {
 			isa = PBXGroup;
 			children = (
+				803B32CA256E3D4500CC5EFA /* Descriptors */,
 				809656742524A6AA000E98F5 /* EncodingField */,
 				07B8A8C81BCD6E3B001948C1 /* SILDebugCharacteristicPropertyView.h */,
 				07B8A8C91BCD6E3B001948C1 /* SILDebugCharacteristicPropertyView.m */,
@@ -1723,7 +1766,6 @@
 		0C3908321FA9C02100934AD1 /* ConnectedLighting */ = {
 			isa = PBXGroup;
 			children = (
-				0C39082F1FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib */,
 				0C39082D1FA8AC7A00934AD1 /* SILConnectedLightingViewController.h */,
 				0C39082E1FA8AC7A00934AD1 /* SILConnectedLightingViewController.m */,
 			);
@@ -1733,8 +1775,6 @@
 		0F34406020ADAB580067397C /* RangeTest */ = {
 			isa = PBXGroup;
 			children = (
-				0F34409720AF0E570067397C /* SILRangeTestModeSelectionViewController.xib */,
-				0F34409420AF0E250067397C /* RangeTestStoryboard.storyboard */,
 			);
 			path = RangeTest;
 			sourceTree = "<group>";
@@ -1750,6 +1790,8 @@
 				0F3EB6B620C524C30062A7C1 /* SILRangeTestAppViewModel.swift */,
 				0FFDD024210F09A000CFFB5E /* SILRangeTestMovingAverageCalculator.swift */,
 				0F75B9D021395E3200E8D9E9 /* SILRangeTestTXValueUpdater.swift */,
+				13ACBA7E256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift */,
+				13ACBA86256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift */,
 			);
 			path = RangeTestApp;
 			sourceTree = "<group>";
@@ -1826,6 +1868,7 @@
 				1E26EC6B255019E0002FFAAB /* DropDown */,
 				1E26EC73255019E0002FFAAB /* ContextMenu */,
 				1E26EC76255019E0002FFAAB /* Details */,
+				1E6CBCF62588AE3500B11648 /* ExitAdvertiserPopup */,
 				1E26EC7D255019E0002FFAAB /* Add16BitServiceDialog */,
 				1E26EC80255019E0002FFAAB /* RemoveServiceListWarningDialog */,
 				1E26EC71255019E0002FFAAB /* SILBaseWireframe.swift */,
@@ -1896,6 +1939,7 @@
 				1E26EC75255019E0002FFAAB /* SILContextMenuTransitioningDelegate.swift */,
 				133D39502554089500BFB484 /* SILContextMenuViewController.swift */,
 				133D396C25540B5900BFB484 /* SILContextMenuCellView.swift */,
+				2F0DE91C258B7F4D00BEFF76 /* SILContextMenu.swift */,
 			);
 			path = ContextMenu;
 			sourceTree = "<group>";
@@ -1940,6 +1984,7 @@
 				1E26ECA125501A0A002FFAAB /* Add128BitServiceDialog */,
 				1E26ECA325501A0A002FFAAB /* Home */,
 				1E26ECAB25501A0A002FFAAB /* Details */,
+				1E6CBCEF2588AE1E00B11648 /* ExitAdvertiserPopup */,
 				1E26ECB125501A0A002FFAAB /* Add16BitServiceDialog */,
 				1E26ECB425501A0A002FFAAB /* RemoveServiceListWarningDialog */,
 				1E26ECB325501A0A002FFAAB /* SILCellViewModel.swift */,
@@ -2019,6 +2064,7 @@
 		1E2D9CA923BA48B100816EC0 /* BluetoothBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				80521472255A786D0021385F /* Sort */,
 				1EEFB2012521CDDE00DD2DD7 /* RefreshImageView */,
 				9B44734F25139BFD00355E0A /* ExitPopup */,
 				1E4C37D3242C992300C822E4 /* Utils */,
@@ -2026,6 +2072,7 @@
 				1E56E9ED24169C1A00D5B92A /* KeyChains */,
 				1EA0119223E08E7E003B3E62 /* Details */,
 				1E6AF7FB23CDB2F600EE8280 /* Filter */,
+				1E3A15FD258B830B00776A00 /* FilterBar */,
 				1E6AF7FA23CDB2EF00EE8280 /* Connections */,
 				1E6AF7F923CDB2E500EE8280 /* Log */,
 				4C97A50B23E806A1000C6894 /* Views */,
@@ -2033,6 +2080,14 @@
 				1E2D9CAB23BA48D600816EC0 /* SILBluetoothBrowserViewController.m */,
 			);
 			path = BluetoothBrowser;
+			sourceTree = "<group>";
+		};
+		1E3A15FD258B830B00776A00 /* FilterBar */ = {
+			isa = PBXGroup;
+			children = (
+				1E3A15FE258B830B00776A00 /* SILFilterBarViewController.swift */,
+			);
+			path = FilterBar;
 			sourceTree = "<group>";
 		};
 		1E48A1F02484FCA300C188C0 /* Toast */ = {
@@ -2048,8 +2103,7 @@
 		1E4C37D3242C992300C822E4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				1E4C37D6242C997B00C822E4 /* SILBluetoothBrowserExpandableViewManager.h */,
-				1E4C37D4242C996400C822E4 /* SILBluetoothBrowserExpandableViewManager.m */,
+				80CCC0642564F8780018D649 /* SILBluetoothBrowserExpandableViewManager.swift */,
 				1E48A1E82484E27300C188C0 /* SILAnimatedUIButton.swift */,
 				1E3FC7D7252B5E40002F740D /* UITextField+DoneButton.swift */,
 			);
@@ -2063,7 +2117,7 @@
 				4C3BA288240D58DF00CF3268 /* SILKeychainViewController.swift */,
 				4C2CB438240E7C840079040D /* SILMapCell.swift */,
 				4CEE629C241276EC00D88354 /* SILCell.swift */,
-				4C3BA28A240D599200CF3268 /* SILBrowserSegmentedControl.swift */,
+				4C3BA28A240D599200CF3268 /* SILBrowserMappingsSegmentedControl.swift */,
 			);
 			path = KeyChains;
 			sourceTree = "<group>";
@@ -2147,6 +2201,23 @@
 			path = Filter;
 			sourceTree = "<group>";
 		};
+		1E6CBCEF2588AE1E00B11648 /* ExitAdvertiserPopup */ = {
+			isa = PBXGroup;
+			children = (
+				1E6CBCF02588AE1E00B11648 /* SILExitAdvertiserPopupViewModel.swift */,
+			);
+			path = ExitAdvertiserPopup;
+			sourceTree = "<group>";
+		};
+		1E6CBCF62588AE3500B11648 /* ExitAdvertiserPopup */ = {
+			isa = PBXGroup;
+			children = (
+				1E6CBCF72588AE3500B11648 /* SILExitAdvertiserPopupViewController.swift */,
+				1E6CBCF82588AE3500B11648 /* SILExitAdvertiserPopupViewController.xib */,
+			);
+			path = ExitAdvertiserPopup;
+			sourceTree = "<group>";
+		};
 		1E90F5E22473E7220013AABD /* Menu */ = {
 			isa = PBXGroup;
 			children = (
@@ -2226,7 +2297,7 @@
 		1EC92F0923A39EDC00FD2219 /* DemoApps */ = {
 			isa = PBXGroup;
 			children = (
-				1EC92EFC23A395C200FD2219 /* SILAppTypeRangeTest.storyboard */,
+				0F34409420AF0E250067397C /* SILAppTypeRangeTest.storyboard */,
 				1EC92EF423A3956B00FD2219 /* SILAppTypeHealthThermometer.storyboard */,
 				1EC92EF223A3955000FD2219 /* SILAppTypeConnectedLighting.storyboard */,
 			);
@@ -2322,6 +2393,8 @@
 				4C2C63372409242D0080CE76 /* SILFavoritePeripheral.swift */,
 				9BCA4F102514C2BB00E3AADD /* SILBrowserSettings.h */,
 				9BCA4F112514C2BB00E3AADD /* SILBrowserSettings.m */,
+				808E0D89257E1A4400A3E4A8 /* SILBrowserDescriptorValueParser.swift */,
+				808E0DBF257E42FE00A3E4A8 /* SILDescryptorTypeUUID.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -2463,6 +2536,42 @@
 				7928D85F1ECA12070075FFCB /* SILHomeKitDebugServicesViewController.xib */,
 			);
 			name = HomeKit;
+			sourceTree = "<group>";
+		};
+		803B32CA256E3D4500CC5EFA /* Descriptors */ = {
+			isa = PBXGroup;
+			children = (
+				8041CCC7256E5A0900C5C368 /* SILDescriptorTableViewCell.swift */,
+			);
+			path = Descriptors;
+			sourceTree = "<group>";
+		};
+		80521472255A786D0021385F /* Sort */ = {
+			isa = PBXGroup;
+			children = (
+				80521477255A7A510021385F /* SILSortViewController.swift */,
+				8052147D255A80F40021385F /* SILSortTypeViewCell.swift */,
+				80521483255A81070021385F /* SILSortModeViewCell.swift */,
+			);
+			path = Sort;
+			sourceTree = "<group>";
+		};
+		808B001B255D7B540062E954 /* BluetoothBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				1E3A15F7258B82EA00776A00 /* SILFilterBarViewModel.swift */,
+				808B001C255D7B650062E954 /* Sort */,
+			);
+			path = BluetoothBrowser;
+			sourceTree = "<group>";
+		};
+		808B001C255D7B650062E954 /* Sort */ = {
+			isa = PBXGroup;
+			children = (
+				808B001D255D7B830062E954 /* SILSortViewModel.swift */,
+				800E3A8C25627DA300A55565 /* SILSortOption.h */,
+			);
+			path = Sort;
 			sourceTree = "<group>";
 		};
 		809656742524A6AA000E98F5 /* EncodingField */ = {
@@ -2691,6 +2800,10 @@
 				1E56E9EC2416976600D5B92A /* SILStoryboard+Constants.h */,
 				1E56E9EA2416974500D5B92A /* SILStoryboard+Constants.m */,
 				1EBC4E3C2452DFBF005B8767 /* CBAttribute+UUID.swift */,
+				2FD579D5257933DD001D7E9E /* NSObject+SILAssociatedObject.h */,
+				2FD579D6257933DD001D7E9E /* NSObject+SILAssociatedObject.m */,
+				2FD579DC2579352C001D7E9E /* UIViewController+SILContext.swift */,
+				1E8529822591F6480064F419 /* UIViewController+Alert.swift */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2735,15 +2848,17 @@
 		E666CBE81A77C70700676C5C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1394F95D2566BD4400795E5A /* SILBigButton.swift */,
 				1E26ECC425501A20002FFAAB /* SILPrimaryButton.swift */,
 				1E26ECC525501A20002FFAAB /* SILSwitch.swift */,
 				1E26EC35254B1528002FFAAB /* SILShadowView.h */,
 				1E26EC36254B1528002FFAAB /* SILShadowView.m */,
 				496A42F11E7C582F006E87F2 /* SILBigRedButton.h */,
 				496A42F21E7C582F006E87F2 /* SILBigRedButton.m */,
-				E666CBE91A77C75400676C5C /* SILSegmentedControl.h */,
-				E666CBEA1A77C75400676C5C /* SILSegmentedControl.m */,
+				E666CBE91A77C75400676C5C /* SILThermometerSegmentedControl.h */,
+				E666CBEA1A77C75400676C5C /* SILThermometerSegmentedControl.m */,
 				80C67058255169950083D20C /* SILRadioButton.swift */,
+				1E6CBD3F2588D23700B11648 /* SILSegmentedControl.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2769,6 +2884,7 @@
 				E642661C1A8527C0006C6B2F /* SILRSSIMeasurementTable.m */,
 				E64266181A84F1D6006C6B2F /* SILRSSIMeasurement.h */,
 				E64266191A84F1D6006C6B2F /* SILRSSIMeasurement.m */,
+				1E8529C025920C3B0064F419 /* SILBluetoothDisabledAlert.swift */,
 			);
 			path = BluetoothControllers;
 			sourceTree = "<group>";
@@ -3059,24 +3175,22 @@
 				0C2FCB9F1F9A542300F4F259 /* SILBeaconRegistryEntryCell.xib in Resources */,
 				1E26EC45254B1BFC002FFAAB /* SILDebugCharacteristicEncodingFieldTableViewCell.xib in Resources */,
 				1EEFB215252218DD00DD2DD7 /* SILCharacteristicWriteFieldTableViewCell.xib in Resources */,
-				E48275BE20D812BE006D1478 /* SILConnectedLightingViewController.xib in Resources */,
 				0C2FCBA01F9A542300F4F259 /* SILDebugDeviceTableViewCell~iphone.xib in Resources */,
 				0C2FCBA11F9A542300F4F259 /* SILDebugDeviceTableViewCell~ipad.xib in Resources */,
 				0C2FCBA21F9A542300F4F259 /* SILRetailBeaconDetailsHeaderView.xib in Resources */,
 				0C2FCBA31F9A542300F4F259 /* SILDebugAdvDetailTableViewCell.xib in Resources */,
 				1EABF869251B7511006358C8 /* SILCharacteristicWriteViewController.xib in Resources */,
 				1EEFB2252524B13A00DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewController.xib in Resources */,
-				1EC92EFD23A395C200FD2219 /* SILAppTypeRangeTest.storyboard in Resources */,
 				1E5DB81223A3B09100929EBB /* SILAppSelectionCollectionViewCell.xib in Resources */,
-				0F34409920AF0E570067397C /* SILRangeTestModeSelectionViewController.xib in Resources */,
 				0C2FCBA41F9A542300F4F259 /* SILDebugDeviceViewController.xib in Resources */,
 				133D395D2554093900BFB484 /* SILContextMenuStoryboard.storyboard in Resources */,
 				0C2FCBA51F9A542300F4F259 /* SILDebugCharacteristicToggleFieldTableViewCell.xib in Resources */,
+				1E6CBCFA2588AE3500B11648 /* SILExitAdvertiserPopupViewController.xib in Resources */,
 				1E4C37A42429095300C822E4 /* Roboto-Bold.ttf in Resources */,
 				4C9EAB6424042FB00023FFB1 /* Roboto-ThinItalic.ttf in Resources */,
 				0C2FCBA61F9A542300F4F259 /* SILOTAHUDView.xib in Resources */,
 				0C2FCBA71F9A542300F4F259 /* SILDebugCharacteristicValueFieldTableViewCell.xib in Resources */,
-				0F34409620AF0E250067397C /* RangeTestStoryboard.storyboard in Resources */,
+				0F34409620AF0E250067397C /* SILAppTypeRangeTest.storyboard in Resources */,
 				0C2FCBA81F9A542300F4F259 /* SILActivityBarViewController.xib in Resources */,
 				1EEFB22B2524B45000DD2DD7 /* SILCharacteristicWriteEnumOptionsTableViewCell.xib in Resources */,
 				0C2FCBAA1F9A542300F4F259 /* SILDebugAdvDetailCollectionViewCell.xib in Resources */,
@@ -3147,19 +3261,17 @@
 				0F4E519121525FDC00F58ACE /* SILOTAProgressViewController.xib in Resources */,
 				0F4E519221525FDC00F58ACE /* SILDebugDeviceFilterViewController.xib in Resources */,
 				0F4E519321525FDC00F58ACE /* SILBeaconRegistryEntryCell.xib in Resources */,
-				0F4E519421525FDC00F58ACE /* SILConnectedLightingViewController.xib in Resources */,
 				0F4E519521525FDC00F58ACE /* SILDebugDeviceTableViewCell~iphone.xib in Resources */,
 				0F4E519621525FDC00F58ACE /* SILDebugDeviceTableViewCell~ipad.xib in Resources */,
 				0F4E519721525FDC00F58ACE /* SILRetailBeaconDetailsHeaderView.xib in Resources */,
 				0F4E519821525FDC00F58ACE /* SILDebugAdvDetailTableViewCell.xib in Resources */,
-				0F4E519921525FDC00F58ACE /* SILRangeTestModeSelectionViewController.xib in Resources */,
 				0F4E519A21525FDC00F58ACE /* SILDebugDeviceViewController.xib in Resources */,
 				9B44736C25139CA100355E0A /* SILExitPopupViewController.xib in Resources */,
 				0F4E519B21525FDC00F58ACE /* SILDebugCharacteristicToggleFieldTableViewCell.xib in Resources */,
 				9B44734625137C6100355E0A /* Colours.xcassets in Resources */,
 				0F4E519C21525FDC00F58ACE /* SILOTAHUDView.xib in Resources */,
 				0F4E519D21525FDC00F58ACE /* SILDebugCharacteristicValueFieldTableViewCell.xib in Resources */,
-				0F4E519E21525FDC00F58ACE /* RangeTestStoryboard.storyboard in Resources */,
+				0F4E519E21525FDC00F58ACE /* SILAppTypeRangeTest.storyboard in Resources */,
 				0F4E519F21525FDC00F58ACE /* SILActivityBarViewController.xib in Resources */,
 				0F4E51A121525FDC00F58ACE /* SILDebugAdvDetailCollectionViewCell.xib in Resources */,
 				0F4E51A221525FDC00F58ACE /* SILDebugServiceTableViewCell~iphone.xib in Resources */,
@@ -3202,7 +3314,6 @@
 				078138071BE40AA5001EFE7E /* SILDebugCharacteristicToggleFieldTableViewCell.xib in Resources */,
 				DCB431131E8315EF00EE94F0 /* SILOTAHUDView.xib in Resources */,
 				078138081BE40AA5001EFE7E /* SILDebugCharacteristicValueFieldTableViewCell.xib in Resources */,
-				0F34409820AF0E570067397C /* SILRangeTestModeSelectionViewController.xib in Resources */,
 				492CA4B21E4E0DD700502AC9 /* SILActivityBarViewController.xib in Resources */,
 				078137F01BE40A8C001EFE7E /* SILDebugAdvDetailCollectionViewCell.xib in Resources */,
 				8096567C2524A6E4000E98F5 /* SILDebugCharacteristicEncodingFieldView.xib in Resources */,
@@ -3213,10 +3324,9 @@
 				07BBA7501BD599F800C2B07E /* XML in Resources */,
 				078138031BE40AA5001EFE7E /* SILDebugCharacteristicEnumerationFieldTableViewCell.xib in Resources */,
 				49FB4BED1E7A2EC200223F3E /* SILPopoverViewController.xib in Resources */,
-				0F34409520AF0E250067397C /* RangeTestStoryboard.storyboard in Resources */,
+				0F34409520AF0E250067397C /* SILAppTypeRangeTest.storyboard in Resources */,
 				0763AC4C1BFE8F5400EBE94B /* SILDebugAdvDetailsViewController.xib in Resources */,
 				AA0FF4081EFC11AD007C14D3 /* SILRetailBeaconDetailsViewController.xib in Resources */,
-				0C3908311FA8AC7A00934AD1 /* SILConnectedLightingViewController.xib in Resources */,
 				078138041BE40AA5001EFE7E /* SILDebugCharacteristicPropertyView.xib in Resources */,
 				0781381B1BE40D4C001EFE7E /* SILRetailBeaconAppViewController.xib in Resources */,
 				0781380B1BE40AA5001EFE7E /* SILDebugServiceTableViewCell~ipad.xib in Resources */,
@@ -3476,17 +3586,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3A15FF258B830B00776A00 /* SILFilterBarViewController.swift in Sources */,
 				1E90F5F42477B1D00013AABD /* SILKeychainInfoViewControllerDelegate.swift in Sources */,
 				1EEE315D23F58C210076E731 /* SILBrowserFilterBeaconTypeViewController.m in Sources */,
 				1E1907B123FD850700DD014C /* SILSavedSearchesRealmModel.m in Sources */,
 				1E56E9E92416934D00D5B92A /* SILBluetoothBrowser+Constants.m in Sources */,
 				1E26ECC725501A20002FFAAB /* SILSwitch.swift in Sources */,
 				1EEE316023F58C4D0076E731 /* SILBrowserFilterSavedSearchesViewController.m in Sources */,
+				2FD579DD2579352C001D7E9E /* UIViewController+SILContext.swift in Sources */,
 				1E26EC99255019E0002FFAAB /* SILAdvertiserDetailsWireframe.swift in Sources */,
 				0C2FCB031F9A542300F4F259 /* SILBluetoothFieldModel.m in Sources */,
+				1E3A15F8258B82EA00776A00 /* SILFilterBarViewModel.swift in Sources */,
 				1E26ECC625501A20002FFAAB /* SILPrimaryButton.swift in Sources */,
 				0C2FCB051F9A542300F4F259 /* SILOTAUICoordinator.m in Sources */,
 				1E93CDE423A8EBF90022640E /* SILUILabels.m in Sources */,
+				8041CCC8256E5A0900C5C368 /* SILDescriptorTableViewCell.swift in Sources */,
 				0C2FCB061F9A542300F4F259 /* SILActivityBarViewController.m in Sources */,
 				1E26EC53255019A1002FFAAB /* SILAdvertisingSetEntity.swift in Sources */,
 				1E90F5EC24767C680013AABD /* UIViewController+Toast.swift in Sources */,
@@ -3519,6 +3633,7 @@
 				0C2FCB171F9A542300F4F259 /* SILCharacteristicFieldValueResolver.m in Sources */,
 				809656842524A71C000E98F5 /* SILDebugCharacteristicEncodingFieldView.m in Sources */,
 				1E26EC9A255019E0002FFAAB /* SILAdvertisingDataValueCellView.swift in Sources */,
+				13ACBA7F256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift in Sources */,
 				4C97A51323E87364000C6894 /* SILBrowserDeviceViewCell.swift in Sources */,
 				1E93CDEA23A91FA20022640E /* SILAppSelectionViewController.m in Sources */,
 				1EEE315A23F57CED0076E731 /* SILSavedSearchesTableViewCell.m in Sources */,
@@ -3541,6 +3656,7 @@
 				1E26ECB725501A0A002FFAAB /* SILAdvertiserCellViewModel.swift in Sources */,
 				0C2FCB1F1F9A542300F4F259 /* SILDoubleKeyDictionaryPair.m in Sources */,
 				1E1A43C1246EA3CB0052DE8D /* SILAdTypeCBPeripheralDecoder.swift in Sources */,
+				8052147E255A80F40021385F /* SILSortTypeViewCell.swift in Sources */,
 				1E586CE023FBFEF900E2C385 /* SILBrowserSavedSearches.m in Sources */,
 				0C2FCB211F9A542300F4F259 /* SILBluetoothEnumerationModel.m in Sources */,
 				0C2FCB221F9A542300F4F259 /* RSSISliderTableViewCell.swift in Sources */,
@@ -3549,6 +3665,7 @@
 				4C2C63382409242D0080CE76 /* SILFavoritePeripheral.swift in Sources */,
 				807B13A8252335A50056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.m in Sources */,
 				4C2CB433240E5A340079040D /* SILCharacteristicMap.swift in Sources */,
+				2FD579D7257933DD001D7E9E /* NSObject+SILAssociatedObject.m in Sources */,
 				0C2FCB281F9A542300F4F259 /* SILDebugCharacteristicValueFieldTableViewCell.m in Sources */,
 				1EDCA5B823E1C05B00F78B14 /* SILBrowserConnectionsTableViewCell.m in Sources */,
 				0C2FCB291F9A542300F4F259 /* UIImage+SILImages.m in Sources */,
@@ -3561,7 +3678,7 @@
 				0C2FCB2E1F9A542300F4F259 /* SILAdvertisementDataModel.m in Sources */,
 				1EEFB2082521CDDE00DD2DD7 /* SILRefreshImageModel.m in Sources */,
 				1E26ECC925529B93002FFAAB /* SILScanResponseViewModelBuilder.swift in Sources */,
-				4C3BA28B240D599200CF3268 /* SILBrowserSegmentedControl.swift in Sources */,
+				4C3BA28B240D599200CF3268 /* SILBrowserMappingsSegmentedControl.swift in Sources */,
 				0C2FCB2F1F9A542300F4F259 /* SILCharacteristicTableModel.m in Sources */,
 				1E26EC88255019E0002FFAAB /* SILLocalNameSettingViewController.swift in Sources */,
 				1EDCA5AF23E1A6CE00F78B14 /* SILBrowserLogFilterViewController.m in Sources */,
@@ -3572,9 +3689,8 @@
 				0C2FCB311F9A542300F4F259 /* SILDebugCharacteristicPropertyView.m in Sources */,
 				0C2FCB321F9A542300F4F259 /* CBPeripheral+Services.m in Sources */,
 				0C2FCB331F9A542300F4F259 /* SILDebugProperty.m in Sources */,
-				1E4C37D5242C996400C822E4 /* SILBluetoothBrowserExpandableViewManager.m in Sources */,
 				0C2FCB341F9A542300F4F259 /* SILPopoverViewController.m in Sources */,
-				0C2FCB351F9A542300F4F259 /* SILSegmentedControl.m in Sources */,
+				0C2FCB351F9A542300F4F259 /* SILThermometerSegmentedControl.m in Sources */,
 				1EA0119123DB249F003B3E62 /* SILDevelopNavigationViewController.m in Sources */,
 				1EEFB2072521CDDE00DD2DD7 /* SILRefreshImageView.m in Sources */,
 				0C2FCB361F9A542300F4F259 /* SILRetailBeaconDetailsHeaderView.m in Sources */,
@@ -3588,11 +3704,15 @@
 				4D8E8168238C30AE00E7EC35 /* SILCharacteristicFieldValueResolverContext.m in Sources */,
 				4C2CB439240E7C840079040D /* SILMapCell.swift in Sources */,
 				0C2FCB3C1F9A542300F4F259 /* SILHeartRateMeasurement.m in Sources */,
+				808B001E255D7B830062E954 /* SILSortViewModel.swift in Sources */,
 				0C2FCB3D1F9A542300F4F259 /* SILApp+AttributedProfiles.m in Sources */,
 				1E70A97B240403320021C51B /* SILBrowserConnectionsViewModel.m in Sources */,
 				0C2FCB3E1F9A542300F4F259 /* SILOTAFirmwareFile.m in Sources */,
 				1E90F5E42473E73E0013AABD /* SILDebugServicesMenuViewController.swift in Sources */,
+				2F0DE91D258B7F4D00BEFF76 /* SILContextMenu.swift in Sources */,
+				1E6CBCF92588AE3500B11648 /* SILExitAdvertiserPopupViewController.swift in Sources */,
 				0C2FCB3F1F9A542300F4F259 /* SILBitRowModel.m in Sources */,
+				1E8529832591F6480064F419 /* UIViewController+Alert.swift in Sources */,
 				1E1A43C324728F770052DE8D /* SILAdTypeEddystoneDecoder.swift in Sources */,
 				0C2FCB401F9A542300F4F259 /* SILRetailBeaconDetailsViewController.m in Sources */,
 				0C2FCB411F9A542300F4F259 /* SILCollectionViewRightAlignedFlowLayout.m in Sources */,
@@ -3603,6 +3723,7 @@
 				0C6745FF1FAC033F0032CBF5 /* SILCentralManager.m in Sources */,
 				0C2FCB471F9A542300F4F259 /* CBService+Categories.m in Sources */,
 				1E26EC85255019E0002FFAAB /* SILAdvertiserCellView.swift in Sources */,
+				13ACBA87256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift in Sources */,
 				1E26EC9C255019E0002FFAAB /* SILAdvertiserAdd16BitServiceDialogViewController.swift in Sources */,
 				0C2FCB481F9A542300F4F259 /* SILEddystoneBeaconViewModel.m in Sources */,
 				0C2FCB491F9A542300F4F259 /* SILBluetoothDescriptorModel.m in Sources */,
@@ -3640,6 +3761,7 @@
 				1E90F5E72473E8340013AABD /* SILDebugServicesMenuTableViewCell.swift in Sources */,
 				0C2FCB531F9A542300F4F259 /* SILBodySensorLocation.m in Sources */,
 				1E26EC8C255019E0002FFAAB /* SILAdvertiserHomeViewController.swift in Sources */,
+				80521484255A81070021385F /* SILSortModeViewCell.swift in Sources */,
 				0C2FCB541F9A542300F4F259 /* TextFieldTableViewCell.swift in Sources */,
 				1E26EC91255019E0002FFAAB /* SILDropDownCellView.swift in Sources */,
 				1E48A1E92484E27300C188C0 /* SILAnimatedUIButton.swift in Sources */,
@@ -3652,7 +3774,9 @@
 				1E6AF80123CDB32800EE8280 /* SILBrowserConnectionsViewController.m in Sources */,
 				9B44736125139C5900355E0A /* SILExitPopupViewController.m in Sources */,
 				4C4F2DE124080E50005D43BB /* SILRoundedButton.swift in Sources */,
+				80CCC0652564F8780018D649 /* SILBluetoothBrowserExpandableViewManager.swift in Sources */,
 				0C2FCB571F9A542300F4F259 /* UIFont+Extensions.swift in Sources */,
+				1E6CBCF12588AE1E00B11648 /* SILExitAdvertiserPopupViewModel.swift in Sources */,
 				0C2FCB581F9A542300F4F259 /* SILDebugServicesViewController.m in Sources */,
 				4C97A51123E86525000C6894 /* SILBrowserDeviceAdTypeViewCell.swift in Sources */,
 				4CEE629D241276EC00D88354 /* SILCell.swift in Sources */,
@@ -3680,6 +3804,7 @@
 				0C2FCB651F9A542300F4F259 /* SILDebugCharacteristicToggleFieldTableViewCell.m in Sources */,
 				1E26ECBE25501A0A002FFAAB /* SILAdvertisingDataTitleCellViewModel.swift in Sources */,
 				1E113D08244ECD6600442752 /* SILDiscoveredPeripheralIdentifierProvider.swift in Sources */,
+				1394F95E2566BD4400795E5A /* SILBigButton.swift in Sources */,
 				133D39C32554514600BFB484 /* SILAdvertiserNotification.swift in Sources */,
 				1E3FC7D8252B5E40002F740D /* UITextField+DoneButton.swift in Sources */,
 				1E56E9EB2416974500D5B92A /* SILStoryboard+Constants.m in Sources */,
@@ -3700,6 +3825,7 @@
 				4D9E26262212CA7000617DBA /* SILRangeTestBoardInfo.swift in Sources */,
 				0C2FCB721F9A542300F4F259 /* SILCentralManagerBuilder.m in Sources */,
 				0F34409C20AF18BA0067397C /* SILRangeTestAppViewController.swift in Sources */,
+				808E0D8A257E1A4400A3E4A8 /* SILBrowserDescriptorValueParser.swift in Sources */,
 				1EC92F0623A3962C00FD2219 /* SILHomeTabBarViewController.m in Sources */,
 				0C2FCB731F9A542300F4F259 /* SILOTAFirmwareUpdateViewModel.m in Sources */,
 				0C2FCB741F9A542300F4F259 /* UIView+SILAnimations.m in Sources */,
@@ -3709,9 +3835,11 @@
 				0C2FCB781F9A542300F4F259 /* UIImage+SILHelpers.m in Sources */,
 				1E1AE4AE247FCB7F00E5F238 /* SILRealmConfiguration.swift in Sources */,
 				1E48A1EF2484FC0B00C188C0 /* SILToastModelType.swift in Sources */,
+				808E0DC0257E42FE00A3E4A8 /* SILDescryptorTypeUUID.swift in Sources */,
 				1E26EC56255019A1002FFAAB /* SILAdvertisingServiceRepository.swift in Sources */,
 				1E2D9CAC23BA48D600816EC0 /* SILBluetoothBrowserViewController.m in Sources */,
 				0C2FCB791F9A542300F4F259 /* SILOTAHUDView.m in Sources */,
+				80521478255A7A510021385F /* SILSortViewController.swift in Sources */,
 				0C2FCB7A1F9A542300F4F259 /* SILServiceTableModel.m in Sources */,
 				0C2FCB7B1F9A542300F4F259 /* SILBluetoothSearch.m in Sources */,
 				0C2FCB7D1F9A542300F4F259 /* SILBluetoothCharacteristicModel.m in Sources */,
@@ -3728,6 +3856,7 @@
 				0C2FCB861F9A542300F4F259 /* SILRSSIMeasurement.m in Sources */,
 				1E26EC55255019A1002FFAAB /* SILAdvertisingSetRepository.swift in Sources */,
 				1E90F5EA2473EA650013AABD /* SILDebugServicesMenuViewControllerDelegate.swift in Sources */,
+				1E6CBD402588D23700B11648 /* SILSegmentedControl.swift in Sources */,
 				0C2FCB871F9A542300F4F259 /* SILIBeaconViewModel.m in Sources */,
 				1E26EC8A255019E0002FFAAB /* SILAdvertiserRemoveWarningViewController.swift in Sources */,
 				4C2CB435240E725C0079040D /* SILMap.swift in Sources */,
@@ -3748,6 +3877,7 @@
 				1E26EC8F255019E0002FFAAB /* SILPassthroughView.swift in Sources */,
 				0C2FCB911F9A542300F4F259 /* SILBarGraphCollectionViewCell.m in Sources */,
 				1EDA0A11253472EE0031961D /* SILErrorDetailsViewControllerDelegate.swift in Sources */,
+				1E8529C125920C3B0064F419 /* SILBluetoothDisabledAlert.swift in Sources */,
 				1E6AF80423CDB33600EE8280 /* SILBrowserFilterViewController.m in Sources */,
 				0F69656A20ECD32A0083C32A /* SILRangeTestManufacturerData.swift in Sources */,
 				0C2FCB931F9A542300F4F259 /* NSError+SILHelpers.m in Sources */,
@@ -3814,7 +3944,8 @@
 				0F4E512321525FDC00F58ACE /* CBPeripheral+Services.m in Sources */,
 				0F4E512421525FDC00F58ACE /* SILDebugProperty.m in Sources */,
 				0F4E512521525FDC00F58ACE /* SILPopoverViewController.m in Sources */,
-				0F4E512621525FDC00F58ACE /* SILSegmentedControl.m in Sources */,
+				0F4E512621525FDC00F58ACE /* SILThermometerSegmentedControl.m in Sources */,
+				1E6CBD422588D23700B11648 /* SILSegmentedControl.swift in Sources */,
 				0F4E512721525FDC00F58ACE /* SILRetailBeaconDetailsHeaderView.m in Sources */,
 				0F4E512821525FDC00F58ACE /* SILOTAHUDPeripheralViewModel.m in Sources */,
 				0F4E512921525FDC00F58ACE /* SILDebugAdvDetailTableViewCell.m in Sources */,
@@ -3846,9 +3977,11 @@
 				0F4E514221525FDC00F58ACE /* SILKeyValueViewModel.m in Sources */,
 				0F4E514321525FDC00F58ACE /* SILDebugCharacteristicEnumerationFieldTableViewCell.m in Sources */,
 				0F4E514421525FDC00F58ACE /* SILRangeTestCharacteristic.swift in Sources */,
+				13ACBA81256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift in Sources */,
 				0F4E514521525FDC00F58ACE /* SILTemperatureMeasurement.m in Sources */,
 				0F4E514621525FDC00F58ACE /* SILRetailBeaconAppViewController.m in Sources */,
 				0F4E514721525FDC00F58ACE /* SILBeaconDataViewModel.m in Sources */,
+				13ACBA89256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift in Sources */,
 				0F4E514821525FDC00F58ACE /* SILOTAFirmwareUpdate.m in Sources */,
 				0F4E514921525FDC00F58ACE /* SILBodySensorLocation.m in Sources */,
 				0F4E514A21525FDC00F58ACE /* TextFieldTableViewCell.swift in Sources */,
@@ -3900,6 +4033,7 @@
 				0F4E517921525FDC00F58ACE /* SILDebugPopoverViewController.m in Sources */,
 				0F4E517A21525FDC00F58ACE /* SILRSSIMeasurement.m in Sources */,
 				0F4E517B21525FDC00F58ACE /* SILIBeaconViewModel.m in Sources */,
+				1394F9602566BD4400795E5A /* SILBigButton.swift in Sources */,
 				0F4E517C21525FDC00F58ACE /* SILBluetoothBitModel.m in Sources */,
 				0F4E517E21525FDC00F58ACE /* SILRangeTestTXValueUpdater.swift in Sources */,
 				0F4E517F21525FDC00F58ACE /* NSDictionary+SILErrorCode.m in Sources */,
@@ -3973,7 +4107,7 @@
 				07B8A89C1BC5F872001948C1 /* SILDebugProperty.m in Sources */,
 				49FB4BEC1E7A2EC200223F3E /* SILPopoverViewController.m in Sources */,
 				0F34409B20AF18BA0067397C /* SILRangeTestAppViewController.swift in Sources */,
-				E666CBEB1A77C75400676C5C /* SILSegmentedControl.m in Sources */,
+				E666CBEB1A77C75400676C5C /* SILThermometerSegmentedControl.m in Sources */,
 				AA5F62EB1F0A84ED007EDAAC /* SILRetailBeaconDetailsHeaderView.m in Sources */,
 				DC4E508E1E92E507004FD829 /* SILOTAHUDPeripheralViewModel.m in Sources */,
 				0C3908301FA8AC7A00934AD1 /* SILConnectedLightingViewController.m in Sources */,
@@ -3989,6 +4123,7 @@
 				494F93CA1E7719D40057C1E0 /* SILOTAFirmwareFile.m in Sources */,
 				0752B77C1BDED93F0064CBF0 /* SILBitRowModel.m in Sources */,
 				AA0FF40B1EFC368A007C14D3 /* SILRetailBeaconDetailsViewController.m in Sources */,
+				1E6CBD412588D23700B11648 /* SILSegmentedControl.swift in Sources */,
 				E6C8FF0F1A71A9A900DF062F /* SILCollectionViewRightAlignedFlowLayout.m in Sources */,
 				E666CBDB1A767DCB00676C5C /* UIColor+SILColors.m in Sources */,
 				07B1AD8B1BFD4C8F00D4D454 /* SILBeaconRegistryEntryCell.m in Sources */,
@@ -4011,6 +4146,7 @@
 				0752B7751BDEC2C00064CBF0 /* SILCharacteristicFieldBuilder.m in Sources */,
 				E621B34C1A655B3F00223C5A /* SILApp.m in Sources */,
 				807B13A9252335A50056CFCC /* SILDebugCharacteristicEncodingFieldEntryCell.m in Sources */,
+				13ACBA80256FA10D00D3EE11 /* SILRangeTestSelectDeviceViewController.swift in Sources */,
 				AA78173F1F33A86100B37B09 /* UIFont+Extensions.swift in Sources */,
 				07B8A8D31BCD6E3B001948C1 /* SILDebugServicesViewController.m in Sources */,
 				E6CCCFF01A73040C0004B2F4 /* SILBeacon.m in Sources */,
@@ -4053,6 +4189,7 @@
 				07BBA7531BD5BD3500C2B07E /* SILBluetoothServiceModel.m in Sources */,
 				E6C667241B0A5BD90083C248 /* SILWeakNotificationPair.m in Sources */,
 				AA4D435E1F2A3F15001EE0D2 /* GradientSlider.swift in Sources */,
+				13ACBA88256FB1D400D3EE11 /* SILRangeTestAppContainerViewController.swift in Sources */,
 				E621B34F1A65645A00223C5A /* SILAppSelectionCollectionViewCell.m in Sources */,
 				E6CAA2261A64011900A49DAF /* main.m in Sources */,
 				AAA154A81F20F3D8002078B5 /* DebugDeviceViewModel.swift in Sources */,
@@ -4060,6 +4197,7 @@
 				E642661A1A84F1D6006C6B2F /* SILRSSIMeasurement.m in Sources */,
 				07B1AD7E1BFD0A2100D4D454 /* SILIBeaconViewModel.m in Sources */,
 				7985D65F1EC6020F000FA0FB /* HMHomeManager+SILHelpers.m in Sources */,
+				1394F95F2566BD4400795E5A /* SILBigButton.swift in Sources */,
 				07BBA75C1BD6862A00C2B07E /* SILBluetoothBitModel.m in Sources */,
 				494F93AB1E757FB10057C1E0 /* NSDictionary+SILErrorCode.m in Sources */,
 				AA4D435C1F2A35A3001EE0D2 /* GradientView.swift in Sources */,
@@ -4137,7 +4275,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 31;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "EFR Connect";
@@ -4147,7 +4285,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Blue Gecko Development";
@@ -4171,7 +4309,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 31;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "EFR Connect";
@@ -4180,7 +4318,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Blue Gecko Development";

@@ -15,8 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
-@property (weak, nonatomic) IBOutlet UILabel *profileKeyLabel;
-@property (weak, nonatomic) IBOutlet UILabel *profileValueLabel;
 
 - (void)setFieldsInCell:(SILApp*)appData;
 @end

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SILRangeTestAppViewModelDelegate {
+protocol SILRangeTestAppViewModelDelegate: class {
     func didReceiveAllPeripheralValues()
     
     func updated(setting: SILRangeTestSetting)
@@ -24,12 +24,14 @@ protocol SILRangeTestAppViewModelDelegate {
     func updated(totalTx: Int)
     func updated(ma: Float)
     func updated(per: Float)
+    
+    func bluetoothIsDisabled()
 }
 
 @objcMembers
 class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
     private let model: [SILRangeTestSetting: SILRangeTestSettingValue] = [
-        .txPower: SILRangeTestSettingValue(title: "TX Power", values: [0], stringFormat: "%gdBm"),
+        .txPower: SILRangeTestSettingValue(title: "TX Power", values: [0]),
         .payloadLength: SILRangeTestSettingValue(title: "Payload Length", values: [0]),
         .maWindowSize: SILRangeTestSettingValue(title: "MA Window Size", values: [0]),
         .channelNumber: SILRangeTestSettingValue(title: "Channel Number", values: [0]),
@@ -56,7 +58,7 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
     let peripheral: SILRangeTestPeripheral
     let mode: SILRangeTestMode
     let boardInfo: SILRangeTestBoardInfo
-    var delegate: SILRangeTestAppViewModelDelegate?
+    weak var delegate: SILRangeTestAppViewModelDelegate?
     var maCalculator: SILRangeTestMovingAverageCalculator?
     var txValueUpdater: SILRangeTestTXValueUpdater?
     
@@ -244,6 +246,10 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
         
     }
     
+    func bluetoothIsDisabled() {
+        delegate?.bluetoothIsDisabled()
+    }
+    
     private func handleMissingManufacturerData() {
         isTestStarted = false
         peripheral.connect()
@@ -288,24 +294,73 @@ extension SILRangeTestAppViewModel {
         
         receivedPeripheralValues = 0
         
-        peripheral.radioMode(callback: onReceive(radioMode:))
-        peripheral.phyConfigList(callback: onReceive(phyConfigList:))
-        peripheral.phyConfig(callback: onReceive(phyConfig:))
-        peripheral.txPower(callback: onReceive(txPower:minValue:maxValue:))
-        peripheral.payloadLength(callback: onReceive(payloadLength:minValue:maxValue:))
-        peripheral.maWindowSize(callback: onReceive(maWindowSize:minValue:maxValue:))
-        peripheral.channel(callback: onReceive(channel:minValue:maxValue:))
-        peripheral.packetsSent(callback: onReceive(packetsSent:))
-        peripheral.packetCount(callback: onReceive(packetCount:minValue:maxValue:))
-        peripheral.remoteId(callback: onReceive(remoteId:minValue:maxValue:))
-        peripheral.selfId(callback: onReceive(selfId:minValue:maxValue:))
-        peripheral.isUartLogEnabled(callback: onReceive(isUartLogEnabled:))
-        peripheral.isRunning(callback: onReceive(isRunning:))
+        peripheral.radioMode { [weak self] in
+            self?.onReceive(radioMode: $0)
+        }
         
-        peripheral.packetsCnt(callback: onReceive(totalRx:))
-        peripheral.packetsReceived(callback: onReceive(rx:))
-        peripheral.per(callback: onReceive(per:))
-        peripheral.ma(callback: onReceive(ma:))
+        peripheral.phyConfigList { [weak self] in
+            self?.onReceive(phyConfigList: $0)
+        }
+        
+        peripheral.phyConfig { [weak self] in
+            self?.onReceive(phyConfig: $0)
+        }
+        
+        peripheral.txPower { [weak self] in
+            self?.onReceive(txPower: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.payloadLength { [weak self] in
+            self?.onReceive(payloadLength: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.maWindowSize { [weak self] in
+            self?.onReceive(maWindowSize: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.channel { [weak self] in
+            self?.onReceive(channel: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.packetsSent { [weak self] in
+            self?.onReceive(packetsSent: $0)
+        }
+        
+        peripheral.packetCount { [weak self] in
+            self?.onReceive(packetCount: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.remoteId { [weak self] in
+            self?.onReceive(remoteId: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.selfId { [weak self] in
+            self?.onReceive(selfId: $0, minValue: $1, maxValue: $2)
+        }
+        
+        peripheral.isUartLogEnabled { [weak self] in
+            self?.onReceive(isUartLogEnabled: $0)
+        }
+        
+        peripheral.isRunning { [weak self] in
+            self?.onReceive(isRunning: $0)
+        }
+        
+        peripheral.packetsCnt { [weak self] in
+            self?.onReceive(totalRx: $0)
+        }
+        
+        peripheral.packetsReceived { [weak self] in
+            self?.onReceive(rx: $0)
+        }
+        
+        peripheral.per { [weak self] in
+            self?.onReceive(per: $0)
+        }
+        
+        peripheral.ma { [weak self] in
+            self?.onReceive(ma: $0)
+        }
     }
     
     private func onReceive(radioMode: Int?) {
@@ -402,7 +457,8 @@ extension SILRangeTestAppViewModel {
         var availableValues: [Double]? = nil
         
         if let minVal = minValue, let maxVal = maxValue {
-            availableValues = Array(stride(from: minVal, through: maxVal, by: 1))
+            let max = maxVal > 32 ? 32 : maxVal
+            availableValues = Array(stride(from: minVal, through: max, by: 1))
         }
         
         self.set(value: remoteId, andAvailableValues: availableValues, forSetting: .remoteId)
@@ -412,7 +468,8 @@ extension SILRangeTestAppViewModel {
         var availableValues: [Double]? = nil
         
         if let minVal = minValue, let maxVal = maxValue {
-            availableValues = Array(stride(from: minVal, through: maxVal, by: 1))
+            let max = maxVal > 32 ? 32 : maxVal
+            availableValues = Array(stride(from: minVal, through: max, by: 1))
         }
         
         self.set(value: selfId, andAvailableValues: availableValues, forSetting: .selfId)

@@ -57,5 +57,6 @@
 - (void)updateWithIBeacon:(CLBeacon*)iBeacon andDiscoveringTimestamp:(double)timestamp;
 - (NSString *)rssiDescription;
 - (void)resetLastTimestampValue;
+- (NSNumber *)rssiValue;
 
 @end

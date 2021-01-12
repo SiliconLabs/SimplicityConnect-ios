@@ -25,6 +25,7 @@
 NSString * const SILCentralManagerDidConnectPeripheralNotification = @"SILCentralManagerDidConnectPeripheralNotification";
 NSString * const SILCentralManagerDidDisconnectPeripheralNotification = @"SILCentralManagerDidDisconnectPeripheralNotification";
 NSString * const SILCentralManagerDidFailToConnectPeripheralNotification = @"SILCentralManagerDidFailToConnectPeripheralNotification";
+NSString * const SILCentralManagerBluetoothDisabledNotification = @"SILCentralManagerBluetoothWasDisabledNotification";
 
 NSString * const SILCentralManagerDiscoveredPeripheralsKey = @"SILCentralManagerDiscoveredPeripheralsKey";
 NSString * const SILCentralManagerPeripheralKey = @"SILCentralManagerPeripheralKey";
@@ -313,7 +314,23 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 #pragma mark - CBCentralManagerDelegate
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    [self checkBluetoothState:central.state];
     [self toggleScanning];
+}
+
+- (void)checkBluetoothState:(CBManagerState)state {
+    if (state == CBManagerStatePoweredOff) {
+        [self postBluetoothWasDisabledNotification];
+        NSLog(@"BLUETOOTH DISABLED!");
+    } else if (state == CBManagerStatePoweredOn) {
+        NSLog(@"Blutooth enabled");
+    }
+}
+
+- (void)postBluetoothWasDisabledNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerBluetoothDisabledNotification
+                                                        object:self
+                                                      userInfo:nil];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
@@ -462,10 +479,11 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (void)postFailedToConnectPeripheral:(CBPeripheral*)peripheral andError:(NSError*)error {
+    NSString* peripheralName = peripheral.name ?: @"N/A";
     [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationFailedToConnectPeripheral
                                                         object:self
                                                       userInfo:@{
-                                                          SILNotificationKeyPeripheralName: peripheral.name,
+                                                          SILNotificationKeyPeripheralName: peripheralName,
                                                           SILNotificationKeyError: [NSString stringWithFormat:@"%ld", (long)error.code]
                                                       }];
 }

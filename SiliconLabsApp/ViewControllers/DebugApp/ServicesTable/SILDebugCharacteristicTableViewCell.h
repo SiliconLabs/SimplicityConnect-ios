@@ -28,6 +28,7 @@
 
 @interface SILDebugCharacteristicTableViewCell : UITableViewCell <SILGenericAttributeTableCell, SILMapCellProtocol>
 @property (weak, nonatomic) id<SILDebugCharacteristicCellDelegate> delegate;
+@property (weak, nonatomic) id<SILDescriptorTableViewCellDelegate> descriptorDelegate;
 @property (weak, nonatomic) SILCharacteristicTableModel *characteristicTableModel;
 @property (weak, nonatomic) IBOutlet UIButton *nameEditButton;
 

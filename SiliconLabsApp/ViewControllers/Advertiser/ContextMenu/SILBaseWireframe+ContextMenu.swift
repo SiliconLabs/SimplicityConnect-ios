@@ -10,18 +10,7 @@ import Foundation
 
 extension SILBaseWireframe {
     func presentContextMenu(sourceView: UIView, options: [ContextMenuOption]) {
-        let storyboard = UIStoryboard(name: "SILContextMenuStoryboard", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "ContextMenu") as! SILContextMenuViewController
-        let transitionDelegate = SILContextMenuTransitioningDelegate(sourceView: sourceView)
-        
-        vc.options = options
-
-        vc.modalPresentationStyle = .custom
-        vc.transitioningDelegate = transitionDelegate
-        
-        viewController.present(vc, animated: false) {
-            let _ = transitionDelegate.description
-        }
+        SILContextMenu.present(owner: viewController, sourceView: sourceView, options: options)
     }
     
     func open(url: String) {

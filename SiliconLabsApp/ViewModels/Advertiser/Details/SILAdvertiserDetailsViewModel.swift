@@ -28,6 +28,7 @@ class SILAdvertiserDetailsViewModel {
     private var currentState: SILTimeLimitRadioButtonState
     private var isExecutionTime: Bool
     private var executionTime: Double
+    private var executionTimeString: String
     
     init(wireframe: SILAdvertiserDetailsWireframe, repository: SILAdvertisingSetRepository, serviceRepository: SILAdvertisingServiceRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity) {
         self.wireframe = wireframe
@@ -45,6 +46,7 @@ class SILAdvertiserDetailsViewModel {
         self.currentState = advertiser.isExecutionTime ? .withLimit : .noLimit
         self.isExecutionTime = advertiser.isExecutionTime
         self.executionTime = advertiser.executionTime
+        self.executionTimeString = String(Int(advertiser.executionTime * 1000))
         
         self.advertisingData = SILObservable(initialValue: [])
         self.advertisingDataBytesAvailable = SILObservable(initialValue: 28)
@@ -58,6 +60,10 @@ class SILAdvertiserDetailsViewModel {
     
     func update(advertisingSetName: String?) {
         self.advertisingSetName = advertisingSetName ?? "";
+    }
+    
+    func updateExecutionTimeString(_ timeString: String?) {
+        self.executionTimeString = timeString ?? ""
     }
     
     func updateExecutionTimeState(isExecutionTime: Bool) {
@@ -220,12 +226,61 @@ class SILAdvertiserDetailsViewModel {
         })
     }
     
-    func save(timeString: String?) {
+    func backToHome() {
+        let popupIsEnabled = !settings.nonSaveChangesExitWarning
+        if popupIsEnabled, advertiserWasChanged() {
+            wireframe.presentNonSaveChangesExitWarningPopup(
+                onYes: { disableWarning in
+                self.settings.nonSaveChangesExitWarning = disableWarning
+                self.save()
+            }, onNo: {
+                self.wireframe.popPage()
+            })
+        } else {
+            wireframe.popPage()
+        }
+    }
+    
+    private func advertiserWasChanged() -> Bool {
+        if self.advertisingSetName != advertiser.name {
+            return true
+        }
+        
+        if self.isCompleteLocalName != advertiser.isCompleteLocalName {
+            return true
+        }
+        
+        let advertiserCompleteList16 = advertiser.completeList16 ?? []
+        let currentCompleteList16 = self.completeList16 ?? []
+        if !currentCompleteList16.elementsEqual(advertiserCompleteList16) {
+            return true
+        }
+        
+        let advertiserCompleteList128 = advertiser.completeList128 ?? []
+        let currentCompleteList128 = self.completeList128 ?? []
+        if !currentCompleteList128.elementsEqual(advertiserCompleteList128) {
+            return true
+        }
+        
+        let advertiserState: SILTimeLimitRadioButtonState = advertiser.isExecutionTime ? .withLimit : .noLimit
+        if self.currentState != advertiserState {
+            return true
+        }
+        
+        let advertiserTimeString = String(Int(advertiser.executionTime * 1000))
+        if self.executionTimeString != advertiserTimeString {
+            return true
+        }
+                
+        return false
+    }
+    
+    func save() {
         let updated = SILAdvertisingSetEntity(value: advertiser)
         
         completeList16 = completeList16 == [] ? nil : completeList16
         completeList128 = completeList128 == [] ? nil : completeList128
-        if (!validateExecutionTime(fromString: timeString)) {
+        if (!validateExecutionTime(fromString: executionTimeString)) {
             wireframe.presentInvalidTimeToastAlert()
             return
         }

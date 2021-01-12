@@ -9,9 +9,10 @@
 import UIKit
 
 //MARK: - Peripheral delegate
-protocol SILRangeTestPeripheralDelegate {
+protocol SILRangeTestPeripheralDelegate: class {
     func didUpdate(connectionState: CBPeripheralState)
     func didUpdate(manufacturerData: SILRangeTestManufacturerData?)
+    func bluetoothIsDisabled()
 }
 
 // MARK: - SILRangeTestPeripheral implementation
@@ -28,7 +29,7 @@ class SILRangeTestPeripheral: NSObject {
     private var characteristics: Characteristics = [:]
     private var alreadyDiscoveredCharacteristics: RawCharacteristics = [:]
     
-    var delegate: SILRangeTestPeripheralDelegate? = nil
+    weak var delegate: SILRangeTestPeripheralDelegate? = nil
     private(set) var manufacturerData: SILRangeTestManufacturerData? = nil
     var state: CBPeripheralState {
         get {
@@ -73,7 +74,7 @@ class SILRangeTestPeripheral: NSObject {
         var characteristics: Characteristics = [:]
         
         for (characteristic, _) in SILRangeTestCharacteristic.deviceInformationServiceCharacteristics {
-            let rtChar = SILRangeTestCharacteristic(characteristic, forPeripheral: self)
+            let rtChar = SILRangeTestCharacteristic(characteristic)
             
             if characteristics[rtChar.serviceUuid] == nil {
                 characteristics[rtChar.serviceUuid] = [:]
@@ -83,7 +84,7 @@ class SILRangeTestPeripheral: NSObject {
         }
         
         for (characteristic, _) in SILRangeTestCharacteristic.rangeTestServiceCharacteristics {
-            let rtChar = SILRangeTestCharacteristic(characteristic, forPeripheral: self)
+            let rtChar = SILRangeTestCharacteristic(characteristic)
             
             if characteristics[rtChar.serviceUuid] == nil {
                 characteristics[rtChar.serviceUuid] = [:]
@@ -141,30 +142,21 @@ class SILRangeTestPeripheral: NSObject {
 // MARK: - Connecting
 extension SILRangeTestPeripheral {
     private func registerForConnectingNotifications() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.SILCentralManagerDidConnectPeripheral,
-                                               object: nil,
-                                               queue: nil,
-                                               using: didConnectPeripheral)
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.SILCentralManagerDidFailToConnectPeripheral,
-                                               object: nil,
-                                               queue: nil,
-                                               using: didFailToConnectPeripheral)
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.SILCentralManagerDidDisconnectPeripheral,
-                                               object: nil,
-                                               queue: nil,
-                                               using: didDisconnectPeripheral)
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyConnectionStateUpdate(_:)), name: NSNotification.Name.SILCentralManagerDidConnectPeripheral, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyConnectionStateUpdate(_:)), name: NSNotification.Name.SILCentralManagerDidFailToConnectPeripheral, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(notifyConnectionStateUpdate(_:)), name: NSNotification.Name.SILCentralManagerDidDisconnectPeripheral, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothIsDisabled(_:)), name: NSNotification.Name.SILCentralManagerBluetoothDisabled, object: nil)
     }
     
-    private func didConnectPeripheral(_ notification: Notification) {
+    @objc private func notifyConnectionStateUpdate(_ notification: Notification) {
         delegate?.didUpdate(connectionState: state)
     }
     
-    private func didFailToConnectPeripheral(_ notification: Notification) {
-        delegate?.didUpdate(connectionState: state)
-    }
-    
-    private func didDisconnectPeripheral(_ notification: Notification) {
-        delegate?.didUpdate(connectionState: state)
+    @objc private func bluetoothIsDisabled(_ notification: Notification) {
+        delegate?.bluetoothIsDisabled()
     }
 }
 

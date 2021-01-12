@@ -176,8 +176,8 @@
     
     writeType = [self checkIfCharacteristicSupportsChosenWriteType:writeType];
     [peripheral writeValue:dataToWrite forCharacteristic:self.characteristic type:writeType];
-    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"writeToPeripheral: " andPeripheral:peripheral andError:*error]];
-    
+    [self postRegisterLogNotification: [SILLogDataModel prepareLogDescriptionForWriteValueOfCharacteristic:self.characteristic andPeripheral:peripheral andError:*error andData:dataToWrite]];
+        
     return YES;
 }
 
@@ -231,7 +231,7 @@
 }
 
 - (void)postRegisterLogNotification:(NSString*)description {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RegisterLog" object:self userInfo:@{ @"description" : description}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationRegisterLog object:self userInfo:@{ @"description" : description}];
 }
 
 - (BOOL)clearModel {

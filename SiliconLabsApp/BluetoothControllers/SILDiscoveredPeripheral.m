@@ -51,7 +51,7 @@ NSString* const EddystoneService = @"FEAA";
 - (void)updateWithAdvertisementData:(NSDictionary *)advertisementData
                                RSSI:(NSNumber *)RSSI
         andDiscoveringTimestamp:(double)timestamp {
-    self.advertisedLocalName = advertisementData[CBAdvertisementDataLocalNameKey];
+    self.advertisedLocalName = advertisementData[CBAdvertisementDataLocalNameKey] ?: self.peripheral.name;
     self.advertisedServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey];
     self.txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey];
     if (!self.isConnectable) {
@@ -204,6 +204,10 @@ NSString* const EddystoneService = @"FEAA";
     } else {
         return @"N/A";
     }
+}
+
+- (NSNumber *)rssiValue {
+    return self.RSSIMeasurementTable.lastRSSIMeasurement;
 }
 
 @end

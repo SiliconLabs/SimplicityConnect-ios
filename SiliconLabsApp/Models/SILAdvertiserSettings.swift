@@ -11,6 +11,7 @@ import Foundation
 class SILAdvertiserSettings {
     private static let CompleteLocalNameSettingKey = "SILCompleteLocalNameSetting"
     private static let DisableRemoveServiceListWarningKey = "SILDisableRemoveServiceListWarningKey"
+    private static let NonSaveChangesExitWarningKey = "SILNonSaveChangesExitWarningKey"
 
     private let userDefaults = UserDefaults.standard
 
@@ -22,5 +23,10 @@ class SILAdvertiserSettings {
     var disableRemoveServiceListWarning: Bool {
         get { userDefaults.bool(forKey: Self.DisableRemoveServiceListWarningKey) }
         set { userDefaults.set(newValue, forKey: Self.DisableRemoveServiceListWarningKey) }
+    }
+    
+    var nonSaveChangesExitWarning: Bool {
+        get { userDefaults.bool(forKey: Self.NonSaveChangesExitWarningKey) }
+        set { userDefaults.set(newValue, forKey: Self.NonSaveChangesExitWarningKey) }
     }
 }

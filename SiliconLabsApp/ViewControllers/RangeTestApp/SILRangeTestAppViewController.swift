@@ -14,16 +14,14 @@ import Charts
 fileprivate struct Constants {
     static let sliderGrey = UIColor(red:0.85, green:0.84, blue:0.84, alpha:1.00)
     static let sliderRed = UIColor(red:0.84, green:0.14, blue:0.19, alpha:1.00)
+    static let sliderBlue = UIColor.sil_regularBlue()!
     
-    static let buttonEnabledBackgroundColor = UIColor(hexString: "#D0021B")!
+    static let buttonEnabledStopBackgroundColor = UIColor(hexString: "#D0021B")!
+    static let buttonEnabledStartBackgroundColor = UIColor.sil_regularBlue()!
     static let buttonDisabledBackgroundColor = UIColor(hexString: "#CCCBCB")!
     
     static let demoName = "Range Test Demo"
     static let modePostfix = "Mode"
-    static let sliderColors = [
-        Constants.sliderGrey,
-        Constants.sliderRed
-    ]
     
     static let textColor = UIColor(hexString: "#504E4E")!
     static let disabledBackgroundColor = UIColor(hexString: "#D5D5D5")!
@@ -38,15 +36,16 @@ class SILRangeTestAppViewController: UIViewController {
     var app: SILApp!
     var viewModel: SILRangeTestAppViewModel!
     
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet private weak var txViewContainer: UIView!
     @IBOutlet private weak var rxViewContainer: UIView!
     @IBOutlet private weak var chartView: LineChartView!
     @IBOutlet private weak var deviceNameLabel: UILabel!
     @IBOutlet private weak var modelNumberLabel: UILabel!
-    @IBOutlet private weak var executeButton: UIButton!
+    @IBOutlet private weak var executeButton: SILPrimaryButton!
     @IBOutlet private weak var txPowerRowView: UIView!
-    @IBOutlet private weak var packetRepeatSwitch: UISwitch!
-    @IBOutlet private weak var uartLogSwitch: UISwitch!
+    @IBOutlet weak var packetRepeatSwitch: SILSwitch!
+    @IBOutlet weak var uartLogSwitch: SILSwitch!
     
     @IBOutlet private weak var rxLabel: UILabel!
     @IBOutlet private weak var txLabel: UILabel!
@@ -54,9 +53,7 @@ class SILRangeTestAppViewController: UIViewController {
     @IBOutlet private weak var maLabel: UILabel!
     @IBOutlet private weak var perLabel: UILabel!
     
-    @IBOutlet private var minimumSliderValueLabels: [UILabel]!
-    @IBOutlet private var maximumSliderValueLabels: [UILabel]!
-    @IBOutlet private var sliders: [GradientSlider]!
+    @IBOutlet private var sliders: [UISlider]!
     @IBOutlet private var valuesButtons: [UIButton]!
     @IBOutlet private var interactableViews: [UIControl]!
     @IBOutlet private var grayLabels: [UILabel]!
@@ -69,6 +66,7 @@ class SILRangeTestAppViewController: UIViewController {
         
         viewModel.delegate = self
         
+        setTabDeviceName()
         prepareUI()
         prepareUIValues()
         prepareUIWithPeripheral()
@@ -88,7 +86,11 @@ class SILRangeTestAppViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.popViewController(animated: false)
+    }
+    
+    private func setTabDeviceName() {
+        let setDeviceName = self.sil_useContext(type: SILSetTabDeviceName.self)
+        setDeviceName?.invoke(viewModel.peripheral.discoveredPeripheral()?.advertisedLocalName ?? "Unknown")
     }
     
     private func prepareUI() {
@@ -103,8 +105,8 @@ class SILRangeTestAppViewController: UIViewController {
         rxViewContainer.isHidden = !isRxMode
         
         for slider in sliders {
-            slider.colors = Constants.sliderColors
-            slider.setThumbImage(enabledKnobImage, for: .normal)
+            slider.minimumTrackTintColor = Constants.sliderBlue
+            slider.thumbTintColor = Constants.sliderBlue
         }
         
         for valueButton in valuesButtons {
@@ -121,6 +123,20 @@ class SILRangeTestAppViewController: UIViewController {
         if isRxMode {
             chartConfigure()
         }
+        
+        contentView.layer.cornerRadius = 16;
+        contentView.layer.shadowColor = UIColor.black.cgColor;
+        contentView.layer.shadowOpacity = 0.3;
+        contentView.layer.shadowOffset = CGSize.zero;
+        contentView.layer.shadowRadius = 2;
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews();
+        
+        DispatchQueue.main.async {
+            self.contentView.layer.shadowPath = UIBezierPath(roundedRect: self.contentView.bounds, cornerRadius: 16.0).cgPath
+        }
     }
     
     private func prepareUIValues() {
@@ -132,13 +148,9 @@ class SILRangeTestAppViewController: UIViewController {
         for setting in viewModel.getAllAvailableSettings() {
             let availableValues = viewModel.getAvailableValues(forSetting: setting)
             let slider = getSlider(forSetting: setting)
-            let minimumValueLabel = getSliderMinimumValueLabel(forSetting: setting)
-            let maximumValueLabel = getSliderMaximumValueLabel(forSetting: setting)
             
             slider?.minimumValue = 0
             slider?.maximumValue = Float(availableValues.count - 1)
-            minimumValueLabel?.text = String(format: "%g", availableValues.first!)
-            maximumValueLabel?.text = String(format: "%g", availableValues.last!)
             
             updateUI(forSetting: setting)
         }
@@ -182,25 +194,14 @@ class SILRangeTestAppViewController: UIViewController {
         let setting = SILRangeTestSetting(rawValue: 0x1 << sender.tag)!
         let availableValues = viewModel.getAvailableValues(forSetting: setting)
         let availableStringValues = viewModel.getAvailableStringValues(forSetting: setting)
-        let currentValue = sender.title(for: .normal) ?? "0"
-        let currentValueIdx = availableStringValues.index(of: currentValue) ?? 0
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil)
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: nil)
         
-        let picker = ActionSheetStringPicker(title: viewModel.getTitle(forSetting: setting),
-                                             rows: availableStringValues,
-                                             initialSelection: currentValueIdx,
-                                             doneBlock: { (picker, idx, value) in
-                                                self.updateModel(setting: setting, withValue: availableValues[idx])
-                                             },
-                                             cancel: nil,
-                                             origin: sender)
-        doneButton.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Constants.sliderRed], for: .normal)
-        cancelButton.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Constants.sliderRed], for: .normal)
-        picker?.setDoneButton(doneButton)
-        picker?.setCancelButton(cancelButton)
-        picker?.toolbarBackgroundColor = .white
-        picker?.show()
+        let options: [ContextMenuOption] = availableStringValues.enumerated().map { (index, value) in
+            return ContextMenuOption(title: value) {
+                self.updateModel(setting: setting, withValue: availableValues[index])
+            }
+        }
+        
+        SILContextMenu.present(owner: self, sourceView: sender, options: options)
     }
     
     @IBAction func sliderValueChanged(_ sender: UISlider) {
@@ -219,7 +220,7 @@ class SILRangeTestAppViewController: UIViewController {
         updateModel(setting: setting, withValue: availableValues[valueIdx], shouldUpdatePeripheral: updatePeriperal)
     }
     
-    @IBAction func switchValueChanged(_ sender: UISwitch) {
+    @IBAction func switchValueChanged(_ sender: SILSwitch) {
         if sender == packetRepeatSwitch {
             viewModel.isPacketRepeatEnabled = packetRepeatSwitch.isOn
         } else if sender == uartLogSwitch {
@@ -240,25 +241,16 @@ class SILRangeTestAppViewController: UIViewController {
         let stringValue = viewModel.getStringValue(forSetting: setting)
         let availableValues = viewModel.getAvailableValues(forSetting: setting)
         
-        guard let minValue = availableValues.first,
-            let maxValue = availableValues.last,
-            let valueIdx = availableValues.index(of: value) else {
+        guard let valueIdx = availableValues.index(of: value) else {
             return
         }
         
         let button = getButton(forSetting: setting)
         let slider = getSlider(forSetting: setting)
-        let minimumValueLabel = getSliderMinimumValueLabel(forSetting: setting)
-        let maximumValueLabel = getSliderMaximumValueLabel(forSetting: setting)
         
-        let minValueText = String(format: "%g", minValue)
-        let maxValueText = String(format: "%g", maxValue)
         let sliderMaxValue = Float(availableValues.count - 1)
         
         UIView.setAnimationsEnabled(false)
-        
-        if minimumValueLabel?.text != minValueText { minimumValueLabel?.text = minValueText }
-        if maximumValueLabel?.text != maxValueText { maximumValueLabel?.text = maxValueText }
         
         if slider?.maximumValue != sliderMaxValue { slider?.maximumValue = sliderMaxValue }
         slider?.setValue(Float(valueIdx), animated: false)
@@ -273,17 +265,6 @@ class SILRangeTestAppViewController: UIViewController {
 
 // MARK: - Helper methods
 extension SILRangeTestAppViewController {
-    fileprivate var enabledKnobImage: UIImage? { get {
-        let size = CGSize(width: 24, height: 24)
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-        let path = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size))
-        Constants.sliderRed.setFill()
-        path.fill()
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    } }
-    
     private func stringify(_ mode: SILRangeTestMode) -> String {
         switch mode {
         case .RX:
@@ -301,14 +282,6 @@ extension SILRangeTestAppViewController {
         return sliders.first { (0x1 << $0.tag) == setting.rawValue }
     }
     
-    private func getSliderMinimumValueLabel(forSetting setting: SILRangeTestSetting) -> UILabel? {
-        return minimumSliderValueLabels.first { (0x1 << $0.tag) == setting.rawValue }
-    }
-    
-    private func getSliderMaximumValueLabel(forSetting setting: SILRangeTestSetting) -> UILabel? {
-        return maximumSliderValueLabels.first { (0x1 << $0.tag) == setting.rawValue }
-    }
-    
     private func getTitleForExecuteButton() -> String {
         if viewModel.isTestStarted && viewModel.mode == .RX {
             return "Waiting for device..."
@@ -318,6 +291,14 @@ extension SILRangeTestAppViewController {
         let mode = stringify(viewModel.mode)
         
         return "\(action) \(mode)"
+    }
+    
+    private func getBackgroundColorForExecuteButton() -> UIColor {
+        if viewModel.isTestStarted && viewModel.mode == .RX {
+            return Constants.buttonDisabledBackgroundColor
+        }
+        
+        return viewModel.isTestStarted ? Constants.buttonEnabledStopBackgroundColor : Constants.buttonEnabledStartBackgroundColor
     }
     
     private func readOnlySettings() -> [SILRangeTestSetting] {
@@ -342,6 +323,10 @@ extension SILRangeTestAppViewController {
             if interactableView is UIButton {
                 interactableView.backgroundColor = isInteractable ? UIColor.clear : Constants.disabledBackgroundColor
             }
+            
+            if interactableView is UISlider {
+                interactableView.setNeedsLayout()
+            }
         }
         
         if !blocked {
@@ -351,7 +336,10 @@ extension SILRangeTestAppViewController {
         
         let isExecuteButtonEnabled = (viewModel.mode == .TX && viewModel.isTestStarted) || !blocked
         executeButton.isEnabled = isExecuteButtonEnabled
-        executeButton.backgroundColor = isExecuteButtonEnabled ? Constants.buttonEnabledBackgroundColor : Constants.buttonDisabledBackgroundColor
+        if isExecuteButtonEnabled {
+            executeButton.backgroundColor = getBackgroundColorForExecuteButton()
+        }
+        view.layoutIfNeeded()
     }
     
     private func resetUIValues() {
@@ -390,13 +378,13 @@ extension SILRangeTestAppViewController : SILRangeTestAppViewModelDelegate {
         let isButtonEnabled = !isPacketRepeatEnabled && !viewModel.isTestStarted && viewModel.didReceivedAllPeripheralValues
         let button = getButton(forSetting: .packetCount)
         
-        packetRepeatSwitch.setOn(isPacketRepeatEnabled, animated: true)
+        packetRepeatSwitch.isOn = isPacketRepeatEnabled
         button?.isEnabled = isButtonEnabled
         button?.backgroundColor = isButtonEnabled ? UIColor.clear : Constants.disabledBackgroundColor
     }
     
     func updated(isUartLogEnabled: Bool) {
-        uartLogSwitch.setOn(isUartLogEnabled, animated: true)
+        uartLogSwitch.isOn = isUartLogEnabled
     }
     
     func updated(rssi: Int) {
@@ -447,15 +435,27 @@ extension SILRangeTestAppViewController : SILRangeTestAppViewModelDelegate {
         
         updateLabel(per: per)
     }
+    
+    func bluetoothIsDisabled() {
+        let bluetoothDisabledAlert = SILBluetoothDisabledAlert.rangeTest
+        self.alertWithOKButton(title: bluetoothDisabledAlert.title,
+                               message: bluetoothDisabledAlert.message,
+                               completion: { [weak self] _ in self?.navigationController?.popToRootViewController(animated: true)
+                               })
+    }
 }
 
 // MARK: - Update label
 extension SILRangeTestAppViewController {
     private func updateLabel(rssi: Int?) {
         if let rssiValue = rssi {
-            rssiLabel.text = String(format: "RSSI: %d dBm", rssiValue)
+            if rssiValue > 0 {
+                rssiLabel.text = String(format: "+%d dBm", rssiValue)
+            } else {
+                rssiLabel.text = String(format: "%d dBm", rssiValue)
+            }
         } else {
-            rssiLabel.text = "RSSI: - dBm"
+            rssiLabel.text = "0 dBm"
         }
     }
     
@@ -483,25 +483,25 @@ extension SILRangeTestAppViewController {
         if let rxValue = rx, let totalRxValue = totalRx {
             self.rxValue = rxValue
             self.totalRxValue = totalRxValue
-            rxLabel.text = String(format: "RX: %d/%d", rxValue, totalRxValue)
+            rxLabel.text = String(format: "%d/%d", rxValue, totalRxValue)
         } else {
-            rxLabel.text = "RX: -/-"
+            rxLabel.text = "0/0"
         }
     }
     
     private func updateLabel(ma: Float?) {
         if let maValue = ma {
-            maLabel.text = String(format: "MA: %.1f%%", maValue)
+            maLabel.text = String(format: "%.1f%%", maValue)
         } else {
-            maLabel.text = "MA: -%"
+            maLabel.text = "0%"
         }
     }
     
     private func updateLabel(per: Float?) {
         if let perValue = per {
-            perLabel.text = String(format: "PER: %.1f%%", perValue)
+            perLabel.text = String(format: "%.1f%%", perValue)
         } else {
-            perLabel.text = "PER: -%"
+            perLabel.text = "0%"
         }
     }
 }
@@ -542,7 +542,7 @@ extension SILRangeTestAppViewController {
         dataSet.drawCirclesEnabled = false
         dataSet.lineWidth = 0
         dataSet.drawFilledEnabled = true
-        dataSet.fillColor = Constants.sliderRed
+        dataSet.fillColor = Constants.sliderBlue
         dataSet.fillAlpha = 1
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
         dataSet.drawVerticalHighlightIndicatorEnabled = false
@@ -639,7 +639,8 @@ extension SILRangeTestAppViewController {
     
     private class YAxisValueFormatter: IAxisValueFormatter {
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-            return String(format: "%g dBm", value)
+            let sign = value > 0 ? "+" : ""
+            return String(format: "%@%g.0 dBm", sign, value)
         }
     }
     

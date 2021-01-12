@@ -17,6 +17,7 @@ class SILAdvertiserService: NSObject, CBPeripheralManagerDelegate {
     private let settings: SILAdvertiserSettings
     
     let runningAdvertisers: SILObservable<[SILAdvertisingSetEntity]> = SILObservable(initialValue: [])
+    let blutoothEnabled: SILObservable<Bool> = SILObservable(initialValue: true)
     private var runningAdvertisersMap: [String: SILRunningAdvertiser] = [:]
     
     init(settings: SILAdvertiserSettings) {
@@ -72,6 +73,11 @@ class SILAdvertiserService: NSObject, CBPeripheralManagerDelegate {
         }
         
         if peripheral.state == CBManagerState.poweredOn {
+            if blutoothEnabled.value == false {
+                blutoothEnabled.value = true
+                print("Bluetooth enabled")
+            }
+            
             let advertiser = runningAdvertiser.advertiser
             var advertisementData: [String: Any] = [:]
             
@@ -104,6 +110,10 @@ class SILAdvertiserService: NSObject, CBPeripheralManagerDelegate {
                     self.stop(advertiser: runningAdvertiser.advertiser)
                 })
             }
+        } else if peripheral.state == CBManagerState.poweredOff {
+            blutoothEnabled.value = false
+            print("Bluetooth disabled")
+            stopAllAdvertisers()
         }
     }
     

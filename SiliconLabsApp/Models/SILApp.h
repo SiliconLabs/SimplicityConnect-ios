@@ -29,4 +29,6 @@ typedef NS_ENUM(NSInteger, SILAppType) {
 + (NSArray *)demoApps;
 + (NSArray *)developApps;
 
++ (SILApp *)rangeTestApp;
+
 @end

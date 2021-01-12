@@ -29,6 +29,11 @@ public class SILFavoritePeripheral: Object {
         return fav
     }
     
+    @objc static func areFavoritePeripherals() -> Bool {
+        let realm = try! Realm()
+        return realm.objects(SILFavoritePeripheral.self).count > 0
+    }
+    
     @objc static func add(_ peripheral: SILDiscoveredPeripheralDisplayDataViewModel) {
         let uuid: String = peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
         let name: String = peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral?.name ?? ""

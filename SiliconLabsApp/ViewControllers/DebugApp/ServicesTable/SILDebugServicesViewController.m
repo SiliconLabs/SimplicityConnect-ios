@@ -46,7 +46,6 @@
 #import "UIImage+SILImages.h"
 #import "SILBrowserConnectionsViewModel.h"
 #import "NSString+SILBrowserNotifications.h"
-#import "SILBluetoothBrowserExpandableViewManager.h"
 #import "SILBluetoothBrowser+Constants.h"
 #import "SILRefreshImageView.h"
 #import "SILRefreshImageModel.h"
@@ -59,7 +58,7 @@ static NSString * const kScanningForPeripheralsMessage = @"Loading...";
 
 static float kTableRefreshInterval = 1;
 
-@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate>
+@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate, SILDescriptorTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
@@ -126,6 +125,7 @@ static float kTableRefreshInterval = 1;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissPopoverIfExist];
+    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -247,6 +247,7 @@ static float kTableRefreshInterval = 1;
         menuVC.delegate = self;
         [menuVC addMenuOptionWithTitle:@"OTA DFU" completion:^{
             [self performOTAAction];
+            [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
         }];
         self.menuOptionHeight.constant = [menuVC getMenuOptionHeight];
     }
@@ -427,7 +428,15 @@ static float kTableRefreshInterval = 1;
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [self heightForRowAtIndexPath:indexPath];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [self heightForRowAtIndexPath:indexPath];
+}
+
+- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.modelsToDisplay[indexPath.row] isEqual:kSpacerCellIdentifieer]) {
         return 24.0;
     }
@@ -444,7 +453,15 @@ static float kTableRefreshInterval = 1;
         if (descriptors == 0) {
             return 107.0;
         } else {
-            return 107.0 + (descriptors + 1) * 18.0;
+            CGFloat tableHeight = 0.0;
+            
+            for (SILDescriptorTableModel * model in modelCharacteristic.descriptorModels) {
+                CGSize size = CGSizeMake(self.tableView.bounds.size.width - 120, CGFLOAT_MAX);
+                CGRect rect = [[model getAttributedDescriptor] boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+                tableHeight += ceil(rect.size.height);
+            }
+            
+            return 130 + tableHeight;
         }
     } else {
         if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
@@ -483,6 +500,8 @@ static float kTableRefreshInterval = 1;
     }
     cell.contentView.backgroundColor = UIColor.whiteColor;
     cell.clipsToBounds = NO;
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -509,7 +528,8 @@ static float kTableRefreshInterval = 1;
     self.headerView.frame = rect;
     if (scrollView.contentOffset.y < 0) {
         scrollView.contentOffset = CGPointZero;
-        [scrollView setScrollEnabled:NO];
+    } else {
+        [self.tableView setScrollEnabled:YES];
     }
 }
 
@@ -529,8 +549,9 @@ static float kTableRefreshInterval = 1;
 
 - (SILDebugCharacteristicTableViewCell *)characteristicCellWithModel:(SILCharacteristicTableModel *)characteristicTableModel forTable:(UITableView *)tableView {
     SILDebugCharacteristicTableViewCell *characteristicCell = (SILDebugCharacteristicTableViewCell *)[tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILDebugCharacteristicTableViewCell class])];
-    [characteristicCell configureWithCharacteristicModel:characteristicTableModel];
     characteristicCell.delegate = self;
+    characteristicCell.descriptorDelegate = self;
+    [characteristicCell configureWithCharacteristicModel:characteristicTableModel];
     [characteristicCell.nameEditButton setHidden:!characteristicTableModel.isMappable];
     return characteristicCell;
 }
@@ -728,6 +749,13 @@ static float kTableRefreshInterval = 1;
     [self.peripheral setNotifyValue:value forCharacteristic:characteristic];
 }
 
+#pragma mark = SILDescriptorsTableViewCellDelegate
+
+- (void)cellDidRequestReadForDescriptor:(CBDescriptor *)descriptor {
+    [self.peripheral readValueForDescriptor:descriptor];
+    [self refreshTable];
+}
+
 #pragma mark - CBPeripheralDelegate
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -777,22 +805,27 @@ static float kTableRefreshInterval = 1;
     [CrashlyticsKit setObjectValue:peripheral.name forKey:@"peripheral"];
     [self addOrUpdateModelForCharacteristic:characteristic forService:characteristic.service];
     [self refreshTable];
-    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didUpdateValueForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
+    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescriptionForUpdateValueOfCharacteristic:characteristic andPeripheral:peripheral andError:error]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    BOOL displayLog = NO;
     if (error != nil) {
         if ([self isATTError:error]) {
             [self showErrorDetailsPopoupWithError:error];
         }
+        displayLog = YES;
     } else {
         for (CBDescriptor *descriptor in characteristic.descriptors) {
-            [self addOrUpdateModelForDescriptor:descriptor forCharacteristic:characteristic];
+            BOOL wasAddedDescriptor = [self addOrUpdateModelForDescriptor:descriptor forCharacteristic:characteristic];
+            displayLog = displayLog || wasAddedDescriptor;
         }
         [self markTableForUpdate];
     }
-
-    [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverDescriptorsForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
+    
+    if (displayLog) {
+        [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverDescriptorsForCharacteristic: " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
+    }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {

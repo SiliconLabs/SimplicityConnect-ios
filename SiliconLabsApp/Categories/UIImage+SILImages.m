@@ -23,7 +23,7 @@ NSString * const SILImageNameHomeThermometer = @"thermometer";
 NSString * const SILImageNameHomeDebug = @"browser";
 NSString * const SILImageNameHomeKitDebug = @"HomeKitDebug";
 NSString * const SILImageNameHomeConnectedLighting = @"light";
-NSString * const SILImageNameHomeRangeTestDemo = @"HomeRangeTestDemo";
+NSString * const SILImageNameHomeRangeTestDemo = @"icon - demo - range_test";
 NSString * const SILImageNameHomeAdvertiser = @"icon - advertiser";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
@@ -91,3 +91,14 @@ NSString * const SILImageEmptyView = @"debug_not_found";
 NSString * const SILImageExitView = @"exitView";
 NSString * const SILImageChevronCollapsed = @"chevron_collapsed";
 NSString * const SILImageChevronExpanded = @"chevron_expanded";
+NSString * const SILImageSortOn = @"icon - sort - on";
+NSString * const SILImageSortOff = @"icon - sort - off";
+NSString * const SILImageSortAscendingOff = @"icon - sort - ascending - off";
+NSString * const SILImageSortAscendingOn = @"icon - sort - ascending - on";
+NSString * const SILImageSortAZOff = @"icon - sort - AZ - off";
+NSString * const SILImageSortAZOn = @"icon - sort - AZ - on";
+NSString * const SILImageSortZAOff = @"icon - sort - ZA - off";
+NSString * const SILImageSortZAOn = @"icon - sort - ZA - on";
+NSString * const SILImageSortDescendingOff = @"icon - descending - off";
+NSString * const SILImageSortDescendingOn = @"icon - descending - on";
+

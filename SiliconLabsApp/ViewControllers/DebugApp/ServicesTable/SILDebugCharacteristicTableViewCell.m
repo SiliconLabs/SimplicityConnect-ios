@@ -18,19 +18,20 @@
 #import "SILHomeKitCharacteristicTableModel.h"
 #endif
 
-@interface SILDebugCharacteristicTableViewCell()
+@interface SILDebugCharacteristicTableViewCell() <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIView *topSeparatorView;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *characteristicUuidLabel;
-@property (weak, nonatomic) IBOutlet UILabel *descriptorsTextLabel;
 @property (weak, nonatomic) IBOutlet UIView *descriptorsView;
 @property (weak, nonatomic) IBOutlet UIButton *readPropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *writePropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *notifyPropertyButton;
 @property (weak, nonatomic) IBOutlet UIButton *indicatePropertyButton;
+@property (weak, nonatomic) IBOutlet UITableView *descriptorsTable;
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray<UIButton *> * allPropertyViews;
 @property (strong, nonatomic) NSArray *allActiveProperties;
+@property (strong, nonatomic) NSArray* descriptorModels;
 
 @property (strong, nonatomic) CBCharacteristic *characteristic;
 
@@ -42,6 +43,14 @@
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self addGestureRecognizerForCharacteristicNameLabel];
+    [self setupDescriptorTable];
+}
+
+- (void)setupDescriptorTable {
+    self.descriptorModels = @[];
+    self.descriptorsTable.dataSource = self;
+    self.descriptorsTable.delegate = self;
+    [self.descriptorsTable invalidateIntrinsicContentSize];
 }
 
 - (void)configureWithCharacteristicModel:(SILCharacteristicTableModel *)characteristicModel {
@@ -50,29 +59,20 @@
     [self.nameEditButton setHidden:!characteristicModel.isMappable];
     self.characteristicNameLabel.text = [characteristicModel name];
     self.characteristicUuidLabel.text = [characteristicModel hexUuidString] ?: EmptyText;
-    if (characteristicModel.descriptorModels.count == 0) {
+    self.descriptorModels = characteristicModel.descriptorModels;
+    if (self.descriptorModels.count == 0) {
         [self.descriptorsView setHidden:YES];
     } else {
         [self.descriptorsView setHidden:NO];
-        self.descriptorsTextLabel.text = [self getDescriptorsText:characteristicModel.descriptorModels];
     }
+    
+    [self.descriptorsTable reloadData];
+
     self.topSeparatorView.hidden = characteristicModel.hideTopSeparator;
     self.allActiveProperties = [SILDebugProperty getActivePropertiesFrom:characteristicModel.characteristic.properties];
     [self configurePropertyViewsForProperties:self.allActiveProperties];
     [self toggleProperties];
     [self layoutIfNeeded];
-}
-
-- (NSString*)getDescriptorsText:(NSArray*)descriptorsModel {
-    NSMutableString* text = [[NSMutableString alloc] initWithString:EmptyText];
-    for (SILDescriptorTableModel* descriptor in descriptorsModel) {
-        [text appendString:[[NSString alloc] initWithFormat:@"%@", descriptor.descriptor.UUID]];
-        [text appendString:@" (UUID: "];
-        [text appendString:[[NSString alloc] initWithFormat:@"%@", descriptor.hexUuidString]];
-        [text appendString:@")\n"];
-    }
-    
-    return [[NSString alloc] initWithString:text];
 }
 
 - (void)addGestureRecognizerForCharacteristicNameLabel {
@@ -147,14 +147,14 @@
     NSString *readImageString = SILImageNamePropertyReadDisabled;
     self.readPropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.readPropertyButton setImage:[UIImage imageNamed:readImageString] forState:UIControlStateNormal];
-    [self.readPropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
+    [self.readPropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
 }
 
 - (void)writeButtonAppearance {
     NSString *writeImageString = SILImageNamePropertyWriteDisabled;
     self.writePropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.writePropertyButton setImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-    [self.writePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
+    [self.writePropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
 }
 
 
@@ -165,7 +165,7 @@
     if (condition) {
         [self.indicatePropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
     } else {
-        [self.indicatePropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
+        [self.indicatePropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
     }
 }
 
@@ -176,7 +176,7 @@
     if (condition) {
         [self.notifyPropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
     } else {
-        [self.notifyPropertyButton setTitleColor:[UIColor sil_primaryTextColor] forState:UIControlStateNormal];
+        [self.notifyPropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
     }
 }
 
@@ -214,6 +214,20 @@
     if (_delegate != nil) {
         [_delegate editNameWithCell:self];
     }
+}
+
+// MARK: UITableViewDataSource
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.descriptorModels.count;
+}
+
+- (UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    SILDescriptorTableViewCell* descriptorCell = [tableView dequeueReusableCellWithIdentifier:@"SILDescriptorTableViewCell" forIndexPath:indexPath];
+    SILDescriptorTableModel* descriptor = self.descriptorModels[indexPath.row];
+    [descriptorCell configureCellWithDescriptor:descriptor];
+    descriptorCell.delegate = self.descriptorDelegate;
+    return descriptorCell;
 }
 
 @end

@@ -64,8 +64,7 @@
 }
 
 - (void)postNotificationToViewModel {
-    NSString* indexString = [NSString stringWithFormat:@"%luld", (unsigned long)_index];
-    NSDictionary* userInfo = @{SILNotificationKeyIndex: indexString};
+    NSDictionary* userInfo = @{SILNotificationKeyIndex: @(_index)};
     [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDisconnectPeripheral object:self userInfo:userInfo];
 }
 

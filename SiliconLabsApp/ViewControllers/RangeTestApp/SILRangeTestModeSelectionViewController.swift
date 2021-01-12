@@ -28,12 +28,11 @@ protocol SILRangeTestModeSelectionViewControllerDelegate {
 class SILRangeTestModeSelectionViewController: UIViewController {
 
     var app: SILApp?
-    var delegate: SILRangeTestModeSelectionViewControllerDelegate?
+    weak var delegate: SILRangeTestModeSelectionViewControllerDelegate?
     var peripheral: SILRangeTestPeripheral?
     
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var mainView: UIView!
-    @IBOutlet private var roundedImageViews: [UIImageView]!
     @IBOutlet private weak var deviceNameLabel: UILabel!
     @IBOutlet weak var modelNumberLabel: UILabel!
     @IBOutlet weak var txPowerLabel: UILabel!
@@ -51,21 +50,21 @@ class SILRangeTestModeSelectionViewController: UIViewController {
         self.parse(txPower: nil)
         
         self.parse(deviceName: peripheral?.deviceName())
-        peripheral?.modelNumber {
-            self.modelNumber = $0
-            self.peripheralValueReceived()
+        peripheral?.modelNumber { [weak self] in
+            self?.modelNumber = $0
+            self?.peripheralValueReceived()
         }
-        peripheral?.txPower { (value, min, max) in
-            self.txPower = value
-            self.peripheralValueReceived()
+        peripheral?.txPower { [weak self] (value, min, max) in
+            self?.txPower = value
+            self?.peripheralValueReceived()
         }
-        peripheral?.radioMode {
-            self.radioMode = $0
-            self.peripheralValueReceived()
+        peripheral?.radioMode { [weak self] in
+            self?.radioMode = $0
+            self?.peripheralValueReceived()
         }
-        peripheral?.isRunning {
-            self.isRunning = $0
-            self.peripheralValueReceived()
+        peripheral?.isRunning { [weak self] in
+            self?.isRunning = $0
+            self?.peripheralValueReceived()
         }
     }
     
@@ -74,15 +73,7 @@ class SILRangeTestModeSelectionViewController: UIViewController {
         
         super.viewWillDisappear(animated)
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         
-        for roundedImageView in roundedImageViews {
-            roundedImageView.layer.cornerRadius = roundedImageView.frame.width/2
-        }
-    }
-    
     override var preferredContentSize: CGSize {
         get {
             if UI_USER_INTERFACE_IDIOM() == .pad {

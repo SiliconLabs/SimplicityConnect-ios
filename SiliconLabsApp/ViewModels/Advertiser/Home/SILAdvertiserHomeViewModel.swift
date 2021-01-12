@@ -53,6 +53,12 @@ class SILAdvertiserHomeViewModel {
             self?.runningAdvertisers = runningAdvertisers
         }.putIn(bag: observableTokenBag)
         
+        service.blutoothEnabled.observe { [weak self] state in
+            if state == false {
+                self?.wireframe.showBluetoothDisabledDialog()
+            }
+        }.putIn(bag: observableTokenBag)
+        
         advertiserNotification.askForPermission()
     }
     

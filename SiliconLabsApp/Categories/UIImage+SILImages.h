@@ -92,3 +92,14 @@ extern NSString * const SILImageExitView;
 
 extern NSString * const SILImageChevronCollapsed;
 extern NSString * const SILImageChevronExpanded;
+extern NSString * const SILImageSortOn;
+extern NSString * const SILImageSortOff;
+extern NSString * const SILImageSortAscendingOff;
+extern NSString * const SILImageSortAscendingOn;
+extern NSString * const SILImageSortAZOff;
+extern NSString * const SILImageSortAZOn;
+extern NSString * const SILImageSortZAOff;
+extern NSString * const SILImageSortZAOn;
+extern NSString * const SILImageSortDescendingOff;
+extern NSString * const SILImageSortDescendingOn;
+

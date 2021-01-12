@@ -14,6 +14,8 @@
 + (NSArray *)demoApps {
     return @[
                 [self healthThermometerApp],
+                [self connectedLightningApp],
+                [self rangeTestApp],
             ];
 }
 
@@ -27,7 +29,7 @@
 + (SILApp *)connectedLightningApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeConnectedLighting
                                      title:@"Connected Lighting"
-                               description:@"Dynamic multiprotocol application for Wireless Gecko SoCs showcasing Bluetooth operating simultaneously with other wireless protocols"
+                               description:@"Control a Dynamic Multiprotocol application of connected lights and switches."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeConnectedLighting];
 }
@@ -67,7 +69,7 @@
 + (SILApp *)rangeTestApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeRangeTest
                                      title:@"Range Test"
-                               description:@"Evaluate the link budget and communication range of the Wireless Gecko SoCs using various wireless radio configurations"
+                               description:@"Evaluate the link budget and range of EFR32."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeRangeTestDemo];
 }
@@ -75,7 +77,7 @@
 + (SILApp *)advertiserApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeAdvertiser
                                      title:@"Advertiser"
-                               description:@"Utilize this device as a BLE peripheral"
+                               description:@"Utilize this device as a Bluetooth Low Energy peripheral."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeAdvertiser];
 }

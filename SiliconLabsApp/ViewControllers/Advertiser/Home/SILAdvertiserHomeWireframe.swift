@@ -49,6 +49,12 @@ final class SILAdvertiserHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
                                                                               animated: true)
     }
     
+    func showBluetoothDisabledDialog() {
+        let bluetoothDisabledAlert = SILBluetoothDisabledAlert.advertiser
+        viewController.alertWithOKButton(title: bluetoothDisabledAlert.title,
+                                         message: bluetoothDisabledAlert.message)
+    }
+    
     func dismissPopover() {
         popoverController?.dismissPopover(animated: true)
     }

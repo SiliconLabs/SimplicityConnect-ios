@@ -17,7 +17,8 @@ protocol DebugDeviceViewModelDelegate: class {
     func didDisconnect(from peripheral: CBPeripheral?)
     @objc(didFailToConnectToPeripheral:)
     func didFailToConnect(to peripheral: CBPeripheral?)
-
+    func bluetoothIsDisabled()
+    
     func scanningDidEnd()
 }
 
@@ -38,43 +39,43 @@ final class DebugDeviceViewModel: NSObject {
     private(set) var isConnecting: [CBPeripheral : Bool] = [:]
     var didStopScanning = false
     var isContentAvailable: Bool {
-        return discoveredPeripherals.count > 0 || didStopScanning
+        return discoveredPeripheralsViewModels.count > 0 || didStopScanning
     }
     var observing = false
 
     var currentMinRSSI: NSNumber? = nil {
         didSet {
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
     
     var searchByDeviceName: String? = nil {
         didSet {
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
     
     var searchByAdvertisingData: String? = nil {
         didSet {
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
     
     var beaconTypes: [SILBrowserBeaconType]? = nil {
         didSet {
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
 
     var isFavourite: Bool = false {
         didSet {
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
 
     var isConnectable: Bool = false {
         didSet {
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
     
@@ -82,6 +83,12 @@ final class DebugDeviceViewModel: NSObject {
         guard let peripheral = connectedPeripheral else { return nil }
         let peripheralName = peripheral.name ?? DefaultDeviceName
         return "Disconnected from \(peripheralName)"
+    }
+    
+    var sortOption: SILSortOption = .none {
+        didSet {
+            removeAndSortDiscoveredDevicesIfNeed()
+        }
     }
 
     // MARK: - Lifecycle
@@ -169,7 +176,7 @@ final class DebugDeviceViewModel: NSObject {
            performActionsForStopScanningWasTapped(peripheralViewModels)
         } else {
             addNewDevicesIfNeed(peripheralViewModels)
-            removeDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed()
         }
     }
     
@@ -185,6 +192,7 @@ final class DebugDeviceViewModel: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(didConnectPeripheral(notification:)), name: .SILCentralManagerDidConnectPeripheral, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didDisconnectPeripheral(notification:)), name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFailToConnectPeripheral(notification:)), name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothIsDisabled(notification:)), name: .SILCentralManagerBluetoothDisabled, object: nil)
     }
 
     private func unregisterNotifications() {
@@ -192,6 +200,7 @@ final class DebugDeviceViewModel: NSObject {
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidConnectPeripheral, object: nil)
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .SILCentralManagerBluetoothDisabled, object: nil)
     }
     
     // MARK: - Stop Scanning Was Tapped Case
@@ -203,7 +212,7 @@ final class DebugDeviceViewModel: NSObject {
         } else {
             if isEqualToReplacementPeripheralsViewModel(peripheralViewModels) {
                 replaceDevicesIfNeed(replacementDiscoveredPeripheralViewModels)
-                removeDiscoveredDevicesIfNeed()
+                removeAndSortDiscoveredDevicesIfNeed()
                 replacementDiscoveredPeripheralViewModels = []
             } else {
                 fillReplacementDiscoveredPeripheralViewModel(peripheralViewModels)
@@ -279,14 +288,10 @@ final class DebugDeviceViewModel: NSObject {
         }
     }
     
-    private func removeDiscoveredDevicesIfNeed() {
-        setupDeviceForFilter()
-        filterByCurrentMinRSSI()
-        filterBySearchDeviceName()
-        filterBySearchAdvertisingData()
-        filterByBeaconTypes()
-        filterByIsFavourite()
-        filterByIsConnectable()
+    private func removeAndSortDiscoveredDevicesIfNeed() {
+        setupDevicesForFilterAndSorting()
+        filterDevices()
+        sortDevices()
         if didStopScanning {
             postCellsForVisibleRows()
             didStopScanning = false
@@ -297,7 +302,16 @@ final class DebugDeviceViewModel: NSObject {
 
     // MARK: - Filtering
     
-    private func setupDeviceForFilter() {
+    private func filterDevices() {
+        filterByCurrentMinRSSI()
+        filterBySearchDeviceName()
+        filterBySearchAdvertisingData()
+        filterByBeaconTypes()
+        filterByIsFavourite()
+        filterByIsConnectable()
+    }
+    
+    private func setupDevicesForFilterAndSorting() {
         discoveredPeripheralsViewModels = allDiscoveredPeripheralsViewModels
     }
     
@@ -360,6 +374,64 @@ final class DebugDeviceViewModel: NSObject {
                 connectablePredicate.evaluate(with: $0) }
         }
     }
+    
+    // MARK: - Sorting
+    
+    private func sortDevices() {
+        switch self.sortOption {
+        case .ascendingRSSI:
+            sortRSSI(ascending: true)
+        case .descendingRSSI:
+            sortRSSI(ascending: false)
+        case .AZ:
+            sortName(aToZ: true)
+        case .ZA:
+            sortName(aToZ: false)
+        case .none:
+            return
+        }
+        moveFavoritesUp()
+    }
+    
+    private func sortRSSI(ascending: Bool) {
+        discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.sorted(by: { (first, second) in
+            let firstRSSI = first.discoveredPeripheralDisplayData.discoveredPeripheral.rssiValue()?.intValue ?? 0
+            let secondRSSI = second.discoveredPeripheralDisplayData.discoveredPeripheral.rssiValue()?.intValue ?? 0
+            if ascending {
+                return firstRSSI < secondRSSI
+            } else {
+                return firstRSSI > secondRSSI
+            }
+        })
+    }
+    
+    private func sortName(aToZ: Bool) {
+        discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.sorted(by: { (first, second) in
+            let firstName = first.discoveredPeripheralDisplayData.discoveredPeripheral.advertisedLocalName ?? DefaultDeviceName
+            let secondName = second.discoveredPeripheralDisplayData.discoveredPeripheral.advertisedLocalName ?? DefaultDeviceName
+            if aToZ {
+                return firstName < secondName
+            } else {
+                return firstName > secondName
+            }
+        })
+    }
+    
+    func moveFavoritesUp() {
+        if SILFavoritePeripheral.areFavoritePeripherals() {
+            var peripheralsWithFavoritesAsFirst:[SILDiscoveredPeripheralDisplayDataViewModel] = []
+            var index = 0
+            for discoveredPeripheral in discoveredPeripheralsViewModels {
+                if (SILFavoritePeripheral.isFavorite(discoveredPeripheral)) {
+                    peripheralsWithFavoritesAsFirst.insert(discoveredPeripheral, at: index)
+                    index += 1
+                } else {
+                    peripheralsWithFavoritesAsFirst.append(discoveredPeripheral)
+                }
+            }
+            discoveredPeripheralsViewModels = peripheralsWithFavoritesAsFirst
+        }
+    }
         
     // MARK: - Post Notifications
     
@@ -397,6 +469,10 @@ final class DebugDeviceViewModel: NSObject {
             isConnecting.updateValue(false, forKey: peripheral)
         }
         delegate?.didFailToConnect(to: peripheral)
+    }
+    
+    @objc private func bluetoothIsDisabled(notification: Notification) {
+        delegate?.bluetoothIsDisabled()
     }
     
     // MARK: - Utils

@@ -17,6 +17,8 @@
 - (instancetype)initWithDesctiption:(NSString*)description;
 + (NSString*)prepareLogDescription:(NSString*)title andPeripheral:(CBPeripheral*)peripheral andError:(NSError*)error;
 + (NSString*)prepareLogDescription:(NSString *)title andCharacteristic:(CBCharacteristic*)characteristic andPeripheral:(CBPeripheral *)peripheral andError:(NSError *)error;
++ (NSString*)prepareLogDescriptionForWriteValueOfCharacteristic:(CBCharacteristic*)characteristic andPeripheral:(CBPeripheral *)peripheral andError:(NSError *)error andData:(NSData*)data;
++ (NSString*)prepareLogDescriptionForUpdateValueOfCharacteristic:(CBCharacteristic*)characteristic andPeripheral:(CBPeripheral *)peripheral andError:(NSError *)error;
 + (NSString*)prepareLogDescription:(NSString *)title andDescriptor:(CBDescriptor*)descriptor andPeripheral:(CBPeripheral *)peripheral andError:(NSError *)error;
 
 @end

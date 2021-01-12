@@ -27,8 +27,8 @@ typedef NS_ENUM(int, SILSwitchSource) {
 
 #define IS_IOS10_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0)
 
-NSString * const SILLightEventOn = @"Last Event: Light ON";
-NSString * const SILLightEventOff = @"Last Event: Light OFF";
+NSString * const SILLightEventOn = @"Light On";
+NSString * const SILLightEventOff = @"Light Off";
 
 @interface SILConnectedLightingViewController () <CBPeripheralDelegate, UIGestureRecognizerDelegate> {
     NSTimer *scheduleReadTimer;
@@ -42,10 +42,14 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
     SILLightState lightState;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *navigationBar;
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIImageView *lightStateImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *lastEventSourceImageView;
+@property (weak, nonatomic) IBOutlet UILabel *lastEventSourceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastEventStateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastEventSourceLabel;
+@property (weak, nonatomic) IBOutlet UIView *lastEventImageContentView;
 @property (strong, nonatomic) UISelectionFeedbackGenerator *feedbackGenerator;
 
 @end
@@ -102,31 +106,41 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
         case SILConnectedLightSwitchSourceBluetooth:
             NSLog(@"Source Bluetooth");
             self.lastEventSourceImageView.image = [UIImage imageNamed:@"iconBluetooth"];
+            self.lastEventSourceNameLabel.text = @"Bluetooth";
+            [self.lastEventImageContentView setHidden:NO];
             break;
         case SILConnectedLightSwitchSourceZigbeeOrConnectOrProprietary: {
             NSString *imageName = nil;
+            NSString *typeName = @"";
             
             if (isDMPConnect) {
                 NSLog(@"Source Connect");
                 imageName = @"iconBleConnect";
+                typeName = @"Connect";
             } else if (isDMPThread) {
                 NSLog(@"Source Thread");
                 imageName = @"iconThread";
+                typeName = @"Thread";
             } else if (isDMPZigbee) {
                 NSLog(@"Source Zigbee");
                 imageName = @"iconZigbee";
+                typeName = @"Zigbee";
             } else {
                 NSLog(@"Source Proprietary");
                 imageName = @"iconProprietary";
+                typeName = @"Proprietary";
             }
-            
             self.lastEventSourceImageView.image = [UIImage imageNamed:imageName];
+            self.lastEventSourceNameLabel.text = typeName;
+            [self.lastEventImageContentView setHidden:NO];
             [self scheduleRecoveryRead];
             break;
         }
         case SILConnectedLightSwitchSourceLightBoard:
             NSLog(@"Source LightBoard");
             self.lastEventSourceImageView.image = nil;
+            self.lastEventSourceNameLabel.text = @"Local control";
+            [self.lastEventImageContentView setHidden:YES];
             [self scheduleRecoveryRead];
             break;
         default:
@@ -138,10 +152,9 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
     char allZeroes[] = {0,0,0,0,0,0,0,0};
     NSData *badData = [NSData dataWithBytes:allZeroes length:sizeof(allZeroes)];
     if ([data isEqual: badData]) {
-        self.lastEventSourceLabel.text = @"Source: Unknown";
+        self.lastEventSourceLabel.text = @"Unknown";
     } else {
-        NSString *sourceAddress = [self hexStringForData:data];
-        self.lastEventSourceLabel.text = [NSString stringWithFormat:@"Source: %@", sourceAddress];
+        self.lastEventSourceLabel.text = [self hexStringForData:data];
     }
 }
 
@@ -192,6 +205,10 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
     [self.feedbackGenerator selectionChanged];
 }
 
+- (IBAction)didTapBackButton:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
@@ -209,6 +226,22 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
     tapGesture.delegate = self;
     [self.lightStateImageView addGestureRecognizer:tapGesture];
     self.lightStateImageView.userInteractionEnabled = YES;
+    
+    self.contentView.layer.cornerRadius = 16;
+    [self.contentView addShadow];
+    
+    [self.navigationBar addShadow];
+    [self.navigationBar.superview bringSubviewToFront:self.navigationBar];
+    
+    [self.lastEventImageContentView setHidden:YES];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.contentView.layer.shadowPath = [[UIBezierPath bezierPathWithRoundedRect:self.contentView.bounds cornerRadius:16] CGPath];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -276,8 +309,6 @@ NSString * const SILLightEventOff = @"Last Event: Light OFF";
     [self.connectedPeripheral setNotifyValue:NO forCharacteristic:lightStateCharacteristic];
     [self.connectedPeripheral setNotifyValue:NO forCharacteristic:sourceAddressCharacteristic];
     [self.centralManager disconnectConnectedPeripheral];
-    
-    [SVProgressHUD showErrorWithStatus:@"Light Disconnected..."];
 }
 
 - (void)discoverPeripheralCharacteristicsForServices {

@@ -15,6 +15,7 @@
 extern NSString * _Nonnull const SILCentralManagerDidConnectPeripheralNotification;
 extern NSString * _Nonnull const SILCentralManagerDidDisconnectPeripheralNotification;
 extern NSString * _Nonnull const SILCentralManagerDidFailToConnectPeripheralNotification;
+extern NSString * _Nonnull const SILCentralManagerBluetoothDisabledNotification;
 
 extern NSString * _Nonnull const SILCentralManagerDiscoveredPeripheralsKey;
 extern NSString * _Nonnull const SILCentralManagerPeripheralKey;

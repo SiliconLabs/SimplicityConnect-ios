@@ -32,12 +32,10 @@ class SILContextMenuViewController: UIViewController, UITableViewDelegate, UITab
                     ]).width
             }).max() ?? 0
         let widthWithMargin = width + 48
-        let widthNotTooSmall = max(widthWithMargin, 207)
-        let widthNotTooBig = min(widthNotTooSmall, UIScreen.main.bounds.width)
 
         let height = CGFloat(options.count) * Self.CellHeight
 
-        preferredContentSize = CGSize(width: widthNotTooBig, height: height)
+        preferredContentSize = CGSize(width: widthWithMargin, height: height)
     }
     
     // MARK: UITableViewDelegate

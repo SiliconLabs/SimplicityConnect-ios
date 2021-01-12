@@ -41,7 +41,6 @@ enum SILRangeTestServiceCharacteristics {
 }
 
 class SILRangeTestCharacteristic {
-    let peripheral: SILRangeTestPeripheral
     let uuid: CBUUID
     let serviceUuid: CBUUID
     let supportsNotifications: Bool
@@ -50,28 +49,26 @@ class SILRangeTestCharacteristic {
     private(set) var minValueData: Data? = nil
     private(set) var maxValueData: Data? = nil
     
-    convenience init(_ characteristic: SILDeviceInformationServiceCharacteristics, forPeripheral peripheral: SILRangeTestPeripheral) {
+    convenience init(_ characteristic: SILDeviceInformationServiceCharacteristics) {
         let characteristicUuid = SILRangeTestCharacteristic.deviceInformationServiceCharacteristics[characteristic]!
         let serviceUuid = SILRangeTestCharacteristic.services[.deviceInformation]!
         let supportsNotifications = SILRangeTestCharacteristic.doesSupportNotifications(characteristic)
         
-        self.init(characteristicUuid, serviceUuid, peripheral, supportsNotifications)
+        self.init(characteristicUuid, serviceUuid, supportsNotifications)
     }
     
-    convenience init(_ characteristic: SILRangeTestServiceCharacteristics, forPeripheral peripheral: SILRangeTestPeripheral) {
+    convenience init(_ characteristic: SILRangeTestServiceCharacteristics) {
         let characteristicUuid = SILRangeTestCharacteristic.rangeTestServiceCharacteristics[characteristic]!
         let serviceUuid = SILRangeTestCharacteristic.services[.rangeTest]!
         let supportsNotifications = SILRangeTestCharacteristic.doesSupportNotifications(characteristic)
         
-        self.init(characteristicUuid, serviceUuid, peripheral, supportsNotifications)
+        self.init(characteristicUuid, serviceUuid, supportsNotifications)
     }
     
-    private init(_ characteristicUuid: String, _ serviceUuid: String, _ peripheral: SILRangeTestPeripheral, _ supportsNotifications: Bool) {
+    private init(_ characteristicUuid: String, _ serviceUuid: String, _ supportsNotifications: Bool) {
         self.uuid = CBUUID(string: characteristicUuid)
         self.serviceUuid = CBUUID(string: serviceUuid)
         self.supportsNotifications = supportsNotifications
-        
-        self.peripheral = peripheral
     }
     
     func value<T>() -> T? {

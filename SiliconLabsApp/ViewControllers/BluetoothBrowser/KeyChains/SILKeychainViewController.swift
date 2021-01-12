@@ -12,7 +12,7 @@ import RealmSwift
 
 class SILKeychainViewController: UIViewController {
     
-    @IBOutlet weak var segments: SILBrowserSegmentedControl!
+    @IBOutlet weak var segments: SILBrowserMappingsSegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var infoImage: UIImageView!
     
@@ -129,7 +129,7 @@ class SILKeychainViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func segmentChanged(_ sender: SILBrowserSegmentedControl) {
+    @IBAction func segmentChanged(_ sender: SILBrowserMappingsSegmentedControl) {
         tableView.reloadData()
     }
 }
