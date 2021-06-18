@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1sB-xZ-xVV">
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Bold.ttf">
+            <string>Roboto-Bold</string>
+        </array>
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Throughput View Controller-->
+        <scene sceneID="Lvo-Op-vSJ">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="1sB-xZ-xVV" customClass="SILThroughputViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Nyy-a5-HmJ">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gsf-07-NJW">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1346"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lyh-5b-gXx" userLabel="Navigation Bar">
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="80"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="r32-EF-vgK" userLabel="Navigation Stack">
+                                                <rect key="frame" x="0.0" y="0.0" width="1024" height="80"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jov-zr-WMa" userLabel="Options">
+                                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="20"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oq8-v2-Va4" customClass="SILBigButton" customModule="BlueGecko" customModuleProvider="target">
+                                                                <rect key="frame" x="16" y="-1" width="8" height="22"/>
+                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <state key="normal" image="left_chevron">
+                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="extendLeft">
+                                                                        <real key="value" value="16"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="extendTop">
+                                                                        <real key="value" value="16"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="extendRight">
+                                                                        <real key="value" value="24"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="extendBottom">
+                                                                        <real key="value" value="24"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="didBackButtonTapped:" destination="1sB-xZ-xVV" eventType="touchUpInside" id="yOu-fk-rPY"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="Oq8-v2-Va4" firstAttribute="centerY" secondItem="jov-zr-WMa" secondAttribute="centerY" id="8o1-4k-SJC"/>
+                                                            <constraint firstItem="Oq8-v2-Va4" firstAttribute="leading" secondItem="jov-zr-WMa" secondAttribute="leading" constant="16" id="TWy-fn-Uaj"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hwh-4f-m4W" userLabel="Title">
+                                                        <rect key="frame" x="0.0" y="20" width="1024" height="60"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Throughput" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qbs-Qv-hfF" userLabel="Title" customClass="SILUILabels">
+                                                                <rect key="frame" x="0.0" y="10" width="1024" height="40"/>
+                                                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="34"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="Qbs-Qv-hfF" firstAttribute="leading" secondItem="hwh-4f-m4W" secondAttribute="leading" id="SIl-D5-0fk"/>
+                                                            <constraint firstItem="Qbs-Qv-hfF" firstAttribute="centerY" secondItem="hwh-4f-m4W" secondAttribute="centerY" id="Zmj-4K-Euc"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Qbs-Qv-hfF" secondAttribute="trailing" id="pNb-7D-jOg"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="80" id="1Xk-uE-koa"/>
+                                                    <constraint firstItem="hwh-4f-m4W" firstAttribute="height" secondItem="r32-EF-vgK" secondAttribute="height" multiplier="0.75" id="2C3-Jt-wR6"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" name="sil_siliconLabsRedColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="16d-V2-dds"/>
+                                            <constraint firstAttribute="trailing" secondItem="r32-EF-vgK" secondAttribute="trailing" id="3Ez-jE-8bZ"/>
+                                            <constraint firstAttribute="bottom" secondItem="r32-EF-vgK" secondAttribute="bottom" id="Ojb-qg-6Lf"/>
+                                            <constraint firstItem="r32-EF-vgK" firstAttribute="top" secondItem="lyh-5b-gXx" secondAttribute="top" id="kjA-VR-BrX"/>
+                                            <constraint firstItem="r32-EF-vgK" firstAttribute="leading" secondItem="lyh-5b-gXx" secondAttribute="leading" id="vvG-VG-E5b"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Wk-Fi-Ulo">
+                                        <rect key="frame" x="0.0" y="80" width="1024" height="1196"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H3d-NM-iAq" userLabel="Speed Gauge View">
+                                                <rect key="frame" x="32" y="32" width="976" height="450"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lG6-yC-SZE" userLabel="Speed Gauge" customClass="SILThroughputGaugeView" customModule="BlueGecko" customModuleProvider="target">
+                                                        <rect key="frame" x="263" y="0.0" width="450" height="450"/>
+                                                        <color key="backgroundColor" name="sil_backgroundColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="320" id="ARR-BD-fXU">
+                                                                <variation key="heightClass=regular-widthClass=regular" constant="450"/>
+                                                            </constraint>
+                                                            <constraint firstAttribute="width" secondItem="lG6-yC-SZE" secondAttribute="height" multiplier="1:1" id="ENl-fP-kgr"/>
+                                                            <constraint firstAttribute="width" priority="999" constant="320" id="xCZ-Jc-ZSs">
+                                                                <variation key="heightClass=regular-widthClass=regular" constant="450"/>
+                                                            </constraint>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="lG6-yC-SZE" firstAttribute="height" secondItem="H3d-NM-iAq" secondAttribute="height" id="UcU-io-gqE"/>
+                                                    <constraint firstItem="lG6-yC-SZE" firstAttribute="centerY" secondItem="H3d-NM-iAq" secondAttribute="centerY" id="cNT-BK-T6h"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="320" id="cQA-Dd-IaG">
+                                                        <variation key="heightClass=regular-widthClass=regular" constant="450"/>
+                                                    </constraint>
+                                                    <constraint firstAttribute="height" priority="999" constant="320" id="ctw-5x-76C">
+                                                        <variation key="heightClass=regular-widthClass=regular" constant="450"/>
+                                                    </constraint>
+                                                    <constraint firstItem="lG6-yC-SZE" firstAttribute="centerX" secondItem="H3d-NM-iAq" secondAttribute="centerX" id="pZi-lZ-0KD"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ljJ-oJ-VRz" userLabel="Options View">
+                                                <rect key="frame" x="16" y="514" width="992" height="310"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAb-Nu-R2H" userLabel="Type">
+                                                        <rect key="frame" x="0.0" y="8" width="992" height="35"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0To-7L-ZrR">
+                                                                <rect key="frame" x="8" y="5.5" width="397" height="24"/>
+                                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
+                                                                <state key="normal" title="Notifications" image="checkBoxInactive">
+                                                                    <color key="titleColor" name="sil_primaryTextColor"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="notificationsButtonWasTapped:" destination="1sB-xZ-xVV" eventType="touchUpInside" id="SyF-Qc-y1J"/>
+                                                                </connections>
+                                                            </button>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQg-Og-5X9" userLabel="SeparatorView">
+                                                                <rect key="frame" x="405" y="4" width="1" height="27"/>
+                                                                <color key="backgroundColor" name="sil_secondaryBackgroundColor"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="27" id="2gN-YK-Hfu"/>
+                                                                    <constraint firstAttribute="width" constant="1" id="UHx-9B-5p5"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8N-3g-Fsh" userLabel="Indications">
+                                                                <rect key="frame" x="414" y="5.5" width="396.5" height="24"/>
+                                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
+                                                                <state key="normal" title="Indications" image="checkBoxActive">
+                                                                    <color key="titleColor" name="sil_primaryTextColor"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="indicationsButtonWasTapped:" destination="1sB-xZ-xVV" eventType="touchUpInside" id="8VU-qN-rYn"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="35" id="Gbn-Ur-YXU"/>
+                                                            <constraint firstItem="a8N-3g-Fsh" firstAttribute="leading" secondItem="zQg-Og-5X9" secondAttribute="trailing" constant="8" id="GdS-QR-eLQ"/>
+                                                            <constraint firstItem="0To-7L-ZrR" firstAttribute="leading" secondItem="TAb-Nu-R2H" secondAttribute="leading" constant="8" id="NHB-bX-BiW"/>
+                                                            <constraint firstItem="zQg-Og-5X9" firstAttribute="centerY" secondItem="TAb-Nu-R2H" secondAttribute="centerY" id="Xgt-H3-f5e"/>
+                                                            <constraint firstItem="0To-7L-ZrR" firstAttribute="centerY" secondItem="TAb-Nu-R2H" secondAttribute="centerY" id="bdA-ty-1ag"/>
+                                                            <constraint firstItem="zQg-Og-5X9" firstAttribute="leading" secondItem="0To-7L-ZrR" secondAttribute="trailing" id="fPn-G8-xaU"/>
+                                                            <constraint firstItem="0To-7L-ZrR" firstAttribute="width" secondItem="TAb-Nu-R2H" secondAttribute="width" multiplier="0.4" id="k4W-B0-gNP"/>
+                                                            <constraint firstItem="a8N-3g-Fsh" firstAttribute="centerY" secondItem="TAb-Nu-R2H" secondAttribute="centerY" id="uBg-ck-l6G"/>
+                                                            <constraint firstItem="a8N-3g-Fsh" firstAttribute="width" secondItem="TAb-Nu-R2H" secondAttribute="width" multiplier="0.4" id="wp5-FD-0TH"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7YR-pN-kfL" userLabel="Separator ">
+                                                        <rect key="frame" x="0.0" y="47" width="992" height="2"/>
+                                                        <color key="backgroundColor" name="sil_secondaryBackgroundColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="2" id="c8u-wF-4MK"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sxr-q0-Qoe" userLabel="Connection Parameters">
+                                                        <rect key="frame" x="8" y="57" width="976" height="245"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e1o-oH-mL5" userLabel="Content View">
+                                                                <rect key="frame" x="0.0" y="0.0" width="976" height="244"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connection Parameters" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Lx-WQ-zr5" userLabel="Title">
+                                                                        <rect key="frame" x="16" y="8" width="191" height="30"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="30" id="4nE-TP-vR4"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
+                                                                        <color key="textColor" name="sil_primaryTextColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PHY: 2M" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZX-cv-g6M" userLabel="PHY" customClass="SILConnectionParameterLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                                        <rect key="frame" x="16" y="46" width="65.5" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="25" id="1Aq-wn-6Vi"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval: 15ms" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBK-yU-vw5" userLabel="Interval" customClass="SILConnectionParameterLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                                        <rect key="frame" x="16" y="79" width="105.5" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="25" id="yKJ-HD-9lF"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latency: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y1U-sJ-oxp" userLabel="Latency" customClass="SILConnectionParameterLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                                        <rect key="frame" x="16" y="112" width="80" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="25" id="eT2-pO-WaW"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Supervision Timeout: 100ms" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J91-SU-xyN" userLabel="Supervision Timeout" customClass="SILConnectionParameterLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                                        <rect key="frame" x="16" y="145" width="216" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="25" id="oXx-aG-PAb"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PDU: 255 bytes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gLi-L7-35c" userLabel="PDU" customClass="SILConnectionParameterLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                                        <rect key="frame" x="16" y="178" width="120" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="25" id="QRf-LQ-zSr"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MTU: 255 bytes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M0C-90-IMV" userLabel="MTU" customClass="SILConnectionParameterLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                                        <rect key="frame" x="16" y="211" width="122.5" height="25"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="25" id="FNu-3E-pU3"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="vBK-yU-vw5" firstAttribute="leading" secondItem="gZX-cv-g6M" secondAttribute="leading" id="5cY-Pr-gXY"/>
+                                                                    <constraint firstItem="Y1U-sJ-oxp" firstAttribute="top" secondItem="vBK-yU-vw5" secondAttribute="bottom" constant="8" id="922-IG-fA4"/>
+                                                                    <constraint firstItem="J91-SU-xyN" firstAttribute="leading" secondItem="Y1U-sJ-oxp" secondAttribute="leading" id="FR9-iA-6tj"/>
+                                                                    <constraint firstItem="1Lx-WQ-zr5" firstAttribute="leading" secondItem="e1o-oH-mL5" secondAttribute="leading" constant="16" id="NCL-Zs-oWe"/>
+                                                                    <constraint firstItem="M0C-90-IMV" firstAttribute="top" secondItem="gLi-L7-35c" secondAttribute="bottom" constant="8" id="Oui-0w-eBk"/>
+                                                                    <constraint firstItem="J91-SU-xyN" firstAttribute="top" secondItem="Y1U-sJ-oxp" secondAttribute="bottom" constant="8" id="T8n-aR-GdS"/>
+                                                                    <constraint firstItem="Y1U-sJ-oxp" firstAttribute="leading" secondItem="vBK-yU-vw5" secondAttribute="leading" id="ZAM-gk-xhm"/>
+                                                                    <constraint firstItem="gZX-cv-g6M" firstAttribute="top" secondItem="1Lx-WQ-zr5" secondAttribute="bottom" constant="8" id="eax-KR-Dux"/>
+                                                                    <constraint firstItem="gLi-L7-35c" firstAttribute="leading" secondItem="J91-SU-xyN" secondAttribute="leading" id="gQO-pv-gWP"/>
+                                                                    <constraint firstItem="gLi-L7-35c" firstAttribute="top" secondItem="J91-SU-xyN" secondAttribute="bottom" constant="8" id="hQE-Dw-12G"/>
+                                                                    <constraint firstItem="gZX-cv-g6M" firstAttribute="leading" secondItem="1Lx-WQ-zr5" secondAttribute="leading" id="hhh-cB-abi"/>
+                                                                    <constraint firstItem="1Lx-WQ-zr5" firstAttribute="top" secondItem="e1o-oH-mL5" secondAttribute="top" constant="8" id="ijx-Yr-Z2A"/>
+                                                                    <constraint firstItem="M0C-90-IMV" firstAttribute="leading" secondItem="gLi-L7-35c" secondAttribute="leading" id="mDw-Qy-4gj"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="M0C-90-IMV" secondAttribute="bottom" constant="8" id="q20-JO-feF"/>
+                                                                    <constraint firstItem="vBK-yU-vw5" firstAttribute="top" secondItem="gZX-cv-g6M" secondAttribute="bottom" constant="8" id="ugZ-lh-IwP"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="e1o-oH-mL5" firstAttribute="leading" secondItem="Sxr-q0-Qoe" secondAttribute="leading" id="6tR-qT-h4o"/>
+                                                            <constraint firstAttribute="bottom" secondItem="e1o-oH-mL5" secondAttribute="bottom" priority="250" id="FAU-Au-7PI"/>
+                                                            <constraint firstItem="e1o-oH-mL5" firstAttribute="centerX" secondItem="Sxr-q0-Qoe" secondAttribute="centerX" id="GKh-Fo-FmR"/>
+                                                            <constraint firstItem="e1o-oH-mL5" firstAttribute="top" secondItem="Sxr-q0-Qoe" secondAttribute="top" id="OgM-nq-frY"/>
+                                                            <constraint firstAttribute="trailing" secondItem="e1o-oH-mL5" secondAttribute="trailing" id="Vrc-9t-rop"/>
+                                                            <constraint firstItem="e1o-oH-mL5" firstAttribute="centerY" secondItem="Sxr-q0-Qoe" secondAttribute="centerY" priority="250" id="bBj-jr-Gto"/>
+                                                        </constraints>
+                                                    </scrollView>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="TAb-Nu-R2H" firstAttribute="top" secondItem="ljJ-oJ-VRz" secondAttribute="top" constant="8" id="1e9-za-SCe"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Sxr-q0-Qoe" secondAttribute="trailing" constant="8" id="4JM-Ot-GoL"/>
+                                                    <constraint firstItem="Sxr-q0-Qoe" firstAttribute="top" secondItem="7YR-pN-kfL" secondAttribute="bottom" constant="8" id="6b6-OZ-iCi"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Sxr-q0-Qoe" secondAttribute="bottom" constant="8" id="ErO-eU-a9j"/>
+                                                    <constraint firstItem="Sxr-q0-Qoe" firstAttribute="leading" secondItem="ljJ-oJ-VRz" secondAttribute="leading" constant="8" id="NO1-LO-eXl"/>
+                                                    <constraint firstItem="7YR-pN-kfL" firstAttribute="leading" secondItem="ljJ-oJ-VRz" secondAttribute="leading" id="QAR-Ha-r8l"/>
+                                                    <constraint firstItem="TAb-Nu-R2H" firstAttribute="leading" secondItem="ljJ-oJ-VRz" secondAttribute="leading" id="WLw-z4-IlK"/>
+                                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="310" id="Zrm-sD-dQe"/>
+                                                    <constraint firstAttribute="height" priority="999" constant="310" id="glL-ei-j2q"/>
+                                                    <constraint firstAttribute="trailing" secondItem="TAb-Nu-R2H" secondAttribute="trailing" id="kYi-nn-A7C"/>
+                                                    <constraint firstItem="7YR-pN-kfL" firstAttribute="top" secondItem="TAb-Nu-R2H" secondAttribute="bottom" constant="4" id="nYs-ds-Bij"/>
+                                                    <constraint firstAttribute="trailing" secondItem="7YR-pN-kfL" secondAttribute="trailing" id="wLm-xd-FO4"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" name="sil_backgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="ljJ-oJ-VRz" firstAttribute="leading" secondItem="0Wk-Fi-Ulo" secondAttribute="leading" constant="16" id="7fG-o3-yvP"/>
+                                            <constraint firstAttribute="trailing" secondItem="ljJ-oJ-VRz" secondAttribute="trailing" constant="16" id="FqN-tn-Uwc"/>
+                                            <constraint firstItem="ljJ-oJ-VRz" firstAttribute="top" secondItem="H3d-NM-iAq" secondAttribute="bottom" constant="16" id="I7M-8d-ZF1">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="32"/>
+                                            </constraint>
+                                            <constraint firstAttribute="trailing" secondItem="H3d-NM-iAq" secondAttribute="trailing" constant="16" id="Is5-2X-qv4"/>
+                                            <constraint firstItem="H3d-NM-iAq" firstAttribute="top" secondItem="0Wk-Fi-Ulo" secondAttribute="top" constant="16" id="Psd-ju-BWj">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="32"/>
+                                            </constraint>
+                                            <constraint firstItem="H3d-NM-iAq" firstAttribute="leading" secondItem="0Wk-Fi-Ulo" secondAttribute="leading" constant="16" id="Tug-LV-AE4">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="32"/>
+                                            </constraint>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ljJ-oJ-VRz" secondAttribute="bottom" constant="8" id="moV-nX-VhU"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fIe-sZ-0Qb" userLabel="ButtonsView">
+                                        <rect key="frame" x="0.0" y="1276" width="1024" height="70"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zSg-qd-JNm" userLabel="Start/Stop" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                                <rect key="frame" x="477" y="19" width="70" height="32"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="70" id="Amd-2c-Vs3"/>
+                                                    <constraint firstAttribute="height" constant="32" id="EEP-r4-txd"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                                <state key="normal" title="Start"/>
+                                                <connections>
+                                                    <action selector="startStopButtonWasTapped:" destination="1sB-xZ-xVV" eventType="touchUpInside" id="VVm-2A-xeY"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="zSg-qd-JNm" firstAttribute="centerX" secondItem="fIe-sZ-0Qb" secondAttribute="centerX" id="GFQ-XQ-C48"/>
+                                            <constraint firstAttribute="height" constant="70" id="KTa-hv-r4q"/>
+                                            <constraint firstItem="zSg-qd-JNm" firstAttribute="centerY" secondItem="fIe-sZ-0Qb" secondAttribute="centerY" id="lnc-Gm-hbf"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w1q-Sj-K4j" userLabel="Above Safe Area">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="0.0"/>
+                                <color key="backgroundColor" name="sil_siliconLabsRedColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Y9g-U2-Hxx"/>
+                        <constraints>
+                            <constraint firstItem="Y9g-U2-Hxx" firstAttribute="trailing" secondItem="gsf-07-NJW" secondAttribute="trailing" id="7tX-xe-2dS"/>
+                            <constraint firstItem="w1q-Sj-K4j" firstAttribute="leading" secondItem="Nyy-a5-HmJ" secondAttribute="leading" id="7ty-VD-U5a"/>
+                            <constraint firstItem="gsf-07-NJW" firstAttribute="leading" secondItem="Y9g-U2-Hxx" secondAttribute="leading" id="9qj-Gh-xMb"/>
+                            <constraint firstAttribute="trailing" secondItem="w1q-Sj-K4j" secondAttribute="trailing" id="LiO-l6-0YP"/>
+                            <constraint firstItem="gsf-07-NJW" firstAttribute="top" secondItem="w1q-Sj-K4j" secondAttribute="bottom" id="gEo-Ry-OZ3"/>
+                            <constraint firstItem="Y9g-U2-Hxx" firstAttribute="bottom" secondItem="gsf-07-NJW" secondAttribute="bottom" id="rqa-J9-r6V"/>
+                            <constraint firstItem="gsf-07-NJW" firstAttribute="top" secondItem="Y9g-U2-Hxx" secondAttribute="top" id="unI-qI-CrQ"/>
+                            <constraint firstItem="w1q-Sj-K4j" firstAttribute="top" secondItem="Nyy-a5-HmJ" secondAttribute="top" id="xXM-SX-pCq"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="buttonsView" destination="fIe-sZ-0Qb" id="LLh-gd-0F8"/>
+                        <outlet property="indicationsTestButton" destination="a8N-3g-Fsh" id="NMm-yW-hwH"/>
+                        <outlet property="intervalLabel" destination="vBK-yU-vw5" id="d9A-Oi-ffO"/>
+                        <outlet property="latencyLabel" destination="Y1U-sJ-oxp" id="bdr-O0-oGd"/>
+                        <outlet property="mtuLabel" destination="M0C-90-IMV" id="OVJ-Ab-bpl"/>
+                        <outlet property="navigationBar" destination="lyh-5b-gXx" id="Orp-0r-GKT"/>
+                        <outlet property="notificationsTestButton" destination="0To-7L-ZrR" id="y5a-TC-AEu"/>
+                        <outlet property="optionsView" destination="ljJ-oJ-VRz" id="wBK-7N-2K9"/>
+                        <outlet property="pduLabel" destination="gLi-L7-35c" id="0qI-D4-rSc"/>
+                        <outlet property="phyLabel" destination="gZX-cv-g6M" id="m1x-Zj-QY2"/>
+                        <outlet property="speedGaugeView" destination="lG6-yC-SZE" id="Bad-Q9-b0A"/>
+                        <outlet property="startStopTestButton" destination="zSg-qd-JNm" id="5cZ-Lx-QOa"/>
+                        <outlet property="supervisionTimeoutLabel" destination="J91-SU-xyN" id="zNT-tW-ZJx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="epB-So-aEW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="173.59999999999999" y="120.98950524737631"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="J91-SU-xyN">
+            <size key="intrinsicContentSize" width="216" height="20.5"/>
+        </designable>
+        <designable name="M0C-90-IMV">
+            <size key="intrinsicContentSize" width="122.5" height="20.5"/>
+        </designable>
+        <designable name="Oq8-v2-Va4">
+            <size key="intrinsicContentSize" width="8" height="22"/>
+        </designable>
+        <designable name="Y1U-sJ-oxp">
+            <size key="intrinsicContentSize" width="80" height="20.5"/>
+        </designable>
+        <designable name="gLi-L7-35c">
+            <size key="intrinsicContentSize" width="120" height="20.5"/>
+        </designable>
+        <designable name="gZX-cv-g6M">
+            <size key="intrinsicContentSize" width="65.5" height="20.5"/>
+        </designable>
+        <designable name="vBK-yU-vw5">
+            <size key="intrinsicContentSize" width="105.5" height="20.5"/>
+        </designable>
+        <designable name="zSg-qd-JNm">
+            <size key="intrinsicContentSize" width="37" height="32"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="checkBoxActive" width="24" height="24"/>
+        <image name="checkBoxInactive" width="24" height="24"/>
+        <image name="left_chevron" width="8" height="13"/>
+        <namedColor name="sil_backgroundColor">
+            <color red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_primaryTextColor">
+            <color red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_secondaryBackgroundColor">
+            <color red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_siliconLabsRedColor">
+            <color red="0.85098039215686272" green="0.11764705882352941" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

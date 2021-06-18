@@ -175,7 +175,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)installViewModelsForExpandableViews {
     self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
-    self.connectionsViewModel.centralManager = self.browserViewModel.centralManager;
     self.filterViewModel = [SILBrowserFilterViewModel sharedInstance];
     self.sortViewModel = [SILSortViewModel sharedInstance];
 }
@@ -199,7 +198,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (void)addObserversForReloadBrowserTableView {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:SILNotificationReloadBrowserTable object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:SILNotificationReloadConnectionsTableView object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cellsForVisibleRows) name: SILNotificationCellsForVisibleRows object:nil];
 }
 
 - (void)reloadTable {
@@ -241,17 +239,25 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     [self.topButtonsView addShadow];
 }
 
+- (void)presentDetailsViewControllerWithPeripheral:(CBPeripheral *)peripheral {
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:SILAppBluetoothBrowserDetails bundle:nil];
+    SILBrowserDetailsTabBarController * detailsTabBarController = [storyboard instantiateViewControllerWithIdentifier: @"SILDetailsTabBarController"];
+    SILDebugServicesViewController* detailsVC = detailsTabBarController.viewControllers[0];
+    detailsVC.peripheral = peripheral;
+    detailsVC.centralManager = self.browserViewModel.centralManager;
+    SILLocalGattServerViewController* localGattServerVC = detailsTabBarController.viewControllers[1];
+    localGattServerVC.peripheral = peripheral;
+    localGattServerVC.centralManager = self.browserViewModel.centralManager;
+    [self updateCellsWithConnecting:peripheral];
+    [self removeUnfiredTimers];
+    [self.navigationController pushViewController:detailsTabBarController animated:YES];
+}
+
 #pragma mark - SILDebugDeviceViewModelDelegate
 
 - (void)didConnectToPeripheral:(CBPeripheral *)peripheral {
-    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:SILAppBluetoothBrowserDetails bundle:nil];
-    SILDebugServicesViewController* detailsVC = [storyboard instantiateViewControllerWithIdentifier:SILSceneConnectedDevice];
-    detailsVC.peripheral = peripheral;
-    detailsVC.centralManager = self.browserViewModel.centralManager;
-    [self updateCellsWithConnecting:peripheral];
-    [self removeUnfiredTimers];
     [self.connectionsViewModel addNewConnectedPeripheral:peripheral];
-    [self.navigationController pushViewController:detailsVC animated:YES];
+    [self presentDetailsViewControllerWithPeripheral:peripheral];
 }
 
 - (void)didDisconnectFromPeripheral:(CBPeripheral *)peripheral {
@@ -411,34 +417,11 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    SILCell *silCell = (SILCell *)cell;
-    if ([tableView indexPathsForVisibleRows][0] == indexPath) {
-        [tableView bringSubviewToFront:silCell];
-    }
-    if (indexPath.row == 0) {
-        if ([tableView numberOfRowsInSection:indexPath.section] > 1) {
-            [silCell addShadowWhenAtTop];
-            [silCell roundCornersTop];
-        } else {
-            [silCell addShadowWhenAtBottom];
-            [silCell roundCornersAll];
-        }
-    } else {
-        [silCell roundCornersNone];
-        [silCell addShadowWhenInMid];
-        if (([tableView numberOfRowsInSection:indexPath.section] - 1) == indexPath.row) {
-            [silCell roundCornersBottom];
-            [silCell addShadowWhenAtBottom];
-        }
-    }
-    cell.clipsToBounds = NO;
+    [SILTableViewWithShadowCells tableView:tableView willDisplay:cell forRowAt:indexPath];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    CGRect size = CGRectMake(tableView.bounds.origin.x, tableView.bounds.origin.y, tableView.bounds.size.width, 20);
-    UIView * view = [[UIView alloc] initWithFrame:size];
-    view.backgroundColor = UIColor.clearColor;
-    return view;
+    return [SILTableViewWithShadowCells tableView:tableView viewForHeaderInSection:section withHeight: 20.0];
 }
 
 #pragma mark - Expandable Controllers
@@ -503,7 +486,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 }
 
 - (void)stopScanningAction {
-    [self.browserViewModel stopScanningWithVisibleCellsCount:[self.browserTableView visibleCells].count];
+    [self.browserViewModel stopScanning];
     [self stopScanningForDevices];
 }
 
@@ -605,14 +588,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     [self.browserTableView reloadData];
 }
 
-- (void)cellsForVisibleRows {
-    [self.browserTableView beginUpdates];
-    for (NSIndexPath* indexPath in [self.browserTableView indexPathsForVisibleRows]) {
-            [self.browserTableView cellForRowAtIndexPath:indexPath];
-    }
-    [self.browserTableView endUpdates];
-}
-
 - (void)startScanning {
     [self.browserViewModel startScanning];
     
@@ -681,7 +656,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)resetFilters {
     self.browserViewModel.searchByDeviceName = nil;
-    self.browserViewModel.searchByAdvertisingData = nil;
     self.browserViewModel.currentMinRSSI = nil;
     self.browserViewModel.beaconTypes = nil;
     self.browserViewModel.isFavourite = nil;
@@ -695,15 +669,9 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 }
 
 - (void)presentDetailsViewControllerForIndex:(NSInteger)index {
-    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:SILAppBluetoothBrowserDetails bundle:nil];
-    SILDebugServicesViewController* detailsVC = [storyboard instantiateViewControllerWithIdentifier:SILSceneConnectedDevice];
     SILConnectedPeripheralDataModel* connectedPeripheral = self.connectionsViewModel.peripherals[index];
-    detailsVC.peripheral = connectedPeripheral.peripheral;
-    detailsVC.centralManager = self.browserViewModel.centralManager;
-    [self updateCellsWithConnecting:connectedPeripheral.peripheral];
-    [self removeUnfiredTimers];
     [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-    [self.navigationController pushViewController:detailsVC animated:YES];
+    [self presentDetailsViewControllerWithPeripheral:connectedPeripheral.peripheral];
 }
 
 #pragma mark - SILBrowserLogViewControllerDelegate
@@ -713,21 +681,11 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 }
 
 - (IBAction)backToDevelopWasTapped:(id)sender {
-    if (![SILBrowserSettings displayExitWarningPopup] && [self.connectionsViewModel areConnections]) {
-        SILExitPopupViewController *exitVC = [[SILExitPopupViewController alloc] init];
-        exitVC.delegate = self;
-        self.popoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:exitVC
-                                                                               presentingViewController:self
-                                                                                               delegate:self
-                                                                                               animated:YES];
-    } else {
-        [self stopScanningAndDisconnectAll];
-    }
+    [self stopScanningAndDisconnectAll];
 }
 
 - (void)stopScanningAndDisconnectAll {
     [self stopScanningAction];
-    [self.connectionsViewModel disconnectAllPeripheral];
     [self.sortViewModel deselectSelectedOption];
     [self.navigationController popViewControllerAnimated:NO];
 }
@@ -765,7 +723,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 }
 
 - (void)clearViewModelsForExpandableViews {
-    [self.connectionsViewModel clearViewModelData];
     [self.filterViewModel clearViewModelData];
     SILBrowserLogViewModel* browserLog = [SILBrowserLogViewModel sharedInstance];
     [browserLog clearLogs];
@@ -780,7 +737,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 }
 
 - (void)refreshTableView {
-    [self.browserViewModel stopScanningWithVisibleCellsCount:0];
+    [self.browserViewModel stopScanning];
     [self removeUnfiredTimers];
     [self.browserViewModel removeAllDiscoveredPeripherals];
     [self reloadTable];

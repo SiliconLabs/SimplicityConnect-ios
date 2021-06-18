@@ -9,12 +9,13 @@
 import Foundation
 
 class SILContextMenu {
-    public static func present(owner: UIViewController, sourceView: UIView, options: [ContextMenuOption]) {
+    public static func present(owner: UIViewController, sourceView: UIView, alignWithSourceViewWidth: Bool = false, options: [ContextMenuOption]) {
         let storyboard = UIStoryboard(name: "SILContextMenuStoryboard", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "ContextMenu") as! SILContextMenuViewController
         let transitionDelegate = SILContextMenuTransitioningDelegate(sourceView: sourceView)
         
         vc.options = options
+        vc.sourceViewWidth = alignWithSourceViewWidth ? sourceView.bounds.size.width : nil
 
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = transitionDelegate

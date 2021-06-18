@@ -16,9 +16,11 @@ class SILCharacteristicWriteViewController: SILDebugPopoverViewController, UITab
     @IBOutlet weak var fieldsTableView: UITableView!
     @IBOutlet weak var writeRequestView: SILRadioButton!
     @IBOutlet weak var writeCommandView: SILRadioButton!
+    @IBOutlet weak var radioButtonsView: UIView!
     private var popoverController: WYPopoverController?
     
     private var viewModel: SILCharacteristicWriteViewModel
+    private var shouldShowRadioButtons: Bool = true
     
     override var preferredContentSize: CGSize {
         get {
@@ -33,9 +35,15 @@ class SILCharacteristicWriteViewController: SILDebugPopoverViewController, UITab
         }
     }
     
+    init(characteristic: CBCharacteristic, asLocalIndicate: Bool, delegate: SILCharacteristicEditEnablerDelegate) {
+        viewModel = SILCharacteristicWriteViewModel(characteristic: characteristic, asLocalIndicate: asLocalIndicate, delegate: delegate)
+        shouldShowRadioButtons = false
+        super.init(nibName: "SILCharacteristicWriteViewController", bundle: nil)
+    }
+    
     @objc init(characteristic: CBCharacteristic,
                delegate: SILCharacteristicEditEnablerDelegate) {
-        viewModel = SILCharacteristicWriteViewModel(characteristic: characteristic, delegate: delegate)
+        viewModel = SILCharacteristicWriteViewModel(characteristic: characteristic, asLocalIndicate: nil, delegate: delegate)
         
         super.init(nibName: "SILCharacteristicWriteViewController", bundle: nil)
     }
@@ -50,6 +58,19 @@ class SILCharacteristicWriteViewController: SILDebugPopoverViewController, UITab
         addGestureRecognizersForRadioButtonsView()
         setupFieldsTableView()
         viewModel.updateRadioButton { [weak self] newState in self?.updateRadioButtons(with: newState) }
+        radioButtonsView.isHidden = !shouldShowRadioButtons
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        scrollToBottom()
+    }
+    
+    func scrollToBottom() {
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: self.viewModel.numberOfCells - 1, section: 0)
+            self.fieldsTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
     }
     
     private func setupValuesInHeaderView() {

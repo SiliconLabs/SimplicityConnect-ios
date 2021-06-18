@@ -8,8 +8,11 @@
 
 import UIKit
 
-protocol SILDropDownViewControllerDelegate: class {
+protocol SILDropDownViewControllerSelectDelegate: class {
     func dropDownDidSelect(value: String)
+}
+
+protocol SILDropDownViewControllerDelegate: class {
     func dropDownBackgroundTapped()
 }
 
@@ -24,6 +27,7 @@ class SILDropDownViewController: UIViewController, UITableViewDataSource, UITabl
     @IBOutlet var backgroundGestureRecognizer: UITapGestureRecognizer!
     
     weak var delegate: SILDropDownViewControllerDelegate?
+    weak var selectDelegate: SILDropDownViewControllerSelectDelegate?
     var sourceView: UIView!
     var passthroughViews: [UIView] = []
     
@@ -143,6 +147,6 @@ class SILDropDownViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let value = dataSource[indexPath.row]
-        delegate?.dropDownDidSelect(value: value)
+        selectDelegate?.dropDownDidSelect(value: value)
     }
 }

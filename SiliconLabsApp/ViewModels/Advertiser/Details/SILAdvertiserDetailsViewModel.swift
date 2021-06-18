@@ -11,7 +11,7 @@ import Foundation
 class SILAdvertiserDetailsViewModel {
     private var wireframe: SILAdvertiserDetailsWireframe
     private var repository: SILAdvertisingSetRepository
-    private var serviceRepository: SILAdvertisingServiceRepository
+    private var serviceRepository: SILGattAssignedNumbersRepository
     private var service: SILAdvertiserService
     private var settings: SILAdvertiserSettings
     private var advertiser: SILAdvertisingSetEntity
@@ -30,7 +30,7 @@ class SILAdvertiserDetailsViewModel {
     private var executionTime: Double
     private var executionTimeString: String
     
-    init(wireframe: SILAdvertiserDetailsWireframe, repository: SILAdvertisingSetRepository, serviceRepository: SILAdvertisingServiceRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity) {
+    init(wireframe: SILAdvertiserDetailsWireframe, repository: SILAdvertisingSetRepository, serviceRepository: SILGattAssignedNumbersRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity) {
         self.wireframe = wireframe
         self.repository = repository
         self.serviceRepository = serviceRepository

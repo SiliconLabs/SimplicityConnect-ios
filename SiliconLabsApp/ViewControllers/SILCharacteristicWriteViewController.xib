@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,6 +22,7 @@
                 <outlet property="characteristicNameLabel" destination="d7N-ka-ONM" id="9q4-7P-kjd"/>
                 <outlet property="characteristicUUIDLabel" destination="ipc-AD-IRp" id="0W3-k9-MoR"/>
                 <outlet property="fieldsTableView" destination="qws-eA-fg0" id="t35-qb-Z9F"/>
+                <outlet property="radioButtonsView" destination="eNV-Cl-zve" id="k1v-yA-x6D"/>
                 <outlet property="serviceNameLabel" destination="OOM-9v-f7p" id="d5W-lX-QHN"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="writeCommandView" destination="Rph-6O-QHg" id="dYY-ND-ZMd"/>
@@ -34,28 +35,28 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PeM-XZ-f2P" userLabel="Header">
-                    <rect key="frame" x="0.0" y="44" width="414" height="75.5"/>
+                    <rect key="frame" x="0.0" y="44" width="414" height="76.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Unknown Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOM-9v-f7p" userLabel="Service Name Label">
-                            <rect key="frame" x="16" y="8" width="94" height="14"/>
+                            <rect key="frame" x="16" y="8" width="92" height="14.5"/>
                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                             <color key="textColor" name="sil_subtleTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Unknown Characteristic" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="568" translatesAutoresizingMaskIntoConstraints="NO" id="d7N-ka-ONM" userLabel="Characteristic Name Label">
-                            <rect key="frame" x="16" y="26" width="193" height="21"/>
+                            <rect key="frame" x="16" y="26.5" width="192" height="21.5"/>
                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
                             <color key="textColor" name="sil_primaryTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Characteristic UUID" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" preferredMaxLayoutWidth="568" translatesAutoresizingMaskIntoConstraints="NO" id="ipc-AD-IRp">
-                            <rect key="frame" x="16" y="51" width="124.5" height="16.5"/>
+                            <rect key="frame" x="16" y="52" width="121.5" height="16.5"/>
                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                             <color key="textColor" name="sil_primaryTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fuA-v0-mpa" userLabel="iPad Characteristic Property Badge Container View">
-                            <rect key="frame" x="225" y="34" width="149" height="37.5"/>
+                            <rect key="frame" x="224" y="34" width="150" height="38.5"/>
                             <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYP-TA-ePn" userLabel="Exit">
@@ -89,88 +90,106 @@
                         <constraint firstItem="fuA-v0-mpa" firstAttribute="top" secondItem="EYP-TA-ePn" secondAttribute="bottom" constant="4" id="wgk-TZ-6sM"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="qws-eA-fg0">
-                    <rect key="frame" x="16" y="127.5" width="382" height="600.5"/>
-                    <color key="backgroundColor" name="sil_bgWhiteColor"/>
-                </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNV-Cl-zve" userLabel="RadioButtons">
-                    <rect key="frame" x="0.0" y="736" width="414" height="70"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="98F-Dc-fnq">
+                    <rect key="frame" x="0.0" y="120.5" width="414" height="693.5"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tsv-GL-XkN">
-                            <rect key="frame" x="16" y="0.0" width="382" height="70"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dyJ-u9-CZ9">
+                            <rect key="frame" x="16" y="8" width="382" height="677.5"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxN-SJ-x1K" userLabel="Write Request View" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="382" height="35"/>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="qws-eA-fg0">
+                                    <rect key="frame" x="0.0" y="0.0" width="382" height="599.5"/>
+                                    <color key="backgroundColor" name="sil_bgWhiteColor"/>
+                                </tableView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNV-Cl-zve" userLabel="RadioButtons">
+                                    <rect key="frame" x="0.0" y="607.5" width="382" height="70"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8G-Pq-GzN">
-                                            <rect key="frame" x="0.0" y="7.5" width="20" height="20"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tsv-GL-XkN">
+                                            <rect key="frame" x="16" y="0.0" width="350" height="70"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxN-SJ-x1K" userLabel="Write Request View" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="350" height="35"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8G-Pq-GzN">
+                                                            <rect key="frame" x="0.0" y="7.5" width="20" height="20"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="a8G-Pq-GzN" secondAttribute="height" multiplier="1:1" id="8Sz-4o-5ST"/>
+                                                                <constraint firstAttribute="width" constant="20" id="ZYg-uB-8jB"/>
+                                                            </constraints>
+                                                            <color key="tintColor" name="sil_siliconLabsRedColor"/>
+                                                            <state key="normal" image="radio_button_active"/>
+                                                        </button>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write with response (write request)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lzv-Ue-jvD" userLabel="WriteRequestDescription">
+                                                            <rect key="frame" x="28" y="9.5" width="217.5" height="16.5"/>
+                                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="centerY" secondItem="nxN-SJ-x1K" secondAttribute="centerY" id="a2T-Rt-w36"/>
+                                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="leading" secondItem="nxN-SJ-x1K" secondAttribute="leading" id="aZC-Ze-Z47"/>
+                                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="centerY" secondItem="Lzv-Ue-jvD" secondAttribute="centerY" id="r87-Ba-fFH"/>
+                                                        <constraint firstItem="Lzv-Ue-jvD" firstAttribute="leading" secondItem="a8G-Pq-GzN" secondAttribute="trailing" constant="8" id="rf8-Mb-meg"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <outlet property="descriptionLabel" destination="Lzv-Ue-jvD" id="y9b-GF-Awy"/>
+                                                        <outlet property="radioButton" destination="a8G-Pq-GzN" id="cEM-8D-Gpj"/>
+                                                    </connections>
+                                                </view>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rph-6O-QHg" userLabel="Write Command View" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="35" width="350" height="35"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Snf-cl-ooC">
+                                                            <rect key="frame" x="0.0" y="7.5" width="20" height="20"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="20" id="87Q-nF-vvx"/>
+                                                                <constraint firstAttribute="width" secondItem="Snf-cl-ooC" secondAttribute="height" multiplier="1:1" id="fyE-hd-9W4"/>
+                                                            </constraints>
+                                                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal" image="radio_button_selected"/>
+                                                        </button>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write without response (write command)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-e2-Re2" userLabel="WriteCommandDescription">
+                                                            <rect key="frame" x="28" y="9.5" width="254" height="16.5"/>
+                                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="Snf-cl-ooC" firstAttribute="leading" secondItem="Rph-6O-QHg" secondAttribute="leading" id="TEi-MM-GVh"/>
+                                                        <constraint firstItem="fPs-e2-Re2" firstAttribute="leading" secondItem="Snf-cl-ooC" secondAttribute="trailing" constant="8" id="ZbT-9K-VFM"/>
+                                                        <constraint firstItem="Snf-cl-ooC" firstAttribute="centerY" secondItem="Rph-6O-QHg" secondAttribute="centerY" id="aDG-g5-h9i"/>
+                                                        <constraint firstItem="fPs-e2-Re2" firstAttribute="centerY" secondItem="Rph-6O-QHg" secondAttribute="centerY" id="dCJ-JI-vh0"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <outlet property="descriptionLabel" destination="fPs-e2-Re2" id="tpe-TB-Alf"/>
+                                                        <outlet property="radioButton" destination="Snf-cl-ooC" id="sN0-96-THf"/>
+                                                    </connections>
+                                                </view>
+                                            </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="width" secondItem="a8G-Pq-GzN" secondAttribute="height" multiplier="1:1" id="8Sz-4o-5ST"/>
-                                                <constraint firstAttribute="width" constant="20" id="ZYg-uB-8jB"/>
+                                                <constraint firstItem="nxN-SJ-x1K" firstAttribute="height" secondItem="tsv-GL-XkN" secondAttribute="height" multiplier="0.5" id="iHQ-tp-aCf"/>
                                             </constraints>
-                                            <color key="tintColor" name="sil_siliconLabsRedColor"/>
-                                            <state key="normal" image="radio_button_active"/>
-                                        </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write with response (write request)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lzv-Ue-jvD" userLabel="WriteRequestDescription">
-                                            <rect key="frame" x="28" y="9.5" width="216" height="16.5"/>
-                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                            <color key="textColor" name="sil_primaryTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="centerY" secondItem="nxN-SJ-x1K" secondAttribute="centerY" id="a2T-Rt-w36"/>
-                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="leading" secondItem="nxN-SJ-x1K" secondAttribute="leading" id="aZC-Ze-Z47"/>
-                                        <constraint firstItem="a8G-Pq-GzN" firstAttribute="centerY" secondItem="Lzv-Ue-jvD" secondAttribute="centerY" id="r87-Ba-fFH"/>
-                                        <constraint firstItem="Lzv-Ue-jvD" firstAttribute="leading" secondItem="a8G-Pq-GzN" secondAttribute="trailing" constant="8" id="rf8-Mb-meg"/>
+                                        <constraint firstItem="tsv-GL-XkN" firstAttribute="centerX" secondItem="eNV-Cl-zve" secondAttribute="centerX" id="BCa-KL-XUf"/>
+                                        <constraint firstItem="tsv-GL-XkN" firstAttribute="width" secondItem="eNV-Cl-zve" secondAttribute="width" constant="-32" id="FyB-5O-66D"/>
+                                        <constraint firstAttribute="height" constant="70" id="K2l-Vy-2lr"/>
+                                        <constraint firstItem="tsv-GL-XkN" firstAttribute="centerY" secondItem="eNV-Cl-zve" secondAttribute="centerY" id="doV-lu-WrA"/>
+                                        <constraint firstItem="tsv-GL-XkN" firstAttribute="height" secondItem="eNV-Cl-zve" secondAttribute="height" id="nd0-GG-vfM"/>
                                     </constraints>
-                                    <connections>
-                                        <outlet property="descriptionLabel" destination="Lzv-Ue-jvD" id="y9b-GF-Awy"/>
-                                        <outlet property="radioButton" destination="a8G-Pq-GzN" id="cEM-8D-Gpj"/>
-                                    </connections>
-                                </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rph-6O-QHg" userLabel="Write Command View" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="35" width="382" height="35"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Snf-cl-ooC">
-                                            <rect key="frame" x="0.0" y="7.5" width="20" height="20"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="20" id="87Q-nF-vvx"/>
-                                                <constraint firstAttribute="width" secondItem="Snf-cl-ooC" secondAttribute="height" multiplier="1:1" id="fyE-hd-9W4"/>
-                                            </constraints>
-                                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <state key="normal" image="radio_button_selected"/>
-                                        </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write without response (write command)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-e2-Re2" userLabel="WriteCommandDescription">
-                                            <rect key="frame" x="28" y="9.5" width="252.5" height="16.5"/>
-                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                            <color key="textColor" name="sil_primaryTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="Snf-cl-ooC" firstAttribute="leading" secondItem="Rph-6O-QHg" secondAttribute="leading" id="TEi-MM-GVh"/>
-                                        <constraint firstItem="fPs-e2-Re2" firstAttribute="leading" secondItem="Snf-cl-ooC" secondAttribute="trailing" constant="8" id="ZbT-9K-VFM"/>
-                                        <constraint firstItem="Snf-cl-ooC" firstAttribute="centerY" secondItem="Rph-6O-QHg" secondAttribute="centerY" id="aDG-g5-h9i"/>
-                                        <constraint firstItem="fPs-e2-Re2" firstAttribute="centerY" secondItem="Rph-6O-QHg" secondAttribute="centerY" id="dCJ-JI-vh0"/>
-                                    </constraints>
-                                    <connections>
-                                        <outlet property="descriptionLabel" destination="fPs-e2-Re2" id="tpe-TB-Alf"/>
-                                        <outlet property="radioButton" destination="Snf-cl-ooC" id="sN0-96-THf"/>
-                                    </connections>
                                 </view>
                             </subviews>
-                            <constraints>
-                                <constraint firstItem="nxN-SJ-x1K" firstAttribute="height" secondItem="tsv-GL-XkN" secondAttribute="height" multiplier="0.5" id="iHQ-tp-aCf"/>
-                            </constraints>
+                            <color key="backgroundColor" name="sil_bgWhiteColor"/>
                         </stackView>
                     </subviews>
+                    <color key="backgroundColor" name="sil_bgWhiteColor"/>
                     <constraints>
-                        <constraint firstItem="tsv-GL-XkN" firstAttribute="centerX" secondItem="eNV-Cl-zve" secondAttribute="centerX" id="BCa-KL-XUf"/>
-                        <constraint firstItem="tsv-GL-XkN" firstAttribute="width" secondItem="eNV-Cl-zve" secondAttribute="width" constant="-32" id="FyB-5O-66D"/>
-                        <constraint firstAttribute="height" constant="70" id="K2l-Vy-2lr"/>
-                        <constraint firstItem="tsv-GL-XkN" firstAttribute="centerY" secondItem="eNV-Cl-zve" secondAttribute="centerY" id="doV-lu-WrA"/>
-                        <constraint firstItem="tsv-GL-XkN" firstAttribute="height" secondItem="eNV-Cl-zve" secondAttribute="height" id="nd0-GG-vfM"/>
+                        <constraint firstItem="dyJ-u9-CZ9" firstAttribute="leading" secondItem="98F-Dc-fnq" secondAttribute="leading" constant="16" id="6Zj-9V-yuy"/>
+                        <constraint firstItem="dyJ-u9-CZ9" firstAttribute="top" secondItem="98F-Dc-fnq" secondAttribute="top" constant="8" id="Aw7-Kr-yJ4"/>
+                        <constraint firstAttribute="trailing" secondItem="dyJ-u9-CZ9" secondAttribute="trailing" constant="16" id="V6j-Ct-VSI"/>
+                        <constraint firstAttribute="bottom" secondItem="dyJ-u9-CZ9" secondAttribute="bottom" constant="8" id="XhQ-xA-ZoN"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WWR-hl-Ybc" userLabel="Footer">
@@ -182,7 +201,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M24-CY-cUW">
                                     <rect key="frame" x="0.0" y="0.0" width="80" height="48"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQE-5K-9qa" userLabel="Clear Button">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQE-5K-9qa" userLabel="Clear Button">
                                             <rect key="frame" x="0.0" y="6" width="72" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="Tva-lB-tOY"/>
@@ -206,7 +225,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgQ-BN-wfM">
                                     <rect key="frame" x="80" y="0.0" width="80" height="48"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="72k-xN-LUX" userLabel="Send Button" customClass="SILRoundedButton" customModule="BlueGecko" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="72k-xN-LUX" userLabel="Send Button" customClass="SILRoundedButton" customModule="BlueGecko" customModuleProvider="target">
                                             <rect key="frame" x="8" y="6" width="72" height="36"/>
                                             <color key="backgroundColor" name="sil_regularBlueColor"/>
                                             <constraints>
@@ -250,26 +269,28 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" name="sil_bgWhiteColor"/>
             <constraints>
-                <constraint firstItem="qws-eA-fg0" firstAttribute="top" secondItem="PeM-XZ-f2P" secondAttribute="bottom" constant="8" id="3KK-oj-E5l"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="WWR-hl-Ybc" secondAttribute="bottom" id="4ZS-Sz-Lnb"/>
                 <constraint firstItem="PeM-XZ-f2P" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="4dZ-TJ-dcs"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="PeM-XZ-f2P" secondAttribute="trailing" id="AOK-rq-Kpa"/>
-                <constraint firstItem="WWR-hl-Ybc" firstAttribute="top" secondItem="eNV-Cl-zve" secondAttribute="bottom" constant="8" id="Ylc-Zz-vnu"/>
+                <constraint firstItem="98F-Dc-fnq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="DP0-HJ-Bvd"/>
+                <constraint firstAttribute="trailing" secondItem="98F-Dc-fnq" secondAttribute="trailing" id="MNH-X9-Z8o"/>
                 <constraint firstItem="WWR-hl-Ybc" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="aAb-RA-2A9"/>
                 <constraint firstItem="PeM-XZ-f2P" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="aR2-9M-lWv"/>
-                <constraint firstItem="qws-eA-fg0" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="bNW-vm-NMf"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="WWR-hl-Ybc" secondAttribute="trailing" id="eMH-kB-gxd"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="eNV-Cl-zve" secondAttribute="trailing" id="kbH-N7-rN0"/>
-                <constraint firstItem="eNV-Cl-zve" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="mgI-nd-BUP"/>
-                <constraint firstItem="eNV-Cl-zve" firstAttribute="top" secondItem="qws-eA-fg0" secondAttribute="bottom" constant="8" id="ujD-RM-XSy"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="qws-eA-fg0" secondAttribute="trailing" constant="16" id="z9D-0m-Eut"/>
+                <constraint firstItem="98F-Dc-fnq" firstAttribute="top" secondItem="PeM-XZ-f2P" secondAttribute="bottom" id="p2y-fu-tbj"/>
+                <constraint firstItem="WWR-hl-Ybc" firstAttribute="top" secondItem="98F-Dc-fnq" secondAttribute="bottom" id="uYd-Rp-owb"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="137.68115942028987" y="152.67857142857142"/>
         </view>
     </objects>
+    <designables>
+        <designable name="72k-xN-LUX">
+            <size key="intrinsicContentSize" width="32" height="29"/>
+        </designable>
+    </designables>
     <resources>
         <image name="exitView" width="24" height="24"/>
         <image name="radio_button_active" width="112.5" height="112.5"/>

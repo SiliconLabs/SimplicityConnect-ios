@@ -19,6 +19,7 @@ class SILCharacteristicWriteViewModel {
     private let assosiatedServiceModel: SILServiceTableModel
     private let support: (writeRequest: Bool, writeCommand: Bool)
     private var currentState: SILCharacteristicWriteRadioButtonState = .unknown
+    private let asLocalIndicate: Bool?
     
     var assosiatedService: (name: String, hexUuidString: String) {
         get {
@@ -48,13 +49,14 @@ class SILCharacteristicWriteViewModel {
         }
     }
     
-    init(characteristic: CBCharacteristic,
+    init(characteristic: CBCharacteristic, asLocalIndicate: Bool?,
          delegate: SILCharacteristicEditEnablerDelegate) {
         self.delegate = delegate
         self.characteristicModel = SILCharacteristicTableModel(characteristic: characteristic)
         self.assosiatedServiceModel = SILServiceTableModel(service: characteristic.service)
         self.support.writeRequest = characteristic.properties.contains(.write)
         self.support.writeCommand = characteristic.properties.contains(.writeWithoutResponse)
+        self.asLocalIndicate = asLocalIndicate
         createCellViewModels()
     }
     
@@ -148,7 +150,10 @@ class SILCharacteristicWriteViewModel {
         
         do {
             try updateFieldRowModels()
-            if let writeType = chooseWriteType() {
+            if let asLocalIndicate = asLocalIndicate {
+                try delegate.write(toLocalCharacteristic: characteristicModel, asLocalIndicate: asLocalIndicate)
+                completion(.none)
+            } else if let writeType = chooseWriteType() {
                 try delegate.saveCharacteristic(characteristicModel, with: writeType)
                 completion(.none)
             }

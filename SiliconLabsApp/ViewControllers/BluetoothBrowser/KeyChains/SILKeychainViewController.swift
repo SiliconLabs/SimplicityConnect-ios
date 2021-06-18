@@ -164,7 +164,7 @@ extension SILKeychainViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let silCell = cell as! SILCell
-        silCell.addShadowWhenAtBottom()
+        silCell.addShadowWhenAlone()
         silCell.roundCornersAll()
     }
 }

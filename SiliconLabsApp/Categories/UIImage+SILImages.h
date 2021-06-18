@@ -25,6 +25,10 @@ extern NSString * const SILImageNameHomeKitDebug;
 extern NSString * const SILImageNameHomeConnectedLighting;
 extern NSString * const SILImageNameHomeRangeTestDemo;
 extern NSString * const SILImageNameHomeAdvertiser;
+extern NSString * const SILImageNameHomeIOPTester;
+extern NSString * const SILImageNameHomeThroughput;
+extern NSString * const SILImageNameHomeGattConfigurator;
+extern NSString * const SILImageNameHomeBlinky;
 
 extern NSString * const SILImageNameKeyboard;
 extern NSString * const SILImageNameKeyboardCheckmark;
@@ -103,3 +107,7 @@ extern NSString * const SILImageSortZAOn;
 extern NSString * const SILImageSortDescendingOff;
 extern NSString * const SILImageSortDescendingOn;
 
+extern NSString * const SILDetailsTabBarRemoteOff;
+extern NSString * const SILDetailsTabBarRemoteOn;
+extern NSString * const SILDetailsTabBarLocalOff;
+extern NSString * const SILDetailsTabBarLocalOn;

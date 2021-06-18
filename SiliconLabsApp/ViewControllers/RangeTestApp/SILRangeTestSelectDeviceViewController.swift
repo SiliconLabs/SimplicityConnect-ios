@@ -12,7 +12,7 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
     @IBOutlet weak var connectButton: SILPrimaryButton!
     
     private let app = SILApp.rangeTest()!
-    private let centralManager = SILCentralManagerBuilder.buildCentralManager(with: SILAppType.typeRangeTest)!
+    private let centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
     
     private var popoverController: WYPopoverController?
 

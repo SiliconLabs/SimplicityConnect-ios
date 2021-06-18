@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YQW-bh-9K2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YQW-bh-9K2">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,7 +12,7 @@
         <!--Develop Applications-->
         <scene sceneID="o8k-yl-5ex">
             <objects>
-                <viewController title="Develop Applications" id="xZn-za-4IL" customClass="SILAppSelectionViewController" sceneMemberID="viewController">
+                <viewController title="Develop Applications" id="xZn-za-4IL" customClass="SILAppSelectionViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="trY-Ay-yeV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -139,7 +139,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="k5Y-80-ebU"/>
                     <connections>
-                        <outlet property="aboveSpaceAreaView" destination="Djj-Tj-tpl" id="O2p-hP-S0Z"/>
+                        <outlet property="aboveSafeAreaView" destination="Djj-Tj-tpl" id="spU-Pq-rZu"/>
                         <outlet property="allSpace" destination="jVj-UH-1Qd" id="Hgx-hT-uh1"/>
                         <outlet property="appCollectionView" destination="IUq-wf-AF7" id="wOB-JB-upX"/>
                         <outlet property="appsView" destination="XE9-Kf-lc6" id="NOD-AT-oQG"/>
@@ -172,7 +172,7 @@
         <!--Demo Applications-->
         <scene sceneID="hUS-2r-B1I">
             <objects>
-                <viewController title="Demo Applications" id="1kM-Te-mg4" customClass="SILAppSelectionViewController" sceneMemberID="viewController">
+                <viewController title="Demo Applications" id="1kM-Te-mg4" customClass="SILAppSelectionViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="34H-OQ-p7v">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -300,7 +300,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ggW-eR-OtJ"/>
                     <connections>
-                        <outlet property="aboveSpaceAreaView" destination="aH4-Q7-h4j" id="I1B-o1-uyq"/>
+                        <outlet property="aboveSafeAreaView" destination="aH4-Q7-h4j" id="hAF-fr-4Ch"/>
                         <outlet property="allSpace" destination="T6p-N8-aqM" id="5BB-po-NgP"/>
                         <outlet property="appCollectionView" destination="c2W-U7-agv" id="Vwt-F9-1aQ"/>
                         <outlet property="appsView" destination="dmg-ac-Vey" id="iBR-Nr-pIf"/>
@@ -341,9 +341,9 @@
         <!--Home Screen-->
         <scene sceneID="KcI-gc-dzF">
             <objects>
-                <tabBarController title="Home Screen" id="YQW-bh-9K2" customClass="SILHomeTabBarViewController" sceneMemberID="viewController">
+                <tabBarController title="Home Screen" id="YQW-bh-9K2" customClass="SILHomeTabBarController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="7PV-5q-H1a"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Blh-oo-RcY" customClass="SILUITabBar">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Blh-oo-RcY" customClass="SILHomeTabBar" customModule="BlueGecko" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -360,7 +360,7 @@
         <!--Demo-->
         <scene sceneID="bAq-vN-V5a">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="IG0-Pb-MmX" customClass="SILDemoNavigationViewController" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="IG0-Pb-MmX" customClass="SILDemoNavigationViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Demo" id="Iol-dv-pwK">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
@@ -380,7 +380,7 @@
         <!--Develop-->
         <scene sceneID="PBG-VU-wB6">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="CWB-1X-NGb" customClass="SILDevelopNavigationViewController" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="CWB-1X-NGb" customClass="SILDevelopNavigationViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Develop" id="oUk-8i-S1a">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
@@ -398,11 +398,6 @@
             <point key="canvasLocation" x="-81.159420289855078" y="320.75892857142856"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="Blh-oo-RcY">
-            <size key="intrinsicContentSize" width="-1" height="83"/>
-        </designable>
-    </designables>
     <resources>
         <image name="help_white" width="30" height="30"/>
         <systemColor name="systemBackgroundColor">

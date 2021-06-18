@@ -11,7 +11,6 @@
 #import "SILBluetoothServiceModel.h"
 #import "SILBluetoothCharacteristicModel.h"
 #import "SILBluetoothDescriptorModel.h"
-#import "SILBluetoothServiceCharacteristicModel.h"
 #import "SILBluetoothFieldModel.h"
 #import "SILBluetoothEnumerationModel.h"
 #import "SILBluetoothBitModel.h"
@@ -81,9 +80,12 @@ const NSString * kTypeAttributeKey = @"_type";
 - (SILBluetoothServiceCharacteristicModel *)buildServiceCharacteristicFromXmlDictionary:(NSDictionary *)xmlDict {
     NSString *name = xmlDict[kNameAttributeKey];
     NSString *type = xmlDict[kTypeAttributeKey];
-    SILBluetoothServiceCharacteristicModel *serviceCharacteristicModel = [[SILBluetoothServiceCharacteristicModel alloc] initWithName:name type:type];
+    NSDictionary *propertiesDict = [self propertiesDictionaryForDict:xmlDict];
+    SILBluetoothServiceCharacteristicProperties *properties = [[SILBluetoothServiceCharacteristicProperties alloc] initWithPropertyDict:propertiesDict];
+    SILBluetoothServiceCharacteristicModel *serviceCharacteristicModel = [[SILBluetoothServiceCharacteristicModel alloc] initWithName:name type:type properties:properties];
 
-    serviceCharacteristicModel.descriptors = [self arrayForDictionary:xmlDict[@"Descriptors"] keyPath:@"Descriptor" selector:@selector(buildDescriptorFromXmlDictionary:)];
+
+    serviceCharacteristicModel.descriptors = [self arrayForDictionary:xmlDict[@"Descriptors"] keyPath:@"Descriptor" selector:@selector(buildServiceDescriptorFromXmlDictionary:)];
     
     return serviceCharacteristicModel;
 }
@@ -156,7 +158,29 @@ const NSString * kTypeAttributeKey = @"_type";
     return descriptorModel;
 }
 
+- (SILBluetoothServiceDescriptorModel *)buildServiceDescriptorFromXmlDictionary:(NSDictionary *)xmlDict {
+    NSString *descriptorName = xmlDict[kNameAttributeKey];
+    NSString *descriptorType = xmlDict[kTypeAttributeKey];
+    NSDictionary *propertiesDict = [self propertiesDictionaryForDict:xmlDict];
+    SILBluetoothServiceDescriptorProperties *properties = [[SILBluetoothServiceDescriptorProperties alloc] initWithPropertyDict:propertiesDict];
+    SILBluetoothServiceDescriptorModel *descriptorModel = [[SILBluetoothServiceDescriptorModel alloc] initWithName: [descriptorName stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]] type:[descriptorType stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]] properties:properties];
+    
+    return descriptorModel;
+}
+
+
 #pragma mark - Helper Methods
+
+- (NSDictionary *)propertiesDictionaryForDict:(NSDictionary *)dict {
+    NSDictionary *propertiesDict;
+    id propertiesId = dict[@"Properties"];
+    if ([propertiesId isKindOfClass:[NSDictionary class]]) {
+        propertiesDict = propertiesId;
+    } else if([propertiesId isKindOfClass:[NSArray class]]) {
+        propertiesDict = [propertiesId firstObject];
+    }
+    return propertiesDict;
+}
 
 - (SILDoubleKeyDictionaryPair *)dictionaryForDirectory:(NSString *)directoryName modelMaker:(SEL)modelMaker {
     SILDoubleKeyDictionaryPair *dictionary = [[SILDoubleKeyDictionaryPair alloc] init];

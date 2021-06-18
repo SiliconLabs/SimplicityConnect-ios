@@ -21,7 +21,6 @@ NSString * const SILNotificationDisconnectPeripheral = @"DisconnectPeripheral";
 NSString * const SILNotificationDeleteDisconnectedPeripheral = @"DeleteDisconnectedPeripheral";
 NSString * const SILNotificationFailedToConnectPeripheral = @"FailedToConnectPeripheral";
 NSString * const SILNotificationDisconnectAllPeripheral = @"DisconnectAllPeripheral";
-NSString * const SILNotificationCellsForVisibleRows = @"CellsForVisibleRows";
 NSString * const SILNotificationDisplayToastRequest = @"DisplayToastRequest";
 NSString * const SILNotificationDisplayToastResponse = @"DisplayToastResponse";
 

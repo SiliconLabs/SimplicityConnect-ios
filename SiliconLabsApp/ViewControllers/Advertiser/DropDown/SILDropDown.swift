@@ -9,7 +9,7 @@
 import Foundation
 
 @objcMembers
-class SILDropDown: NSObject, SILDropDownViewControllerDelegate {
+class SILDropDown: NSObject, SILDropDownViewControllerDelegate, SILDropDownViewControllerSelectDelegate {
     let textField: UITextField
     let values: [String]
     
@@ -24,7 +24,7 @@ class SILDropDown: NSObject, SILDropDownViewControllerDelegate {
         return textField.text ?? ""
     }
     
-    init(textField: UITextField, values: [String]) {
+    init(textField: UITextField, values: [String], delegate: SILDropDownViewControllerSelectDelegate? = nil) {
         self.textField = textField
         self.values = values
         
@@ -34,6 +34,7 @@ class SILDropDown: NSObject, SILDropDownViewControllerDelegate {
         super.init()
         
         viewController.delegate = self
+        viewController.selectDelegate = delegate ?? self
         viewController.sourceView = self.textField
         viewController.passthroughViews.append(self.textField)
         
@@ -67,7 +68,7 @@ class SILDropDown: NSObject, SILDropDownViewControllerDelegate {
     }
     
     private func updateDropDown() {
-        if isEditing == false {
+        if isEditing == false || inputText.count < 2 {
             hideDropDown()
         } else {
             let matchingValues = findMatchingValues()
@@ -104,13 +105,15 @@ class SILDropDown: NSObject, SILDropDownViewControllerDelegate {
         }
     }
 
-    // MARK: SILDropDownViewControllerDelegate
+    // MARK: SILDropDownViewControllerSelectDelegate
     
     func dropDownDidSelect(value: String) {
         textField.text = value
         textField.sendActions(for: .editingChanged)
         textField.resignFirstResponder()
     }
+    
+    // MARK: SILDropDownViewControllerDelegate
     
     func dropDownBackgroundTapped() {
         textField.resignFirstResponder()

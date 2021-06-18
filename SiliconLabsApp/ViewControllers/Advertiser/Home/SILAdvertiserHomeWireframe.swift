@@ -8,11 +8,24 @@
 
 import Foundation
 
-final class SILAdvertiserHomeWireframe: SILBaseWireframe, WYPopoverControllerDelegate {
+protocol SILAdvertiserHomeWireframeType : SILBaseWireframeType {
+    init()
+    func showAdvertiserDetails(_ advertiser: SILAdvertisingSetEntity)
+    func showLocalNameSettingPopup(onSave: @escaping () -> Void)
+    func showAdvertiserRemoveWarning(_ confirmAction: @escaping () -> ())
+    func showBluetoothDisabledDialog()
+    func dismissPopover()
+}
+
+protocol SILPopupDismissable {
+    func dismissPopover()
+}
+
+final class SILAdvertiserHomeWireframe: SILBaseWireframe, SILAdvertiserHomeWireframeType, WYPopoverControllerDelegate, SILPopupDismissable {
     private let storyboard = UIStoryboard(name: "SILAppAdvertiser", bundle: nil)
     
-    lazy private var settings = { SILAdvertiserSettings() }()
-    lazy private var service = { SILAdvertiserService(settings: settings) }()
+    lazy private var settings = { SILAdvertiserSettings.shared }()
+    lazy private var service = { SILAdvertiserService.shared }()
     lazy private var repository = { SILAdvertisingSetRepository() }()
     
     private var popoverController: WYPopoverController?
@@ -28,7 +41,11 @@ final class SILAdvertiserHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
                                                   repository: repository,
                                                   settings: settings)
     }
-
+    
+    required init(viewController: UIViewController) {
+        super.init(viewController: viewController)
+    }
+    
     func showAdvertiserDetails(_ advertiser: SILAdvertisingSetEntity) {
         let wireframe = SILAdvertiserDetailsWireframe(repository: repository, service: service, settings: settings, advertiser: advertiser)
         navigationController?.pushWireframe(wireframe)
@@ -41,12 +58,13 @@ final class SILAdvertiserHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
     }
     
     func showAdvertiserRemoveWarning(_ confirmAction: @escaping () -> ()) {
-        let adveriserRemoveWarning = SILAdvertiserRemoveWarningViewController()
-        adveriserRemoveWarning.viewModel = SILAdvertiserRemoveWarningViewModel(wireframe: self, confirmAction: confirmAction)
-        self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: adveriserRemoveWarning,
-                                                                              presenting: viewController,
-                                                                              delegate: self,
-                                                                              animated: true)
+        let advertiserRemoveWarning = SILWarningViewController()
+        let settingAction: (Bool) -> () = { SILAdvertiserRemoveSetting.setDisplayAdvertiserRemoveWarning(value: $0) }
+        advertiserRemoveWarning.viewModel = SILRemoveWarningViewModel(wireframe: self, confirmAction: confirmAction, setSettingAction: settingAction, name: "Advertiser")
+        self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: advertiserRemoveWarning,
+                                                                      presenting: viewController,
+                                                                      delegate: self,
+                                                                      animated: true)
     }
     
     func showBluetoothDisabledDialog() {

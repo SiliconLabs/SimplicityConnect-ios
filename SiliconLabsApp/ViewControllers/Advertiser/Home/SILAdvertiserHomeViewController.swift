@@ -105,33 +105,10 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     // MARK: UITableViewDelegate
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (tableView.indexPathsForVisibleRows?[0] == indexPath) {
-            tableView.bringSubviewToFront(cell)
-        }
-        if (indexPath.row == 0) {
-            if (tableView.numberOfRows(inSection: indexPath.section) > 1) {
-                cell.addShadowWhenAtTop()
-                cell.roundCornersTop()
-            } else {
-                cell.addShadowWhenAtBottom()
-                cell.roundCornersAll()
-            }
-        } else {
-            if (tableView.numberOfRows(inSection: indexPath.section) - 1 == indexPath.row) {
-                cell.addShadowWhenAtBottom()
-                cell.roundCornersBottom()
-            } else {
-                cell.roundCornersNone()
-                cell.addShadowWhenInMid()
-            }
-        }
-        cell.clipsToBounds = false
+        SILTableViewWithShadowCells.tableView(tableView, willDisplay: cell, forRowAt: indexPath)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let size = CGRect(origin: tableView.bounds.origin, size: CGSize(width: tableView.bounds.size.width, height: 20))
-        let view = UIView(frame: size)
-        view.backgroundColor = .clear
-        return view
+        return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 20.0)
     }
 }

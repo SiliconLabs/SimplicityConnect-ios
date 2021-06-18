@@ -55,4 +55,8 @@
     return [self.descriptorModelDictionary objectForIdKey:string];
 }
 
+- (SILBluetoothDescriptorModel *)descriptorModelForName:(NSString *)string {
+    return [self.descriptorModelDictionary objectForNameKey:string];
+}
+
 @end

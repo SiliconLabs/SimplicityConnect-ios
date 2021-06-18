@@ -24,6 +24,12 @@ def shared_pods
     pod 'RealmSwift'
 end
 
+def test_pods
+  pod 'Quick'
+  pod 'Nimble'
+  pod 'OCMock'
+end
+
 target 'BlueGecko' do
    shared_pods
 end
@@ -34,4 +40,14 @@ end
 
 target 'WirelessGecko' do
    shared_pods
+end
+
+target 'SiliconLabsAppTests' do
+  shared_pods
+  test_pods
+end
+
+target 'BlueGeckoTests' do
+  shared_pods
+  test_pods
 end

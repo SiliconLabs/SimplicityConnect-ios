@@ -43,6 +43,7 @@
         self.fieldBuilder = [[SILCharacteristicFieldBuilder alloc] init];
         self.fieldTableRowModels = [self.fieldBuilder characteristicModelValueAsFieldRows:self.bluetoothModel];
         self.requirementsMet = [[NSMutableArray alloc] initWithArray:@[@"Mandatory"]];
+        self.descriptorModels = @[];
         self.writeWithResponse = self.characteristic.properties & CBCharacteristicPropertyWrite;
         self.writeNoResponse = self.characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse;
         self.canWrite = self.writeWithResponse || self.writeNoResponse;
@@ -179,6 +180,21 @@
     [self postRegisterLogNotification: [SILLogDataModel prepareLogDescriptionForWriteValueOfCharacteristic:self.characteristic andPeripheral:peripheral andError:*error andData:dataToWrite]];
         
     return YES;
+}
+
+- (NSData *)getDataToWritingToLocalCharacteristicWithError:(NSError**)error {
+    NSData * const dataToWrite = [self dataToWriteWithError:error];
+    
+    if (error != nil && *error) { return nil; }
+    
+    if (!dataToWrite) {
+        if (error != nil) {
+            *error = [NSError errorWithDomain:@"Data is out of range" code:-1 userInfo:nil];
+        }
+        return nil;
+    }
+    
+    return dataToWrite;
 }
 
 - (CBCharacteristicWriteType)checkIfCharacteristicSupportsChosenWriteType:(CBCharacteristicWriteType)writeType {

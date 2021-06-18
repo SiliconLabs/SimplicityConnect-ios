@@ -41,4 +41,5 @@ extern NSInteger const SILMediumFontSizeIpads;
 extern NSInteger const SILSmallFontSizeIphones;
 extern NSInteger const SILSmallFontSizeIpads;
 extern NSInteger const SILNavigationBarTitleFontSize;
+extern NSInteger const SILGattConfiguratorNavigationBarTitleFontSize;
 extern NSInteger const SILScanningButtonTitleFontSize;

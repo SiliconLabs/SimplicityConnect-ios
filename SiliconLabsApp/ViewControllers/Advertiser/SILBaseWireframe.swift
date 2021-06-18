@@ -8,8 +8,18 @@
 
 import Foundation
 
-@objcMembers
-class SILBaseWireframe: NSObject {
+protocol SILBaseWireframeType : class {
+    var viewController: UIViewController { get }
+    var navigationController: UINavigationController? { get }
+    
+    init(viewController: UIViewController)
+    func releaseViewController()
+    func presentToastAlert(message : String, toastType: ToastType, shouldHasSizeOfText: Bool, completion: @escaping () -> ())
+    func presentContextMenu(sourceView: UIView, options: [ContextMenuOption])
+    func open(url: String)
+}
+
+class SILBaseWireframe: NSObject, SILBaseWireframeType {
     private(set) unowned var viewController: UIViewController
     private var viewControllerReference: UIViewController?
     
@@ -17,7 +27,7 @@ class SILBaseWireframe: NSObject {
         return viewController.navigationController
     }
 
-    init(viewController: UIViewController) {
+    required init(viewController: UIViewController) {
         self.viewController = viewController
         self.viewControllerReference = viewController
     }

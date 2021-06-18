@@ -19,6 +19,7 @@
 @property (nonatomic, copy) BOOL (^filter)(SILDiscoveredPeripheral*);
 
 - (instancetype)initWithAppType:(SILApp *)app;
+- (instancetype)initWithAppType:(SILApp *)app withFilterByName:(NSString *)name;
 - (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals;
 - (NSString *)selectDeviceString;
 

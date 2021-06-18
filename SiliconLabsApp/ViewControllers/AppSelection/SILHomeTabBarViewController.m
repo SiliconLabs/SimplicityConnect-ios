@@ -8,7 +8,6 @@
 
 #import "SILHomeTabBarViewController.h"
 #import "UIImage+SILImages.h"
-#import "SILAppSelectionViewController.h"
 #import "SILApp.h"
 #import "SILUITabBar.h"
 

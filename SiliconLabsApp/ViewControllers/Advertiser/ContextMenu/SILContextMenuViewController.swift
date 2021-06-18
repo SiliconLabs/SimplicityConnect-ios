@@ -14,6 +14,7 @@ class SILContextMenuViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     
     var options: [ContextMenuOption]!
+    var sourceViewWidth: CGFloat?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,17 +26,22 @@ class SILContextMenuViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private func updatePreferredContentSize() {
-        let width = options
-            .map({ option in
-                return option.title.size(withAttributes: [
-                    .font: UIFont(name: "Roboto-Regular", size: 17)!
+        var width = CGFloat(0)
+        if let sourceViewWidth = sourceViewWidth {
+            width = sourceViewWidth
+        } else {
+            let widthWithoutMargin = options
+                .map({ option in
+                    return option.title.size(withAttributes: [
+                        .font: UIFont(name: "Roboto-Regular", size: 17)!
                     ]).width
-            }).max() ?? 0
-        let widthWithMargin = width + 48
+                }).max() ?? 0
+            width = widthWithoutMargin + 48
+        }
 
         let height = CGFloat(options.count) * Self.CellHeight
 
-        preferredContentSize = CGSize(width: widthWithMargin, height: height)
+        preferredContentSize = CGSize(width: width, height: height)
     }
     
     // MARK: UITableViewDelegate

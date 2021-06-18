@@ -12,7 +12,7 @@ extension SILBaseWireframe {
     func presentContextMenu(sourceView: UIView, options: [ContextMenuOption]) {
         SILContextMenu.present(owner: viewController, sourceView: sourceView, options: options)
     }
-    
+
     func open(url: String) {
         UIApplication.shared.open(URL(string: url)!)
     }

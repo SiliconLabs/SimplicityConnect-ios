@@ -31,6 +31,7 @@
 - (void)updateWithField:(id<SILCharacteristicFieldRow>)fieldModel;
 ///@discussion won't write to peripheral if this model cannot write
 - (BOOL)writeIfAllowedToPeripheral:(CBPeripheral *)peripheral withWriteType:(CBCharacteristicWriteType)writeType error:(NSError**)error;
+- (NSData *)getDataToWritingToLocalCharacteristicWithError:(NSError**)error;
 - (NSData *)dataToWriteWithError:(NSError * __autoreleasing *)error;
 - (void)readCharacteristicIfAllowed;
 - (BOOL)clearModel;

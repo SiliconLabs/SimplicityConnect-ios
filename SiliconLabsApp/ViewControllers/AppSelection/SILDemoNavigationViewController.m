@@ -7,7 +7,6 @@
 //
 
 #import "SILDemoNavigationViewController.h"
-#import "SILAppSelectionViewController.h"
 
 @interface SILDemoNavigationViewController () <UINavigationControllerDelegate>
 

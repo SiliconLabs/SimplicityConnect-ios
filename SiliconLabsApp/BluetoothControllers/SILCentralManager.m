@@ -48,8 +48,6 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 @interface SILCentralManager ()
 
-@property (strong, nonatomic) NSArray *serviceUUIDs;
-
 @property (assign, nonatomic) BOOL isScanning;
 @property (strong, nonatomic) NSMutableDictionary *discoveredPeripheralMapping;
 @property (strong, nonatomic) NSTimer *discoveryTimeoutTimer;
@@ -321,6 +319,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 - (void)checkBluetoothState:(CBManagerState)state {
     if (state == CBManagerStatePoweredOff) {
         [self postBluetoothWasDisabledNotification];
+        [self.connectionsViewModel clearViewModelData];
         NSLog(@"BLUETOOTH DISABLED!");
     } else if (state == CBManagerStatePoweredOn) {
         NSLog(@"Blutooth enabled");

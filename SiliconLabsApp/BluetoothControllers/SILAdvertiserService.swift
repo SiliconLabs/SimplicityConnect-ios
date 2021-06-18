@@ -14,14 +14,15 @@ fileprivate struct SILRunningAdvertiser {
 }
 
 class SILAdvertiserService: NSObject, CBPeripheralManagerDelegate {
-    private let settings: SILAdvertiserSettings
+    static let shared = SILAdvertiserService()
+    private let settings: SILAdvertiserSettings = SILAdvertiserSettings.shared
     
     let runningAdvertisers: SILObservable<[SILAdvertisingSetEntity]> = SILObservable(initialValue: [])
     let blutoothEnabled: SILObservable<Bool> = SILObservable(initialValue: true)
     private var runningAdvertisersMap: [String: SILRunningAdvertiser] = [:]
     
-    init(settings: SILAdvertiserSettings) {
-        self.settings = settings
+    private override init() {
+        super.init()
     }
     
     deinit {

@@ -19,5 +19,6 @@
 - (SILBluetoothCharacteristicModel *)characteristicModelForUUIDString:(NSString *)string;
 - (SILBluetoothCharacteristicModel *)characteristicModelForName:(NSString *)string;
 - (SILBluetoothDescriptorModel *)descriptorModelForUUIDString:(NSString *)string;
+- (SILBluetoothDescriptorModel *)descriptorModelForName:(NSString *)string;
 
 @end

@@ -22,9 +22,13 @@ NSString * const SILImageNameHomeSmartWatch = @"HomeSmartWatch";
 NSString * const SILImageNameHomeThermometer = @"thermometer";
 NSString * const SILImageNameHomeDebug = @"browser";
 NSString * const SILImageNameHomeKitDebug = @"HomeKitDebug";
-NSString * const SILImageNameHomeConnectedLighting = @"light";
+NSString * const SILImageNameHomeConnectedLighting = @"connectedLighting";
 NSString * const SILImageNameHomeRangeTestDemo = @"icon - demo - range_test";
 NSString * const SILImageNameHomeAdvertiser = @"icon - advertiser";
+NSString * const SILImageNameHomeIOPTester = @"iopTester";
+NSString * const SILImageNameHomeThroughput = @"throughput";
+NSString * const SILImageNameHomeGattConfigurator = @"gattConfigurator";
+NSString * const SILImageNameHomeBlinky = @"graphic - blinky";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";
@@ -102,3 +106,7 @@ NSString * const SILImageSortZAOn = @"icon - sort - ZA - on";
 NSString * const SILImageSortDescendingOff = @"icon - descending - off";
 NSString * const SILImageSortDescendingOn = @"icon - descending - on";
 
+NSString * const SILDetailsTabBarRemoteOff = @"icon - remote - inactive";
+NSString * const SILDetailsTabBarRemoteOn = @"icon - remote - active";
+NSString * const SILDetailsTabBarLocalOff = @"icon - local - inactive";
+NSString * const SILDetailsTabBarLocalOn = @"icon - local - active";

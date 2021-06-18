@@ -219,20 +219,24 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 }
 
 - (void)handleBluetoothDisabledNotification:(NSNotification *)notification {
-    SILBluetoothDisabledAlertObjc* bluetoothDiabledAlert = nil;
+    SILBluetoothDisabledAlertObjc* bluetoothDisabledAlert = nil;
     
     if (self.viewModel.app.appType == SILAppTypeHealthThermometer) {
-        bluetoothDiabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertHealthThermometer];
+        bluetoothDisabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertHealthThermometer];
     } else if (self.viewModel.app.appType == SILAppTypeConnectedLighting) {
-        bluetoothDiabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertConnectedLighting];
+        bluetoothDisabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertConnectedLighting];
+    } else if (self.viewModel.app.appType == SILAppTypeThroughput) {
+        bluetoothDisabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertThroughput];
+    } else if (self.viewModel.app.appType == SILAppTypeBlinky) {
+        bluetoothDisabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertBlinky];
     }
     
-    if (bluetoothDiabledAlert == nil) {
+    if (bluetoothDisabledAlert == nil) {
         return;
     }
     
-    [self alertWithOKButtonWithTitle:[bluetoothDiabledAlert getTitle]
-    message:[bluetoothDiabledAlert getMessage] completion:^(UIAlertAction * action) {
+    [self alertWithOKButtonWithTitle:[bluetoothDisabledAlert getTitle]
+    message:[bluetoothDisabledAlert getMessage] completion:^(UIAlertAction * action) {
         if ([self.delegate respondsToSelector:@selector(didDismissDeviceSelectionViewController)]) {
                 [self.delegate didDismissDeviceSelectionViewController];
         }

@@ -67,6 +67,12 @@ class SILObservableTokenBag {
     func add(token: SILObservableToken) {
         tokens.append(token)
     }
+    
+    func invalidateTokens() {
+        for token in tokens {
+            token.invalidate()
+        }
+    }
 }
 
 extension SILObservableToken {

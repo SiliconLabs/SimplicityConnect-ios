@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, SILDFUStatus) {
         completion:(void(^)(CBPeripheral *peripheral, NSError *error))completion;
 - (void)disconnectConnectedPeripheral;
 + (NSUInteger)maximumByteAlignedWriteValueLengthForPeripheral:(CBPeripheral *)peripheral forType:(CBCharacteristicWriteType)type;
+- (void)reconnectToOTADevice;
 
 @end
 

@@ -23,7 +23,7 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 
 @interface SILCentralManager : NSObject <CBCentralManagerDelegate, CLLocationManagerDelegate>
 
-@property (nonnull, strong, nonatomic, readonly) NSArray *serviceUUIDs;
+@property (nonnull, strong, nonatomic) NSArray *serviceUUIDs;
 @property (nonnull, strong, nonatomic) CBCentralManager *centralManager;
 @property (nullable, strong, nonatomic) CBPeripheral *connectedPeripheral;
 

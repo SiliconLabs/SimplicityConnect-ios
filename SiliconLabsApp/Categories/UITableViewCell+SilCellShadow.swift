@@ -11,18 +11,27 @@ import UIKit
 extension UITableViewCell {
     @objc func addShadowWhenAtTop() {
         let topShadowRect = CGRect(x: bounds.origin.x, y: bounds.origin.y + 1,
-                                   width: bounds.size.width, height: bounds.size.height - 2);
+                                   width: bounds.size.width, height: bounds.size.height - 3);
         addShadow(withOffset: CGSize(width: SILCellShadowOffset.width, height: 0), radius: SILCellShadowRadius)
         let radiusRect = CGSize(width: CornerRadiusStandardValue, height: CornerRadiusStandardValue);
         self.layer.shadowPath = UIBezierPath(roundedRect: topShadowRect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: radiusRect).cgPath
     }
     
     @objc func addShadowWhenInMid() {
-        addShadow(withOffset: CGSize(width: SILCellShadowOffset.width, height: -SILCellShadowOffset.height),
+        addShadow(withOffset: CGSize(width: SILCellShadowOffset.width, height: -2),
                   radius: SILCellShadowRadius)
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
     }
     
     @objc func addShadowWhenAtBottom() {
+        let topShadowRect = CGRect(x: bounds.origin.x, y: bounds.origin.y - 2,
+                                   width: bounds.size.width, height: bounds.size.height + 3)
+        addShadow(withOffset: CGSize(width: SILCellShadowOffset.width, height: 0), radius: SILCellShadowRadius)
+        let radiusRect = CGSize(width: CornerRadiusStandardValue, height: CornerRadiusStandardValue);
+        self.layer.shadowPath = UIBezierPath(roundedRect: topShadowRect, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: radiusRect).cgPath
+    }
+    
+    @objc func addShadowWhenAlone() {
         self.layer.shadowPath = nil
         addShadow(withOffset: SILCellShadowOffset, radius: SILCellShadowRadius)
     }

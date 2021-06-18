@@ -41,6 +41,7 @@ NSInteger const SILMediumFontSizeIpads = 20;
 NSInteger const SILSmallFontSizeIphones = 12;
 NSInteger const SILSmallFontSizeIpads = 20;
 NSInteger const SILNavigationBarTitleFontSize = 34;
+NSInteger const SILGattConfiguratorNavigationBarTitleFontSize = 28;
 NSInteger const SILScanningButtonTitleFontSize = 18;
 
 CGFloat const SILCornerRadius = 20.0;

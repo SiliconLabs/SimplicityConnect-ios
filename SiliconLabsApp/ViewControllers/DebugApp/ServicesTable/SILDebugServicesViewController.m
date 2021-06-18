@@ -101,14 +101,12 @@ static float kTableRefreshInterval = 1;
     [super viewDidLoad];
     [self.menuButton setHidden:YES];
     [self.menuContainer setHidden:YES];
-    [self registerForNotifications];
     [self registerNibsAndSetUpSizing];
     [self startServiceSearch];
     [self setupNavigationBar];
     [self setupBrowserExpandableViewManager];
     [self setupButtonsTabBar];
     [self setupConnectionsViewModel];
-    [self addObserverForUpdateConnectionsButtonTitle];
     [self updateConnectionsButtonTitle];
     [self hideRSSIView];
     self.isUpdatingFirmware = NO;
@@ -119,6 +117,8 @@ static float kTableRefreshInterval = 1;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.deviceNameLabel.text = self.peripheral.name;
+    [self registerForNotifications];
+    [self addObserverForUpdateConnectionsButtonTitle];
     [self installRSSITimer];
 }
 
@@ -126,12 +126,25 @@ static float kTableRefreshInterval = 1;
     [super viewWillDisappear:animated];
     [self dismissPopoverIfExist];
     [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
+    [self removeUnfiredTimers];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dismissPopoverIfExist {
     if (self.popoverController) {
         [self.popoverController dismissPopoverAnimated:YES];
+    }
+}
+
+- (void)removeUnfiredTimers {
+    [self removeTimer:self.tableRefreshTimer];
+    [self removeTimer:self.rssiTimer];
+}
+
+- (void)removeTimer:(NSTimer *)timer {
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
     }
 }
 
@@ -328,7 +341,7 @@ static float kTableRefreshInterval = 1;
 
 - (void)didDisconnectPeripheralNotifcation:(NSNotification *)notification {
     NSString* uuid = (NSString*)notification.userInfo[SILNotificationKeyUUID];
-    
+    NSLog(@"disconnect in debug service");
     if ([uuid isEqualToString:self.peripheral.identifier.UUIDString]) {
         if (!self.isUpdatingFirmware) {
             [self.navigationController popViewControllerAnimated:YES];
@@ -487,7 +500,7 @@ static float kTableRefreshInterval = 1;
             [cell addShadowWhenAtTop];
         }  else {
             [cell roundCornersAll];
-            [cell addShadowWhenAtBottom];
+            [cell addShadowWhenAlone];
         }
     } else {
         if ([self.modelsToDisplay[indexPath.row + 1] isEqual:kSpacerCellIdentifieer]) {
@@ -772,7 +785,7 @@ static float kTableRefreshInterval = 1;
         if (!title) {
             title = self.peripheral.name ?: DefaultDeviceName;
         }
-        self.title = title;
+        self.deviceNameLabel.text = title;
         self.tableView.hidden = NO;
         self.headerView.hidden = NO;
         for (CBService *service in peripheral.services) {

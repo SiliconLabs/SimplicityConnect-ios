@@ -21,7 +21,6 @@ extern NSString * const SILNotificationDisconnectPeripheral;
 extern NSString * const SILNotificationDeleteDisconnectedPeripheral;
 extern NSString * const SILNotificationDisconnectAllPeripheral;
 extern NSString * const SILNotificationFailedToConnectPeripheral;
-extern NSString * const SILNotificationCellsForVisibleRows;
 extern NSString * const SILNotificationDisplayToastRequest;
 extern NSString * const SILNotificationDisplayToastResponse;
 

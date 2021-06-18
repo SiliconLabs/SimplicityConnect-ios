@@ -17,19 +17,61 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 - (instancetype)initWithAppType:(SILApp *)app {
     self = [super init];
     self.app = app;
-    self.filter = ^BOOL(SILDiscoveredPeripheral* _) {
-        return YES;
+    
+    self.filter = ^BOOL(SILDiscoveredPeripheral* peripheral) {
+        for (CBUUID * cbuuid in [SILDeviceSelectionViewModel serviceListForAppType:app.appType]) {
+            if ([peripheral.advertisedServiceUUIDs containsObject:cbuuid]) {
+                return YES;
+            }
+        }
+        return NO;
     };
     
     return self;
 }
 
+- (instancetype)initWithAppType:(SILApp *)app withFilterByName:(NSString *)name {
+    self = [self initWithAppType:app];
+    if (![name isEqual:@""]) {
+        self.filter = ^BOOL(SILDiscoveredPeripheral* discoveredPeripheral) {
+            return [discoveredPeripheral.advertisedLocalName isEqual:name];
+        };
+    } else {
+        self.filter = ^BOOL(SILDiscoveredPeripheral * _) {
+            return YES;
+        };
+    }
+    
+    return self;
+}
+
++ (NSArray*)serviceListForAppType:(SILAppType)appType {
+    NSArray *serviceUUIDs = @[];
+    switch (appType) {
+        case SILAppTypeHealthThermometer:
+            serviceUUIDs = @[
+                             [CBUUID UUIDWithString:SILServiceNumberHealthThermometer],
+                             [CBUUID UUIDWithString:@"FFF0"], // Temporarily added to support connecting to 3rd Party Thermometer...
+                             ];
+            break;
+        case SILAppTypeConnectedLighting:
+            serviceUUIDs = @[[CBUUID UUIDWithString:SILServiceNumberConnectedLightingConnect],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingProprietary],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingThread],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingZigbee],];
+            break;
+        default:
+            break;
+    }
+    return serviceUUIDs;
+}
+
 - (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
-    self.discoveredDevices = [self sortedDiscoveredDevices:[self removeNonConnectableDevices:discoveredPeripherals]];
+    self.discoveredDevices = [self sortedDiscoveredDevices:[self removeDevicesNotMatchRequirements:discoveredPeripherals]];
     self.hasDataChanged = YES;
 }
 
-- (NSArray<SILDiscoveredPeripheral*>*)removeNonConnectableDevices:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
+- (NSArray<SILDiscoveredPeripheral*>*)removeDevicesNotMatchRequirements:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals {
     NSPredicate* filterPredicate = [NSPredicate predicateWithBlock:^BOOL(SILDiscoveredPeripheral* evaluatedObject, NSDictionary<NSString *,id>* bindings) {
         return evaluatedObject.isConnectable && self.filter(evaluatedObject);
     }];
@@ -57,7 +99,7 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 }
 
 - (NSString *)selectDeviceString {
-    if (self.app.appType == SILAppTypeHealthThermometer) {
+    if (self.app.appType == SILAppTypeHealthThermometer || self.app.appType == SILAppTypeThroughput || self.app.appType == SILAppTypeBlinky) {
         return @"Select a Bluetooth Device";
     } else if (self.app.appType == SILAppTypeConnectedLighting || self.app.appType == SILAppTypeRangeTest) {
         return @"Select a Wireless Gecko Device";

@@ -13,5 +13,6 @@
 
 - (void)beginValueEditWithValue:(SILValueFieldRowModel *)valueModel;
 - (BOOL)saveCharacteristic:(SILCharacteristicTableModel *)characteristicModel withWriteType:(CBCharacteristicWriteType)writeType error:(NSError **)error;
+- (BOOL)writeToLocalCharacteristic:(SILCharacteristicTableModel *)characteristicModel asLocalIndicate:(BOOL)asLocalIndicate error:(NSError **)error;
 
 @end

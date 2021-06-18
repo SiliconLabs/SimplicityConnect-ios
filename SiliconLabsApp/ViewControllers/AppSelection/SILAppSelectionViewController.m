@@ -30,7 +30,7 @@
 #import "SILHomeKitDebugDeviceViewController.h"
 #endif
 
-@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate>
+@interface SILAppSelectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate, SILIOPPopupDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *allSpace;
 @property (strong, nonatomic) WYPopoverController *devicePopoverController;
@@ -170,6 +170,22 @@
     [wireframe releaseViewController];
 }
 
+-(void)showIOPEnterDeviceNamePopup: (SILApp *)app animated:(BOOL)animated {
+    SILIOPDeviceNamePopup *popupVC = [[SILIOPDeviceNamePopup alloc] init];
+    popupVC.delegate = self;
+    self.devicePopoverController = [WYPopoverController sil_presentCenterPopoverWithContentViewController:popupVC
+                                                                                 presentingViewController:self
+                                                                                                 delegate:self
+                                                                                                 animated:YES];
+}
+
+- (void)showIOPTestList: (NSString * _Nonnull)text {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"SILIOPTest" bundle:nil];
+    SILIOPTesterViewController *iopVC = [storyboard instantiateViewControllerWithIdentifier:@"SILIOPBLETesterVC"];
+    iopVC.deviceNameToSearch = text;
+    [self.navigationController pushViewController:iopVC animated: YES];
+}
+
 - (void)showHomeKitDebugWithApp:(SILApp *)app animated:(BOOL)animated {
 #if ENABLE_HOMEKIT
     SILHomeKitDebugDeviceViewController *appViewController = [[SILHomeKitDebugDeviceViewController alloc] init];
@@ -189,6 +205,7 @@
     switch (app.appType) {
         case SILAppTypeConnectedLighting:
         case SILAppTypeHealthThermometer:
+        case SILAppTypeBlinky:
             [self presentDeviceSelectionViewControllerWithApp:app animated:YES];
             break;
         case SILAppTypeRangeTest:
@@ -206,6 +223,8 @@
         case SILAppTypeHomeKitDebug:
             [self showHomeKitDebugWithApp:app animated:YES];
             break;
+        case SILAppIopTest:
+            [self showIOPEnterDeviceNamePopup:app animated:YES];
         default:
             break;
     }
@@ -271,6 +290,11 @@
             appViewController.centralManager = viewController.centralManager;
             appViewController.connectedPeripheral = peripheral;
             [self.navigationController pushViewController:appViewController animated:YES];
+        } else if (viewController.viewModel.app.appType == SILAppTypeBlinky) {
+            SILAppTypeBlinkyViewController *appViewController = [[UIStoryboard storyboardWithName:@"SILAppTypeBlinky" bundle:nil] instantiateInitialViewController];
+            appViewController.centralManager = viewController.centralManager;
+            appViewController.connectedPeripheral = peripheral;
+            [self.navigationController pushViewController:appViewController animated:YES];
         }
     }];
 }
@@ -327,6 +351,25 @@
     _isDisconnectedIntentionally = NO;
 }
 
+#pragma mark - SILIOPPopupDelegate
 
+- (void)didTappedOKButtonWithDeviceName:(NSString *)text bluetoothState:(BOOL)bluetoothState {
+    [self.devicePopoverController dismissPopoverAnimated:YES];
+    self.devicePopoverController = nil;
+    if (bluetoothState) {
+        [self showIOPTestList:text];
+    } else {
+        SILBluetoothDisabledAlertObjc* bluetoothDisabledAlert = [[SILBluetoothDisabledAlertObjc alloc] initWithBluetoothDisabledAlert:SILBluetoothDisabledAlertInteroperabilityTest];
+        
+        [self alertWithOKButtonWithTitle:[bluetoothDisabledAlert getTitle]
+                                 message:[bluetoothDisabledAlert getMessage]
+                              completion:nil];
+    }
+}
+
+- (void)didTappedCancelButton {
+    [self.devicePopoverController dismissPopoverAnimated:YES];
+    self.devicePopoverController = nil;
+}
 
 @end

@@ -14,6 +14,10 @@ class SILAdvertiserSettings {
     private static let NonSaveChangesExitWarningKey = "SILNonSaveChangesExitWarningKey"
 
     private let userDefaults = UserDefaults.standard
+    
+    static let shared = SILAdvertiserSettings()
+    
+    private init() {}
 
     var completeLocalName: String {
         get { userDefaults.string(forKey: Self.CompleteLocalNameSettingKey) ?? UIDevice.current.name }

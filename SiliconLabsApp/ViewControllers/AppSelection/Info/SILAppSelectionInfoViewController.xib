@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -46,26 +46,8 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lt-nk-Du5">
                     <rect key="frame" x="0.0" y="48" width="375" height="571"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ABOUT SILICON LABS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2F-lE-fcX">
-                            <rect key="frame" x="22" y="18" width="118" height="14"/>
-                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
-                            <color key="textColor" red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                            <variation key="widthClass=compact">
-                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
-                            </variation>
-                        </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SPg-Sb-313">
-                            <rect key="frame" x="22" y="42" width="331" height="1"/>
-                            <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="2" id="Rgw-oH-bev">
-                                    <variation key="widthClass=compact" constant="1"/>
-                                </constraint>
-                            </constraints>
-                        </view>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="331" placeholderIntrinsicHeight="100" scrollEnabled="NO" contentInsetAdjustmentBehavior="never" editable="NO" text="Placeholder description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xFi-iS-e1Z">
-                            <rect key="frame" x="22" y="53" width="331" height="100"/>
+                            <rect key="frame" x="22" y="16" width="331" height="100"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="tintColor" red="0.0" green="0.52549019607843139" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -74,7 +56,7 @@
                             <dataDetectorType key="dataDetectorTypes" link="YES"/>
                         </textView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VERSION:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WKY-pL-tjS">
-                            <rect key="frame" x="22" y="163" width="52" height="14"/>
+                            <rect key="frame" x="22" y="126" width="52" height="14"/>
                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
                             <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -84,35 +66,18 @@
                         </label>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="e2F-lE-fcX" firstAttribute="top" secondItem="3lt-nk-Du5" secondAttribute="top" constant="36" id="01x-4D-a04">
-                            <variation key="widthClass=compact" constant="18"/>
-                        </constraint>
-                        <constraint firstAttribute="centerX" secondItem="SPg-Sb-313" secondAttribute="centerX" id="0h9-bG-IPx"/>
-                        <constraint firstItem="SPg-Sb-313" firstAttribute="width" secondItem="3lt-nk-Du5" secondAttribute="width" constant="-72" id="4Xz-96-SU0">
-                            <variation key="widthClass=compact" constant="-44"/>
-                        </constraint>
-                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="width" secondItem="SPg-Sb-313" secondAttribute="width" id="Bmw-7z-y6c"/>
-                        <constraint firstItem="e2F-lE-fcX" firstAttribute="leading" secondItem="SPg-Sb-313" secondAttribute="leading" id="Fzm-6C-atc"/>
+                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="top" secondItem="3lt-nk-Du5" secondAttribute="top" constant="16" id="0qN-Ig-213"/>
+                        <constraint firstAttribute="trailing" secondItem="xFi-iS-e1Z" secondAttribute="trailing" constant="22" id="GlZ-ek-C0K"/>
                         <constraint firstAttribute="bottom" secondItem="WKY-pL-tjS" secondAttribute="bottom" constant="18" id="SCb-rO-p0Z"/>
-                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="leading" secondItem="SPg-Sb-313" secondAttribute="leading" id="WC5-Da-VhD"/>
+                        <constraint firstItem="WKY-pL-tjS" firstAttribute="leading" secondItem="3lt-nk-Du5" secondAttribute="leading" constant="22" id="Y6p-70-jOn"/>
                         <constraint firstItem="WKY-pL-tjS" firstAttribute="top" secondItem="xFi-iS-e1Z" secondAttribute="bottom" constant="10" id="aAq-eB-zd1"/>
-                        <constraint firstItem="SPg-Sb-313" firstAttribute="top" secondItem="e2F-lE-fcX" secondAttribute="bottom" constant="18" id="cZ0-m9-veQ">
-                            <variation key="widthClass=compact" constant="10"/>
-                        </constraint>
-                        <constraint firstItem="SPg-Sb-313" firstAttribute="leading" secondItem="3lt-nk-Du5" secondAttribute="leading" constant="36" id="fW7-Vc-iBb">
-                            <variation key="widthClass=compact" constant="22"/>
-                        </constraint>
-                        <constraint firstAttribute="trailing" secondItem="SPg-Sb-313" secondAttribute="trailing" constant="36" id="opb-TC-JDj">
-                            <variation key="widthClass=compact" constant="22"/>
-                        </constraint>
-                        <constraint firstItem="WKY-pL-tjS" firstAttribute="leading" secondItem="SPg-Sb-313" secondAttribute="leading" id="r16-8Z-yOj"/>
-                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="top" secondItem="SPg-Sb-313" secondAttribute="bottom" constant="10" id="yh2-Em-dgY"/>
+                        <constraint firstItem="xFi-iS-e1Z" firstAttribute="leading" secondItem="3lt-nk-Du5" secondAttribute="leading" constant="22" id="iGr-rB-NqQ"/>
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iqn-Cl-cQh" userLabel="Footer View">
                     <rect key="frame" x="0.0" y="619" width="375" height="48"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TTM-qz-acH">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TTM-qz-acH">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="48"/>
                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                             <state key="normal" title="OK">

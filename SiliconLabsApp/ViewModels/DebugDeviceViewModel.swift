@@ -30,72 +30,66 @@ final class DebugDeviceViewModel: NSObject {
 
     weak var delegate: DebugDeviceViewModelDelegate? = nil
 
-    let centralManager = SILCentralManager(serviceUUIDs: [])
+    let centralManager: SILCentralManager
     private var discoveredPeripherals: [SILDiscoveredPeripheral] = []
     private var allDiscoveredPeripheralsViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
     private(set) var discoveredPeripheralsViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
     private var replacementDiscoveredPeripheralViewModels: [SILDiscoveredPeripheralDisplayDataViewModel] = []
     var connectedPeripheral: CBPeripheral? = nil
     private(set) var isConnecting: [CBPeripheral : Bool] = [:]
-    var didStopScanning = false
+    private var shouldStartReplacementMode = false
     var isContentAvailable: Bool {
-        return discoveredPeripheralsViewModels.count > 0 || didStopScanning
+        return discoveredPeripheralsViewModels.count > 0
     }
     var observing = false
 
     var currentMinRSSI: NSNumber? = nil {
         didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed(filtering: true)
         }
     }
     
     var searchByDeviceName: String? = nil {
         didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed(filtering: true)
         }
     }
-    
-    var searchByAdvertisingData: String? = nil {
-        didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
-        }
-    }
-    
+        
     var beaconTypes: [SILBrowserBeaconType]? = nil {
         didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed(filtering: true)
         }
     }
 
     var isFavourite: Bool = false {
         didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed(filtering: true)
         }
     }
 
     var isConnectable: Bool = false {
         didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
+            removeAndSortDiscoveredDevicesIfNeed(filtering: true)
         }
     }
     
+    var sortOption: SILSortOption = .none {
+        didSet {
+            removeAndSortDiscoveredDevicesIfNeed(filtering: true)
+        }
+    }
+
     var peripheralDisconnectedMessage: String? {
         guard let peripheral = connectedPeripheral else { return nil }
         let peripheralName = peripheral.name ?? DefaultDeviceName
         return "Disconnected from \(peripheralName)"
     }
     
-    var sortOption: SILSortOption = .none {
-        didSet {
-            removeAndSortDiscoveredDevicesIfNeed()
-        }
-    }
-
     // MARK: - Lifecycle
 
     override init() {
+        self.centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
         super.init()
-
         registerNotifications()
     }
 
@@ -159,8 +153,8 @@ final class DebugDeviceViewModel: NSObject {
         preparePeripheralsForCalculatingAdvertisingIntervals()
     }
 
-    func stopScanning(visibleCellsCount: Int) {
-        didStopScanning = visibleCellsCount > 0
+    func stopScanning() {
+        shouldStartReplacementMode = allDiscoveredPeripheralsViewModels.count > 0
         centralManager.removeScan(forPeripheralsObserver: self)
         discoveredPeripherals = []
     }
@@ -172,7 +166,7 @@ final class DebugDeviceViewModel: NSObject {
     func refreshDiscoveredPeripheralViewModels() {
         let peripheralViewModels = discoverForCurrentArrayPeripheralDevices()
         
-        if didStopScanning {
+        if shouldStartReplacementMode {
            performActionsForStopScanningWasTapped(peripheralViewModels)
         } else {
             addNewDevicesIfNeed(peripheralViewModels)
@@ -288,16 +282,14 @@ final class DebugDeviceViewModel: NSObject {
         }
     }
     
-    private func removeAndSortDiscoveredDevicesIfNeed() {
+    private func removeAndSortDiscoveredDevicesIfNeed(filtering: Bool = false) {
         setupDevicesForFilterAndSorting()
         filterDevices()
         sortDevices()
-        if didStopScanning {
-            postCellsForVisibleRows()
-            didStopScanning = false
-        } else {
-            postReloadBrowserTable()
+        if shouldStartReplacementMode && !filtering {
+            shouldStartReplacementMode = false
         }
+        postReloadBrowserTable()
     }
 
     // MARK: - Filtering
@@ -305,7 +297,6 @@ final class DebugDeviceViewModel: NSObject {
     private func filterDevices() {
         filterByCurrentMinRSSI()
         filterBySearchDeviceName()
-        filterBySearchAdvertisingData()
         filterByBeaconTypes()
         filterByIsFavourite()
         filterByIsConnectable()
@@ -327,10 +318,6 @@ final class DebugDeviceViewModel: NSObject {
             let namePredicate = NSPredicate(format: "discoveredPeripheralDisplayData.discoveredPeripheral.advertisedLocalName CONTAINS[cd] %@", searchByDeviceName)
             discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter { namePredicate.evaluate(with: $0) }
         }
-    }
-    
-    private func filterBySearchAdvertisingData() {
-
     }
     
     private func filterByBeaconTypes() {
@@ -439,10 +426,6 @@ final class DebugDeviceViewModel: NSObject {
         NotificationCenter.default.post(name: Notification.Name(SILNotificationReloadBrowserTable), object: nil)
     }
     
-    private func postCellsForVisibleRows() {
-        NotificationCenter.default.post(name: Notification.Name(SILNotificationCellsForVisibleRows), object: nil)
-    }
-
     // MARK: - Notifcation Methods
 
     @objc private func didConnectPeripheral(notification: Notification) {

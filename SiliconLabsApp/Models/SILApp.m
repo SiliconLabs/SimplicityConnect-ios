@@ -16,6 +16,8 @@
                 [self healthThermometerApp],
                 [self connectedLightningApp],
                 [self rangeTestApp],
+                [self blinkyApp],
+                [self throughputApp],
             ];
 }
 
@@ -23,6 +25,8 @@
     return @[
                 [self bluetoothBrowserApp],
                 [self advertiserApp],
+                [self gattConfiguratorApp],
+                [self iopTestApp],
             ];
 }
 
@@ -40,6 +44,14 @@
                                description:@"View readings from the health thermometer service."
                          showcasedProfiles:@{ @"HTP" : @"­Health Thermometer Profile" }
                                  imageName:SILImageNameHomeThermometer];
+}
+
++ (SILApp *)blinkyApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeBlinky
+                                     title:@"Blinky"
+                               description:@"Control LED and receive button presses on a Silabs kit."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeBlinky];
 }
 
 + (SILApp *)bluetoothBeaconingApp {
@@ -80,6 +92,30 @@
                                description:@"Utilize this device as a Bluetooth Low Energy peripheral."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeAdvertiser];
+}
+
++ (SILApp *)iopTestApp {
+    return [[SILApp alloc] initWithAppType:SILAppIopTest
+                                     title:@"Interoperability Test"
+                               description:@"Exercise common Bluetooth operations with Silicon Labs hardware and software."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeIOPTester];
+}
+
++ (SILApp *)gattConfiguratorApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeGATTConfigurator
+                                     title:@"GATT Configurator"
+                               description:@"Allows you to create a local GATT database."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeGattConfigurator];
+}
+
++ (SILApp *)throughputApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeThroughput
+                                     title:@"Throughput"
+                               description:@"Measure throughput between the mobile device and EFR32."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeThroughput];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

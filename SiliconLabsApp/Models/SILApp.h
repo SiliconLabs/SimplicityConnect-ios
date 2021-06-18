@@ -11,11 +11,15 @@
 typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppTypeConnectedLighting,
     SILAppTypeHealthThermometer,
+    SILAppTypeBlinky,
     SILAppTypeRetailBeacon,
     SILAppBluetoothBrowser,
     SILAppTypeHomeKitDebug,
     SILAppTypeRangeTest,
-    SILAppTypeAdvertiser
+    SILAppTypeAdvertiser,
+    SILAppIopTest,
+    SILAppTypeGATTConfigurator,
+    SILAppTypeThroughput,
 };
 
 @interface SILApp : NSObject

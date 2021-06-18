@@ -8,17 +8,32 @@
 
 import Foundation
 
-class SILAdvertiserDetailsWireframe: SILBaseWireframe, WYPopoverControllerDelegate {
+protocol SILAdvertiserDetailsWireframeType : SILBaseWireframeType {
+    init(repository: SILAdvertisingSetRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity)
+    func popPage()
+    func presentAdd16BitServiceDialog(onSave: @escaping (String) -> Void)
+    func presentAdd128BitServiceDialog(onSave: @escaping (String) -> Void)
+    func presentRemoveServiceListWarningDialog(onOk: @escaping (Bool) -> Void)
+    func presentNonSaveChangesExitWarningPopup(onYes: @escaping (Bool) -> Void, onNo: @escaping () -> ())
+    func presentInvalidTimeToastAlert()
+    func dismissPopover()
+}
+
+class SILAdvertiserDetailsWireframe: SILBaseWireframe, SILAdvertiserDetailsWireframeType, WYPopoverControllerDelegate {
     private let storyboard = UIStoryboard(name: "SILAppAdvertiserDetails", bundle: nil)
-    private let advertisingServiceRepository = SILAdvertisingServiceRepository()
+    private let advertisingServiceRepository = SILGattAssignedNumbersRepository()
     private var popover: WYPopoverController?
     
-    init(repository: SILAdvertisingSetRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity) {        
+    required init(repository: SILAdvertisingSetRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity) {
         let vc = storyboard.instantiateViewController(withIdentifier: "AdvertiserDetails") as! SILAdvertiserDetailsViewController
         
         super.init(viewController: vc)
         
         vc.viewModel = SILAdvertiserDetailsViewModel(wireframe: self, repository: repository, serviceRepository: advertisingServiceRepository, service: service, settings: settings, advertiser: advertiser)
+    }
+    
+    required init(viewController: UIViewController) {
+        super.init(viewController: viewController)
     }
     
     func popPage() {

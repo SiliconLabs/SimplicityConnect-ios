@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "SILDebugProperty.h"
 #import "SILGenericAttributeTableCell.h"
-#import "BlueGecko.pch"
 
+@protocol SILMapCellDelegate;
+@protocol SILMapCellProtocol;
+@protocol SILDescriptorTableViewCellDelegate;
 @class SILDebugCharacteristicTableViewCell;
 @class SILCharacteristicTableModel;
 #if ENABLE_HOMEKIT

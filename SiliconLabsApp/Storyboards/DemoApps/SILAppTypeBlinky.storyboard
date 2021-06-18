@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ZpH-W2-d6U">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--App Type Blinky View Controller-->
+        <scene sceneID="AP9-3L-jZ5">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="ZpH-W2-d6U" customClass="SILAppTypeBlinkyViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Qc2-w0-G2H">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="0Hb-FV-mZM" userLabel="All space">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cJC-Op-0dn" userLabel="Navigation Bar">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rGS-mu-r1r" userLabel="Navigation Stack">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X5Y-vJ-ne8" userLabel="Options">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="20"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Sj-jd-C4G">
+                                                                <rect key="frame" x="16" y="-1" width="50" height="22"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="50" id="RLy-6e-bby"/>
+                                                                </constraints>
+                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <state key="normal" image="left_chevron">
+                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="backButtonTapped" destination="ZpH-W2-d6U" eventType="touchUpInside" id="L0J-zg-L7K"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="3Sj-jd-C4G" firstAttribute="centerY" secondItem="X5Y-vJ-ne8" secondAttribute="centerY" id="AbF-cA-7e3"/>
+                                                            <constraint firstItem="3Sj-jd-C4G" firstAttribute="leading" secondItem="X5Y-vJ-ne8" secondAttribute="leading" constant="16" id="ypP-c5-5PO"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1zY-8U-YCs" userLabel="Title">
+                                                        <rect key="frame" x="0.0" y="20" width="414" height="60"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blinky" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FHX-QB-6Y5" customClass="SILUILabels">
+                                                                <rect key="frame" x="0.0" y="10" width="204" height="40"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="204" id="28w-wq-sv7"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="34"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="FHX-QB-6Y5" firstAttribute="leading" secondItem="1zY-8U-YCs" secondAttribute="leading" id="Gsv-xM-n6i"/>
+                                                            <constraint firstItem="FHX-QB-6Y5" firstAttribute="centerY" secondItem="1zY-8U-YCs" secondAttribute="centerY" id="OCk-99-A48"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="1zY-8U-YCs" firstAttribute="height" secondItem="rGS-mu-r1r" secondAttribute="height" multiplier="0.75" id="BBE-Gv-hzI"/>
+                                                    <constraint firstAttribute="height" constant="80" id="QqW-CN-Gve"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" name="sil_siliconLabsRedColor"/>
+                                        <constraints>
+                                            <constraint firstItem="rGS-mu-r1r" firstAttribute="leading" secondItem="cJC-Op-0dn" secondAttribute="leading" id="1cn-tb-3kc"/>
+                                            <constraint firstAttribute="trailing" secondItem="rGS-mu-r1r" secondAttribute="trailing" id="2Zg-qc-uJI"/>
+                                            <constraint firstAttribute="bottom" secondItem="rGS-mu-r1r" secondAttribute="bottom" id="49z-38-soN"/>
+                                            <constraint firstItem="rGS-mu-r1r" firstAttribute="top" secondItem="cJC-Op-0dn" secondAttribute="top" id="Lbd-6Z-4wo"/>
+                                            <constraint firstAttribute="height" constant="80" id="wrq-CV-O7a"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="93h-Rs-8hK">
+                                        <rect key="frame" x="0.0" y="88" width="414" height="648"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="lrm-VJ-0bl">
+                                                <rect key="frame" x="8" y="8" width="398" height="632"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIf-QR-IsH" userLabel="lightButton">
+                                                        <rect key="frame" x="8" y="50" width="382" height="250"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="260" id="K6I-MJ-4cr"/>
+                                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="250" id="LIG-AC-ujz"/>
+                                                        </constraints>
+                                                        <state key="normal" image="lightOff"/>
+                                                        <connections>
+                                                            <action selector="onLightBulbButtonTapped" destination="ZpH-W2-d6U" eventType="touchUpInside" id="KmZ-2l-f1C"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Tap the light to toggle the LED on the kit" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTH-HB-awB">
+                                                        <rect key="frame" x="8" y="316" width="382" height="19"/>
+                                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                                        <color key="textColor" name="sil_subtleTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="graphic - blinky - button -  off" translatesAutoresizingMaskIntoConstraints="NO" id="cfl-gg-GM6" userLabel="virtualButtonImage">
+                                                        <rect key="frame" x="8" y="351" width="382" height="60"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="60" id="kYx-bX-2cv"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="twn-bh-TtB">
+                                                        <rect key="frame" x="8" y="427" width="382" height="37.666666666666686"/>
+                                                        <string key="text">Press the button on the kit to see the virtual 
+button state changing in sync</string>
+                                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                                        <color key="textColor" name="sil_subtleTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GTd-0w-k4H">
+                                                        <rect key="frame" x="8" y="480.66666666666657" width="382" height="143.33333333333331"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </view>
+                                                </subviews>
+                                                <directionalEdgeInsets key="directionalLayoutMargins" top="100" leading="8" bottom="8" trailing="8"/>
+                                                <variation key="heightClass=regular-widthClass=compact">
+                                                    <directionalEdgeInsets key="directionalLayoutMargins" top="50" leading="8" bottom="8" trailing="8"/>
+                                                </variation>
+                                                <variation key="heightClass=regular-widthClass=regular" spacing="32"/>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" name="sil_backgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="lrm-VJ-0bl" firstAttribute="width" secondItem="93h-Rs-8hK" secondAttribute="width" constant="-16" id="0AU-au-Vq4">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="-32"/>
+                                            </constraint>
+                                            <constraint firstItem="lrm-VJ-0bl" firstAttribute="height" secondItem="93h-Rs-8hK" secondAttribute="height" constant="-16" id="AjC-bs-GUm">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="-32"/>
+                                            </constraint>
+                                            <constraint firstItem="lrm-VJ-0bl" firstAttribute="centerX" secondItem="93h-Rs-8hK" secondAttribute="centerX" id="fri-kB-ZiA"/>
+                                            <constraint firstItem="lrm-VJ-0bl" firstAttribute="centerY" secondItem="93h-Rs-8hK" secondAttribute="centerY" id="xLy-yi-Lln"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0NI-IZ-6Cs" userLabel="Above Safe Area">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                                <color key="backgroundColor" name="sil_siliconLabsRedColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="RAl-3r-sK4"/>
+                        <color key="backgroundColor" name="sil_backgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="0NI-IZ-6Cs" secondAttribute="width" id="3fw-CC-sPc"/>
+                            <constraint firstItem="0NI-IZ-6Cs" firstAttribute="leading" secondItem="RAl-3r-sK4" secondAttribute="leading" id="6GX-2y-V6S"/>
+                            <constraint firstItem="RAl-3r-sK4" firstAttribute="width" secondItem="0NI-IZ-6Cs" secondAttribute="width" id="BLa-Vw-9MN"/>
+                            <constraint firstItem="0NI-IZ-6Cs" firstAttribute="width" secondItem="RAl-3r-sK4" secondAttribute="width" id="Dw8-JY-nkN"/>
+                            <constraint firstItem="0NI-IZ-6Cs" firstAttribute="width" secondItem="RAl-3r-sK4" secondAttribute="width" id="McJ-pf-7N1"/>
+                            <constraint firstItem="0Hb-FV-mZM" firstAttribute="width" secondItem="Qc2-w0-G2H" secondAttribute="width" id="QnB-mX-HkD"/>
+                            <constraint firstItem="0NI-IZ-6Cs" firstAttribute="bottom" secondItem="RAl-3r-sK4" secondAttribute="top" id="RfQ-6C-V0k"/>
+                            <constraint firstItem="0Hb-FV-mZM" firstAttribute="centerY" secondItem="RAl-3r-sK4" secondAttribute="centerY" id="SPj-7y-erf"/>
+                            <constraint firstItem="0NI-IZ-6Cs" firstAttribute="top" secondItem="Qc2-w0-G2H" secondAttribute="top" id="X8k-ra-hYX"/>
+                            <constraint firstItem="0Hb-FV-mZM" firstAttribute="top" secondItem="0NI-IZ-6Cs" secondAttribute="bottom" id="Ypq-md-aDv"/>
+                            <constraint firstItem="0Hb-FV-mZM" firstAttribute="centerX" secondItem="RAl-3r-sK4" secondAttribute="centerX" id="eeH-2N-uIc"/>
+                            <constraint firstItem="RAl-3r-sK4" firstAttribute="top" secondItem="0Hb-FV-mZM" secondAttribute="top" id="q0U-NX-eo9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="lightBulbButton" destination="UIf-QR-IsH" id="IPs-ey-ngl"/>
+                        <outlet property="navigationBar" destination="cJC-Op-0dn" id="76Z-EQ-iit"/>
+                        <outlet property="virtualButtonImage" destination="cfl-gg-GM6" id="94y-qB-Jss"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BHC-Gv-SDi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-151.875" y="61.25"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="graphic - blinky - button -  off" width="60" height="60"/>
+        <image name="left_chevron" width="8" height="13"/>
+        <image name="lightOff" width="241" height="251.33332824707031"/>
+        <namedColor name="sil_backgroundColor">
+            <color red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_siliconLabsRedColor">
+            <color red="0.85098039215686272" green="0.11764705882352941" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_subtleTextColor">
+            <color red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

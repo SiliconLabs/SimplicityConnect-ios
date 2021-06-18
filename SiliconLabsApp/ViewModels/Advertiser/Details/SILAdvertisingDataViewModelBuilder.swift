@@ -9,11 +9,11 @@
 import Foundation
 
 class SILAdvertisingDataViewModelBuilder {
-    private let serviceRepository: SILAdvertisingServiceRepository
+    private let serviceRepository: SILGattAssignedNumbersRepository
     
     private var data: [SILCellViewModel] = []
     
-    init(serviceRepository: SILAdvertisingServiceRepository) {
+    init(serviceRepository: SILGattAssignedNumbersRepository) {
         self.serviceRepository = serviceRepository
     }
         

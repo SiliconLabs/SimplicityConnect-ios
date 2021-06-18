@@ -21,6 +21,7 @@
     [SILAppearance setupAppearance];
     [Fabric with:@[CrashlyticsKit]];
     [SILRealmConfiguration updateRealmConfigurationIfNeeded];
+    SILBrowserConnectionsViewModel.sharedInstance.centralManager = [[SILCentralManager alloc] initWithServiceUUIDs:@[]];
     return YES;
 }
 

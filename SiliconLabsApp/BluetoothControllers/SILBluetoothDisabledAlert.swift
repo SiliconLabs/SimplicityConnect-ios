@@ -15,25 +15,37 @@ enum SILBluetoothDisabledAlert: Int {
     case healthThermometer
     case rangeTest
     case connectedLighting
+    case interoperabilityTest
+    case throughput
+    case gattConfigurator
+    case blinky
     
     var title: String {
         "Bluetooth Disabled"
     }
     
     var message: String {
-        let backMsg = "You will back to the home screen."
+        let backMsg = "You will be redirected to the home screen."
         let turnOnMsg = "Turn on Bluetooth to"
         switch self {
         case .browser:
-            return "\(backMsg) \(turnOnMsg) using Browser."
+            return "\(backMsg) \(turnOnMsg) use Browser."
         case .advertiser:
             return "\(turnOnMsg) start any Advertiser."
         case .healthThermometer:
-            return "\(backMsg) \(turnOnMsg) using Health Thermometer."
+            return "\(backMsg) \(turnOnMsg) use Health Thermometer."
         case .rangeTest:
-            return "\(backMsg) \(turnOnMsg) using Range Test."
+            return "\(backMsg) \(turnOnMsg) use Range Test."
         case .connectedLighting:
-            return "\(backMsg) \(turnOnMsg) using Connected Lighting."
+            return "\(backMsg) \(turnOnMsg) use Connected Lighting."
+        case .interoperabilityTest:
+            return "\(backMsg) \(turnOnMsg) run Interoperability Test."
+        case .throughput:
+            return "\(backMsg) \(turnOnMsg) use Throughput."
+        case .gattConfigurator:
+            return "\(turnOnMsg) start any GATT Server."
+        case .blinky:
+            return "\(backMsg) \(turnOnMsg) use Blinky."
         }
     }
 }

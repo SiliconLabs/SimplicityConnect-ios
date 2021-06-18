@@ -22,60 +22,94 @@ class SILRealmConfiguration : NSObject {
     // Added scheme for storing advertisers
     static let SchemeVersionEFR_2_1_0: UInt64 = 2
     
+    // Updated:
+    // - removed mappings for Blinky and Throughput services and characteristic
+    // - added scheme for storing Gatt Configurations
+    static let SchemeVersionEFR_2_3_0: UInt64 = 3
+    
     @objc
     static func updateRealmConfigurationIfNeeded() {
         let configuration = Realm.Configuration(
-            schemaVersion: SILRealmConfiguration.SchemeVersionEFR_2_0_3,
+            schemaVersion: SILRealmConfiguration.SchemeVersionEFR_2_3_0,
             migrationBlock: { migration, oldSchemeVersion in
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_0_3 {
                     SILRealmConfiguration.performUpdateDatabaseForEFR_2_0_3(migration: migration)
                 }
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_1_0 { }
+                if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_3_0 {
+                    SILRealmConfiguration.performUpdateDatabaseForEFR_2_3_0(migration: migration)
+                }
             }
         )
         Realm.Configuration.defaultConfiguration = configuration
     }
     
     private static func performUpdateDatabaseForEFR_2_0_3(migration: Migration) {
-        func migrateServiceMappings() {
-            let servicesUUIDMappingsToRemove = [
-                "1827",
-                "1826",
-                "183A",
-                "1820",
-                "1828",
-                "1829"
-            ]
-            
-            migration.enumerateObjects(ofType: "SILServiceMap") { oldObject, _ in
-                if  let oldObject = oldObject,
-                    let uuid = oldObject["uuid"] as? String,
-                    servicesUUIDMappingsToRemove.contains(uuid) {
-                        migration.delete(oldObject)
-                }
+        let servicesUUIDMappingsToRemove = [
+            "1827",
+            "1826",
+            "183A",
+            "1820",
+            "1828",
+            "1829"
+        ]
+        let characteristicsUUIDMappingsToRemove = [
+            "F7BF3564-FB6D-4E53-88A4-5E37E0326063",
+            "984227F3-34FC-4045-A5D0-2C581F81A153",
+            "4F4A2368-8CCA-451E-BFFF-CF0E2EE23E9F",
+            "4CC07BCF-0868-4B32-9DAD-BA4CC41E5316",
+            "25F05C0A-E917-46E9-B2A5-AA2BE1245AFE",
+            "0D77CC11-4AC1-49F2-BFA9-CD96AC7A92F8"
+        ]
+        
+        migrateServiceMappings(migration: migration, servicesUUIDMappingsToRemove: servicesUUIDMappingsToRemove)
+        migrateCharacteristicMappings(migration: migration, characteristicsUUIDMappingsToRemove: characteristicsUUIDMappingsToRemove)
+    }
+    
+    
+    
+    private static func performUpdateDatabaseForEFR_2_3_0(migration: Migration) {
+        let servicesUUIDMappingsToRemove = [
+            "DE8A5AAC-A99B-C315-0C80-60D4CBB51224",
+            "BBB99E70-FFF7-46CF-ABC7-2D32C71820F2",
+            "BA1E0E9F-4D81-BAE3-F748-3AD55DA38B46",
+        ]
+        let characteristicsUUIDMappingsToRemove = [
+            "5B026510-4088-C297-46D8-BE6C736A087A",
+            "61A885A4-41C3-60D0-9A53-6D652A70D29C",
+            "6109B631-A643-4A51-83D2-2059700AD49F",
+            "47B73DD6-DEE3-4DA1-9BE0-F5C539A9A4BE",
+            "BE6B6BE1-CD8A-4106-9181-5FFE2BC67718",
+            "ADF32227-B00F-400C-9EEB-B903A6CC291B",
+            "00A82B93-0FEB-2739-72BE-ABDA1F5993D0",
+            "0A32F5A6-0A6C-4954-F413-A698FAF2C664",
+            "FF629B92-332B-E7F7-975F-0E535872DDAE",
+            "67E2C4F2-2F50-914C-A611-ADB3727B056D",
+            "30CC364A-0739-268C-4926-36F112631E0C",
+            "3816DF2F-D974-D915-D26E-78300F25E86E"
+        ]
+        
+        migrateServiceMappings(migration: migration, servicesUUIDMappingsToRemove: servicesUUIDMappingsToRemove)
+        migrateCharacteristicMappings(migration: migration, characteristicsUUIDMappingsToRemove: characteristicsUUIDMappingsToRemove)
+    }
+    
+    private static func migrateServiceMappings(migration: Migration, servicesUUIDMappingsToRemove: [String]) {
+        migration.enumerateObjects(ofType: "SILServiceMap") { oldObject, _ in
+            if  let oldObject = oldObject,
+                let uuid = oldObject["uuid"] as? String,
+                servicesUUIDMappingsToRemove.contains(uuid) {
+                    migration.delete(oldObject)
             }
         }
-        
-        func migrateCharacteristicMappings() {
-            let characteristicsUUIDMappingsToRemove = [
-                "F7BF3564-FB6D-4E53-88A4-5E37E0326063",
-                "984227F3-34FC-4045-A5D0-2C581F81A153",
-                "4F4A2368-8CCA-451E-BFFF-CF0E2EE23E9F",
-                "4CC07BCF-0868-4B32-9DAD-BA4CC41E5316",
-                "25F05C0A-E917-46E9-B2A5-AA2BE1245AFE",
-                "0D77CC11-4AC1-49F2-BFA9-CD96AC7A92F8"
-            ]
-            
-             migration.enumerateObjects(ofType: "SILCharacteristicMap") { oldObject, _ in
-                 if  let oldObject = oldObject,
-                     let uuid = oldObject["uuid"] as? String,
-                     characteristicsUUIDMappingsToRemove.contains(uuid) {
-                         migration.delete(oldObject)
-                 }
+    }
+    
+    private static func migrateCharacteristicMappings(migration: Migration, characteristicsUUIDMappingsToRemove: [String]) {
+         migration.enumerateObjects(ofType: "SILCharacteristicMap") { oldObject, _ in
+             if  let oldObject = oldObject,
+                 let uuid = oldObject["uuid"] as? String,
+                 characteristicsUUIDMappingsToRemove.contains(uuid) {
+                     migration.delete(oldObject)
              }
-        }
-        
-        migrateServiceMappings()
-        migrateCharacteristicMappings()
+         }
     }
 }

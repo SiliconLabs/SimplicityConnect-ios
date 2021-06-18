@@ -15,9 +15,9 @@ protocol SILAdvertiserAdd16BitServiceDialogViewDelegate: class {
 fileprivate struct ServiceInfo {
     let fullName: String
     let uuid: String
-    let service: SILAdvertisingServiceEntity
+    let service: SILGattAssignedNumberEntity
     
-    init(service: SILAdvertisingServiceEntity) {
+    init(service: SILGattAssignedNumberEntity) {
         self.fullName = "\(service.name) (0x\(service.uuid.uppercased()))"
         self.uuid = service.uuid
         self.service = service
@@ -26,7 +26,7 @@ fileprivate struct ServiceInfo {
 
 class SILAdvertiserAdd16BitServiceDialogViewModel {
     private let wireframe: SILAdvertiserDetailsWireframe
-    private let repository: SILAdvertisingServiceRepository
+    private let repository: SILGattAssignedNumbersRepository
     private let onSaveCallback: (String) -> Void
     
     private var serviceName: String = ""
@@ -44,7 +44,7 @@ class SILAdvertiserAdd16BitServiceDialogViewModel {
     var isClearButtonEnabled: SILObservable<Bool> = SILObservable(initialValue: false)
     var isSaveButtonEnabled: SILObservable<Bool> = SILObservable(initialValue: false)
     
-    init(wireframe: SILAdvertiserDetailsWireframe, repository: SILAdvertisingServiceRepository, onSave: @escaping (String) -> Void) {
+    init(wireframe: SILAdvertiserDetailsWireframe, repository: SILGattAssignedNumbersRepository, onSave: @escaping (String) -> Void) {
         self.wireframe = wireframe
         self.repository = repository
         self.onSaveCallback = onSave

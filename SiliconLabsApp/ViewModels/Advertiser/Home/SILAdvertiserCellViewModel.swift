@@ -102,7 +102,7 @@ class SILAdvertiserCellViewModel: SILCellViewModel {
         
         
         if let completeList16 = advertiser.completeList16 {
-            let servicesRepository = SILAdvertisingServiceRepository()
+            let servicesRepository = SILGattAssignedNumbersRepository()
             let value = completeList16.map({ uuid in
                 let serviceName = servicesRepository.getService(byUuid: uuid)?.name ?? "Unknown service"
                 return "0x\(uuid) - \(serviceName)"
