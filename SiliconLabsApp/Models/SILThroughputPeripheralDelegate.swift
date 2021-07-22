@@ -24,7 +24,6 @@ protocol SILThroughputPeripheralDelegateType: class {
     func subscribeGATT()
     func readConnectionParameters()
     func stopTesting()
-    func getMTU(for writeType: CBCharacteristicWriteType) -> Int
     func phoneToEFRStatusChanged(isTesting: Bool)
 }
 
@@ -36,6 +35,7 @@ class SILThroughputPeripheralDelegate : NSObject, SILThroughputPeripheralDelegat
     private var throughputCountInBits = 0
     private var currentTestType = SILThroughputTestType.none
     private var throughputReleaseTimer: Timer?
+    private var packetReceivedCount = 0
     
     private var peripheral: CBPeripheral
     private var throughputPeripheralReferences: SILThroughputPeripheralGATTReferences
@@ -100,10 +100,6 @@ class SILThroughputPeripheralDelegate : NSObject, SILThroughputPeripheralDelegat
     func stopTesting() {
         throughputReleaseTimer?.invalidate()
         throughputReleaseTimer = nil
-    }
-    
-    func getMTU(for writeType: CBCharacteristicWriteType) -> Int {
-        return peripheral.maximumWriteValueLength(for: writeType)
     }
     
     func phoneToEFRStatusChanged(isTesting: Bool) {
@@ -271,6 +267,7 @@ class SILThroughputPeripheralDelegate : NSObject, SILThroughputPeripheralDelegat
             if characteristic.uuid.uuidString == SILThroughputPeripheralGATTDatabase.ThroughputService.ThroughputNotifications.uuid || characteristic.uuid.uuidString == SILThroughputPeripheralGATTDatabase.ThroughputService.ThroughputIndications.uuid {
                 if let value = characteristic.value {
                     throughputCountInBits += value.count * 8
+                    packetReceivedCount += 1
                     
                     if currentTestType == .none {
                         if characteristic.uuid.uuidString == SILThroughputPeripheralGATTDatabase.ThroughputService.ThroughputNotifications.uuid {
@@ -320,6 +317,8 @@ class SILThroughputPeripheralDelegate : NSObject, SILThroughputPeripheralDelegat
     private func didUpdateThroughputResult(value: Data?) {
         self.throughputResult.value = SILThroughputResult(sender: .EFRToPhone, testType: self.currentTestType, valueInBits: 0)
         debugPrint("RELEASE FROM EFR \(self.throughputResult.value.valueInBits)")
+        debugPrint("CNT: \(packetReceivedCount)")
+        self.packetReceivedCount = 0
         self.throughputCountInBits = 0
         self.currentTestType = .none
     }

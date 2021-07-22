@@ -83,7 +83,6 @@ class SILThroughputViewModel: SILThroughputViewModelType {
     
     private var isSubscribed: Bool = false
     
-    
     init(peripheralManager: SILThroughputPeripheralManager, centralManager: SILCentralManager, connectedPeripheral: CBPeripheral) {
         self.peripheralManager = peripheralManager
         self.centralManager = centralManager
@@ -100,8 +99,6 @@ class SILThroughputViewModel: SILThroughputViewModelType {
             case .initiated:
                 weakSelf.peripheralDelegateSubscription?.invalidate()
                 weakSelf.readConnectionParameters()
-                weakSelf.peripheralManager.setMtu(mtu: weakSelf.peripheralDelegate.getMTU(for: .withResponse), for: .withResponse)
-                weakSelf.peripheralManager.setMtu(mtu: weakSelf.peripheralDelegate.getMTU(for: .withoutResponse), for: .withoutResponse)
                 
                 if weakSelf.isSubscribed == true {
                     weakSelf.testState.value = .initiatedCorrectly
@@ -239,7 +236,7 @@ class SILThroughputViewModel: SILThroughputViewModelType {
             peripheralManager.stopTest()
         }
     }
-    
+        
     func changePhoneTestModeSelection(newSelection: SILThroughputPhoneTestMode) {
         if newSelection != phoneTestModeSelected.value {
             phoneTestModeSelected.value = newSelection

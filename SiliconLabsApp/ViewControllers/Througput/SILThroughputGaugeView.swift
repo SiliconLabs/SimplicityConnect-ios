@@ -63,6 +63,7 @@ class SILThroughputGaugeView: UIView {
     // MARK: - Drawing a gauge view
     
     override func draw(_ rect: CGRect) {
+        clearsContextBeforeDrawing = true
         backgroundColor = UIColor.sil_background()
         
         let center = CGPoint(x: self.frame.width / 2, y: self.frame.height / 2)

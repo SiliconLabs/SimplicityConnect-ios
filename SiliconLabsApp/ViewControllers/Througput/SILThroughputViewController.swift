@@ -259,9 +259,7 @@ class SILThroughputViewController: UIViewController {
     }
     
     @IBAction func startStopButtonWasTapped(_ sender: UIButton) {
-        self.alertWithOKButton(title: "Info", message: "Sending data from mobile device to EFR is coming soon!")
-        
-//        viewModel.changeTestState()
+        viewModel.changeTestState()
     }
     
     private func showBluetoothDisabledAlert() {
@@ -281,8 +279,8 @@ class SILThroughputViewController: UIViewController {
     }
     
     private func showNoSubscriberErrorDialog() {
-//        self.alertWithOKButton(title: "Error: Failed to find Throughput service. This demo may not work correctly.",
-//                               message: "This demo requires Bluetooth - SoC Throughput sample app running on the kit. Please ensure it has been correctly flashed.")
+        self.alertWithOKButton(title: "Error: Failed to find Throughput service. This demo may not work correctly.",
+                               message: "This demo requires Bluetooth - SoC Throughput sample app running on the kit. Please ensure it has been correctly flashed.")
     }
     
     private func showCharacteristicArentNotyfingErrorDialog() {

@@ -117,6 +117,7 @@ static float kTableRefreshInterval = 1;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.deviceNameLabel.text = self.peripheral.name;
+    self.peripheral.delegate = self;
     [self registerForNotifications];
     [self addObserverForUpdateConnectionsButtonTitle];
     [self installRSSITimer];

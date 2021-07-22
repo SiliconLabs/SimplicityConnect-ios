@@ -44,7 +44,6 @@ protocol SILThroughputPeripheralManagerType {
     func startAdveritising()
     func stopAdvertising()
     func setSubscriber(uuid: String)
-    func setMtu(mtu: Int, for writeType: CBCharacteristicWriteType)
     func setConnectionInterval(in ms: Int)
     func startTest(type: SILThroughputTestType)
     func stopTest()
@@ -64,14 +63,15 @@ class SILThroughputPeripheralManager: NSObject, SILThroughputPeripheralManagerTy
     private var transmissionOnCharacteristic: CBMutableCharacteristic?
     
     private var connectionInterval: Int = -1
-    private var mtuWriteResponse: Int = -1
-    private var mtuWriteNoResponse: Int = -1
     private var writeToCharTimer: Timer?
     private var releaseTimer: Timer?
     private var throughputCountInBits = 0
     private var currentTestType = SILThroughputTestType.none
     
+    private var packetNumber = 1
+    private var dataSize = 0
     private var checkIfEFRSubscribedTimer: Timer?
+    private var packetSentCount = 0
     
     override init() {
         super.init()
@@ -102,7 +102,8 @@ class SILThroughputPeripheralManager: NSObject, SILThroughputPeripheralManagerTy
         debugPrint("SUBSCRIBER SET TO \(uuid)")
         subscriber.connectedPeripheralUUID = uuid
         
-        checkIfEFRSubscribedTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false, block: { timer in
+        let timeForEFRToSubscribeCharacteristics = TimeInterval(2.5)
+        checkIfEFRSubscribedTimer = Timer.scheduledTimer(withTimeInterval: timeForEFRToSubscribeCharacteristics, repeats: false, block: { timer in
             timer.invalidate()
             
             self.isSubscribed.value = self.subscriber.isSubscribed()
@@ -114,38 +115,46 @@ class SILThroughputPeripheralManager: NSObject, SILThroughputPeripheralManagerTy
         self.connectionInterval = ms
     }
     
-    func setMtu(mtu: Int, for writeType: CBCharacteristicWriteType) {
-        debugPrint("SET MTU TO \(mtu) for \(writeType.rawValue)")
-        if writeType == .withResponse {
-            self.mtuWriteResponse = mtu
-        } else {
-            self.mtuWriteNoResponse = mtu
-        }
-    }
-    
+    // Notifications can be sent without waiting for response, indications can be sent one per 2 * interval
+    // More information here https://www.silabs.com/community/wireless/bluetooth/knowledge-base.entry.html/2015/08/06/throughput_with_blue-Wybp
     func startTest(type: SILThroughputTestType) {
-        var dataSize = 0
         var characteristicToWrite = self.indicationCharacteristic!
+        var timeInterval: TimeInterval
+        dataSize = subscriber.subscriber!.maximumUpdateValueLength
         if type == .indications {
-            debugPrint("START INDICATIONS TEST")
             characteristicToWrite = self.indicationCharacteristic!
-            dataSize = self.mtuWriteNoResponse
+            timeInterval = TimeInterval(Double(self.connectionInterval * 2) / 1000.0)
+            debugPrint("START INDICATIONS TEST WITH DATA SIZE \(dataSize)")
         } else if type == .notifications {
-            debugPrint("START NOTICATIONS TEST")
             characteristicToWrite = self.notificationCharacteristic!
-            dataSize = self.mtuWriteResponse
+            timeInterval = TimeInterval(0.005)
+            debugPrint("START NOTIFICATIONS TEST WITH DATA SIZE \(dataSize)")
         } else {
             return
         }
-        
+
         self.peripheralManager.updateValue(SILThroughputPeripheralGATTDatabase.ThroughputService.TransmissionOn.WriteValues.active, for: transmissionOnCharacteristic!, onSubscribedCentrals: nil)
         
-        writeToCharTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(Double(connectionInterval) / 1000.0), repeats: true, block: { timer in
-            self.peripheralManager.updateValue(Data(repeating: 0x00, count: dataSize), for: characteristicToWrite, onSubscribedCentrals: nil)
-            self.throughputCountInBits += dataSize * 8
+        writeToCharTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true, block: { timer in
+            var dataArray = [UInt8]()
+            dataArray.append(UInt8(self.packetNumber))
+            
+            for i in 0..<self.dataSize - 1 {
+                dataArray.append(self.appendNextLetter(i: i))
+            }
+                
+            if self.peripheralManager.updateValue(Data(dataArray), for: characteristicToWrite, onSubscribedCentrals: nil) {
+                debugPrint("UPDATE - SENT")
+                self.throughputCountInBits += self.dataSize * 8
+                self.packetNumber = (self.packetNumber + 1) % 100
+                self.packetSentCount += 1
+            } else {
+                debugPrint("UPDATE - NOT SENT")
+            }
         })
         
-        releaseTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { timer in
+        let timeBetweenUIUpdates = TimeInterval(0.2)
+        releaseTimer = Timer.scheduledTimer(withTimeInterval: timeBetweenUIUpdates, repeats: true, block: { timer in
             debugPrint("RELEASE FROM PHONE \(self.throughputCountInBits)")
             self.throughputResult.value = SILThroughputResult(sender: .phoneToEFR, testType: type, valueInBits: self.throughputCountInBits * 5)
             self.throughputCountInBits = 0
@@ -153,14 +162,28 @@ class SILThroughputPeripheralManager: NSObject, SILThroughputPeripheralManagerTy
         
         throughputResult.value = SILThroughputResult(sender: .phoneToEFR, testType: type, valueInBits: 0)
     }
+    
+    func appendNextLetter(i: Int) -> UInt8 {
+        return UInt8(97 + (i - 1) % 26)
+    }
 
     func stopTest() {
         writeToCharTimer?.invalidate()
         releaseTimer?.invalidate()
         throughputCountInBits = 0
+        packetNumber = 1
+        dataSize = 0
         throughputResult.value = SILThroughputResult(sender: .phoneToEFR, testType: .none, valueInBits: 0)
         
-        self.peripheralManager.updateValue(SILThroughputPeripheralGATTDatabase.ThroughputService.TransmissionOn.WriteValues.disable, for: transmissionOnCharacteristic!, onSubscribedCentrals: nil)
+        debugPrint("CNT: \(self.packetSentCount)")
+        self.packetSentCount = 0
+        
+        let timeToEnsureThatDisableMessageIsSentAfterLastDataPacket = TimeInterval(0.2)
+        _ = Timer.scheduledTimer(withTimeInterval: timeToEnsureThatDisableMessageIsSentAfterLastDataPacket, repeats: false, block: { timer in
+            timer.invalidate()
+            debugPrint("SEND DISABLE TEST SIGNAL")
+            self.peripheralManager.updateValue(SILThroughputPeripheralGATTDatabase.ThroughputService.TransmissionOn.WriteValues.disable, for: self.transmissionOnCharacteristic!, onSubscribedCentrals: nil)
+        })
     }
     
     private func createThroughputService() -> CBMutableService {
