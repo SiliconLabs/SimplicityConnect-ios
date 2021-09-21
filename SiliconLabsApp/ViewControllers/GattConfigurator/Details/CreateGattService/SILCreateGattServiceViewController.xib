@@ -58,173 +58,186 @@
                         <constraint firstAttribute="height" constant="48" id="Y16-ep-khb"/>
                     </constraints>
                 </view>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vim-Ol-8Ux">
-                    <rect key="frame" x="16" y="64" width="418" height="388"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nbf-VL-Uff">
+                    <rect key="frame" x="0.0" y="48" width="450" height="420"/>
                     <subviews>
-                        <textField opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Service name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cPP-11-9Yb">
-                            <rect key="frame" x="0.0" y="0.0" width="418" height="34"/>
-                            <color key="tintColor" name="sil_regularBlueColor"/>
-                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                        </textField>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="16/128-bit UUID" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tZU-mR-Ozi">
-                            <rect key="frame" x="0.0" y="44" width="418" height="34"/>
-                            <color key="tintColor" name="sil_regularBlueColor"/>
-                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <outlet property="delegate" destination="-1" id="i0A-m6-gYE"/>
-                            </connections>
-                        </textField>
-                        <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="I9n-fQ-hI6">
-                            <rect key="frame" x="0.0" y="88" width="418" height="20"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vim-Ol-8Ux">
+                            <rect key="frame" x="20" y="20" width="410" height="384"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qhu-N1-oRo" customClass="SILCheckBox" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" secondItem="Qhu-N1-oRo" secondAttribute="height" multiplier="1:1" id="56k-4w-1yZ"/>
-                                        <constraint firstAttribute="height" constant="20" id="wCh-lH-GfE"/>
-                                    </constraints>
+                                <textField opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Service name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cPP-11-9Yb">
+                                    <rect key="frame" x="0.0" y="0.0" width="410" height="34"/>
+                                    <color key="tintColor" name="sil_regularBlueColor"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                </textField>
+                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="16/128-bit UUID" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tZU-mR-Ozi">
+                                    <rect key="frame" x="0.0" y="44" width="410" height="34"/>
+                                    <color key="tintColor" name="sil_regularBlueColor"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
                                     <connections>
-                                        <action selector="toggleMandatoryRequirementsCheckBox:" destination="-1" eventType="valueChanged" id="UIf-7N-80a"/>
+                                        <outlet property="delegate" destination="-1" id="i0A-m6-gYE"/>
                                     </connections>
-                                </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add mandatory service requirements" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9D0-J9-P2f">
-                                    <rect key="frame" x="25" y="0.0" width="393" height="20"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
-                                    <color key="textColor" name="sil_primaryTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                        </stackView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L9X-J7-Avg">
-                            <rect key="frame" x="0.0" y="118" width="418" height="50"/>
-                            <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R9a-2L-I9y">
-                                    <rect key="frame" x="0.0" y="0.0" width="418" height="50"/>
+                                </textField>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="I9n-fQ-hI6">
+                                    <rect key="frame" x="0.0" y="88" width="410" height="20"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Primary Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GOj-8x-aP0">
-                                            <rect key="frame" x="8" y="8" width="92" height="34"/>
-                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
-                                            <nil key="textColor"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qhu-N1-oRo" customClass="SILCheckBox" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="Qhu-N1-oRo" secondAttribute="height" multiplier="1:1" id="56k-4w-1yZ"/>
+                                                <constraint firstAttribute="height" constant="20" id="wCh-lH-GfE"/>
+                                            </constraints>
+                                            <connections>
+                                                <action selector="toggleMandatoryRequirementsCheckBox:" destination="-1" eventType="valueChanged" id="UIf-7N-80a"/>
+                                            </connections>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add mandatory service requirements" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9D0-J9-P2f">
+                                            <rect key="frame" x="25" y="0.0" width="385" height="20"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
+                                            <color key="textColor" name="sil_primaryTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="Kpa-XE-CSM">
-                                            <rect key="frame" x="396" y="21.5" width="14" height="9"/>
+                                    </subviews>
+                                </stackView>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L9X-J7-Avg">
+                                    <rect key="frame" x="0.0" y="118" width="410" height="50"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R9a-2L-I9y">
+                                            <rect key="frame" x="0.0" y="0.0" width="410" height="50"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Primary Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GOj-8x-aP0">
+                                                    <rect key="frame" x="8" y="8" width="92" height="34"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="Kpa-XE-CSM">
+                                                    <rect key="frame" x="388" y="21.5" width="14" height="9"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="14" id="VaA-0w-y3X"/>
+                                                        <constraint firstAttribute="height" constant="9" id="cgf-Yi-bDO"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="14" id="VaA-0w-y3X"/>
-                                                <constraint firstAttribute="height" constant="9" id="cgf-Yi-bDO"/>
+                                                <constraint firstItem="GOj-8x-aP0" firstAttribute="top" secondItem="R9a-2L-I9y" secondAttribute="top" constant="8" id="2pA-Uj-ynR"/>
+                                                <constraint firstAttribute="trailing" secondItem="Kpa-XE-CSM" secondAttribute="trailing" constant="8" id="Es5-vj-M06"/>
+                                                <constraint firstItem="GOj-8x-aP0" firstAttribute="leading" secondItem="R9a-2L-I9y" secondAttribute="leading" constant="8" id="e39-oe-2ic"/>
+                                                <constraint firstItem="Kpa-XE-CSM" firstAttribute="centerY" secondItem="R9a-2L-I9y" secondAttribute="centerY" constant="1" id="pZS-it-eFe"/>
+                                                <constraint firstAttribute="bottom" secondItem="GOj-8x-aP0" secondAttribute="bottom" constant="8" id="taH-lw-4ie"/>
                                             </constraints>
-                                        </imageView>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
-                                        <constraint firstItem="GOj-8x-aP0" firstAttribute="top" secondItem="R9a-2L-I9y" secondAttribute="top" constant="8" id="2pA-Uj-ynR"/>
-                                        <constraint firstAttribute="trailing" secondItem="Kpa-XE-CSM" secondAttribute="trailing" constant="8" id="Es5-vj-M06"/>
-                                        <constraint firstItem="GOj-8x-aP0" firstAttribute="leading" secondItem="R9a-2L-I9y" secondAttribute="leading" constant="8" id="e39-oe-2ic"/>
-                                        <constraint firstItem="Kpa-XE-CSM" firstAttribute="centerY" secondItem="R9a-2L-I9y" secondAttribute="centerY" constant="1" id="pZS-it-eFe"/>
-                                        <constraint firstAttribute="bottom" secondItem="GOj-8x-aP0" secondAttribute="bottom" constant="8" id="taH-lw-4ie"/>
+                                        <constraint firstAttribute="bottom" secondItem="R9a-2L-I9y" secondAttribute="bottom" id="A46-UK-fOR"/>
+                                        <constraint firstAttribute="trailing" secondItem="R9a-2L-I9y" secondAttribute="trailing" id="A7A-Xf-e8v"/>
+                                        <constraint firstItem="R9a-2L-I9y" firstAttribute="top" secondItem="L9X-J7-Avg" secondAttribute="top" id="ezD-bD-ghz"/>
+                                        <constraint firstItem="R9a-2L-I9y" firstAttribute="leading" secondItem="L9X-J7-Avg" secondAttribute="leading" id="hPq-yj-yiB"/>
                                     </constraints>
                                 </view>
-                            </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstAttribute="bottom" secondItem="R9a-2L-I9y" secondAttribute="bottom" id="A46-UK-fOR"/>
-                                <constraint firstAttribute="trailing" secondItem="R9a-2L-I9y" secondAttribute="trailing" id="A7A-Xf-e8v"/>
-                                <constraint firstItem="R9a-2L-I9y" firstAttribute="top" secondItem="L9X-J7-Avg" secondAttribute="top" id="ezD-bD-ghz"/>
-                                <constraint firstItem="R9a-2L-I9y" firstAttribute="leading" secondItem="L9X-J7-Avg" secondAttribute="leading" id="hPq-yj-yiB"/>
-                            </constraints>
-                        </view>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="I7E-FA-3dD">
-                            <rect key="frame" x="0.0" y="178" width="418" height="163"/>
-                            <subviews>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" allowsEditingTextAttributes="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjI-Ol-mJO">
-                                    <rect key="frame" x="0.0" y="0.0" width="418" height="130"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="130" id="6XU-Lk-7mg"/>
-                                    </constraints>
-                                    <string key="text">Please insert your service name and UUID. 128-bit UUIDs will be automatically formatted as they are entered. Example:
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="I7E-FA-3dD">
+                                    <rect key="frame" x="0.0" y="178" width="410" height="163"/>
+                                    <subviews>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" allowsEditingTextAttributes="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjI-Ol-mJO">
+                                            <rect key="frame" x="0.0" y="0.0" width="410" height="130"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="130" id="6XU-Lk-7mg"/>
+                                            </constraints>
+                                            <string key="text">Please insert your service name and UUID. 128-bit UUIDs will be automatically formatted as they are entered. Example:
 030a590b-0e23-4482-8567-8434046b5a25
 
 A full list of 16-bit service UUIDs is available from the Bluetooth SIG:</string>
-                                    <color key="textColor" name="sil_masalaColor"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                                </textView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga6-XK-KOe" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="130" width="102" height="33"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                    <color key="tintColor" systemColor="systemBlueColor"/>
-                                    <inset key="contentEdgeInsets" minX="8" minY="4" maxX="8" maxY="4"/>
-                                    <state key="normal" title="Bluetooth SIG"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasBorder" value="YES"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onBluetoothSIGClick:" destination="-1" eventType="touchUpInside" id="CbO-Sp-9OH"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <constraints>
-                                <constraint firstItem="gjI-Ol-mJO" firstAttribute="width" secondItem="I7E-FA-3dD" secondAttribute="width" id="e5p-ko-OwM"/>
-                            </constraints>
-                        </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4GE-sH-ZIw">
-                            <rect key="frame" x="0.0" y="351" width="418" height="37"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hxd-xI-WRq" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="2" width="132.5" height="33"/>
-                                    <color key="tintColor" systemColor="systemBlueColor"/>
-                                    <state key="normal" title="Clear"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onClearTouch:" destination="-1" eventType="touchUpInside" id="mZW-nu-xXL"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7CY-5G-89h" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="142.5" y="2" width="133" height="33"/>
-                                    <color key="tintColor" systemColor="systemBlueColor"/>
-                                    <state key="normal" title="Cancel"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onCancelTouch:" destination="-1" eventType="touchUpInside" id="c0K-R2-Vxm"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AEb-2G-Brh" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="285.5" y="2" width="132.5" height="33"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <state key="normal" title="Save"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
-                                            <real key="value" value="14"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="onSaveTouch:" destination="-1" eventType="touchUpInside" id="8Nf-ZA-KT9"/>
-                                    </connections>
-                                </button>
+                                            <color key="textColor" name="sil_masalaColor"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                        </textView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga6-XK-KOe" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="130" width="102" height="33"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                            <color key="tintColor" systemColor="systemBlueColor"/>
+                                            <inset key="contentEdgeInsets" minX="8" minY="4" maxX="8" maxY="4"/>
+                                            <state key="normal" title="Bluetooth SIG"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBorder" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onBluetoothSIGClick:" destination="-1" eventType="touchUpInside" id="CbO-Sp-9OH"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="gjI-Ol-mJO" firstAttribute="width" secondItem="I7E-FA-3dD" secondAttribute="width" id="e5p-ko-OwM"/>
+                                    </constraints>
+                                </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4GE-sH-ZIw">
+                                    <rect key="frame" x="0.0" y="351" width="410" height="33"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hxd-xI-WRq" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="130" height="33"/>
+                                            <color key="tintColor" systemColor="systemBlueColor"/>
+                                            <state key="normal" title="Clear"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onClearTouch:" destination="-1" eventType="touchUpInside" id="mZW-nu-xXL"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7CY-5G-89h" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="140" y="0.0" width="130" height="33"/>
+                                            <color key="tintColor" systemColor="systemBlueColor"/>
+                                            <state key="normal" title="Cancel"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onCancelTouch:" destination="-1" eventType="touchUpInside" id="c0K-R2-Vxm"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AEb-2G-Brh" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="280" y="0.0" width="130" height="33"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" title="Save"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
+                                                    <real key="value" value="14"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onSaveTouch:" destination="-1" eventType="touchUpInside" id="8Nf-ZA-KT9"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
                             </subviews>
                         </stackView>
                     </subviews>
-                </stackView>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="vim-Ol-8Ux" secondAttribute="trailing" constant="20" id="1s4-DD-9KR"/>
+                        <constraint firstItem="vim-Ol-8Ux" firstAttribute="leading" secondItem="Nbf-VL-Uff" secondAttribute="leading" constant="20" id="HDB-Gv-ZKD"/>
+                        <constraint firstAttribute="bottom" secondItem="vim-Ol-8Ux" secondAttribute="bottom" priority="250" constant="20" id="RZR-5W-OCk"/>
+                        <constraint firstItem="vim-Ol-8Ux" firstAttribute="centerX" secondItem="Nbf-VL-Uff" secondAttribute="centerX" id="Tg5-hI-4Zp"/>
+                        <constraint firstItem="vim-Ol-8Ux" firstAttribute="top" secondItem="Nbf-VL-Uff" secondAttribute="top" constant="20" symbolic="YES" id="ZLs-eo-qaQ"/>
+                        <constraint firstItem="vim-Ol-8Ux" firstAttribute="centerY" secondItem="Nbf-VL-Uff" secondAttribute="centerY" priority="250" id="nYf-mP-NwA"/>
+                    </constraints>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="vim-Ol-8Ux" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="E7g-95-V6N"/>
-                <constraint firstAttribute="trailing" secondItem="vim-Ol-8Ux" secondAttribute="trailing" constant="16" id="EsX-Ae-SLJ"/>
                 <constraint firstItem="GbR-rM-xGe" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="HyC-GK-P3Q"/>
+                <constraint firstItem="Nbf-VL-Uff" firstAttribute="top" secondItem="GbR-rM-xGe" secondAttribute="bottom" id="Pgs-4Y-hX8"/>
                 <constraint firstItem="GbR-rM-xGe" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QpT-eZ-I2e"/>
-                <constraint firstAttribute="bottom" secondItem="vim-Ol-8Ux" secondAttribute="bottom" constant="16" id="WSj-TJ-0K0"/>
+                <constraint firstItem="Nbf-VL-Uff" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WCf-jF-mVC"/>
+                <constraint firstAttribute="trailing" secondItem="Nbf-VL-Uff" secondAttribute="trailing" id="bR3-AN-toL"/>
                 <constraint firstAttribute="trailing" secondItem="GbR-rM-xGe" secondAttribute="trailing" id="doi-ha-6B0"/>
-                <constraint firstItem="vim-Ol-8Ux" firstAttribute="top" secondItem="GbR-rM-xGe" secondAttribute="bottom" constant="16" id="lA8-cc-gyD"/>
+                <constraint firstAttribute="bottom" secondItem="Nbf-VL-Uff" secondAttribute="bottom" id="hW7-P8-Q9F"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="163.768115942029" y="180.80357142857142"/>

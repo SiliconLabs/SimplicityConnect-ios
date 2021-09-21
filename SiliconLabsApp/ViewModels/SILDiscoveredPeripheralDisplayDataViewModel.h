@@ -8,15 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class SILDiscoveredPeripheralDisplayData;
 @class SILAdvertisementDataViewModel;
 
 @interface SILDiscoveredPeripheralDisplayDataViewModel : NSObject
 
-@property (strong, nonatomic, readonly) SILDiscoveredPeripheralDisplayData *discoveredPeripheralDisplayData;
-@property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
-@property (strong, nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModelsForInfoView;
+@property (nonatomic, readonly) SILDiscoveredPeripheral *discoveredPeripheral;
+@property (nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
 
-- (instancetype)initWithDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheralDisplayData *)discoveredPeripheralDisplayData;
+- (instancetype)initWithDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheral *)discoveredPeripheral;
 
 @end

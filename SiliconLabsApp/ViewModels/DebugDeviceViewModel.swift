@@ -15,8 +15,8 @@ protocol DebugDeviceViewModelDelegate: class {
     func didConnect(to peripheral: CBPeripheral?)
     @objc(didDisconnectFromPeripheral:)
     func didDisconnect(from peripheral: CBPeripheral?)
-    @objc(didFailToConnectToPeripheral:)
-    func didFailToConnect(to peripheral: CBPeripheral?)
+    @objc(didFailToConnectToPeripheral:peerRemovedPairingInformation:)
+    func didFailToConnect(to peripheral: CBPeripheral?, peerRemovedPairingInformation: Bool)
     func bluetoothIsDisabled()
     
     func scanningDidEnd()
@@ -116,15 +116,15 @@ final class DebugDeviceViewModel: NSObject {
     }
 
     func connect(to peripheralViewModel: SILDiscoveredPeripheralDisplayDataViewModel) -> Bool {
-        if let discoveredPeripheral = peripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral,
+        if let discoveredPeripheral = peripheralViewModel.discoveredPeripheral,
             discoveredPeripheral.isConnectable,
             centralManager.canConnect(to: discoveredPeripheral) {
             centralManager.connect(to: discoveredPeripheral)
             isConnecting.updateValue(true, forKey: discoveredPeripheral.peripheral!)
         } else {
-            isConnecting.updateValue(false, forKey: peripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral!)
+            isConnecting.updateValue(false, forKey: peripheralViewModel.discoveredPeripheral.peripheral!)
         }
-        return isConnecting[peripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral!]!
+        return isConnecting[peripheralViewModel.discoveredPeripheral.peripheral!]!
     }
 
     func containPeripheral(_ peripheral: CBPeripheral) -> Bool {
@@ -233,8 +233,8 @@ final class DebugDeviceViewModel: NSObject {
             if arrayContainDevice(peripheral, in: allDiscoveredPeripheralsViewModels) {
                 if let firstIndex = firstIndexOfReplacement(device: peripheral) {
                     let replacement = replaceViewModels[firstIndex]
-                    if (allDiscoveredPeripheralsViewModels[index].discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite) {
-                        replacement.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite = true
+                    if (allDiscoveredPeripheralsViewModels[index].discoveredPeripheral.isFavourite) {
+                        replacement.discoveredPeripheral.isFavourite = true
                     }
                     allDiscoveredPeripheralsViewModels[index] = replacement
                 }
@@ -243,7 +243,7 @@ final class DebugDeviceViewModel: NSObject {
     }
     
     private func firstIndexOfReplacement(device: SILDiscoveredPeripheralDisplayDataViewModel) -> Int? {
-        let firstIndex = replacementDiscoveredPeripheralViewModels.firstIndex(where: {  $0.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey == device.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
+        let firstIndex = replacementDiscoveredPeripheralViewModels.firstIndex(where: {  $0.discoveredPeripheral.identityKey == device.discoveredPeripheral.identityKey
         })
         
         return firstIndex
@@ -258,10 +258,9 @@ final class DebugDeviceViewModel: NSObject {
         for peripheral in discoveredPeripherals {
             guard centralManager.canConnect(to: peripheral) else { continue }
 
-            let discoveredPeripheralDisplayData = SILDiscoveredPeripheralDisplayData(discoveredPeripheral: peripheral)
-            guard let peripheralViewModel = SILDiscoveredPeripheralDisplayDataViewModel(discoveredPeripheralDisplayData: discoveredPeripheralDisplayData) else { continue }
+            guard let peripheralViewModel = SILDiscoveredPeripheralDisplayDataViewModel(discoveredPeripheralDisplayData: peripheral) else { continue }
             
-            peripheralViewModels = peripheralViewModels.filter({ $0.discoveredPeripheralDisplayData.discoveredPeripheral.rssiMeasurementTable.lastRSSIMeasurement() != nil })
+            peripheralViewModels = peripheralViewModels.filter({ $0.discoveredPeripheral.rssiMeasurementTable.lastRSSIMeasurement() != nil })
             
             peripheralViewModels.append(peripheralViewModel)
         }
@@ -273,7 +272,7 @@ final class DebugDeviceViewModel: NSObject {
         for peripheralDevice in peripheralViewModels {
             if !arrayContainDevice(peripheralDevice, in: allDiscoveredPeripheralsViewModels) {
                 if (SILFavoritePeripheral.isFavorite(peripheralDevice)) {
-                    peripheralDevice.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite = true
+                    peripheralDevice.discoveredPeripheral.isFavourite = true
                     allDiscoveredPeripheralsViewModels.insert(peripheralDevice, at: 0)
                 } else {
                     allDiscoveredPeripheralsViewModels.append(peripheralDevice)
@@ -308,14 +307,14 @@ final class DebugDeviceViewModel: NSObject {
     
     private func filterByCurrentMinRSSI() {
         if let currentMinRSSI = currentMinRSSI {
-            let rssiPredicate = NSPredicate(format: "discoveredPeripheralDisplayData.discoveredPeripheral.RSSIMeasurementTable.lastRSSIMeasurement.intValue > \(currentMinRSSI)")
+            let rssiPredicate = NSPredicate(format: "discoveredPeripheral.RSSIMeasurementTable.lastRSSIMeasurement.intValue > \(currentMinRSSI)")
             discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter { rssiPredicate.evaluate(with: $0) }
         }
     }
     
     private func filterBySearchDeviceName() {
         if let searchByDeviceName = searchByDeviceName {
-            let namePredicate = NSPredicate(format: "discoveredPeripheralDisplayData.discoveredPeripheral.advertisedLocalName CONTAINS[cd] %@", searchByDeviceName)
+            let namePredicate = NSPredicate(format: "discoveredPeripheral.advertisedLocalName CONTAINS[cd] %@", searchByDeviceName)
             discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter { namePredicate.evaluate(with: $0) }
         }
     }
@@ -342,13 +341,13 @@ final class DebugDeviceViewModel: NSObject {
     }
     
     private func filterByBeaconNameNotEqual(beaconName: String) {
-        let beaconPredicate = NSPredicate(format: "NOT (discoveredPeripheralDisplayData.discoveredPeripheral.beacon.name CONTAINS[cd] %@)", beaconName)
+        let beaconPredicate = NSPredicate(format: "NOT (discoveredPeripheral.beacon.name CONTAINS[cd] %@)", beaconName)
         discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter { beaconPredicate.evaluate(with: $0) }
     }
     
     private func filterByIsFavourite() {
         if (isFavourite) {
-            let favouritePredicate = NSPredicate(format: "discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite == %i", isFavourite ? 1 : 0);
+            let favouritePredicate = NSPredicate(format: "discoveredPeripheral.isFavourite == %i", isFavourite ? 1 : 0);
             discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter{
                 favouritePredicate.evaluate(with: $0) }
         }
@@ -356,7 +355,7 @@ final class DebugDeviceViewModel: NSObject {
     
     private func filterByIsConnectable() {
         if (isConnectable) {
-            let connectablePredicate = NSPredicate(format: "discoveredPeripheralDisplayData.discoveredPeripheral.isConnectable == %i", isConnectable ? 1 : 0);
+            let connectablePredicate = NSPredicate(format: "discoveredPeripheral.isConnectable == %i", isConnectable ? 1 : 0);
             discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter{
                 connectablePredicate.evaluate(with: $0) }
         }
@@ -382,8 +381,8 @@ final class DebugDeviceViewModel: NSObject {
     
     private func sortRSSI(ascending: Bool) {
         discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.sorted(by: { (first, second) in
-            let firstRSSI = first.discoveredPeripheralDisplayData.discoveredPeripheral.rssiValue()?.intValue ?? 0
-            let secondRSSI = second.discoveredPeripheralDisplayData.discoveredPeripheral.rssiValue()?.intValue ?? 0
+            let firstRSSI = first.discoveredPeripheral.rssiValue()?.intValue ?? 0
+            let secondRSSI = second.discoveredPeripheral.rssiValue()?.intValue ?? 0
             if ascending {
                 return firstRSSI < secondRSSI
             } else {
@@ -394,8 +393,8 @@ final class DebugDeviceViewModel: NSObject {
     
     private func sortName(aToZ: Bool) {
         discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.sorted(by: { (first, second) in
-            let firstName = first.discoveredPeripheralDisplayData.discoveredPeripheral.advertisedLocalName ?? DefaultDeviceName
-            let secondName = second.discoveredPeripheralDisplayData.discoveredPeripheral.advertisedLocalName ?? DefaultDeviceName
+            let firstName = first.discoveredPeripheral.advertisedLocalName ?? DefaultDeviceName
+            let secondName = second.discoveredPeripheral.advertisedLocalName ?? DefaultDeviceName
             if aToZ {
                 return firstName < secondName
             } else {
@@ -448,10 +447,19 @@ final class DebugDeviceViewModel: NSObject {
     @objc private func didFailToConnectPeripheral(notification: Notification) {
         guard observing else { return }
         let peripheral = notification.userInfo?[SILCentralManagerPeripheralKey] as? CBPeripheral
+        var peerRemovedPairingInformation = false
+        if let error = notification.userInfo?[SILCentralManagerErrorKey] as? CBError {
+            if #available(iOS 13.4, *) {
+                peerRemovedPairingInformation = error.code == .peerRemovedPairingInformation
+            } else {
+                peerRemovedPairingInformation = false
+            }
+        }
+        
         if let peripheral = peripheral {
             isConnecting.updateValue(false, forKey: peripheral)
         }
-        delegate?.didFailToConnect(to: peripheral)
+        delegate?.didFailToConnect(to: peripheral, peerRemovedPairingInformation: peerRemovedPairingInformation)
     }
     
     @objc private func bluetoothIsDisabled(notification: Notification) {
@@ -461,7 +469,7 @@ final class DebugDeviceViewModel: NSObject {
     // MARK: - Utils
     
     private func arrayContainDevice(_ device: SILDiscoveredPeripheralDisplayDataViewModel, in collection: [SILDiscoveredPeripheralDisplayDataViewModel]) -> Bool {
-        let containDevice = collection.contains(where: {  $0.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey == device.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
+        let containDevice = collection.contains(where: {  $0.discoveredPeripheral.identityKey == device.discoveredPeripheral.identityKey
         })
         
         return containDevice

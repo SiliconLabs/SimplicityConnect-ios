@@ -7,14 +7,12 @@
 //
 
 #import "SILDiscoveredPeripheralDisplayDataViewModel.h"
-#import "SILDiscoveredPeripheralDisplayData.h"
 #import "SILAdvertisementDataViewModel.h"
 
 @interface SILDiscoveredPeripheralDisplayDataViewModel ()
 
-@property (strong, nonatomic, readwrite) SILDiscoveredPeripheralDisplayData *discoveredPeripheralDisplayData;
-@property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
-@property (strong, nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModelsForInfoView;
+@property (nonatomic, readwrite) SILDiscoveredPeripheral *discoveredPeripheral;
+@property (nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
 
 @end
 
@@ -22,36 +20,88 @@
 
 #pragma mark - Initializers
 
-- (instancetype)initWithDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheralDisplayData *)discoveredPeripheralDisplayData {
+- (instancetype)initWithDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheral *)discoveredPeripheral {
     self = [super self];
     if (self) {
-        self.discoveredPeripheralDisplayData = discoveredPeripheralDisplayData;
-        self.advertisementDataViewModels = [self advertisementDataViewModelsForDiscoveredPeripheralDisplayData:discoveredPeripheralDisplayData];
+        _discoveredPeripheral = discoveredPeripheral;
     }
+    
     return self;
 }
-
 #pragma mark - Properties
 
-- (NSArray *)advertisementDataViewModelsForInfoView {
-    if (_advertisementDataViewModelsForInfoView == nil) {
-        _advertisementDataViewModelsForInfoView = [self advertisementDataViewModelsForadvertisementDataModels:_discoveredPeripheralDisplayData.advertisementDataModelsForInfoView];
+- (NSArray<SILAdvertisementDataViewModel *> *)advertisementDataViewModels {
+    NSArray<SILAdvertisementDataModel *> *dataModels = [self advertisementDataModelsForPeripheral:self.discoveredPeripheral];
+    
+    NSMutableArray<SILAdvertisementDataViewModel *> *viewModels = [NSMutableArray.alloc init];
+    for (int index = 0; index < dataModels.count; index++) {
+        SILAdvertisementDataViewModel *viewModel = [SILAdvertisementDataViewModel.alloc initWithAdvertisementDataModel:dataModels[index]];
+        [viewModels addObject:viewModel];
     }
-    return _advertisementDataViewModelsForInfoView;
+    
+    return viewModels;
 }
 
-#pragma mark - Helpers
-
-- (NSArray *)advertisementDataViewModelsForDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheralDisplayData *)device {
-    return [self advertisementDataViewModelsForadvertisementDataModels:_discoveredPeripheralDisplayData.advertisementDataModels];
-}
-
-- (NSArray *)advertisementDataViewModelsForadvertisementDataModels:(NSArray *)advertisementDataModels {
-    NSMutableArray *mutableDataViewModels = [NSMutableArray new];
-    for (SILAdvertisementDataModel *dataModel in advertisementDataModels) {
-        [mutableDataViewModels addObject:[[SILAdvertisementDataViewModel alloc] initWithAdvertisementDataModel:dataModel]];
+- (NSArray *)advertisementDataModelsForPeripheral:(SILDiscoveredPeripheral *)device {
+    if (device.peripheral != nil) {
+        return [self adverisementDataModelsForCBPeripheral:device];
+    } else {
+        return [self advertisementDataModelsForCLBeacon:device];
     }
-    return [mutableDataViewModels copy];
+    return nil;
 }
+
+- (NSArray*)adverisementDataModelsForCBPeripheral:(SILDiscoveredPeripheral*)device {
+    SILAdTypeCBPeripheralDecoder* decoder = [[SILAdTypeCBPeripheralDecoder alloc] initWithPeripheral:device];
+    return [decoder decode];
+}
+
+- (NSArray*)advertisementDataModelsForCLBeacon:(SILDiscoveredPeripheral*)device {
+    NSMutableArray *mutableAdvModels = [[NSMutableArray alloc] init];
+    NSMutableString* iBeaconDataString = [[NSMutableString alloc] init];
+    SILBeacon* beacon = device.beacon;
+    BOOL isFirst = YES;
+    if (beacon.minor) {
+        [iBeaconDataString appendString:@"Minor: "];
+        NSString* minorStringValue = [NSString stringWithFormat:@"%hu", beacon.minor];
+        [iBeaconDataString appendString:minorStringValue];
+        isFirst = NO;
+    }
+    if (beacon.major) {
+        if (isFirst == YES) {
+            isFirst = NO;
+        } else {
+            [iBeaconDataString appendString:@"\n"];
+        }
+        [iBeaconDataString appendString:@"Major: "];
+        NSString* majorStringValue = [NSString stringWithFormat:@"%hu", beacon.major];
+        [iBeaconDataString appendString:majorStringValue];
+    }
+    if (beacon.UUIDString) {
+        if (isFirst == YES) {
+            isFirst = NO;
+        } else {
+            [iBeaconDataString appendString:@"\n"];
+        }
+        [iBeaconDataString appendString:@"UUID: "];
+        [iBeaconDataString appendString:beacon.UUIDString];
+    }
+    
+    if (beacon.beacon.proximity && beacon.beacon.accuracy) {
+        if (isFirst == YES) {
+            isFirst = NO;
+        } else {
+            [iBeaconDataString appendString:@"\n"];
+        }
+        [iBeaconDataString appendFormat:@"Distance from iBeacon: "];
+        [iBeaconDataString appendFormat:@"%ld +/- %.2f meters", (long)beacon.beacon.proximity, beacon.beacon.accuracy];
+    }
+    
+    SILAdvertisementDataModel* iBeaconModel = [[SILAdvertisementDataModel alloc] initWithValue:iBeaconDataString type:AdModelTypeIBeacon];
+    [mutableAdvModels addObject:iBeaconModel];
+    
+    return mutableAdvModels;
+}
+
 
 @end

@@ -41,6 +41,7 @@ enum SILIOPFirmware: String {
     case BRD4181A
     case BRD4181B
     case BRD4182A
+    case BRD4186B
 
     var rawValue: String {
         switch self {
@@ -52,6 +53,8 @@ enum SILIOPFirmware: String {
             return "xG21"
         case .BRD4182A:
             return "xG22"
+        case .BRD4186B:
+            return "xG24"
         }
     }
 }

@@ -12,10 +12,29 @@ import Foundation
 import Quick
 import Nimble
 import RealmSwift
+import AEXML
 
 class SILGattConfigurationModelSpec: QuickSpec {
     
     override func spec() {
+        context("SILGattProjectEntity") {
+            var projectEntity: SILGattProjectEntity!
+            beforeEach {
+                projectEntity = SILGattProjectEntity()
+            }
+            
+            describe("getCopy()") {
+                it("should copy object") {
+                    projectEntity.additionalXmlAttributes.append(SILGattXMLAttribute(name: "device", value: "iOS"))
+                    let copiedObject = projectEntity.getCopy()
+                    expect(copiedObject._additionalXmlAttributes).to(equal(projectEntity._additionalXmlAttributes))
+                    expect(copiedObject.additionalXmlChildren.count).to(equal(projectEntity.additionalXmlChildren.count))
+                    expect(copiedObject.createdAt).notTo(equal(projectEntity.createdAt))
+                    expect(copiedObject.uuid).notTo(equal(projectEntity.uuid))
+                }
+            }
+        }
+        
         context("SILGattConfigurationEntity") {
             var configurationEntity: SILGattConfigurationEntity!
             beforeEach {
@@ -28,9 +47,11 @@ class SILGattConfigurationModelSpec: QuickSpec {
                     let testServices = [SILGattConfigurationServiceEntity()]
                     configurationEntity.name = testName
                     configurationEntity.services.append(objectsIn: testServices)
+                    configurationEntity.additionalXmlAttributes.append(SILGattXMLAttribute(name: "in", value: "true"))
                     let copiedObject = configurationEntity.getCopy()
                     expect(copiedObject.name).to(equal(testName))
                     expect(copiedObject.services.count).to(equal(testServices.count))
+                    expect(copiedObject.additionalXmlAttributes.count).to(equal(configurationEntity.additionalXmlAttributes.count))
                     expect(copiedObject.createdAt).notTo(equal(configurationEntity.createdAt))
                     expect(copiedObject.uuid).notTo(equal(configurationEntity.uuid))
                 }
@@ -88,6 +109,7 @@ class SILGattConfigurationModelSpec: QuickSpec {
                     expect(copiedObject.initialValueType).to(equal(testInitialValueType))
                     expect(copiedObject.createdAt).notTo(equal(characteristicEntity.createdAt))
                     expect(copiedObject.uuid).notTo(equal(characteristicEntity.uuid))
+                    expect(copiedObject.fixedVariableLength).to(equal(characteristicEntity.fixedVariableLength))
                 }
             }
             
@@ -136,6 +158,7 @@ class SILGattConfigurationModelSpec: QuickSpec {
                     expect(copiedObject.initialValueType).to(equal(testInitialValueType))
                     expect(copiedObject.createdAt).notTo(equal(descriptorEntity.createdAt))
                     expect(copiedObject.uuid).notTo(equal(descriptorEntity.uuid))
+                    expect(copiedObject.fixedVariableLength).to(equal(descriptorEntity.fixedVariableLength))
                 }
             }
             
@@ -327,6 +350,71 @@ class SILGattConfigurationModelSpec: QuickSpec {
                     differentFieldEntity.services.append(SILGattConfigurationServiceEntity())
                     
                     expect(entity.isEqualTo(differentFieldEntity)).to(beFalse())
+                }
+            }
+        }
+        
+        context("SILGattXMLAttribute") {
+            var attribute: SILGattXMLAttribute!
+            let testName = "test_name"
+            let testValue = "test_value"
+            
+            describe("init from pairString") {
+                it("should have set proper fields from pairString") {
+                    let pairString = "\(testName):\(testValue)"
+                    attribute = SILGattXMLAttribute(pairString: pairString)
+                    expect(attribute.name).to(equal(testName))
+                    expect(attribute.value).to(equal(testValue))
+                }
+                
+                it("should be equal attributes when create from getPairString()") {
+                    attribute = SILGattXMLAttribute(name: "other_name", value: "other_value")
+                    let attributeToCompare = SILGattXMLAttribute(pairString: attribute.getPairString())
+                    expect(attribute.name).to(equal(attributeToCompare.name))
+                    expect(attribute.value).to(equal(attributeToCompare.value))
+                }
+            }
+            
+            describe("getPairString()") {
+                it("should return string in proper format") {
+                    attribute = SILGattXMLAttribute(name: testName, value: testValue)
+                    expect(attribute.getPairString()).to(equal("test_name:test_value"))
+                }
+            }
+        }
+        
+        context("SILGattXmlNodeInfo") {
+            describe("_additionalXmlAttributes") {
+                var entity: SILGattConfigurationCharacteristicEntity!
+                beforeEach {
+                    entity = SILGattConfigurationCharacteristicEntity()
+                }
+                
+                it("should be proper set when set additionalXmlAttributes") {
+                    let testXMLAttributes = [SILGattXMLAttribute(pairString: "name1:val1"), SILGattXMLAttribute(pairString: "name2:val2")]
+                    entity.additionalXmlAttributes = testXMLAttributes
+                    expect(entity.additionalXmlAttributes.count).to(equal(2))
+                    expect(entity.additionalXmlAttributes).to(containElementSatisfying({ $0.getPairString() == "name1:val1" }))
+                    expect(entity.additionalXmlAttributes).to(containElementSatisfying({ $0.getPairString() == "name2:val2" }))
+                    expect(entity._additionalXmlAttributes).to(equal("name1:val1:::name2:val2"))
+                }
+            }
+            
+            describe("_additionalXmlChildren") {
+                var entity: SILGattConfigurationCharacteristicEntity!
+                beforeEach {
+                    entity = SILGattConfigurationCharacteristicEntity()
+                }
+                
+                it("should be proper set when set additionalXmlChildren") {
+                    let firstXMLElement = AEXMLElement(name: "name", value: "val", attributes: ["attr": "attr_val"])
+                    let secondXMLElement = AEXMLElement(name: "name2", value: "val2", attributes: ["attr2": "attr_val2"])
+                    let testXMLAttributes = [firstXMLElement, secondXMLElement]
+                    entity.additionalXmlChildren = testXMLAttributes
+                    expect(entity.additionalXmlChildren.count).to(equal(2))
+                    expect(entity.additionalXmlChildren).to(containElementSatisfying({ $0.xml == firstXMLElement.xml }))
+                    expect(entity.additionalXmlChildren).to(containElementSatisfying({ $0.xml == secondXMLElement.xml }))
+                    expect(entity._additionalXmlChildren).to(equal("\(firstXMLElement.xml):::\(secondXMLElement.xml)"))
                 }
             }
         }

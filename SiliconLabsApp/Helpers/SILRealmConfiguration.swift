@@ -27,10 +27,14 @@ class SILRealmConfiguration : NSObject {
     // - added scheme for storing Gatt Configurations
     static let SchemeVersionEFR_2_3_0: UInt64 = 3
     
+    // Updated:
+    // - added fields for Gatt Configurations import and export
+    static let SchemeVersionEFR_2_3_2: UInt64 = 4
+    
     @objc
     static func updateRealmConfigurationIfNeeded() {
         let configuration = Realm.Configuration(
-            schemaVersion: SILRealmConfiguration.SchemeVersionEFR_2_3_0,
+            schemaVersion: SILRealmConfiguration.SchemeVersionEFR_2_3_2,
             migrationBlock: { migration, oldSchemeVersion in
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_0_3 {
                     SILRealmConfiguration.performUpdateDatabaseForEFR_2_0_3(migration: migration)
@@ -38,6 +42,9 @@ class SILRealmConfiguration : NSObject {
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_1_0 { }
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_3_0 {
                     SILRealmConfiguration.performUpdateDatabaseForEFR_2_3_0(migration: migration)
+                }
+                if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_3_2 {
+                    SILRealmConfiguration.performUpdateDatabaseForEFR_2_3_2(migration: migration)
                 }
             }
         )
@@ -91,6 +98,34 @@ class SILRealmConfiguration : NSObject {
         
         migrateServiceMappings(migration: migration, servicesUUIDMappingsToRemove: servicesUUIDMappingsToRemove)
         migrateCharacteristicMappings(migration: migration, characteristicsUUIDMappingsToRemove: characteristicsUUIDMappingsToRemove)
+    }
+    
+    private static func performUpdateDatabaseForEFR_2_3_2(migration: Migration) {
+        let types = ["SILGattConfigurationEntity", "SILGattConfigurationServiceEntity", "SILGattConfigurationCharacteristicEntity", "SILGattConfigurationDescriptorEntity"]
+        types.forEach { setDefaultValue(migration: migration, type: $0, fieldName: "_additionalXmlAttributes", value: nil) }
+        types.forEach { setDefaultValue(migration: migration, type: $0, fieldName: "_additionalXmlChildren", value: nil) }
+        setDefaultValue(migration: migration, type: "SILGattConfigurationEntity", fieldName: "projectEntity", value: nil)
+        addFieldsTofGattConfigurationEntities(migration: migration)
+        setFixedVariableLength(migration: migration, type: "SILGattConfigurationCharacteristicEntity")
+        setFixedVariableLength(migration: migration, type: "SILGattConfigurationDescriptorEntity")
+    }
+    
+    private static func setDefaultValue(migration: Migration, type: String, fieldName: String, value: Any?) {
+        migration.enumerateObjects(ofType: type) { old, new in
+            new?[fieldName] = value
+        }
+    }
+    
+    private static func addFieldsTofGattConfigurationEntities(migration: Migration) {
+        migration.enumerateObjects(ofType: "SILGattConfigurationEntity") { oldObject, newObject in
+            newObject?["_additionalXmlAttributes"] = "out:gatt_db.c:::header:gatt_db.h:::prefix:gattdb_:::generic_attribute_service:true"
+        }
+    }
+    
+    private static func setFixedVariableLength(migration: Migration, type: String) {
+        migration.enumerateObjects(ofType: type, { oldObject, newObject in
+            newObject?["fixedVariableLength"] = false
+        })
     }
     
     private static func migrateServiceMappings(migration: Migration, servicesUUIDMappingsToRemove: [String]) {

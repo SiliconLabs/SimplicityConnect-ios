@@ -15,7 +15,6 @@
 #import "SILBrowserLogViewControllerDelegate.h"
 #import "SILDebugServicesViewController.h"
 #import "SILDiscoveredPeripheralDisplayDataViewModel.h"
-#import "SILDiscoveredPeripheralDisplayData.h"
 #import "SILDiscoveredPeripheral.h"
 #import "SILAdvertisementDataViewModel.h"
 #import "SILBrowserFilterViewModel.h"
@@ -264,8 +263,13 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     [self updateCellsWithConnecting:peripheral];
 }
 
-- (void)didFailToConnectToPeripheral:(CBPeripheral *)peripheral {
+- (void)didFailToConnectToPeripheral:(CBPeripheral * _Nullable)peripheral peerRemovedPairingInformation:(BOOL)peerRemovedPairingInformation {
     [self updateCellsWithConnecting:peripheral];
+    if (peerRemovedPairingInformation) {
+        [self alertWithOKButtonWithTitle:@"Error"
+                                 message:@"The peripheral can't be connected because of peripheral has removed pairing information. Please go to the Settings of your device and remove the pair with peripheral, then try to connect again."
+                              completion:nil];
+    }
 }
 
 - (void)scanningDidEnd {
@@ -290,13 +294,14 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     SILDiscoveredPeripheralDisplayDataViewModel *discoveredPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:section];
-    NSString* identifier = discoveredPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey;
-    
-    if ([self.expandSections containsObject:identifier]) {
-        return self.browserViewModel.discoveredPeripheralsViewModels[section].advertisementDataViewModelsForInfoView.count + 1;
-    } else {
-        return 1;
-    }
+     NSString* identifier = discoveredPeripheralViewModel.discoveredPeripheral.identityKey;
+     
+     if ([self.expandSections containsObject:identifier]) {
+         return discoveredPeripheralViewModel.advertisementDataViewModels.count + 1;
+     } else {
+         return 1;
+     }
+     
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -318,9 +323,9 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (void)configureDeviceCell:(SILBrowserDeviceViewCell*)cell atIndexPath:(NSIndexPath *)indexPath {
     cell.delegate = self;
     SILDiscoveredPeripheralDisplayDataViewModel *discoveredPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
-    NSString* cellIdentifier = discoveredPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey;
+    NSString* cellIdentifier = discoveredPeripheralViewModel.discoveredPeripheral.identityKey;
     cell.cellIdentifier = cellIdentifier;
-    SILDiscoveredPeripheral *discoveredPeripheral = discoveredPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral;
+    SILDiscoveredPeripheral *discoveredPeripheral = discoveredPeripheralViewModel.discoveredPeripheral;
     NSString *deviceName = discoveredPeripheral.advertisedLocalName;
     cell.rssiLabel.text = discoveredPeripheral.rssiDescription;
     cell.title.text = deviceName;
@@ -349,7 +354,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     }
     cell.beaconLabel.text = discoveredPeripheral.beacon.name;
 
-    if (discoveredPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite) {
+    if (discoveredPeripheralViewModel.discoveredPeripheral.isFavourite) {
         [cell.favouritesButton setSelected:YES];
     }
     
@@ -363,9 +368,15 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)configureAdTypeCell:(SILBrowserDeviceAdTypeViewCell*)cell atIndexPath:(NSIndexPath *)indexPath {
     SILDiscoveredPeripheralDisplayDataViewModel *discoveredPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
-    SILAdvertisementDataViewModel *detailModel = discoveredPeripheralViewModel.advertisementDataViewModelsForInfoView[indexPath.row-1];
-    cell.adTypeNameLabel.text = detailModel.typeString;
-    cell.adTypeValueLabel.text = detailModel.valueString;
+    
+    SILDiscoveredPeripheral *discoveredPeripheral = discoveredPeripheralViewModel.discoveredPeripheral;
+
+    SILAdTypeCBPeripheralDecoder *decoder = [SILAdTypeCBPeripheralDecoder.alloc initWithPeripheral:discoveredPeripheral];
+    SILAdvertisementDataModel *adDataModel = [decoder decode][indexPath.row-1];
+    SILAdvertisementDataViewModel *adViewDataModel = [SILAdvertisementDataViewModel.alloc initWithAdvertisementDataModel:adDataModel];
+
+    cell.adTypeNameLabel.text = adViewDataModel.typeString;
+    cell.adTypeValueLabel.text = adViewDataModel.valueString;
 }
 
 - (BOOL)isConnectedPeripheral:(SILDiscoveredPeripheral*)peripheral {
@@ -401,7 +412,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SILDiscoveredPeripheralDisplayDataViewModel *selectedPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
-    NSString* identifier = selectedPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey;
+    NSString* identifier = selectedPeripheralViewModel.discoveredPeripheral.identityKey;
     if ([self.expandSections containsObject:identifier]) {
         [self.expandSections removeObject:identifier];
     } else {
@@ -513,7 +524,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (void)favouriteButtonTappedInCell:(SILBrowserDeviceViewCell*)cell {
     NSIndexPath *indexPath = [self.browserTableView indexPathForCell:cell];
     SILDiscoveredPeripheralDisplayDataViewModel *discoveredPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
-    if (discoveredPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite) {
+    if (discoveredPeripheralViewModel.discoveredPeripheral.isFavourite) {
         [SILFavoritePeripheral remove:discoveredPeripheralViewModel];
     } else {
         [SILFavoritePeripheral add:discoveredPeripheralViewModel];
@@ -525,7 +536,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     NSIndexPath *indexPath = [self.browserTableView indexPathForCell:cell];
     SILDiscoveredPeripheralDisplayDataViewModel *selectedPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
     
-    NSInteger index = [self isConnectedPeripheralWithIndex:selectedPeripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral];
+    NSInteger index = [self isConnectedPeripheralWithIndex:selectedPeripheralViewModel.discoveredPeripheral];
     
     if (index != NoDeviceFoundedIndex) {
         [self postNotificationToViewModel:index];

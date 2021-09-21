@@ -21,7 +21,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     @IBOutlet weak var aboveSafeAreaView: UIView!
     @IBOutlet weak var navigationBarView: UIView!
     @IBOutlet weak var navigationBarTitleLabel: UILabel!
-    private var devicePopoverController: WYPopoverController!
+    private var devicePopoverController: WYPopoverController?
 
     private var peripheralManagerSubscription: SILObservableToken?
     private var disposeBag = SILObservableTokenBag()
@@ -255,7 +255,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     }
     
     func deviceSelectionViewController(_ viewController: SILDeviceSelectionViewController!, didSelect peripheral: CBPeripheral!) {
-        self.devicePopoverController.dismissPopover(animated: true) { [self] in
+        self.devicePopoverController?.dismissPopover(animated: true) { [self] in
             self.devicePopoverController = nil
             let appType = viewController.viewModel.app.appType
             
@@ -296,7 +296,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             peripheralManager.stopAdvertising()
         }
         
-        self.devicePopoverController.dismissPopover(animated: true)
+        self.devicePopoverController?.dismissPopover(animated: true)
     }
     
     func runHealthThermometer(viewController: SILDeviceSelectionViewController, peripheral: CBPeripheral) {
@@ -317,13 +317,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     }
     
     func didFinishInfo(with infoViewController: SILAppSelectionInfoViewController!) {
-        self.devicePopoverController .dismissPopover(animated: true) {
+        self.devicePopoverController?.dismissPopover(animated: true) {
             self.devicePopoverController = nil
         }
     }
     
     func popoverControllerDidDismissPopover(_ popoverController: WYPopoverController!) {
-        self.devicePopoverController .dismissPopover(animated: true)
+        self.devicePopoverController?.dismissPopover(animated: true)
         self.devicePopoverController = nil
     }
     
@@ -355,7 +355,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     }
     
     func didTappedOKButton(deviceName text: String, bluetoothState: Bool) {
-        self.devicePopoverController.dismissPopover(animated: true)
+        self.devicePopoverController?.dismissPopover(animated: true)
         self.devicePopoverController = nil
         if bluetoothState {
             self.showIOPTestList(text: text)
@@ -368,7 +368,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     }
     
     func didTappedCancelButton() {
-        self.devicePopoverController.dismissPopover(animated: true)
+        self.devicePopoverController?.dismissPopover(animated: true)
         self.devicePopoverController = nil
     }
 }

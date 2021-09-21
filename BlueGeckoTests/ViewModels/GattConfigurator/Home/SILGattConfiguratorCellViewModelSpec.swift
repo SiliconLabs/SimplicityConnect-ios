@@ -14,7 +14,6 @@ import RealmSwift
 @testable import BlueGecko
 
 fileprivate class MockSILGattConfiguratorHomeWireframe : SILGattConfiguratorHomeWireframeType {
-    
     var viewController: UIViewController
     var navigationController: UINavigationController?
     
@@ -46,6 +45,10 @@ fileprivate class MockSILGattConfiguratorHomeWireframe : SILGattConfiguratorHome
     func showGattConfiguratorRemoveWarning(_ confirmAction: @escaping () -> ()) { }
     
     func dismissPopover() { }
+    
+    func showBluetoothDisabledDialog() { }
+
+    func showDocumentPickerView() { }
 }
 
 fileprivate class MockSILGattConfiguratorService : SILGattConfiguratorServiceType {

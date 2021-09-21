@@ -160,7 +160,7 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
 - (void)presentAlertControllerWithError:(NSError *)error animated:(BOOL)animated {
     NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
     
-    if (error.domain == CBATTErrorDomain) {
+    if (underlyingError.domain == CBATTErrorDomain) {
         SILErrorDetailsViewController* errorDetailsViewController = [[SILErrorDetailsViewController alloc] initWithError:underlyingError
                                                                                                             delegate:self];
     
@@ -169,7 +169,7 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
                                                                                                delegate:self.presentingViewController
                                                                                                animated:YES];
     } else {
-        [self handleNonATTError:error];
+        [self handleNonATTError:underlyingError];
     }
 }
 

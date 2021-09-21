@@ -627,6 +627,11 @@ static float kTableRefreshInterval = 1;
             NSUnderlyingErrorKey: *error,
             NSLocalizedDescriptionKey: [self prepareErrorDescription:*error],
         }];
+    } else {
+        NSData *dataAboutToBeWritten = [characteristicModel dataToWriteWithError:error];
+        
+        SILCharacteristicTableModel *originalCharacteristicTableModel = [self findCharacteristicTableModelForCharacteristic:characteristicModel.characteristic];
+        [originalCharacteristicTableModel setDataToWrite:dataAboutToBeWritten];
     }
     
     return success;
@@ -850,6 +855,7 @@ static float kTableRefreshInterval = 1;
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     NSString *message;
+    SILCharacteristicTableModel *characteristicTableModel = [self findCharacteristicTableModelForCharacteristic:characteristic];
     if (error) {
         NSLog(@"Write failed, restoring backup");
         message = [NSString stringWithFormat:@"Write failed. Error: code=%ld \"%@\"", (long)error.code, error.localizedDescription];
@@ -857,6 +863,8 @@ static float kTableRefreshInterval = 1;
         if ([self isATTError:error]) {
             [self showErrorDetailsPopoupWithError:error];
         }
+
+        [characteristicTableModel writeFailed];
     } else {
         NSLog(@"Write successful, updating read value");
         message = @"Write successful!";
@@ -865,8 +873,9 @@ static float kTableRefreshInterval = 1;
                          toastType:ToastTypeInfo
                shouldHasSizeOfText:YES
                         completion:^{}];
+        
+        [characteristicTableModel writeSucceeded];
     }
-    [peripheral readValueForCharacteristic:characteristic];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
@@ -1112,6 +1121,13 @@ static float kTableRefreshInterval = 1;
 
 - (void)postRegisterLogNotification:(NSString*)description {
     [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationRegisterLog object:self userInfo:@{ SILNotificationKeyDescription : description}];
+}
+
+- (SILCharacteristicTableModel *)findCharacteristicTableModelForCharacteristic:(CBCharacteristic *)characteristic {
+    SILServiceTableModel *serviceTableModel = [self findServiceModelForService:characteristic.service];
+    SILCharacteristicTableModel *characteristicTableModel = [self findCharacteristicModelForCharacteristic:characteristic forServiceModel:serviceTableModel];
+    
+    return characteristicTableModel;
 }
 
 #pragma mark - dealloc

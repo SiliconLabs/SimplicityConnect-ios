@@ -89,7 +89,7 @@ class SILIOPTesterViewModel: NSObject {
         testCaseResults = nil
         allTestCases = 0
         inProgressTestCases = 0
-        SILFileWriter().clearLogDir()
+        SILIOPFileWriter().clearLogDir()
         firmwareInfo = nil
         connectionParameters = nil
         
@@ -292,7 +292,7 @@ class SILIOPTesterViewModel: NSObject {
     }
     
     func getReportFile() -> URL {
-        let fileWriter = SILFileWriter(firmware: firmwareInfo?.firmware ?? .unknown, timestamp: timestamp)
+        let fileWriter = SILIOPFileWriter(firmware: firmwareInfo?.firmware ?? .unknown, timestamp: timestamp)
         
         if fileWriter.createEmptyFile(atPath: fileWriter.getFilePath), let testReport = testReport {
             let report = testReport.generateReport()

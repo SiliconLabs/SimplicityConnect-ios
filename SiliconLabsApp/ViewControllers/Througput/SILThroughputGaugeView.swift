@@ -250,6 +250,7 @@ class SILThroughputGaugeView: UIView {
             directionImageView.image = directionPhoneEFRImage
             
         case .none:
+            directionImageView.image = nil
             debugPrint("NONE CASE!")
         }
     }

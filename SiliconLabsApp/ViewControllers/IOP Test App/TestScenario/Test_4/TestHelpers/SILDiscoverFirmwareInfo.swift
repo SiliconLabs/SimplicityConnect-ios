@@ -110,7 +110,7 @@ class SILDiscoverFirmwareInfo {
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestVersionCharacteristic,
-                   let stackVersion = data?.hexDescription {
+                   let stackVersion = weakSelf.parseStackVersion(data: data) {
                     weakSelf.invalidateObservableTokens()
                     weakSelf.state.value = .completed(stackVersion: stackVersion)
                     return
@@ -142,5 +142,34 @@ class SILDiscoverFirmwareInfo {
     
     func stopTesting() {
         invalidateObservableTokens()
+    }
+    
+    private func parseStackVersion(data: Data?) -> String? {
+        guard let data = data else { return nil }
+        
+        let simpleVersioningLength = 1
+        let semanticVersioningLength = 8
+        
+        if data.count == simpleVersioningLength {
+            return parseSimpleVersioning(data: data)
+        } else if data.count == semanticVersioningLength {
+            return parseSemanticVersioningLittleEndian(data: data)
+        } else {
+            return nil;
+        }
+    }
+    
+    private func parseSimpleVersioning(data: Data) -> String {
+        return data.hexString
+    }
+    
+    private func parseSemanticVersioningLittleEndian(data: Data) -> String {
+        let major = data.subdata(in: 0..<2).integerValueFromData()
+        let minor = data.subdata(in: 2..<4).integerValueFromData()
+        let patch = data.subdata(in: 4..<6).integerValueFromData()
+        
+        let parsedSemanticVersioning = "\(major).\(minor).\(patch)"
+        
+        return parsedSemanticVersioning
     }
 }

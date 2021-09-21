@@ -20,7 +20,7 @@ public class SILFavoritePeripheral: Object {
     }
     
     @objc static func isFavorite(_ peripheral: SILDiscoveredPeripheralDisplayDataViewModel) -> Bool {
-        let uuid: String = peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
+        let uuid: String = peripheral.discoveredPeripheral.identityKey
         var fav = false
         let realm = try! Realm()
         if let _: SILFavoritePeripheral = realm.object(ofType: SILFavoritePeripheral.self, forPrimaryKey: uuid) {
@@ -35,8 +35,8 @@ public class SILFavoritePeripheral: Object {
     }
     
     @objc static func add(_ peripheral: SILDiscoveredPeripheralDisplayDataViewModel) {
-        let uuid: String = peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
-        let name: String = peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral?.name ?? ""
+        let uuid: String = peripheral.discoveredPeripheral.identityKey
+        let name: String = peripheral.discoveredPeripheral.peripheral?.name ?? ""
         let realm = try! Realm()
         try! realm.write {
             let peripheral = SILFavoritePeripheral()
@@ -44,12 +44,12 @@ public class SILFavoritePeripheral: Object {
             peripheral.uuid = uuid
             realm.add(peripheral, update: .modified)
         }
-        peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite = true
+        peripheral.discoveredPeripheral.isFavourite = true
     }
     
     @objc static func remove(_ peripheral: SILDiscoveredPeripheralDisplayDataViewModel) {
-        peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.isFavourite = false
-        let uuid: String = peripheral.discoveredPeripheralDisplayData.discoveredPeripheral.identityKey
+        peripheral.discoveredPeripheral.isFavourite = false
+        let uuid: String = peripheral.discoveredPeripheral.identityKey
         let realm = try! Realm()
         guard let peripheral: SILFavoritePeripheral = realm.object(ofType: SILFavoritePeripheral.self, forPrimaryKey: uuid) else {
             return

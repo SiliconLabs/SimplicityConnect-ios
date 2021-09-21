@@ -28,7 +28,7 @@
 }
 
 - (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error {
-    return [[self.parentCharacteristicModel characteristic] value];
+    return [self.parentCharacteristicModel getProbableCharacteristicValue];
 }
 
 - (NSString *)primaryTitle {

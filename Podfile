@@ -22,6 +22,7 @@ def shared_pods
     pod 'XMLDictionary', '~> 1.4.1'
     pod 'Realm', '~> 4.3.2'
     pod 'RealmSwift'
+    pod 'AEXML'
 end
 
 def test_pods

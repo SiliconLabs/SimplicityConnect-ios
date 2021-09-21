@@ -52,7 +52,11 @@ open class SILCheckBox: UIControl {
     @IBInspectable
     var disabledColor: UIColor = .systemGray
     
-    var checkboxBackgroundColor: UIColor! = .white
+    @IBInspectable
+    var checkboxUnselectedBackgroundColor: UIColor! = .clear
+    
+    @IBInspectable
+    var checkboxSelectedBackgroundColor: UIColor! = .clear
     
     //Used to increase the touchable are for the component
     var increasedTouchRadius: CGFloat = 5
@@ -61,6 +65,7 @@ open class SILCheckBox: UIControl {
     var isChecked: Bool = false {
         didSet{
             self.setNeedsDisplay()
+            self.layoutIfNeeded()
         }
     }
     
@@ -104,7 +109,8 @@ open class SILCheckBox: UIControl {
         
         let context = UIGraphicsGetCurrentContext()!
         context.setStrokeColor(!self.isEnabled ? disabledColor.cgColor : self.isChecked ? checkedBorderColor.cgColor : uncheckedBorderColor.cgColor)
-        context.setFillColor(checkboxBackgroundColor.cgColor)
+        context.setFillColor(!self.isEnabled ? UIColor.clear.cgColor : self.isChecked ? checkboxSelectedBackgroundColor.cgColor : checkboxUnselectedBackgroundColor.cgColor)
+        context.fill(newRect)
         context.setLineWidth(borderWidth)
         
         var shapePath: UIBezierPath!

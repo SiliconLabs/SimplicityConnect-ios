@@ -11,7 +11,6 @@
 #import "SILCentralManager.h"
 #import "SILDiscoveredPeripheralDisplayDataViewModel.h"
 #import "SILDiscoveredPeripheral.h"
-#import "SILDiscoveredPeripheralDisplayData.h"
 #import "SILBrowserBeaconType.h"
 #import "SILRSSIMeasurementTable.h"
 #import "UIColor+SILColors.h"

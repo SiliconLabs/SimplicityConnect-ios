@@ -315,7 +315,7 @@ class SILThroughputPeripheralDelegate : NSObject, SILThroughputPeripheralDelegat
     }
         
     private func didUpdateThroughputResult(value: Data?) {
-        self.throughputResult.value = SILThroughputResult(sender: .EFRToPhone, testType: self.currentTestType, valueInBits: 0)
+        self.throughputResult.value = SILThroughputResult(sender: .none, testType: self.currentTestType, valueInBits: 0)
         debugPrint("RELEASE FROM EFR \(self.throughputResult.value.valueInBits)")
         debugPrint("CNT: \(packetReceivedCount)")
         self.packetReceivedCount = 0

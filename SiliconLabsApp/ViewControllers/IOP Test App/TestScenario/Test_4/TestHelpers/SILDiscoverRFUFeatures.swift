@@ -124,6 +124,8 @@ class SILDiscoverRFUFeatures {
                         firmware = .BRD4181B
                     } else if ic_name == 4 {
                         firmware = .BRD4182A
+                    } else if ic_name == 5 {
+                        firmware = .BRD4186B
                     }
                     let pdu_size: Int = arrayData[2]
                     let mtu_size: Int = arrayData[1]

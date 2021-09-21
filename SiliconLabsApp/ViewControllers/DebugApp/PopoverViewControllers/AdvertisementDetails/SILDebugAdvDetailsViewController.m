@@ -14,7 +14,6 @@
 #import "SILDebugPopoverViewController.h"
 #import "UITableViewCell+SILHelpers.h"
 #import "UIView+NibInitable.h"
-#import "SILDiscoveredPeripheralDisplayData.h"
 #import "SILAdvertisementDataViewModel.h"
 #import "SILBluetoothBrowser+Constants.h"
 
@@ -40,7 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self registerNibs];
-    self.generalTitle.text = self.peripheralViewModel.discoveredPeripheralDisplayData.discoveredPeripheral.peripheral.name ?: DefaultDeviceName;
+    self.generalTitle.text = self.peripheralViewModel.discoveredPeripheral.peripheral.name ?: DefaultDeviceName;
 }
 
 #pragma mark - Setup 
@@ -54,7 +53,7 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.peripheralViewModel.advertisementDataViewModelsForInfoView.count;
+    return self.peripheralViewModel.advertisementDataViewModels.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -70,7 +69,8 @@
 }
 
 - (void)configureCell:(SILDebugAdvDetailTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    SILAdvertisementDataViewModel *detailModel = self.peripheralViewModel.advertisementDataViewModelsForInfoView[indexPath.row];
+    SILAdvertisementDataViewModel *detailModel = self.peripheralViewModel.advertisementDataViewModels[indexPath.row];
+    
     cell.detailValueLabel.text = detailModel.valueString;
     cell.detailTypeLabel.text = detailModel.typeString;
     [cell layoutIfNeeded];

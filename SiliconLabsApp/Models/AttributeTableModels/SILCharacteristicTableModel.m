@@ -27,6 +27,9 @@
 @property (nonatomic, readwrite) BOOL canWrite;
 @property (nonatomic) BOOL writeWithResponse;
 @property (nonatomic) BOOL writeNoResponse;
+
+@property (nonatomic, nullable) NSData *rememberedValue;
+@property (nonatomic, nullable) NSData *dataToBeWritten;
 @end
 
 @implementation SILCharacteristicTableModel
@@ -259,6 +262,29 @@
     }
     
     return YES;
+}
+
+- (void)setDataToWrite:(NSData * _Nullable)data {
+    self.dataToBeWritten = data;
+}
+- (void)writeSucceeded {
+    self.rememberedValue = self.dataToBeWritten;
+    self.dataToBeWritten = nil;
+}
+- (void)writeFailed {
+    self.dataToBeWritten = nil;
+}
+- (NSData * _Nullable)getProbableCharacteristicValue {
+    if (self.characteristic.value) {
+        self.rememberedValue = self.characteristic.value;
+        return self.rememberedValue;
+    }
+    
+    if(self.rememberedValue) {
+        return self.rememberedValue;
+    }
+    
+    return nil;
 }
 
 @end

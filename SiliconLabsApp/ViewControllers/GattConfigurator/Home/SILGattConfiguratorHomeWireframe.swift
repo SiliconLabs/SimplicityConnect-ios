@@ -11,6 +11,7 @@ protocol SILGattConfiguratorHomeWireframeType : SILBaseWireframeType {
     func showGattConfiguratorDetails(gattConfiguration: SILGattConfigurationEntity)
     func showGattConfiguratorRemoveWarning(_ confirmAction: @escaping () -> ())
     func showBluetoothDisabledDialog()
+    func showDocumentPickerView()
     func dismissPopover()
 }
 
@@ -20,6 +21,7 @@ class SILGattConfiguratorHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
     lazy private var settings = { SILGattConfiguratorSettings() }()
     lazy private var repository = { SILGattConfigurationRepository.shared }()
     lazy private var service = { SILGattConfiguratorService.shared }()
+    lazy private var gattAssignedRepository = { SILGattAssignedNumbersRepository() }()
     
     private var popoverController: WYPopoverController?
     
@@ -28,7 +30,7 @@ class SILGattConfiguratorHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
         
         super.init(viewController: vc)
         
-        vc.viewModel = SILGattConfiguratorHomeViewModel(wireframe: self, view: vc, service: service, settings: settings, repository: repository)
+        vc.viewModel = SILGattConfiguratorHomeViewModel(wireframe: self, view: vc, service: service, settings: settings, repository: repository, gattAssignedRepository: gattAssignedRepository)
     }
     
     required init(viewController: UIViewController) {
@@ -36,7 +38,7 @@ class SILGattConfiguratorHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
     }
     
     func showGattConfiguratorDetails(gattConfiguration: SILGattConfigurationEntity) {
-        let wireframe = SILGattConfiguratorDetailsWireframe(service: service, repository: repository, settings: settings, gattConfiguration: gattConfiguration)
+        let wireframe = SILGattConfiguratorDetailsWireframe(service: service, repository: repository, settings: settings, gattConfiguration: gattConfiguration, gattAssignedRepository: gattAssignedRepository)
         navigationController?.pushWireframe(wireframe)
     }
     
@@ -55,7 +57,14 @@ class SILGattConfiguratorHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
         viewController.alertWithOKButton(title: bluetoothDisabledAlert.title,
                                          message: bluetoothDisabledAlert.message)
     }
-
+    
+    func showDocumentPickerView() {
+        let documentPickerView = UIDocumentPickerViewController(documentTypes: ["public.xml"], in: .import)
+        documentPickerView.delegate = viewController as? SILGattConfiguratorHomeViewController
+        UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.sil_regularBlue()], for: .normal)
+        UINavigationBar.appearance().tintColor = UIColor.sil_regularBlue()
+        viewController.present(documentPickerView, animated: false, completion: nil)
+    }
     
     func dismissPopover() {
         popoverController?.dismissPopover(animated: true)

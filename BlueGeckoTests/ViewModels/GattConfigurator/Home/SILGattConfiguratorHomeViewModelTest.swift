@@ -14,7 +14,6 @@ import RealmSwift
 @testable import BlueGecko
 
 fileprivate class MockSILGattConfigutatorHomeWireframe: SILGattConfiguratorHomeWireframeType {
-    
     var menuPresented = false
     var sourceView: UIView?
     
@@ -43,7 +42,7 @@ fileprivate class MockSILGattConfigutatorHomeWireframe: SILGattConfiguratorHomeW
         expect(options[1].enabled).to(equal(true))
         expect(options[1].title).to(equal("Import"))
         
-        expect(options[2].enabled).to(equal(true))
+        expect(options[2].enabled).to(equal(false))
         expect(options[2].title).to(equal("Export"))
         
         self.options = options
@@ -66,10 +65,16 @@ fileprivate class MockSILGattConfigutatorHomeWireframe: SILGattConfiguratorHomeW
     func invokeMenuOption2() {
         self.options?[2].callback()
     }
+    
+    func showBluetoothDisabledDialog() { }
+    
+    func showDocumentPickerView() { }
 }
 
 fileprivate class MockSILGattConfiguratorHomeViewDelegate : SILGattConfiguratorHomeViewDelegate {
-    func updateConfigurations(configurations: [SILGattConfiguratorCellViewModel]) { }
+    func updateConfigurations(configurations: [SILGattConfiguratorCellViewModel], checkBoxCells: [SILGattConfiguratorCheckBoxCellViewModel]) { }
+    
+    func popViewController() { }
 }
 
 fileprivate class MockSILGattConfiguratorService : SILGattConfiguratorServiceType {
@@ -143,6 +148,7 @@ class SILGattConfiguratorHomeViewModelTest : QuickSpec {
     fileprivate var service: MockSILGattConfiguratorService!
     fileprivate var repository: MockSILGattConfigurationRepository!
     fileprivate var settings: MockSILGattConfiguratorSettings!
+    var gattAssignedRepository = SILGattAssignedNumbersRepository()
     
     var testObj: SILGattConfiguratorHomeViewModel!
     
@@ -172,7 +178,8 @@ class SILGattConfiguratorHomeViewModelTest : QuickSpec {
                                                                              view: self.view,
                                                                              service: self.service,
                                                                              settings: self.settings,
-                                                                             repository: self.repository)
+                                                                             repository: self.repository,
+                                                                             gattAssignedRepository: self.gattAssignedRepository)
         }
         
         afterEach {

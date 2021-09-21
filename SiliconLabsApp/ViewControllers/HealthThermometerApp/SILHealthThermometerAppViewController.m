@@ -281,7 +281,6 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     self.isConnected = NO;
     [self unregisterForBluetoothControllerNotifications];
     self.connectedPeripheral.delegate = nil;
-    [self.connectedPeripheral setNotifyValue:NO forCharacteristic:self.temperatureMeasurementCharacteristic];
     self.temperatureMeasurementCharacteristic = nil;
     self.connectedPeripheral = nil;
     [self.centralManager disconnectConnectedPeripheral];

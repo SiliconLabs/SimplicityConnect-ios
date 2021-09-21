@@ -91,6 +91,9 @@ class SILOTANonAckTestCase: SILTestCase {
         case .BRD4182A:
             boardID = "BRD4182A"
             
+        case .BRD4186B:
+            boardID = "BRD4186B"
+            
         case .unknown:
             self.invalidateObservableTokens()
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .uknown(reason: "Unsupported board."))

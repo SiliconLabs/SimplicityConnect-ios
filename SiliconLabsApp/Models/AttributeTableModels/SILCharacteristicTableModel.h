@@ -36,5 +36,9 @@
 - (void)readCharacteristicIfAllowed;
 - (BOOL)clearModel;
 - (void)expandFieldIfNeeded;
+- (void)setDataToWrite:(NSData * _Nullable)data;
+- (void)writeSucceeded;
+- (void)writeFailed;
+- (NSData * _Nullable)getProbableCharacteristicValue;
 
 @end

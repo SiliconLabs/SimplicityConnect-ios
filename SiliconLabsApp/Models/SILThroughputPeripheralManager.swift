@@ -173,7 +173,7 @@ class SILThroughputPeripheralManager: NSObject, SILThroughputPeripheralManagerTy
         throughputCountInBits = 0
         packetNumber = 1
         dataSize = 0
-        throughputResult.value = SILThroughputResult(sender: .phoneToEFR, testType: .none, valueInBits: 0)
+        throughputResult.value = SILThroughputResult(sender: .none, testType: .none, valueInBits: 0)
         
         debugPrint("CNT: \(self.packetSentCount)")
         self.packetSentCount = 0

@@ -98,7 +98,7 @@ class SILThroughputViewController: UIViewController {
             if value == -1.0 {
                 weakSelf.intervalLabel.text = "Interval: N/A"
             } else {
-                weakSelf.intervalLabel.text = "Interval: \(Int(value))"
+                weakSelf.intervalLabel.text = "Interval: \(Double(value)) ms"
             }
         })
         disposeBag.add(token: connectionInterval)
@@ -108,7 +108,7 @@ class SILThroughputViewController: UIViewController {
             if value == -1.0 {
                 weakSelf.latencyLabel.text = "Latency: N/A"
             } else {
-                weakSelf.latencyLabel.text = "Latency: \(Int(value))"
+                weakSelf.latencyLabel.text = "Latency: \(Double(value)) ms"
             }
         })
         disposeBag.add(token: slaveLatency)
@@ -118,7 +118,7 @@ class SILThroughputViewController: UIViewController {
             if value == -1.0 {
                 weakSelf.supervisionTimeoutLabel.text = "Supervision Timeout: N/A"
             } else {
-                weakSelf.supervisionTimeoutLabel.text = "Supervision Timeout: \(Int(value))"
+                weakSelf.supervisionTimeoutLabel.text = "Supervision Timeout: \(Double(value)) ms"
             }
         })
         disposeBag.add(token: supervisionTimeout)
@@ -271,7 +271,7 @@ class SILThroughputViewController: UIViewController {
     }
     
     private func showProgressView() {
-        SVProgressHUD.show(withStatus: "Initiating test")
+        SVProgressHUD.show(withStatus: "Reading device state…")
     }
     
     private func hideProgressView() {

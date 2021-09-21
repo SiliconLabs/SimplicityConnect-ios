@@ -40,6 +40,8 @@ class SILGattConfiguratorCellView: SILCell, SILCellView {
         if let viewModel = viewModel {
             weak var weakSelf = self
 
+            enableSwitch.isUserInteractionEnabled = !viewModel.isExportModeOn
+            
             stateToken = viewModel.state.observe { state in
                 weakSelf?.state = state
             }
@@ -50,23 +52,35 @@ class SILGattConfiguratorCellView: SILCell, SILCellView {
     
     private func didSetState(oldValue: SILGattConfiguratorCellViewModel.State?) {
         titleLabel.text = state?.name
-        serviceNumberLabel.text = "\(viewModel?.configuration.services.count ?? 0) Services"
+        if viewModel?.configuration.services.count == 1 {
+            serviceNumberLabel.text = "\(viewModel?.configuration.services.count ?? 1) Service"
+        } else {
+            serviceNumberLabel.text = "\(viewModel?.configuration.services.count ?? 0) Services"
+        }
         enableSwitch.isOn = state?.isOn ?? false
     }
     
     @IBAction func toggleEnableSwitch(_ sender: SILSwitch) {
-        viewModel?.toggleEnableSwitch(isOn: sender.isOn)
+        if let viewModel = viewModel, !viewModel.isExportModeOn {
+            viewModel.toggleEnableSwitch(isOn: sender.isOn)
+        }
     }
     
     @IBAction func editConfiguration(_ sender: Any) {
-        viewModel?.editConfiguration()
+        if let viewModel = viewModel, !viewModel.isExportModeOn {
+            viewModel.editConfiguration()
+        }
     }
     
     @IBAction func removeAdvertiser(_ sender: Any) {
-        viewModel?.removeConfiguration()
+        if let viewModel = viewModel, !viewModel.isExportModeOn {
+            viewModel.removeConfiguration()
+        }
     }
     
     @IBAction func copyAdvertiserSet(_ sender: Any) {
-        viewModel?.copyConfiguration()
+        if let viewModel = viewModel, !viewModel.isExportModeOn {
+            viewModel.copyConfiguration()
+        }
     }
 }

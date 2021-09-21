@@ -26,7 +26,6 @@
 #import "SILActivityBarViewController.h"
 #import "UIViewController+Containment.h"
 #import <PureLayout/PureLayout.h>
-#import "SILDiscoveredPeripheralDisplayData.h"
 #import "SILAdvertisementDataViewModel.h"
 #import "SILHomeKitManager.h"
 #import "SILHomeKitDebugServicesViewController.h"

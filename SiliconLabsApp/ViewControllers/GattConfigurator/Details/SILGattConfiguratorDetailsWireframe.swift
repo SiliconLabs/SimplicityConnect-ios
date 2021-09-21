@@ -9,7 +9,7 @@
 import Foundation
 
 protocol SILGattConfiguratorDetailsWireframeType: SILBaseWireframeType {
-    init(service: SILGattConfiguratorService, repository: SILGattConfigurationRepository, settings: SILGattConfiguratorSettingsType, gattConfiguration: SILGattConfigurationEntity)
+    init(service: SILGattConfiguratorService, repository: SILGattConfigurationRepository, settings: SILGattConfiguratorSettingsType, gattConfiguration: SILGattConfigurationEntity, gattAssignedRepository: SILGattAssignedNumbersRepository)
     func popPage()
     func dismissPopover()
     func presentCreateGattServicePopup(onSave: @escaping (SILGattConfigurationServiceEntity) -> ())
@@ -18,11 +18,12 @@ protocol SILGattConfiguratorDetailsWireframeType: SILBaseWireframeType {
 class SILGattConfiguratorDetailsWireframe: SILBaseWireframe, SILGattConfiguratorDetailsWireframeType, WYPopoverControllerDelegate, SILPopupDismissable {
     
     private let storyboard = UIStoryboard(name: "SILAppGATTConfigurator", bundle: nil)
-    private let gattAssignedRepository = SILGattAssignedNumbersRepository()
+    private var gattAssignedRepository: SILGattAssignedNumbersRepository?
     private var popover: WYPopoverController?
     
-    required init(service: SILGattConfiguratorService, repository: SILGattConfigurationRepository, settings: SILGattConfiguratorSettingsType, gattConfiguration: SILGattConfigurationEntity) {
+    required init(service: SILGattConfiguratorService, repository: SILGattConfigurationRepository, settings: SILGattConfiguratorSettingsType, gattConfiguration: SILGattConfigurationEntity, gattAssignedRepository: SILGattAssignedNumbersRepository) {
         let vc = storyboard.instantiateViewController(withIdentifier: "GattConfiguratorDetails") as! SILGattConfiguratorDetailsViewController
+        self.gattAssignedRepository = gattAssignedRepository
         
         super.init(viewController: vc)
         
@@ -43,7 +44,7 @@ class SILGattConfiguratorDetailsWireframe: SILBaseWireframe, SILGattConfigurator
     
     func presentCreateGattServicePopup(onSave: @escaping (SILGattConfigurationServiceEntity) -> ()) {
         let vc = SILCreateGattServiceViewController()
-        let viewModel = SILCreateGattServiceViewModel(wireframe: self, repository: gattAssignedRepository, onSave: onSave)
+        let viewModel = SILCreateGattServiceViewModel(wireframe: self, repository: gattAssignedRepository!, onSave: onSave)
         viewModel.viewDelegate = vc
         vc.viewModel = viewModel
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
@@ -51,7 +52,7 @@ class SILGattConfiguratorDetailsWireframe: SILBaseWireframe, SILGattConfigurator
     
     func presentCreateGattCharacteristicPopup(onSave: @escaping (SILGattConfigurationCharacteristicEntity) -> ()) {
         let vc = SILCreateGattCharacteristicViewController()
-        let viewModel = SILCreateGattCharacteristicViewModel(wireframe: self, repository: gattAssignedRepository, onSave: onSave)
+        let viewModel = SILCreateGattCharacteristicViewModel(wireframe: self, repository: gattAssignedRepository!, onSave: onSave)
         viewModel.viewDelegate = vc
         vc.viewModel = viewModel
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
@@ -59,7 +60,7 @@ class SILGattConfiguratorDetailsWireframe: SILBaseWireframe, SILGattConfigurator
     
     func presentEditGattCharacteristicPopup(characteristic: SILGattConfigurationCharacteristicEntity, onSave: @escaping (SILGattConfigurationCharacteristicEntity) -> ()) {
         let vc = SILCreateGattCharacteristicViewController()
-        let viewModel = SILCreateGattCharacteristicViewModel(wireframe: self, repository: gattAssignedRepository, characteristic: characteristic, onSave: onSave)
+        let viewModel = SILCreateGattCharacteristicViewModel(wireframe: self, repository: gattAssignedRepository!, characteristic: characteristic, onSave: onSave)
         viewModel.viewDelegate = vc
         vc.viewModel = viewModel
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
@@ -67,7 +68,7 @@ class SILGattConfiguratorDetailsWireframe: SILBaseWireframe, SILGattConfigurator
     
     func presentCreateGattDescriptorPopup(onSave: @escaping (SILGattConfigurationDescriptorEntity) -> ()) {
         let vc = SILCreateGattDescriptorViewController()
-        let viewModel = SILCreateGattDescriptorViewModel(wireframe: self, repository: gattAssignedRepository, onSave: onSave)
+        let viewModel = SILCreateGattDescriptorViewModel(wireframe: self, repository: gattAssignedRepository!, onSave: onSave)
         viewModel.viewDelegate = vc
         vc.viewModel = viewModel
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
@@ -75,7 +76,7 @@ class SILGattConfiguratorDetailsWireframe: SILBaseWireframe, SILGattConfigurator
     
     func presentEditGattDescriptorPopup(descriptor: SILGattConfigurationDescriptorEntity, onSave: @escaping (SILGattConfigurationDescriptorEntity) -> ()) {
         let vc = SILCreateGattDescriptorViewController()
-        let viewModel = SILCreateGattDescriptorViewModel(wireframe: self, repository: gattAssignedRepository, descriptor: descriptor, onSave: onSave)
+        let viewModel = SILCreateGattDescriptorViewModel(wireframe: self, repository: gattAssignedRepository!, descriptor: descriptor, onSave: onSave)
         viewModel.viewDelegate = vc
         vc.viewModel = viewModel
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)

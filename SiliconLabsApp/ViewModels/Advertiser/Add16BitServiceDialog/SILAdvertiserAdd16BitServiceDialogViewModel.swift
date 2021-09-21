@@ -58,7 +58,7 @@ class SILAdvertiserAdd16BitServiceDialogViewModel {
     }
     
     func onInfo() {
-        wireframe.open(url: "https://www.bluetooth.com/%20specifications/gatt/services/")
+        wireframe.open(url: repository.linkUrl)
     }
     
     func onClear() {

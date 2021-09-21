@@ -225,7 +225,14 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         self.progressViewController = SILOTAProgressViewController(viewModel: self.progressViewModel)
         self.popoverViewController = SILPopoverViewController(nibName: nil, bundle: nil, contentViewController: self.progressViewController)
         guard let topVC = UIViewController.topViewController() else { return }
-        topVC.present(self.popoverViewController!, animated: true, completion: completion)
+        if topVC.isKind(of: UIAlertController.self) {
+            topVC.dismiss(animated: true) {
+                guard let newTopVC = UIViewController.topViewController() else { return }
+                newTopVC.present(self.popoverViewController!, animated: true, completion: completion)
+            }
+        } else {
+            topVC.present(self.popoverViewController!, animated: true, completion: completion)
+        }
     }
     
     func showOTAProgressForFirmwareFile(file: SILOTAFirmwareFile, totalNumber: Int, completion: (() -> Void)?) {
