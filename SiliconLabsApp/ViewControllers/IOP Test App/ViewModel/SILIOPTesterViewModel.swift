@@ -266,6 +266,11 @@ class SILIOPTesterViewModel: NSObject {
             testParameters["peripheral"] = peripheral
             discoveredPeripheral = dict["discoveredPeripheral"] as? SILDiscoveredPeripheral
             testParameters["discoveredPeripheral"] = discoveredPeripheral
+        } else if testIndex == 5 {
+            peripheral = dict["peripheral"] as? CBPeripheral
+            testParameters["peripheral"] = peripheral
+            discoveredPeripheral = dict["discoveredPeripheral"] as? SILDiscoveredPeripheral
+            testParameters["discoveredPeripheral"] = discoveredPeripheral
         } else if testIndex == 6 {
             peripheral = dict["peripheral"] as? CBPeripheral
             testParameters["peripheral"] = peripheral

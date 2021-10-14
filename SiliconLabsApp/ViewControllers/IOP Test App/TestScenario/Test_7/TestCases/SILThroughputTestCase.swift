@@ -65,59 +65,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
         }
 
         publishStartTestEvent()
-        reconnectToDevice()
-    }
-    
-    private func reconnectToDevice() {
-        weak var weakSelf = self
-        let centralManagerSubscription = iopCentralManager.newPublishConnectionStatus().observe( { connectionStatus in
-            guard let weakSelf = weakSelf else { return }
-            switch connectionStatus {
-            case let .connected(peripheral: peripheral):
-                debugPrint("didConnectPeripheral**********")
-                weakSelf.peripheral = peripheral
-                weakSelf.invalidateObservableTokens()
-                weakSelf.connectionTimeout?.invalidate()
-                weakSelf.testThroughput()
-                
-            case let .disconnected(peripheral: _, error: error):
-                debugPrint("didDisconnectPeripheral**********")
-                weakSelf.connectionTimeout?.invalidate()
-                weakSelf.publishTestResult(passed: false, description: "Disconnected peripheral with error \(String(describing: error?.localizedDescription))")
-                
-            case let .failToConnect(peripheral: _, error: error):
-                debugPrint("didFailToConnectPeripheral**********")
-                weakSelf.connectionTimeout?.invalidate()
-                weakSelf.publishTestResult(passed: false, description: "Did fail to connect to peripheral with error \(String(describing: error?.localizedDescription))")
-                
-            case let .bluetoothEnabled(enabled: enabled):
-                if !enabled {
-                    debugPrint("Bluetooth disabled!")
-                    weakSelf.connectionTimeout?.invalidate()
-                    weakSelf.publishTestResult(passed: false, description: "Bluetooth disabled.")
-                }
-                
-            case .unknown:
-                break
-            }
-        })
-        disposeBag.add(token: centralManagerSubscription)
-        observableTokens.append(centralManagerSubscription)
-        
-        if discoveredPeripheral.isConnectable {
-            connectionTimeout = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(connectionFailed), userInfo: nil, repeats: false)
-            iopCentralManager.connect(to: discoveredPeripheral)
-        } else {
-            invalidateObservableTokens()
-            publishTestResult(passed: false, description: "Peripheral isn't connectable.")
-        }
-    }
-    
-    @objc private func connectionFailed() {
-        connectionTimeout?.invalidate()
-        connectionTimeout = nil
-        iopCentralManager.disconnect(peripheral: peripheral)
-        publishTestResult(passed: false, description: "Peripheral wasn't reconnected in 10 seconds.")
+        testThroughput()
     }
     
     private func subscribeToCentralManager() {

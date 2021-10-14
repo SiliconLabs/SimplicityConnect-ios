@@ -26,6 +26,8 @@ class SILOTAAckTestCase: SILTestCase {
     
     private var otaUpdateManager: SILIopTestOTAUpdateManger!
     
+    private let deviceNameAfterOtaUpdate = "IOP Test Update"
+    
     init() { }
     
     func injectParameters(parameters: Dictionary<String, Any>) {
@@ -112,7 +114,7 @@ class SILOTAAckTestCase: SILTestCase {
         weak var weakSelf = self
         let discoveredPeripheral = browserCentralManager.discoveredPeripherals().first(where: { peripheral in
             guard let weakSelf = weakSelf else { return false }
-            return weakSelf.isPeripheralWithLocalName(discoveredPeripheral: peripheral, uuid: weakSelf.peripheral.identifier.uuidString)
+            return weakSelf.isPeripheralWithName(discoveredPeripheral: peripheral, name: peripheralLocalName, uuid: weakSelf.peripheral.identifier.uuidString)
         })
         
         if let discoveredPeripheral = discoveredPeripheral {
@@ -134,7 +136,9 @@ class SILOTAAckTestCase: SILTestCase {
             switch status {
             case .success:
                 weakSelf.otaUpdateManager = nil
-                weakSelf.publishTestResult(passed: true)
+                weakSelf.invalidateObservableTokens()
+                
+                weakSelf.reconnectToDevice()
                 
             case let .failure(reason: reason):
                 weakSelf.otaUpdateManager = nil
@@ -184,13 +188,38 @@ class SILOTAAckTestCase: SILTestCase {
             timer = nil
         }
     }
+    
+    private func reconnectToDevice() {
+        weak var weakSelf = self
+        let reconnectManager = SILIOPTestReconnectManager(with: peripheral, iopCentralManager: iopCentralManager)
+        let reconnectManagerSubscription = reconnectManager.reconnectStatus.observe { reconnectStatus in
+            guard let weakSelf = weakSelf else { return }
+            switch reconnectStatus {
+            case let .success(discoveredPeripheral: discoveredPeripheral):
+                weakSelf.discoveredPeripheral = discoveredPeripheral
+                weakSelf.peripheral = discoveredPeripheral?.peripheral
+                weakSelf.invalidateObservableTokens()
+                weakSelf.publishTestResult(passed: true)
+                
+            case let .failure(reason: reason):
+                weakSelf.publishTestResult(passed: false, description: reason)
+                
+            case .unknown:
+                break
+            }
+        }
+        self.disposeBag.add(token: reconnectManagerSubscription)
+        observableTokens.append(reconnectManagerSubscription)
         
-    private func isPeripheralWithLocalName(discoveredPeripheral: SILDiscoveredPeripheral, uuid: String) -> Bool {
+        reconnectManager.reconnectToDevice(withName: deviceNameAfterOtaUpdate)
+    }
+
+    private func isPeripheralWithName(discoveredPeripheral: SILDiscoveredPeripheral, name: String, uuid: String) -> Bool {
         guard let localName = discoveredPeripheral.advertisedLocalName else {
             return false
         }
             
-        return reformatPeripheralName(name: localName) == reformatPeripheralName(name: peripheralLocalName) && discoveredPeripheral.peripheral.identifier.uuidString == uuid
+        return reformatPeripheralName(name: localName) == reformatPeripheralName(name: name) && discoveredPeripheral.peripheral.identifier.uuidString == uuid
     }
     
     private func reformatPeripheralName(name: String) -> String {

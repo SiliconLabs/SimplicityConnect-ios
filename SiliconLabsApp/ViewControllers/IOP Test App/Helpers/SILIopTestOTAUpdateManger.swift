@@ -84,6 +84,11 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         debugPrint("didDisconnectPeripheral**********OTA")
         if self.otaProgress == .reconnected {
             self.otaProgress = .initiated
+        } else if self.otaProgress == .finished {
+            self.unregisterNotifications()
+            self.dismissPopoverWithCompletion(completion: {
+                self.otaTestStatus.value = .success
+            })
         } else {
             self.dismissPopoverWithCompletion(completion: nil)
             self.unregisterNotifications()
@@ -200,15 +205,16 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
             }, completion: { (peripheral, error) in
                 print("Completed Flash")
                 self.handleAppFileUploadCompletionForPeripheral(peripheral: peripheral, error: error)
-                self.unregisterNotifications()
                 self.finishOTAError = error
-                self.dismissPopoverWithCompletion(completion: {
-                    if self.finishOTAError == nil {
-                        self.otaTestStatus.value = .success
-                    } else {
+                if self.finishOTAError == nil {
+                    self.otaProgress = .finished
+                    self.silCentralManager?.disconnect(from: self.peripheral!)
+                } else {
+                    self.unregisterNotifications()
+                    self.dismissPopoverWithCompletion(completion: {
                         self.otaTestStatus.value = .failure(reason: "Error during a file update.")
-                    }
-                })
+                    })
+                }
             })
         }
     }

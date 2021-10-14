@@ -16,12 +16,16 @@ class SILOTANonAckTestCase: SILTestCase {
     private var browserCentralManager: SILCentralManager!
     private var peripheral: CBPeripheral!
     private var firmwareInfo: SILIOPTestFirmwareInfo?
+    private var iopCentralManager: SILIOPTesterCentralManager!
+    
+    private var discoveredPeripheral: SILDiscoveredPeripheral?
     
     var observableTokens: [SILObservableToken?] = []
     private var disposeBag = SILObservableTokenBag()
     
     private var otaUpdateManager: SILIopTestOTAUpdateManger!
-    private var completion: (() -> ())!
+    
+    private let deviceNameAfterOtaUpdate = "IOP Test"
     
     init() { }
     
@@ -29,6 +33,7 @@ class SILOTANonAckTestCase: SILTestCase {
         self.browserCentralManager = parameters["browserCentralManager"] as? SILCentralManager
         self.peripheral = parameters["peripheral"] as? CBPeripheral
         self.firmwareInfo = parameters["firmwareInfo"] as? SILIOPTestFirmwareInfo
+        self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
     }
 
     // Test
@@ -61,9 +66,7 @@ class SILOTANonAckTestCase: SILTestCase {
             case .success:
                 weakSelf.otaUpdateManager = nil
                 weakSelf.invalidateObservableTokens()
-                weakSelf.disconnect {
-                    weakSelf.publishTestResult(passed: true)
-                }
+                weakSelf.reconnectToDevice()
    
             case let .failure(reason: reason):
                 weakSelf.otaUpdateManager = nil
@@ -102,53 +105,44 @@ class SILOTANonAckTestCase: SILTestCase {
         self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.version)
     }
     
-    private func disconnect(completion: @escaping () -> ()) {
-        self.completion = completion
-        registerNotifications()
-        self.browserCentralManager.disconnect(from: peripheral)
-    }
- 
-    private func registerNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(didConnectPeripheral(notification:)), name: .SILCentralManagerDidConnectPeripheral, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didDisconnectPeripheral(notification:)), name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didFailToConnectPeripheral(notification:)), name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothDisabled), name: .SILCentralManagerBluetoothDisabled, object: nil)
-    }
-    
-    private func unregisterNotifications() {
-        browserCentralManager.removeScan(forPeripheralsObserver: self)
-        NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidConnectPeripheral, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .SILCentralManagerBluetoothDisabled, object: nil)
-    }
-
-    @objc private func didConnectPeripheral(notification: Notification) {
-        debugPrint("didConnectPeripheral**********")
-        unregisterNotifications()
-        self.publishTestResult(passed: false, description: "Unknown error.")
-    }
-    
-    @objc private func didDisconnectPeripheral(notification: Notification) {
-        debugPrint("didDisconnectPeripheral**********")
-        unregisterNotifications()
-        self.completion()
-    }
-    
-    @objc private func didFailToConnectPeripheral(notification: Notification) {
-        debugPrint("didFailToConnectPeripheral**********")
-        unregisterNotifications()
-        self.publishTestResult(passed: false, description: "Unknown error.")
-    }
-
-    @objc private func bluetoothDisabled() {
-        debugPrint("bluetoothDisabled**********")
-        unregisterNotifications()
-        self.publishTestResult(passed: false, description: "Bluetooth disabled.")
+    private func reconnectToDevice() {
+        weak var weakSelf = self
+        let reconnectManager = SILIOPTestReconnectManager(with: peripheral, iopCentralManager: iopCentralManager)
+        let reconnectManagerSubscription = reconnectManager.reconnectStatus.observe { reconnectStatus in
+            guard let weakSelf = weakSelf else { return }
+            switch reconnectStatus {
+            case let .success(discoveredPeripheral: discoveredPeripheral):
+                weakSelf.discoveredPeripheral = discoveredPeripheral
+                weakSelf.peripheral = discoveredPeripheral?.peripheral
+                weakSelf.invalidateObservableTokens()
+                weakSelf.publishTestResult(passed: true)
+                
+            case let .failure(reason: reason):
+                weakSelf.publishTestResult(passed: false, description: reason)
+                
+            case .unknown:
+                break
+            }
+        }
+        self.disposeBag.add(token: reconnectManagerSubscription)
+        observableTokens.append(reconnectManagerSubscription)
+        
+        reconnectManager.reconnectToDevice(withName: deviceNameAfterOtaUpdate)
     }
     
     // Artifacts
     func getTestArtifacts() -> Dictionary<String, Any> {
-        return [:]
+        var parameters = ["browserCentralManager" : self.browserCentralManager!] as [String: Any]
+        
+        if let discoveredPeripheral = discoveredPeripheral {
+            parameters["discoveredPeripheral"] = discoveredPeripheral
+        }
+        
+        if let peripheral = peripheral {
+            parameters["peripheral"] = peripheral
+        }
+        
+        return parameters
     }
+
 }

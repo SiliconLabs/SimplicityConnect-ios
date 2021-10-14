@@ -876,6 +876,7 @@
 		8008B8FD25E67DB400439F3A /* DebugDeviceFilterViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8008B8FC25E67DB400439F3A /* DebugDeviceFilterViewModelSpec.swift */; };
 		8008B99925E6918400439F3A /* SILTemperatureMeasurementSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 8008B99825E6918400439F3A /* SILTemperatureMeasurementSpec.m */; };
 		8041CCC8256E5A0900C5C368 /* SILDescriptorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8041CCC7256E5A0900C5C368 /* SILDescriptorTableViewCell.swift */; };
+		8044307D270F008200DD3EA6 /* SILIOPTestReconnectManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044307C270F008200DD3EA6 /* SILIOPTestReconnectManager.swift */; };
 		80521478255A7A510021385F /* SILSortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80521477255A7A510021385F /* SILSortViewController.swift */; };
 		8052147E255A80F40021385F /* SILSortTypeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052147D255A80F40021385F /* SILSortTypeViewCell.swift */; };
 		80521484255A81070021385F /* SILSortModeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80521483255A81070021385F /* SILSortModeViewCell.swift */; };
@@ -1691,6 +1692,7 @@
 		8008B99725E6918300439F3A /* BlueGeckoTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlueGeckoTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		8008B99825E6918400439F3A /* SILTemperatureMeasurementSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SILTemperatureMeasurementSpec.m; sourceTree = "<group>"; };
 		8041CCC7256E5A0900C5C368 /* SILDescriptorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILDescriptorTableViewCell.swift; sourceTree = "<group>"; };
+		8044307C270F008200DD3EA6 /* SILIOPTestReconnectManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILIOPTestReconnectManager.swift; sourceTree = "<group>"; };
 		80521477255A7A510021385F /* SILSortViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortViewController.swift; sourceTree = "<group>"; };
 		8052147D255A80F40021385F /* SILSortTypeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortTypeViewCell.swift; sourceTree = "<group>"; };
 		80521483255A81070021385F /* SILSortModeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSortModeViewCell.swift; sourceTree = "<group>"; };
@@ -2710,6 +2712,7 @@
 				1E868B342611DCB30064977F /* SILIOPTesterPeripheralDelegate.swift */,
 				1E4D8F4D26035FE000924430 /* SILIopTestOTAUpdateManger.swift */,
 				1E0E2E5026284D0600B7B7FD /* SILIOPTestReport.swift */,
+				8044307C270F008200DD3EA6 /* SILIOPTestReconnectManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -5080,6 +5083,7 @@
 				1E26ECC725501A20002FFAAB /* SILSwitch.swift in Sources */,
 				1EEE316023F58C4D0076E731 /* SILBrowserFilterSavedSearchesViewController.m in Sources */,
 				2FD579DD2579352C001D7E9E /* UIViewController+SILContext.swift in Sources */,
+				8044307D270F008200DD3EA6 /* SILIOPTestReconnectManager.swift in Sources */,
 				1E4DB378266A71AE00405BD2 /* SILTabBarController.swift in Sources */,
 				1E26EC99255019E0002FFAAB /* SILAdvertiserDetailsWireframe.swift in Sources */,
 				1E973CF22672693400B5FC71 /* SILAppTypeBlinkyViewController.swift in Sources */,
@@ -5945,7 +5949,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DISPLAY_NAME = "EFR Connect";
@@ -5955,7 +5959,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5979,7 +5983,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DISPLAY_NAME = "EFR Connect";
@@ -5988,7 +5992,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
