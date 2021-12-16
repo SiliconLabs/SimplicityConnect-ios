@@ -10,6 +10,16 @@
  Contains all of custom services/characteristic that have IOP Test peripheral
  */
 struct SILIOPPeripheral {
+    struct DeviceInformationService {
+        static let uuid = "0x180A"
+        static let cbUUID = CBUUID(string: uuid)
+        
+        struct ModelNumberStringCharacteristic {
+            static let uuid = "0x2A24"
+            static let cbUUID = CBUUID(string: uuid)
+        }
+    }
+    
     struct SILIOPTest {
         static let uuid = "6A2857FE-9092-4E97-8AAE-C028E5B361A8"
         static let cbUUID = CBUUID(string: uuid)
@@ -19,7 +29,7 @@ struct SILIOPPeripheral {
             static let cbUUID = CBUUID(string: uuid)
         }
         
-        struct IOPTestFeaturesRFU {
+        struct IOPTestConnection {
             static let uuid = "6CB60323-2D62-473D-8815-B73DF2EE3517"
             static let cbUUID = CBUUID(string: uuid)
         }

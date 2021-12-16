@@ -11,7 +11,7 @@
 
 NSString * const SILDeviceSelectionCollectionViewCellIdentifier = @"SILDeviceSelectionCollectionViewCellIdentifier";
 
-extern CGFloat const SILDeviceSelectionViewControllerReloadThreshold;
+CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 
 @interface SILDeviceSelectionCollectionViewCell ()
 
@@ -27,6 +27,22 @@ extern CGFloat const SILDeviceSelectionViewControllerReloadThreshold;
         [self hideDbmTypeImageView];
     }
     [self setRSSIImageForPeripheral:discoveredPeripheral];
+}
+
+- (void)configureCellForThunderboardDevice:(DiscoveredDeviceDisplay *)device {
+
+    self.deviceNameLabel.text = device.name;
+    [self.dmpTypeImageView setHidden:YES];
+    self.dmpTypeImageView.image = nil;
+    
+    NSNumber *rssi = device.RSSI != nil ? device.RSSI : 0;
+    if ([rssi integerValue] > SILConstantsStrongSignalThreshold) {
+        self.signalImageView.image = [UIImage imageNamed: SILImageNameBTStrong];
+    } else if ([rssi integerValue] > SILConstantsMediumSignalThreshold) {
+        self.signalImageView.image = [UIImage imageNamed: SILImageNameBTMedium];
+    } else {
+        self.signalImageView.image = [UIImage imageNamed: SILImageNameBTWeak];
+    }
 }
 
 - (void)setDeviceNameForPeripheral:(SILDiscoveredPeripheral*)discoveredPeripheral {

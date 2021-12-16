@@ -19,6 +19,9 @@ enum SILBluetoothDisabledAlert: Int {
     case throughput
     case gattConfigurator
     case blinky
+    case motion
+    case environment
+    case wifiCommissioning
     
     var title: String {
         "Bluetooth Disabled"
@@ -46,6 +49,12 @@ enum SILBluetoothDisabledAlert: Int {
             return "\(turnOnMsg) start any GATT Server."
         case .blinky:
             return "\(backMsg) \(turnOnMsg) use Blinky."
+        case .motion:
+            return "\(backMsg) \(turnOnMsg) use Motion"
+        case .environment:
+            return "\(backMsg) \(turnOnMsg) use Environment"
+        case .wifiCommissioning:
+            return "\(backMsg) \(turnOnMsg) use WiFi Commissioning"
         }
     }
 }

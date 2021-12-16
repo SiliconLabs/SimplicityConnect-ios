@@ -18,7 +18,7 @@ class SILGATT4_1TestCase: SILTestCase {
     private var disposeBag = SILObservableTokenBag()
     
     private var peripheral: CBPeripheral!
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     private var iopCentralManager: SILIOPTesterCentralManager!
     
     private var gattOperationsTestHelper: SILIOPGATTOperationsTestHelper!
@@ -33,7 +33,7 @@ class SILGATT4_1TestCase: SILTestCase {
     
     func injectParameters(parameters: Dictionary<String, Any>) {
         self.peripheral = parameters["peripheral"] as? CBPeripheral
-        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILPeripheralDelegate
         self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
     }
     
@@ -52,7 +52,7 @@ class SILGATT4_1TestCase: SILTestCase {
         subscribeToCentralManager()
         
         
-        guard let iopTestProperties = gattOperationsTestHelper.findService(with: iopTestProperties, in: peripheral) else {
+        guard let iopTestProperties = peripheralDelegate.findService(with: iopTestProperties, in: peripheral) else {
             self.publishTestResult(passed: false, description: "Service IOP Test Properties not found.")
             return
         }

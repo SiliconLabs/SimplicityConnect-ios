@@ -105,14 +105,17 @@ class SILGattConfiguratorHomeViewModel {
     private func getFilePathForGattConfiguration(createdFilesDict: inout [String: Int], name: String) -> String {
         let name = name.replacingOccurrences(of: " ", with: "_").lowercased()
         
-        if let index = createdFilesDict[name] {
-            createdFilesDict.updateValue(index + 1, forKey: name)
-            let nameWithSuffix = name.appending("_\(index + 1)")
-            return fileWriter.getFilePath(withName: nameWithSuffix)
-        } else {
-            createdFilesDict[name] = 1
-            return fileWriter.getFilePath(withName: name)
+        var fileName = name
+        var index = 1
+        
+        while (createdFilesDict[fileName] != nil) {
+            fileName = name.appending("_\(index)")
+            index += 1
         }
+        
+        createdFilesDict[fileName] = index
+        
+        return fileWriter.getFilePath(withName: fileName)
     }
     
     func export(onFinish: @escaping ([URL]) -> ()) {

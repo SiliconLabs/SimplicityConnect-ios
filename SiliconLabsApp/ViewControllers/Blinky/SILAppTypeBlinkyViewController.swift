@@ -9,14 +9,18 @@
 import UIKit
 import SVProgressHUD
 
-class SILAppTypeBlinkyViewController: UIViewController {
+class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate, SILThunderboardConnectedDeviceBar, UIGestureRecognizerDelegate {
+    
+    var connectedDeviceView: ConnectedDeviceBarView?
+    var connectedDeviceBarHeight: CGFloat = 70.0
     
     @IBOutlet var lightBulbButton: UIButton!
     @IBOutlet var virtualButtonImage: UIImageView!
     @IBOutlet var navigationBar: UIView!
     
-    @objc public var centralManager: SILCentralManager?;
-    @objc public var connectedPeripheral: CBPeripheral?;
+    public var deviceConnector: DeviceConnection?
+    public var connectedPeripheral: CBPeripheral?
+    public var deviceName: String!
     
     private var viewModel: SILBlinkyViewModel?
     
@@ -27,9 +31,19 @@ class SILAppTypeBlinkyViewController: UIViewController {
         
         setupLightBulbButton()
         setupNavigationBarShadow()
-        viewModel = SILBlinkyViewModel(centralManager: centralManager!, connectedPeripheral: connectedPeripheral!)
+        viewModel = SILBlinkyViewModel(deviceConnector: self.deviceConnector!, connectedPeripheral: self.connectedPeripheral!, name: deviceName)
         subscribeToViewModel()
         viewModel?.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        deviceConnector?.disconnectAllDevices()
+        self.disposeBag.invalidateTokens()
     }
     
     private func setupLightBulbButton() -> Void {
@@ -45,8 +59,14 @@ class SILAppTypeBlinkyViewController: UIViewController {
             case .initiated:
                 SVProgressHUD.dismiss()
             case .failure(let reason):
-                SVProgressHUD.showError(withStatus: "Error: \(reason)")
-                self.navigationController?.popViewController(animated: true)
+                if reason == "Bluetooth disabled" {
+                    self.displayBluetoothDisabledAlert()
+                } else {
+                    SVProgressHUD.showError(withStatus: "Error: \(reason)")
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
             default:
                 return
             }
@@ -54,29 +74,49 @@ class SILAppTypeBlinkyViewController: UIViewController {
         disposeBag.add(token: blinkyStateSubscription!)
         
         let lightStateSubscription = viewModel?.LightState.observe({ lightState in
-            switch lightState{
-            case .On:
-                self.setLightBulbOn()
-            case .Off:
-                self.setLightBulbOff()
+            DispatchQueue.main.async {
+                switch lightState{
+                case .On:
+                    self.setLightBulbOn()
+                case .Off:
+                    self.setLightBulbOff()
+                }
             }
         })
         disposeBag.add(token: lightStateSubscription!)
         
         let reportButtonStateSubscription = viewModel?.ReportButtonState.observe({ buttonState in
-            switch buttonState{
-            case .Pressed:
-                self.setVirtualButtonOn()
-            case .Released:
-                self.setVirtualButtonOff()
+            DispatchQueue.main.async {
+                switch buttonState{
+                case .Pressed:
+                    self.setVirtualButtonOn()
+                case .Released:
+                    self.setVirtualButtonOff()
+                }
             }
         })
         disposeBag.add(token: reportButtonStateSubscription!)
+        
+        let connectedDeviceDataSubscription = viewModel?.connectedDeviceDataState.observe { data in
+            if let data = data {
+                self.connectedDeviceUpdated(data.deviceName, RSSI: nil, power: data.powerSource, identifier: nil, firmwareVersion: data.firmwareVersion)
+            }
+        }
+        disposeBag.add(token: connectedDeviceDataSubscription!)
     }
 
     private func setupNavigationBarShadow() {
         self.navigationBar.superview?.bringSubviewToFront(navigationBar)
         navigationBar.addShadow()
+    }
+    
+    @objc func displayBluetoothDisabledAlert() {
+        debugPrint("Did disconnect peripheral")
+            
+        let bluetoothDisabledAlert = SILBluetoothDisabledAlert.blinky
+        self.alertWithOKButton(title: bluetoothDisabledAlert.title, message: bluetoothDisabledAlert.message) { _ in
+            self.navigationController?.popViewController(animated: true)
+        }
     }
         
     @IBAction func onLightBulbButtonTapped() -> Void {
@@ -102,5 +142,16 @@ class SILAppTypeBlinkyViewController: UIViewController {
     
     private func setVirtualButtonOn() {
         virtualButtonImage.image = UIImage(named: "graphic - blinky - button - on")
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isEqual(navigationController?.interactivePopGestureRecognizer) {
+            viewModel?.viewWillDisappear()
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
+            return true
+        }
+        return false
     }
 }

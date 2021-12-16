@@ -8,40 +8,13 @@
 
 import Foundation
 
-struct SILBlinkyPeripheralGATTDatabase {
-    struct BlinkyService {
-        static let uuid = "de8a5aac-a99b-c315-0c80-60d4cbb51224"
-        static let cbUUID = CBUUID(string: uuid)
-        
-        struct LightCharacteristic {
-            static let uuid = "5b026510-4088-c297-46d8-be6c736a087a"
-            static let cbUUID = CBUUID(string: uuid)
-            
-            struct WriteValues {
-                static let TurnOff = Data(bytes: [0x00], count: 1)
-                static let TurnOn = Data(bytes: [0x01], count: 1)
-            }
-        }
-        
-        struct ReportButtonCharacteristic {
-            static let uuid = "61a885a4-41c3-60d0-9a53-6d652a70d29c"
-            static let cbUUID = CBUUID(string: uuid)
-            
-            struct ReadValues {
-                static let Released = Data(bytes: [0x00], count: 1)
-                static let Pressed = Data(bytes: [0x01], count: 1)
-            }
-        }
-    }
-}
-
 enum SILBlinkyPeripheralDelegateState {
     case initiated
     case failure(reason: String)
     case unknown
 }
 
-enum SILBlinkyCharacteristicState {
+enum SILBlinkyCharacteristicState: Equatable {
     case unknown
     case updateValue(data: Data)
 }
@@ -51,15 +24,61 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
     var lightCharacteristicState: SILObservable<SILBlinkyCharacteristicState> = SILObservable(initialValue: .unknown)
     var reportButtonCharacteristicState: SILObservable<SILBlinkyCharacteristicState> = SILObservable(initialValue: .unknown)
     
+    var powerSourceState: SILObservable<PowerSource?> = SILObservable(initialValue: nil)
+    var firmwareVersion: String = "N/A"
+    private var powerSource: PowerSource = .unknown
+    
     private var peripheral: CBPeripheral
     private var lightCharacteristic: CBCharacteristic?
     private var reportButtonCharacteristic: CBCharacteristic?
     
-    init(peripheral: CBPeripheral) {
+    private var isThunderboard: Bool = false
+    
+    private var serviceUUID: CBUUID!
+    private var lightUUID: CBUUID!
+    private var reportUUID: CBUUID!
+        
+    private var turnOnData: Data!
+    private var turnOffData: Data!
+        
+    private var lightProperties: CBCharacteristicProperties?
+    private var reportProperties: CBCharacteristicProperties?
+
+    init(peripheral: CBPeripheral, name: String) {
         self.peripheral = peripheral
         super.init()
+        initDevice(name: name)
         self.peripheral.delegate = self
     }
+    
+    private func initDevice(name: String) {
+        if (name.contains("Blinky") == true) {
+            self.isThunderboard = false
+            self.serviceUUID = SILBlinkyPeripheralGATTDatabase.BlinkyService.cbUUID
+                
+            self.lightUUID = SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.cbUUID
+            self.reportUUID = SILBlinkyPeripheralGATTDatabase.BlinkyService.ReportButtonCharacteristic.cbUUID
+                
+            self.turnOnData = SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.WriteValues.TurnOn
+            self.turnOffData = SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.WriteValues.TurnOff
+                
+            self.lightProperties = nil
+            self.reportProperties = nil
+        } else if (name.contains("Thunder") == true) {
+            self.isThunderboard = true
+            
+            self.serviceUUID = SILThunderboardPeripheralGATTDatabase.ThunderboardService.cbUUID
+            self.lightUUID = SILThunderboardPeripheralGATTDatabase.ThunderboardService.LightCharacteristic.cbUUID
+            self.reportUUID = SILThunderboardPeripheralGATTDatabase.ThunderboardService.ReportButtonCharacteristic.cbUUID
+                
+            self.turnOnData = SILThunderboardPeripheralGATTDatabase.ThunderboardService.LightCharacteristic.WriteValues.TurnOn
+            self.turnOffData = SILThunderboardPeripheralGATTDatabase.ThunderboardService.LightCharacteristic.WriteValues.TurnOff
+                
+            self.lightProperties = SILThunderboardPeripheralGATTDatabase.ThunderboardService.LightCharacteristic.properties
+            self.reportProperties = SILThunderboardPeripheralGATTDatabase.ThunderboardService.ReportButtonCharacteristic.properties
+        }
+    }
+
     
     func newState() -> SILObservable<SILBlinkyPeripheralDelegateState> {
         state = SILObservable(initialValue: .unknown)
@@ -84,22 +103,23 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
     func discoverBlinkyService() {
         debugPrint("Discover Light service")
         
-        self.peripheral.discoverServices([SILBlinkyPeripheralGATTDatabase.BlinkyService.cbUUID])
-    }
-    
-    func deviceDidDisconnect() {
-        self.peripheral.setNotifyValue(false, for: reportButtonCharacteristic!)
+        self.peripheral.discoverServices(nil)
     }
     
     // MARK: - access to Light characteristics
+    
     public func writeOnValueToLightCharacteristic() {
-        let onValue = SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.WriteValues.TurnOn
-        peripheral.writeValue(onValue, for: self.lightCharacteristic!, type: .withResponse)
+        guard let lightCharacteristic = self.lightCharacteristic else {
+            return
+        }
+        peripheral.writeValue(turnOnData, for: lightCharacteristic, type: .withResponse)
     }
     
     public func writeOffValueToLightCharacteristic() {
-        let offValue = SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.WriteValues.TurnOff
-        peripheral.writeValue(offValue, for: self.lightCharacteristic!, type: .withResponse)
+        guard let lightCharacteristic = self.lightCharacteristic else {
+            return
+        }
+        peripheral.writeValue(turnOffData, for: lightCharacteristic, type: .withResponse)
     }
     
     // MARK: - Bluetooth delegate's methods
@@ -112,49 +132,82 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
             return
         }
         
-        let blinkyService = peripheral.services?.first(where: {service in service.uuid == SILBlinkyPeripheralGATTDatabase.BlinkyService.cbUUID})
+        let blinkyService: CBService? = peripheral.services?.first(where: {service in service.uuid == self.serviceUUID})
         
-        guard let blinkyServiceUnwrapped = blinkyService else {
+        guard let _ = blinkyService else {
             state.value = .failure(reason: "No Blinky service discovered")
             return
         }
         
-        peripheral.discoverCharacteristics([SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.cbUUID,
-                                            SILBlinkyPeripheralGATTDatabase.BlinkyService.ReportButtonCharacteristic.cbUUID], for: blinkyServiceUnwrapped)
+        peripheral.services?.forEach({
+            peripheral.discoverCharacteristics(nil, for: $0)
+        })
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         debugPrint("Blinky peripheral(:didDiscoverCharacteristicsFor:service:error)")
         
-        guard error == nil else {
-            state.value = .failure(reason: "Failure discovering Blinky service characteristics: \(String(describing: error?.localizedDescription))")
-            return
+        if service.uuid == self.serviceUUID {
+            guard error == nil else {
+                state.value = .failure(reason: "Failure discovering Blinky service characteristics: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            guard let lightCharacteristic = findCharacteristic(characteristics: service.characteristics,
+                                                               withUUID: self.lightUUID, withProperties: self.lightProperties)
+            else {
+                state.value = .failure(reason: "Blinky light characteristic not discovered")
+                return
+            }
+            self.lightCharacteristic = lightCharacteristic
+            
+            guard let reportButtonCharacteristic = findCharacteristic(characteristics: service.characteristics,
+                                                                      withUUID: self.reportUUID, withProperties: self.reportProperties)
+            else {
+                state.value = .failure(reason: "Blinky report button characteristic not discovered")
+                return
+            }
+            self.reportButtonCharacteristic = reportButtonCharacteristic
+            
+            subscribeToReportButton()
+            readCharacteristicsInitialValues()
+        } else if isThunderboard {
+            if service.uuid == SILThunderboardPeripheralGATTDatabase.BatteryService.cbUUID {
+                guard let batteryCharacteristic = findCharacteristic(characteristics: service.characteristics,
+                                                                     withUUID: SILThunderboardPeripheralGATTDatabase.BatteryService
+                                                                        .BatteryLevelCharacteristic.cbUUID,
+                                                                     withProperties: nil) else {
+                    state.value = .failure(reason: "Battery Characteristic not discovered")
+                    return
+                }
+                peripheral.setNotifyValue(true, for: batteryCharacteristic)
+                
+            } else if service.uuid == SILThunderboardPeripheralGATTDatabase.PowerSourceCustomService.cbUUID {
+                guard let powerSourceCharacteristic = findCharacteristic(characteristics: service.characteristics,
+                                                                         withUUID: SILThunderboardPeripheralGATTDatabase.PowerSourceCustomService
+                                                                            .PowerSourceCustomCharacteristic.cbUUID,
+                                                                         withProperties: nil) else {
+                    state.value = .failure(reason: "Power Source Characteristic not discovered")
+                    return
+                }
+                peripheral.readValue(for: powerSourceCharacteristic)
+            } else if service.uuid == SILThunderboardPeripheralGATTDatabase.DeviceInformationService.cbUUID {
+                guard let firmwareRevisionCharacteristic = findCharacteristic(characteristics: service.characteristics,
+                                                                         withUUID: SILThunderboardPeripheralGATTDatabase.DeviceInformationService
+                                                                         .FirmwareRevisionCharacteristic.cbUUID,
+                                                                         withProperties: nil) else {
+                    state.value = .failure(reason: "Firmware Revision not discovered")
+                    return
+                }
+                peripheral.readValue(for: firmwareRevisionCharacteristic)
+            }
         }
-        
-        guard let lightCharacteristic = findCharacteristic(characteristics: service.characteristics,
-                                                           with: SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.cbUUID)
-        else {
-            state.value = .failure(reason: "Blinky light characteristic not discovered")
-            return
-        }
-        self.lightCharacteristic = lightCharacteristic
-        
-        guard let reportButtonCharacteristic = findCharacteristic(characteristics: service.characteristics,
-                                                                  with: SILBlinkyPeripheralGATTDatabase.BlinkyService.ReportButtonCharacteristic.cbUUID)
-        else {
-            state.value = .failure(reason: "Blinky report button characteristic not discovered")
-            return
-        }
-        self.reportButtonCharacteristic = reportButtonCharacteristic
-        
-        subscribeToReportButton()
-        readCharacteristicsInitialValues()
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         debugPrint("Blinky peripheral(:didUpdateValueFor:characteristic:error)")
         
-        if (characteristic.uuid == SILBlinkyPeripheralGATTDatabase.BlinkyService.ReportButtonCharacteristic.cbUUID)  {
+        if (checkIsReportButtonCharacteristic(characteristic))  {
             debugPrint("Notification from report button characteristic")
             
             guard error == nil else {
@@ -168,9 +221,11 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
             }
             
             self.reportButtonCharacteristicState.value = .updateValue(data: value)
+            updateStateIfIsInitiated()
+            return
         }
         
-        if (characteristic.uuid == SILBlinkyPeripheralGATTDatabase.BlinkyService.LightCharacteristic.cbUUID) {
+        if (checkIsLightCharacteristic(characteristic)) {
             debugPrint("Response from light characteristic for initial value request")
             
             switch self.state.value {
@@ -186,21 +241,140 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
                 }
                 
                 self.lightCharacteristicState.value = .updateValue(data: value)
-                self.state.value = .initiated
+                updateStateIfIsInitiated()
             default:
                 break;
             }
+            return
+        }
+        
+        if (characteristic.uuid == SILThunderboardPeripheralGATTDatabase.DeviceInformationService.FirmwareRevisionCharacteristic.cbUUID) {
+            debugPrint("Response from firmware revision characteristic for initial value request")
+            
+            guard error == nil else {
+                state.value = .failure(reason: "Failure on receiving response from firmware revision characteristic: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            guard let firmwareVersion = characteristic.tb_stringValue() else {
+                state.value = .failure(reason: "Missing firmware revision characteristic value")
+                return
+            }
+            
+            self.firmwareVersion = firmwareVersion
+            updateStateIfIsInitiated()
+            return
+        }
+        
+        if (characteristic.uuid == SILThunderboardPeripheralGATTDatabase.PowerSourceCustomService.PowerSourceCustomCharacteristic.cbUUID) {
+            debugPrint("Response from light characteristic for initial value request")
+ 
+            guard error == nil else {
+                state.value = .failure(reason: "Failure on receiving response from power source characteristic: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            guard let value = characteristic.tb_int8Value() else {
+                state.value = .failure(reason: "Missing power source characteristic value")
+                return
+            }
+            updatePowerSource(with: value)
+            updateStateIfIsInitiated()
+            return
+        }
+        
+        if (characteristic.uuid == SILThunderboardPeripheralGATTDatabase.BatteryService.BatteryLevelCharacteristic.cbUUID) {
+            debugPrint("Response from battery level characteristic for initial value request")
+
+            guard error == nil else {
+                state.value = .failure(reason: "Failure on receiving response from battery level characteristic: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            guard let value = characteristic.tb_int8Value() else {
+                state.value = .failure(reason: "Missing battery level characteristic value")
+                return
+            }
+            
+            self.updatePower(batteryLevel: Int(value))
+            updateStateIfIsInitiated()
+        }
+    }
+    
+    private func checkIsLightCharacteristic(_ characteristic: CBCharacteristic) -> Bool {
+        if let properties = self.lightProperties {
+            return characteristic.uuid == self.lightCharacteristic?.uuid && characteristic.properties.rawValue == properties.rawValue
+        }
+        return characteristic.uuid == self.lightCharacteristic?.uuid
+    }
+    
+    private func checkIsReportButtonCharacteristic(_ characteristic: CBCharacteristic) -> Bool {
+        if let properties = self.reportProperties {
+            return characteristic.uuid == self.reportButtonCharacteristic?.uuid && characteristic.properties.rawValue == properties.rawValue
+        }
+        return characteristic.uuid == self.reportButtonCharacteristic?.uuid
+    }
+    
+    private func checkIsInitiated() -> Bool {
+        var result = true
+        if isThunderboard {
+            result = result && self.powerSourceState.value != .unknown
+        }
+
+        return result && lightCharacteristicState.value != .unknown && reportButtonCharacteristicState.value != .unknown
+    }
+    
+    private func updateStateIfIsInitiated() {
+        if checkIsInitiated() {
+            self.state.value = .initiated
         }
     }
     
     //MARK: - Helper methods
-    func findCharacteristic(characteristics: [CBCharacteristic]?, with uuid: CBUUID) -> CBCharacteristic? {
-        return characteristics?.first(where: {characteristic in
-            characteristic.uuid == uuid
-        })
+    func findCharacteristic(characteristics: [CBCharacteristic]?, withUUID uuid: CBUUID, withProperties properties: CBCharacteristicProperties?) -> CBCharacteristic? {
+        if let properties = properties {
+            return characteristics?.first(where: {characteristic in
+                characteristic.uuid == uuid && characteristic.properties.rawValue == properties.rawValue
+            })
+        } else {
+            return characteristics?.first(where: {characteristic in
+                characteristic.uuid == uuid
+            })
+        }
     }
     
-    func readCharacteristicsInitialValues() {
+    private func updatePowerSource(with characteristicValue: Int8) {
+        var knownPowerSource: PowerSource = .unknown
+        switch characteristicValue {
+        case 1:
+            knownPowerSource = .usb
+        case 2, 3:
+            knownPowerSource = .aa(0)
+        case 4:
+            knownPowerSource = .coinCell(0)
+        default:
+            break
+        }
+        self.powerSource = knownPowerSource
+        self.powerSourceState.value = knownPowerSource
+    }
+    
+    private func updatePower(batteryLevel: Int) {
+        switch powerSource {
+        case .unknown:
+            break
+        case .usb:
+            self.powerSourceState.value = .usb
+        case .genericBattery:
+            self.powerSourceState.value = .genericBattery(batteryLevel)
+        case .aa:
+            self.powerSourceState.value = .aa(batteryLevel)
+        case .coinCell:
+            self.powerSourceState.value = .coinCell(batteryLevel)
+        }
+    }
+    
+    private func readCharacteristicsInitialValues() {
         self.peripheral.readValue(for: self.lightCharacteristic!)
         self.peripheral.readValue(for: self.reportButtonCharacteristic!)
     }

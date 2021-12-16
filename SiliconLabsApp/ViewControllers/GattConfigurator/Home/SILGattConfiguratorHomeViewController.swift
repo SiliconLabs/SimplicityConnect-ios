@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 import SVProgressHUD
 
-class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SILGattConfiguratorHomeViewDelegate {
+class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SILGattConfiguratorHomeViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var allSpace: UIStackView!
     @IBOutlet weak var navigationBarView: UIView!
@@ -36,9 +36,13 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         super.viewDidLoad()
         setupNavigationBar()
         setupNormalModeView()
-        disallowMutlipleTouchesInTheExportModeView()
+        disallowMultipleButtonTouches()
         setupLogic()
         viewModel.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -63,9 +67,8 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         exportViewHeight.constant = 0.0
     }
     
-    private func disallowMutlipleTouchesInTheExportModeView() {
-        exportButton.isExclusiveTouch = true
-        cancelExportButton.isExclusiveTouch = true
+    private func disallowMultipleButtonTouches() {
+        UIButton.appearance(whenContainedInInstancesOf: [SILGattConfiguratorHomeViewController.self]).isExclusiveTouch = true
     }
     
     private func setupLogic() {
@@ -127,6 +130,14 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     
     private func hideProgressView() {
         SVProgressHUD.dismiss()
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isEqual(self.navigationController?.interactivePopGestureRecognizer) {
+            navigationController?.popToViewController(self, animated: true)
+            return true
+        }
+        return false
     }
     
     // MARK: SILGattConfiguratorHomeViewDelegate

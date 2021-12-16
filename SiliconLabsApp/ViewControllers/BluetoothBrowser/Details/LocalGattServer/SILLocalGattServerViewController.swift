@@ -225,6 +225,16 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         menuContainer.isHidden = true
     }
     
+    // MARK: - Swipe Actions
+    
+    @IBAction func swipeToClient(_ sender: UISwipeGestureRecognizer) {
+        let silTabBarController = tabBarController as! SILTabBarController
+        let silTabBar = silTabBarController.tabBar as! SILTabBar
+        
+        silTabBar.setMuliplierForSelectedIndex(0)
+        silTabBarController.defaultIndex = 0
+    }
+    
     // MARK: - Expandable Controllers
     
     @IBAction func connectionsButtonTapped(_ sender: Any) {

@@ -71,8 +71,6 @@ CGFloat const RefreshTopConstraintMaxValue = 2.5 * RefreshTopConstraintActionVal
 }
 
 -(void)setupGestureAndDelegates {
-    UIPanGestureRecognizer *presentationPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveImage:)];
-    [self.model.emptyView addGestureRecognizer:presentationPanGestureRecognizer];
     UIPanGestureRecognizer *scrollViewPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveImage:)];
     scrollViewPanGestureRecognizer.delegate = self;
     [self.model.tableView addGestureRecognizer:scrollViewPanGestureRecognizer];

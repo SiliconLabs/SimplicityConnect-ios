@@ -23,16 +23,27 @@ class SILBlinkyViewModel {
     var ReportButtonState: SILObservable<SILBlinkyReportButtonState> = SILObservable(initialValue: .Released)
     var BlinkyState: SILObservable<SILBlinkyPeripheralDelegateState> = SILObservable(initialValue: .unknown)
     
+    struct ConnectedDeviceData {
+        var firmwareVersion: String
+        var deviceName: String
+        var powerSource: PowerSource
+    }
+    
+    var connectedDeviceDataState: SILObservable<ConnectedDeviceData?> = SILObservable(initialValue: nil)
+    
+    private var deviceName: String
+    
     private var disposeBag = SILObservableTokenBag()
 
-    private var centralManager: SILCentralManager
+    private var deviceConnector: DeviceConnection
     private var connectedPeripheral: CBPeripheral
     private var peripheralDelegate: SILBlinkyPeripheralDelegate
 
-    init(centralManager: SILCentralManager, connectedPeripheral: CBPeripheral) {
-            self.centralManager = centralManager
-            self.connectedPeripheral = connectedPeripheral
-            self.peripheralDelegate = SILBlinkyPeripheralDelegate(peripheral: self.connectedPeripheral)
+    init(deviceConnector: DeviceConnection, connectedPeripheral: CBPeripheral, name: String) {
+        self.deviceConnector = deviceConnector
+        self.connectedPeripheral = connectedPeripheral
+        self.deviceName = name
+        self.peripheralDelegate = SILBlinkyPeripheralDelegate(peripheral: self.connectedPeripheral, name: name)
     }
     
     public func viewDidLoad() {
@@ -42,7 +53,7 @@ class SILBlinkyViewModel {
             guard let weakSelf = weakSelf else {
                 return
             }
-                weakSelf.BlinkyState.value = state
+            weakSelf.BlinkyState.value = state
         })
         disposeBag.add(token: peripheralStateSubscription)
         
@@ -88,32 +99,41 @@ class SILBlinkyViewModel {
         })
         disposeBag.add(token: reportButtonCharacteristicStateSubscription)
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleCentralManagerDisconnectNotification),
-                                               name: NSNotification.Name.SILCentralManagerDidDisconnectPeripheral,
-                                               object: self.centralManager)
+        let connectedDeviceDataSubscription = peripheralDelegate.powerSourceState.observe({ powerSource in
+            if let powerSource = powerSource {
+                self.connectedDeviceDataState.value = ConnectedDeviceData(firmwareVersion: self.peripheralDelegate.firmwareVersion,
+                                                                          deviceName: self.deviceName,
+                                                                          powerSource: powerSource)
+            }
+        })
+        disposeBag.add(token: connectedDeviceDataSubscription)
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(handleCentralManagerBluetoothDisabledNotification),
-                                               name:NSNotification.Name.SILCentralManagerBluetoothDisabled ,
-                                               object: self.centralManager)
+                                               selector: #selector(handleDisconnectNotification),
+                                               name: .SILThunderboardDeviceDisconnect,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleBluetoothDisabledNotification),
+                                               name: .SILThunderboardBluetoothDisabled,
+                                               object: nil)
         
         self.peripheralDelegate.discoverBlinkyService()
     }
     
     public func viewWillDisappear() {
         NotificationCenter.default.removeObserver(self)
-        centralManager.disconnect(from: self.connectedPeripheral)
+        deviceConnector.disconnectAllDevices()
     }
     
-    @objc func handleCentralManagerDisconnectNotification() {
+    @objc func handleDisconnectNotification() {
         debugPrint("Did disconnect peripheral")
         
         NotificationCenter.default.removeObserver(self)
         BlinkyState.value = .failure(reason: "Device disconnected")
     }
     
-    @objc func handleCentralManagerBluetoothDisabledNotification() {
+    @objc func handleBluetoothDisabledNotification() {
         debugPrint("Did disable Bluetooth")
         
         NotificationCenter.default.removeObserver(self)

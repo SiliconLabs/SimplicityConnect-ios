@@ -15,7 +15,6 @@
 #import "SILCollectionViewRightAlignedFlowLayout.h"
 #import "UIColor+SILColors.h"
 #import "SILThermometerSegmentedControl.h"
-#import "SILDeviceSelectionViewController.h"
 #import "WYPopoverController.h"
 #import "WYPopoverController+SILHelpers.h"
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -27,7 +26,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     SILThermometerUnitControlTypeCelsius = 1,
 };
 
-@interface SILHealthThermometerAppViewController () <CBPeripheralDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate>
+@interface SILHealthThermometerAppViewController () <CBPeripheralDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) CBCharacteristic *temperatureMeasurementCharacteristic;
 @property (strong, nonatomic) SILTemperatureMeasurement *recentTemperatureMeasurement;
@@ -258,6 +257,8 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 
     [self registerForBluetoothControllerNotifications];
     [self preparePeripheral];
+    
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -273,6 +274,15 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 
 - (void)dealloc {
     [self unregisterForBluetoothControllerNotifications];
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isEqual: self.navigationController.interactivePopGestureRecognizer]) {
+        [self.navigationController popToViewController: self animated:YES];
+        return TRUE;
+    }
+    return FALSE;
 }
 
 #pragma mark - Bluetooth

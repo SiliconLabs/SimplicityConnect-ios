@@ -13,7 +13,7 @@ class SILIOPTesterViewModel: NSObject {
     private var iopCentralManager: SILIOPTesterCentralManager = SILIOPTesterCentralManager()
     private var browserCentralManager = SILCentralManager(serviceUUIDs: [])
     private var peripheral: CBPeripheral?
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     private var deviceNameToSearch: String!
     private var discoveredPeripheral: SILDiscoveredPeripheral!
     private var testParameters: Dictionary<String, Any> = [:]
@@ -248,17 +248,17 @@ class SILIOPTesterViewModel: NSObject {
             peripheral = dict["peripheral"] as? CBPeripheral
             testParameters["peripheral"] = peripheral
             if let peripheral = peripheral {
-                peripheralDelegate = SILIOPTesterPeripheralDelegate(peripheral: peripheral)
+                peripheralDelegate = SILPeripheralDelegate(peripheral: peripheral)
                 testParameters["peripheralDelegate"] = peripheralDelegate
             }
         } else if testIndex == 3 {
-            firmwareInfo = dict["firmwareInfo"] as? SILIOPTestFirmwareInfo
             connectionParameters = dict["connectionParameters"] as? SILIOPTestConnectionParameters
             if let connectionParameters = connectionParameters {
                 testParameters["mtu_size"] = connectionParameters.mtu_size as NSObject
                 testParameters["pdu_size"] = connectionParameters.pdu_size as NSObject
             }
-            if let firmwareInfo = firmwareInfo {
+            if let firmwareInfo = dict["firmwareInfo"] as? SILIOPTestFirmwareInfo {
+                self.firmwareInfo = firmwareInfo
                 testParameters["firmwareInfo"] = firmwareInfo
             }
         } else if testIndex == 4 {
@@ -266,15 +266,23 @@ class SILIOPTesterViewModel: NSObject {
             testParameters["peripheral"] = peripheral
             discoveredPeripheral = dict["discoveredPeripheral"] as? SILDiscoveredPeripheral
             testParameters["discoveredPeripheral"] = discoveredPeripheral
+            if let firmwareInfo = dict["firmwareInfo"] as? SILIOPTestFirmwareInfo {
+                self.firmwareInfo = firmwareInfo
+                testParameters["firmwareInfo"] = firmwareInfo
+            }
         } else if testIndex == 5 {
             peripheral = dict["peripheral"] as? CBPeripheral
             testParameters["peripheral"] = peripheral
             discoveredPeripheral = dict["discoveredPeripheral"] as? SILDiscoveredPeripheral
             testParameters["discoveredPeripheral"] = discoveredPeripheral
+            if let firmwareInfo = dict["firmwareInfo"] as? SILIOPTestFirmwareInfo {
+                self.firmwareInfo = firmwareInfo
+                testParameters["firmwareInfo"] = firmwareInfo
+            }
         } else if testIndex == 6 {
             peripheral = dict["peripheral"] as? CBPeripheral
             testParameters["peripheral"] = peripheral
-            peripheralDelegate = dict["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+            peripheralDelegate = dict["peripheralDelegate"] as? SILPeripheralDelegate
             testParameters["peripheralDelegate"] = peripheralDelegate
         }
     }

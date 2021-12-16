@@ -15,6 +15,11 @@ enum SILIOPTestOTAStatus {
     case unknown
 }
 
+extension NSNotification.Name {
+    static let SILIOPFileUrlChosen = Notification.Name("iopFileChosen")
+    static let SILIOPShowFilePicker = Notification.Name("iopShowFilePicker")
+}
+
 class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate {
     private enum OTAProgress {
         case reconnected
@@ -35,7 +40,6 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
     
     private var otaProgress: OTAProgress = .unknown
     private var boardID: String = ""
-    private var firmwareVersion: String = ""
     
     var otaTestStatus: SILObservable<SILIOPTestOTAStatus> = SILObservable(initialValue: .unknown)
     private var fileToUpdate: URL?
@@ -58,6 +62,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         NotificationCenter.default.addObserver(self, selector: #selector(didDisconnectPeripheral(notification:)), name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFailToConnectPeripheral(notification:)), name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(bluetoothDisabled), name: .SILCentralManagerBluetoothDisabled, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleGblFileNotification(notification:)), name: .SILIOPFileUrlChosen, object: nil)
     }
     
     private func unregisterNotifications() {
@@ -66,6 +71,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidDisconnectPeripheral, object: nil)
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerDidFailToConnectPeripheral, object: nil)
         NotificationCenter.default.removeObserver(self, name: .SILCentralManagerBluetoothDisabled, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .SILIOPFileUrlChosen, object: nil)
     }
     
     @objc private func didConnectPeripheral(notification: Notification) {
@@ -116,21 +122,28 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         firmwareUpdateVM.delegate = self
     }
     
-    func startTest(for board: String, firmwareVersion: String) {
+    func startTest(for board: String, firmwareVersion: SILIOPFirmwareVersion) {
         self.boardID = board
-        self.firmwareVersion = firmwareVersion
         
         self.otaFirmwareUpdateManager?.reconnectToOTADevice()
         
         _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { timer in
             timer.invalidate()
-            self.findOTAFileForBoard()
+            self.findOTAFileForBoard(firmwareVersion)
         })
     }
     
-    private func findOTAFileForBoard() {
+    private func findOTAFileForBoard(_ firmwareVersion: SILIOPFirmwareVersion) {
+        if firmwareVersion.isLesserThan3_3_0() {
+            findLocalFile(version: firmwareVersion.version)
+        } else {
+            postShowFilePickerNotification()
+        }
+    }
+    
+    private func findLocalFile(version: String) {
         let bundle = Bundle.main
-        let pathToFirmware = "iop_ota_files/\(self.boardID)/\(self.firmwareVersion)"
+        let pathToFirmware = "iop_ota_files/\(self.boardID)/\(version)"
         let urls = bundle.paths(forResourcesOfType: "gbl", inDirectory: pathToFirmware)
             
         for url in urls {
@@ -149,7 +162,10 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
                 break
             }
         }
-            
+        prepareOtaUpdateFirmware()
+    }
+    
+    private func prepareOtaUpdateFirmware() {
         guard let fileToUpdate = self.fileToUpdate else {
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "File to update not found.")
@@ -170,6 +186,20 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "Chosen file isn't EBL or GBL file")
         }
+    }
+    
+    @objc private func handleGblFileNotification(notification: NSNotification) {
+        if let gblFileUrl = notification.userInfo?["gblFileUrl"] as? URL {
+            self.fileToUpdate = gblFileUrl
+            prepareOtaUpdateFirmware()
+        } else {
+            self.unregisterNotifications()
+            self.otaTestStatus.value = .failure(reason: "No chosen file.")
+        }
+    }
+    
+    private func postShowFilePickerNotification() {
+        NotificationCenter.default.post(Notification(name: .SILIOPShowFilePicker))
     }
     
     func waitForChangeTopController() {

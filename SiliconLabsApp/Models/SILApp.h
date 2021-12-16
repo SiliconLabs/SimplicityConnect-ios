@@ -20,6 +20,9 @@ typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppIopTest,
     SILAppTypeGATTConfigurator,
     SILAppTypeThroughput,
+    SILAppTypeMotion,
+    SILAppTypeEnvironment,
+    SILAppTypeWifiCommissioning
 };
 
 @interface SILApp : NSObject

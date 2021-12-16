@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSource {
+class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSource, UIGestureRecognizerDelegate {
     @IBOutlet weak var aboveSafeAreaView: UIView!
     
     @IBOutlet weak var navigationBarView: UIView!
@@ -53,6 +53,10 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
         setupLogic()
         setupKeyboardHandling()
         setupExecutionTime()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -201,6 +205,11 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
         
         let tapTimeLimitView = UITapGestureRecognizer(target: self, action: #selector(tapTimeLimitView(_:)))
         timeLimitRadioButtonView.addGestureRecognizer(tapTimeLimitView)
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        viewModel.backToHome()
+        return false
     }
     
     private func updateRadioButtons(with newState: SILTimeLimitRadioButtonState) {

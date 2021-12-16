@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IDh-3l-oFd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IDh-3l-oFd">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,12 +28,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="76" estimatedRowHeight="76" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="vpD-Y8-o6X">
+                            <tableView multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="76" estimatedRowHeight="76" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="vpD-Y8-o6X">
                                 <rect key="frame" x="16" y="168" width="382" height="728"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MapCell" rowHeight="76" id="hg1-xz-gFg" customClass="SILMapCell" customModule="BlueGecko" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="382" height="76"/>
+                                        <rect key="frame" x="0.0" y="49.5" width="382" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hg1-xz-gFg" id="0mH-1W-cjH">
                                             <rect key="frame" x="0.0" y="0.0" width="382" height="76"/>
@@ -120,6 +121,7 @@
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <gestureRecognizers/>
                                             <constraints>
                                                 <constraint firstItem="5Fl-4W-IkC" firstAttribute="centerY" secondItem="0mH-1W-cjH" secondAttribute="centerY" id="Aa7-fp-6ry"/>
                                                 <constraint firstItem="7Sc-Ki-YHn" firstAttribute="centerY" secondItem="0mH-1W-cjH" secondAttribute="centerY" id="dyt-P9-Srk"/>
@@ -139,6 +141,8 @@
                                 <connections>
                                     <outlet property="dataSource" destination="IDh-3l-oFd" id="UTV-WW-1yf"/>
                                     <outlet property="delegate" destination="IDh-3l-oFd" id="c6T-OS-qau"/>
+                                    <outletCollection property="gestureRecognizers" destination="XO0-wI-y3I" appends="YES" id="wP3-Rd-A4d"/>
+                                    <outletCollection property="gestureRecognizers" destination="Xxx-AU-cMp" appends="YES" id="2ro-zq-D3H"/>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ke-MH-2kv" customClass="SILShadowView">
@@ -257,6 +261,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nAD-iR-7Ij"/>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6xr-MH-ZoE" secondAttribute="trailing" id="02W-kc-O82"/>
                             <constraint firstItem="iiS-LF-OpM" firstAttribute="top" secondItem="6xr-MH-ZoE" secondAttribute="bottom" id="0Ox-5d-mnL"/>
@@ -281,6 +286,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bjA-Za-qsA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="XO0-wI-y3I" userLabel="SwipeToCharacteristics">
+                    <connections>
+                        <action selector="swipeToCharacteristics:" destination="IDh-3l-oFd" id="NRv-AZ-j5D"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="Xxx-AU-cMp" userLabel="SwipeToServices">
+                    <connections>
+                        <action selector="swipeToServices:" destination="IDh-3l-oFd" id="ukV-ul-cBq"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="132" y="138.91625615763547"/>
         </scene>

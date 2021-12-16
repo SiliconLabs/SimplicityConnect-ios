@@ -83,6 +83,7 @@ class SILThroughputViewModel: SILThroughputViewModelType {
     
     private var isSubscribed: Bool = false
     
+    
     init(peripheralManager: SILThroughputPeripheralManager, centralManager: SILCentralManager, connectedPeripheral: CBPeripheral) {
         self.peripheralManager = peripheralManager
         self.centralManager = centralManager
@@ -236,7 +237,7 @@ class SILThroughputViewModel: SILThroughputViewModelType {
             peripheralManager.stopTest()
         }
     }
-        
+    
     func changePhoneTestModeSelection(newSelection: SILThroughputPhoneTestMode) {
         if newSelection != phoneTestModeSelected.value {
             phoneTestModeSelected.value = newSelection

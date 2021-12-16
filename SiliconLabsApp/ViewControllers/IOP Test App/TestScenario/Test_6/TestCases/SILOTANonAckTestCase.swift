@@ -17,6 +17,7 @@ class SILOTANonAckTestCase: SILTestCase {
     private var peripheral: CBPeripheral!
     private var firmwareInfo: SILIOPTestFirmwareInfo?
     private var iopCentralManager: SILIOPTesterCentralManager!
+    private var firmwareVersionAfterOtaAckUpdate: SILIOPFirmwareVersion?
     
     private var discoveredPeripheral: SILDiscoveredPeripheral?
     
@@ -25,9 +26,11 @@ class SILOTANonAckTestCase: SILTestCase {
     
     private var otaUpdateManager: SILIopTestOTAUpdateManger!
     
-    private let deviceNameAfterOtaUpdate = "IOP Test"
-    
-    init() { }
+    private var deviceNameAfterOtaUpdate: String {
+        get {
+            return firmwareInfo!.originalVersion.isLesserThan3_3_0() ? "IOP Test" : "IOP_Test_1"
+        }
+    }
     
     func injectParameters(parameters: Dictionary<String, Any>) {
         self.browserCentralManager = parameters["browserCentralManager"] as? SILCentralManager
@@ -97,12 +100,15 @@ class SILOTANonAckTestCase: SILTestCase {
         case .BRD4186B:
             boardID = "BRD4186B"
             
+        case .readName(let name):
+            boardID = name
+            
         case .unknown:
             self.invalidateObservableTokens()
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .uknown(reason: "Unsupported board."))
         }
         
-        self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.version)
+        self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.originalVersion)
     }
     
     private func reconnectToDevice() {
@@ -111,9 +117,10 @@ class SILOTANonAckTestCase: SILTestCase {
         let reconnectManagerSubscription = reconnectManager.reconnectStatus.observe { reconnectStatus in
             guard let weakSelf = weakSelf else { return }
             switch reconnectStatus {
-            case let .success(discoveredPeripheral: discoveredPeripheral):
+            case let .success(discoveredPeripheral: discoveredPeripheral, stackVersion: stackVersion):
                 weakSelf.discoveredPeripheral = discoveredPeripheral
                 weakSelf.peripheral = discoveredPeripheral?.peripheral
+                weakSelf.firmwareVersionAfterOtaAckUpdate = SILIOPFirmwareVersion(version: stackVersion)
                 weakSelf.invalidateObservableTokens()
                 weakSelf.publishTestResult(passed: true)
                 
@@ -131,6 +138,7 @@ class SILOTANonAckTestCase: SILTestCase {
     }
     
     // Artifacts
+    
     func getTestArtifacts() -> Dictionary<String, Any> {
         var parameters = ["browserCentralManager" : self.browserCentralManager!] as [String: Any]
         
@@ -141,6 +149,16 @@ class SILOTANonAckTestCase: SILTestCase {
         if let peripheral = peripheral {
             parameters["peripheral"] = peripheral
         }
+        
+        if let firmwareVersion = self.firmwareVersionAfterOtaAckUpdate, let firmwareInfo = self.firmwareInfo {
+            let updatedFirmwareInfo = SILIOPTestFirmwareInfo(originalVersion: firmwareInfo.originalVersion,
+                                                             otaAckVersion: firmwareInfo.otaAckVersion,
+                                                             otaNonAckVersion: firmwareVersion,
+                                                             name: firmwareInfo.name,
+                                                             firmware: firmwareInfo.firmware)
+            parameters["firmwareInfo"] = updatedFirmwareInfo
+        }
+        
         
         return parameters
     }

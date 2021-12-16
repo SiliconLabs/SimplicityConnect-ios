@@ -10,7 +10,6 @@ import UIKit
 
 @IBDesignable
 open class SILCheckBox: UIControl {
-    
     public enum Style {
         
         /// ■
@@ -56,10 +55,12 @@ open class SILCheckBox: UIControl {
     var checkboxUnselectedBackgroundColor: UIColor! = .clear
     
     @IBInspectable
-    var checkboxSelectedBackgroundColor: UIColor! = .clear
+    var checkboxSelectedBackgroundColor: UIColor! = UIColor.systemBlue
     
     //Used to increase the touchable are for the component
     var increasedTouchRadius: CGFloat = 5
+    
+    let animationDuration = 0.2
     
     @IBInspectable
     var isChecked: Bool = false {
@@ -103,7 +104,6 @@ open class SILCheckBox: UIControl {
     }
     
     open override func draw(_ rect: CGRect) {
-        
         //Draw the outlined component
         let newRect = rect.insetBy(dx: borderWidth / 2, dy: borderWidth / 2)
         
@@ -127,6 +127,8 @@ open class SILCheckBox: UIControl {
         context.strokePath()
         context.fillPath()
         
+        animateCheckBox(frame: newRect)
+        
         //When it is selected, depends on the style
         //By using helper methods, draw the inner part of the component UI.
         if isChecked {
@@ -146,7 +148,6 @@ open class SILCheckBox: UIControl {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
-        self.setNeedsDisplay()
     }
     
     open override func prepareForInterfaceBuilder() {
@@ -167,7 +168,12 @@ open class SILCheckBox: UIControl {
     
     //Draws tick inside the component
     func drawCheckMark(frame: CGRect) {
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration, execute: {
+            self.animateCheckMark(frame: frame)
+        })
+    }
+    
+    private func getCheckMarkPath(frame: CGRect) -> UIBezierPath {
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
         bezierPath.move(to: CGPoint(x: frame.minX + 0.26000 * frame.width, y: frame.minY + 0.50000 * frame.height))
@@ -176,14 +182,54 @@ open class SILCheckBox: UIControl {
         bezierPath.addLine(to: CGPoint(x: frame.minX + 0.78000 * frame.width, y: frame.minY + 0.30000 * frame.height))
         bezierPath.addLine(to: CGPoint(x: frame.minX + 0.44000 * frame.width, y: frame.minY + 0.76000 * frame.height))
         bezierPath.addCurve(to: CGPoint(x: frame.minX + 0.20000 * frame.width, y: frame.minY + 0.58000 * frame.height), controlPoint1: CGPoint(x: frame.minX + 0.44000 * frame.width, y: frame.minY + 0.76000 * frame.height), controlPoint2: CGPoint(x: frame.minX + 0.26000 * frame.width, y: frame.minY + 0.62000 * frame.height))
-        if isEnabled {
-            checkmarkColor.setFill()
-        } else {
-            disabledColor.setFill()
-        }
-        bezierPath.fill()
+        
+        return bezierPath
     }
     
+    func animateCheckMark(frame: CGRect) {
+        let layer = CAShapeLayer()
+        
+        layer.lineWidth = 2
+        layer.fillColor = UIColor.white.cgColor
+        
+        let bezierPath = getCheckMarkPath(frame: frame)
+        
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = animationDuration
+        
+        layer.path = bezierPath.cgPath
+        layer.add(animation, forKey: "Line")
+        
+        self.layer.addSublayer(layer)
+    }
+    
+    func animateCheckBox(frame: CGRect) {
+        let newRect = frame.insetBy(dx: borderWidth / 2, dy: borderWidth / 2)
+        let layer = CAShapeLayer()
+        
+        layer.lineWidth = 0
+        
+        if isChecked {
+            layer.fillColor = checkboxSelectedBackgroundColor.cgColor
+        } else {
+            layer.fillColor = UIColor.white.cgColor
+        }
+        
+        let bezierPath = UIBezierPath(rect: newRect)
+        
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = animationDuration
+        
+        layer.path = bezierPath.cgPath
+        layer.add(animation, forKey: "Line")
+        
+        self.layer.addSublayer(layer)
+    }
+ 
     //Draws circle inside the component
     func drawCircle(frame: CGRect) {
         //// General Declarations

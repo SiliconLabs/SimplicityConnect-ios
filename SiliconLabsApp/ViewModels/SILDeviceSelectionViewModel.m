@@ -17,7 +17,7 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 - (instancetype)initWithAppType:(SILApp *)app {
     self = [super init];
     self.app = app;
-    
+    self.discoveredDevices = @[];
     self.filter = ^BOOL(SILDiscoveredPeripheral* peripheral) {
         for (CBUUID * cbuuid in [SILDeviceSelectionViewModel serviceListForAppType:app.appType]) {
             if ([peripheral.advertisedServiceUUIDs containsObject:cbuuid]) {
@@ -30,17 +30,11 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
     return self;
 }
 
-- (instancetype)initWithAppType:(SILApp *)app withFilterByName:(NSString *)name {
-    self = [self initWithAppType:app];
-    if (![name isEqual:@""]) {
-        self.filter = ^BOOL(SILDiscoveredPeripheral* discoveredPeripheral) {
-            return [discoveredPeripheral.advertisedLocalName isEqual:name];
-        };
-    } else {
-        self.filter = ^BOOL(SILDiscoveredPeripheral * _) {
-            return YES;
-        };
-    }
+- (instancetype)initWithAppType:(SILApp *)app withFilter:(DiscoveredPeripheralFilter)filter {
+    self = [super init];
+    self.app = app;
+    self.discoveredDevices = @[];
+    self.filter = filter;
     
     return self;
 }
@@ -99,12 +93,18 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 }
 
 - (NSString *)selectDeviceString {
-    if (self.app.appType == SILAppTypeHealthThermometer || self.app.appType == SILAppTypeThroughput || self.app.appType == SILAppTypeBlinky) {
-        return @"Select a Bluetooth Device";
-    } else if (self.app.appType == SILAppTypeConnectedLighting || self.app.appType == SILAppTypeRangeTest) {
-        return @"Select a Wireless Gecko Device";
-    } else {
-        return @"";
+    switch (self.app.appType) {
+        case SILAppTypeHealthThermometer:
+        case SILAppTypeThroughput:
+        case SILAppIopTest:
+        case SILAppTypeBlinky:
+        case SILAppTypeWifiCommissioning:
+            return @"Select a Bluetooth Device";
+        case SILAppTypeConnectedLighting:
+        case SILAppTypeRangeTest:
+            return @"Select a Wireless Gecko Device";
+        default:
+            return @"";
     }
 }
 

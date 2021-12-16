@@ -24,7 +24,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
     
     private var testCase: SILTestCase!
     private var peripheral: CBPeripheral!
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     private var iopCentralManager: SILIOPTesterCentralManager!
     
     private var gattOperationsTestHelper: SILIOPGATTOperationsTestHelper!
@@ -51,7 +51,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
     
     func injectParameters(parameters: Dictionary<String, Any>) {
         self.peripheral = parameters["peripheral"] as? CBPeripheral
-        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILPeripheralDelegate
         self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
     }
     
@@ -79,7 +79,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
             guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                guard let iopTestPropertiesCharacteristic = weakSelf.gattOperationsTestHelper.findCharacteristic(with: weakSelf.testedCharacteristicUUID, in: characteristics) else {
+                guard let iopTestPropertiesCharacteristic = weakSelf.peripheralDelegate.findCharacteristic(with: weakSelf.testedCharacteristicUUID, in: characteristics) else {
                     weakSelf.notifyError(description: "Characteristic wasn't discovered.")
                     return
                 }
@@ -105,7 +105,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
         
         subscribeToCentralManager()
         
-        guard let iopTestProperties = gattOperationsTestHelper.findService(with: iopTestProperties, in: peripheral) else {
+        guard let iopTestProperties = peripheralDelegate.findService(with: iopTestProperties, in: peripheral) else {
             self.notifyError(description: "Peripheral doesn't contain a service IOP Test Properties.")
             return
         }

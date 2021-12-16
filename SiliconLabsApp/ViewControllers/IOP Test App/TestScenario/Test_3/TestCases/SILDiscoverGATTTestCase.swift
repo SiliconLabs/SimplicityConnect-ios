@@ -23,14 +23,14 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
     private var disposeBag = SILObservableTokenBag()
     
     private var peripheral: CBPeripheral!
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     private var iopCentralManager: SILIOPTesterCentralManager!
     
     init() { }
     
     func injectParameters(parameters: Dictionary<String, Any>) {
         self.peripheral = parameters["peripheral"] as? CBPeripheral
-        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILPeripheralDelegate
         self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
     }
     
@@ -67,7 +67,8 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
         
         peripheralDelegate.discoverServices(services: [SILIOPPeripheral.SILIOPTest.cbUUID,
                                      SILIOPPeripheral.SILIOPTestProperties.cbUUID,
-                                     SILIOPPeripheral.SILIOPTestCharacteristicTypes.cbUUID])
+                                     SILIOPPeripheral.SILIOPTestCharacteristicTypes.cbUUID,
+                                     SILIOPPeripheral.DeviceInformationService.cbUUID])
     }
     
     private func subscribeToCentralManager() {
@@ -128,7 +129,7 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
     }
     
     private func areValidServices(services: [CBService]) -> Bool {
-        if services.count != 3 {
+        if services.count != 4 {
             return false
         }
         
@@ -141,6 +142,10 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
         }
         
         guard let _ = services.first(where: { service in service.uuid == SILIOPPeripheral.SILIOPTestCharacteristicTypes.cbUUID }) else {
+            return false
+        }
+        
+        guard let _ = services.first(where: { service in service.uuid == SILIOPPeripheral.DeviceInformationService.cbUUID }) else {
             return false
         }
         

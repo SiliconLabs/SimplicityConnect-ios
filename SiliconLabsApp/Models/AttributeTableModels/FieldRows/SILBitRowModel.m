@@ -44,7 +44,7 @@
 }
 
 - (NSString *)secondaryTitle {
-    return self.fieldModel.name;
+    return [NSString stringWithFormat: @"%@ - %@", self.fieldModel.name, self.bit.name];
 }
 
 - (void)clearValues {

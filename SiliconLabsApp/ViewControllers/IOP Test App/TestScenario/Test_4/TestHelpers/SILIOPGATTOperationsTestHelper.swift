@@ -13,7 +13,7 @@ class SILIOPGATTOperationsTestHelper {
     
     func checkInjectedParameters(iopCentralManager: SILIOPTesterCentralManager?,
                                  peripheral: CBPeripheral?,
-                                 peripheralDelegate: SILIOPTesterPeripheralDelegate?) -> (areValid: Bool, reason: String) {
+                                 peripheralDelegate: SILPeripheralDelegate?) -> (areValid: Bool, reason: String) {
         guard let iopCentralManager = iopCentralManager else {
             return (false, "Central manager is nil.")
         }
@@ -31,14 +31,6 @@ class SILIOPGATTOperationsTestHelper {
         }
         
         return (true, "")
-    }
-    
-    func findService(with serviceUUID: CBUUID, in peripheral: CBPeripheral) -> CBService? {
-        return peripheral.services?.first(where: { service in service.uuid == serviceUUID})
-    }
-    
-    func findCharacteristic(with characteristicUUID: CBUUID, in characteristics: [CBCharacteristic]) -> CBCharacteristic? {
-        return characteristics.first(where: { characteristic in characteristic.uuid == characteristicUUID })
     }
     
     // MARK: - Subscriptions
@@ -70,16 +62,14 @@ class SILIOPGATTOperationsTestHelper {
     
     func getROLenTestSubscription(for characteristicUUID: CBUUID,
                                   exceptedValue: String,
-                                  peripheralDelegate: SILIOPTesterPeripheralDelegate,
+                                  peripheralDelegate: SILPeripheralDelegate,
                                   testCase: SILTestCase) -> SILObservableToken {
         weak var weakTestCase = testCase
-        weak var weakSelf = self
         let peripheralDelegateSubscription = peripheralDelegate.newStatus().observe( { status in
             guard let weakTestCase = weakTestCase else { return }
-            guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                guard let iopTestPropertiesROLen = weakSelf.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                guard let iopTestPropertiesROLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic RO Len wasn't discovered.")
                     return
                 }
@@ -119,16 +109,14 @@ class SILIOPGATTOperationsTestHelper {
     func getWRLenTestSubscription(for characteristicUUID: CBUUID,
                                   valueToWrite: String,
                                   count: Int,
-                                  peripheralDelegate: SILIOPTesterPeripheralDelegate,
+                                  peripheralDelegate: SILPeripheralDelegate,
                                   testCase: SILTestCase) -> SILObservableToken {
         weak var weakTestCase = testCase
-        weak var weakSelf = self
         let peripheralDelegateSubscription = peripheralDelegate.newStatus().observe( { status in
             guard let weakTestCase = weakTestCase else { return }
-            guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                guard let iopTestPropertiesWRLen = weakSelf.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                guard let iopTestPropertiesWRLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic WR Len wasn't discovered.")
                     return
                 }
@@ -169,16 +157,14 @@ class SILIOPGATTOperationsTestHelper {
                                        valueToWrite: String,
                                        count: Int,
                                        exceptedValue: String,
-                                       peripheralDelegate: SILIOPTesterPeripheralDelegate,
+                                       peripheralDelegate: SILPeripheralDelegate,
                                        testCase: SILTestCase) -> SILObservableToken {
         weak var weakTestCase = testCase
-        weak var weakSelf = self
         let peripheralDelegateSubscription = peripheralDelegate.newStatus().observe( { status in
             guard let weakTestCase = weakTestCase else { return }
-            guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                guard let iopTestPropertiesWRNoResLen = weakSelf.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                guard let iopTestPropertiesWRNoResLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic WRNoRes Len wasn't discovered.")
                     return
                 }
@@ -224,16 +210,14 @@ class SILIOPGATTOperationsTestHelper {
                                        valueToWrite: String,
                                        count: Int,
                                        exceptedValue: String,
-                                       peripheralDelegate: SILIOPTesterPeripheralDelegate,
+                                       peripheralDelegate: SILPeripheralDelegate,
                                        testCase: SILTestCase) -> SILObservableToken {
         weak var weakTestCase = testCase
-        weak var weakSelf = self
         let peripheralDelegateSubscription = peripheralDelegate.newStatus().observe( { status in
             guard let weakTestCase = weakTestCase else { return }
-            guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                guard let iopTestCharacteristicTypesRWLen = weakSelf.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                guard let iopTestCharacteristicTypesRWLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic Types RW Len wasn't discovered.")
                     return
                 }

@@ -17,7 +17,7 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
     private var iopCentralManager: SILIOPTesterCentralManager!
     private var discoveredPeripheral: SILDiscoveredPeripheral!
     private var peripheral: CBPeripheral!
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     
     private var disposeBag = SILObservableTokenBag()
     private var observableTokens = [SILObservableToken]()
@@ -47,7 +47,7 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
         self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
         self.discoveredPeripheral = parameters["discoveredPeripheral"] as? SILDiscoveredPeripheral
         self.peripheral = parameters["peripheral"] as? CBPeripheral
-        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILPeripheralDelegate
     }
     
     func performTestCase() {

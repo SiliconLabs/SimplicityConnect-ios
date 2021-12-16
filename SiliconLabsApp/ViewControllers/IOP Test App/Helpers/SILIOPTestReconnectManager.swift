@@ -9,7 +9,7 @@
 import Foundation
 
 enum SILIOPTestReconnectStatus {
-    case success(discoveredPeripheral: SILDiscoveredPeripheral?)
+    case success(discoveredPeripheral: SILDiscoveredPeripheral?, stackVersion: String)
     case failure(reason: String)
     case unknown
 }
@@ -19,6 +19,8 @@ class SILIOPTestReconnectManager: NSObject {
     private var iopCentralManager: SILIOPTesterCentralManager!
     private var peripheral: CBPeripheral!
     private var discoveredPeripheral: SILDiscoveredPeripheral?
+    private var peripheralDelegate: SILPeripheralDelegate!
+    private var discoverFirmwareInfo: SILDiscoverFirmwareInfo!
     
     var nameToReconnect: String?
     var reconnectStatus: SILObservable<SILIOPTestReconnectStatus> = SILObservable(initialValue: .unknown)
@@ -35,6 +37,7 @@ class SILIOPTestReconnectManager: NSObject {
         super.init()
         self.iopCentralManager = iopCentralManager
         self.peripheral = peripheral
+        self.discoverFirmwareInfo = SILDiscoverFirmwareInfo()
     }
     
     func reconnectToDevice(withName name: String) {
@@ -62,11 +65,11 @@ class SILIOPTestReconnectManager: NSObject {
                 }
                 weakSelf.peripheral = peripheral
                 weakSelf.discoveredPeripheral?.peripheral = peripheral
-                weakSelf.invalidateObservableTokens()
-                weakSelf.connectionTimeout?.invalidate()
-
-                weakSelf.reconnectStatus.value = .success(discoveredPeripheral: weakSelf.discoveredPeripheral)
+                weakSelf.stopConnectionTimeout()
+                weakSelf.peripheralDelegate = SILPeripheralDelegate(peripheral: peripheral)
                 
+                weakSelf.discoverServices()
+            
                 
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("didDisconnectPeripheral**********RECONNECT")
@@ -91,6 +94,69 @@ class SILIOPTestReconnectManager: NSObject {
         })
         disposeBag.add(token: centralManagerSubscription)
         observableTokens.append(centralManagerSubscription)
+    }
+    
+    private func discoverServices() {
+        weak var weakSelf = self
+        let peripheralDelegateSubscription = peripheralDelegate.newStatus().observe( { status in
+            guard let weakSelf = weakSelf else { return }
+            switch status {
+            case let .successForServices(discoveredServices):
+                guard let _ = discoveredServices.first(where: { service in service.uuid == SILIOPPeripheral.SILIOPTest.cbUUID }) else {
+                    weakSelf.reconnectStatus.value = .failure(reason: "Discovered GATT Services don't match with expected.")
+                    return
+                }
+                weakSelf.stopConnectionTimeout()
+                weakSelf.discoverFirmwareVersion()
+                
+            case .unknown:
+                break
+
+            default:
+                weakSelf.reconnectStatus.value = .failure(reason: "Unknown failure from peripheral delegate.")
+            }
+        })
+        disposeBag.add(token: peripheralDelegateSubscription)
+        observableTokens.append(peripheralDelegateSubscription)
+        
+        startConnectionTimeout()
+        peripheralDelegate.discoverServices(services: [SILIOPPeripheral.SILIOPTest.cbUUID])
+    }
+    
+    private func discoverFirmwareVersion() {
+        prepareDiscoverFirmware()
+        
+        weak var weakSelf = self
+        let discoverFirmwareInfoSubscription = self.discoverFirmwareInfo.state.observe( { state in
+            guard let weakSelf = weakSelf else { return }
+            switch state {
+            case .failed:
+                weakSelf.reconnectStatus.value = .failure(reason: "Discover firmware version failed")
+                break
+                
+            case let .completed(stackVersion: stackVersion):
+                weakSelf.invalidateObservableTokens()
+                weakSelf.stopConnectionTimeout()
+                
+                weakSelf.reconnectStatus.value = .success(discoveredPeripheral: self.discoveredPeripheral, stackVersion: stackVersion)
+                break
+                
+            default:
+                break
+            }
+        })
+        disposeBag.add(token: discoverFirmwareInfoSubscription)
+        
+        startConnectionTimeout()
+        discoverFirmwareInfo.run()
+    }
+    
+    private func prepareDiscoverFirmware() {
+        var parameters = ["peripheral" : self.peripheral] as [String: Any]
+        parameters["peripheralDelegate"] = self.peripheralDelegate
+        parameters["iopCentralManager"] = self.iopCentralManager
+        
+        discoverFirmwareInfo.injectParameters(parameters: parameters)
     }
     
     @objc private func scanIntervalTimerFired() {
@@ -120,15 +186,22 @@ class SILIOPTestReconnectManager: NSObject {
                 self.stopScanning()
                 self.discoveredPeripheralSubscription?.invalidate()
                 
-                self.connectionTimeout = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.connectionFailed), userInfo: nil, repeats: false)
                 self.iopCentralManager.connect(to: discoveredPeripheral)
             }
         })
     }
     
+    private func startConnectionTimeout() {
+        self.connectionTimeout = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.connectionFailed), userInfo: nil, repeats: false)
+    }
+    
+    private func stopConnectionTimeout() {
+        self.connectionTimeout?.invalidate()
+        self.connectionTimeout = nil
+    }
+    
     @objc private func connectionFailed() {
-        connectionTimeout?.invalidate()
-        connectionTimeout = nil
+        stopConnectionTimeout()
         iopCentralManager.disconnect(peripheral: peripheral)
         reconnectStatus.value = .failure(reason: "Peripheral with name \(self.nameToReconnect ?? "") wasn't reconnected in 10 seconds.")
     }

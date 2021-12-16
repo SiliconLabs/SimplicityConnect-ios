@@ -16,7 +16,7 @@ class SILIOPUserLenCharacteristicTestHelper {
     
     private var testCase: SILTestCase
     private var peripheral: CBPeripheral!
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     private var iopCentralManager: SILIOPTesterCentralManager!
     
     private var gattOperationsTestHelper: SILIOPGATTOperationsTestHelper
@@ -41,7 +41,7 @@ class SILIOPUserLenCharacteristicTestHelper {
     
     func injectParameters(parameters: Dictionary<String, Any>) {
         self.peripheral = parameters["peripheral"] as? CBPeripheral
-        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILPeripheralDelegate
         self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
     }
     
@@ -58,7 +58,7 @@ class SILIOPUserLenCharacteristicTestHelper {
         subscribeToPeripheralDelegate()
         subscribeToCentralManager()
         
-        guard let iopTestCharacteristicTypes = gattOperationsTestHelper.findService(with: iopTestCharacteristicTypes, in: peripheral) else {
+        guard let iopTestCharacteristicTypes = peripheralDelegate.findService(with: iopTestCharacteristicTypes, in: peripheral) else {
             self.testResult.value = TestResult(passed: false, description: "Service IOP Characteristic Types not found.")
             return
         }
@@ -78,7 +78,7 @@ class SILIOPUserLenCharacteristicTestHelper {
             guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                guard let iopTestCharacteristicTypesRWUserLen1 = weakSelf.gattOperationsTestHelper.findCharacteristic(with: weakSelf.testedCharacteristicUUID, in: characteristics) else {
+                guard let iopTestCharacteristicTypesRWUserLen1 = weakSelf.peripheralDelegate.findCharacteristic(with: weakSelf.testedCharacteristicUUID, in: characteristics) else {
                     weakSelf.testResult.value = TestResult(passed: false, description: "Characteristic Types RW User Len wasn't discovered.")
                     return
                 }

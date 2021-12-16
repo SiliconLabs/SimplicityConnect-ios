@@ -9,13 +9,14 @@
 import UIKit
 
 class SILCreateGattServiceViewController: UIViewController, UITextFieldDelegate {
-        
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var serviceTypePicker: UIView!
     @IBOutlet weak var serviceTypePickerLabel: UILabel!
     @IBOutlet weak var serviceTypePickerCollapseImage: UIImageView!
     @IBOutlet weak var serviceNameField: UITextField!
     @IBOutlet weak var serviceUUIDField: UITextField!
+    @IBOutlet weak var mandatoryServicesLabel: UILabel!
     @IBOutlet weak var mandatoryServicesCheckBox: SILCheckBox!
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -64,6 +65,9 @@ class SILCreateGattServiceViewController: UIViewController, UITextFieldDelegate 
         serviceNameField.addTarget(self, action: #selector(onServiceNameChange(_:)), for: .editingChanged)
         serviceUUIDField.addTarget(self, action: #selector(onServiceUUIDChange(_:)), for: .editingChanged)
         [serviceNameField, serviceUUIDField].forEach { $0?.tintColor = UIColor.sil_regularBlue()}
+        
+        let mandatoryServicesLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(onMandatoryServicesLabelTap(_:)))
+        mandatoryServicesLabel.addGestureRecognizer(mandatoryServicesLabelTapGesture)
 
         weak var weakSelf = self
         
@@ -102,15 +106,31 @@ class SILCreateGattServiceViewController: UIViewController, UITextFieldDelegate 
     }
     
     @objc func onServiceNameChange(_ textField: UITextField) {
+        uncheckMandatoryServicesCheckBoxIfNecessary()
         viewModel.update(serviceName: textField.text)
     }
     
     @objc func onServiceUUIDChange(_ textField: UITextField) {
+        uncheckMandatoryServicesCheckBoxIfNecessary()
         viewModel.update(serviceUUID: textField.text)
+    }
+    
+    private func uncheckMandatoryServicesCheckBoxIfNecessary() {
+        if mandatoryServicesCheckBox.isChecked {
+            mandatoryServicesCheckBox.isChecked = false
+            viewModel.toggleMandatoryRequirementsCheckBox(isChecked: mandatoryServicesCheckBox.isChecked)
+        }
     }
     
     @IBAction func toggleMandatoryRequirementsCheckBox(_ sender: SILCheckBox) {
         viewModel.toggleMandatoryRequirementsCheckBox(isChecked: sender.isChecked)
+    }
+    
+    @objc func onMandatoryServicesLabelTap(_ sender: UILabel) {
+        if mandatoryServicesCheckBox.isEnabled {
+            mandatoryServicesCheckBox.isChecked = !mandatoryServicesCheckBox.isChecked
+            viewModel.toggleMandatoryRequirementsCheckBox(isChecked: mandatoryServicesCheckBox.isChecked)
+        }
     }
     
     @IBAction func onClearTouch(_ sender: UIButton) {

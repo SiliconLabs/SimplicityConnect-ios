@@ -12,14 +12,17 @@
 
 @interface SILDeviceSelectionViewModel : NSObject
 
+typedef BOOL (^DiscoveredPeripheralFilter)(SILDiscoveredPeripheral *);
+
 @property (strong, nonatomic) SILApp *app;
 @property (strong, nonatomic) NSArray<SILDiscoveredPeripheral*>* discoveredDevices;
 @property (strong, nonatomic) SILDiscoveredPeripheral *connectingPeripheral;
 @property (assign, nonatomic) BOOL hasDataChanged;
-@property (nonatomic, copy) BOOL (^filter)(SILDiscoveredPeripheral*);
+@property (nonatomic, copy) DiscoveredPeripheralFilter filter;
 
 - (instancetype)initWithAppType:(SILApp *)app;
-- (instancetype)initWithAppType:(SILApp *)app withFilterByName:(NSString *)name;
+- (instancetype)initWithAppType:(SILApp *)app withFilter:(DiscoveredPeripheralFilter)filter;
+
 - (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals;
 - (NSString *)selectDeviceString;
 

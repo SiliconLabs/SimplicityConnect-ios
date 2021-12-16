@@ -248,6 +248,7 @@ NSString * const SILLightEventOff = @"Light Off";
     [super viewDidAppear:animated];
     [self preparePeripheral];
     [self observeCentralManagerNotifications];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

@@ -23,7 +23,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
     private var mtu_size: Int?
     private var pdu_size: Int?
 
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     
     var observableTokens: [SILObservableToken?] = []
     private var disposeBag = SILObservableTokenBag()
@@ -95,7 +95,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
     }
     
     private func testThroughput() {
-        self.peripheralDelegate = SILIOPTesterPeripheralDelegate(peripheral: self.peripheral)
+        self.peripheralDelegate = SILPeripheralDelegate(peripheral: self.peripheral)
         
         weak var weakSelf = self
         let peripheralDelegateSubscription = peripheralDelegate.newStatus().observe( { status in

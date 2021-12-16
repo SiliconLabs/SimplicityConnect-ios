@@ -43,7 +43,6 @@ class SILRangeTestTXValueUpdater {
             return
         }
         
-        self.value += 1
         self.callback(self.value)
     }
     

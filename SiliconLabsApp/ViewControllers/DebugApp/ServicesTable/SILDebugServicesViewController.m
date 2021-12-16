@@ -58,7 +58,7 @@ static NSString * const kScanningForPeripheralsMessage = @"Loading...";
 
 static float kTableRefreshInterval = 1;
 
-@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate, SILDescriptorTableViewCellDelegate>
+@interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate, SILDescriptorTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
@@ -121,6 +121,7 @@ static float kTableRefreshInterval = 1;
     [self registerForNotifications];
     [self addObserverForUpdateConnectionsButtonTitle];
     [self installRSSITimer];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -285,6 +286,13 @@ static float kTableRefreshInterval = 1;
 - (void)hideMenu {
     [self.menuContainer setHidden:YES];
     self.tableView.userInteractionEnabled = YES;
+}
+
+// MARK: - Swipe Actions
+
+- (IBAction)swipeToServer:(UISwipeGestureRecognizer *)sender {
+    self.tabBarController.selectedIndex = 1;
+    [(SILTabBar *)self.tabBarController.tabBar setMuliplierForSelectedIndex:1];
 }
 
 #pragma mark - Expandable Controllers

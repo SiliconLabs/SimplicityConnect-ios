@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1XA-9s-9Nl">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Settings Navigation Controller-->
+        <scene sceneID="YhJ-HQ-GZT">
+            <objects>
+                <navigationController storyboardIdentifier="SettingsViewController" id="1XA-9s-9Nl" customClass="SettingsNavigationController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sVS-ey-aI8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="wn4-bo-hC8" kind="relationship" relationship="rootViewController" id="cOf-QU-T0P"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="acm-f6-SxG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="548" y="1169"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="Kip-hZ-mMf">
+            <objects>
+                <tableViewController title="Settings" id="wn4-bo-hC8" customClass="SettingsViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="OR5-7t-4HU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <sections>
+                            <tableViewSection id="4G1-EM-F9w">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="54" id="ze4-Sq-QZb" customClass="SettingsViewCell" customModule="BlueGecko" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="18" width="375" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ze4-Sq-QZb" id="8Tx-q3-f5P">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ymW-9A-0xc">
+                                                    <rect key="frame" x="252" y="11" width="110" height="33"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="110" id="RaT-AO-XiG"/>
+                                                    </constraints>
+                                                    <segments>
+                                                        <segment title="C"/>
+                                                        <segment title="F"/>
+                                                    </segments>
+                                                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="temperatureDidChange:" destination="wn4-bo-hC8" eventType="valueChanged" id="Nco-ZD-7fR"/>
+                                                    </connections>
+                                                </segmentedControl>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temperature" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YdO-Au-Oj9" customClass="StyledLabel" customModule="BlueGecko" customModuleProvider="target">
+                                                    <rect key="frame" x="15" y="17" width="97" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="YdO-Au-Oj9" firstAttribute="top" secondItem="8Tx-q3-f5P" secondAttribute="topMargin" constant="6" id="Jff-QR-WId"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="ymW-9A-0xc" secondAttribute="trailing" constant="-3" id="PWP-JJ-LHb"/>
+                                                <constraint firstItem="YdO-Au-Oj9" firstAttribute="centerY" secondItem="ymW-9A-0xc" secondAttribute="centerY" id="dPy-sT-XZl"/>
+                                                <constraint firstItem="ymW-9A-0xc" firstAttribute="centerY" secondItem="8Tx-q3-f5P" secondAttribute="centerY" id="idu-lF-An5"/>
+                                                <constraint firstItem="ymW-9A-0xc" firstAttribute="top" secondItem="8Tx-q3-f5P" secondAttribute="topMargin" id="kxv-Wy-5PN"/>
+                                                <constraint firstItem="YdO-Au-Oj9" firstAttribute="leading" secondItem="8Tx-q3-f5P" secondAttribute="leading" constant="15" id="rVA-W0-idm"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="wn4-bo-hC8" id="2Ro-lc-x4t"/>
+                            <outlet property="delegate" destination="wn4-bo-hC8" id="qoa-Oa-kKe"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Settings" id="5i6-MB-qpE">
+                        <barButtonItem key="leftBarButtonItem" image="btn_navbar_close" style="done" id="8FZ-YG-OB3">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="wn4-bo-hC8" id="QZw-Ar-iCG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="temperatureControl" destination="ymW-9A-0xc" id="k2A-hZ-Hzn"/>
+                        <outlet property="temperatureLabel" destination="YdO-Au-Oj9" id="GWK-15-uCR"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ivh-LP-VkT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="Rah-u8-3bq">
+                    <rect key="frame" x="0.0" y="0.0" width="372" height="54"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
+            </objects>
+            <point key="canvasLocation" x="1577" y="1169"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="btn_navbar_close" width="25" height="25"/>
+    </resources>
+</document>

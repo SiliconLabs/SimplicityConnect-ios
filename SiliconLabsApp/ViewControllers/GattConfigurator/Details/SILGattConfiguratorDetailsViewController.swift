@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var aboveSafeAreaView: UIView!
     @IBOutlet weak var navigationBarView: UIView!
@@ -26,6 +26,10 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
         super.viewDidLoad()
         setupAppearance()
         setupLogic()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     func setupAppearance() {
@@ -76,6 +80,11 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
     @IBAction func didChangeGattConfigurationName(_ sender: UITextField) {
         viewModel.update(gattConfigurationName: sender.text)
         navigationBarTitleLabel.text = sender.text
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        viewModel.backToHome()
+        return false
     }
     
     // MARK: UITextFieldDelegate

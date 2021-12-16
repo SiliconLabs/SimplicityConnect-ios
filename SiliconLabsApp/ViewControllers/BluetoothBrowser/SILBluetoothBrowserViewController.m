@@ -34,7 +34,7 @@
 #import "SILExitPopupViewController.h"
 #import "SILBrowserSettings.h"
 
-@interface SILBluetoothBrowserViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate, SILDebugDeviceViewModelDelegate, SILBrowserFilterViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILBrowserLogViewControllerDelegate, WYPopoverControllerDelegate, SILExitPopupViewControllerDelegate, SILSortViewControllerDelegate>
+@interface SILBluetoothBrowserViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate, SILDebugDeviceViewModelDelegate, SILBrowserFilterViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILBrowserLogViewControllerDelegate, WYPopoverControllerDelegate, SILExitPopupViewControllerDelegate, SILSortViewControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
@@ -109,6 +109,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     [self.connectionsViewModel connectionsViewOnDetailsScreen:NO];
     [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
     self.browserViewModel.connectedPeripheral = nil;
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -767,6 +768,20 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
         self.filterBarViewController = (SILFilterBarViewController*)segue.destinationViewController;
         self.filterBarViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return self.navigationController.viewControllers.count > 1;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isEqual: self.navigationController.interactivePopGestureRecognizer]) {
+        [self.navigationController popToViewController: self animated:YES];
+        return TRUE;
+    }
+    return FALSE;
 }
 
 @end

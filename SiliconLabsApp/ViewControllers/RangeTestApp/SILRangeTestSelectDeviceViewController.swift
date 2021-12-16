@@ -9,6 +9,7 @@
 import UIKit
 
 class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate {
+    
     @IBOutlet weak var connectButton: SILPrimaryButton!
     
     private let app = SILApp.rangeTest()!
@@ -40,7 +41,7 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
             return discoveredPeripheral?.isRangeTest ?? false
         }
         
-        let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel)!
+        let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel!)
         
         selectionViewController.centralManager = centralManager
         selectionViewController.delegate = self
@@ -50,15 +51,15 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
     
     // MARK: SILDeviceSelectionViewControllerDelegate
     
-    func deviceSelectionViewController(_ viewController: SILDeviceSelectionViewController!, didSelect peripheral: CBPeripheral!) {
+    func deviceSelectionViewController(_ viewController: SILDeviceSelectionViewController!, didSelect peripheral: SILDiscoveredPeripheral!) {
         self.popoverController?.dismissPopover(animated: true) {
             let storyboard = UIStoryboard(name: "SILAppTypeRangeTest", bundle: nil)
             let selectionViewController = storyboard.instantiateViewController(withIdentifier: "SILRangeTestModeSelectionViewController") as! SILRangeTestModeSelectionViewController
             
             selectionViewController.app = self.app;
             selectionViewController.delegate = self
-            selectionViewController.peripheral = SILRangeTestPeripheral(withPeripheral: peripheral, andCentralManager: self.centralManager)
-            
+            selectionViewController.peripheral = SILRangeTestPeripheral(withPeripheral: peripheral.peripheral, andCentralManager: self.centralManager)
+
             self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
         }
     }

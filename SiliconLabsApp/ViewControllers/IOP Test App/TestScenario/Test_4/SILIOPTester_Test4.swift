@@ -21,16 +21,17 @@ class SILIOPTester_Test4 : SILTestScenario {
     private var disposeBag = SILObservableTokenBag()
     
     private var discoverFirmwareInfo: SILDiscoverFirmwareInfo!
-    private var discoverRFUFeatures: SILDiscoverRFUFeatures!
+    private var discoverRFUFeatures: SILDiscoverTestConnectionParameters!
     
     private var parameters: Dictionary<String, Any>!
     private var deviceName: String!
     private var firmwareInfo: SILIOPTestFirmwareInfo?
     private var connectionParameters: SILIOPTestConnectionParameters?
+    private var stackVersion: String?
     
     init() {
         discoverFirmwareInfo = SILDiscoverFirmwareInfo()
-        discoverRFUFeatures = SILDiscoverRFUFeatures()
+        discoverRFUFeatures = SILDiscoverTestConnectionParameters()
         
         appendTestCase(testCase: SILGATT4_1TestCase())
         appendTestCase(testCase: SILGATT4_2TestCase())
@@ -101,6 +102,7 @@ class SILIOPTester_Test4 : SILTestScenario {
             case let .completed(stackVersion: stackVersion):
                 debugPrint("DISCOVER FIRMWARE COMPLETED")
                 weakSelf.parameters["stackVersion"] = stackVersion
+                weakSelf.stackVersion = stackVersion
                 weakSelf.discoverRFUFeatures.injectParameters(parameters: weakSelf.parameters)
                 weakSelf.runDiscoverRFUFeatures()
                 break
@@ -148,6 +150,10 @@ class SILIOPTester_Test4 : SILTestScenario {
         }
         if let connectionParameters = self.connectionParameters {
             artifacts["connectionParameters"] = connectionParameters
+        }
+        
+        if let stackVersion = self.stackVersion {
+            artifacts["stackVersion"] = stackVersion
         }
 
         return artifacts

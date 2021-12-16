@@ -18,6 +18,9 @@
                 [self rangeTestApp],
                 [self blinkyApp],
                 [self throughputApp],
+                [self motionApp],
+                [self environmentApp],
+                [self wifiCommissioningApp]
             ];
 }
 
@@ -116,6 +119,30 @@
                                description:@"Measure throughput between the mobile device and EFR32."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeThroughput];
+}
+
++ (SILApp *)motionApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeMotion
+                                     title:@"Motion"
+                               description:@"Control a 3D render of a dev kit."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeMotion];
+}
+
++ (SILApp *)environmentApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeEnvironment
+                                     title:@"Environment"
+                               description:@"Read and display data from the dev kit sensors."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeEnvironment];
+}
+
++ (SILApp *)wifiCommissioningApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeWifiCommissioning
+                                     title:@"Wi-Fi Commissioning"
+                               description:@"Wi-Fi commissioning over BLE."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeWifiCommissioning];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

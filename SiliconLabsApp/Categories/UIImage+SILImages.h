@@ -29,6 +29,9 @@ extern NSString * const SILImageNameHomeIOPTester;
 extern NSString * const SILImageNameHomeThroughput;
 extern NSString * const SILImageNameHomeGattConfigurator;
 extern NSString * const SILImageNameHomeBlinky;
+extern NSString * const SILImageNameHomeMotion;
+extern NSString * const SILImageNameHomeEnvironment;
+extern NSString * const SILImageNameHomeWifiCommissioning;
 
 extern NSString * const SILImageNameKeyboard;
 extern NSString * const SILImageNameKeyboardCheckmark;

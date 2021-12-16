@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import SVProgressHUD
 
 @objcMembers
-class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate, SILIOPPopupDelegate {
+class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate {
     var appsArray: [SILApp] = [SILApp]()
     var isDisconnectedIntentionally: Bool = false
 
@@ -26,6 +27,23 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     private var peripheralManagerSubscription: SILObservableToken?
     private var disposeBag = SILObservableTokenBag()
     private var peripheralManager: SILThroughputPeripheralManager!
+    
+    @IBAction func swipeToDemo(_ sender: UISwipeGestureRecognizer) {
+        changeAppsView(0)
+    }
+    
+    @IBAction func swipeToDevelop(_ sender: UISwipeGestureRecognizer) {
+        changeAppsView(1)
+    }
+    
+    private func changeAppsView(_ viewIndex: Int) {
+        let silTabBarController = tabBarController as! SILTabBarController
+        let silTabBar = silTabBarController.tabBar as! SILTabBar
+        
+        silTabBar.setMuliplierForSelectedIndex(viewIndex)
+        silTabBarController.defaultIndex = viewIndex
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,19 +118,31 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         NotificationCenter.default.addObserver(self, selector: #selector(setIsDisconnectedIntentionallyFlag), name: NSNotification.Name(rawValue: "NotIntentionallyBackFromThermometer"), object:nil)
     }
     
-    private func presentDeviceSelectionViewController(app: SILApp!, filterByName: String? = nil, animated: Bool) {
+    private func presentDeviceSelectionViewController(app: SILApp!, shouldConnectWithPeripheral shouldConnect: Bool = true, animated: Bool,
+                                                      filter: DiscoveredPeripheralFilter? = nil) {
         var viewModel: SILDeviceSelectionViewModel?
-        if let filterByName = filterByName {
-            viewModel = SILDeviceSelectionViewModel(appType: app, withFilterByName: filterByName)
-        } else {
+        if let filter = filter {
+            viewModel = SILDeviceSelectionViewModel(appType: app, withFilter: filter)
+        }
+        else {
             viewModel = SILDeviceSelectionViewModel(appType: app)
         }
-        let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel)
-        selectionViewController?.centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
-        selectionViewController?.delegate = self
-        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
+        let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel!, shouldConnect: shouldConnect)
+        selectionViewController.centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
+        selectionViewController.delegate = self
+        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self,
+                                                                                    delegate: self, animated: true)
     }
-
+    
+    private func presentThunderboardDeviceSelection(app: SILApp!, animated: Bool, filter: ((Device) -> Bool)? = nil) {
+        let thunderboardCentralManager = BleManager()
+        let interaction = DeviceSelectionInteraction(scanner: thunderboardCentralManager, connector: thunderboardCentralManager, appType: app.appType, filter: filter)
+        let selectionViewController = SILThunderboardDeviceSelectionViewController(interaction: interaction, appType: app.appType)
+        selectionViewController.delegate = self
+        
+        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
+    }  
+    
     private func presentCalibrationViewController(animated: Bool) {
         debugPrint("Do nothing - app is deprecated")
     }
@@ -164,8 +194,20 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.presentDeviceSelectionViewController(app: app, animated: true)
         
         case .typeBlinky:
-            self.presentDeviceSelectionViewController(app: app, filterByName: "Blinky Example", animated: true)
+            self.presentThunderboardDeviceSelection(app: app, animated: true) {
+                $0.name!.hasPrefix("Thunder") || $0.name!.hasPrefix("TBS") || $0.name!.hasPrefix("Blinky")
+            }
         
+        case .typeMotion:
+            self.presentThunderboardDeviceSelection(app: app, animated: true) {
+                $0.name!.hasPrefix("Thunder") || $0.name!.hasPrefix("TBS")
+            }
+            
+        case .typeEnvironment:
+            self.presentThunderboardDeviceSelection(app: app, animated: true) {
+                $0.name!.hasPrefix("Thunder") || $0.name!.hasPrefix("TBS")
+            }
+            
         case .typeThroughput:
             peripheralManager = SILThroughputPeripheralManager()
             
@@ -183,7 +225,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             })
             self.disposeBag.add(token: peripheralManagerSubscription!)
             
-            self.presentDeviceSelectionViewController(app: app, filterByName: "Throughput Test", animated: true)
+            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "Throughput Test" }
             
         case .typeRangeTest:
             self.showRangeTest(app: app, animated: true)
@@ -199,12 +241,15 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             
         case .typeHomeKitDebug:
             self.showHomeKitDebug(app: app, animated: true)
-
+            
         case .typeGATTConfigurator:
             self.showGattConfigurator(app: app, animated: true)
             
         case .iopTest:
-             self.showIOPEnterDeviceNamePopup(app: app, animated: true)
+            self.presentDeviceSelectionViewController(app: app, shouldConnectWithPeripheral: false, animated: true) { $0!.advertisedLocalName?.contains("IOP") ?? false }
+            
+        case .typeWifiCommissioning:
+            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
             
         default:
             return
@@ -254,35 +299,43 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         return 8.0
     }
     
-    func deviceSelectionViewController(_ viewController: SILDeviceSelectionViewController!, didSelect peripheral: CBPeripheral!) {
+    func deviceSelectionViewController(_ viewController: SILDeviceSelectionViewController!, didSelect peripheral: SILDiscoveredPeripheral!) {
         self.devicePopoverController?.dismissPopover(animated: true) { [self] in
             self.devicePopoverController = nil
             let appType = viewController.viewModel.app.appType
             
             switch appType {
             case .typeHealthThermometer:
-                self.runHealthThermometer(viewController: viewController, peripheral: peripheral)
+                self.runHealthThermometer(viewController: viewController, peripheral: peripheral.peripheral)
             
             case .typeConnectedLighting:
                 if let connectedLightingController = UIStoryboard(name: "SILAppTypeConnectedLighting", bundle: nil).instantiateInitialViewController() as? SILConnectedLightingViewController {
                     connectedLightingController.centralManager = viewController.centralManager
-                    connectedLightingController.connectedPeripheral = peripheral
+                    connectedLightingController.connectedPeripheral = peripheral.peripheral
                     self.navigationController?.pushViewController(connectedLightingController, animated: true)
-                }
-        
-            case .typeBlinky:
-                if let blinkyController = UIStoryboard(name: "SILAppTypeBlinky", bundle: nil).instantiateInitialViewController() as? SILAppTypeBlinkyViewController {
-                    blinkyController.centralManager = viewController.centralManager
-                    blinkyController.connectedPeripheral = peripheral
-                    self.navigationController?.pushViewController(blinkyController, animated: true)
                 }
  
             case .typeThroughput:
                 if let throughputController = UIStoryboard(name: "SILAppTypeThroughput", bundle: nil).instantiateInitialViewController() as? SILThroughputViewController {
                     throughputController.peripheralManager = peripheralManager
                     throughputController.centralManager = viewController.centralManager
-                    throughputController.connectedPeripheral = peripheral
+                    throughputController.connectedPeripheral = peripheral.peripheral
                     self.navigationController?.pushViewController(throughputController, animated: true)
+                }
+                
+            case .typeWifiCommissioning:
+                if let wifiCommissioningController = UIStoryboard(name: "SILAppTypeWifiCommissioning", bundle: nil).instantiateInitialViewController() as? SILWifiCommissioningViewController {
+                    wifiCommissioningController.centralManager = viewController.centralManager
+                    wifiCommissioningController.connectedPeripheral = peripheral.peripheral
+                    self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
+                }
+                
+            case .iopTest:
+                let storyboard = UIStoryboard(name: "SILIOPTest", bundle: nil)
+                if let iopVC = storyboard.instantiateInitialViewController() as? SILIOPTesterViewController {
+                    iopVC.deviceNameToSearch = peripheral.advertisedLocalName
+                    self.navigationController?.pushViewController(iopVC, animated: true)
+
                 }
                 
             default:
@@ -290,7 +343,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             }
         }
     }
-    
+
     func didDismissDeviceSelectionViewController() {
         if let peripheralManager = peripheralManager {
             peripheralManager.stopAdvertising()
@@ -298,7 +351,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         
         self.devicePopoverController?.dismissPopover(animated: true)
     }
-    
+
     func runHealthThermometer(viewController: SILDeviceSelectionViewController, peripheral: CBPeripheral) {
         let storyboard = UIStoryboard(name: "SILAppTypeHealthThermometer", bundle: nil)
         let controller = storyboard.instantiateInitialViewController()
@@ -337,15 +390,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         self.isDisconnectedIntentionally = false
     }
     
-    func showIOPEnterDeviceNamePopup(app: SILApp, animated: Bool) {
-        let popupVC = SILIOPDeviceNamePopup()
-        popupVC.delegate = self
-        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: popupVC,
-                                                                                    presenting: self,
-                                                                                    delegate: self,
-                                                                                    animated: true)
-    }
-    
     func showIOPTestList(text: String) {
         let storyboard = UIStoryboard(name: "SILIOPTest", bundle: nil)
         if let iopVC = storyboard.instantiateInitialViewController() as? SILIOPTesterViewController {
@@ -370,5 +414,85 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     func didTappedCancelButton() {
         self.devicePopoverController?.dismissPopover(animated: true)
         self.devicePopoverController = nil
+    }
+    
+    // MARK: SILThunderboardDeviceSelectionViewControllerDelegate
+    
+    func deviceSelectionViewControllerDidFinishThunderboardDeviceConfiguration(connection: DemoConnection, deviceConnector: DeviceConnection, appType: SILAppType) {
+        SVProgressHUD.dismiss()
+        self.devicePopoverController?.dismissPopover(animated: true) {
+            switch appType {
+            case .typeMotion:
+                if let motionConnection = connection as? MotionDemoConnection, motionConnection.device.model == .sense {
+                    self.displayMotion(connection: motionConnection, deviceConnector: deviceConnector)
+                }
+            case .typeEnvironment:
+                if let environmentConnection = connection as? EnvironmentDemoConnection {
+                    self.displayEnvironment(connection: environmentConnection, deviceConnector: deviceConnector)
+                }
+            case .typeBlinky:
+                if let ioConnection = connection as? IoDemoConnection {
+                    self.displayIO(connection: ioConnection, deviceConnector: deviceConnector)
+                }
+            default:
+                return
+            }
+        }
+    }
+    
+    func deviceSelectionViewControllerDidConnectWithBlinkyDevice(device: Device, deviceConnector: DeviceConnection, isThunderboard: Bool) {
+        self.devicePopoverController?.dismissPopover(animated: true) {
+            self.displayBlinky(device: device, deviceConnector: deviceConnector, shouldDisplayPower: isThunderboard)
+        }
+    }
+    
+    private func displayBlinky(device: Device, deviceConnector: DeviceConnection, shouldDisplayPower: Bool) {
+        if let blinkyController = UIStoryboard(name: "SILAppTypeBlinky", bundle: nil).instantiateInitialViewController() as? SILAppTypeBlinkyViewController, let device = device as? BleDevice {
+            blinkyController.deviceConnector = deviceConnector
+            blinkyController.connectedPeripheral = device.cbPeripheral
+            blinkyController.deviceName = device.name!
+            if shouldDisplayPower {
+                blinkyController.addConnectedDeviceBar(bottomNotchHeight: 0.0)
+            }
+            self.navigationController?.pushViewController(blinkyController, animated: true)
+        }
+    }
+    
+    private func displayMotion(connection: MotionDemoConnection, deviceConnector: DeviceConnection) {
+        if let demoViewController = UIStoryboard(name: "MotionSenseBoardDemoViewController", bundle: nil).instantiateViewController(withIdentifier: "MotionSenseBoardDemoViewController") as? MotionSenseBoardDemoViewController {
+            
+            let interaction = MotionDemoInteraction(output: demoViewController, demoConnection: connection)
+            demoViewController.interaction = interaction
+            demoViewController.deviceConnector = deviceConnector
+            demoViewController.deviceModelName = connection.device.modelName
+            demoViewController.addConnectedDeviceBar(bottomNotchHeight: 0.0)
+            connection.device.connectedDelegate = demoViewController
+            self.navigationController?.pushViewController(demoViewController, animated: true)
+        }
+    }
+    
+    private func displayEnvironment(connection: EnvironmentDemoConnection, deviceConnector: DeviceConnection) {
+        if let demoViewController = UIStoryboard(name: "EnvironmentDemoViewController", bundle: nil).instantiateViewController(withIdentifier: "EnvironmentDemoViewController") as? EnvironmentDemoViewController {
+            let interaction = EnvironmentDemoInteraction(output: demoViewController, demoConnection: connection)
+            demoViewController.interaction = interaction
+            demoViewController.deviceConnector = deviceConnector
+            demoViewController.addConnectedDeviceBar(bottomNotchHeight: 0.0)
+            connection.device.connectedDelegate = demoViewController
+            self.navigationController?.pushViewController(demoViewController, animated: true)
+            
+        }
+    }
+    
+    private func displayIO(connection: IoDemoConnection, deviceConnector: DeviceConnection) {
+        if let demoViewController = UIStoryboard(name: "IoDemoViewController", bundle: nil).instantiateViewController(withIdentifier: "IoDemoViewController") as? IoDemoViewController {
+            
+            let interaction = IoDemoInteraction(output: demoViewController, demoConnection: connection)
+            demoViewController.interaction = interaction
+            
+            demoViewController.deviceConnector = deviceConnector
+            demoViewController.addConnectedDeviceBar(bottomNotchHeight: 0.0)
+            connection.device.connectedDelegate = demoViewController
+            self.navigationController?.pushViewController(demoViewController, animated: true)
+        }
     }
 }

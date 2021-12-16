@@ -12,7 +12,7 @@ struct SILSetTabDeviceName {
     let invoke: (String) -> Void
 }
 
-class SILRangeTestAppContainerViewController: UIViewController, UITabBarControllerDelegate {
+class SILRangeTestAppContainerViewController: UIViewController, UITabBarControllerDelegate, UIGestureRecognizerDelegate {
     @IBOutlet weak var navigationBar: UIView!
     @IBOutlet weak var tabSelection: UISegmentedControl!
     
@@ -24,6 +24,10 @@ class SILRangeTestAppContainerViewController: UIViewController, UITabBarControll
         navigationBar.addShadow()
         navigationBar.superview?.bringSubviewToFront(navigationBar)
         observeForBluetoothDisabledNotification()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,4 +68,13 @@ class SILRangeTestAppContainerViewController: UIViewController, UITabBarControll
 
         }
     }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isEqual(navigationController?.interactivePopGestureRecognizer) {
+            navigationController?.popViewController(animated: true)
+            return true
+        }
+        return false
+    }
+    
 }

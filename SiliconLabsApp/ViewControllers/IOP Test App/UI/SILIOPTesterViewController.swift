@@ -11,7 +11,7 @@ import UIKit
 
 @objc
 @objcMembers
-class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     @IBOutlet weak var allSpace: UIStackView!
     @IBOutlet weak var navigationBarView: UIView!
     @IBOutlet weak var navigationBarTitleLabel: UILabel!
@@ -44,9 +44,22 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         deviceNameLabel.text = "Device Name: \(UIDevice.deviceName)"
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.registerNotifications()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    private func registerNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showDocumentPickerView), name: .SILIOPShowFilePicker, object: nil)
+    }
+    
+    private func unregisterNotifications() {
+        NotificationCenter.default.removeObserver(self, name: .SILIOPShowFilePicker, object: nil)
     }
     
     //MARK: Initialize Views
@@ -184,6 +197,14 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         self.showPopupAlert()
     }
     
+    func showDocumentPickerView() {
+        let documentPickerView = SILDocumentPickerViewController(documentTypes: ["public.gbl"], in: .import)
+        documentPickerView.delegate = self
+        UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.sil_regularBlue()], for: .normal)
+        UINavigationBar.appearance().tintColor = UIColor.sil_regularBlue()
+        self.present(documentPickerView, animated: false, completion: nil)
+    }
+    
     //MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var _cellViewModel: SILCellViewModel?
@@ -212,5 +233,32 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 20.0)
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        showPopupAlert()
+        return false
+    }
+    
+}
+
+extension SILIOPTesterViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        debugPrint("DID PICK")
+        self.sendChosenUrl(urls: urls)
+    }
+    
+    private func sendChosenUrl(urls: [URL]) {
+        if let gblFile = urls.first {
+            let gblFileDict: [String: Any] = ["gblFileUrl": gblFile]
+            
+            NotificationCenter.default.post(Notification(name: .SILIOPFileUrlChosen, object: nil, userInfo: gblFileDict))
+        }
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        debugPrint("DID CANCEL")
+        NotificationCenter.default.post(Notification(name: .SILIOPFileUrlChosen, object: nil, userInfo: nil))
+        controller.dismiss(animated: true, completion: nil)
     }
 }

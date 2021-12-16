@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDelegate, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     @IBOutlet weak var allSpace: UIStackView!
     @IBOutlet weak var aboveSafeAreaView: UIView!
     @IBOutlet weak var navigationBarView: UIView!
@@ -28,6 +28,10 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
         tableView.delegate = self
         
         viewModel.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     func setupNavigationBar() {
@@ -110,5 +114,13 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 20.0)
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isEqual(navigationController?.interactivePopGestureRecognizer) {
+            navigationController?.popViewController(animated: true)
+            return true
+        }
+        return false
     }
 }

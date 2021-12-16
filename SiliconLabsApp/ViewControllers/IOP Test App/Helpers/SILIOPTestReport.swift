@@ -35,13 +35,14 @@ struct SILIOPTestPhoneInfo {
     }
 }
 
-enum SILIOPFirmware: String {
+enum SILIOPFirmware: Equatable {
     case unknown
     case BRD4104A
     case BRD4181A
     case BRD4181B
     case BRD4182A
     case BRD4186B
+    case readName(_ name: String)
 
     var rawValue: String {
         switch self {
@@ -55,23 +56,43 @@ enum SILIOPFirmware: String {
             return "xG22"
         case .BRD4186B:
             return "xG24"
+        case .readName(let name):
+            return name
         }
+    }
+}
+
+struct SILIOPFirmwareVersion {
+    let version: String
+    
+    func isLesserThan3_3_0() -> Bool {
+        return version.versionCompare("3.3.0") == .orderedAscending
     }
 }
 
 struct SILIOPTestFirmwareInfo {
     let tagName = "firmware_informations"
-    let versionTag = "firmware_version"
+    
+    let originalVersionTag = "firmware_original_version"
+    let otaAckVersionTag = "firmware_ota_ack_version"
+    let otaNonAckVersionTag = "firmware_ota_non_ack_version"
+    
     let nameTag = "firmware_name"
     let firmwareTag = "firmware_ic_name"
     
-    let version: String
+    var originalVersion: SILIOPFirmwareVersion
+    var otaAckVersion: SILIOPFirmwareVersion?
+    var otaNonAckVersion: SILIOPFirmwareVersion?
+    
     let name: String
     let firmware: SILIOPFirmware
     
     func generateReport() -> String {
         let reportBuilder = SILIOPTestReportBuilder()
-        var textReport = reportBuilder.buildInnerTag(innerTagName: versionTag, text: version)
+        var textReport = reportBuilder.buildInnerTag(innerTagName: originalVersionTag, text: originalVersion.version)
+        textReport.append(reportBuilder.buildInnerTag(innerTagName: otaAckVersionTag, text: otaAckVersion?.version ?? "N/A"))
+        textReport.append(reportBuilder.buildInnerTag(innerTagName: otaNonAckVersionTag, text: otaNonAckVersion?.version  ?? "N/A"))
+
         textReport.append(reportBuilder.buildInnerTag(innerTagName: nameTag, text: name))
         textReport.append(reportBuilder.buildInnerTag(innerTagName: firmwareTag, text: firmware.rawValue))
         
@@ -80,7 +101,9 @@ struct SILIOPTestFirmwareInfo {
     
     static func generateReportWithUknownValues() -> String {
         let reportBuilder = SILIOPTestReportBuilder()
-        var textReport = reportBuilder.buildInnerTag(innerTagName: "firmware_version", text: "N/A")
+        var textReport = reportBuilder.buildInnerTag(innerTagName: "firmware_original_version", text: "N/A")
+        textReport.append(reportBuilder.buildInnerTag(innerTagName: "firmware_ota_ack_version", text: "N/A"))
+        textReport.append(reportBuilder.buildInnerTag(innerTagName: "firmware_ota_non_ack_version", text: "N/A"))
         textReport.append(reportBuilder.buildInnerTag(innerTagName: "firmware_name", text: "N/A"))
         textReport.append(reportBuilder.buildInnerTag(innerTagName: "firmware_ic_name", text: "N/A"))
         

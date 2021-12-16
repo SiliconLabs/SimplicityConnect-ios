@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILWifiCommissioningDisconnectPopup" customModule="BlueGecko" customModuleProvider="target">
+            <connections>
+                <outlet property="descriptionLabel" destination="5X2-0N-H1O" id="kl9-P9-CQt"/>
+                <outlet property="noButton" destination="sds-3A-HXw" id="DRt-io-W8s"/>
+                <outlet property="view" destination="tM3-0v-pad" id="BpB-ON-nzh"/>
+                <outlet property="yesButton" destination="eD4-eF-279" id="Mvl-4t-9wy"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="tM3-0v-pad">
+            <rect key="frame" x="0.0" y="0.0" width="573" height="200"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="xIu-6f-4no">
+                    <rect key="frame" x="0.0" y="0.0" width="573" height="200"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j0D-Qz-Nt7" userLabel="headerView">
+                            <rect key="frame" x="0.0" y="0.0" width="573" height="48"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Disconnect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FcL-Ho-mZo">
+                                    <rect key="frame" x="241.5" y="13.5" width="90.5" height="21.5"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                    <variation key="widthClass=compact">
+                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
+                                    </variation>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" name="sil_bgGreyColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="AyG-dJ-h4g"/>
+                                <constraint firstItem="FcL-Ho-mZo" firstAttribute="centerY" secondItem="j0D-Qz-Nt7" secondAttribute="centerY" id="PBe-eY-IuE"/>
+                                <constraint firstItem="FcL-Ho-mZo" firstAttribute="centerX" secondItem="j0D-Qz-Nt7" secondAttribute="centerX" id="QTg-P0-HEZ"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Y1-Ac-RHa">
+                            <rect key="frame" x="0.0" y="56" width="573" height="90"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="jAz-9r-x4P" userLabel="PasswordStackView">
+                                    <rect key="frame" x="16" y="8" width="541" height="74"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to disconnect?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5X2-0N-H1O" userLabel="Description">
+                                            <rect key="frame" x="0.0" y="0.0" width="541" height="74"/>
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                            <color key="textColor" name="sil_subtleTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="5X2-0N-H1O" firstAttribute="width" secondItem="jAz-9r-x4P" secondAttribute="width" id="YiO-Hq-KV5"/>
+                                    </constraints>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="jAz-9r-x4P" secondAttribute="trailing" constant="16" id="6LK-Xf-e0T"/>
+                                <constraint firstAttribute="bottom" secondItem="jAz-9r-x4P" secondAttribute="bottom" constant="8" id="Dma-qv-aSC"/>
+                                <constraint firstItem="jAz-9r-x4P" firstAttribute="top" secondItem="3Y1-Ac-RHa" secondAttribute="top" constant="8" id="WRs-18-ggZ"/>
+                                <constraint firstItem="jAz-9r-x4P" firstAttribute="leading" secondItem="3Y1-Ac-RHa" secondAttribute="leading" constant="16" id="xJg-tc-bca"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ngm-Uz-Ijx" userLabel="buttonView">
+                            <rect key="frame" x="0.0" y="154" width="573" height="46"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="avB-QU-28R">
+                                    <rect key="frame" x="120.5" y="0.0" width="332" height="36"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sds-3A-HXw" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="150" id="e81-Qc-WrR"/>
+                                            </constraints>
+                                            <state key="normal" title="No"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
+                                                    <real key="value" value="15"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="didTappedNoBtn:" destination="-1" eventType="touchUpInside" id="TfD-Ut-2JW"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eD4-eF-279" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                            <rect key="frame" x="182" y="0.0" width="150" height="36"/>
+                                            <state key="normal" title="Yes"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
+                                                    <real key="value" value="15"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBorder" value="NO"/>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="didTappedYesBtn:" destination="-1" eventType="touchUpInside" id="OUR-cf-2pf"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="eD4-eF-279" firstAttribute="width" secondItem="sds-3A-HXw" secondAttribute="width" id="GqF-Xc-Jdz"/>
+                                        <constraint firstAttribute="height" constant="36" id="RkQ-UK-kqT"/>
+                                    </constraints>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="avB-QU-28R" secondAttribute="bottom" constant="10" id="1lg-Z1-gnr"/>
+                                <constraint firstItem="avB-QU-28R" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ngm-Uz-Ijx" secondAttribute="leading" constant="16" id="7Ij-fT-Dvb"/>
+                                <constraint firstItem="avB-QU-28R" firstAttribute="centerX" secondItem="Ngm-Uz-Ijx" secondAttribute="centerX" id="8bY-sO-BvS"/>
+                                <constraint firstItem="avB-QU-28R" firstAttribute="top" secondItem="Ngm-Uz-Ijx" secondAttribute="top" id="Wha-As-qCI"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="avB-QU-28R" secondAttribute="trailing" constant="16" id="r5I-ac-lcc"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="6bi-BS-HPO"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="xIu-6f-4no" firstAttribute="trailing" secondItem="6bi-BS-HPO" secondAttribute="trailing" id="3lQ-zR-Bdz"/>
+                <constraint firstAttribute="bottom" secondItem="xIu-6f-4no" secondAttribute="bottom" id="92m-7e-7kP"/>
+                <constraint firstItem="xIu-6f-4no" firstAttribute="top" secondItem="tM3-0v-pad" secondAttribute="top" id="IZx-Wc-Vhl"/>
+                <constraint firstItem="xIu-6f-4no" firstAttribute="leading" secondItem="6bi-BS-HPO" secondAttribute="leading" id="LHT-xQ-dRG"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="252.89855072463769" y="174.77678571428569"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="eD4-eF-279">
+            <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
+        <designable name="sds-3A-HXw">
+            <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
+    </designables>
+    <resources>
+        <namedColor name="sil_bgGreyColor">
+            <color red="0.94509803921568625" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_subtleTextColor">
+            <color red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

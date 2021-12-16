@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NavigationController" customModule="ThunderBoard" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="L3s-Kx-ITz" customClass="ConnectedDeviceBarView" customModule="ThunderBoard" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="77"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rOa-SH-TFk" customClass="RoundView" customModule="ThunderBoard" customModuleProvider="target">
+                    <rect key="frame" x="16" y="16" width="14" height="14"/>
+                    <color key="backgroundColor" red="0.1960784314" green="0.84313725490000002" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="370-82-rom"/>
+                        <constraint firstAttribute="width" constant="14" id="N1b-wf-mYe"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="colorOn">
+                            <color key="value" red="0.19607843137254902" green="0.84313725490196079" blue="0.29411764705882354" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="colorOff">
+                            <color key="value" red="0.19607843137254902" green="0.84313725490196079" blue="0.29411764705882354" alpha="1" colorSpace="calibratedRGB"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connected to" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GgZ-Ft-B8A">
+                    <rect key="frame" x="38" y="15" width="84" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="84" id="EBq-qJ-cgw"/>
+                        <constraint firstAttribute="height" constant="16" id="HV0-TY-e1U"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
+                    <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon - battery - 0" translatesAutoresizingMaskIntoConstraints="NO" id="JE6-cB-kRh" customClass="BatteryIcon" customModule="ThunderBoard" customModuleProvider="target">
+                    <rect key="frame" x="321" y="13" width="38" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="WJH-Dm-3F3"/>
+                        <constraint firstAttribute="width" constant="38" id="bdO-ID-DlR"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dy-hs-xEm">
+                    <rect key="frame" x="271" y="13" width="42" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="m1J-gB-zGT"/>
+                        <constraint firstAttribute="width" constant="42" id="oAq-us-eXn"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.52549019610000003" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thunderboard-Sense #58772" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5B-00-BfC">
+                    <rect key="frame" x="16" y="35" width="343" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="hTt-Fh-mGO"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.4.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bT1-xi-EZ7">
+                    <rect key="frame" x="16" y="59" width="32" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="2uZ-at-rvO"/>
+                        <constraint firstAttribute="width" constant="32" id="v4r-jp-b1Y"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
+                    <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="GgZ-Ft-B8A" firstAttribute="top" secondItem="L3s-Kx-ITz" secondAttribute="top" constant="15" id="DMo-tf-Sqy"/>
+                <constraint firstItem="bT1-xi-EZ7" firstAttribute="leading" secondItem="L3s-Kx-ITz" secondAttribute="leading" constant="16" id="DuA-8J-4mM"/>
+                <constraint firstItem="JE6-cB-kRh" firstAttribute="top" secondItem="L3s-Kx-ITz" secondAttribute="top" constant="13" id="I2U-ci-7IS"/>
+                <constraint firstAttribute="trailing" secondItem="N5B-00-BfC" secondAttribute="trailing" constant="16" id="RjA-Je-oJm"/>
+                <constraint firstItem="rOa-SH-TFk" firstAttribute="top" secondItem="L3s-Kx-ITz" secondAttribute="top" constant="16" id="SCq-NE-vLo"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="bT1-xi-EZ7" secondAttribute="bottom" constant="4" id="TSJ-hp-Bgr"/>
+                <constraint firstItem="GgZ-Ft-B8A" firstAttribute="leading" secondItem="rOa-SH-TFk" secondAttribute="trailing" constant="8" id="WdH-HP-DdJ"/>
+                <constraint firstItem="N5B-00-BfC" firstAttribute="top" secondItem="GgZ-Ft-B8A" secondAttribute="bottom" constant="4" id="aRL-Va-dng"/>
+                <constraint firstItem="bT1-xi-EZ7" firstAttribute="top" secondItem="N5B-00-BfC" secondAttribute="bottom" id="jTV-cN-rP4"/>
+                <constraint firstItem="N5B-00-BfC" firstAttribute="leading" secondItem="L3s-Kx-ITz" secondAttribute="leading" constant="16" id="mGO-Yh-2D3"/>
+                <constraint firstItem="6dy-hs-xEm" firstAttribute="top" secondItem="L3s-Kx-ITz" secondAttribute="top" constant="13" id="rl2-wC-e9Z"/>
+                <constraint firstAttribute="trailing" secondItem="JE6-cB-kRh" secondAttribute="trailing" constant="16" id="uOG-GF-euk"/>
+                <constraint firstItem="JE6-cB-kRh" firstAttribute="leading" secondItem="6dy-hs-xEm" secondAttribute="trailing" constant="8" id="vi1-fq-pYf"/>
+                <constraint firstItem="rOa-SH-TFk" firstAttribute="leading" secondItem="L3s-Kx-ITz" secondAttribute="leading" constant="16" id="zfs-B7-8QL"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="batteryStatusImageView" destination="JE6-cB-kRh" id="GpB-8g-RvI"/>
+                <outlet property="batteryStatusLabel" destination="6dy-hs-xEm" id="UrA-MX-XCD"/>
+                <outlet property="connectedToLabel" destination="GgZ-Ft-B8A" id="Zzs-XB-8PD"/>
+                <outlet property="deviceNameLabel" destination="N5B-00-BfC" id="3MT-By-ac0"/>
+                <outlet property="dot" destination="rOa-SH-TFk" id="fWx-Sp-DRo"/>
+                <outlet property="firmwareVersionLabel" destination="bT1-xi-EZ7" id="Vlt-0H-qTN"/>
+            </connections>
+            <point key="canvasLocation" x="128.80000000000001" y="-4.0479760119940034"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon - battery - 0" width="37.5" height="20.5"/>
+    </resources>
+</document>

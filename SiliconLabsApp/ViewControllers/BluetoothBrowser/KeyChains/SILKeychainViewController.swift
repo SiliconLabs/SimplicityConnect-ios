@@ -10,7 +10,7 @@ import UIKit
 import Realm
 import RealmSwift
 
-class SILKeychainViewController: UIViewController {
+class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var segments: SILBrowserMappingsSegmentedControl!
     @IBOutlet weak var tableView: UITableView!
@@ -52,6 +52,10 @@ class SILKeychainViewController: UIViewController {
         super.viewDidLoad()
         setupNotificationToken()
         setupInfoImage()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -131,6 +135,21 @@ class SILKeychainViewController: UIViewController {
     
     @IBAction func segmentChanged(_ sender: SILBrowserMappingsSegmentedControl) {
         tableView.reloadData()
+    }
+    
+    @IBAction func swipeToCharacteristics(_ sender: Any) {
+        segments.selectedSegmentIndex = 0
+        tableView.reloadData()
+    }
+    
+    @IBAction func swipeToServices(_ sender: Any) {
+        segments.selectedSegmentIndex = 1
+        tableView.reloadData()
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        self.navigationController?.popViewController(animated: true)
+        return false
     }
 }
 

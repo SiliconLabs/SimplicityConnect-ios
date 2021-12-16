@@ -29,6 +29,9 @@ NSString * const SILImageNameHomeIOPTester = @"iopTester";
 NSString * const SILImageNameHomeThroughput = @"throughput";
 NSString * const SILImageNameHomeGattConfigurator = @"gattConfigurator";
 NSString * const SILImageNameHomeBlinky = @"graphic - blinky";
+NSString * const SILImageNameHomeMotion = @"icon - motion";
+NSString * const SILImageNameHomeEnvironment = @"icon - environment";
+NSString * const SILImageNameHomeWifiCommissioning = @"icon - wifi commissioning";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";

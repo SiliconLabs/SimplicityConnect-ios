@@ -33,6 +33,7 @@
     if (self) {
         self.fieldModel = fieldModel;
         self.bitRowFields = [self initbitRowModels];
+        self.requirementsSatisfied = YES;
     }
     return self;
 }

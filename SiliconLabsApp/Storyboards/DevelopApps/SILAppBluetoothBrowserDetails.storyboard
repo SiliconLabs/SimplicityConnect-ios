@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -64,7 +64,7 @@
                                         <rect key="frame" x="306" y="35" width="100" height="29"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-100 dBm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsa-dY-xxL" userLabel="RSSI Value">
-                                                <rect key="frame" x="29" y="8" width="80.5" height="21"/>
+                                                <rect key="frame" x="29" y="7.5" width="77" height="21.5"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                                                 <color key="textColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -86,7 +86,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Nr-m3-DJA">
-                                        <rect key="frame" x="16" y="2" width="50" height="21"/>
+                                        <rect key="frame" x="16" y="1" width="50" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="1UZ-mG-Okg"/>
                                         </constraints>
@@ -145,14 +145,14 @@
                                                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <prototypes>
                                                             <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="SILServiceCell" rowHeight="104" id="uiZ-sg-T5Z" customClass="SILServiceCell" customModule="BlueGecko" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="28" width="382" height="104"/>
+                                                                <rect key="frame" x="0.0" y="24.5" width="382" height="104"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uiZ-sg-T5Z" id="Nvf-6e-5uf">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="104"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Service" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6XX-pc-yJf">
-                                                                            <rect key="frame" x="16" y="20" width="141" height="24"/>
+                                                                            <rect key="frame" x="16" y="20" width="139" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" id="B3c-D3-v6R"/>
                                                                                 <constraint firstAttribute="height" constant="24" id="K6k-AI-bTS"/>
@@ -185,7 +185,7 @@
                                                                             </connections>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21P-JF-IQA">
-                                                                            <rect key="frame" x="161" y="16" width="24" height="24"/>
+                                                                            <rect key="frame" x="159" y="16" width="24" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="24" id="Da1-Cf-ffX"/>
                                                                                 <constraint firstAttribute="width" constant="24" id="peu-F6-0ce"/>
@@ -220,7 +220,7 @@
                                                                 </connections>
                                                             </tableViewCell>
                                                             <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SILDebugCharacteristicTableViewCell" rowHeight="209" id="VKy-Tq-jxD" customClass="SILDebugCharacteristicTableViewCell">
-                                                                <rect key="frame" x="0.0" y="132" width="382" height="209"/>
+                                                                <rect key="frame" x="0.0" y="128.5" width="382" height="209"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VKy-Tq-jxD" id="Umq-1U-44e">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="209"/>
@@ -234,7 +234,7 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Characteristic" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kzO-20-hKm">
-                                                                            <rect key="frame" x="16" y="16" width="129" height="20"/>
+                                                                            <rect key="frame" x="16" y="16" width="128" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="7KD-Eo-15I"/>
                                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" id="I3y-ft-43v"/>
@@ -256,30 +256,30 @@
                                                                             <rect key="frame" x="24" y="63" width="342" height="102"/>
                                                                             <subviews>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Descriptors:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rcl-o9-52x" userLabel="Descriptors Const Text">
-                                                                                    <rect key="frame" x="8" y="0.0" width="330" height="14"/>
+                                                                                    <rect key="frame" x="8" y="0.0" width="330" height="14.5"/>
                                                                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                                     <color key="textColor" red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kvC-Uv-7dr">
-                                                                                    <rect key="frame" x="4" y="16" width="334" height="82"/>
+                                                                                    <rect key="frame" x="4" y="16.5" width="334" height="81.5"/>
                                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                                     <prototypes>
                                                                                         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SILDescriptorTableViewCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILDescriptorTableViewCell" id="nrc-B8-V4x" customClass="SILDescriptorTableViewCell" customModule="BlueGecko" customModuleProvider="target">
-                                                                                            <rect key="frame" x="0.0" y="28" width="334" height="14"/>
+                                                                                            <rect key="frame" x="0.0" y="24.5" width="334" height="14.5"/>
                                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                                             <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nrc-B8-V4x" id="Y3p-bC-hb0">
-                                                                                                <rect key="frame" x="0.0" y="0.0" width="334" height="14"/>
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="334" height="14.5"/>
                                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                                 <subviews>
                                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Descriptor (UUID: 2899)" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj9-9a-2VK" userLabel="Descriptors ">
-                                                                                                        <rect key="frame" x="4" y="0.0" width="262" height="14"/>
+                                                                                                        <rect key="frame" x="4" y="0.0" width="262" height="14.5"/>
                                                                                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                                                                                                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                                                         <nil key="highlightedColor"/>
                                                                                                     </label>
                                                                                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pex-em-YzG" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="270" y="-5.5" width="60" height="25"/>
+                                                                                                        <rect key="frame" x="270" y="-5.5" width="60" height="25.5"/>
                                                                                                         <constraints>
                                                                                                             <constraint firstAttribute="width" constant="60" id="LJI-ys-PDa"/>
                                                                                                             <constraint firstAttribute="height" constant="25" id="TWO-f8-Gbf"/>
@@ -398,7 +398,7 @@
                                                                             </constraints>
                                                                         </stackView>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UNO-4H-YGS">
-                                                                            <rect key="frame" x="149" y="16" width="20" height="20"/>
+                                                                            <rect key="frame" x="148" y="16" width="20" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="KGt-0O-TJC"/>
                                                                                 <constraint firstAttribute="width" constant="20" id="U7P-gJ-6C1"/>
@@ -566,6 +566,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WdT-uR-aKU"/>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Xe1-Jy-pxc" secondAttribute="bottom" id="6DO-xR-lwf"/>
                             <constraint firstItem="1K6-8J-EfV" firstAttribute="trailing" secondItem="fhg-P2-Dom" secondAttribute="trailing" constant="-16" id="II0-jY-dZc"/>
@@ -581,6 +582,9 @@
                             <constraint firstItem="Xe1-Jy-pxc" firstAttribute="leading" secondItem="WdT-uR-aKU" secondAttribute="leading" id="pLx-Yh-VmN"/>
                             <constraint firstItem="1K6-8J-EfV" firstAttribute="top" secondItem="fhg-P2-Dom" secondAttribute="top" id="zmN-ug-0iR"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ZWq-2s-hK4" appends="YES" id="2Mu-5j-GeV"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Remote (Client)" id="9OZ-O3-asZ"/>
                     <navigationItem key="navigationItem" id="9Dg-1d-hra"/>
@@ -606,6 +610,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AS7-BY-l9a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="ZWq-2s-hK4" userLabel="SwipeToServer">
+                    <connections>
+                        <action selector="swipeToServer:" destination="mkA-d8-NQG" id="ocv-Xr-CON"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-6565" y="-153"/>
         </scene>
@@ -667,7 +676,7 @@
                                         <rect key="frame" x="306" y="35" width="100" height="29"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-100 dBm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mi7-r5-YO8" userLabel="RSSI Value">
-                                                <rect key="frame" x="29" y="8" width="80.5" height="21"/>
+                                                <rect key="frame" x="29" y="7.5" width="77" height="21.5"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                                                 <color key="textColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -689,7 +698,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="not-yP-ycp">
-                                        <rect key="frame" x="16" y="2" width="50" height="21"/>
+                                        <rect key="frame" x="16" y="1" width="50" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="rIa-5g-FrU"/>
                                         </constraints>
@@ -748,14 +757,14 @@
                                                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <prototypes>
                                                             <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="SILServiceCell" rowHeight="104" id="WrU-AN-nue" customClass="SILServiceCell" customModule="BlueGecko" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="28" width="382" height="104"/>
+                                                                <rect key="frame" x="0.0" y="24.5" width="382" height="104"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WrU-AN-nue" id="yPg-oJ-X3F">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="104"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Service" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BWd-KG-3rE">
-                                                                            <rect key="frame" x="16" y="20" width="141" height="24"/>
+                                                                            <rect key="frame" x="16" y="20" width="139" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="24" id="TlT-cL-Aar"/>
                                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" id="vnJ-b1-nEb"/>
@@ -788,7 +797,7 @@
                                                                             </connections>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a0x-Px-qlC">
-                                                                            <rect key="frame" x="161" y="16" width="24" height="24"/>
+                                                                            <rect key="frame" x="159" y="16" width="24" height="24"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="24" id="0eZ-0h-Hnl"/>
                                                                                 <constraint firstAttribute="height" constant="24" id="ZSx-jg-1oI"/>
@@ -823,7 +832,7 @@
                                                                 </connections>
                                                             </tableViewCell>
                                                             <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SILDebugCharacteristicTableViewCell" rowHeight="209" id="YWI-mW-dsj" customClass="SILDebugCharacteristicTableViewCell">
-                                                                <rect key="frame" x="0.0" y="132" width="382" height="209"/>
+                                                                <rect key="frame" x="0.0" y="128.5" width="382" height="209"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YWI-mW-dsj" id="6An-7T-KCR">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="209"/>
@@ -837,7 +846,7 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Characteristic" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ST1-EY-gpr">
-                                                                            <rect key="frame" x="16" y="16" width="129" height="20"/>
+                                                                            <rect key="frame" x="16" y="16" width="128" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="QEE-pl-bv3"/>
                                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" id="fcf-tv-MvP"/>
@@ -859,30 +868,30 @@
                                                                             <rect key="frame" x="24" y="63" width="342" height="102"/>
                                                                             <subviews>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Descriptors:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtA-La-oym" userLabel="Descriptors Const Text">
-                                                                                    <rect key="frame" x="8" y="0.0" width="330" height="14"/>
+                                                                                    <rect key="frame" x="8" y="0.0" width="330" height="14.5"/>
                                                                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                                     <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Da6-hZ-oHh">
-                                                                                    <rect key="frame" x="4" y="16" width="334" height="82"/>
+                                                                                    <rect key="frame" x="4" y="16.5" width="334" height="81.5"/>
                                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                                     <prototypes>
                                                                                         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SILDescriptorTableViewCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILDescriptorTableViewCell" id="4Ge-nz-7m5" customClass="SILDescriptorTableViewCell" customModule="BlueGecko" customModuleProvider="target">
-                                                                                            <rect key="frame" x="0.0" y="28" width="334" height="14"/>
+                                                                                            <rect key="frame" x="0.0" y="24.5" width="334" height="14.5"/>
                                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                                             <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4Ge-nz-7m5" id="9uh-pu-yx8">
-                                                                                                <rect key="frame" x="0.0" y="0.0" width="334" height="14"/>
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="334" height="14.5"/>
                                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                                 <subviews>
                                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Descriptor (UUID: 2899)" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HbS-W6-3JF" userLabel="Descriptors ">
-                                                                                                        <rect key="frame" x="4" y="0.0" width="262" height="14"/>
+                                                                                                        <rect key="frame" x="4" y="0.0" width="262" height="14.5"/>
                                                                                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                                                                                                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                                                         <nil key="highlightedColor"/>
                                                                                                     </label>
                                                                                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBz-cm-AgW" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="270" y="-5.5" width="60" height="25"/>
+                                                                                                        <rect key="frame" x="270" y="-5.5" width="60" height="25.5"/>
                                                                                                         <constraints>
                                                                                                             <constraint firstAttribute="width" constant="60" id="VaW-JW-wjw"/>
                                                                                                             <constraint firstAttribute="height" constant="25" id="jux-lU-mUV"/>
@@ -1001,7 +1010,7 @@
                                                                             </constraints>
                                                                         </stackView>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kw8-8V-aNe">
-                                                                            <rect key="frame" x="149" y="16" width="20" height="20"/>
+                                                                            <rect key="frame" x="148" y="16" width="20" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="20" id="DtX-RU-eUj"/>
                                                                                 <constraint firstAttribute="height" constant="20" id="tz3-bc-JMj"/>
@@ -1073,6 +1082,7 @@
                                                     </tableView>
                                                 </subviews>
                                                 <color key="backgroundColor" name="sil_backgroundColor"/>
+                                                <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstItem="xFT-Fn-iCs" firstAttribute="leading" secondItem="zga-ac-BgT" secondAttribute="leading" constant="16" id="5rb-Y8-dVT"/>
                                                     <constraint firstAttribute="bottom" secondItem="xFT-Fn-iCs" secondAttribute="bottom" id="6vu-as-vQN"/>
@@ -1169,6 +1179,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="wBo-xi-GUI"/>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="MYw-b7-us0" firstAttribute="leading" secondItem="wBo-xi-GUI" secondAttribute="leading" id="5Yw-nB-hgY"/>
                             <constraint firstItem="2pr-Hc-7Ix" firstAttribute="leading" secondItem="wBo-xi-GUI" secondAttribute="leading" id="CmL-jY-Q7J"/>
@@ -1184,6 +1195,9 @@
                             <constraint firstItem="2pr-Hc-7Ix" firstAttribute="trailing" secondItem="wBo-xi-GUI" secondAttribute="trailing" id="nVK-YQ-KsY"/>
                             <constraint firstAttribute="trailing" secondItem="MYw-b7-us0" secondAttribute="trailing" id="oxY-hJ-jjF"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="DYi-a8-Eaa" appends="YES" id="mRb-2f-alR"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Local (Server)" id="6Om-va-Jrc"/>
                     <navigationItem key="navigationItem" id="Zyc-Ll-HjJ"/>
@@ -1209,12 +1223,17 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TWY-oy-dJL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="DYi-a8-Eaa" userLabel="SwipeToClient">
+                    <connections>
+                        <action selector="swipeToClient:" destination="ecP-60-0hN" id="pIM-vN-9To"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-6565" y="513"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jTV-mD-1TY"/>
+        <segue reference="X25-mR-xtj"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Edit" width="30" height="30"/>

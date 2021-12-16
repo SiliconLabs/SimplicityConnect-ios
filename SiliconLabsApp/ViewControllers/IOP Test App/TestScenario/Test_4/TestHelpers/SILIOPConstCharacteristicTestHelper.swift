@@ -16,7 +16,7 @@ class SILIOPConstCharacteristicTestHelper {
     
     private var testCase: SILTestCase!
     private var peripheral: CBPeripheral!
-    private var peripheralDelegate: SILIOPTesterPeripheralDelegate!
+    private var peripheralDelegate: SILPeripheralDelegate!
     private var iopCentralManager: SILIOPTesterCentralManager!
     
     private var gattOperationsTestHelper: SILIOPGATTOperationsTestHelper
@@ -45,7 +45,7 @@ class SILIOPConstCharacteristicTestHelper {
     
     func injectParameters(parameters: Dictionary<String, Any>) {
         self.peripheral = parameters["peripheral"] as? CBPeripheral
-        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILIOPTesterPeripheralDelegate
+        self.peripheralDelegate = parameters["peripheralDelegate"] as? SILPeripheralDelegate
         self.iopCentralManager = parameters["iopCentralManager"] as? SILIOPTesterCentralManager
     }
     
@@ -62,7 +62,7 @@ class SILIOPConstCharacteristicTestHelper {
         subscribeToPeripheralDelegate()
         subscribeToCentralManager()
         
-        guard let iopTestCharacteristicTypes = gattOperationsTestHelper.findService(with: iopTestCharacteristicTypes, in: peripheral) else {
+        guard let iopTestCharacteristicTypes = peripheralDelegate.findService(with: iopTestCharacteristicTypes, in: peripheral) else {
             self.testResult.value = TestResult(passed: false, description: "Service IOP Characteristic Types not found.")
             return
         }
@@ -87,7 +87,7 @@ class SILIOPConstCharacteristicTestHelper {
                     return
                 }
                 
-                guard let iopTestCharacteristicTypesRWConstLen1 = weakSelf.gattOperationsTestHelper.findCharacteristic(with: weakSelf.iopTestCharacteristicTypesRWConstLen1, in: characteristics) else {
+                guard let iopTestCharacteristicTypesRWConstLen1 = weakSelf.peripheralDelegate.findCharacteristic(with: weakSelf.iopTestCharacteristicTypesRWConstLen1, in: characteristics) else {
                     weakSelf.testResult.value = TestResult(passed: false, description: "Characteristic Types RW Const Len 1 wasn't discovered.")
                     return
                 }
