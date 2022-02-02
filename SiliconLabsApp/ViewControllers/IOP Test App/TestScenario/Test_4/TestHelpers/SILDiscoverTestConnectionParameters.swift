@@ -112,7 +112,7 @@ class SILDiscoverTestConnectionParameters {
             guard let weakSelf = weakSelf else { return }
             switch status {
             case let .successForCharacteristics(characteristics):
-                switch characteristics.first?.service.uuid {
+                switch characteristics.first?.service?.uuid {
                 case weakSelf.deviceInformationService:
                     if !weakSelf.isVersionNumberLesserThan3_3_0 {
                         guard let modelNumberStringCharacteristic = weakSelf.peripheralDelegate.findCharacteristic(with: weakSelf.modelNumberStringCharacteristic,

@@ -175,7 +175,7 @@ class SILGattConfiguratorServiceHelper: SILGattConfiguratorServiceHelperType {
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        if let characteristic = self.characteristicMap[request.characteristic.service.uuid]?[request.characteristic.uuid], let value = characteristic.value {
+        if let service = request.characteristic.service, let characteristic = self.characteristicMap[service.uuid]?[request.characteristic.uuid], let value = characteristic.value {
             if request.offset > characteristic.value?.count ?? 0 {
                 peripheral.respond(to: request, withResult: .invalidOffset)
                 return
@@ -191,7 +191,7 @@ class SILGattConfiguratorServiceHelper: SILGattConfiguratorServiceHelperType {
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
         for request in requests {
-            if let characteristic = self.characteristicMap[request.characteristic.service.uuid]?[request.characteristic.uuid] {
+            if let service = request.characteristic.service, let characteristic = self.characteristicMap[service.uuid]?[request.characteristic.uuid] {
                 if request.offset > characteristic.value?.count ?? 0  {
                     peripheral.respond(to: request, withResult: .invalidOffset)
                     return
@@ -206,7 +206,7 @@ class SILGattConfiguratorServiceHelper: SILGattConfiguratorServiceHelperType {
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
-        if let characteristic = self.characteristicMap[characteristic.service.uuid]?[characteristic.uuid] {
+        if let service = characteristic.service, let characteristic = self.characteristicMap[service.uuid]?[characteristic.uuid] {
             if let value = characteristic.value {
                 peripheral.updateValue(value, for: characteristic, onSubscribedCentrals: [central])
             }
@@ -215,7 +215,7 @@ class SILGattConfiguratorServiceHelper: SILGattConfiguratorServiceHelperType {
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
-        if let characteristic = self.characteristicMap[characteristic.service.uuid]?[characteristic.uuid] {
+        if let service = characteristic.service, let characteristic = self.characteristicMap[service.uuid]?[characteristic.uuid] {
             print("Subscribed centrals of characteristic after unsubscription ", characteristic.subscribedCentrals ?? "")
         }
     }

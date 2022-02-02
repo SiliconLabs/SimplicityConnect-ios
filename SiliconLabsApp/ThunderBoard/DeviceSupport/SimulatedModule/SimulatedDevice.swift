@@ -85,6 +85,10 @@ class SimulatedDevice : Device, DemoConfiguration, Equatable, CustomDebugStringC
 //        }
     }
     
+    func isThunderboardDevice() -> Bool {
+        return true
+    }
+    
     var debugDescription: String {
         get { return "\(String(describing: name)): \(String(describing: deviceIdentifier)) \(capabilities) \(power)" }
     }

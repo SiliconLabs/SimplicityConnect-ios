@@ -198,7 +198,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func showDocumentPickerView() {
-        let documentPickerView = SILDocumentPickerViewController(documentTypes: ["public.gbl"], in: .import)
+        let documentPickerView = UIDocumentPickerViewController(documentTypes: ["public.gbl"], in: .import)
         documentPickerView.delegate = self
         UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.sil_regularBlue()], for: .normal)
         UINavigationBar.appearance().tintColor = UIColor.sil_regularBlue()

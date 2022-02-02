@@ -160,4 +160,12 @@ extension CBUUID {
     static let NumberOfDigitals = CBUUID(string: "0x2909")
     
     static let SenseRGBOutput = CBUUID(string: "FCB89C40-C603-59F3-7DC3-5ECE444A401B")
+    
+    static let RGBLeds = CBUUID(string: "fcb89c40-c603-59f3-7dc3-5ece444a401b")
+    
+    //
+    // Digital Descriptors
+    //
+    
+    static let RGBLedCount = CBUUID(string: "1c694489-8825-45cc-8720-28b54b1fbf00")
 }

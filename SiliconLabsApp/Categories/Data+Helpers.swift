@@ -21,6 +21,10 @@ extension Data {
         return value
     }
     
+    var hexDescription: String {
+        return reduce("") {$0 + String(format: "%02x", $1)}
+    }
+    
     fileprivate func convertData(data: Data) -> [UInt8] {
         return [UInt8](data)
     }
@@ -33,9 +37,5 @@ extension Data {
             value += (Int(byteValue) * shiftValueInt)
         }
         return value
-    }
-    
-    var hexDescription: String {
-        return reduce("") {$0 + String(format: "%02x", $1)}
     }
 }

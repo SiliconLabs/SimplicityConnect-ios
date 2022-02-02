@@ -59,7 +59,7 @@ class SILGattConfiguratorHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
     }
     
     func showDocumentPickerView() {
-        let documentPickerView = SILDocumentPickerViewController(documentTypes: ["public.xml", "public.btconf"], in: .import)
+        let documentPickerView = UIDocumentPickerViewController(documentTypes: ["public.xml", "public.btconf"], in: .import)
         documentPickerView.delegate = viewController as? SILGattConfiguratorHomeViewController
         UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.sil_regularBlue()], for: .normal)
         UINavigationBar.appearance().tintColor = UIColor.sil_regularBlue()

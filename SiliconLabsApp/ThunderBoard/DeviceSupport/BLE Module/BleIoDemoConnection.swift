@@ -215,7 +215,7 @@ class BleIoDemoConnection: IoDemoConnection {
         // 0010 0x02 back, upper
         // 0100 0x04 front, upper
         // 1000 0x08 front, lower (near USB)
-        let enabledLeds = on ? UInt8(0x0F) : UInt8(0x00)
+        let enabledLeds = on ? bleDevice.turnOnRGBLedCommand : UInt8(0x00)
         return Data(bytes: [enabledLeds,
                             UInt8(color.red * 255),
                             UInt8(color.green * 255),

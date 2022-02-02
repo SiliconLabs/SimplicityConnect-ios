@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YQW-bh-9K2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YQW-bh-9K2">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -93,7 +93,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="689"/>
                                                 <subviews>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IUq-wf-AF7" userLabel="Develop Apps Tiles">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="689"/>
+                                                        <rect key="frame" x="8" y="8" width="398" height="673"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" sectionInsetReference="layoutMargins" id="Xr2-uL-3jP">
                                                             <size key="itemSize" width="50" height="50"/>
@@ -107,10 +107,10 @@
                                                 <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
-                                                    <constraint firstItem="IUq-wf-AF7" firstAttribute="height" secondItem="XE9-Kf-lc6" secondAttribute="height" id="1Uc-TN-4Se"/>
+                                                    <constraint firstItem="IUq-wf-AF7" firstAttribute="height" secondItem="XE9-Kf-lc6" secondAttribute="height" constant="-16" id="1Uc-TN-4Se"/>
                                                     <constraint firstItem="IUq-wf-AF7" firstAttribute="centerY" secondItem="XE9-Kf-lc6" secondAttribute="centerY" id="4jt-vp-Omy"/>
                                                     <constraint firstItem="IUq-wf-AF7" firstAttribute="centerX" secondItem="XE9-Kf-lc6" secondAttribute="centerX" id="LvU-Yk-HzN"/>
-                                                    <constraint firstItem="IUq-wf-AF7" firstAttribute="width" secondItem="XE9-Kf-lc6" secondAttribute="width" id="QRJ-Fk-fQg"/>
+                                                    <constraint firstItem="IUq-wf-AF7" firstAttribute="width" secondItem="XE9-Kf-lc6" secondAttribute="width" constant="-16" id="QRJ-Fk-fQg"/>
                                                 </constraints>
                                                 <connections>
                                                     <outletCollection property="gestureRecognizers" destination="e7N-ND-Z5A" appends="YES" id="c4d-nj-cIj"/>
@@ -263,7 +263,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="689"/>
                                                 <subviews>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="c2W-U7-agv" userLabel="Demo Apps Tiles">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="689"/>
+                                                        <rect key="frame" x="8" y="8" width="398" height="673"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" sectionInsetReference="layoutMargins" id="kgj-OC-Zr6">
                                                             <size key="itemSize" width="50" height="50"/>
@@ -276,8 +276,8 @@
                                                 </subviews>
                                                 <gestureRecognizers/>
                                                 <constraints>
-                                                    <constraint firstItem="c2W-U7-agv" firstAttribute="height" secondItem="dmg-ac-Vey" secondAttribute="height" id="713-PU-Avo"/>
-                                                    <constraint firstItem="c2W-U7-agv" firstAttribute="width" secondItem="dmg-ac-Vey" secondAttribute="width" id="TUq-hb-sFY"/>
+                                                    <constraint firstItem="c2W-U7-agv" firstAttribute="height" secondItem="dmg-ac-Vey" secondAttribute="height" constant="-16" id="713-PU-Avo"/>
+                                                    <constraint firstItem="c2W-U7-agv" firstAttribute="width" secondItem="dmg-ac-Vey" secondAttribute="width" constant="-16" id="TUq-hb-sFY"/>
                                                     <constraint firstItem="c2W-U7-agv" firstAttribute="centerX" secondItem="dmg-ac-Vey" secondAttribute="centerX" id="bGZ-Oh-2qN"/>
                                                     <constraint firstItem="c2W-U7-agv" firstAttribute="centerY" secondItem="dmg-ac-Vey" secondAttribute="centerY" id="kmj-YD-gUe"/>
                                                 </constraints>

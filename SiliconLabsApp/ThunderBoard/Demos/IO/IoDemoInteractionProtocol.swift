@@ -12,6 +12,7 @@ protocol IoDemoInteractionOutput : class {
     func showButtonState(_ button: Int, pressed: Bool)
     func showLedState(_ led: Int, state: LedState)
     func disableRgb()
+    func disableLeds()
     func enable(_ enable: Bool, led ledNo: Int)
     func enable(_ enable: Bool, switch switchNo: Int)
 }

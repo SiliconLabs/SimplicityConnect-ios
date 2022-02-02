@@ -16,7 +16,7 @@ extension Device {
             return [ LedStaticColor.blue, LedStaticColor.green ][index]
         case .sense:
             return [ LedStaticColor.red, LedStaticColor.green ][index]
-        case .unknown:
+        case .unknown, .bobcat:
             return .green
         }
     }

@@ -578,7 +578,9 @@ extension SILRangeTestPeripheral: CBPeripheralDelegate {
             return
         }
         
-        let serviceUUID = characteristic.service.uuid
+        guard let serviceUUID = characteristic.service?.uuid else {
+            return
+        }
         let characteristicUUID = characteristic.uuid
         
         guard let rtCharacteristic = characteristics[serviceUUID]?[characteristicUUID] else {
@@ -615,8 +617,13 @@ extension SILRangeTestPeripheral: CBPeripheralDelegate {
             return
         }
         
-        let serviceUUID = descriptor.characteristic.service.uuid
-        let characteristicUUID = descriptor.characteristic.uuid
+        guard let characteristicUUID = descriptor.characteristic?.uuid else {
+            return
+        }
+        
+        guard let serviceUUID = descriptor.characteristic?.service?.uuid else {
+            return
+        }
         
         guard let rtCharacteristic = characteristics[serviceUUID]?[characteristicUUID] else {
             return
@@ -637,8 +644,10 @@ extension SILRangeTestPeripheral: CBPeripheralDelegate {
             return
         }
         
-        let serviceUUID = characteristic.service.uuid
         let characteristicUUID = characteristic.uuid
+        guard let serviceUUID = characteristic.service?.uuid else {
+            return
+        }
         
         guard let rtCharacteristic = characteristics[serviceUUID]?[characteristicUUID] else {
             return

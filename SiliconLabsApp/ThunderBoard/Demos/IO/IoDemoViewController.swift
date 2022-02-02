@@ -7,6 +7,22 @@
 
 import UIKit
 
+fileprivate struct IOSectionViewData {
+    enum SectionType {
+        case switches
+        case leds
+        case rgb
+    }
+    
+    let type: SectionType
+    let rows: [IORowViewData]
+}
+
+fileprivate struct IORowViewData {
+    var identifier: String
+    var height: CGFloat
+}
+
 @IBDesignable
 class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, ConnectedDeviceDelegate,
                             SILThunderboardConnectedDeviceBar {
@@ -31,13 +47,32 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
     let brightnessString = "BRIGHTNESS"
     let switchesString   = "SWITCHES"
     let lightsString     = "LIGHTS"
-
     
     let rgbLEDPositionNo = 2
     let switchMaxNo = 2
 
     var interaction: IoDemoInteraction?
     var deviceConnector: DeviceConnection?
+    
+    private var rgbLedSection: Int {
+        get {
+            guard let rgbLedSectionIndex = cellsData.firstIndex(where: { $0.type == .rgb }) else {
+                return 2
+            }
+            return rgbLedSectionIndex
+        }
+    }
+    
+    private var cellsData = [
+        IOSectionViewData(type: .switches, rows: [IORowViewData(identifier: "SwitchStatusCell", height: 85)]),
+        IOSectionViewData(type: .leds, rows: [IORowViewData(identifier: "LightsCell", height: 64)]),
+        IOSectionViewData(type: .rgb, rows: [
+            IORowViewData(identifier: "RGBCell", height: 64),
+            IORowViewData(identifier: "StrengthCell", height: 64),
+            IORowViewData(identifier: "ColorCell", height: 70),
+            IORowViewData(identifier: "BrightnessCell", height: 90)
+        ])
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,9 +99,10 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
         interaction?.turnOffLed(1)
         interaction?.turnOffLed(2)
         tableView.reloadData()
-        let cell: LightsCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! LightsCell
-        cell.lights[0].isOn = false
-        cell.lights[1].isOn = false
+        if let cell: LightsCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? LightsCell {
+            cell.lights[0].isOn = false
+            cell.lights[1].isOn = false
+        }
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -146,14 +182,21 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
         var hue: CGFloat = 0.0
         color.getHue(&hue, saturation: nil, brightness: &brightness, alpha: nil)
         let imageColor = UIColor(hue: hue, saturation: 1.0, brightness: 1.0, alpha: brightness)
-        guard let cell: StrengthCell = tableView.cellForRow(at: IndexPath(row: 1, section: 2)) as? StrengthCell else { return }
+        guard let cell: StrengthCell = tableView.cellForRow(at: IndexPath(row: 1, section: rgbLedSection)) as? StrengthCell else { return }
         cell.barView.color = on ? imageColor : StyleColor.gray
     }
     
-    var rgbEnabled = true
-    
     func disableRgb() {
-        rgbEnabled = false
+        if let rgbCellIndex = cellsData.firstIndex(where: { $0.type == .rgb }) {
+            cellsData.remove(at: rgbCellIndex)
+        }
+        self.tableView.reloadData()
+    }
+    
+    func disableLeds() {
+        if let ledsCellIndex = cellsData.firstIndex(where: { $0.type == .leds }) {
+            cellsData.remove(at: ledsCellIndex)
+        }
         self.tableView.reloadData()
     }
     
@@ -176,8 +219,8 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
     //MARK: - Internal
     
     fileprivate func colorForSliderValues() -> LedRgb? {
-        guard let colorCell: ColorCell = tableView?.cellForRow(at: IndexPath(row: 2, section: 2)) as? ColorCell else { return  nil}
-        guard let brightnessCell: BrightnessCell = tableView?.cellForRow(at: IndexPath(row: 3, section: 2)) as? BrightnessCell else { return nil }
+        guard let colorCell: ColorCell = tableView?.cellForRow(at: IndexPath(row: 2, section: rgbLedSection)) as? ColorCell else { return  nil}
+        guard let brightnessCell: BrightnessCell = tableView?.cellForRow(at: IndexPath(row: 3, section: rgbLedSection)) as? BrightnessCell else { return nil }
         guard let hue = colorCell.colorSlider?.value, let brightness = brightnessCell.slider?.value else { return nil }
         
         let color = UIColor(hue: CGFloat(hue), saturation: 1.0, brightness: CGFloat(brightness), alpha: 1.0)
@@ -216,31 +259,19 @@ extension UISlider {
 extension IoDemoViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if rgbEnabled {
-            return 3
-        }
-        return 2
+        return cellsData.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return 1
-        case 2:
-            return 4
-        default:
-            return 0
-        }
+        return cellsData[section].rows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            switch indexPath.row {
-            case 0:
-                let cell: SwitchStatusCell = tableView.dequeueReusableCell(withIdentifier: "SwitchStatusCell", for: indexPath) as! SwitchStatusCell
+        let cellData = cellsData[indexPath.section].rows[indexPath.row]
+        let identifier = cellData.identifier
+        switch identifier {
+        case "SwitchStatusCell":
+            if let cell: SwitchStatusCell = tableView.dequeueReusableCell(withIdentifier: "SwitchStatusCell", for: indexPath) as? SwitchStatusCell {
                 for switchView in cell.switches {
                     switchView.isHidden = true
                 }
@@ -254,13 +285,9 @@ extension IoDemoViewController: UITableViewDataSource {
                     }
                 }
                 return cell
-            default:
-                break
             }
-        case 1:
-            switch indexPath.row {
-            case 0:
-                let cell: LightsCell = tableView.dequeueReusableCell(withIdentifier: "LightsCell", for: indexPath) as! LightsCell
+        case "LightsCell":
+            if let cell: LightsCell = tableView.dequeueReusableCell(withIdentifier: "LightsCell", for: indexPath) as? LightsCell {
                 cell.titleLabel.text = NSLocalizedString("led", comment: "")
                 for led in cell.lights {
                     led.isHidden = true
@@ -275,70 +302,47 @@ extension IoDemoViewController: UITableViewDataSource {
                     cell.titleLabel.text = NSLocalizedString("leds", comment: "")
                 }
                 return cell
-            default:
-                break
             }
-        case 2:
-            switch indexPath.row {
-            case 0:
-                let cell: RGBCell = tableView.dequeueReusableCell(withIdentifier: "RGBCell", for: indexPath) as! RGBCell
+        case "RGBCell":
+            if let cell: RGBCell = tableView.dequeueReusableCell(withIdentifier: "RGBCell", for: indexPath) as? RGBCell {
                 cell.titleLabel.text = NSLocalizedString("rgb_leds", comment: "")
                 cell.lightSwitch.isOn = showRGB
                 cell.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
                 return cell
-            case 1:
-                let cell: StrengthCell = tableView.dequeueReusableCell(withIdentifier: "StrengthCell", for: indexPath) as! StrengthCell
+            }
+        case "StrengthCell":
+            if let cell: StrengthCell = tableView.dequeueReusableCell(withIdentifier: "StrengthCell", for: indexPath) as? StrengthCell {
                 cell.barView.isUserInteractionEnabled = showRGB
                 return cell
-            case 2:
-                let cell: ColorCell = tableView.dequeueReusableCell(withIdentifier: "ColorCell", for: indexPath) as! ColorCell
+            }
+        case "ColorCell":
+            if let cell: ColorCell = tableView.dequeueReusableCell(withIdentifier: "ColorCell", for: indexPath) as? ColorCell {
                 cell.colorSlider.isEnabled = showRGB
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.colorSliderChanged(cell.colorSlider)
                 }
                 return cell
-            case 3:
-                let cell: BrightnessCell = tableView.dequeueReusableCell(withIdentifier: "BrightnessCell", for: indexPath) as! BrightnessCell
+            }
+        case "BrightnessCell":
+            if let cell: BrightnessCell = tableView.dequeueReusableCell(withIdentifier: "BrightnessCell", for: indexPath) as? BrightnessCell {
                 cell.slider.isEnabled = showRGB
                 cell.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMaxXMaxYCorner]
                 return cell
-            default:
-                break
             }
         default:
             break
         }
-        return tableView.dequeueReusableCell(withIdentifier: "BlankCell", for: indexPath)
+        return UITableViewCell()
     }
 }
 
 extension IoDemoViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 85
-        case 1:
-            return 64
-        case 2:
-            switch indexPath.row {
-            case 0:
-                return 64
-            case 1:
-                return 64
-            case 2:
-                return 70
-            case 3:
-                return 90
-            default:
-                return 0
-            }
-        default:
-            return 0
-        }
+        return cellsData[indexPath.section].rows[indexPath.row].height
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         SILTableViewWithShadowCells.tableView(tableView, willDisplay: cell, forRowAt: indexPath)
-      }
+    }
 }

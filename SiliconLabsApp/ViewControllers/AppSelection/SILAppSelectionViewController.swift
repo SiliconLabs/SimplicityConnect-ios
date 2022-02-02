@@ -194,19 +194,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.presentDeviceSelectionViewController(app: app, animated: true)
         
         case .typeBlinky:
-            self.presentThunderboardDeviceSelection(app: app, animated: true) {
-                $0.name!.hasPrefix("Thunder") || $0.name!.hasPrefix("TBS") || $0.name!.hasPrefix("Blinky")
-            }
+            self.presentThunderboardDeviceSelection(app: app, animated: true) { $0.isThunderboardDevice() || $0.name!.hasPrefix("Blinky") }
         
         case .typeMotion:
-            self.presentThunderboardDeviceSelection(app: app, animated: true) {
-                $0.name!.hasPrefix("Thunder") || $0.name!.hasPrefix("TBS")
-            }
+            self.presentThunderboardDeviceSelection(app: app, animated: true) { $0.isThunderboardDevice() }
             
         case .typeEnvironment:
-            self.presentThunderboardDeviceSelection(app: app, animated: true) {
-                $0.name!.hasPrefix("Thunder") || $0.name!.hasPrefix("TBS")
-            }
+            self.presentThunderboardDeviceSelection(app: app, animated: true) { $0.isThunderboardDevice() }
             
         case .typeThroughput:
             peripheralManager = SILThroughputPeripheralManager()
@@ -241,7 +235,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             
         case .typeHomeKitDebug:
             self.showHomeKitDebug(app: app, animated: true)
-            
+
         case .typeGATTConfigurator:
             self.showGattConfigurator(app: app, animated: true)
             
@@ -343,7 +337,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             }
         }
     }
-
+    
     func didDismissDeviceSelectionViewController() {
         if let peripheralManager = peripheralManager {
             peripheralManager.stopAdvertising()
@@ -423,7 +417,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         self.devicePopoverController?.dismissPopover(animated: true) {
             switch appType {
             case .typeMotion:
-                if let motionConnection = connection as? MotionDemoConnection, motionConnection.device.model == .sense {
+                if let motionConnection = connection as? MotionDemoConnection, motionConnection.device.model == .sense || motionConnection.device.model == .bobcat {
                     self.displayMotion(connection: motionConnection, deviceConnector: deviceConnector)
                 }
             case .typeEnvironment:

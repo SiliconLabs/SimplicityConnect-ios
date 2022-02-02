@@ -24,6 +24,7 @@ enum DeviceModel {
     case unknown
     case react
     case sense
+    case bobcat
 }
 
 enum DeviceCapability {
@@ -80,6 +81,7 @@ protocol Device : DemoConfiguration {
     
     func ledColor(_ index: Int) -> LedStaticColor
     func displayName() -> String
+    func isThunderboardDevice() -> Bool
 }
 
 func ==(lhs: PowerSource, rhs: PowerSource) -> Bool {

@@ -555,8 +555,8 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     func write(toLocalCharacteristic characteristicModel: SILCharacteristicTableModel!, asLocalIndicate: Bool) throws {
         do {
             let data = try characteristicModel.getDataToWritingToLocalCharacteristic()
-            if let characteristic = characteristicModel.characteristic {
-                let service = characteristic.service
+            if let characteristic = characteristicModel.characteristic,
+               let service = characteristic.service {
                 if !asLocalIndicate {
                     debugPrint("set local")
                     gattConfiguratorService.writeToLocalCharacteristic(data: data, service: service, characteristic: characteristic)

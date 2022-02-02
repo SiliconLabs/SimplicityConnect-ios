@@ -27,6 +27,11 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
             notifyConnectedDelegate()
         }
     }
+    
+    var manufacturerData: Data?
+    private let thunderboardManufacturerIdentifier = 0x0047
+    private let thunderboardManufacturerData: [UInt8] = [2, 0]
+    
     var RSSI: Int? {
         didSet {
             notifyConnectedDelegate()
@@ -69,6 +74,8 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
             notifyDeviceIdentifierChanged()
         }
     }
+    
+    var turnOnRGBLedCommand = UInt8(0x0F)
 
     fileprivate (set) var capabilities: Set<DeviceCapability> = []
 
@@ -112,6 +119,13 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
         didSet {
             notifyConnectedDelegate()
         }
+    }
+    
+    func isThunderboardDevice() -> Bool {
+        if let manufacturerData = manufacturerData {
+            return manufacturerData.checkManufacturerData(manufacturerIdentifier: self.thunderboardManufacturerIdentifier, manufacturerData: self.thunderboardManufacturerData)
+        }
+        return false
     }
     
     fileprivate func notifyConnectedDelegate() {
@@ -363,6 +377,9 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
             case CBUUID.PowerSourceCharacteristicCustom:
                 peripheral.readValue(for: $0)
                 
+            case CBUUID.RGBLeds:
+                peripheral.discoverDescriptors(for: $0)
+                
             default:
                 // read all supported values
                 if $0.tb_supportsRead() {
@@ -372,11 +389,37 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
         })
     }
     
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
+        if let error = error {
+            debugPrint("Thunderboard discovering descriptor error: ", error.localizedDescription)
+            return
+        }
+        
+        guard let descriptors = characteristic.descriptors else {
+            return
+        }
+        
+        if let rgbLedCountDescriptor = descriptors.first(where: { $0.uuid == CBUUID.RGBLedCount }) {
+            peripheral.readValue(for: rgbLedCountDescriptor)
+        }
+    }
+    
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         dispatch_main_sync {
             if error == nil {
                 self.characteristicDidWriteHook?(characteristic)
             }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
+        if let error = error {
+            debugPrint("Thunderboard reading descriptor value error: ", error.localizedDescription)
+            return
+        }
+        
+        if descriptor.uuid == CBUUID.RGBLedCount, let value = descriptor.value as? Data, let command = value.bytes.first {
+            self.turnOnRGBLedCommand = command
         }
     }
     
@@ -401,6 +444,8 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
                     case "BRD4160A": fallthrough
                     case "BRD4166A", "BRD4184A", "BRD4184B":
                         self.model = .sense
+                    case "BRD2601A", "BRD2601B":
+                        self.model = .bobcat
                     default:
                         self.model = .unknown
                     }

@@ -12,6 +12,12 @@ class IoDemoInteraction: IoDemoConnectionDelegate {
     fileprivate weak var output: IoDemoInteractionOutput?
     fileprivate var connection: IoDemoConnection?
 
+    var isBobcatDevice: Bool {
+        get {
+            return self.connection?.device.model == .bobcat
+        }
+    }
+    
     //MARK: Public
     
     init(output: IoDemoInteractionOutput?, demoConnection: IoDemoConnection) {
@@ -37,6 +43,10 @@ class IoDemoInteraction: IoDemoConnectionDelegate {
         
         if connection.capabilities.contains(.rgbOutput) == false {
             output?.disableRgb()
+        }
+        
+        if connection.device.model == .bobcat {
+            output?.disableLeds()
         }
     }
         
