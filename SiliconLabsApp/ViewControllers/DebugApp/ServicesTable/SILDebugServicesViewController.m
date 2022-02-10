@@ -770,10 +770,22 @@ static float kTableRefreshInterval = 1;
 
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestNotifyForCharacteristic:(CBCharacteristic *)characteristic withValue:(BOOL)value {
     [self.peripheral setNotifyValue:value forCharacteristic:characteristic];
+    [self updateClientCharacteristicConfigurationDescriptorValueForCharacteristic:characteristic];
 }
 
 - (void)cell:(SILDebugCharacteristicTableViewCell *)cell didRequestIndicateForCharacteristic:(CBCharacteristic *)characteristic withValue:(BOOL)value {
     [self.peripheral setNotifyValue:value forCharacteristic:characteristic];
+    [self updateClientCharacteristicConfigurationDescriptorValueForCharacteristic:characteristic];
+}
+
+- (void)updateClientCharacteristicConfigurationDescriptorValueForCharacteristic:(CBCharacteristic *)characteristic {
+    for (CBDescriptor *descriptor in characteristic.descriptors) {
+        if ([descriptor.UUID.UUIDString isEqual:CBUUIDClientCharacteristicConfigurationString]) {
+            [self.peripheral readValueForDescriptor:descriptor];
+            break;
+        }
+    }
+    [self refreshTable];
 }
 
 #pragma mark = SILDescriptorsTableViewCellDelegate

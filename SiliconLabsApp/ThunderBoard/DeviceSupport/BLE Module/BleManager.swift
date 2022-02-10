@@ -220,8 +220,7 @@ class BleManager: NSObject, CBCentralManagerDelegate, DeviceScanner, DeviceConne
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         // RSSI value 127 is Apple-reserved and indicates the RSSI value could not be read.
         guard RSSI.intValue != 127,
-            let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String,
-            let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data else {
+              let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String else {
             return
         }
         
@@ -229,7 +228,9 @@ class BleManager: NSObject, CBCentralManagerDelegate, DeviceScanner, DeviceConne
         
         device.name = peripheralName
         device.RSSI = RSSI.intValue
-        device.manufacturerData = manufacturerData
+        if let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data {
+            device.manufacturerData = manufacturerData
+        }
         
         if device.advertisementDataLocalName == nil {
             device.advertisementDataLocalName = peripheralName

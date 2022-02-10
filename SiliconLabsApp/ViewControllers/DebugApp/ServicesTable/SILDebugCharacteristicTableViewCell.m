@@ -199,6 +199,7 @@
         [self.characteristicTableModel expandFieldIfNeeded];
     }
     [self.delegate cell:self didRequestIndicateForCharacteristic:self.characteristic withValue:newNotifyingValue];
+    [self prepareClientCharacteristicConfigurationDescriptorModelToUpdateCell];
 }
 
 - (IBAction)handleNotifyViewTap:(id)sender {
@@ -208,11 +209,21 @@
         [self.characteristicTableModel expandFieldIfNeeded];
     }
     [self.delegate cell:self didRequestNotifyForCharacteristic:self.characteristic withValue:newNotifyingValue];
+    [self prepareClientCharacteristicConfigurationDescriptorModelToUpdateCell];
 }
 
 - (IBAction)editName:(UIButton *)sender {
     if (_delegate != nil) {
         [_delegate editNameWithCell:self];
+    }
+}
+
+- (void)prepareClientCharacteristicConfigurationDescriptorModelToUpdateCell {
+    for (SILDescriptorTableModel* descriptorModel in self.descriptorModels) {
+        if ([descriptorModel.uuidString isEqual:CBUUIDClientCharacteristicConfigurationString]) {
+            descriptorModel.shouldReadValue = YES;
+            break;
+        }
     }
 }
 

@@ -75,9 +75,9 @@ class SILBrowserDescriptorValueParser: NSObject {
     }
     
     private func getEnvironmentalSensingConfiguration(bytes: [UInt8]) -> String {
-        let firstByte = uint8ToInt(bytes[0])
+        let lastByte = uint8ToInt(bytes.last!)
 
-        switch (firstByte) {
+        switch (lastByte) {
         case 0: return "Boolean AND"
         case 1: return "Boolean OR"
         default: return "Unknown value: 0x\(bytesToHexString(bytes))"
@@ -85,16 +85,16 @@ class SILBrowserDescriptorValueParser: NSObject {
     }
 
     private func getCharacteristicExtendedProperties(bytes: [UInt8]) -> String {
-        let firstByte = bytes[0]
+        let lastByte = bytes.last!
         var result = ""
 
-        if firstByte & 0b0000_0001 == 1 {
+        if lastByte & 0b0000_0001 == 1 {
             result.append("Reliable Write enabled, ")
         } else {
             result.append("Reliable Write disabled, ")
         }
 
-        if firstByte & 0b0000_0010 == 2 {
+        if lastByte & 0b0000_0010 == 2 {
             result.append("Writable Auxiliaries enabled, ")
         } else {
             result.append("Writable Auxiliaries disabled, ")
@@ -112,16 +112,16 @@ class SILBrowserDescriptorValueParser: NSObject {
     }
 
     private func getClientCharacteristicConfiguration(bytes: [UInt8]) -> String {
-        let firstByte = bytes[0]
+        let lastByte = bytes[bytes.count - 1]
         var result = ""
 
-        if firstByte & 0b0000_0001 == 1 {
+        if lastByte & 0b0000_0001 == 1 {
             result.append("Notifications enabled, ")
         } else {
             result.append("Notifications disabled, ")
         }
         
-        if firstByte & 0b0000_0010 == 2 {
+        if lastByte & 0b0000_0010 == 2 {
             result.append("Indications enabled, ")
         } else {
             result.append("Indications disabled, ")
@@ -135,13 +135,13 @@ class SILBrowserDescriptorValueParser: NSObject {
     }
 
     private func getServerCharacteristicConfiguration(bytes: [UInt8]) -> String {
-        let firstByte = bytes[0]
+        let lastByte = bytes.last!
 
-        return firstByte & 0b0000_0001 == 1 ? "Broadcasts enabled" : "Broadcasts disabled"
+        return lastByte & 0b0000_0001 == 1 ? "Broadcasts enabled" : "Broadcasts disabled"
     }
 
     private func getNumberOfDigitals(bytes: [UInt8]) -> String {
-        let intValue = uint8ToInt(bytes[0])
+        let intValue = uint8ToInt(bytes.last!)
         return String(intValue)
     }
 
