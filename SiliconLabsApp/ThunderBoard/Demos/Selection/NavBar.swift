@@ -9,16 +9,6 @@
 import UIKit
 
 class NavBar: UIView {
-
-    
-    @IBOutlet weak var height: NSLayoutConstraint!
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if UIDevice.current.hasNoth {
-            height.constant = 148
-        }
-    }
     
     override func draw(_ rect: CGRect) {
            super.draw(rect)

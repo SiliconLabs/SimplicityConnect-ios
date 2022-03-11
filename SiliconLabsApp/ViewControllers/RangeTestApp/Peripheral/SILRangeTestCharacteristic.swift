@@ -195,4 +195,8 @@ extension SILRangeTestCharacteristic {
             return false
         }
     }
+    
+    func getServiceCharacteristicEnum() -> SILRangeTestServiceCharacteristics? {
+        return SILRangeTestCharacteristic.rangeTestServiceCharacteristics.first(where: { $1 == self.uuid.uuidString.lowercased() })?.key
+    }
 }

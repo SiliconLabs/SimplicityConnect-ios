@@ -24,8 +24,6 @@ protocol SILRangeTestAppViewModelDelegate: class {
     func updated(totalTx: Int)
     func updated(ma: Float)
     func updated(per: Float)
-    
-    func bluetoothIsDisabled()
 }
 
 @objcMembers
@@ -55,6 +53,10 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
         }
     }
     
+    private var waitingForDisconnectTimer: Timer?
+    private var shouldDisconnect = false
+    private weak var bluetoothConnectionsHandler: SILRangeTestBluetoothConnectionsHandler?
+    
     let peripheral: SILRangeTestPeripheral
     let mode: SILRangeTestMode
     let boardInfo: SILRangeTestBoardInfo
@@ -68,6 +70,7 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
                 peripheral.setIsRunning(isTestStarted)
                 
                 if isTestStarted {
+                    shouldDisconnect = mode == .RX
                     startTest()
                 } else {
                     stopTest()
@@ -100,15 +103,17 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
         }
     }
     
-    init(withMode mode: SILRangeTestMode, peripheral: SILRangeTestPeripheral, andBoardInfo boardInfo: SILRangeTestBoardInfo) {
+    init(withMode mode: SILRangeTestMode, peripheral: SILRangeTestPeripheral, boardInfo: SILRangeTestBoardInfo, bluetoothConnectionsHandler: SILRangeTestBluetoothConnectionsHandler?) {
         self.mode = mode
         self.peripheral = peripheral
         self.boardInfo = boardInfo
+        self.bluetoothConnectionsHandler = bluetoothConnectionsHandler
         
         super.init()
         
         self.peripheral.delegate = self
         self.registerForPeripheralValuesUpdates()
+        self.bluetoothConnectionsHandler?.addConnectedPeripheral(self.peripheral.peripheral)
     }
     
     func getAllAvailableSettings() -> [SILRangeTestSetting] {
@@ -222,12 +227,19 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
     func didUpdate(connectionState: CBPeripheralState) {
         if connectionState == .connected {
             self.registerForPeripheralValuesUpdates()
+            return
+        }
+        if connectionState == .disconnected {
+            if shouldDisconnect {
+                isTestStarted = true
+            } else {
+                bluetoothConnectionsHandler?.deviceDidDisconnect()
+            }
         }
     }
     
     func didUpdate(manufacturerData: SILRangeTestManufacturerData?) {
         guard let manufData = manufacturerData else {
-            handleMissingManufacturerData()
             return
         }
         
@@ -247,13 +259,26 @@ class SILRangeTestAppViewModel : NSObject, SILRangeTestPeripheralDelegate {
     }
     
     func bluetoothIsDisabled() {
-        delegate?.bluetoothIsDisabled()
+        bluetoothConnectionsHandler?.bluetoothIsDisabled()
     }
     
-    private func handleMissingManufacturerData() {
-        isTestStarted = false
-        peripheral.connect()
-        registerForPeripheralValuesUpdates()
+    func didGetNotificationFromIsRunningCharacteristic() {
+        if self.mode == .RX {
+            runWaitingForDisconnectTimer()
+        }
+    }
+    
+    func disconnect() {
+        peripheral.clearCallbacks()
+        peripheral.delegate = nil
+        peripheral.disconnect()
+    }
+    
+    private func runWaitingForDisconnectTimer() {
+        self.shouldDisconnect = true
+        self.waitingForDisconnectTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            self.shouldDisconnect = false
+        }
     }
     
     private func startTest() {

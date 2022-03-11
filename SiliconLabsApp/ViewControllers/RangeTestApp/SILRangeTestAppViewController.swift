@@ -10,6 +10,7 @@ import UIKit
 import ActionSheetPicker_3_0
 import ChameleonFramework
 import Charts
+import SVProgressHUD
 
 fileprivate struct Constants {
     static let sliderGrey = UIColor(red:0.85, green:0.84, blue:0.84, alpha:1.00)
@@ -76,9 +77,7 @@ class SILRangeTestAppViewController: UIViewController {
         super.willMove(toParent: parent)
         
         if (parent == nil) {
-            viewModel.peripheral.clearCallbacks()
-            viewModel.peripheral.delegate = nil
-            viewModel.peripheral.disconnect()
+            self.viewModel.disconnect()
             
             UIApplication.shared.isIdleTimerDisabled = false;
         }
@@ -88,11 +87,15 @@ class SILRangeTestAppViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
+    deinit {
+        self.viewModel.disconnect()
+    }
+    
     private func setTabDeviceName() {
         let setDeviceName = self.sil_useContext(type: SILSetTabDeviceName.self)
         setDeviceName?.invoke(viewModel.peripheral.discoveredPeripheral()?.advertisedLocalName ?? "Unknown")
     }
-    
+  
     private func prepareUI() {
         let isRxMode = viewModel.mode == .RX
         let isTxMode = viewModel.mode == .TX
@@ -434,14 +437,6 @@ extension SILRangeTestAppViewController : SILRangeTestAppViewModelDelegate {
         guard viewModel.mode == .RX else { return }
         
         updateLabel(per: per)
-    }
-    
-    func bluetoothIsDisabled() {
-        let bluetoothDisabledAlert = SILBluetoothDisabledAlert.rangeTest
-        self.alertWithOKButton(title: bluetoothDisabledAlert.title,
-                               message: bluetoothDisabledAlert.message,
-                               completion: { [weak self] _ in self?.navigationController?.popToRootViewController(animated: true)
-                               })
     }
 }
 

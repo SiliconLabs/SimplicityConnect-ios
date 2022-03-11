@@ -10,6 +10,7 @@ import UIKit
 
 //MARK: - Peripheral delegate
 protocol SILRangeTestPeripheralDelegate: class {
+    func didGetNotificationFromIsRunningCharacteristic()
     func didUpdate(connectionState: CBPeripheralState)
     func didUpdate(manufacturerData: SILRangeTestManufacturerData?)
     func bluetoothIsDisabled()
@@ -23,7 +24,7 @@ class SILRangeTestPeripheral: NSObject {
     private typealias Characteristics = [CBUUID: [CBUUID: SILRangeTestCharacteristic]]
     private typealias ValueCallbacks = [CBUUID: [CBUUID: (SILRangeTestCharacteristic) -> Void]]
     
-    private var peripheral: CBPeripheral
+    var peripheral: CBPeripheral
     private let manager: SILCentralManager
     private var valuesCallbacks: ValueCallbacks = [:]
     private var characteristics: Characteristics = [:]
@@ -67,7 +68,7 @@ class SILRangeTestPeripheral: NSObject {
     }
     
     func disconnect() {
-        manager.disconnectConnectedPeripheral()
+        manager.disconnect(from: peripheral)
     }
     
     private func prepareCharacteristics() {
@@ -585,6 +586,12 @@ extension SILRangeTestPeripheral: CBPeripheralDelegate {
         
         guard let rtCharacteristic = characteristics[serviceUUID]?[characteristicUUID] else {
             return
+        }
+        
+        // when RX is started we get notification without changing characteristic value, so callback in self.valuesCallbacks won't be called
+        // We have to inform the delegate about getting this notification, because if in a short time device will disconnect it means the test's started.
+        if rtCharacteristic.getServiceCharacteristicEnum() == .isRunning {
+            delegate?.didGetNotificationFromIsRunningCharacteristic()
         }
         
         let containsNewValues = rtCharacteristic.update(withCharacteristic: characteristic)

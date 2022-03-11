@@ -16,6 +16,7 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
     private let centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
     
     private var popoverController: WYPopoverController?
+    weak var bluetoothConnectionsHandler: SILRangeTestBluetoothConnectionsHandler?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,9 +38,7 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
         self.popoverController?.dismissPopover(animated: false)
         
         let viewModel = SILDeviceSelectionViewModel(appType: app)
-        viewModel?.filter = { discoveredPeripheral in
-            return discoveredPeripheral?.isRangeTest ?? false
-        }
+        viewModel?.filter = bluetoothConnectionsHandler?.filter
         
         let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel!)
         
@@ -78,7 +77,10 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
         self.popoverController?.dismissPopover(animated: true) {
             let storyboard = UIStoryboard(name: "SILAppTypeRangeTest", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: "SILRangeTestAppViewController") as! SILRangeTestAppViewController
-            let viewModel = SILRangeTestAppViewModel(withMode: mode, peripheral: peripheral!, andBoardInfo: boardInfo!)
+            let viewModel = SILRangeTestAppViewModel(withMode: mode,
+                                                     peripheral: peripheral!,
+                                                     boardInfo: boardInfo!,
+                                                     bluetoothConnectionsHandler: self.bluetoothConnectionsHandler)
                 
             viewController.app = app;
             viewController.viewModel = viewModel;
