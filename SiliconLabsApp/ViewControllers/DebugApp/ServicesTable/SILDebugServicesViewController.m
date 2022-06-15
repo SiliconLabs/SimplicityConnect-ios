@@ -15,7 +15,6 @@
 #import "SILDebugServiceTableViewCell.h"
 #import "SILDebugCharacteristicTableViewCell.h"
 #import "SILDebugHeaderView.h"
-#import "SILDiscoveredPeripheral.h"
 #import "SILBluetoothModelManager.h"
 #import "SILCharacteristicFieldBuilder.h"
 #import "SILEnumerationFieldRowModel.h"
@@ -332,7 +331,7 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)addObserverForUpdateConnectionsButtonTitle {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:SILNotificationReloadConnectionsTableView object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:SILNotificationReloadConnectionsTableView object:nil];
 }
 
 - (void)addObserverForDisplayToastResponse {
@@ -389,7 +388,10 @@ static float kTableRefreshInterval = 1;
 
 - (void)installRSSITimer {
     __weak SILDebugServicesViewController *blocksafeSelf = self;
-    self.rssiTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer){ [blocksafeSelf.peripheral readRSSI];
+    self.rssiTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer* timer){
+        if ([blocksafeSelf.peripheral.delegate respondsToSelector:@selector(peripheral:didReadRSSI:error:)]){
+            [blocksafeSelf.peripheral readRSSI];
+        }
     }];
 }
 
@@ -918,6 +920,11 @@ static float kTableRefreshInterval = 1;
     [self refreshTable];
 }
 
+- (void)peripheral:(CBPeripheral *)peripheral didModifyServices:(NSArray<CBService *> *)invalidatedServices {
+    NSLog(@"Did modify services");
+    [self refresh];
+}
+
 - (BOOL)isATTError:(NSError*)error {
     if (error == nil) {
         return NO;
@@ -1175,6 +1182,8 @@ static float kTableRefreshInterval = 1;
     [self.refreshControl removeFromSuperview];
     self.refreshControl = nil;
     self.allServiceModels = nil;
+    [self viewWillDisappear:YES];
+    [self viewDidDisappear:YES];
     [self viewDidLoad];
     [self viewWillAppear:YES];
     [self viewDidAppear:YES];

@@ -78,11 +78,11 @@ class SILRangeTestAppContainerViewController: UIViewController, UITabBarControll
 extension SILRangeTestAppContainerViewController: SILRangeTestBluetoothConnectionsHandler {
     var filter: DiscoveredPeripheralFilter {
         return { discoveredPeripheral in
-            guard let discoveredPeripheral = discoveredPeripheral else {
+            guard let discoveredPeripheral = discoveredPeripheral, let peripheral = discoveredPeripheral.peripheral else {
                 return false
             }
             
-            return discoveredPeripheral.isRangeTest && !self.connectedPeripherals.contains(discoveredPeripheral.peripheral)
+            return discoveredPeripheral.isRangeTest && !self.connectedPeripherals.contains(peripheral)
         }
     }
     

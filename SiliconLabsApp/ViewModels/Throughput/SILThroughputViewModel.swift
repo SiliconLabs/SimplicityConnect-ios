@@ -55,7 +55,7 @@ protocol SILThroughputViewModelType {
     func changeTestState()
     func changePhoneTestModeSelection(newSelection: SILThroughputPhoneTestMode)
     func viewDidLoad()
-    func viewWillDisappear()
+    func unregisterAndStopTests()
 }
 
 class SILThroughputViewModel: SILThroughputViewModelType {
@@ -169,11 +169,12 @@ class SILThroughputViewModel: SILThroughputViewModelType {
         peripheralDelegate.discoverThroughputGATTServices()
     }
     
-    func viewWillDisappear() {
+    func unregisterAndStopTests() {
         unregisterNotifications()
         peripheralDelegate.stopTesting()
         peripheralManager.stopTest()
         peripheralManager.stopAdvertising()
+        centralManager.disconnect(from: connectedPeripheral)
     }
     
     private func readConnectionParameters() {

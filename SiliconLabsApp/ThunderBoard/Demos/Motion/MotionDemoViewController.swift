@@ -54,6 +54,7 @@ class MotionDemoViewController : DemoViewController, MotionDemoInteractionOutput
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        interaction.checkMissingSensors()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.setupWheel()
             self.updateModelOrientation(ThunderboardInclination(x: 0, y: 0, z: 0), animated: false)
@@ -61,9 +62,16 @@ class MotionDemoViewController : DemoViewController, MotionDemoInteractionOutput
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         deviceConnector?.disconnectAllDevices()
+    }
+    
+    func displayInfoAbout(missingCapabilities: Set<DeviceCapability>) {
+        let alertMessage = "The device cannot work properly, because it has broken sensors: \(missingCapabilities.map { $0.name }.joined(separator: ", ")). \nYou will be redirected to home screen."
+        self.alertWithOKButton(title: "Broken sensors", message: alertMessage) { _ in
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func dispatchSetup() {

@@ -261,8 +261,8 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 
     if (self.isConnected) {
         [SVProgressHUD showErrorWithStatus:@"Disconnecting Thermometer..."];
@@ -437,11 +437,11 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 
 #pragma mark - SILDeviceSelectionViewControllerDelegate
 
-- (void)deviceSelectionViewController:(SILDeviceSelectionViewController *)viewController didSelectPeripheral:(CBPeripheral *)peripheral {
+- (void)deviceSelectionViewController:(SILDeviceSelectionViewController *)viewController didSelect:(SILDiscoveredPeripheral *)peripheral {
     [self.devicePopoverController dismissPopoverAnimated:YES completion:^{
         self.devicePopoverController = nil;
 
-        self.connectedPeripheral = peripheral;
+        self.connectedPeripheral = peripheral.peripheral;
         self.deviceNameLabel.text = self.connectedPeripheral.name;
         [self registerForBluetoothControllerNotifications];
         [self preparePeripheral];

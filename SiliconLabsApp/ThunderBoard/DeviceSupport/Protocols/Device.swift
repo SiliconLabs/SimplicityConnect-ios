@@ -53,6 +53,80 @@ enum DeviceCapability {
     
     // Device Details
     case powerSource
+    
+    static let environmentDemoCapabilities: Set<DeviceCapability> = [
+        .temperature,
+        .uvIndex,
+        .ambientLight,
+        .humidity,
+        .soundLevel,
+        .airQualityCO2,
+        .airQualityVOC,
+        .airPressure,
+        .hallEffectState,
+        .hallEffectFieldStrength,
+    ]
+    
+    static let ioDemoCapabilities: Set<DeviceCapability> = [
+        .digitalInput,
+        .digitalOutput,
+        .rgbOutput
+    ]
+    
+    static let motionDemoCapabilities: Set<DeviceCapability> = [
+        .acceleration,
+        .orientation,
+        .calibration,
+        .revolutions,
+        .rgbOutput
+    ]
+    
+    var name: String {
+        switch self {
+        // IO
+        case .digitalInput:
+            return "Switches"
+        case .digitalOutput:
+            return "LEDs"
+        case .rgbOutput:
+            return "RGB LEDs"
+        
+        // Enviroment
+        case .temperature:
+            return "Temperature"
+        case .humidity:
+            return "Humidity"
+        case .ambientLight:
+            return "Ambient Light"
+        case .uvIndex:
+            return "UV Index"
+        case .airQualityCO2:
+            return "Carbon Dioxide"
+        case .airQualityVOC:
+            return "VOCs"
+        case .airPressure:
+            return "Air Pressure"
+        case .soundLevel:
+            return "Sound Level"
+        case .hallEffectState:
+            return "Door State"
+        case .hallEffectFieldStrength:
+            return "Magnetic Field"
+        
+        // Motion
+        case .calibration:
+            return "Calibrate"
+        case .orientation:
+            return "Orientation"
+        case .acceleration:
+            return "Acceleration"
+        case .revolutions:
+            return "Hall State"
+
+        default:
+            return ""
+        }
+    }
 }
 
 enum PowerSource : Equatable {
@@ -76,6 +150,7 @@ protocol Device : DemoConfiguration {
     var firmwareVersion: String? { get }
     var connectionState: DeviceConnectionState { get }
     var capabilities: Set<DeviceCapability> { get }
+    var missingCapabilities: Set<DeviceCapability> { get }
     
     var connectedDelegate: ConnectedDeviceDelegate? { get set }
     

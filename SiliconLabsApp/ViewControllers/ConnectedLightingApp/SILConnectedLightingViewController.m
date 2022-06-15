@@ -12,7 +12,6 @@
 #import "SILConstants.h"
 #import "SILApp.h"
 #import <SVProgressHUD/SVProgressHUD.h>
-#import "SILDiscoveredPeripheral.h"
 
 typedef NS_ENUM(int, SILLightState) {
     SILConnectedLightStateOff = 0,
@@ -244,14 +243,14 @@ NSString * const SILLightEventOff = @"Light Off";
     });
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self preparePeripheral];
     [self observeCentralManagerNotifications];
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if (isConnected) {
         [self disconnectPeripheral];

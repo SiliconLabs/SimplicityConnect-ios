@@ -150,7 +150,7 @@ class BleEnvironmentDemoConnection : EnvironmentDemoConnection {
     }
 
     func resetTamper() {
-        let data = Data(bytes: [UInt8(0x01)])
+        let data = Data(bytes: [UInt8(0x01), UInt8(0x00)])
         bleDevice.writeValueForCharacteristic(.HallControlPoint, value: data)
     }
 }

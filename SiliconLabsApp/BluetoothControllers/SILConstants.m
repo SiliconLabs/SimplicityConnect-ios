@@ -29,6 +29,9 @@ NSString * const SILCharacteristicNumberDMPLightState = @"76E137AC-B15F-49D7-9C4
 NSString * const SILCharacteristicNumberDMPSwitchSource = @"2F16EE52-0BFD-4597-85D4-A5141FDBAE15";
 NSString * const SILCharacteristicNumberDMPSourceAddress = @"82A1CB54-3921-4C9C-BA34-34F78BAB9A1B";
 
+NSString * const SILDiscoveredPeripheralConnectableDevice = @"Connectable";
+NSString * const SILDiscoveredPeripheralNonConnectableDevice = @"Non-connectable";
+
 NSInteger const SILConstantsStrongSignalThreshold = -50;
 NSInteger const SILConstantsMediumSignalThreshold = -80;
 

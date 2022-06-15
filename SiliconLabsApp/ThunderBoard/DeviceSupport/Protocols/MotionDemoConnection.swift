@@ -36,14 +36,10 @@ protocol MotionDemoConnectionDelegate: class {
 
 extension MotionDemoConnection {
     var capabilities: Set<DeviceCapability> {
-        let environmentCapabilities: Set<DeviceCapability> = [
-            .acceleration,
-            .orientation,
-            .calibration,
-            .revolutions,
-            .rgbOutput,
-        ]
-        
-        return device.capabilities.intersection(environmentCapabilities)
+        return DeviceCapability.motionDemoCapabilities.intersection(device.capabilities)
+    }
+    
+    var missingCapabilities: Set<DeviceCapability> {
+        return DeviceCapability.motionDemoCapabilities.intersection(device.missingCapabilities)
     }
 }

@@ -82,8 +82,12 @@ enum SILIOPTesterCentralManagerConnectionStatus {
     }
     
     func connect(to discoveredPeripheral: SILDiscoveredPeripheral) {
-        debugPrint("CONNECTING PERIPHERAL \(String(describing: discoveredPeripheral.peripheral))")
-        self.centralManager.connect(discoveredPeripheral.peripheral)
+        guard let peripheral = discoveredPeripheral.peripheral else {
+            debugPrint("CENTRAL MANAGER discovered peripheral is nil!")
+            return
+        }
+        debugPrint("CONNECTING PERIPHERAL \(String(describing: peripheral))")
+        self.centralManager.connect(peripheral)
     }
     
     func disconnect(peripheral: CBPeripheral) {
@@ -122,9 +126,8 @@ enum SILIOPTesterCentralManagerConnectionStatus {
         if let discoveredPeripheral = self.discoveredPeripherals.first(where: { discoveredPeripheral in discoveredPeripheral.peripheral == peripheral }) {
             discoveredPeripheral.update(withAdvertisementData: advertisementData, rssi: RSSI, andDiscoveringTimestamp: Date.timeIntervalBetween1970AndReferenceDate)
         } else {
-            if let newDiscoveredPeripheral = SILDiscoveredPeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI, andDiscoveringTimestamp: Date.timeIntervalBetween1970AndReferenceDate) {
-                self.discoveredPeripherals.append(newDiscoveredPeripheral)
-            }
+            let newDiscoveredPeripheral = SILDiscoveredPeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI, andDiscoveringTimestamp: Date.timeIntervalBetween1970AndReferenceDate)
+            self.discoveredPeripherals.append(newDiscoveredPeripheral)
         }
     }
     

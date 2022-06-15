@@ -32,7 +32,7 @@ class SILGattConfiguratorHomeViewModel {
     let isExportModeOn: SILObservable<Bool> = SILObservable(initialValue: false)
     let isMenuEnabled: SILObservable<Bool> = SILObservable(initialValue: true)
     
-    let fileWriter = SILGattConfiguratorFileWriter()
+    let fileWriter = SILFileWriter(exportDirName: "SILGattConfiguratorExport")
     
     private var isExportModeTurnOn: Bool = false {
         didSet {

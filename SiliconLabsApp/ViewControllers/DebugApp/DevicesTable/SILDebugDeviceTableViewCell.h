@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SILDiscoveredPeripheral.h"
 
 @class SILDebugAdvDetailCollectionViewCell;
 

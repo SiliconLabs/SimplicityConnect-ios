@@ -125,7 +125,8 @@ class SILConnectDeviceTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWith
     }
     
     private func notifyError() {
-        self.iopCentralManager.disconnect(peripheral: discoveredPeripheral.peripheral)
+        guard let peripheral = discoveredPeripheral.peripheral else { return }
+        self.iopCentralManager.disconnect(peripheral: peripheral)
         self.publishTestResult(passed: false,
                                description: "Peripheral \(String(describing: self.cbPeripheral)) wasn't connected in any of 5 attempts of connecting for \(self.timeoutMS) ms")
     }

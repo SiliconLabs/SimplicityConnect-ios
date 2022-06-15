@@ -48,6 +48,7 @@ class SimulatedDevice : Device, DemoConfiguration, Equatable, CustomDebugStringC
     
     fileprivate (set) var power: PowerSource = .unknown
     fileprivate (set) var capabilities: Set<DeviceCapability> = []
+    fileprivate (set) var missingCapabilities: Set<DeviceCapability> = []
     
     weak var connectedDelegate: ConnectedDeviceDelegate?
     weak var simulatedScanner: SimulatedDeviceScanner?

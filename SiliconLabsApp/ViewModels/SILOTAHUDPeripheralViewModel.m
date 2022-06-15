@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SILDiscoveredPeripheral.h"
 #import "SILOTAHUDPeripheralViewModel.h"
 #import "SILOTAFirmwareUpdateManager.h"
 

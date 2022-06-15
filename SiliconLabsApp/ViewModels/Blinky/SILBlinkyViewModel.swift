@@ -121,7 +121,7 @@ class SILBlinkyViewModel {
         self.peripheralDelegate.discoverBlinkyService()
     }
     
-    public func viewWillDisappear() {
+    public func removeObserverAndDisconnect() {
         NotificationCenter.default.removeObserver(self)
         deviceConnector.disconnectAllDevices()
     }

@@ -690,10 +690,10 @@ extension SILRangeTestPeripheral: SILDiscoveredPeripheralDelegate {
         }
     }
     
-    func peripheral(_ peripheral: SILDiscoveredPeripheral!, didUpdateWithAdvertisementData dictionary: [AnyHashable : Any]!, andRSSI rssi: NSNumber!) {
+    func peripheral(_ peripheral: SILDiscoveredPeripheral, didUpdateWithAdvertisementData dictionary: [String : Any]?, andRSSI rssi: NSNumber) {
         var manufacturerData: SILRangeTestManufacturerData? = nil
         
-        if let data = peripheral.manufacturerData {
+        if let data = peripheral.manufacturerData as Data? {
             manufacturerData = SILRangeTestManufacturerData(manufacturerData: data)
             self.manufacturerData = manufacturerData
         }

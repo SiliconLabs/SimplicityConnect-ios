@@ -131,7 +131,11 @@ class SILOTAAckTestCase: SILTestCase {
     }
     
     private func createAndStartOTAUpdate() {
-        self.otaUpdateManager = SILIopTestOTAUpdateManger(with: self.discoveredPeripheral!.peripheral,
+        guard let discoveredPeripheral = discoveredPeripheral, let peripheral = discoveredPeripheral.peripheral else {
+            return
+        }
+
+        self.otaUpdateManager = SILIopTestOTAUpdateManger(with: peripheral,
                                                           centralManager: self.browserCentralManager,
                                                           otaMode: .reliability)
         
@@ -224,11 +228,11 @@ class SILOTAAckTestCase: SILTestCase {
     }
 
     private func isPeripheralWithName(discoveredPeripheral: SILDiscoveredPeripheral, name: String, uuid: String) -> Bool {
-        guard let localName = discoveredPeripheral.advertisedLocalName else {
+        guard let localName = discoveredPeripheral.advertisedLocalName, let peripheral = discoveredPeripheral.peripheral else {
             return false
         }
             
-        return reformatPeripheralName(name: localName) == reformatPeripheralName(name: name) && discoveredPeripheral.peripheral.identifier.uuidString == uuid
+        return reformatPeripheralName(name: localName) == reformatPeripheralName(name: name) && peripheral.identifier.uuidString == uuid
     }
     
     private func reformatPeripheralName(name: String) -> String {

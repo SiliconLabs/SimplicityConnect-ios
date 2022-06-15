@@ -10,10 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "SILCentralManager.h"
 #import "SILBrowserConnectionsViewModel.h"
-#import "SILDiscoveredPeripheral.h"
 #import "NSError+SILHelpers.h"
 #import "SILWeakTargetWrapper.h"
-#import "SILRSSIMeasurementTable.h"
 #import "SILLogDataModel.h"
 #import "SILWeakNotificationPair.h"
 #import "SILConstants.h"
@@ -186,7 +184,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 - (void)filterDiscoveredPeripheralByTimeout {
     BOOL didRemovePeripherals = NO;
     for (SILDiscoveredPeripheral *discoveredPeripheral in [self discoveredPeripherals]) {
-        if (![discoveredPeripheral.RSSIMeasurementTable hasRSSIMeasurementInPastTimeInterval:SILCentralManagerDiscoveryTimeoutThreshold]) {
+        if (![discoveredPeripheral.rssiMeasurementTable hasRSSIMeasurementInPastTimeInterval:SILCentralManagerDiscoveryTimeoutThreshold]) {
             didRemovePeripherals = YES;
             [self.discoveredPeripheralMapping removeObjectForKey:discoveredPeripheral.identityKey];
         }

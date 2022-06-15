@@ -13,7 +13,7 @@ class ColorSlider: UISlider {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.setMinimumTrackImage(UIImage(named: "interface - color line")?.stretchableImage(withLeftCapWidth: Int(self.bounds.size.width), topCapHeight: 0), for: .normal)
+        self.setMinimumTrackImage(UIImage(named: "interface - color line"), for: .normal)
         self.setMaximumTrackImage(UIImage(named: "interface - color line"), for: .normal)
     }
     

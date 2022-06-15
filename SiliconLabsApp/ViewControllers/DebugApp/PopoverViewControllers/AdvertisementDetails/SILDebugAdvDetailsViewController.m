@@ -9,7 +9,6 @@
 #import "SILAdvertisementDataModel.h"
 #import "SILDebugAdvDetailTableViewCell.h"
 #import "SILDebugAdvDetailsViewController.h"
-#import "SILDiscoveredPeripheral.h"
 #import "SILDiscoveredPeripheralDisplayDataViewModel.h"
 #import "SILDebugPopoverViewController.h"
 #import "UITableViewCell+SILHelpers.h"

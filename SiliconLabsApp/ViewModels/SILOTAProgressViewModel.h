@@ -7,13 +7,10 @@
 //
 
 #import "SILBeacon.h"
-#import "SILBeaconRegistryEntry.h"
-#import "SILBeaconViewModel.h"
 #import "SILCentralManager.h"
 #import "SILOTAFirmwareFile.h"
 #import "SILOTAHUDPeripheralViewModel.h"
 #import "SILProximityCalculator.h"
-#import "SILRSSIMeasurementTable.h"
 #import "CBPeripheral+Services.h"
 
 #ifndef SILOTAProgressViewModel_h

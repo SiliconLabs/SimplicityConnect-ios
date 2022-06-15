@@ -63,9 +63,9 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        viewModel.viewWillDisappear()
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel.unregisterAndStopTests()
     }
     
     private func addShadowForOptionsView() {
@@ -148,7 +148,7 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
         let peripheralConnectionStatus = viewModel.peripheralConnectionStatus.observe( { value in
             guard let weakSelf = weakSelf else { return }
             if !value {
-                weakSelf.viewModel.viewWillDisappear()
+                weakSelf.viewModel.unregisterAndStopTests()
                 SVProgressHUD.dismiss()
                 weakSelf.navigationController?.popToRootViewController(animated: true)
             }
@@ -255,13 +255,11 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        backToHomeScreenActions()
-        return false
+        return true
     }
     
     private func backToHomeScreenActions() {
-        centralManager.disconnect(from: connectedPeripheral)
-        viewModel.viewWillDisappear()
+        viewModel.unregisterAndStopTests()
         self.navigationController?.popToRootViewController(animated: true)
     }
     
@@ -272,7 +270,7 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
     private func showBluetoothDisabledAlert() {
         let bluetoothDisabledAlert = SILBluetoothDisabledAlert.throughput
         self.alertWithOKButton(title: bluetoothDisabledAlert.title, message: bluetoothDisabledAlert.message, completion: { _ in
-            self.viewModel.viewWillDisappear()
+            self.viewModel.unregisterAndStopTests()
             self.navigationController?.popViewController(animated: true)
         })
     }

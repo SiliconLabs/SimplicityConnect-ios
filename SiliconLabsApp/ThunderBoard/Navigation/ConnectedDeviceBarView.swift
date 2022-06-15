@@ -37,10 +37,11 @@ class ConnectedDeviceBarView: UIView {
     
     var powerType: PowerSource = .unknown {
         didSet {
+            batteryStatusLabel.isHidden = powerType == .unknown
+            batteryStatusImageView.isHidden = powerType == .unknown
             switch powerType {
             case .unknown:
                 level = 0
-                batteryStatusLabel.tb_setText(String.tb_placeholderText(), style: StyleText.numbers1)
             case .usb:
                 level = 0
                 batteryStatusImageView.image = UIImage(named: "icon - usb - opt2")

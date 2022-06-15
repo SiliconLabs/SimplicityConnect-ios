@@ -20,19 +20,6 @@ protocol EnvironmentDemoConnectionDelegate: class {
 
 extension EnvironmentDemoConnection {
     var capabilities: Set<DeviceCapability> {
-        let environmentCapabilities: Set<DeviceCapability> = [
-            .temperature,
-            .uvIndex,
-            .ambientLight,
-            .humidity,
-            .soundLevel,
-            .airQualityCO2,
-            .airQualityVOC,
-            .airPressure,
-            .hallEffectState,
-            .hallEffectFieldStrength,
-        ]
-        
         // Filter AirQuality capabilities if the Sense board is on CoinCell power
         let enabledDeviceCapabilities = device.capabilities.filter({ (capability) -> Bool in
             if device.model != .sense {
@@ -54,6 +41,10 @@ extension EnvironmentDemoConnection {
             }
         })
         
-        return environmentCapabilities.intersection(enabledDeviceCapabilities)
+        return DeviceCapability.environmentDemoCapabilities.intersection(enabledDeviceCapabilities)
+    }
+    
+    var missingCapabilities: Set<DeviceCapability> {
+        return DeviceCapability.environmentDemoCapabilities.intersection(device.missingCapabilities)
     }
 }

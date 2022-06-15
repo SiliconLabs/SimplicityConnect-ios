@@ -307,7 +307,7 @@ final class DebugDeviceViewModel: NSObject {
     
     private func filterByCurrentMinRSSI() {
         if let currentMinRSSI = currentMinRSSI {
-            let rssiPredicate = NSPredicate(format: "discoveredPeripheral.RSSIMeasurementTable.lastRSSIMeasurement.intValue > \(currentMinRSSI)")
+            let rssiPredicate = NSPredicate(format: "discoveredPeripheral.rssiMeasurementTable.lastRSSIMeasurement.intValue > \(currentMinRSSI)")
             discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter { rssiPredicate.evaluate(with: $0) }
         }
     }

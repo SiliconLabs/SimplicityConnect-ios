@@ -41,8 +41,9 @@ class SILWarningViewModel {
         wireframe.dismissPopover()
     }
     
-    func onCancel() {
+    func onCancel(with switchState: Bool) {
         cancelAction()
+        setSettingAction(switchState)
         wireframe.dismissPopover()
     }
     

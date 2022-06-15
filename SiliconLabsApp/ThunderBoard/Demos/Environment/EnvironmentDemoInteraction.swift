@@ -9,6 +9,7 @@ import Foundation
 
 protocol EnvironmentDemoInteractionOutput : class {
     func updatedEnvironmentData(_ data: EnvironmentData, capabilities: Set<DeviceCapability>)
+    func displayInfoAbout(missingCapabilities: Set<DeviceCapability>, activeCapabilities: Set<DeviceCapability>)
 }
 
 class EnvironmentDemoInteraction: EnvironmentDemoConnectionDelegate {
@@ -34,6 +35,15 @@ class EnvironmentDemoInteraction: EnvironmentDemoConnectionDelegate {
 
     func resetTamperState() {
         connection?.resetTamper()
+    }
+    
+    func checkMissingSensors() {
+        guard let missingCapabilities = connection?.missingCapabilities, let activeCapabilities = connection?.capabilities else { return }
+        
+        if missingCapabilities.count > 0 {
+            self.output?.displayInfoAbout(missingCapabilities: missingCapabilities, activeCapabilities: activeCapabilities)
+
+        }
     }
 
     //MARK: - EnvironmentDemoConnectionDelegate

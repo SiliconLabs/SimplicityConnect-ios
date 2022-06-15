@@ -15,7 +15,6 @@
 #import "SILBrowserLogViewControllerDelegate.h"
 #import "SILDebugServicesViewController.h"
 #import "SILDiscoveredPeripheralDisplayDataViewModel.h"
-#import "SILDiscoveredPeripheral.h"
 #import "SILAdvertisementDataViewModel.h"
 #import "SILBrowserFilterViewModel.h"
 #import "SILBrowserConnectionsViewModel.h"
@@ -343,14 +342,14 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     cell.advertisingIntervalLabel.text = advertisingIntervalText;
     
     if (discoveredPeripheral.isConnectable) {
-        cell.connectableLabel.text = SILDiscoveredPeripheral.connectableDevice;
+        cell.connectableLabel.text = SILDiscoveredPeripheralConnectableDevice;
         if ([self isConnectedPeripheral:discoveredPeripheral]) {
             [cell setDisconnectButtonAppearance];
         } else {
             [cell setConnectButtonAppearance];
         }
     } else {
-        cell.connectableLabel.text = SILDiscoveredPeripheral.nonConnectableDevice;
+        cell.connectableLabel.text = SILDiscoveredPeripheralNonConnectableDevice;
         [cell setHiddenButtonAppearance];
     }
     cell.beaconLabel.text = discoveredPeripheral.beacon.name;
@@ -370,11 +369,8 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (void)configureAdTypeCell:(SILBrowserDeviceAdTypeViewCell*)cell atIndexPath:(NSIndexPath *)indexPath {
     SILDiscoveredPeripheralDisplayDataViewModel *discoveredPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
     
-    SILDiscoveredPeripheral *discoveredPeripheral = discoveredPeripheralViewModel.discoveredPeripheral;
-
-    SILAdTypeCBPeripheralDecoder *decoder = [SILAdTypeCBPeripheralDecoder.alloc initWithPeripheral:discoveredPeripheral];
-    SILAdvertisementDataModel *adDataModel = [decoder decode][indexPath.row-1];
-    SILAdvertisementDataViewModel *adViewDataModel = [SILAdvertisementDataViewModel.alloc initWithAdvertisementDataModel:adDataModel];
+    NSArray<SILAdvertisementDataViewModel *> *viewModels = discoveredPeripheralViewModel.advertisementDataViewModels;
+    SILAdvertisementDataViewModel *adViewDataModel = indexPath.row <= viewModels.count ? viewModels[indexPath.row-1] : nil;
 
     cell.adTypeNameLabel.text = adViewDataModel.typeString;
     cell.adTypeValueLabel.text = adViewDataModel.valueString;

@@ -9,7 +9,6 @@
 #import "SILOTAFirmwareUpdateManager.h"
 #import "CBPeripheral+Services.h"
 #import "CBService+Categories.h"
-#import "SILDiscoveredPeripheral.h"
 #import "SILUUIDProvider.h"
 #import "SILCharacteristicTableModel.h"
 #import "NSError+SILHelpers.h"
@@ -128,7 +127,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 
     self.fileCompletion = completion;
 
-    if (initiatingByteSequence) {
+    if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
         [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
     } else {
         [self disconnectConnectedPeripheral];

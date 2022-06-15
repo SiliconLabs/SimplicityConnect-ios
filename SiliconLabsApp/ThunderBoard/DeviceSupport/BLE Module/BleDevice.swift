@@ -78,6 +78,7 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
     var turnOnRGBLedCommand = UInt8(0x0F)
 
     fileprivate (set) var capabilities: Set<DeviceCapability> = []
+    fileprivate (set) var missingCapabilities: Set<DeviceCapability> = []
 
     var cbPeripheral: CBPeripheral!
 
@@ -502,10 +503,66 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
             }
 
             if error == nil {
+                self.checkMissingCapabilities(characteristic)
                 self.characteristicUpdateHook?(characteristic)
                 self.demoConnectionCharacteristicValueUpdated?(characteristic)
             }
         }
+    }
+    
+    fileprivate func checkMissingCapabilities(_ characteristic: CBCharacteristic) {
+        if let valueHexString = characteristic.value?.reversedBytesHexString {
+            switch characteristic.uuid.uuidString {
+            case CBUUID.SenseAirQualityCarbonDioxide.uuidString:
+                if valueHexString.uppercased() == "FFFF" {
+                    missingCapabilities.insert(.airQualityCO2)
+                }
+            case CBUUID.SenseAirQualityVolatileOrganicCompounds.uuidString:
+                if valueHexString.uppercased() == "FFFF" {
+                    missingCapabilities.insert(.airQualityVOC)
+                }
+            case CBUUID.HallFieldStrength.uuidString:
+                if valueHexString.uppercased() == "7FFFFFFF" {
+                    missingCapabilities.insert(.hallEffectFieldStrength)
+                    missingCapabilities.insert(.hallEffectState)
+                }
+            case CBUUID.AccelerationMeasurement.uuidString:
+                if valueHexString.uppercased() == "7FFF7FFF7FFF" {
+                    missingCapabilities.insert(.acceleration)
+                }
+            case CBUUID.OrientationMeasurement.uuidString:
+                if valueHexString.uppercased() == "7FFF7FFF7FFF" {
+                    missingCapabilities.insert(.orientation)
+                }
+            case CBUUID.UVIndex.uuidString:
+                if valueHexString.uppercased() == "FF" {
+                    missingCapabilities.insert(.uvIndex)
+                }
+            case CBUUID.AmbientLight.uuidString:
+                if valueHexString.uppercased() == "FFFFFFFF" {
+                    missingCapabilities.insert(.ambientLight)
+                }
+            case CBUUID.Pressure.uuidString:
+                if valueHexString.uppercased() == "FFFFFFFF" {
+                    missingCapabilities.insert(.airPressure)
+                }
+            case CBUUID.Temperature.uuidString:
+                if valueHexString.uppercased() == "7FFF" {
+                    missingCapabilities.insert(.temperature)
+                }
+            case CBUUID.Humidity.uuidString:
+                if valueHexString.uppercased() == "FFFF" {
+                    missingCapabilities.insert(.humidity)
+                }
+            case CBUUID.SoundLevelCustom.uuidString:
+                if valueHexString.uppercased() == "7FFF" {
+                    missingCapabilities.insert(.soundLevel)
+                }
+            default:
+                break
+            }
+        }
+        capabilities.subtract(missingCapabilities)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {

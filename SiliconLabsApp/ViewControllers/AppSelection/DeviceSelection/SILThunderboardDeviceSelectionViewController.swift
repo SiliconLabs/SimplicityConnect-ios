@@ -38,14 +38,33 @@ class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionVi
         super.viewDidLoad()
         self.interaction?.startScanning()
         self.interaction?.interactionOutput = self
+        self.registerForDisconnecting()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.interaction?.stopScanning()
+        self.unregisterForDisconnecting()
     }
     
     @IBAction override func didPressCancelButton(_ sender: Any) {
+        delegate?.didDismissDeviceSelectionViewController()
+    }
+    
+    private func registerForDisconnecting() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleDeviceDisconnectNotification),
+                                               name: .SILThunderboardDeviceDisconnect,
+                                               object: nil)
+    }
+    
+    private func unregisterForDisconnecting() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func handleDeviceDisconnectNotification() {
+        debugPrint("Did disconnect peripheral")
+        SVProgressHUD.showError(withStatus: "Device disconnect while configuring")
         delegate?.didDismissDeviceSelectionViewController()
     }
     

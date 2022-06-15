@@ -27,12 +27,6 @@ protocol IoDemoConnectionDelegate: class {
 
 extension IoDemoConnection {
     var capabilities: Set<DeviceCapability> {
-        let ioDemoCapabilities: Set<DeviceCapability> = [
-            .digitalInput,
-            .digitalOutput,
-            .rgbOutput
-        ]
-        
         let enabledDeviceCapabilities = device.capabilities.filter({ (capability) -> Bool in
             if device.model != .sense {
                 return true
@@ -53,6 +47,10 @@ extension IoDemoConnection {
             }
         })
         
-        return ioDemoCapabilities.intersection(enabledDeviceCapabilities)
+        return DeviceCapability.ioDemoCapabilities.intersection(enabledDeviceCapabilities)
+    }
+    
+    var missingCapabilities: Set<DeviceCapability> {
+        return DeviceCapability.ioDemoCapabilities.intersection(device.missingCapabilities)
     }
 }

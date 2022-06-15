@@ -44,6 +44,6 @@ class SILWarningViewController: UIViewController {
     }
     
     @IBAction func cancelButtonWasTapped(_ sender: UIButton) {
-        viewModel.onCancel()
+        viewModel.onCancel(with: confirmSwitch.isOn)
     }
 }

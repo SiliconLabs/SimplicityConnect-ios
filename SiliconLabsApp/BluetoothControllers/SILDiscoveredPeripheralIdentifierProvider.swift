@@ -36,7 +36,7 @@ class SILDiscoveredPeripheralIdentifierProvider : NSObject {
         // for example E2C56DB5-DFFB-48D2-B060-D0F5A71096E0 -> 36 characters
         let UUIDLength = 36
         let identityKey = mapping.identityKey
-        guard let uuid = identityKey?.prefix(UUIDLength) else { return NSUUID() }
+        let uuid = identityKey.prefix(UUIDLength)
         let uuidString = String(uuid)
         guard let nsuuid = NSUUID(uuidString: uuidString) else { return NSUUID() }
         return nsuuid

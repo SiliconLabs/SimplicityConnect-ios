@@ -11,7 +11,7 @@ import UIKit
 
 @objc
 @objcMembers
-class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
+class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, SILIOPPopupDelegate, WYPopoverControllerDelegate {
     @IBOutlet weak var allSpace: UIStackView!
     @IBOutlet weak var navigationBarView: UIView!
     @IBOutlet weak var navigationBarTitleLabel: UILabel!
@@ -22,6 +22,9 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var totalTestCases: UILabel!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var runTestButton: UIButton!
+    @IBOutlet weak var infoImage: UIImageView!
+    
+    private var infoPopoverController: WYPopoverController?
     
     private var viewModel: SILIOPTesterViewModel!
     var deviceNameToSearch: String?
@@ -49,8 +52,8 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         self.registerNotifications()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.navigationController?.navigationBar.prefersLargeTitles = false
     }
     
@@ -67,7 +70,40 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         runTestButton.setTitle("Run Tests", for: .normal)
         runTestButton.setTitle("Waiting...", for: .disabled)
         
+        self.setupInfoImage()
         self.setupNavigationBar()
+    }
+    
+    private func setupInfoImage() {
+        let image = UIImage(named: "help_white")?.withRenderingMode(.alwaysTemplate)
+        infoImage.image = image
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedInfoImage(_:)))
+        self.infoImage.addGestureRecognizer(tap)
+    }
+    
+    @objc private func tappedInfoImage(_ gestureRecognizer: UIGestureRecognizer) {
+        self.presentInfoPopup(animated: true)
+    }
+    
+    private func presentInfoPopup(animated: Bool) {
+        let infoPopup = SILIOPInfoPopup()
+        infoPopup.delegate = self
+        self.infoPopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: infoPopup, presenting: self, delegate: self, animated: true)
+    }
+    
+    func didTappedCancelButton() {
+        dismissPopup()
+    }
+    
+    func popoverControllerDidDismissPopover(_ popoverController: WYPopoverController!) {
+        dismissPopup()
+    }
+    
+    private func dismissPopup() {
+        self.infoPopoverController?.dismissPopover(animated: true) {
+            self.infoPopoverController = nil
+        }
     }
     
     func setupNavigationBar() {
@@ -106,6 +142,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
             guard let weakSelf = weakSelf else { return }
             weakSelf.currentTestState = status
             weakSelf.updateInfoView(newState: status)
+            weakSelf.updateInfoImage(newState: status)
         })
         disposeBag.add(token: testStateStatusSubscription)
         
@@ -116,6 +153,16 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
             }
         })
         disposeBag.add(token: bluetoothStateSubscription)
+    }
+    
+    private func updateInfoImage(newState: SILIOPTesterViewModel.TestState) {
+        if newState == .running {
+            infoImage.isUserInteractionEnabled = false
+            infoImage.tintColor = UIColor.sil_lineGrey()
+        } else {
+            infoImage.isUserInteractionEnabled = true
+            infoImage.tintColor = .white
+        }
     }
     
     private func updateInfoView(newState: SILIOPTesterViewModel.TestState) {
@@ -198,11 +245,9 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func showDocumentPickerView() {
-        let documentPickerView = UIDocumentPickerViewController(documentTypes: ["public.gbl"], in: .import)
-        documentPickerView.delegate = self
-        UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.sil_regularBlue()], for: .normal)
-        UINavigationBar.appearance().tintColor = UIColor.sil_regularBlue()
-        self.present(documentPickerView, animated: false, completion: nil)
+        let documentPickerViewController = SILDocumentPickerViewController(documentTypes: ["public.gbl"], in: .import)
+        documentPickerViewController.setupDocumentPickerView()
+        self.present(documentPickerViewController, animated: false, completion: nil)
     }
     
     //MARK: UITableViewDelegate
@@ -236,8 +281,12 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        showPopupAlert()
-        return false
+        let isRunning = self.currentTestState == .running
+        if isRunning {
+            showPopupAlert()
+        }
+        
+        return !isRunning
     }
     
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1th-y7-bl9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1th-y7-bl9">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -66,11 +66,32 @@
                                                                 <color key="textColor" name="sil_backgroundColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OXx-iD-KaL" userLabel="Info Image View" customClass="SILRoundedViewBehaviour">
+                                                                <rect key="frame" x="267" y="0.0" width="100" height="60"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="help_white" translatesAutoresizingMaskIntoConstraints="NO" id="2JS-eN-GWb">
+                                                                        <rect key="frame" x="66" y="18" width="30" height="30"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="30" id="LN8-l6-opJ"/>
+                                                                            <constraint firstAttribute="width" secondItem="2JS-eN-GWb" secondAttribute="height" multiplier="1:1" id="WPW-RG-BbX"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="trailing" secondItem="2JS-eN-GWb" secondAttribute="trailing" constant="4" id="QqQ-n6-ur3"/>
+                                                                    <constraint firstAttribute="width" constant="100" id="b6m-LY-9nV"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="2JS-eN-GWb" secondAttribute="bottom" constant="12" id="s0z-aI-fM0"/>
+                                                                </constraints>
+                                                            </view>
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Tse-Yq-bGo" secondAttribute="trailing" constant="8" id="EN4-zS-CLW"/>
+                                                            <constraint firstItem="OXx-iD-KaL" firstAttribute="centerY" secondItem="PO9-jV-TMa" secondAttribute="centerY" id="KUo-XI-YoL"/>
+                                                            <constraint firstItem="OXx-iD-KaL" firstAttribute="height" secondItem="PO9-jV-TMa" secondAttribute="height" id="SDo-eL-HZE"/>
                                                             <constraint firstItem="Tse-Yq-bGo" firstAttribute="centerY" secondItem="PO9-jV-TMa" secondAttribute="centerY" id="hY3-AQ-bGe"/>
                                                             <constraint firstItem="Tse-Yq-bGo" firstAttribute="leading" secondItem="PO9-jV-TMa" secondAttribute="leading" id="uVy-f7-zpj"/>
+                                                            <constraint firstAttribute="trailing" secondItem="OXx-iD-KaL" secondAttribute="trailing" constant="8" id="zKp-MW-GyI"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
@@ -99,7 +120,7 @@
                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILIOPTestScenarioCellView" rowHeight="80" id="LNk-Bq-b59" userLabel="SILIOPTestScenarioCellView" customClass="SILIOPTestScenarioCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="28" width="343" height="80"/>
+                                                        <rect key="frame" x="0.0" y="44.666666030883789" width="343" height="80"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LNk-Bq-b59" id="X1r-jw-7T9">
                                                             <rect key="frame" x="0.0" y="0.0" width="343" height="80"/>
@@ -342,7 +363,8 @@
                         <outlet property="allSpace" destination="JpK-zT-aTC" id="yNd-Ga-ET9"/>
                         <outlet property="deviceNameLabel" destination="BKn-lF-FJD" id="oXq-zw-KDg"/>
                         <outlet property="firmwareNameLabel" destination="Lmu-IX-Wfe" id="IfV-l6-OFu"/>
-                        <outlet property="infoView" destination="8w1-tC-Ibk" id="Dcr-QT-Knx"/>
+                        <outlet property="infoImage" destination="2JS-eN-GWb" id="sP5-yj-R2k"/>
+                        <outlet property="infoView" destination="8w1-tC-Ibk" id="aKB-3E-IlJ"/>
                         <outlet property="navigationBarTitleLabel" destination="Tse-Yq-bGo" id="wVF-J0-G8M"/>
                         <outlet property="navigationBarView" destination="8eH-jD-PD7" id="Z5y-5J-Tmv"/>
                         <outlet property="runTestButton" destination="SmZ-Zf-Lb6" id="FDb-MS-sBO"/>
@@ -366,6 +388,7 @@
     </designables>
     <resources>
         <image name="cancelScanning" width="200" height="200"/>
+        <image name="help_white" width="30" height="30"/>
         <image name="icon - share - blue" width="13" height="14"/>
         <image name="left_chevron" width="8" height="13"/>
         <namedColor name="sil_backgroundColor">

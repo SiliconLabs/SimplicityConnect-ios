@@ -207,11 +207,11 @@ class SILIOPTestReconnectManager: NSObject {
     }
         
     private func isPeripheralWithName(discoveredPeripheral: SILDiscoveredPeripheral, name: String, uuid: String) -> Bool {
-        guard let localName = discoveredPeripheral.advertisedLocalName else {
+        guard let localName = discoveredPeripheral.advertisedLocalName, let peripheral = discoveredPeripheral.peripheral else {
             return false
         }
             
-        return reformatPeripheralName(name: localName) == reformatPeripheralName(name: name) && discoveredPeripheral.peripheral.identifier.uuidString == uuid
+        return reformatPeripheralName(name: localName) == reformatPeripheralName(name: name) && peripheral.identifier.uuidString == uuid
     }
     
     private func reformatPeripheralName(name: String) -> String {

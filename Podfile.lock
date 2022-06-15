@@ -31,7 +31,7 @@ PODS:
   - RxSwift (6.2.0)
   - SVProgressHUD (2.2.5)
   - UICircularProgressRing (4.1.0)
-  - WYPopoverController (0.2.2)
+  - WYPopoverController (0.3.9)
   - XMLDictionary (1.4.1)
 
 DEPENDENCIES:
@@ -55,7 +55,7 @@ DEPENDENCIES:
   - RxSwift (~> 6.2.0)
   - SVProgressHUD (~> 2.2.5)
   - UICircularProgressRing (~> 4.1.0)
-  - WYPopoverController (~> 0.2.2)
+  - WYPopoverController (from `https://github.com/sammcewan/WYPopoverController.git`)
   - XMLDictionary (~> 1.4.1)
 
 SPEC REPOS:
@@ -80,18 +80,22 @@ SPEC REPOS:
     - RxSwift
     - SVProgressHUD
     - UICircularProgressRing
-    - WYPopoverController
     - XMLDictionary
 
 EXTERNAL SOURCES:
   Eddystone:
     :branch: nservidio/add-properties-to-Generic
     :git: https://github.com/IntrepidPursuits/eddystone-ios.git
+  WYPopoverController:
+    :git: https://github.com/sammcewan/WYPopoverController.git
 
 CHECKOUT OPTIONS:
   Eddystone:
     :commit: ecbaed68ff82aecc82a52671fae17552658c2b8d
     :git: https://github.com/IntrepidPursuits/eddystone-ios.git
+  WYPopoverController:
+    :commit: 9b8011bd95bd95f6fca6a0afa78965fbf645a062
+    :git: https://github.com/sammcewan/WYPopoverController.git
 
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: eef157d75e151f255c5333d26656c7fbfe905a51
@@ -115,9 +119,9 @@ SPEC CHECKSUMS:
   RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   UICircularProgressRing: 5a32c01f54474571b1e66e8fa050c0f83d6d981b
-  WYPopoverController: 00d879c25bddd1fd873dcc21aa98c8308d7f1555
+  WYPopoverController: a9db25ac2841a686acdc0f3a99bdb21545db32f4
   XMLDictionary: fa07b6ff422b3a91d47a5de9bc82e3fc04fbd167
 
-PODFILE CHECKSUM: fa38ccfd90caab8b342bbeb884f33901d78598f1
+PODFILE CHECKSUM: 0c27fdd7e95d8fb75e6cc907591fbf6ff042fa18
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2

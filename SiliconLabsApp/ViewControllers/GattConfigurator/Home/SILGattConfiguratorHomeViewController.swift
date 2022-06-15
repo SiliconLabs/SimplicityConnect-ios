@@ -153,20 +153,17 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     func showSharingExportFiles(filesToShare: [URL]) {
         let filesToShare = filesToShare
         let gattConfiguratorSubject = "Gatt Configurator Export"
-        
-        let activityViewController = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
-        UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.sil_regularBlue()], for: .normal)
-        UINavigationBar.appearance().tintColor = UIColor.sil_regularBlue()
-        activityViewController.setValue(gattConfiguratorSubject, forKey: "Subject")
-        activityViewController.completionWithItemsHandler = { activity, success, items, error in
+        let completionWithItems: UIActivityViewController.CompletionWithItemsHandler = { activity, success, items, error in
             if self.canFinishExport(activity: activity, success: success) {
                 self.viewModel.turnOffExportMode()
             }
         }
         
-        activityViewController.popoverPresentationController?.sourceView = self.exportButton
-        activityViewController.popoverPresentationController?.sourceRect = self.exportButton.bounds
-        self.present(activityViewController, animated: true, completion: nil)
+        self.showSharingExportFiles(filesToShare: filesToShare,
+                                    subject: gattConfiguratorSubject,
+                                    sourceView: self.exportButton,
+                                    sourceRect: self.exportButton.bounds,
+                                    completionWithItemsHandler: completionWithItems)
     }
     
     private func canFinishExport(activity: UIActivity.ActivityType?, success: Bool) -> Bool {

@@ -56,11 +56,12 @@ class EnvironmentDemoViewController: DemoViewController, EnvironmentDemoInteract
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.interaction?.checkMissingSensors()
         self.interaction?.updateView()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         deviceConnector?.disconnectAllDevices()
     }
     
@@ -72,6 +73,18 @@ class EnvironmentDemoViewController: DemoViewController, EnvironmentDemoInteract
 
     func updatedEnvironmentData(_ data: EnvironmentData, capabilities: Set<DeviceCapability>) {
         dataSource.updateData(data, capabilities: capabilities)
+    }
+    
+    func displayInfoAbout(missingCapabilities: Set<DeviceCapability>, activeCapabilities: Set<DeviceCapability>) {
+        if activeCapabilities.count == 0 {
+            let alertMessage = "No active sensors, you will be redirected to the home screen."
+            self.alertWithOKButton(title: "Broken sensors", message: alertMessage) { _ in
+                self.navigationController?.popViewController(animated: true)
+            }
+        } else {
+            let alertMessage = "The device has broken sensors: \(missingCapabilities.map { $0.name }.joined(separator: ", "))"
+            self.alertWithOKButton(title: "Broken sensors", message: alertMessage)
+        }
     }
     
     @IBAction func settingsButtonPressed() {

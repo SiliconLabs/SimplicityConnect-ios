@@ -29,6 +29,9 @@ extern NSString * const SILCharacteristicNumberDMPLightState;
 extern NSString * const SILCharacteristicNumberDMPSwitchSource;
 extern NSString * const SILCharacteristicNumberDMPSourceAddress;
 
+extern NSString * const SILDiscoveredPeripheralConnectableDevice;
+extern NSString * const SILDiscoveredPeripheralNonConnectableDevice;
+
 extern NSInteger const SILConstantsStrongSignalThreshold;
 extern NSInteger const SILConstantsMediumSignalThreshold;
 

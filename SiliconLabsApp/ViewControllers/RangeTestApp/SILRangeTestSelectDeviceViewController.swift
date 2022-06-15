@@ -55,9 +55,11 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
             let storyboard = UIStoryboard(name: "SILAppTypeRangeTest", bundle: nil)
             let selectionViewController = storyboard.instantiateViewController(withIdentifier: "SILRangeTestModeSelectionViewController") as! SILRangeTestModeSelectionViewController
             
+            guard let peripheral = peripheral.peripheral else { return }
+            
             selectionViewController.app = self.app;
             selectionViewController.delegate = self
-            selectionViewController.peripheral = SILRangeTestPeripheral(withPeripheral: peripheral.peripheral, andCentralManager: self.centralManager)
+            selectionViewController.peripheral = SILRangeTestPeripheral(withPeripheral: peripheral, andCentralManager: self.centralManager)
 
             self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
         }

@@ -20,36 +20,28 @@ class SILAdTypeCBPeripheralDecoder : NSObject {
     func decode() -> [SILAdvertisementDataModel] {
         var advertisementDataModels = [SILAdvertisementDataModel]()
         
-        if peripheral.advertisedServiceUUIDs != nil {
-            advertisementDataModels += decodeAdvertisedSericeUUIDs()
+        if let advertisedServiceUUIDs = peripheral.advertisedServiceUUIDs {
+            advertisementDataModels += decodeAdvertisedSericeUUIDs(advertisedServiceUUIDs)
         }
         
-        if peripheral.solicitedServiceUUIDs != nil {
-            advertisementDataModels += decodeSolicitedServiceUUIDs()
+        if let solicitedServiceUUIDs = peripheral.solicitedServiceUUIDs {
+            advertisementDataModels += decodeSolicitedServiceUUIDs(solicitedServiceUUIDs)
         }
         
-        if peripheral.txPowerLevel != nil {
-            if let txPowerLevelModel = SILAdvertisementDataModel(value: decodeTXPowerLevel(), type: .txPowerLevel) {
+        if let txPowerLevel = peripheral.txPowerLevel, let txPowerLevelModel = SILAdvertisementDataModel(value: decodeTXPowerLevel(txPowerLevel), type: .txPowerLevel) {
                 advertisementDataModels.append(txPowerLevelModel)
-            }
         }
         
-        if peripheral.advertisedLocalName != nil {
-            if let advertisementLocalNameModel = SILAdvertisementDataModel(value: decodeAdvertisementLocalName(), type: .completeLocalName) {
+        if let advertisedLocalName = peripheral.advertisedLocalName, let advertisementLocalNameModel = SILAdvertisementDataModel(value: decodeAdvertisementLocalName(advertisedLocalName), type: .completeLocalName) {
                 advertisementDataModels.append(advertisementLocalNameModel)
-            }
         }
         
-        if peripheral.manufacturerData != nil {
-            if let manufacturerDataModel = SILAdvertisementDataModel(value: decodeManufacturerData(), type: .manufacturerData) {
+        if let manufacturerData = peripheral.manufacturerData, let manufacturerDataModel = SILAdvertisementDataModel(value: decodeManufacturerData(manufacturerData as Data), type: .manufacturerData) {
                 advertisementDataModels.append(manufacturerDataModel)
-            }
         }
         
-        if peripheral.dataServiceData != nil {
-            if let dataServiceDataModel = SILAdvertisementDataModel(value: decodeDataServiceData(), type: .dataServiceData) {
+        if let dataServiceData = peripheral.dataServiceData, let dataServiceDataModel = SILAdvertisementDataModel(value: decodeDataServiceData(dataServiceData), type: .dataServiceData) {
                 advertisementDataModels.append(dataServiceDataModel)
-            }
         }
         
         if peripheral.beacon.type == .altBeacon {
@@ -67,9 +59,9 @@ class SILAdTypeCBPeripheralDecoder : NSObject {
         return advertisementDataModels
     }
     
-    private func decodeAdvertisedSericeUUIDs() -> [SILAdvertisementDataModel] {
+    private func decodeAdvertisedSericeUUIDs(_ advertisedServicesUUIDs: [CBUUID]) -> [SILAdvertisementDataModel] {
         var advertisedServicesDataModels = [SILAdvertisementDataModel]()
-        let splitServicesArray = splitServices(services: peripheral.advertisedServiceUUIDs)
+        let splitServicesArray = splitServices(services: advertisedServicesUUIDs)
         
         if !splitServicesArray[0].isEmpty {
             if let advertisedServiceUUIDsModel = SILAdvertisementDataModel(value: decodeAdvertisedServiceUUIDs16Bit(services16Bit: splitServicesArray[0]), type: .advertisedServiceUUIDs16Bit) {
@@ -122,9 +114,9 @@ class SILAdTypeCBPeripheralDecoder : NSObject {
         return decode128BitServices(services128Bit)
     }
     
-    private func decodeSolicitedServiceUUIDs() -> [SILAdvertisementDataModel] {
+    private func decodeSolicitedServiceUUIDs(_ solicitedServiceUUIDs: [CBUUID]) -> [SILAdvertisementDataModel] {
         var solicitedServiceDataModels = [SILAdvertisementDataModel]()
-        let splitServicesArray = splitServices(services: peripheral.solicitedServiceUUIDs)
+        let splitServicesArray = splitServices(services: solicitedServiceUUIDs)
         
         if !splitServicesArray[0].isEmpty {
             if let solicitedServiceUUIDsModel = SILAdvertisementDataModel(value: decodeSolicitedServiceUUIDs16Bit(services16Bit: splitServicesArray[0]), type: .solicitedServiceUUIDs16Bit) {
@@ -149,18 +141,18 @@ class SILAdTypeCBPeripheralDecoder : NSObject {
         return decode128BitServices(services128Bit)
     }
     
-    private func decodeTXPowerLevel() -> String {
-        return self.peripheral.txPowerLevel.stringValue
+    private func decodeTXPowerLevel(_ txPowerLevel: NSNumber) -> String {
+        return txPowerLevel.stringValue
     }
     
-    private func decodeAdvertisementLocalName() -> String {
-        return peripheral.advertisedLocalName
+    private func decodeAdvertisementLocalName(_ advertisedLocalName: String) -> String {
+        return advertisedLocalName
     }
     
-    private func decodeManufacturerData() -> String {
+    private func decodeManufacturerData(_ manufacturerData: Data) -> String {
         var manufacturerDataString = ""
         
-        let parsedBytes = hexEncodedString(data: self.peripheral.manufacturerData)
+        let parsedBytes = hexEncodedString(data: manufacturerData)
         
         if parsedBytes.count < 4 {
             manufacturerDataString += "PARSING ERROR: "
@@ -190,10 +182,10 @@ class SILAdTypeCBPeripheralDecoder : NSObject {
         return manufacturerDataString
     }
         
-    private func decodeDataServiceData() -> String {
+    private func decodeDataServiceData(_ dataServiceDataDict: [CBUUID : NSData]) -> String {
         var dataServiceData = ""
         var isFirst = true
-        for (_, data) in self.peripheral.dataServiceData.enumerated() {
+        for (_, data) in dataServiceDataDict.enumerated() {
             if isFirst {
                 isFirst = false
             } else {
@@ -203,7 +195,7 @@ class SILAdTypeCBPeripheralDecoder : NSObject {
             dataServiceData += "UUID: 0x"
             dataServiceData += data.key.uuidString
             
-            let parsedBytes = hexEncodedString(data: data.value)
+            let parsedBytes = hexEncodedString(data: data.value as Data)
             
             if parsedBytes.count > 0 {
                 dataServiceData += " Data: 0x"

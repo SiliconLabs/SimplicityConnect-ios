@@ -81,6 +81,7 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        interaction?.checkMissingSensors()
         interaction?.updateView()
     }
     
@@ -90,7 +91,6 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
             interaction?.toggleLed(2)
         }
         showRGB = false
-        deviceConnector?.disconnectAllDevices()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -98,11 +98,17 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
         interaction?.turnOffLed(0)
         interaction?.turnOffLed(1)
         interaction?.turnOffLed(2)
+        deviceConnector?.disconnectAllDevices()
         tableView.reloadData()
         if let cell: LightsCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? LightsCell {
             cell.lights[0].isOn = false
             cell.lights[1].isOn = false
         }
+    }
+    
+    func displayInfoAbout(missingCapabilities: Set<DeviceCapability>) {
+        let alertMessage = "The device has broken sensors: \(missingCapabilities.map { $0.name }.joined(separator: ", "))"
+        self.alertWithOKButton(title: "Broken sensors", message: alertMessage)
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {

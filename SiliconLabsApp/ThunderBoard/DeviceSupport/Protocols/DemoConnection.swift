@@ -10,4 +10,5 @@ import Foundation
 protocol DemoConnection: class {
     var device: Device { get set }
     var capabilities: Set<DeviceCapability> { get }
+    var missingCapabilities: Set<DeviceCapability> { get }
 }

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SILDiscoveredPeripheral.h"
 #import "SILApp.h"
 
 @interface SILDeviceSelectionViewModel : NSObject

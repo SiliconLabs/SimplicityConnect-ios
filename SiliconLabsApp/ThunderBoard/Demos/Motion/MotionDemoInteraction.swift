@@ -14,6 +14,7 @@ protocol MotionDemoInteractionOutput : class {
     func updateLocation(_ distance: Float, speed: Float, rpm: Float, totalRpm: UInt)
     func updateLedColor(_ on: Bool, color: LedRgb)
     func deviceCalibrating(_ isCalibrating: Bool)
+    func displayInfoAbout(missingCapabilities: Set<DeviceCapability>)
 }
 
 class MotionDemoInteraction: MotionDemoConnectionDelegate {
@@ -39,6 +40,14 @@ class MotionDemoInteraction: MotionDemoConnectionDelegate {
         self.output = output
         self.connection = demoConnection
         self.connection?.connectionDelegate = self
+    }
+    
+    func checkMissingSensors() {
+        guard let missingCapabilities = connection?.missingCapabilities else { return }
+        
+        if missingCapabilities.count > 0 {
+            output?.displayInfoAbout(missingCapabilities: missingCapabilities)
+        }
     }
     
     func updateView() {

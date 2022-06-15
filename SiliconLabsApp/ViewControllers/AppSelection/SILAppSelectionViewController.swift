@@ -186,6 +186,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
 
     }
     
+    private func showRSSIGraph(app: SILApp!, animated: Bool) {
+        let storyboard = UIStoryboard(name: "SILAppRSSIGraph", bundle: nil)
+        if let viewController = storyboard.instantiateInitialViewController() {
+            self.navigationController?.pushViewController(viewController, animated: animated)
+        }
+    }
+    
     private func didSelectApp(app: SILApp!) {
         debugPrint("didSelectItem \(String(describing: app.title))")
         switch app.appType {
@@ -245,6 +252,9 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         case .typeWifiCommissioning:
             self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
             
+        case .typeRSSIGraph:
+            self.showRSSIGraph(app: app, animated: true)
+            
         default:
             return
         }
@@ -300,7 +310,8 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             
             switch appType {
             case .typeHealthThermometer:
-                self.runHealthThermometer(viewController: viewController, peripheral: peripheral.peripheral)
+                guard let peripheral = peripheral.peripheral else { return }
+                self.runHealthThermometer(viewController: viewController, peripheral: peripheral)
             
             case .typeConnectedLighting:
                 if let connectedLightingController = UIStoryboard(name: "SILAppTypeConnectedLighting", bundle: nil).instantiateInitialViewController() as? SILConnectedLightingViewController {

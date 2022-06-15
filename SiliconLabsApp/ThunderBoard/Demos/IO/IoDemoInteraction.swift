@@ -26,6 +26,14 @@ class IoDemoInteraction: IoDemoConnectionDelegate {
         self.connection?.connectionDelegate = self
     }
     
+    func checkMissingSensors() {
+        guard let missingCapabilities = connection?.missingCapabilities else { return }
+        
+        if missingCapabilities.count > 0 {
+            output?.displayInfoAbout(missingCapabilities: missingCapabilities)
+        }
+    }
+    
     func updateView() {
         guard let connection = connection else { return }
                 

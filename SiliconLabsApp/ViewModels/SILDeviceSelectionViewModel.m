@@ -8,7 +8,6 @@
 
 #import "SILDeviceSelectionViewModel.h"
 #import "SILApp+AttributedProfiles.h"
-#import "SILRSSIMeasurementTable.h"
 
 CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
 

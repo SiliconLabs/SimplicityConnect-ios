@@ -76,7 +76,7 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 }
 
 - (void)setRSSIImageForPeripheral:(SILDiscoveredPeripheral*)discoveredPeripheral {
-    NSInteger smoothedRSSIValue = [[discoveredPeripheral.RSSIMeasurementTable averageRSSIMeasurementInPastTimeInterval:SILDeviceSelectionViewControllerReloadThreshold] integerValue];
+    NSInteger smoothedRSSIValue = [[discoveredPeripheral.rssiMeasurementTable averageRSSIMeasurementInPastTimeInterval:SILDeviceSelectionViewControllerReloadThreshold] integerValue];
     if (smoothedRSSIValue > SILConstantsStrongSignalThreshold) {
         self.signalImageView.image = [UIImage imageNamed:SILImageNameBTStrong];
     } else if (smoothedRSSIValue > SILConstantsMediumSignalThreshold) {

@@ -193,7 +193,7 @@ class EnvironmentDemoCollectionViewDataSource : NSObject {
                 return EnvironmentCellData(name: title, value: value, imageName: "icon - door state", imageBackgroundColor: color, power: .na)
             }
 
-            return EnvironmentCellData(name: title, value: String.tb_placeholderText(), imageName: "icon - door state", imageBackgroundColor: nil, power: .na)
+            return EnvironmentCellData(name: title, value: String.tb_placeholderText(), imageName: "icon - door state inactive", imageBackgroundColor: nil, power: .na)
         },
 
         .hallEffectFieldStrength : { data in
@@ -205,7 +205,7 @@ class EnvironmentDemoCollectionViewDataSource : NSObject {
                 return EnvironmentCellData(name: title, value: value, imageName: "icon - magnetic field", imageBackgroundColor: color, power: .na)
             }
 
-            return EnvironmentCellData(name: title, value: String.tb_placeholderText(), imageName: "icon - magnetic field", imageBackgroundColor: nil, power: .na)
+            return EnvironmentCellData(name: title, value: String.tb_placeholderText(), imageName: "icon - magnetic field inactive", imageBackgroundColor: nil, power: .na)
         },
     ]
     

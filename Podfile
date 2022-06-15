@@ -18,7 +18,7 @@ def shared_pods
     pod 'PureLayout', '~> 3.1.4'
     pod 'SVProgressHUD', '~> 2.2.5'
     pod 'UICircularProgressRing', '~> 4.1.0'
-    pod 'WYPopoverController', '~> 0.2.2'
+    pod 'WYPopoverController', :git => 'https://github.com/sammcewan/WYPopoverController.git'
     pod 'XMLDictionary', '~> 1.4.1'
     pod 'Realm', '~> 4.3.2'
     pod 'RealmSwift'

@@ -40,9 +40,9 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        deviceConnector?.disconnectAllDevices()
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel?.removeObserverAndDisconnect()
         self.disposeBag.invalidateTokens()
     }
     
@@ -124,7 +124,7 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
     }
     
     @IBAction func backButtonTapped() -> Void {
-        viewModel?.viewWillDisappear()
+        viewModel?.removeObserverAndDisconnect()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -146,7 +146,7 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer.isEqual(navigationController?.interactivePopGestureRecognizer) {
-            viewModel?.viewWillDisappear()
+            viewModel?.removeObserverAndDisconnect()
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
             }

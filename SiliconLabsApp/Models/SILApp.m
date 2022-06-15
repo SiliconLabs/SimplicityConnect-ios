@@ -30,6 +30,7 @@
                 [self advertiserApp],
                 [self gattConfiguratorApp],
                 [self iopTestApp],
+                [self rssiGraph]
             ];
 }
 
@@ -95,6 +96,14 @@
                                description:@"Utilize this device as a Bluetooth Low Energy peripheral."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeAdvertiser];
+}
+
++ (SILApp *)rssiGraph {
+    return [[SILApp alloc] initWithAppType:SILAppTypeRSSIGraph
+                                     title:@"RSSI Graph"
+                               description:@"Draw a plot with RSSI data from discovered devices."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeRangeTestDemo];
 }
 
 + (SILApp *)iopTestApp {

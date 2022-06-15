@@ -15,4 +15,5 @@ protocol IoDemoInteractionOutput : class {
     func disableLeds()
     func enable(_ enable: Bool, led ledNo: Int)
     func enable(_ enable: Bool, switch switchNo: Int)
+    func displayInfoAbout(missingCapabilities: Set<DeviceCapability>)
 }
