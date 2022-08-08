@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "SILCharacteristicFieldValueResolver.h"
+#import "SILBluetoothFieldModel.h"
 
 @interface SILCharacteristicFieldValueResolver()
 - (SInt64)sintCasterForSint:(SInt64)result originalSize:(int)originalSize castSize:(int)castSize;
+@end
+
+@interface SILCharacteristicFieldValueResolver(TestPrivate)
+- (NSData*)dataForValueString:(NSString *)dataString asFormat:(NSString *)format;
+- (NSString*)readValueString:(NSData *)data forFormat:(NSString *)format;
+- (NSData*)dataForHexString:(NSString *)dataString;
 @end
 
 @interface SILValueResolverTests : XCTestCase
@@ -50,16 +57,28 @@ NSString * const kU16StringFormat = @"utf16s";
 NSString * const kRegCertFormat = @"reg-cert-data-list";
 NSString * const kVariableFormat = @"variable";
 
+SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format){
+    return [[SILBluetoothFieldModel alloc] initWithName:@"x" unit:@"unit" format:format requires:@"x"];
+};
+
+@implementation SILCharacteristicFieldValueResolver(TestPrivate)
+
+- (NSData*)dataForValueString:(NSString *)dataString asFormat:(NSString *)format{
+    NSError *error;
+    return [self dataForValueString:dataString withFieldModel:fieldForFormat(format) error:&error];
+}
+
+- (NSString*)readValueString:(NSData *)data forFormat:(NSString *)format{
+    return [self readValueString:data withFieldModel:fieldForFormat(format)];
+}
+
+- (NSData*)dataForHexString:(NSString *)dataString {
+    return [self dataForValueString:dataString asFormat:kVariableFormat];
+}
+
+@end
+
 @implementation SILValueResolverTests
-
-- (void)setUp {
-    [super setUp];
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
 
 #pragma mark - NSData Bug
 
@@ -307,7 +326,7 @@ NSString * const kVariableFormat = @"variable";
 }
 
 - (void)testWriteUint64 {
-    uint64_t target = 13235973595268495360;
+    uint64_t target = 13235973595268495360ULL;
     uint64_t written = 0;
     
     NSData *writtenData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:@"13235973595268495360" asFormat:kU64Format];
@@ -733,7 +752,7 @@ NSString * const kVariableFormat = @"variable";
 #pragma mark - Hex String encoding
 
 - (void)testDataForHexSuccess {
-    NSString *hexString = @"3A:55:0F:1B:4C";
+    NSString *hexString = @"3A550F1B4C";
     const char target[5] = {0x3a, 0x55, 0x0f, 0x1B, 0x4c};
     NSData *targetData = [NSData dataWithBytes:target length:sizeof(target)];
     
@@ -744,14 +763,7 @@ NSString * const kVariableFormat = @"variable";
 }
 
 - (void)testDataForHexFailure_BadPair {
-    NSString *hexString = @"3T:55:0f:1B:4c";
-    NSData *stringData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:hexString];
-    
-    XCTAssertNil(stringData);
-}
-
-- (void)testDataForHexFailure_LongPair {
-    NSString *hexString = @"365:55:0f:1B:4c";
+    NSString *hexString = @"3T550f1B4c";
     NSData *stringData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForHexString:hexString];
     
     XCTAssertNil(stringData);

@@ -36,9 +36,9 @@ extension IoDemoConnection {
             switch capability {
             case .rgbOutput:
                 switch device.power {
-                case .unknown, .coinCell:
+                case .coinCell:
                     return false
-                case .usb, .aa, .genericBattery:
+                case .usb, .aa, .genericBattery, .unknown:
                     return true
                 }
                 

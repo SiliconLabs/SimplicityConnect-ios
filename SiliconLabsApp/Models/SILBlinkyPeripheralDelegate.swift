@@ -318,7 +318,7 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
     private func checkIsInitiated() -> Bool {
         var result = true
         if isThunderboard {
-            result = result && self.powerSourceState.value != .unknown
+            result = result && self.powerSourceState.value != nil
         }
 
         return result && lightCharacteristicState.value != .unknown && reportButtonCharacteristicState.value != .unknown

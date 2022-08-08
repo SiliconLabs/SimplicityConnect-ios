@@ -17,7 +17,7 @@ NSString * const ERROR_KIND_RANGE = @"Range";
 NSString * const REGEX_PATTERN_DECIMAL_EXPONENT_EQUALS_0 = @"^[+-]?\\d+$";
 NSString * const REGEX_PATTERN_FORMAT_DECIMAL_EXPONENT_GRATER_THAN_0 = @"^[+-]?\\d+0{%ld,}$";
 NSString * const REGEX_PATTERN_FORMAT_DECIMAL_EXPONENT_LESS_THAN_0 = @"^[+-]?\\d+(\\.\\d{0,%ld})?$";
-NSString * const REGEX_PATTERN_FLOAT = @"^[+-]?\\d+(\\.\\d{0,%ld})?$";
+NSString * const REGEX_PATTERN_FLOAT = @"^[+-]?\\d+(\\.\\d{0,})?$";
 NSString * const NUMBER_PARSING_LOCALE = @"en_US";
 
 typedef NS_ENUM(NSInteger, AppMode) {
@@ -270,11 +270,11 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
     const BOOL isRangeDefined = min != nil && max != nil;
     const BOOL isNumberInRange = isRangeDefined && [min doubleValue] <= [number doubleValue] && [number doubleValue] <= [max doubleValue];
     
-    if (!isNumberInRange) {
+    if (isRangeDefined && !isNumberInRange) {
         [context setErrorWithKind:ERROR_KIND_RANGE];
     }
     
-    return isNumberInRange;
+    return !isRangeDefined || isNumberInRange;
 }
 
 #pragma mark - Binary Helpers
@@ -732,7 +732,7 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
                                                                    rangeMin:nil
                                                                    rangeMax:nil
                                                                       error:error];
-    [self parseStringAsIntegerInContext:context];
+    [self parseStringAsFloatInContext:context];
     
     if (![self validateNumberInContext:context]) { return nil; }
     
@@ -748,7 +748,7 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
                                                                    rangeMin:nil
                                                                    rangeMax:nil
                                                                       error:error];
-    [self parseStringAsIntegerInContext:context];
+    [self parseStringAsFloatInContext:context];
     
     if (![self validateNumberInContext:context]) { return nil; }
     
@@ -764,7 +764,7 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
                                                                    rangeMin:nil
                                                                    rangeMax:nil
                                                                       error:error];
-    [self parseStringAsIntegerInContext:context];
+    [self parseStringAsFloatInContext:context];
     
     if (![self validateNumberInContext:context]) { return nil; }
     
@@ -828,7 +828,7 @@ float const kReservedSFloatValues[5] = {kSFloatPostiviveInfinity, kSFloatNan, kS
                                                                    rangeMin:nil
                                                                    rangeMax:nil
                                                                       error:error];
-    [self parseStringAsIntegerInContext:context];
+    [self parseStringAsFloatInContext:context];
     
     if (![self validateNumberInContext:context]) { return nil; }
     

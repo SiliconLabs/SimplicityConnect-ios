@@ -31,6 +31,7 @@ def test_pods
   pod 'Quick'
   pod 'Nimble'
   pod 'OCMock'
+  pod 'MockingbirdFramework', '~> 0.20'
 end
 
 target 'BlueGecko' do
@@ -43,11 +44,6 @@ end
 
 target 'WirelessGecko' do
    shared_pods
-end
-
-target 'SiliconLabsAppTests' do
-  shared_pods
-  test_pods
 end
 
 target 'BlueGeckoTests' do

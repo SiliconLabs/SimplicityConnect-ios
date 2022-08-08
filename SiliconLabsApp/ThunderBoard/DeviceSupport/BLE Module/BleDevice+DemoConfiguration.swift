@@ -170,25 +170,11 @@ extension BleDevice {
         }
         
         // NOTE: the environmental demo polls most of the characteristics,
-        // but we are waiting for discovery for the Hall State,
-        // and we need to wait for model and power (to determine if air quality should be shown)
-        
-        let _ = queue.tb_addAsyncOperationBlock { (operation) in
-            while self.power == .unknown {
-                log.info("waiting for power source information")
-                sleep(1)
-            }
-
-            while self.model == .unknown {
-                log.info("waiting for model information")
-                sleep(1)
-            }
-
-            operation.done()
-        }
+        // but we are waiting for discovery for the Hall State
         
         let requiredCharacteristics: Set<CBUUID> = [
-            CBUUID.HallState
+            CBUUID.HallState,
+            CBUUID.ModelNumber
         ]
         queue.addOperation(waitForCharacteristics(requiredCharacteristics, timeout: 5.0))
         

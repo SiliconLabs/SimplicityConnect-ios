@@ -25,7 +25,7 @@ class SILRSSIMeasurementTable: NSObject {
         .map { $0.last! }
     
     func addRSSIMeasurement(_ RSSI: NSNumber) {
-        if -100...20 ~= RSSI.intValue {
+        if -100...18 ~= RSSI.intValue {
             rssiMeasurements.addElement(element: SILRSSIMeasurement(rssi: RSSI, date: Date()))
         }
     }

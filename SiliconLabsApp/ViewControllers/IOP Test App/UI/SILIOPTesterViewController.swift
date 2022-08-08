@@ -247,6 +247,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     func showDocumentPickerView() {
         let documentPickerViewController = SILDocumentPickerViewController(documentTypes: ["public.gbl"], in: .import)
         documentPickerViewController.setupDocumentPickerView()
+        documentPickerViewController.delegate = self
         self.present(documentPickerViewController, animated: false, completion: nil)
     }
     
