@@ -65,7 +65,7 @@ class SILGraphView: UIView {
                     if cellData.isSelected {
                         // set selected dataSet to be drawn on the top
                         _self.chartView.lineData?.removeDataSet(dataSet)
-                        _self.chartView.lineData?.addDataSet(dataSet)
+                        _self.chartView.lineData?.append(dataSet)
                     }
                 }
             }

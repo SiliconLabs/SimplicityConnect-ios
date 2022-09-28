@@ -1099,7 +1099,7 @@ static float kTableRefreshInterval = 1;
                     [displayArray addObject:fieldModel];
                 }
             } else {
-                NSLog(@"Requirements not met for %@", characteristicModel.bluetoothModel.name);
+                NSLog(@"Requirements not met for %@ - %@", characteristicModel.bluetoothModel.name, fieldModel.fieldModel.name);
             }
         }
     }

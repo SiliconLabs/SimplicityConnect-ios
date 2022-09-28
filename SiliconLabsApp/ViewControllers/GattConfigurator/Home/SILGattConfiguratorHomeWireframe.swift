@@ -61,6 +61,7 @@ class SILGattConfiguratorHomeWireframe: SILBaseWireframe, WYPopoverControllerDel
     func showDocumentPickerView() {
         let documentPickerViewController = SILDocumentPickerViewController(documentTypes: ["public.xml", "public.btconf"], in: .import)
         documentPickerViewController.setupDocumentPickerView()
+        documentPickerViewController.delegate = viewController as? SILGattConfiguratorHomeViewController
         viewController.present(documentPickerViewController, animated: false, completion: nil)
     }
     

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio Designer Edition 9.1.10.3537 (http://www.liquid-technologies.com) -->
 <!--Copyright 2011 Bluetooth SIG, Inc. All rights reserved.-->
 <Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Record Access Control Point" type="org.bluetooth.characteristic.record_access_control_point" uuid="2A52" last-modified="2011-12-06" approved="Yes">
@@ -11,12 +11,12 @@
             <Format>uint8</Format>
             <Enumerations>
                 <Enumeration key="0" value="Reserved for future use (Operator:N/A)" />
-                <Enumeration key="1" value="Report stored records (Operator: Value from Operator Table)" />
-                <Enumeration key="2" value="Delete stored records (Operator: Value from Operator Table)" />
+                <Enumeration key="1" value="Report stored records (Operator: Value from Operator Table)" requires="C1"/>
+                <Enumeration key="2" value="Delete stored records (Operator: Value from Operator Table)" requires="C1"/>
                 <Enumeration key="3" value="Abort operation (Operator: Null 'value of 0x00 from Operator Table')" />
-                <Enumeration key="4" value="Report number of stored records (Operator: Value from Operator Table)" />
-                <Enumeration key="5" value="Number of stored records response (Operator: Null 'value of 0x00 from Operator Table')" />
-                <Enumeration key="6" value="Response Code (Operator: Null 'value of 0x00 from Operator Table')" />
+                <Enumeration key="4" value="Report number of stored records (Operator: Value from Operator Table)" requires="C1"/>
+                <Enumeration key="5" value="Number of stored records response (Operator: Null 'value of 0x00 from Operator Table')" requires="C1"/>
+                <Enumeration key="6" value="Response Code (Operator: Null 'value of 0x00 from Operator Table')" requires="C1" />
                 <ReservedForFutureUse start="7" end="255" />
             </Enumerations>
         </Field>
@@ -24,11 +24,11 @@
             <Requirement>Mandatory</Requirement>
             <Format>uint8</Format>
             <Enumerations>
-                <Enumeration key="0" value="Null" />
+                <Enumeration key="0" value="Null" requires="C2" />
                 <Enumeration key="1" value="All records" />
-                <Enumeration key="2" value="Less than or equal to" />
-                <Enumeration key="3" value="Greater than or equal to" />
-                <Enumeration key="4" value="Within range of (inclusive)" />
+                <Enumeration key="2" value="Less than or equal to" requires="C2" />
+                <Enumeration key="3" value="Greater than or equal to" requires="C2" />
+                <Enumeration key="4" value="Within range of (inclusive)" requires="C2" />
                 <Enumeration key="5" value="First record(i.e. oldest record)" />
                 <Enumeration key="6" value="Last record (i.e. most recent record)" />
                 <ReservedForFutureUse start="7" end="255" />
@@ -37,8 +37,9 @@
         
          <Field name="Operand">
             <InformativeText>The operands correspond to the Op Code values (Keys 0 to 255) defined in the Op Code Field above</InformativeText>
-            <Requirement>Mandatory</Requirement>
-            <Format>variable</Format>
+            <Requirement>C1</Requirement>
+            <Requirement>C2</Requirement>
+            <Format>8bit</Format>
             
             <Enumerations>
                 <InformativeText>Op Code / Operand Value Correspondence</InformativeText>

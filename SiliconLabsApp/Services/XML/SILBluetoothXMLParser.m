@@ -68,9 +68,16 @@ const NSString * kTypeAttributeKey = @"_type";
     NSString *characteristicSummary = [self bestAvailableSummary:xmlDict];
     NSString *characteristicType = xmlDict[kTypeAttributeKey];
     NSString *characteristicUuid = xmlDict[kUuuidAttributeKey];
+    NSString *charNote = xmlDict[@"Note"];
+    BOOL characteristicFieldsInvertedByteOrder = [charNote.description containsString:@"LSO to MSO"];
     SILBluetoothCharacteristicModel *characteristicModel = [[SILBluetoothCharacteristicModel alloc] initWithName:characteristicName summary:characteristicSummary type:characteristicType uuid:characteristicUuid];
     
     characteristicModel.fields = [self arrayForDictionary:xmlDict[@"Value"] keyPath:@"Field" selector:@selector(buildFieldFromXmlDictionary:)];
+    [characteristicModel.fields enumerateObjectsUsingBlock:^(SILBluetoothFieldModel *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.invertedBytesOrder = characteristicFieldsInvertedByteOrder;
+    }];
+    
+    NSLog(@"%@ fields have inverted bytes order  : %i", characteristicName, characteristicFieldsInvertedByteOrder);
     
     return characteristicModel;
 }
@@ -97,13 +104,19 @@ const NSString * kTypeAttributeKey = @"_type";
     NSString *name = xmlDict[kNameAttributeKey];
     NSString *unit = xmlDict[@"Unit"];
     NSString *format = xmlDict[@"Format"];
-    NSString *requires = xmlDict[@"Requirement"];
-    SILBluetoothFieldModel *fieldModel = [[SILBluetoothFieldModel alloc] initWithName:name unit:unit format:format requires:requires];
+    NSArray *requirements = [self getRequirementsArrayFromXmlDictionary:xmlDict];
+    SILBluetoothFieldModel *fieldModel = [[SILBluetoothFieldModel alloc] initWithName:name unit:unit format:format requires:requirements];
     
     fieldModel.minimum = [xmlDict[@"Minimum"] integerValue];
     fieldModel.maximum = [xmlDict[@"Maximum"] integerValue];
     fieldModel.reference = xmlDict[@"Reference"];
     fieldModel.decimalExponent = [xmlDict[@"DecimalExponent"] integerValue];
+    fieldModel.multiplier = [xmlDict[@"Multiplier"] integerValue];
+    
+    if (fieldModel.multiplier == 0){
+        fieldModel.multiplier = 1;
+    }
+    
     
     NSArray *bitModels = [self arrayForDictionary:xmlDict[@"BitField"] keyPath:@"Bit" selector:@selector(buildBitFromXmlDictionary:)];
     if (bitModels) {
@@ -121,6 +134,19 @@ const NSString * kTypeAttributeKey = @"_type";
     }
     
     return fieldModel;
+}
+
+- (NSArray *)getRequirementsArrayFromXmlDictionary:(NSDictionary *)xmlDict {
+    NSObject *object = xmlDict[@"Requirement"];
+    NSArray *requirements = nil;
+    if (object) {
+        if ([object isKindOfClass:[NSArray class]]) {
+            requirements = (NSArray *) object;
+        } else {
+            requirements = @[object];
+        }
+    }
+    return requirements;
 }
 
 #pragma mark - Bits

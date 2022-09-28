@@ -27,15 +27,18 @@ class SILCharacteristicWriteFieldCellViewModel : SILCharacteristicWriteCellViewM
     let indexInModel: Int
     var currentValue: String
     let format: String
+    let isMandatoryField: Bool
 
     init(titleName: String,
          currentValue: String,
          indexInModel: Int,
+         isMandatoryField: Bool,
          format: String = "") {
         self.titleName = titleName
         self.currentValue = currentValue
         self.indexInModel = indexInModel
         self.format = format
+        self.isMandatoryField = isMandatoryField
     }
     
     func updateValue(newValue: String) {
@@ -90,7 +93,8 @@ class SILCharacteristicWriteEncodingFieldCellViewModel : SILCharacteristicWriteF
         self.index = index
         super.init(titleName: titleName,
                    currentValue: currentValue,
-                   indexInModel: -1)
+                   indexInModel: -1,
+                   isMandatoryField: false)
     }
 }
 
@@ -98,11 +102,11 @@ class SILCharacteristicWriteBitFieldCellViewModel : SILCharacteristicWriteEnumLi
     var index: (inModel: Int,
                 inBitModel: Int)
     
-    init(currentValue: Int,
+    init(name: String, currentValue: Int,
          allPossibleValues: [SILBluetoothEnumerationModel],
          index: (inModel: Int, inBitModel: Int)) {
         self.index = index
-        super.init(titleName: "",
+        super.init(titleName: name,
                    currentValue: currentValue,
                    allPossibleValues: allPossibleValues,
                    indexInModel: index.inModel)

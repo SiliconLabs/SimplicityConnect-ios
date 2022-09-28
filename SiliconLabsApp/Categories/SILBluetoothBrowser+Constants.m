@@ -33,3 +33,4 @@ NSString * const DefaultDeviceName = @"N/A";
 CGFloat CornerRadiusForButtons = 4.0;
 CGFloat CornerRadiusStandardValue = 16.0;
 NSString * const CannotWriteEmptyTextToCharacteristic = @"You cannot send an empty value to characteristic";
+NSString * const FillAllMandatoryFields = @"Please fill all mandatory fields";

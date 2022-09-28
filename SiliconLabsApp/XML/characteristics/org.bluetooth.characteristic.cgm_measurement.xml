@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright 2014 Bluetooth SIG, Inc. All rights reserved.-->
 <Characteristic xsi:noNamespaceSchemaLocation="http://schemas.bluetooth.org/Documents/characteristic.xsd"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -321,7 +321,7 @@
         </Field>
         <Field name="E2E-CRC">
             <InformativeText>If the device supports E2E-safety (E2E-CRC Supported bit is set in CGM Feature), the measurement is secured by a CRC calculated over all fields. The computation of the CRC is done using a CRC-CCITT generator polynomial g(D)=D16+D12+D5+1 (i.e.210041 in octal representation) with a seed of 0xFFFF. This field is mandatory if the device supports E2E-CRC (Bit 12 in CGM Feature is set to 1) otherwise excluded.</InformativeText>
-            <Requirement>C3</Requirement>
+            <Requirement>Mandatory</Requirement>
             <Format>uint16</Format>
             
         </Field>

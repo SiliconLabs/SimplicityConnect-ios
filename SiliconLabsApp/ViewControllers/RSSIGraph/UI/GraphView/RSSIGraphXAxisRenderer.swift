@@ -17,9 +17,9 @@ class RSSIGraphXAxisRenderer: XAxisRenderer {
     }
     
     override func renderLimitLines(context: CGContext) {
-        guard let xAxis = self.axis as? XAxis,
-            let transformer = self.transformer
-            else { return }
+        let xAxis = self.axis
+        
+        guard let transformer = self.transformer else { return }
         let trans = transformer.valueToPixelMatrix
         
         for limitLine in xAxis.limitLines {
@@ -61,7 +61,7 @@ class RSSIGraphXAxisRenderer: XAxisRenderer {
     }
 }
 
-class RSSIGraphXAxisValueFormatter: IAxisValueFormatter {
+class RSSIGraphXAxisValueFormatter: AxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         return "\(Int(value))s"
     }

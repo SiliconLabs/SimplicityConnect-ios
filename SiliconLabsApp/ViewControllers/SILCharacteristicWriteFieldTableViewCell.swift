@@ -24,6 +24,7 @@ class SILCharacteristicWriteFieldTableViewCell: UITableViewCell, UITextFieldDele
         self.cellViewModel = cellViewModel
         self.fieldNameLabel.text =  self.cellViewModel?.titleName
         self.enterValueTextField.text = self.cellViewModel?.currentValue
+        self.enterValueTextField.placeholder = cellViewModel.isMandatoryField ? "Mandatory" : ""
     }
     
     @IBAction func enterValueWasChanged(_ sender: UITextField) {

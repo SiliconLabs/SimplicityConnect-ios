@@ -531,7 +531,7 @@ extension SILRangeTestAppViewController {
     }
     
     private func prepareDataSet() -> LineChartDataSet {
-        let dataSet = LineChartDataSet(entries: [], label: nil)
+        let dataSet = LineChartDataSet(entries: [], label: "")
         
         dataSet.mode = .cubicBezier
         dataSet.drawCirclesEnabled = false
@@ -556,7 +556,7 @@ extension SILRangeTestAppViewController {
     }
     
     private func configureChartView(withChartData chartData: LineChartData) {
-        chartView.chartDescription?.enabled = false
+        chartView.chartDescription.enabled = false
         chartView.legend.enabled = false
         chartView.scaleXEnabled = false
         chartView.scaleYEnabled = false
@@ -572,13 +572,13 @@ extension SILRangeTestAppViewController {
         chartView.leftAxis.drawGridLinesEnabled = false
         chartView.leftAxis.drawAxisLineEnabled = false
         chartView.leftYAxisRenderer = RangeTestYAxisRenderer(viewPortHandler: chartView.leftYAxisRenderer.viewPortHandler,
-                                                             yAxis: chartView.leftAxis,
+                                                             axis: chartView.leftAxis,
                                                              transformer: chartView.leftYAxisRenderer.transformer)
         chartView.xAxis.valueFormatter = XAxisValueFormatter()
         chartView.xAxis.drawGridLinesEnabled = false
         chartView.xAxis.drawAxisLineEnabled = false
         chartView.xAxisRenderer = RangeTestXAxisRenderer(viewPortHandler: chartView.xAxisRenderer.viewPortHandler,
-                                                         xAxis: chartView.xAxis,
+                                                         axis: chartView.xAxis,
                                                          transformer: chartView.xAxisRenderer.transformer)
         chartView.minOffset = 0
         chartView.extraTopOffset = -10
@@ -626,20 +626,20 @@ extension SILRangeTestAppViewController {
         return gridLine
     }
     
-    private class CubicLineSampleFillFormatter: IFillFormatter {
-        func getFillLinePosition(dataSet: ILineChartDataSet, dataProvider: LineChartDataProvider) -> CGFloat {
+    private class CubicLineSampleFillFormatter: FillFormatter {
+        func getFillLinePosition(dataSet: Charts.LineChartDataSetProtocol, dataProvider: Charts.LineChartDataProvider) -> CGFloat {
             return -100
         }
     }
     
-    private class YAxisValueFormatter: IAxisValueFormatter {
+    private class YAxisValueFormatter: AxisValueFormatter {
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
             let sign = value > 0 ? "+" : ""
             return String(format: "%@%g.0 dBm", sign, value)
         }
     }
     
-    private class XAxisValueFormatter: IAxisValueFormatter {
+    private class XAxisValueFormatter: AxisValueFormatter {
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
             return ""
         }
@@ -648,8 +648,8 @@ extension SILRangeTestAppViewController {
     private class RangeTestXAxisRenderer : XAxisRenderer {
         private var initialPosition: CGPoint?
         
-        override init(viewPortHandler: ViewPortHandler, xAxis: XAxis?, transformer: Transformer?) {
-            super.init(viewPortHandler: viewPortHandler, xAxis: xAxis, transformer: transformer)
+        override init(viewPortHandler: ViewPortHandler, axis xAxis: XAxis, transformer: Transformer?) {
+            super.init(viewPortHandler: viewPortHandler, axis: xAxis, transformer: transformer)
         }
         
         override func renderLimitLineLine(context: CGContext, limitLine: ChartLimitLine, position: CGPoint) {
@@ -687,13 +687,13 @@ extension SILRangeTestAppViewController {
         private let arrowWidth = CGFloat(6)
         private let arrowHeight = CGFloat(7)
         
-        override init(viewPortHandler: ViewPortHandler, yAxis: YAxis?, transformer: Transformer?) {
-            super.init(viewPortHandler: viewPortHandler, yAxis: yAxis, transformer: transformer)
+        override init(viewPortHandler: ViewPortHandler, axis yAxis: YAxis, transformer: Transformer?) {
+            super.init(viewPortHandler: viewPortHandler, axis: yAxis, transformer: transformer)
         }
         
         override func renderLimitLines(context: CGContext) {
-            guard let yAxis = self.axis as? YAxis,
-                let transformer = self.transformer
+            let yAxis = self.axis
+            guard let transformer = self.transformer
                 else { return }
             let trans = transformer.valueToPixelMatrix
             

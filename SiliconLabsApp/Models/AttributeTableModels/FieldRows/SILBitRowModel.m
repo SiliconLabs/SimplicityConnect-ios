@@ -12,6 +12,7 @@
 #import "SILBluetoothBitModel.h"
 #import "SILBluetoothEnumerationModel.h"
 #import "SILCharacteristicFieldValueResolver.h"
+#import "NSData+Reverse.h"
 
 @interface SILBitRowModel()
 
@@ -34,26 +35,30 @@
         self.bit = bit;
         self.fieldModel = fieldModel;
         self.requirementsSatisfied = YES; //this is kind of a hack, they have to explicitly be set to NO due to some bug
-        self.toggleValue = ((SILBluetoothEnumerationModel *)self.bit.enumerations[1]).value;
     }
     return self;
 }
 
 - (NSString *)primaryTitle {
-    return self.toggleValue;
+    if (self.toggleState == nil) {
+        return nil;
+    }
+    
+    return ((SILBluetoothEnumerationModel *)self.bit.enumerations[[self.toggleState intValue]]).value;
 }
 
 - (NSString *)secondaryTitle {
     return [NSString stringWithFormat: @"%@ - %@", self.fieldModel.name, self.bit.name];
 }
 
-- (void)clearValues {
-    self.toggleValue = @"";
-}
+- (NSString *)toggleValue {
+    return ((SILBluetoothEnumerationModel *)self.bit.enumerations[[self.toggleState intValue]]).value;
 
+}
 
 //@discussion current implementation has this called by SILBitFieldFieldModel, which handles correct length
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
+    value = [self reverseDataIfNeeded:value];
     NSArray *binaryArray = [[SILCharacteristicFieldValueResolver sharedResolver] binaryArrayFromValue:value forFormat:self.fieldModel.format];
     
     if (self.bit.index < binaryArray.count) {
@@ -76,4 +81,7 @@
     return nil;
 }
 
+- (NSData *)reverseDataIfNeeded:(NSData *)fieldData {
+    return self.fieldModel.invertedBytesOrder ? fieldData.reversed : fieldData;
+}
 @end

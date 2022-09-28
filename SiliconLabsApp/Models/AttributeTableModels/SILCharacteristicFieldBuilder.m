@@ -32,12 +32,17 @@
     return sharedBuilder;
 }
 
-- (NSArray *)characteristicModelValueAsFieldRows:(SILBluetoothCharacteristicModel *)characteristicModel {
+- (NSArray *)characteristicModelValueAsFieldRows:(SILBluetoothCharacteristicModel *)characteristicModel withRequirements:(NSArray<NSString *> *)requirements {
     NSMutableArray *allFieldsModels = [NSMutableArray new];
     
     for (SILBluetoothFieldModel *fieldModel in characteristicModel.fields) {
         NSArray *fieldTableRowModels = [self fieldTableRowsForFieldModel:fieldModel];
         [allFieldsModels addObjectsFromArray:fieldTableRowModels];
+    }
+    if (requirements != nil) {
+        for (id<SILCharacteristicFieldRow> fieldRow in allFieldsModels) {
+            fieldRow.fieldModel.requirements = [requirements copy];
+        }
     }
     
     return [allFieldsModels copy];
@@ -48,7 +53,7 @@
     
     if (fieldModel.reference) {
         SILBluetoothCharacteristicModel *referenceModel = [[SILBluetoothModelManager sharedManager] characteristicModelForName:fieldModel.reference];
-        return [self characteristicModelValueAsFieldRows:referenceModel];
+        return [self characteristicModelValueAsFieldRows:referenceModel withRequirements:fieldModel.requirements];
     }
     
     if (!fieldModel.format) {

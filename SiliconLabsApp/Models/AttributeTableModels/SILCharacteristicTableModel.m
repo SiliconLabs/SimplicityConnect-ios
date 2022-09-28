@@ -44,7 +44,7 @@
         self.characteristic = characteristic;
         self.bluetoothModel = [[SILBluetoothModelManager sharedManager] characteristicModelForUUIDString:[self uuidString]];
         self.fieldBuilder = [[SILCharacteristicFieldBuilder alloc] init];
-        self.fieldTableRowModels = [self.fieldBuilder characteristicModelValueAsFieldRows:self.bluetoothModel];
+        self.fieldTableRowModels = [self.fieldBuilder characteristicModelValueAsFieldRows:self.bluetoothModel withRequirements:nil];
         self.requirementsMet = [[NSMutableArray alloc] initWithArray:@[@"Mandatory"]];
         self.descriptorModels = @[];
         self.writeWithResponse = self.characteristic.properties & CBCharacteristicPropertyWrite;
@@ -135,9 +135,9 @@
         [CrashlyticsKit setObjectValue:self.bluetoothModel.name forKey:@"characteristic_name"];
         [CrashlyticsKit setObjectValue:characteristic.value forKey:@"characteristic_value"];
         for (NSObject<SILCharacteristicFieldRow> *fieldRowModel in self.fieldTableRowModels) {
-            NSString *fieldRequirement = fieldRowModel.fieldModel.requirement;
+            NSArray *fieldRequirements = fieldRowModel.fieldModel.requirements;
             fieldRowModel.delegate = self;
-            if (!fieldRequirement || [self.requirementsMet containsObject:fieldRequirement]) {
+            if (!fieldRequirements || [self isFieldMetRequirement:fieldRowModel]) {
                 fieldRowModel.requirementsSatisfied = YES;
                 [CrashlyticsKit setObjectValue:@(readIndex) forKey:@"read_index"];
                 NSInteger readLength = [fieldRowModel consumeValue:self.lastReadValue fromIndex:readIndex];
@@ -236,6 +236,8 @@
         NSData * const fieldData = [fieldModel dataForFieldWithError:error];
 
         if (*error) { return nil; }
+        fieldModel.delegate = self;
+        [fieldModel consumeValue:fieldData fromIndex:0];
             
         [data appendData:fieldData];
     }
@@ -244,9 +246,12 @@
 }
 
 - (BOOL)isFieldMetRequirement:(NSObject<SILCharacteristicFieldRow> *)fieldModel {
-    NSString * const fieldRequirement = fieldModel.fieldModel.requirement;
+    NSArray * const fieldRequirements = fieldModel.fieldModel.requirements;
+    NSArray *nonMetRequirements = [fieldRequirements filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSObject *requirement, NSDictionary *bindings) {
+        return ![self.requirementsMet containsObject:requirement];
+    }]];
     
-    return fieldRequirement && [self.requirementsMet containsObject:fieldRequirement];
+    return fieldRequirements && nonMetRequirements.count == 0;
 }
 
 - (void)postRegisterLogNotification:(NSString*)description {
@@ -260,7 +265,7 @@
     for (id<SILCharacteristicFieldRow> fieldRow in self.fieldTableRowModels) {        
         [fieldRow clearValues];
     }
-    
+    self.requirementsMet = [[NSMutableArray alloc] initWithArray:@[@"Mandatory"]];
     return YES;
 }
 

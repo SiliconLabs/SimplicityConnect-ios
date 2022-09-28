@@ -12,6 +12,7 @@
 #import "SILBluetoothFieldModel.h"
 #import "SILBluetoothBitFieldModel.h"
 #import "SILCharacteristicFieldValueResolver.h"
+#import "NSData+Reverse.h"
 
 @interface SILBitFieldFieldModel()
 
@@ -77,7 +78,8 @@
 
 //Consume a single bit value
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
-    NSData *bitFieldData = [[SILCharacteristicFieldValueResolver sharedResolver] subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];
+    NSData *bitFieldData = [[SILCharacteristicFieldValueResolver sharedResolver] subsectionOfData:value fromIndex:index forFieldModel:self.fieldModel];
+    bitFieldData = [self reverseDataIfNeeded:bitFieldData];
     self.readData = bitFieldData;
     
     for (SILBitRowModel *bitModel in self.bitRowFields) {
@@ -89,9 +91,10 @@
 }
 
 - (NSData *)dataForFieldWithError:(NSError * __autoreleasing *)error {
-    NSMutableData * const bitFieldData = [NSMutableData new];
+    NSMutableData *bitFieldData = [NSMutableData new];
     const NSUInteger bitCount = [[SILCharacteristicFieldValueResolver sharedResolver] bitCountForFormat:self.fieldModel.format];
-    uint8_t resultBuffer = 0;
+    uint64_t resultBuffer = 0;
+    NSInteger byteLength = ceil((double)bitCount / 8);
     NSInteger bitIndex = bitCount - 1;
     
     while (bitIndex >= 0) {
@@ -107,9 +110,14 @@
         bitIndex--;
     }
     
-    [bitFieldData appendBytes:&resultBuffer length:1];
+    [bitFieldData appendBytes:&resultBuffer length:byteLength];
+    bitFieldData = [self reverseDataIfNeeded:bitFieldData.reversed];
     
     return bitFieldData ?: self.readData;
+}
+
+- (NSData *)reverseDataIfNeeded:(NSData *)fieldData {
+    return self.fieldModel.invertedBytesOrder ? fieldData.reversed : fieldData;
 }
 
 @end

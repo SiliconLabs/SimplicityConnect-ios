@@ -11,9 +11,6 @@
 #import "SILCharacteristicFieldValueResolver.h"
 #import "SILBluetoothFieldModel.h"
 
-@interface SILCharacteristicFieldValueResolver()
-- (SInt64)sintCasterForSint:(SInt64)result originalSize:(int)originalSize castSize:(int)castSize;
-@end
 
 @interface SILCharacteristicFieldValueResolver(TestPrivate)
 - (NSData*)dataForValueString:(NSString *)dataString asFormat:(NSString *)format;
@@ -465,9 +462,9 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     
     NSData *writtenData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:@"-838445" asFormat:kS24Format];
     [writtenData getBytes:&written length:sizeof(sizeBuffer)];
-    written = (SInt32)[[SILCharacteristicFieldValueResolver sharedResolver] sintCasterForSint:written originalSize:24 castSize:32];
     
-    XCTAssertEqual(target, written);
+    
+    XCTAssertEqual(target & 0x00FFFFFF, written & 0x00FFFFFF);
 }
 
 - (void)testWriteSint24_Positive {
@@ -477,9 +474,8 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     
     NSData *writtenData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:@"638200" asFormat:kS24Format];
     [writtenData getBytes:&written length:sizeof(sizeBuffer)];
-    written = (SInt32)[[SILCharacteristicFieldValueResolver sharedResolver] sintCasterForSint:written originalSize:24 castSize:32];
     
-    XCTAssertEqual(target, written);
+    XCTAssertEqual(target & 0x00FFFFFF, written & 0x00FFFFFF);
 }
 
 #pragma mark - sint32
@@ -533,9 +529,8 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     
     NSData *writtenData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:@"-92740304304534" asFormat:kS48Format];
     [writtenData getBytes:&written length:sizeof(sizeBuffer)];
-    written = (SInt64)[[SILCharacteristicFieldValueResolver sharedResolver] sintCasterForSint:written originalSize:48 castSize:64];
     
-    XCTAssertEqual(target, written);
+    XCTAssertEqual(target & 0x0000FFFFFFFFFFFF, written & 0x0000FFFFFFFFFFFF);
 }
 
 - (void)testWriteSint48_Positive {
@@ -545,9 +540,8 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     
     NSData *writtenData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForValueString:@"29374398573359" asFormat:kS48Format];
     [writtenData getBytes:&written length:sizeof(sizeBuffer)];
-    written = (SInt64)[[SILCharacteristicFieldValueResolver sharedResolver] sintCasterForSint:written originalSize:48 castSize:64];
     
-    XCTAssertEqual(target, written);
+    XCTAssertEqual(target & 0x0000FFFFFFFFFFFF, written & 0x0000FFFFFFFFFFFF);
 }
 
 #pragma mark - sint 64
@@ -635,6 +629,16 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     XCTAssertTrue([writtenData isEqualToData:targetData]);
 }
 
+- (void)testFloat {
+    uint16_t bytes[2] = {0x016C, 0xFF00};
+    XCTAssertTrue([self assertBytes:bytes ofLength:4 areEqualToExpected:@"36.4" forFormat:kFloatFormat]);
+}
+
+- (void)testFloatNegative {
+    uint16_t bytes[2] = {0x718C, 0xFFFF};
+    XCTAssertTrue([self assertBytes:bytes ofLength:4 areEqualToExpected:@"-3646.8" forFormat:kFloatFormat]);
+}
+
 #pragma mark - SFLOAT
 
 - (void)testSFloat_Positive {
@@ -664,12 +668,12 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
 
 - (void)testSFloat_BorderValue1 {
     uint16_t bytes[1] = {0x0800};
-    XCTAssertTrue([self assertBytes:bytes ofLength:2 areEqualToExpected:@"2047" forFormat:kSFloatFormat]);
+    XCTAssertTrue([self assertBytes:bytes ofLength:2 areEqualToExpected:@"-2048" forFormat:kSFloatFormat]);
 }
 
 - (void)testSFLoat_BorderValue2 {
     uint16_t bytes[1] = {0x0801};
-    XCTAssertTrue([self assertBytes:bytes ofLength:2 areEqualToExpected:@"2047" forFormat:kSFloatFormat]);
+    XCTAssertTrue([self assertBytes:bytes ofLength:2 areEqualToExpected:@"-2047" forFormat:kSFloatFormat]);
 }
 
 - (void)testWriteSFloatString_Positive {
@@ -744,10 +748,6 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     
     XCTAssert([written isEqualToString:target]);
 }
-
-#pragma mark - reg-cert-data-list
-
-#pragma mark - variable
 
 #pragma mark - Hex String encoding
 
@@ -837,52 +837,6 @@ SILBluetoothFieldModel* (^fieldForFormat)(NSString *format) = ^(NSString *format
     NSData *stringData = [[SILCharacteristicFieldValueResolver sharedResolver] dataForDecimalString:decimalString];
 
     XCTAssertNil(stringData);
-}
-
-#pragma mark - Utility Tests
-
-- (void)testExponentPositive {
-    Float32 number = 535000.0f;
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:number];
-    
-    XCTAssertTrue(exponent == 3);
-}
-
-- (void)testExponentLessThanOne {
-    Float32 number = 0.052f;
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:number];
-    
-    XCTAssertTrue(exponent == -3);
-}
-
-- (void)testExponentZero {
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:0];
-    XCTAssertTrue(exponent == 0);
-}
-
-- (void)testExponentOne {
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:1];
-    XCTAssertTrue(exponent == 0);
-}
-
-- (void)testExponentTen {
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:10];
-    XCTAssertTrue(exponent == 1);
-}
-
-- (void)testExponentTwelve {
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:12];
-    XCTAssertTrue(exponent == 0);
-}
-
-- (void)testExponentTwenty {
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:20];
-    XCTAssertTrue(exponent == 1);
-}
-
-- (void)testExponentTwentyThree {
-    int exponent = [[SILCharacteristicFieldValueResolver sharedResolver] exponentOfIntegerBaseForFloat:23];
-    XCTAssertTrue(exponent == 0);
 }
 
 #pragma mark - Test Helpers

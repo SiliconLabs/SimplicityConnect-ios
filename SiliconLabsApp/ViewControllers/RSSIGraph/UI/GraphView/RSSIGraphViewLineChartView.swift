@@ -46,7 +46,7 @@ class RSSIGraphLineChartView: LineChartView {
     }
     
     private func disableLegend() {
-        chartDescription?.enabled = false
+        chartDescription.enabled = false
         legend.enabled = false
         rightAxis.enabled = false
     }
@@ -67,7 +67,7 @@ class RSSIGraphLineChartView: LineChartView {
         leftAxis.drawGridLinesEnabled = false
         leftAxis.drawAxisLineEnabled = false
         leftYAxisRenderer = RSSIGraphYAxisRenderer(viewPortHandler: leftYAxisRenderer.viewPortHandler,
-                                                             yAxis: leftAxis,
+                                                   axis: leftAxis,
                                                              transformer: leftYAxisRenderer.transformer)
     }
     
@@ -79,7 +79,7 @@ class RSSIGraphLineChartView: LineChartView {
         xAxis.drawGridLinesEnabled = false
         xAxis.drawAxisLineEnabled = false
         xAxisRenderer = RSSIGraphXAxisRenderer(viewPortHandler: xAxisRenderer.viewPortHandler,
-                                                         xAxis: xAxis,
+                                               axis: xAxis,
                                                          transformer: xAxisRenderer.transformer)
     }
     
@@ -188,7 +188,7 @@ class RSSIGraphLineChartView: LineChartView {
         cofigureDataSet(dataSet: dataSet)
         dataSet.colors = [color]
         
-        lineData?.addDataSet(dataSet)
+        lineData?.append(dataSet)
     }
 
     private func cofigureDataSet(dataSet: LineChartDataSet) {

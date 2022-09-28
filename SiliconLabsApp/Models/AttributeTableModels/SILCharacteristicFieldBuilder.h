@@ -11,6 +11,6 @@
 
 @interface SILCharacteristicFieldBuilder : NSObject
 
-- (NSArray *)characteristicModelValueAsFieldRows:(SILBluetoothCharacteristicModel *)characteristicModel;
+- (NSArray *)characteristicModelValueAsFieldRows:(SILBluetoothCharacteristicModel *)characteristicModel withRequirements:(NSArray<NSString *> *)requirements;
 
 @end

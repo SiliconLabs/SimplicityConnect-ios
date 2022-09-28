@@ -32,3 +32,4 @@ extern NSString * const DefaultDeviceName;
 extern CGFloat CornerRadiusForButtons;
 extern CGFloat CornerRadiusStandardValue;
 extern NSString * const CannotWriteEmptyTextToCharacteristic;
+extern NSString * const FillAllMandatoryFields;

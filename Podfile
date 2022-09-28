@@ -1,6 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '9.3'
+platform :ios, '12.0'
 
 inhibit_all_warnings!
 use_frameworks!
@@ -8,7 +8,7 @@ use_frameworks!
 def shared_pods
     pod 'ActionSheetPicker-3.0', '~> 2.3.0'
     pod 'ChameleonFramework', '~> 2.1.0'
-    pod 'Charts', '~> 3.3.0'
+    pod 'Charts', '~> 4.1.0'
     pod 'Crashlytics', '~> 3.12.0'
     pod 'Eddystone', :git => 'https://github.com/IntrepidPursuits/eddystone-ios.git', :branch => 'nservidio/add-properties-to-Generic'
     pod 'Fabric', '~> 1.9.0'

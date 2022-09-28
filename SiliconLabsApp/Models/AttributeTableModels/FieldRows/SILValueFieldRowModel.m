@@ -9,6 +9,7 @@
 #import "SILValueFieldRowModel.h"
 #import "SILBluetoothFieldModel.h"
 #import "SILCharacteristicFieldValueResolver.h"
+#import "NSData+Reverse.h"
 
 @interface SILValueFieldRowModel()
 
@@ -49,11 +50,12 @@
 
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
     SILCharacteristicFieldValueResolver * const valueResolver = [SILCharacteristicFieldValueResolver sharedResolver];
-    NSData * const fieldData = [valueResolver subsectionOfData:value fromIndex:index forFormat:self.fieldModel.format];
+    NSData * fieldData = [valueResolver subsectionOfData:value fromIndex:index forFieldModel:self.fieldModel];
+    fieldData = [self reverseDataIfNeeded:fieldData];
+    
     NSString * const readValue = [valueResolver readValueString:fieldData withFieldModel:self.fieldModel];
     self.primaryValue = readValue;
     self.readData = fieldData;
-    [self.delegate didMeetRequirement:self.fieldModel.requirement];
     return fieldData.length;
 }
 
@@ -61,8 +63,13 @@
     SILCharacteristicFieldValueResolver * const valueResolver = [SILCharacteristicFieldValueResolver sharedResolver];
 
     self.writeData = [valueResolver dataForValueString:self.primaryValue withFieldModel:self.fieldModel error:error];
+    self.writeData = [self reverseDataIfNeeded:self.writeData];
     
     return self.writeData ?: self.readData;
+}
+
+- (NSData *)reverseDataIfNeeded:(NSData *)fieldData {
+    return self.fieldModel.invertedBytesOrder ? fieldData.reversed : fieldData;
 }
 
 @end

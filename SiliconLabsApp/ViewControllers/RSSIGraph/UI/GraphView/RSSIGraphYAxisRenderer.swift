@@ -79,7 +79,7 @@ class RSSIGraphYAxisRenderer : YAxisRenderer {
     }
 }
 
-class RSSIGraphYAxisValueFormatter: IAxisValueFormatter {
+class RSSIGraphYAxisValueFormatter: AxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let sign = value > 0 ? "+" : ""
         return String(format: "%@%g.0 dBm", sign, value)

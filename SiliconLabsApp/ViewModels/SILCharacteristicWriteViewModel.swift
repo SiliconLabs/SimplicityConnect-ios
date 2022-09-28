@@ -79,9 +79,10 @@ class SILCharacteristicWriteViewModel {
             for rowModel in fieldsTableRowModels {
                 if let valueFieldRowModel = rowModel as? SILValueFieldRowModel {
                     cellViewModels.append(SILCharacteristicWriteFieldCellViewModel(titleName: valueFieldRowModel.fieldModel.name,
-                                                                               currentValue: valueFieldRowModel.primaryValue,
-                                                                               indexInModel: fieldsRowModelIndex,
-                                                                               format: valueFieldRowModel.fieldModel.format))
+                                                                                   currentValue: valueFieldRowModel.primaryValue,
+                                                                                   indexInModel: fieldsRowModelIndex,
+                                                                                   isMandatoryField: rowModel.fieldModel.isMandatoryField(),
+                                                                                   format: valueFieldRowModel.fieldModel.format))
                 } else if let enumListRowModel = rowModel as? SILEnumerationFieldRowModel {
                     cellViewModels.append(SILCharacteristicWriteEnumListCellViewModel(titleName: enumListRowModel.fieldModel.name,
                                                                                       currentValue: enumListRowModel.activeValue,
@@ -91,7 +92,8 @@ class SILCharacteristicWriteViewModel {
                     if let bitRowModels = bitFieldRowModel.bitRowModels() {
                         var bitRowModelIndex = 0
                         for bitRowModel in bitRowModels {
-                            cellViewModels.append(SILCharacteristicWriteBitFieldCellViewModel(currentValue: 0,
+                            cellViewModels.append(SILCharacteristicWriteBitFieldCellViewModel(name: bitRowModel.bit.name,
+                                                                                              currentValue: 0,
                                                                                               allPossibleValues: bitRowModel.bit.enumerations as! [SILBluetoothEnumerationModel],
                                                                                               index: (inModel: fieldsRowModelIndex, inBitModel: bitRowModelIndex)))
                             bitRowModelIndex = bitRowModelIndex + 1
@@ -247,10 +249,13 @@ class SILCharacteristicWriteViewModel {
                 } else if let fieldCellViewModel = cellViewModels[i] as? SILCharacteristicWriteFieldCellViewModel {
                     let indexInModel = fieldCellViewModel.indexInModel
                     if let fieldRowModel = self.fieldsTableRowModels[indexInModel] as? SILValueFieldRowModel {
-                        if fieldCellViewModel.currentValue.isEmpty {
-                            throw SILCharacteristicWriteError.parsingError(CannotWriteEmptyTextToCharacteristic)
+                        if !fieldRowModel.fieldModel.isMandatoryField() && fieldCellViewModel.currentValue.isEmpty{
+                            fieldRowModel.primaryValue = nil
+                        }else if fieldRowModel.fieldModel.isMandatoryField() && fieldCellViewModel.currentValue.isEmpty{
+                            throw SILCharacteristicWriteError.parsingError(FillAllMandatoryFields)
+                        }else {
+                            fieldRowModel.primaryValue = fieldCellViewModel.currentValue
                         }
-                        fieldRowModel.primaryValue = fieldCellViewModel.currentValue
                     }
                 } else if let enumListCellViewModel = cellViewModels[i] as? SILCharacteristicWriteEnumListCellViewModel {
                     let indexInModel = enumListCellViewModel.indexInModel

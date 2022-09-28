@@ -18,7 +18,7 @@ extern NSString * const FieldReadErrorMessage;
 - (NSString *)readValueString:(NSData *)value withFieldModel:(SILBluetoothFieldModel *)fieldModel;
 - (NSData *)dataForValueString:(NSString *)string withFieldModel:(SILBluetoothFieldModel *)fieldModel error:(NSError *__autoreleasing *)error;
 - (NSArray *)binaryArrayFromValue:(NSData *)value forFormat:(NSString *)format;
-- (NSData *)subsectionOfData:(NSData *)value fromIndex:(NSInteger)index forFormat:(NSString *)format;
+- (NSData *)subsectionOfData:(NSData *)value fromIndex:(NSInteger)index forFieldModel:(SILBluetoothFieldModel *)field;
 - (NSString *)hexStringForData:(NSData *)value decimalExponent:(NSInteger)decimalExponent;
 - (BOOL)isLegalHexString:(NSString *)hexPairString length:(NSUInteger)length;
 - (NSString *)asciiStringForData:(NSData *)value;
@@ -29,6 +29,5 @@ extern NSString * const FieldReadErrorMessage;
 - (NSData *)dataForDecimalString:(NSString *)decimalString;
 - (NSUInteger)bitCountForFormat:(NSString *)format;
 - (NSUInteger)byteCountForFormat:(NSString *)format;
-- (int)exponentOfIntegerBaseForFloat:(Float32)number;
 
 @end
