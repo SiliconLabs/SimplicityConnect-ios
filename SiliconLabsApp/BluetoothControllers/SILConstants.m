@@ -30,7 +30,7 @@ NSString * const SILCharacteristicNumberDMPSwitchSource = @"2F16EE52-0BFD-4597-8
 NSString * const SILCharacteristicNumberDMPSourceAddress = @"82A1CB54-3921-4C9C-BA34-34F78BAB9A1B";
 
 NSString * const SILDiscoveredPeripheralConnectableDevice = @"Connectable";
-NSString * const SILDiscoveredPeripheralNonConnectableDevice = @"Non-connectable";
+NSString * const SILDiscoveredPeripheralNonConnectableDevice = @"N-connectable";
 
 NSInteger const SILConstantsStrongSignalThreshold = -50;
 NSInteger const SILConstantsMediumSignalThreshold = -80;

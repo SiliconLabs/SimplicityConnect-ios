@@ -153,7 +153,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
                         let acceptableThroughput = weakSelf.calculateThroughput()
                         if acceptableThroughput == 0 {
                             weakSelf.invalidateObservableTokens()
-                            weakSelf.testResult.value = SILTestResult(testID: weakSelf.testID, testName: weakSelf.testName, testStatus: .uknown(reason: "(Throughput: \(throughputSpped) Bytes/s)"))
+                            weakSelf.testResult.value = SILTestResult(testID: weakSelf.testID, testName: weakSelf.testName, testStatus: .unknown(reason: "(Throughput: \(throughputSpped) Bytes/s)"))
                         } else if weakSelf.calculateThroughput() <= throughputSpped {
                             weakSelf.publishTestResult(passed: true, description: "(Throughput: \(throughputSpped) Bytes/s, Acceptable Throughput: \(weakSelf.calculateThroughput()) Bytes/s).")
                         } else {

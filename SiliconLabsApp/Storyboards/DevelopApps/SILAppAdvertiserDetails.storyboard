@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -33,87 +33,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ccc-wl-xes" userLabel="All Space">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7a-RL-VKw" userLabel="Navigation Bar">
-                                        <rect key="frame" x="0.0" y="0.0" width="768" height="80"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="XcO-pz-tLf" userLabel="Navigation Stack">
-                                                <rect key="frame" x="0.0" y="0.0" width="768" height="80"/>
-                                                <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C7t-oP-oU3" userLabel="Options">
-                                                        <rect key="frame" x="0.0" y="0.0" width="768" height="20"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="779-kc-Pgk">
-                                                                <rect key="frame" x="16" y="-1" width="50" height="22"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="50" id="D2g-01-5Mf"/>
-                                                                </constraints>
-                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <state key="normal" image="left_chevron">
-                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="onBackTouch:" destination="BQp-FC-hhJ" eventType="touchUpInside" id="dNI-4T-Zwu"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="779-kc-Pgk" firstAttribute="centerY" secondItem="C7t-oP-oU3" secondAttribute="centerY" id="5rH-PV-2Vb"/>
-                                                            <constraint firstItem="779-kc-Pgk" firstAttribute="leading" secondItem="C7t-oP-oU3" secondAttribute="leading" constant="16" id="z8h-oa-ygi"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lJ-By-fLu" userLabel="Title">
-                                                        <rect key="frame" x="0.0" y="20" width="768" height="60"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New adv" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C6c-U5-yIs" userLabel="Title" customClass="SILUILabels">
-                                                                <rect key="frame" x="0.0" y="9.5" width="720" height="41"/>
-                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOS-Td-D2c" userLabel="Save Button">
-                                                                <rect key="frame" x="720" y="14" width="32" height="32"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="32" id="jvi-qE-rk1"/>
-                                                                    <constraint firstAttribute="height" constant="32" id="oR8-W3-Ro0"/>
-                                                                </constraints>
-                                                                <color key="tintColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                                                <state key="normal" image="save"/>
-                                                                <connections>
-                                                                    <action selector="onSaveTouch:" destination="BQp-FC-hhJ" eventType="touchUpInside" id="q9h-bV-Kng"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <constraints>
-                                                            <constraint firstAttribute="trailing" secondItem="hOS-Td-D2c" secondAttribute="trailing" constant="16" id="N0U-CQ-ySn"/>
-                                                            <constraint firstItem="hOS-Td-D2c" firstAttribute="centerY" secondItem="C6c-U5-yIs" secondAttribute="centerY" id="TAQ-0X-IWz"/>
-                                                            <constraint firstItem="C6c-U5-yIs" firstAttribute="centerY" secondItem="3lJ-By-fLu" secondAttribute="centerY" id="dVn-nx-DVk"/>
-                                                            <constraint firstItem="hOS-Td-D2c" firstAttribute="leading" secondItem="C6c-U5-yIs" secondAttribute="trailing" id="iHM-5p-Tms"/>
-                                                            <constraint firstItem="C6c-U5-yIs" firstAttribute="leading" secondItem="3lJ-By-fLu" secondAttribute="leading" id="ixp-td-4Do"/>
-                                                        </constraints>
-                                                    </view>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="80" id="7Zy-3z-Zlp"/>
-                                                    <constraint firstItem="3lJ-By-fLu" firstAttribute="height" secondItem="XcO-pz-tLf" secondAttribute="height" multiplier="0.75" id="hzZ-2Q-i7c"/>
-                                                </constraints>
-                                            </stackView>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemRedColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="XcO-pz-tLf" secondAttribute="bottom" id="5Pa-wv-jWt"/>
-                                            <constraint firstAttribute="height" constant="80" id="AQZ-Z1-Mon"/>
-                                            <constraint firstItem="XcO-pz-tLf" firstAttribute="leading" secondItem="z7a-RL-VKw" secondAttribute="leading" id="Bao-JR-jbE"/>
-                                            <constraint firstAttribute="trailing" secondItem="XcO-pz-tLf" secondAttribute="trailing" id="dmP-wH-KTL"/>
-                                            <constraint firstItem="XcO-pz-tLf" firstAttribute="top" secondItem="z7a-RL-VKw" secondAttribute="top" id="s6h-iT-4oQ"/>
-                                        </constraints>
-                                    </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eR9-XK-wZI">
-                                        <rect key="frame" x="0.0" y="80" width="768" height="944"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                                         <subviews>
                                             <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56k-E9-euz">
-                                                <rect key="frame" x="0.0" y="0.0" width="768" height="944"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A39-ee-sJd" userLabel="shadowView">
                                                         <rect key="frame" x="16" y="16" width="736" height="1337.5"/>
@@ -125,13 +51,13 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="736" height="90"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Advertising Set Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsQ-sy-JqQ">
-                                                                                <rect key="frame" x="16" y="16" width="116.5" height="14"/>
+                                                                                <rect key="frame" x="16" y="16" width="117" height="14.5"/>
                                                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qJq-m4-74m">
-                                                                                <rect key="frame" x="16" y="38" width="704" height="35"/>
+                                                                                <rect key="frame" x="16" y="38.5" width="704" height="34.5"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                 <textInputTraits key="textInputTraits"/>
                                                                                 <connections>
@@ -191,7 +117,7 @@
                                                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                                                 <prototypes>
                                                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILAdvertisingDataTitleCellView" id="ePD-gt-Tqg" customClass="SILAdvertisingDataTitleCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="0.0" y="28" width="696" height="44"/>
+                                                                                                        <rect key="frame" x="0.0" y="50" width="696" height="44"/>
                                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ePD-gt-Tqg" id="C8r-6n-rB4">
                                                                                                             <rect key="frame" x="0.0" y="0.0" width="696" height="44"/>
@@ -234,7 +160,7 @@
                                                                                                         </connections>
                                                                                                     </tableViewCell>
                                                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILAdvertisingDataValueCellView" id="ihH-68-xl7" customClass="SILAdvertisingDataValueCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="0.0" y="72" width="696" height="64"/>
+                                                                                                        <rect key="frame" x="0.0" y="94" width="696" height="64"/>
                                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ihH-68-xl7" id="WwP-DW-iB3">
                                                                                                             <rect key="frame" x="0.0" y="0.0" width="696" height="64"/>
@@ -244,7 +170,7 @@
                                                                                                                     <rect key="frame" x="16" y="8" width="664" height="48"/>
                                                                                                                     <subviews>
                                                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="unb-2C-lSc">
-                                                                                                                            <rect key="frame" x="16" y="17" width="615" height="14"/>
+                                                                                                                            <rect key="frame" x="16" y="17" width="615" height="14.5"/>
                                                                                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                                                                                                                             <nil key="textColor"/>
                                                                                                                             <nil key="highlightedColor"/>
@@ -288,14 +214,14 @@
                                                                                                         </connections>
                                                                                                     </tableViewCell>
                                                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILAdvertisingDataButtonCellView" id="BS6-7W-FZN" customClass="SILAdvertisingDataButtonCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="0.0" y="136" width="696" height="40"/>
+                                                                                                        <rect key="frame" x="0.0" y="158" width="696" height="40"/>
                                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BS6-7W-FZN" id="HtZ-7F-wCJ">
                                                                                                             <rect key="frame" x="0.0" y="0.0" width="696" height="40"/>
                                                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                                                             <subviews>
                                                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BPa-ka-zwS" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                                    <rect key="frame" x="16" y="8" width="67" height="24"/>
+                                                                                                                    <rect key="frame" x="16" y="8" width="52" height="24"/>
                                                                                                                     <constraints>
                                                                                                                         <constraint firstAttribute="height" constant="24" id="Nhp-Ih-Rni"/>
                                                                                                                     </constraints>
@@ -347,7 +273,7 @@
                                                                                 <rect key="frame" x="0.0" y="421" width="736" height="47"/>
                                                                                 <subviews>
                                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUK-88-VsB" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                        <rect key="frame" x="16" y="12" width="129" height="27"/>
+                                                                                        <rect key="frame" x="16" y="12" width="107" height="27"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="27" id="MHm-p7-Nl8"/>
                                                                                         </constraints>
@@ -435,7 +361,7 @@
                                                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                                                 <prototypes>
                                                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILScanResponseTitleCellView" id="hXe-V0-ics" customClass="SILScanResponseTitleCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="0.0" y="28" width="696" height="44"/>
+                                                                                                        <rect key="frame" x="0.0" y="50" width="696" height="44"/>
                                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hXe-V0-ics" id="SZo-QT-YNe">
                                                                                                             <rect key="frame" x="0.0" y="0.0" width="696" height="44"/>
@@ -478,7 +404,7 @@
                                                                                                         </connections>
                                                                                                     </tableViewCell>
                                                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILScanResponseValueCellView" id="hTZ-nU-XPD" customClass="SILScanResponseValueCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="0.0" y="72" width="696" height="64"/>
+                                                                                                        <rect key="frame" x="0.0" y="94" width="696" height="64"/>
                                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hTZ-nU-XPD" id="L4f-ua-Brz">
                                                                                                             <rect key="frame" x="0.0" y="0.0" width="696" height="64"/>
@@ -488,7 +414,7 @@
                                                                                                                     <rect key="frame" x="16" y="8" width="664" height="48"/>
                                                                                                                     <subviews>
                                                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="faj-hA-djQ">
-                                                                                                                            <rect key="frame" x="16" y="17" width="29" height="14"/>
+                                                                                                                            <rect key="frame" x="16" y="17" width="30" height="14.5"/>
                                                                                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
                                                                                                                             <nil key="textColor"/>
                                                                                                                             <nil key="highlightedColor"/>
@@ -516,14 +442,14 @@
                                                                                                         </connections>
                                                                                                     </tableViewCell>
                                                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILAdvertisingDataButtonCellView" id="d6u-yC-pTg" customClass="SILAdvertisingDataButtonCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                        <rect key="frame" x="0.0" y="136" width="696" height="40"/>
+                                                                                                        <rect key="frame" x="0.0" y="158" width="696" height="40"/>
                                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="d6u-yC-pTg" id="Hez-aJ-Su1">
                                                                                                             <rect key="frame" x="0.0" y="0.0" width="696" height="40"/>
                                                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                                                             <subviews>
                                                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DbR-Rp-YUC" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                                                    <rect key="frame" x="16" y="8" width="67" height="24"/>
+                                                                                                                    <rect key="frame" x="16" y="8" width="52" height="24"/>
                                                                                                                     <constraints>
                                                                                                                         <constraint firstAttribute="height" constant="24" id="10E-u7-koG"/>
                                                                                                                     </constraints>
@@ -575,7 +501,7 @@
                                                                                 <rect key="frame" x="0.0" y="421" width="736" height="47"/>
                                                                                 <subviews>
                                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVG-Rn-ha4" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                        <rect key="frame" x="16" y="12" width="129" height="27"/>
+                                                                                        <rect key="frame" x="16" y="12" width="107" height="27"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="27" id="wLv-e6-yZU"/>
                                                                                         </constraints>
@@ -636,7 +562,7 @@
                                                                                 <rect key="frame" x="16" y="17" width="704" height="183.5"/>
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Advertising Parameters" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZJi-o7-jfB">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="125" height="25"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="127" height="25"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="25" id="Ck0-QK-uoi"/>
                                                                                         </constraints>
@@ -645,14 +571,14 @@
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BiS-mo-fmw">
-                                                                                        <rect key="frame" x="0.0" y="35" width="638.5" height="33.5"/>
+                                                                                        <rect key="frame" x="0.0" y="35" width="634" height="33.5"/>
                                                                                         <string key="text">iOS advertises on a "best effort" basis and does not provide access to any additional advertising parameters except of advertising time</string>
                                                                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                                         <color key="textColor" name="sil_secondaryBackgroundColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Advertising Time Limit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7b5-CV-IwT">
-                                                                                        <rect key="frame" x="0.0" y="78.5" width="119" height="25"/>
+                                                                                        <rect key="frame" x="0.0" y="78.5" width="121.5" height="25"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="25" id="0jX-Yr-BZq"/>
                                                                                         </constraints>
@@ -791,26 +717,17 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PSR-IX-mBx" userLabel="Above Safe Area">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="0.0"/>
-                                <color key="backgroundColor" systemColor="systemRedColor"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="EkE-8K-zsC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="EkE-8K-zsC" firstAttribute="trailing" secondItem="PSR-IX-mBx" secondAttribute="trailing" id="Dqm-Kw-JBN"/>
                             <constraint firstItem="ccc-wl-xes" firstAttribute="top" secondItem="EkE-8K-zsC" secondAttribute="top" id="JDy-p3-7cG"/>
-                            <constraint firstItem="PSR-IX-mBx" firstAttribute="top" secondItem="aI0-7f-Q0E" secondAttribute="top" id="M6h-mC-ThP"/>
                             <constraint firstItem="ccc-wl-xes" firstAttribute="leading" secondItem="EkE-8K-zsC" secondAttribute="leading" id="X7x-qg-G56"/>
                             <constraint firstItem="EkE-8K-zsC" firstAttribute="trailing" secondItem="ccc-wl-xes" secondAttribute="trailing" id="bWT-oa-35O"/>
-                            <constraint firstItem="EkE-8K-zsC" firstAttribute="bottom" secondItem="ccc-wl-xes" secondAttribute="bottom" id="mVd-Hb-QoT"/>
-                            <constraint firstItem="ccc-wl-xes" firstAttribute="top" secondItem="PSR-IX-mBx" secondAttribute="bottom" id="nUM-e0-Az9"/>
-                            <constraint firstItem="PSR-IX-mBx" firstAttribute="leading" secondItem="EkE-8K-zsC" secondAttribute="leading" id="t1S-gQ-x1U"/>
+                            <constraint firstAttribute="bottom" secondItem="ccc-wl-xes" secondAttribute="bottom" id="mVd-Hb-QoT"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="aboveSafeAreaView" destination="PSR-IX-mBx" id="lyh-ca-EE5"/>
                         <outlet property="addDataTypeButton" destination="zUK-88-VsB" id="U08-Md-RRe"/>
                         <outlet property="addScanResponseDataTypeButton" destination="EVG-Rn-ha4" id="thV-sA-DRr"/>
                         <outlet property="advertisingDataTableContainerView" destination="jzk-pu-ihp" id="XvT-ly-eau"/>
@@ -821,10 +738,7 @@
                         <outlet property="bodyContainer" destination="A39-ee-sJd" id="7Z0-9y-rfB"/>
                         <outlet property="dataContainerView" destination="5mj-eo-wgg" id="oDe-Kf-Een"/>
                         <outlet property="executionTimeTextField" destination="Ah0-db-iP4" id="tPC-Nw-7o3"/>
-                        <outlet property="navigationBarTitleLabel" destination="C6c-U5-yIs" id="8gk-he-1rQ"/>
-                        <outlet property="navigationBarView" destination="z7a-RL-VKw" id="aOP-jL-FTa"/>
                         <outlet property="noLimitRadioButtonView" destination="tkV-9v-bQ2" id="Ta1-p6-Su3"/>
-                        <outlet property="saveButton" destination="hOS-Td-D2c" id="fDA-Xl-dNM"/>
                         <outlet property="scanResponseBytesCountLabel" destination="LNM-he-Mgl" id="Q9K-cJ-rdc"/>
                         <outlet property="scanResponseDataContainerView" destination="KH4-sx-9Ow" id="WeP-bu-efq"/>
                         <outlet property="scanResponseTableContainerView" destination="CV7-0B-vgK" id="lHd-zB-cgY"/>
@@ -840,22 +754,20 @@
     </scenes>
     <designables>
         <designable name="BPa-ka-zwS">
-            <size key="intrinsicContentSize" width="67" height="37"/>
+            <size key="intrinsicContentSize" width="52" height="31"/>
         </designable>
         <designable name="DbR-Rp-YUC">
-            <size key="intrinsicContentSize" width="67" height="37"/>
+            <size key="intrinsicContentSize" width="52" height="31"/>
         </designable>
         <designable name="EVG-Rn-ha4">
-            <size key="intrinsicContentSize" width="129" height="37"/>
+            <size key="intrinsicContentSize" width="107" height="33"/>
         </designable>
         <designable name="zUK-88-VsB">
-            <size key="intrinsicContentSize" width="129" height="37"/>
+            <size key="intrinsicContentSize" width="107" height="33"/>
         </designable>
     </designables>
     <resources>
-        <image name="left_chevron" width="8" height="13"/>
         <image name="radio_button_active" width="112.5" height="112.5"/>
-        <image name="save" width="18" height="18"/>
         <image name="sil_trash" width="30" height="30"/>
         <namedColor name="sil_backgroundColor">
             <color red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -871,9 +783,6 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

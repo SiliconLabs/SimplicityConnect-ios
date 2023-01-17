@@ -186,7 +186,7 @@ struct SILTestCaseResults {
             switch testCaseResult.testStatus {
             case .passed(details: _),
                  .failed(reason: _),
-                 .uknown(reason: _),
+                 .unknown(reason: _),
                  .inProgress:
                 i = i + 1
             default:
@@ -238,7 +238,7 @@ struct SILIOPTestReport {
                 text = "\n\tTest Case \(testID) \(result.rawValue)."
             }
         
-        case let .uknown(reason: reason):
+        case let .unknown(reason: reason):
             if testID == "7.1", let reason = reason, reason.description.contains("(Throughput") {
                 text = "\n\tTest Case \(testID) \(result.rawValue),\(reason.description)"
             } else {

@@ -40,8 +40,6 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 @property (weak, nonatomic) IBOutlet UILabel *recentTypeLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *measurementCollectionView;
 @property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
-@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
-@property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
 @property (weak, nonatomic) IBOutlet SILThermometerSegmentedControl *typeControl;
 @property (assign, nonatomic) BOOL isConnected;
 @property (weak, nonatomic) IBOutlet UIStackView *presentationSpace;
@@ -112,7 +110,6 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     [self setupDeviceInfo];
     [self setupTypeControl];
     [self setupMeasurementCollectionView];
-    [self setupNavigationBar];
     [self updateRecentMeasurement];
 }
 
@@ -123,7 +120,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 - (void)setupTypeControl {
     [self.typeControl addTarget:self action:@selector(typeControlWasTapped:) forControlEvents:UIControlEventValueChanged];
 
-    if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)) {
+    if ((UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad)) {
         self.typeControl.firstSegmentLabel.text = @"F";
         self.typeControl.secondSegmentLabel.text = @"C";
 
@@ -138,33 +135,11 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
         self.typeControl.firstSegmentLabel.text = @"ºF";
         self.typeControl.secondSegmentLabel.text = @"ºC";
 
-        self.typeControl.selectedTextColor = [UIColor sil_siliconLabsRedColor];
+        self.typeControl.selectedTextColor = [UIColor sil_regularBlueColor];
         self.typeControl.unselectedTextColor = [UIColor sil_silverColor];
-        self.typeControl.selectedIndicatorColor = [UIColor sil_siliconLabsRedColor];
+        self.typeControl.selectedIndicatorColor = [UIColor sil_regularBlueColor];
         self.typeControl.unselectedIndicatorColor = [UIColor sil_silverColor];
     }
-}
-
-- (void)setupNavigationBar {
-    [self setupNavigationBarBackgroundColor];
-    [self setupNavigatioBarTitleLabel];
-    [self setupNavigationBarShadow];
-}
-
-- (void)setupNavigationBarBackgroundColor {
-    _aboveSpaceAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-    _navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-}
-
-- (void)setupNavigatioBarTitleLabel {
-    _navigationBarTitleLabel.font = [UIFont robotoMediumWithSize:SILNavigationBarTitleFontSize];
-    _navigationBarTitleLabel.textColor = [UIColor sil_backgroundColor];
-    _navigationBarTitleLabel.adjustsFontSizeToFitWidth = YES;
-}
-
-- (void)setupNavigationBarShadow {
-    [self.presentationSpace bringSubviewToFront:self.navigationBarView];
-    [self.navigationBarView addShadow];
 }
 
 - (void)setupMeasurementCollectionView {
@@ -177,7 +152,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     self.measurementCollectionView.contentInset = UIEdgeInsetsMake(0,
                                                                    0,
                                                                    0,
-                                                                   (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 18 : 5);
+                                                                   (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) ? 18 : 5);
     [self.measurementCollectionView registerNib:[UINib nibWithNibName:NSStringFromClass([SILBarGraphCollectionViewCell class]) bundle:nil]
                      forCellWithReuseIdentifier:NSStringFromClass([SILBarGraphCollectionViewCell class])];
 }
@@ -250,14 +225,14 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 
     [self setup];
     self.temperatureMeasurements = [NSMutableArray array];
+    [self setLeftAlignedTitle:@"Health Thermometer"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
+    
     [self registerForBluetoothControllerNotifications];
     [self preparePeripheral];
-    
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
@@ -265,11 +240,20 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     [super viewDidDisappear:animated];
 
     if (self.isConnected) {
-        [SVProgressHUD showErrorWithStatus:@"Disconnecting Thermometer..."];
         [self disconnectPeripheral];
     }
     
     [self.navigationController popViewControllerAnimated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.tabBarController hideTabBarAndUpdateFrames];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController.tabBarController showTabBarAndUpdateFrames];
 }
 
 - (void)dealloc {
@@ -427,7 +411,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 #pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return CGSizeMake(146, collectionView.bounds.size.height);
     } else {
         CGFloat screenWidth = [[[UIApplication sharedApplication] delegate] window].frame.size.width;

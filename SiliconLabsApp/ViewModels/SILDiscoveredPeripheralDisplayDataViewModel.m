@@ -68,7 +68,7 @@
         isFirst = NO;
     }
     if (beacon.major) {
-        if (isFirst == YES) {
+        if (!isFirst) {
             isFirst = NO;
         } else {
             [iBeaconDataString appendString:@"\n"];

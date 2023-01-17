@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Roboto-Medium.ttf">
-            <string>Roboto-Medium</string>
+        <array key="Roboto-Bold.ttf">
+            <string>Roboto-Bold</string>
         </array>
         <array key="Roboto-Regular.ttf">
             <string>Roboto-Regular</string>
@@ -31,33 +32,30 @@
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dva-HR-vXe">
                     <rect key="frame" x="0.0" y="0.0" width="306" height="24"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hex" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="288" translatesAutoresizingMaskIntoConstraints="NO" id="23m-38-4cB" userLabel="HexLabel">
-                            <rect key="frame" x="0.0" y="0.0" width="50" height="24"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="50" id="byf-v3-wcW"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.34000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ACd-NO-SF6">
-                            <rect key="frame" x="58" y="0.0" width="248" height="24"/>
+                            <rect key="frame" x="0.0" y="0.0" width="306" height="24"/>
                             <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hex" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="288" translatesAutoresizingMaskIntoConstraints="NO" id="23m-38-4cB" userLabel="HexLabel">
+                                    <rect key="frame" x="8" y="0.0" width="18" height="24"/>
+                                    <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="10"/>
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="288" translatesAutoresizingMaskIntoConstraints="NO" id="v8Z-ma-B2s" userLabel="HexValue">
-                                    <rect key="frame" x="0.0" y="0.0" width="29" height="24"/>
+                                    <rect key="frame" x="34" y="0.0" width="29" height="24"/>
                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4A2-15-vV1">
-                                    <rect key="frame" x="0.0" y="23" width="248" height="1"/>
+                                    <rect key="frame" x="0.0" y="23" width="306" height="1"/>
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="e9p-Gr-aKh"/>
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PnH-C3-feV">
-                                    <rect key="frame" x="228" y="0.0" width="20" height="20"/>
+                                    <rect key="frame" x="286" y="0.0" width="20" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="TVG-tV-5uP"/>
                                         <constraint firstAttribute="width" secondItem="PnH-C3-feV" secondAttribute="height" multiplier="1:1" id="VTi-hd-lkx"/>
@@ -68,16 +66,20 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <color key="backgroundColor" name="sil_backgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="4A2-15-vV1" secondAttribute="bottom" id="BgP-s4-Zip"/>
                                 <constraint firstItem="4A2-15-vV1" firstAttribute="width" secondItem="ACd-NO-SF6" secondAttribute="width" id="BlO-TP-9WF"/>
-                                <constraint firstItem="v8Z-ma-B2s" firstAttribute="leading" secondItem="ACd-NO-SF6" secondAttribute="leading" id="Cbt-rK-yiq"/>
+                                <constraint firstItem="v8Z-ma-B2s" firstAttribute="leading" secondItem="23m-38-4cB" secondAttribute="trailing" constant="8" id="Cbt-rK-yiq"/>
+                                <constraint firstItem="23m-38-4cB" firstAttribute="leading" secondItem="ACd-NO-SF6" secondAttribute="leading" constant="8" id="K9i-Jj-Ome"/>
                                 <constraint firstAttribute="trailing" secondItem="PnH-C3-feV" secondAttribute="trailing" id="dbF-Wh-Nce"/>
                                 <constraint firstItem="v8Z-ma-B2s" firstAttribute="top" secondItem="ACd-NO-SF6" secondAttribute="top" id="eNJ-bQ-05u"/>
                                 <constraint firstAttribute="bottom" secondItem="v8Z-ma-B2s" secondAttribute="bottom" id="eWn-L0-zSl"/>
                                 <constraint firstItem="PnH-C3-feV" firstAttribute="top" secondItem="ACd-NO-SF6" secondAttribute="top" id="gfV-2U-lrg"/>
+                                <constraint firstItem="PnH-C3-feV" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="v8Z-ma-B2s" secondAttribute="trailing" id="hp0-ab-nNu"/>
                                 <constraint firstItem="4A2-15-vV1" firstAttribute="leading" secondItem="ACd-NO-SF6" secondAttribute="leading" id="r2P-VD-FSS"/>
+                                <constraint firstItem="23m-38-4cB" firstAttribute="bottom" secondItem="v8Z-ma-B2s" secondAttribute="bottom" id="uAU-an-sJf"/>
+                                <constraint firstItem="23m-38-4cB" firstAttribute="top" secondItem="v8Z-ma-B2s" secondAttribute="top" id="vCq-tF-S9n"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -98,6 +100,9 @@
     </objects>
     <resources>
         <image name="icon - copy" width="20" height="20"/>
+        <namedColor name="sil_backgroundColor">
+            <color red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -11,6 +11,7 @@ class SILGattConfiguratorCellView: SILCell, SILCellView {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var serviceNumberLabel: UILabel!
     @IBOutlet weak var enableSwitch: SILSwitch!
+    @IBOutlet weak var affordanceImage: UIImageView!
     
     private var viewModel: SILGattConfiguratorCellViewModel? {
         didSet {
@@ -58,6 +59,16 @@ class SILGattConfiguratorCellView: SILCell, SILCellView {
             serviceNumberLabel.text = "\(viewModel?.configuration.services.count ?? 0) Services"
         }
         enableSwitch.isOn = state?.isOn ?? false
+        
+        changeAffordanceImageWhenCellIsTapped()
+    }
+    
+    private func changeAffordanceImageWhenCellIsTapped() {
+        if(viewModel?.isExpanded == true) {
+            affordanceImage.image = UIImage(named: "chevron_expanded")
+        } else {
+            affordanceImage.image = UIImage(named: "chevron_collapsed")
+        }
     }
     
     @IBAction func toggleEnableSwitch(_ sender: SILSwitch) {

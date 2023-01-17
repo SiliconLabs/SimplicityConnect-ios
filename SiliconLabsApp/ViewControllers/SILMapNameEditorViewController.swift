@@ -53,8 +53,8 @@ class SILMapNameEditorViewController: SILDebugPopoverViewController, UITextField
     }
     
     private func setupFieldsUsingModel() {
-        let ServiceTitleText = "Change service name"
-        let CharacteristicTitleText = "Change characteristic name"
+        let ServiceTitleText = "Rename service"
+        let CharacteristicTitleText = "Rename characteristic"
                 
         switch self.model {
         case is SILServiceMap:

@@ -11,22 +11,18 @@ import UIKit
 
 @objc
 @objcMembers
-class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, SILIOPPopupDelegate, WYPopoverControllerDelegate {
+class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
     @IBOutlet weak var allSpace: UIStackView!
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var navigationBarTitleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var infoView: UIView!
     @IBOutlet weak var firmwareNameLabel: UILabel!
     @IBOutlet weak var deviceNameLabel: UILabel!
     @IBOutlet weak var totalTestCases: UILabel!
-    @IBOutlet weak var shareButton: UIButton!
-    @IBOutlet weak var runTestButton: UIButton!
-    @IBOutlet weak var infoImage: UIImageView!
+    @IBOutlet weak var floatingButton: UIButton!
     
-    private var infoPopoverController: WYPopoverController?
     
-    private var viewModel: SILIOPTesterViewModel!
+    private var viewModel: SILIOPTesterViewModel?
     var deviceNameToSearch: String?
 
     private var disposeBag = SILObservableTokenBag()
@@ -34,27 +30,34 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     private var currentTestState: SILIOPTesterViewModel.TestState?
     private var currentTestScenarioIndex: Int = 0
     
-    //MARK: ViewController LifeCycle Method
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.disposeBag = SILObservableTokenBag()
         self.setupViewModel()
-        self.setupView()
+        self.setupFloatingButton()
         self.subscribeToUpdateUINotifications()
+        self.floatingButton.layer.cornerRadius = 20
         infoView.addShadow()
         if let deviceNameToSearch = deviceNameToSearch {
             firmwareNameLabel.text = "Firmware Name: \(deviceNameToSearch)"
         }
         deviceNameLabel.text = "Device Name: \(UIDevice.deviceName)"
+        self.setLeftAlignedTitle("Interoperability Test")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "shareWhite"),
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(shareTestResult))
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        super.viewDidAppear(animated)
         self.registerNotifications()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+        self.unregisterNotifications()
+        viewModel?.stopTest()
     }
     
     private func registerNotifications() {
@@ -65,54 +68,33 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         NotificationCenter.default.removeObserver(self, name: .SILIOPShowFilePicker, object: nil)
     }
     
-    //MARK: Initialize Views
-    func setupView() {
-        runTestButton.setTitle("Run Tests", for: .normal)
-        runTestButton.setTitle("Waiting...", for: .disabled)
-        
-        self.setupInfoImage()
-        self.setupNavigationBar()
-    }
-    
-    private func setupInfoImage() {
-        let image = UIImage(named: "help_white")?.withRenderingMode(.alwaysTemplate)
-        infoImage.image = image
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedInfoImage(_:)))
-        self.infoImage.addGestureRecognizer(tap)
-    }
-    
-    @objc private func tappedInfoImage(_ gestureRecognizer: UIGestureRecognizer) {
-        self.presentInfoPopup(animated: true)
-    }
-    
-    private func presentInfoPopup(animated: Bool) {
-        let infoPopup = SILIOPInfoPopup()
-        infoPopup.delegate = self
-        self.infoPopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: infoPopup, presenting: self, delegate: self, animated: true)
-    }
-    
-    func didTappedCancelButton() {
-        dismissPopup()
-    }
-    
-    func popoverControllerDidDismissPopover(_ popoverController: WYPopoverController!) {
-        dismissPopup()
-    }
-    
-    private func dismissPopup() {
-        self.infoPopoverController?.dismissPopover(animated: true) {
-            self.infoPopoverController = nil
+    @IBAction func floatingButtonPressed() {
+        if currentTestState! != .running {
+            viewModel?.startTest()
+        } else {
+            showPopupAlert()
         }
     }
     
-    func setupNavigationBar() {
-        navigationBarTitleLabel.adjustsFontSizeToFitWidth = true
-        navigationBarView.addShadow()
-        allSpace.bringSubviewToFront(navigationBarView)
+    func setupFloatingButton() {
+        self.floatingButton.setTitle(self.buttonText(), for: .normal)
+    }
+    
+    func buttonText() -> String {
+        guard let currentTestState = currentTestState else {
+            return "Run Test"
+        }
+        
+        switch(currentTestState) {
+        case .initiated, .ended:
+            return "Run Test"
+        case .running:
+            return "Stop Test"
+        }
     }
     
     func subscribeToUpdateUINotifications() {
+        guard let viewModel = viewModel else { return }
         weak var weakSelf = self
         let updateTableViewSubscription = viewModel.updateTableViewWithCurrentTestScenarioIndex.observe( { index in
             guard let weakSelf = weakSelf else { return }
@@ -141,8 +123,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         let testStateStatusSubscription = viewModel.testStateStatus.observe( { status in
             guard let weakSelf = weakSelf else { return }
             weakSelf.currentTestState = status
-            weakSelf.updateInfoView(newState: status)
-            weakSelf.updateInfoImage(newState: status)
+            weakSelf.setupFloatingButton()
         })
         disposeBag.add(token: testStateStatusSubscription)
         
@@ -155,48 +136,15 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         disposeBag.add(token: bluetoothStateSubscription)
     }
     
-    private func updateInfoImage(newState: SILIOPTesterViewModel.TestState) {
-        if newState == .running {
-            infoImage.isUserInteractionEnabled = false
-            infoImage.tintColor = UIColor.sil_lineGrey()
-        } else {
-            infoImage.isUserInteractionEnabled = true
-            infoImage.tintColor = .white
-        }
-    }
-    
-    private func updateInfoView(newState: SILIOPTesterViewModel.TestState) {
-        switch newState {
-        case .initiated:
-            shareButton.isHidden = true
-            runTestButton.isEnabled = true
-
-            runTestButton.backgroundColor = UIColor.sil_regularBlue()
-            
-        case .running:
-            shareButton.isHidden = true
-            runTestButton.isEnabled = false
-            runTestButton.backgroundColor = .lightGray
-            
-        case .ended:
-            shareButton.isHidden = false
-            runTestButton.isEnabled = true
-            runTestButton.backgroundColor = UIColor.sil_regularBlue()
-            
-        }
-    }
-    
     private func showPopupAlert() {
         guard self.currentTestState == .running else {
-            self.navigationController?.popViewController(animated: true)
             return
         }
         
         let alert = UIAlertController(title: "Are you sure you want to stop the test?", message: "", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "No", style: .default)
         let okAction = UIAlertAction(title: "Yes", style: .destructive) { (action) in
-            self.viewModel.stopTest()
-            self.navigationController?.popViewController(animated: true)
+            self.viewModel?.endTesting()
         }
 
         alert.addAction(okAction)
@@ -204,23 +152,22 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         self.present(alert, animated: true)
     }
  
-    private func shareTestResult() {
-        let filesToShare = [viewModel.getReportFile()] as [Any]
+    @objc func shareTestResult() {
+        guard let viewModel = viewModel, currentTestState != .initiated else { return }
+        let filesToShare = [viewModel.getReportFile() as Any] as [Any]
         let iopTestLogSubject = "IOP Test Log"
         
         let activityViewController = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
         activityViewController.setValue(iopTestLogSubject, forKey: "Subject")
+        activityViewController.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
         
-        activityViewController.popoverPresentationController?.sourceView = self.shareButton
-        activityViewController.popoverPresentationController?.sourceRect = self.shareButton.bounds
         self.present(activityViewController, animated: true, completion: nil)
     }
     
     private func showBluetoothDisabledAlert() {
         let bluetoothDisabledAlert = SILBluetoothDisabledAlert.interoperabilityTest
         self.alertWithOKButton(title: bluetoothDisabledAlert.title, message: bluetoothDisabledAlert.message, completion: { _ in
-            self.viewModel.stopTest()
-            self.navigationController?.popViewController(animated: true)
+            self.viewModel?.stopTest()
         })
     }
     
@@ -229,19 +176,6 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     func setupViewModel() {
         guard let deviceName =  self.deviceNameToSearch else { return }
         self.viewModel = SILIOPTesterViewModel(deviceNameToSearch: deviceName)
-    }
-    
-    //MARK: Action Methods
-    @IBAction func didTappedRunOrStopBtn(_ sender: Any) {
-        self.viewModel.startTest()
-    }
-    
-    @IBAction func didTappedShareBtn(_ sender: Any) {
-        self.shareTestResult()
-    }
-    
-    @IBAction func tappedBackBtn(_ sender: Any) {
-        self.showPopupAlert()
     }
     
     func showDocumentPickerView() {
@@ -253,10 +187,9 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     
     //MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var _cellViewModel: SILCellViewModel?
-        _cellViewModel = self.viewModel.cellViewModels[indexPath.section] as SILCellViewModel
+        var cellViewModel = self.viewModel?.cellViewModels[indexPath.section] as SILCellViewModel?
         
-        guard let cellViewModel = _cellViewModel else { return UITableViewCell() }
+        guard let cellViewModel = cellViewModel else { return UITableViewCell() }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellViewModel.reusableIdentifier) as?  SILIOPTestScenarioCellView else { return UITableViewCell() }
         
@@ -266,7 +199,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.cellViewModels.count
+        return viewModel?.cellViewModels.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -278,18 +211,8 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 20.0)
+        SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 5.0)
     }
-    
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let isRunning = self.currentTestState == .running
-        if isRunning {
-            showPopupAlert()
-        }
-        
-        return !isRunning
-    }
-    
 }
 
 extension SILIOPTesterViewController: UIDocumentPickerDelegate {

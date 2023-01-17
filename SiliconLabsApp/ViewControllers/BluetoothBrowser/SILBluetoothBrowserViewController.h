@@ -14,6 +14,16 @@ IB_DESIGNABLE
 @interface SILBluetoothBrowserViewController : UIViewController
 
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
+@property BOOL filterIsSelected;
+
+- (void)startScanning;
+- (void)stopScanningAction;
+- (void)startScanningAction;
+- (void)filterButtonTapped;
+- (void)sortButtonTapped;
+- (void)mapButtonTapped;
+- (void)setupFloatingButtonSettings:(id)settings;
+- (IBAction)scanningButtonWasTapped:(id)sender;
 
 @end
 

@@ -12,7 +12,7 @@ import Foundation
 class SILSegmentedControl: UISegmentedControl {
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.red], for: .selected)
+        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
         self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
     }
 }

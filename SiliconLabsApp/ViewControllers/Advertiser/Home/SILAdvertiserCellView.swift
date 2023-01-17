@@ -11,7 +11,8 @@ import UIKit
 class SILAdvertiserCellView: SILCell, SILAdvertiserHomeCellView {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var enableSwitch: SILSwitch!
-    
+    @IBOutlet weak var affordanceImage: UIImageView!
+
     private var viewModel: SILAdvertiserCellViewModel? {
         didSet {
             didSetViewModel()
@@ -51,6 +52,15 @@ class SILAdvertiserCellView: SILCell, SILAdvertiserHomeCellView {
     private func didSetState(oldValue: SILAdvertiserCellViewModel.State?) {
         titleLabel.text = state?.name
         enableSwitch.isOn = state?.isOn ?? false
+        changeAffordanceImageWhenCellIsTapped()
+    }
+    
+    private func changeAffordanceImageWhenCellIsTapped() {
+        if(state?.isExpanded == true) {
+            affordanceImage.image = UIImage(named: "chevron_expanded")
+        } else {
+            affordanceImage.image = UIImage(named: "chevron_collapsed")
+        }
     }
     
     @IBAction func toggleEnableSwitch(_ sender: SILSwitch) {
@@ -68,4 +78,5 @@ class SILAdvertiserCellView: SILCell, SILAdvertiserHomeCellView {
     @IBAction func copyAdvertiserSet(_ sender: Any) {
         viewModel?.copyAdvertiserSet()
     }
+    
 }

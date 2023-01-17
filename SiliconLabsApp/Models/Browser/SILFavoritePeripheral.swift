@@ -19,8 +19,8 @@ public class SILFavoritePeripheral: Object {
         return "uuid"
     }
     
-    @objc static func isFavorite(_ peripheral: SILDiscoveredPeripheralDisplayDataViewModel) -> Bool {
-        let uuid: String = peripheral.discoveredPeripheral.identityKey
+    @objc static func isFavorite(_ peripheral: SILDiscoveredPeripheral) -> Bool {
+        let uuid: String = peripheral.identityKey
         var fav = false
         let realm = try! Realm()
         if let _: SILFavoritePeripheral = realm.object(ofType: SILFavoritePeripheral.self, forPrimaryKey: uuid) {

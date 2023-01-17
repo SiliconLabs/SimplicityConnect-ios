@@ -37,7 +37,7 @@ class SILAbstractDeviceSelectionViewController: UIViewController, UICollectionVi
     
     override var preferredContentSize: CGSize {
         get {
-            if UI_USER_INTERFACE_IDIOM() == .pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: 540, height: 606)
             } else {
                 return CGSize(width: 296, height: 447)
@@ -57,7 +57,7 @@ class SILAbstractDeviceSelectionViewController: UIViewController, UICollectionVi
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellHeight: CGFloat = UI_USER_INTERFACE_IDIOM() == .pad ? 104.0 : 64.0
+        let cellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 104.0 : 64.0
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
             let rowSpacing: CGFloat = flowLayout.minimumInteritemSpacing + flowLayout.sectionInset.left + flowLayout.sectionInset.right

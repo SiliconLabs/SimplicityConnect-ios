@@ -63,6 +63,6 @@ class RSSIGraphXAxisRenderer: XAxisRenderer {
 
 class RSSIGraphXAxisValueFormatter: AxisValueFormatter {
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-        return "\(Int(value))s"
+        return "\(Int(value)) s"
     }
 }

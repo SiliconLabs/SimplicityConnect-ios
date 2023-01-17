@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uiP-VV-6br">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uiP-VV-6br">
     <device id="ipad11_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,111 +19,50 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3YN-zm-255" userLabel="All Space">
-                                <rect key="frame" x="0.0" y="0.0" width="834" height="1174"/>
+                                <rect key="frame" x="0.0" y="24" width="834" height="1150"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Jop-fw-utc" userLabel="Presentation Space">
-                                        <rect key="frame" x="0.0" y="0.0" width="834" height="1174"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="834" height="1150"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SaE-cs-mbB" userLabel="Navigation Bar">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nAS-tw-Kgn" userLabel="Device View">
                                                 <rect key="frame" x="0.0" y="0.0" width="834" height="80"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tQK-ay-mI9" userLabel="Navigation Stack">
-                                                        <rect key="frame" x="0.0" y="0.0" width="834" height="80"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="4Z0-cw-Wlq">
+                                                        <rect key="frame" x="16" y="24" width="373.5" height="32"/>
                                                         <subviews>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4kZ-fa-yQ2" userLabel="Options">
-                                                                <rect key="frame" x="0.0" y="0.0" width="834" height="32"/>
-                                                                <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uwh-l0-LGL">
-                                                                        <rect key="frame" x="16" y="5" width="50" height="22"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="width" constant="50" id="FCT-h3-KMS"/>
-                                                                        </constraints>
-                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <state key="normal" image="left_chevron">
-                                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="backButtonWasTapped:" destination="uiP-VV-6br" eventType="touchUpInside" id="dTe-rT-FDn"/>
-                                                                        </connections>
-                                                                    </button>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstItem="Uwh-l0-LGL" firstAttribute="leading" secondItem="4kZ-fa-yQ2" secondAttribute="leading" constant="16" id="ZzB-ms-zm6"/>
-                                                                    <constraint firstItem="Uwh-l0-LGL" firstAttribute="centerY" secondItem="4kZ-fa-yQ2" secondAttribute="centerY" id="q7w-5L-gSc"/>
-                                                                </constraints>
-                                                            </view>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vvn-tx-Grd" userLabel="Title">
-                                                                <rect key="frame" x="0.0" y="32" width="834" height="48"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Health Thermometer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d69-Aj-YxO" userLabel="Health Thermometer" customClass="SILUILabels">
-                                                                        <rect key="frame" x="0.0" y="3.5" width="300" height="41"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="width" constant="300" id="VQU-dc-ppz"/>
-                                                                        </constraints>
-                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
-                                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstItem="d69-Aj-YxO" firstAttribute="centerY" secondItem="vvn-tx-Grd" secondAttribute="centerY" id="3Ba-3V-jAz"/>
-                                                                    <constraint firstItem="d69-Aj-YxO" firstAttribute="leading" secondItem="vvn-tx-Grd" secondAttribute="leading" id="YJT-xS-hGO"/>
-                                                                </constraints>
-                                                            </view>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CONNECTED TO :" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XD7-H9-RjD">
+                                                                <rect key="frame" x="0.0" y="0.0" width="133.5" height="32"/>
+                                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                                                                <color key="textColor" name="sil_regularBlueColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <variation key="widthClass=compact">
+                                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                                                                </variation>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silicon Labs Thermometer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR3-ti-3M2">
+                                                                <rect key="frame" x="138.5" y="0.0" width="235" height="32"/>
+                                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                                <color key="textColor" name="sil_regularBlueColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <variation key="widthClass=compact">
+                                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                                                </variation>
+                                                            </label>
                                                         </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="vvn-tx-Grd" firstAttribute="height" secondItem="tQK-ay-mI9" secondAttribute="height" multiplier="0.6" id="QyC-cu-afd"/>
-                                                            <constraint firstAttribute="height" constant="80" id="qQt-d8-uPS"/>
-                                                        </constraints>
                                                     </stackView>
-                                                </subviews>
-                                                <color key="backgroundColor" systemColor="systemRedColor"/>
-                                                <constraints>
-                                                    <constraint firstItem="tQK-ay-mI9" firstAttribute="centerY" secondItem="SaE-cs-mbB" secondAttribute="centerY" id="BY4-pg-xcG"/>
-                                                    <constraint firstItem="tQK-ay-mI9" firstAttribute="width" secondItem="SaE-cs-mbB" secondAttribute="width" id="K7o-tF-5fy"/>
-                                                    <constraint firstItem="tQK-ay-mI9" firstAttribute="centerX" secondItem="SaE-cs-mbB" secondAttribute="centerX" id="Soi-Ud-OUl"/>
-                                                    <constraint firstItem="tQK-ay-mI9" firstAttribute="height" secondItem="SaE-cs-mbB" secondAttribute="height" id="VG3-rA-G77"/>
-                                                </constraints>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nAS-tw-Kgn" userLabel="Device View">
-                                                <rect key="frame" x="0.0" y="80" width="834" height="124"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CONNECTED TO" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XD7-H9-RjD">
-                                                        <rect key="frame" x="38" y="37" width="124.5" height="19"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                                        <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <variation key="widthClass=compact">
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
-                                                        </variation>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Silicon Labs Thermometer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR3-ti-3M2">
-                                                        <rect key="frame" x="38" y="58" width="281.5" height="28"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                                        <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <variation key="widthClass=compact">
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                                        </variation>
-                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstItem="ZR3-ti-3M2" firstAttribute="leading" secondItem="XD7-H9-RjD" secondAttribute="leading" id="2Vt-Pq-FCZ"/>
-                                                    <constraint firstItem="XD7-H9-RjD" firstAttribute="top" secondItem="nAS-tw-Kgn" secondAttribute="top" constant="37" id="FdE-6M-6wT">
-                                                        <variation key="widthClass=compact" constant="17"/>
-                                                    </constraint>
-                                                    <constraint firstAttribute="height" constant="124" id="HxZ-Oe-HPw">
+                                                    <constraint firstAttribute="height" constant="80" id="HxZ-Oe-HPw">
                                                         <variation key="widthClass=compact" constant="68"/>
                                                     </constraint>
-                                                    <constraint firstItem="ZR3-ti-3M2" firstAttribute="top" secondItem="XD7-H9-RjD" secondAttribute="bottom" constant="2" id="O0q-lT-Ho5"/>
-                                                    <constraint firstItem="XD7-H9-RjD" firstAttribute="leading" secondItem="nAS-tw-Kgn" secondAttribute="leading" constant="38" id="qXS-zC-AEd">
-                                                        <variation key="widthClass=compact" constant="16"/>
-                                                    </constraint>
+                                                    <constraint firstItem="ZR3-ti-3M2" firstAttribute="centerY" secondItem="nAS-tw-Kgn" secondAttribute="centerY" id="T3G-lg-TFO"/>
+                                                    <constraint firstItem="4Z0-cw-Wlq" firstAttribute="leading" secondItem="nAS-tw-Kgn" secondAttribute="leading" constant="16" id="eBV-FW-vAV"/>
+                                                    <constraint firstItem="4Z0-cw-Wlq" firstAttribute="top" secondItem="nAS-tw-Kgn" secondAttribute="top" constant="24" id="kCV-8r-ZZW"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="aZG-cn-Pfs" userLabel="Recent View">
-                                                <rect key="frame" x="0.0" y="204" width="834" height="280"/>
+                                                <rect key="frame" x="0.0" y="80" width="834" height="280"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VKL-mG-PVX" userLabel="Divider View">
                                                         <rect key="frame" x="480.5" y="67.5" width="1" height="145"/>
@@ -142,7 +82,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="1000" text="TEMPERATURE" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lZ4-bE-6Ad">
                                                         <rect key="frame" x="36" y="67" width="114.5" height="19"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                                                        <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="sil_regularBlueColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <variation key="widthClass=compact">
                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
@@ -151,15 +91,15 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="80" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ERa-s1-KqG">
                                                         <rect key="frame" x="36" y="68.5" width="156" height="160.5"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="140"/>
-                                                        <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="sil_regularBlueColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <variation key="widthClass=compact">
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="86"/>
                                                         </variation>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="4" translatesAutoresizingMaskIntoConstraints="NO" id="Awz-qv-Jlo">
-                                                        <rect key="frame" x="517.5" y="94.5" width="280.5" height="28"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
+                                                        <rect key="frame" x="517.5" y="94.5" width="280.5" height="29"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
                                                         <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <variation key="widthClass=compact">
@@ -192,7 +132,7 @@
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHE-Dg-eMM" userLabel="Decimal View">
                                                         <rect key="frame" x="197" y="194" width="8" height="8"/>
-                                                        <color key="backgroundColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" name="sil_regularBlueColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="8" id="387-OA-y0l">
                                                                 <variation key="widthClass=compact" constant="6"/>
@@ -210,7 +150,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ulu-n8-fM3">
                                                         <rect key="frame" x="215" y="131" width="39" height="83"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="70"/>
-                                                        <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="sil_regularBlueColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <variation key="widthClass=compact">
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="36"/>
@@ -219,7 +159,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="º" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5rt-eM-scd">
                                                         <rect key="frame" x="254" y="90" width="20.5" height="71"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="60"/>
-                                                        <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="sil_regularBlueColor"/>
                                                         <nil key="highlightedColor"/>
                                                         <variation key="widthClass=compact">
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
@@ -289,11 +229,11 @@
                                                                 </variation>
                                                                 <variation key="widthClass=compact">
                                                                     <mask key="constraints">
+                                                                        <exclude reference="tJB-Hu-pkQ"/>
                                                                         <include reference="Oqr-kz-cZF"/>
                                                                         <exclude reference="hsx-vg-lIR"/>
                                                                         <include reference="nTl-Aj-wJn"/>
                                                                         <exclude reference="qXZ-0Z-dVK"/>
-                                                                        <exclude reference="tJB-Hu-pkQ"/>
                                                                     </mask>
                                                                 </variation>
                                                             </view>
@@ -363,11 +303,11 @@
                                                                 </variation>
                                                                 <variation key="widthClass=compact">
                                                                     <mask key="constraints">
+                                                                        <exclude reference="OoC-mb-tFV"/>
                                                                         <include reference="0GB-Bn-bmN"/>
                                                                         <include reference="Elq-dZ-C1P"/>
                                                                         <exclude reference="QHe-Jy-MAR"/>
                                                                         <exclude reference="zim-qQ-3i0"/>
-                                                                        <exclude reference="OoC-mb-tFV"/>
                                                                     </mask>
                                                                 </variation>
                                                             </view>
@@ -488,12 +428,12 @@
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
+                                                        <exclude reference="zlV-RA-ccV"/>
+                                                        <exclude reference="34g-B8-yKd"/>
                                                         <exclude reference="Owp-8x-s1s"/>
                                                         <exclude reference="Psf-GS-CIF"/>
                                                         <exclude reference="lM0-wn-GI8"/>
                                                         <exclude reference="opl-00-1nG"/>
-                                                        <exclude reference="zlV-RA-ccV"/>
-                                                        <exclude reference="34g-B8-yKd"/>
                                                         <exclude reference="4aT-Ks-NPo"/>
                                                         <exclude reference="SlG-PM-q9c"/>
                                                     </mask>
@@ -503,6 +443,9 @@
                                                         <exclude reference="Ifm-Ja-YIP"/>
                                                     </mask>
                                                     <mask key="constraints">
+                                                        <include reference="zlV-RA-ccV"/>
+                                                        <include reference="34g-B8-yKd"/>
+                                                        <exclude reference="eJq-QH-YSx"/>
                                                         <exclude reference="5Yp-WZ-40n"/>
                                                         <exclude reference="BH4-Ix-G9a"/>
                                                         <exclude reference="MMP-Fi-Zil"/>
@@ -511,25 +454,22 @@
                                                         <exclude reference="aWE-Yn-GNl"/>
                                                         <include reference="lM0-wn-GI8"/>
                                                         <include reference="opl-00-1nG"/>
-                                                        <include reference="zlV-RA-ccV"/>
-                                                        <include reference="34g-B8-yKd"/>
-                                                        <exclude reference="eJq-QH-YSx"/>
-                                                        <include reference="4aT-Ks-NPo"/>
-                                                        <include reference="SlG-PM-q9c"/>
-                                                        <exclude reference="dOV-kX-LTQ"/>
-                                                        <exclude reference="XfT-BJ-vve"/>
                                                         <exclude reference="2hG-Qh-4Qh"/>
                                                         <exclude reference="8Vu-nv-SL5"/>
                                                         <exclude reference="JXZ-Tf-wSG"/>
                                                         <exclude reference="ewl-bX-ToW"/>
+                                                        <include reference="4aT-Ks-NPo"/>
+                                                        <include reference="SlG-PM-q9c"/>
+                                                        <exclude reference="dOV-kX-LTQ"/>
+                                                        <exclude reference="XfT-BJ-vve"/>
                                                     </mask>
                                                 </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5k1-3h-7sn" userLabel="Graph View">
-                                                <rect key="frame" x="0.0" y="484" width="834" height="690"/>
+                                                <rect key="frame" x="0.0" y="360" width="834" height="790"/>
                                                 <subviews>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="f1D-fb-XkH">
-                                                        <rect key="frame" x="0.0" y="0.0" width="834" height="690"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="834" height="790"/>
                                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <collectionViewLayout key="collectionViewLayout" id="xwT-fq-ehX" customClass="SILCollectionViewRightAlignedFlowLayout"/>
                                                         <cells/>
@@ -554,30 +494,19 @@
                                     <constraint firstItem="Jop-fw-utc" firstAttribute="height" secondItem="3YN-zm-255" secondAttribute="height" id="h4f-V6-PCG"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MFr-x7-OrP" userLabel="Above Space Area View">
-                                <rect key="frame" x="0.0" y="0.0" width="834" height="0.0"/>
-                                <color key="backgroundColor" systemColor="systemRedColor"/>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hfW-nB-mk6"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="MFr-x7-OrP" firstAttribute="bottom" secondItem="3YN-zm-255" secondAttribute="top" id="CUU-hC-vPD"/>
                             <constraint firstItem="3YN-zm-255" firstAttribute="height" secondItem="hfW-nB-mk6" secondAttribute="height" id="FMi-ax-ktt"/>
-                            <constraint firstItem="MFr-x7-OrP" firstAttribute="width" secondItem="3YN-zm-255" secondAttribute="width" id="aHT-yQ-eES"/>
-                            <constraint firstItem="MFr-x7-OrP" firstAttribute="leading" secondItem="3YN-zm-255" secondAttribute="leading" id="fYh-0f-YNb"/>
+                            <constraint firstItem="hfW-nB-mk6" firstAttribute="bottom" secondItem="3YN-zm-255" secondAttribute="bottom" id="OYa-C0-1HC"/>
                             <constraint firstItem="3YN-zm-255" firstAttribute="centerX" secondItem="hfW-nB-mk6" secondAttribute="centerX" id="jaB-4f-a4x"/>
-                            <constraint firstItem="MFr-x7-OrP" firstAttribute="top" secondItem="MTd-Th-NEu" secondAttribute="top" id="t2y-Vo-WTd"/>
-                            <constraint firstItem="3YN-zm-255" firstAttribute="centerY" secondItem="hfW-nB-mk6" secondAttribute="centerY" id="uAx-13-cMS"/>
                             <constraint firstItem="3YN-zm-255" firstAttribute="width" secondItem="hfW-nB-mk6" secondAttribute="width" id="uMt-1l-Os5"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="aboveSpaceAreaView" destination="MFr-x7-OrP" id="SAq-54-ARY"/>
                         <outlet property="deviceNameLabel" destination="ZR3-ti-3M2" id="2EX-KR-wSE"/>
                         <outlet property="measurementCollectionView" destination="f1D-fb-XkH" id="MJa-ly-xeP"/>
-                        <outlet property="navigationBarTitleLabel" destination="d69-Aj-YxO" id="BYz-Qk-LMr"/>
-                        <outlet property="navigationBarView" destination="SaE-cs-mbB" id="yQK-UV-Kuw"/>
                         <outlet property="presentationSpace" destination="Jop-fw-utc" id="AWi-EU-ubz"/>
                         <outlet property="recentTemperatureDecimalLabel" destination="Ulu-n8-fM3" id="zgi-dq-1qE"/>
                         <outlet property="recentTemperatureLabel" destination="ERa-s1-KqG" id="TRA-b7-yUa"/>
@@ -588,22 +517,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bRe-xz-kQs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="129" y="180"/>
+            <point key="canvasLocation" x="128.77697841726621" y="179.89949748743717"/>
         </scene>
     </scenes>
     <resources>
-        <image name="left_chevron" width="8" height="13"/>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <namedColor name="sil_regularBlueColor">
+            <color red="0.058823529411764705" green="0.3843137254901961" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -52,7 +52,7 @@ class SILIOPTestStatusView: UIView {
             testStatusLabel.textColor = UIColor.sil_siliconLabsRed()
             testStatusImageView.image = UIImage(named: imageNamesForStatus.failed)
             
-        case .uknown(reason: _):
+        case .unknown(reason: _):
             testStatusLabel.isHidden = false
             NSLayoutConstraint.deactivate([imageHeightContraint])
             testStatusImageView.isHidden = true

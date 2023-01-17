@@ -14,6 +14,17 @@ class MotionSenseBoardDemoViewController : MotionDemoViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setLeftAlignedTitle("Motion")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     override func setupModel() {

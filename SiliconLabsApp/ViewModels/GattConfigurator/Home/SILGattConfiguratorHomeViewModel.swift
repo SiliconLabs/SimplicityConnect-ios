@@ -10,11 +10,10 @@ import AEXML
 
 protocol SILGattConfiguratorHomeViewDelegate: class {
     func updateConfigurations(configurations: [SILGattConfiguratorCellViewModel], checkBoxCells: [SILGattConfiguratorCheckBoxCellViewModel])
-    func popViewController()
  }
 
 class SILGattConfiguratorHomeViewModel {
-    private let wireframe: SILGattConfiguratorHomeWireframeType
+    let wireframe: SILGattConfiguratorHomeWireframeType
     private unowned let view: SILGattConfiguratorHomeViewDelegate
     private let repository: SILGattConfigurationRepositoryType
     private let service: SILGattConfiguratorServiceType
@@ -30,14 +29,12 @@ class SILGattConfiguratorHomeViewModel {
     
     let isExportButtonEnable: SILObservable<Bool> = SILObservable(initialValue: false)
     let isExportModeOn: SILObservable<Bool> = SILObservable(initialValue: false)
-    let isMenuEnabled: SILObservable<Bool> = SILObservable(initialValue: true)
     
     let fileWriter = SILFileWriter(exportDirName: "SILGattConfiguratorExport")
     
-    private var isExportModeTurnOn: Bool = false {
+    var isExportModeTurnOn: Bool = false {
         didSet {
             isExportModeOn.value = isExportModeTurnOn
-            isMenuEnabled.value = !isExportModeOn.value
             if !isExportModeTurnOn {
                 gattConfigurationsToExport = []
                 isExportButtonEnable.value = false
@@ -77,29 +74,6 @@ class SILGattConfiguratorHomeViewModel {
         }.putIn(bag: observableTokenBag)
         
         fileWriter.clearExportDir()
-    }
-    
-    func openMenu(sourceView: UIView) {
-        wireframe.presentContextMenu(sourceView: sourceView, options: [
-            ContextMenuOption(title: "Create new") { [weak self] in
-                print("Selected create new")
-                self?.isMenuEnabled.value = false
-                self?.createGattConfiguration()
-                self?.isMenuEnabled.value = true
-            },
-            ContextMenuOption(title: "Import", callback: {
-                print("Selected import")
-                self.wireframe.showDocumentPickerView()
-            }),
-            ContextMenuOption(enabled: gattConfigurations.count > 0, title: "Export",  callback: {
-                print("Selected export")
-                self.isExportModeTurnOn = true
-            })
-        ])
-    }
-    
-    func onBack() {
-        self.view.popViewController()
     }
     
     private func getFilePathForGattConfiguration(createdFilesDict: inout [String: Int], name: String) -> String {
@@ -147,7 +121,6 @@ class SILGattConfiguratorHomeViewModel {
                     onStarted: @escaping () -> (),
                     onFinish: @escaping ([URL: SILGattXmlParserError]) -> ()) {
         onStarted()
-        isMenuEnabled.value = false
         
         var configurationToAdd: SILGattConfigurationEntity?
         var importError = [URL: SILGattXmlParserError]()
@@ -171,7 +144,6 @@ class SILGattConfiguratorHomeViewModel {
                 self.repository.add(configuration: configuration)
             }
             
-            self.isMenuEnabled.value = true
             onFinish(importError)
         })
     }

@@ -271,7 +271,7 @@ final class DebugDeviceViewModel: NSObject {
     private func addNewDevicesIfNeed(_ peripheralViewModels: [SILDiscoveredPeripheralDisplayDataViewModel]) {
         for peripheralDevice in peripheralViewModels {
             if !arrayContainDevice(peripheralDevice, in: allDiscoveredPeripheralsViewModels) {
-                if (SILFavoritePeripheral.isFavorite(peripheralDevice)) {
+                if (SILFavoritePeripheral.isFavorite(peripheralDevice.discoveredPeripheral)) {
                     peripheralDevice.discoveredPeripheral.isFavourite = true
                     allDiscoveredPeripheralsViewModels.insert(peripheralDevice, at: 0)
                 } else {
@@ -379,8 +379,8 @@ final class DebugDeviceViewModel: NSObject {
         moveFavoritesUp()
     }
     
-    private func sortRSSI(ascending: Bool) {
-        discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.sorted(by: { (first, second) in
+    func sortRSSI(ascending: Bool) {
+        allDiscoveredPeripheralsViewModels = allDiscoveredPeripheralsViewModels.sorted(by: { (first, second) in
             let firstRSSI = first.discoveredPeripheral.rssiValue()?.intValue ?? 0
             let secondRSSI = second.discoveredPeripheral.rssiValue()?.intValue ?? 0
             if ascending {
@@ -408,7 +408,7 @@ final class DebugDeviceViewModel: NSObject {
             var peripheralsWithFavoritesAsFirst:[SILDiscoveredPeripheralDisplayDataViewModel] = []
             var index = 0
             for discoveredPeripheral in discoveredPeripheralsViewModels {
-                if (SILFavoritePeripheral.isFavorite(discoveredPeripheral)) {
+                if (SILFavoritePeripheral.isFavorite(discoveredPeripheral.discoveredPeripheral)) {
                     peripheralsWithFavoritesAsFirst.insert(discoveredPeripheral, at: index)
                     index += 1
                 } else {
@@ -421,7 +421,7 @@ final class DebugDeviceViewModel: NSObject {
         
     // MARK: - Post Notifications
     
-    private func postReloadBrowserTable() {
+    func postReloadBrowserTable() {
         NotificationCenter.default.post(name: Notification.Name(SILNotificationReloadBrowserTable), object: nil)
     }
     

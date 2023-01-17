@@ -33,28 +33,16 @@
 #import "SILExitPopupViewController.h"
 #import "SILBrowserSettings.h"
 
-@interface SILBluetoothBrowserViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate, SILDebugDeviceViewModelDelegate, SILBrowserFilterViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILBrowserLogViewControllerDelegate, WYPopoverControllerDelegate, SILExitPopupViewControllerDelegate, SILSortViewControllerDelegate, UIGestureRecognizerDelegate>
+@interface SILBluetoothBrowserViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate, SILDebugDeviceViewModelDelegate, SILBrowserFilterViewControllerDelegate, WYPopoverControllerDelegate, SILExitPopupViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
-@property (weak, nonatomic) IBOutlet UIView *aboveSpaceAreaView;
-@property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
 @property (weak, nonatomic) IBOutlet UIView *presentationView;
 @property (weak, nonatomic) IBOutlet UIView *discoveredDevicesView;
 @property (weak, nonatomic) IBOutlet UITableView *browserTableView;
-@property (weak, nonatomic) IBOutlet UIButton *logButton;
-@property (weak, nonatomic) IBOutlet UIButton *connectionsButton;
-@property (weak, nonatomic) IBOutlet UIButton *filterButton;
-@property (weak, nonatomic) IBOutlet UIButton *sortButton;
-@property (weak, nonatomic) IBOutlet UIButton *scanningButton;
 @property (weak, nonatomic) IBOutlet UIImageView *noDevicesFoundImageView;
-@property (weak, nonatomic) IBOutlet UIStackView *noDevicesFoundView;
+@property (weak, nonatomic) IBOutlet UIStackView *noDevicesFoundStackView;
 @property (weak, nonatomic) IBOutlet UILabel *noDevicesFoundLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *expandableControllerHeight;
-@property (weak, nonatomic) IBOutlet UIView *expandableControllerView;
 @property (weak, nonatomic) IBOutlet SILRefreshImageView *refreshImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topRefreshImageConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterBarHeight;
-@property (weak, nonatomic) IBOutlet SILFilterBarViewController* filterBarViewController;
 
 @property (strong, nonatomic) NSTimer *tableRefreshTimer;
 @property (strong, nonatomic) SILDebugDeviceViewModel *browserViewModel;
@@ -64,10 +52,8 @@
 @property (strong, nonatomic) NSIndexPath *connectingCellIndexPath;
 @property (nonatomic) BOOL isScanning;
 @property (nonatomic) NSMutableArray<NSString*>* expandSections;
-@property (nonatomic) SILBluetoothBrowserExpandableViewManager* browserExpandableViewManager;
 @property (strong, nonatomic) WYPopoverController *popoverController;
-@property (weak, nonatomic) IBOutlet UIView *scanningButtonView;
-@property (weak, nonatomic) IBOutlet UIView *topButtonsView;
+@property (nonatomic, weak) FloatingButtonSettings *floatingButtonSettings;
 
 @end
 
@@ -76,39 +62,33 @@
 NSString* const TitleForScanningButtonDuringScanning = @"Stop Scanning";
 NSString* const TitleForScanningButtonWhenIsNotScanning = @"Start Scanning";
 long long const ms = 1000;
-NSString* const AppendingMS = @" ms";
 const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)viewDidLoad {
+    self.filterIsSelected = NO;
     [super viewDidLoad];
     [self setupProperties];
-    [self setupNavigationBar];
-    [self setupBrowserExpandableViewManager];
-    [self setupButtonsTabBar];
-    [self setupScanningButton];
     [self setupBrowserViewModel];
     [self installViewModelsForExpandableViews];
-    [self setupBackgroundForScanning:YES];
-    [self setScanningButtonAppearanceWithScanning:_isScanning];
     [self clearViewModelsForExpandableViews];
     [self setupRefreshImageView];
-    [self setupShadows];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setupBackgroundForScanning:YES];
     self.browserViewModel.observing = YES;
     [self manageScannerState];
     [self addObservers];
     [self updateConnectionsButtonTitle];
+    [self setScanningButtonAppearanceWithScanning:_isScanning];
+    [self applyFiltersButtonWasTapped:SILBrowserFilterViewModel.sharedInstance];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.connectionsViewModel connectionsViewOnDetailsScreen:NO];
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
     self.browserViewModel.connectedPeripheral = nil;
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -116,7 +96,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     self.browserViewModel.observing = NO;
     [self setScannerStateWhenControllerIsDisappeared];
     [self.browserViewModel clearIsConnectingDirectory];
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -126,39 +105,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     self.isScanning = YES;
     self.cornerRadius = CornerRadiusStandardValue;
     self.expandSections = [[NSMutableArray alloc] init];
-}
-
-- (void)setupNavigationBar {
-    [self setupNavigationBarBackgroundColor];
-    [self setupNavigationBarTitle];
-}
-
-- (void)setupNavigationBarBackgroundColor {
-    self.navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-    self.aboveSpaceAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-}
-
-- (void)setupNavigationBarTitle {
-    self.navigationBarTitleLabel.font = [UIFont robotoMediumWithSize:SILNavigationBarTitleFontSize];
-    self.navigationBarTitleLabel.textColor = [UIColor sil_backgroundColor];
-}
-
-- (void)setupBrowserExpandableViewManager {
-    self.browserExpandableViewManager = [[SILBluetoothBrowserExpandableViewManager alloc] initWithOwnerViewController:self];
-    [self.browserExpandableViewManager setReferenceForPresentationView:self.presentationView andDiscoveredDevicesView:self.discoveredDevicesView];
-    [self.browserExpandableViewManager setReferenceForExpandableControllerView:self.expandableControllerView andExpandableControllerHeight:self.expandableControllerHeight];
-    [self.browserExpandableViewManager setValueForCornerRadius:self.cornerRadius];
-    [self.browserExpandableViewManager setupFilterBarWithFilterBarHeight:self.filterBarHeight filterBarViewController:self.filterBarViewController];
-}
- 
-- (void)setupButtonsTabBar {
-    [self.browserExpandableViewManager setupButtonsTabBarWithLog:self.logButton connections:self.connectionsButton filter:self.filterButton andFilterIsActive:[self.filterViewModel isFilterActive] andSortButton:self.sortButton];
-}
-
-- (void)setupScanningButton {
-    self.scanningButton.titleLabel.font = [UIFont robotoMediumWithSize:SILScanningButtonTitleFontSize];
-    self.scanningButton.titleLabel.textColor = [UIColor sil_backgroundColor];
-    self.scanningButton.layer.cornerRadius = CornerRadiusForButtons;
+    self.noDevicesFoundStackView.layer.cornerRadius = CornerRadiusStandardValue;
 }
 
 - (void)registerForApplicationWillResignActiveNotification {
@@ -209,7 +156,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)updateConnectionsButtonTitle {
     NSUInteger connections = [self.connectionsViewModel.peripherals count];
-    [self.browserExpandableViewManager updateConnectionsButtonTitle:connections];
+    //TODO: Update Active connections amount in Scanner Tab
 }
 
 - (void)addObserverForDisplayToastResponse {
@@ -225,17 +172,12 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (void)setupRefreshImageView {
     self.refreshImageView.model = [[SILRefreshImageModel alloc] initWithConstraint:self.topRefreshImageConstraint
-                                                                     withEmptyView:self.discoveredDevicesView
+                                                                     withEmptyView:self.view
                                                                      withTableView:self.browserTableView
                                                                  andWithReloadAction: ^{
                                                                                     [self refreshTableView];
                                                                                     }];
     [self.refreshImageView setup];
-}
-
-- (void)setupShadows {
-    [self.scanningButtonView addShadow];
-    [self.topButtonsView addShadow];
 }
 
 - (void)presentDetailsViewControllerWithPeripheral:(CBPeripheral *)peripheral {
@@ -333,6 +275,9 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
         cell.title.text = DefaultDeviceName;
     }
     
+    BOOL isExpanded = [self.expandSections containsObject:cellIdentifier];
+    [cell setExpanded:isExpanded];
+    
     cell.uuidLabel.text = discoveredPeripheral.uuid.UUIDString;
     long long advertisingIntervalsInMS = discoveredPeripheral.advertisingInterval * ms;
     
@@ -356,6 +301,8 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
     if (discoveredPeripheralViewModel.discoveredPeripheral.isFavourite) {
         [cell.favouritesButton setSelected:YES];
+    }else {
+        [cell.favouritesButton setSelected:NO];
     }
     
     if (discoveredPeripheral.peripheral != nil) {
@@ -378,7 +325,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (BOOL)isConnectedPeripheral:(SILDiscoveredPeripheral*)peripheral {
     for (SILConnectedPeripheralDataModel* connectedPeripheral in self.connectionsViewModel.peripherals) {
-        if ([peripheral.peripheral.identifier.UUIDString isEqualToString:connectedPeripheral.peripheral.identifier.UUIDString]) {
+        if ([peripheral.peripheral.identifier.UUIDString isEqualToString:connectedPeripheral.discoveredPeripheral.peripheral.identifier.UUIDString]) {
             return YES;
         }
     }
@@ -389,7 +336,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (NSInteger)isConnectedPeripheralWithIndex:(SILDiscoveredPeripheral*)peripheral {
     NSInteger index = 0;
     for (SILConnectedPeripheralDataModel* connectedPeripheral in self.connectionsViewModel.peripherals) {
-        if ([peripheral.peripheral.identifier.UUIDString isEqualToString:connectedPeripheral.peripheral.identifier.UUIDString]) {
+        if ([peripheral.peripheral.identifier.UUIDString isEqualToString:connectedPeripheral.discoveredPeripheral.peripheral.identifier.UUIDString]) {
             return index;
         }
         index++;
@@ -402,9 +349,14 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
-        return 121.0;
+        return 160.0;
     }
     return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 12.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -432,34 +384,40 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     return [SILTableViewWithShadowCells tableView:tableView viewForHeaderInSection:section withHeight: 20.0];
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [self numberOfSectionsInTableView:tableView] - 1 == section ? [SILTableViewWithShadowCells tableView:tableView viewForFooterInSection:section withHeight:LastFooterHeight] : nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return [self numberOfSectionsInTableView:tableView] - 1 == section ? LastFooterHeight : 0;
+}
+
 #pragma mark - Expandable Controllers
 
-- (IBAction)filterButtonTapped:(id)sender {
-    SILBrowserFilterViewController* filterVC = [self.browserExpandableViewManager filterButtonWasTappedAction];
+- (void)filterButtonTapped {
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:SILAppBluetoothBrowserHome bundle:nil];
+    SILBrowserFilterViewController *filterVC = [storyboard instantiateViewControllerWithIdentifier:SILSceneFilter];
+    
     if (filterVC.delegate == nil) {
         filterVC.delegate = self;
     }
+    
+    [self presentViewController:filterVC animated:YES completion:nil];
 }
 
-- (IBAction)connectionsButtonTapped:(id)sender {
-    SILBrowserConnectionsViewController* connectionsVC = [self.browserExpandableViewManager connectionsButtonWasTappedAction];
-    if (connectionsVC.delegate == nil) {
-        connectionsVC.delegate = self;
-    }
+- (void)sortButtonTapped {
+    [self sortRSSI];
 }
 
-- (IBAction)logButtonWasTapped:(id)sender {
-    SILBrowserLogViewController* logVC = [self.browserExpandableViewManager logButtonWasTappedAction];
-    if (logVC.delegate == nil) {
-        logVC.delegate = self;
-    }
+- (void)sortRSSI {
+    [self.browserViewModel sortRSSIWithAscending:NO];
+    [self.browserViewModel postReloadBrowserTable];
 }
 
-- (IBAction)sortButtonWasTapped:(id)sender {
-    SILSortViewController* sortVC = [self.browserExpandableViewManager sortButtonWasTappedAction];
-    if (sortVC.delegate == nil) {
-        sortVC.delegate = self;
-    }
+- (void)mapButtonTapped {
+    [self performSegueWithIdentifier:@"SILKeychainSegue" sender:self];
 }
 
 #pragma mark - Scanning
@@ -470,16 +428,17 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     } else {
         [self setStartScanningButton];
     }
+    [self.floatingButtonSettings setPresented:true];
 }
 
 - (void)setStopScanningButton {
-    self.scanningButton.backgroundColor = [UIColor sil_siliconLabsRedColor];
-    [self.scanningButton setTitle:TitleForScanningButtonDuringScanning forState:UIControlStateNormal];
+    [self.floatingButtonSettings setButtonText:@"Stop Scanning"];
+    [self.floatingButtonSettings setColor:UIColor.sil_siliconLabsRedColor];
 }
 
 - (void)setStartScanningButton {
-    self.scanningButton.backgroundColor = [UIColor sil_regularBlueColor];
-    [self.scanningButton setTitle:TitleForScanningButtonWhenIsNotScanning forState:UIControlStateNormal];
+    [self.floatingButtonSettings setButtonText:@"Start Scanning"];
+    [self.floatingButtonSettings setColor:UIColor.sil_regularBlueColor];
 }
 
 - (IBAction)scanningButtonWasTapped:(id)sender {
@@ -513,7 +472,6 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (void)setScannerStateWhenControllerIsDisappeared {
     [self stopScanningAction];
     self.isScanning = NO;
-    [self setScanningButtonAppearanceWithScanning:self.isScanning];
 }
 
 #pragma mark - SILBrowserDeviceViewCellDelegate
@@ -529,7 +487,7 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     [self refreshTable];
 }
 
-- (void)connectViewButtonTappedInCell:(SILBrowserDeviceViewCell*)cell {
+- (void)connectButtonTappedInCell:(SILBrowserDeviceViewCell*)cell {
     NSIndexPath *indexPath = [self.browserTableView indexPathForCell:cell];
     SILDiscoveredPeripheralDisplayDataViewModel *selectedPeripheralViewModel = [self.browserViewModel peripheralViewModelAt:indexPath.section];
     
@@ -616,30 +574,22 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
 - (void)displayNoDeviceViewIfNeeded {
     [self setupBackgroundForScanning:self.isScanning];
     if (self.browserViewModel.isContentAvailable) {
-        self.browserTableView.hidden = NO;
-        [self.noDevicesFoundView setHidden:YES];
+        [self.noDevicesFoundStackView setHidden:YES];
     } else {
-        [self.browserTableView setHidden:YES];
-        [self.noDevicesFoundView setHidden:NO];
+        [self.noDevicesFoundStackView setHidden:NO];
     }
 }
 
 #pragma mark - SILBrowserFilterViewControllerDelegate
 
 - (void)backButtonWasTapped {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)searchButtonWasTapped:(SILBrowserFilterViewModel *)filterViewModel {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-    [self manageAppearanceOfActiveFilterImage:filterViewModel];
+- (void)applyFiltersButtonWasTapped:(SILBrowserFilterViewModel *)filterViewModel {
     [self filterBrowser:filterViewModel];
-    [self.browserExpandableViewManager updateFilterBarWith:filterViewModel];
     [self displayNoDeviceViewIfNeeded];
-}
-
-- (void)manageAppearanceOfActiveFilterImage:(SILBrowserFilterViewModel*)filterViewModel {
-    [self.browserExpandableViewManager updateFilterIsActiveFilter:[filterViewModel isFilterActive]];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)filterBrowser:(SILBrowserFilterViewModel*)filterViewModel {
@@ -670,39 +620,10 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     self.browserViewModel.isConnectable = nil;
 }
 
-#pragma mark - SILBrowserConnectionsViewControllerDelegate
-
-- (void)connectionsViewBackButtonPressed {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-}
-
-- (void)presentDetailsViewControllerForIndex:(NSInteger)index {
-    SILConnectedPeripheralDataModel* connectedPeripheral = self.connectionsViewModel.peripherals[index];
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-    [self presentDetailsViewControllerWithPeripheral:connectedPeripheral.peripheral];
-}
-
-#pragma mark - SILBrowserLogViewControllerDelegate
-
-- (void)logViewBackButtonPressed {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-}
-
-- (IBAction)backToDevelopWasTapped:(id)sender {
-    [self stopScanningAndDisconnectAll];
-}
-
 - (void)stopScanningAndDisconnectAll {
     [self stopScanningAction];
     [self.sortViewModel deselectSelectedOption];
     [self.navigationController popViewControllerAnimated:NO];
-}
-
-#pragma mark = SILSortViewControllerDelegate
-
-- (void)sortOptionWasSelectedWithOption:(SILSortOption)option {
-    self.browserViewModel.sortOption = option;
-    [self.browserExpandableViewManager changeImagesOfSortButtonForOption:option];
 }
 
 #pragma mark - WYPopoverControllerDelegate
@@ -749,35 +670,15 @@ const float TABLE_FRESH_INTERVAL = 1.0f;
     [self removeUnfiredTimers];
     [self.browserViewModel removeAllDiscoveredPeripherals];
     [self reloadTable];
-    [self.noDevicesFoundView setHidden:NO];
     self.isScanning = YES;
-    [self setScanningButtonAppearanceWithScanning:self.isScanning];
     [self startScanning];
+    [self setScanningButtonAppearanceWithScanning:_isScanning];
+    [self displayNoDeviceViewIfNeeded];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [self getInstanceOfFilterBarViewController:segue];
-}
-
-- (void)getInstanceOfFilterBarViewController:(UIStoryboardSegue*)segue {
-    if ([segue.identifier isEqual:@"filterBarViewController"]) {
-        self.filterBarViewController = (SILFilterBarViewController*)segue.destinationViewController;
-        self.filterBarViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    }
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return self.navigationController.viewControllers.count > 1;
-}
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    if ([gestureRecognizer isEqual: self.navigationController.interactivePopGestureRecognizer]) {
-        [self.navigationController popToViewController: self animated:YES];
-        return TRUE;
-    }
-    return FALSE;
+- (void)setupFloatingButtonSettings:(FloatingButtonSettings *)settings {
+    self.floatingButtonSettings = settings;
+    [self setScanningButtonAppearanceWithScanning:self.isScanning];
 }
 
 @end

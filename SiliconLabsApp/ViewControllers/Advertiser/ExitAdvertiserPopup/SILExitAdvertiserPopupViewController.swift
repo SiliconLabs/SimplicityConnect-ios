@@ -21,7 +21,7 @@ class SILExitAdvertiserPopupViewController: UIViewController {
     
     override var preferredContentSize: CGSize {
         get {
-            if UI_USER_INTERFACE_IDIOM() == .pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: 500, height: 270);
             } else {
                 return CGSize(width: 350, height: 220);

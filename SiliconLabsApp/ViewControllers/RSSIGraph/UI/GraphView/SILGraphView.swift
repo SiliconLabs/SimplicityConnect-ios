@@ -142,11 +142,12 @@ class SILGraphView: UIView {
     
     private func setupRightArrowButton() {
         addSubview(rightArrowButton)
-        let arrowSystemImage = UIImage(named: "right_chevron")
+        let arrowSystemImage = UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysTemplate)
         rightArrowButton.isHidden = true
         rightArrowButton.setImage(arrowSystemImage, for: .normal)
+        rightArrowButton.tintColor = .black
         rightArrowButton.translatesAutoresizingMaskIntoConstraints = false
-        rightArrowButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5).isActive = true
+        rightArrowButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12).isActive = true
         rightArrowButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
         
         rightArrowButton.extendLeft = RSSIConstants.extendedButtonOffset
@@ -156,11 +157,12 @@ class SILGraphView: UIView {
     
     private func setupLeftArrowButton() {
         addSubview(leftArrowButton)
-        let arrowSystemImage = UIImage(named: "left_chevron")
+        let arrowSystemImage = UIImage(systemName: "chevron.left")?.withRenderingMode(.alwaysTemplate)
         leftArrowButton.isHidden = true
         leftArrowButton.setImage(arrowSystemImage, for: .normal)
+        leftArrowButton.tintColor = .black
         leftArrowButton.translatesAutoresizingMaskIntoConstraints = false
-        leftArrowButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5).isActive = true
+        leftArrowButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 56).isActive = true
         leftArrowButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
         
         leftArrowButton.extendRight = RSSIConstants.extendedButtonOffset
@@ -192,7 +194,7 @@ class SILGraphView: UIView {
 }
 
 struct RSSIConstants {
-    static let axisRed = UIColor(red:0.84, green:0.14, blue:0.19, alpha:1.00)
+    static let axisBlack = UIColor.black
     
     static let graphLineDisabled = UIColor.lightGray
     

@@ -62,8 +62,10 @@ class SILThroughputPeripheralDelegate : NSObject, SILThroughputPeripheralDelegat
     
     func subscribeGATT() {
         debugPrint("Subscribe Throughput GATT")
-        for service in peripheral.services! {
-            for characteristic in service.characteristics! {
+        guard let services = peripheral.services else { return }
+        for service in services {
+            guard let characteristics = service.characteristics else { continue }
+            for characteristic in characteristics {
                 peripheral.setNotifyValue(true, for: characteristic)
             }
         }

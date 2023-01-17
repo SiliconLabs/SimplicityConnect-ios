@@ -18,7 +18,7 @@ class SILTabBar: UITabBar {
     var indicatorConstantIPadFor1: CGFloat = 0.17
     
     @IBInspectable var height: CGFloat = 0.0
-    let DefaultHeight: CGFloat = 70.0
+    let DefaultHeight: CGFloat = 120.0
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -85,7 +85,7 @@ class SILTabBar: UITabBar {
     }
 
     func setMuliplierForSelectedIndex(_ index: Int) {
-        if UI_USER_INTERFACE_IDIOM() == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             if index == 0 {
                 indicatorConstant = indicatorConstantIPadFor0
             } else {

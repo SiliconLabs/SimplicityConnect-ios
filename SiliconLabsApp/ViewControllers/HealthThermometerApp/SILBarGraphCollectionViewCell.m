@@ -70,8 +70,8 @@ NSString * const SILBarGraphCollectionViewCellIdentifier = @"SILBarGraphCollecti
         temperature = [self.temperatureMeasurement valueInCelsius];
     }
 
-    UIFont *largeSize = [UIFont helveticaNeueLightWithSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 32 : 16];
-    UIFont *smallSize = [UIFont helveticaNeueLightWithSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 20 : 11];
+    UIFont *largeSize = [UIFont helveticaNeueLightWithSize:(UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) ? 32 : 16];
+    UIFont *smallSize = [UIFont helveticaNeueLightWithSize:(UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) ? 20 : 11];
 
     NSString *valueString = [NSString stringWithFormat:@"%.1f°", temperature];
     NSMutableAttributedString *attributedValueString = [[NSMutableAttributedString alloc] initWithString:valueString

@@ -17,21 +17,40 @@
     [self setupNavigationBarAppearance];
     [self setupBarButtonItemAppearance];
     [self setupTextFieldAppearance];
+    [self setupSegmentedControlAppearance];
     
     [self setupSVProgressHUD];
 }
 
++ (void)setupSegmentedControlAppearance {
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:@[UISegmentedControl.class]] setNumberOfLines:2];
+    
+    UISegmentedControl.appearance.selectedSegmentTintColor = [UIColor sil_bgWhiteColor];
+    UISegmentedControl.appearance.backgroundColor = [UIColor sil_lightBlueColor];
+    [UISegmentedControl.appearance setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] } forState:UIControlStateNormal];
+    [UISegmentedControl.appearance setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] } forState:UIControlStateSelected];
+}
+
 + (void)setupNavigationBarAppearance {
-    [[UINavigationBar appearance] setTranslucent:NO];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor clearColor]];
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage sil_imageWithColor:[UIColor sil_siliconLabsRedColor]] forBarMetrics:UIBarMetricsDefault];
-
-
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor sil_bgWhiteColor],
-                                                           NSFontAttributeName: [UIFont robotoRegularWithSize:17.0],
-                                                           }];
+    UINavigationBarAppearance *x = [UINavigationBarAppearance new];
+    x.backgroundColor = UIColor.sil_regularBlueColor;
+    x.titleTextAttributes = @{
+        NSForegroundColorAttributeName: [UIColor whiteColor],
+        NSFontAttributeName: [UIFont robotoRegularWithSize:17.0],
+    };
+    UINavigationBar.appearance.standardAppearance = x;
+    UINavigationBar.appearance.compactAppearance = x;
+    UINavigationBar.appearance.scrollEdgeAppearance = x;
+    
+    UITabBarAppearance *tabBarAppearance = [UITabBarAppearance new];
+    [tabBarAppearance configureWithOpaqueBackground];
+    UITabBar.appearance.standardAppearance = tabBarAppearance;
+    
+    if (@available(iOS 15.0, *)) {
+        UITabBar.appearance.scrollEdgeAppearance = tabBarAppearance;
+    }
+    
+    [UIButton appearanceWhenContainedInInstancesOfClasses:@[UINavigationBar.class]].tintColor = UIColor.whiteColor;
 }
 
 + (void)setupBarButtonItemAppearance {

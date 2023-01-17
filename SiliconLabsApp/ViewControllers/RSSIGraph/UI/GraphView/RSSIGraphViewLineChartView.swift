@@ -31,8 +31,8 @@ class RSSIGraphLineChartView: LineChartView {
         setupXAxis()
         setupLabels()
         
-        addYAxisLines(withColor: RSSIConstants.axisRed)
-        addXAxisLines(withColor: RSSIConstants.axisRed)
+        addYAxisLines(withColor: RSSIConstants.axisBlack)
+        addXAxisLines(withColor: RSSIConstants.axisBlack)
         
         resetChart()
     }
@@ -65,10 +65,12 @@ class RSSIGraphLineChartView: LineChartView {
         leftAxis.axisMaximum = RSSIConstants.startYAxisMaximum
         leftAxis.granularity = RSSIConstants.yAxisGranularity
         leftAxis.drawGridLinesEnabled = false
-        leftAxis.drawAxisLineEnabled = false
+        leftAxis.drawAxisLineEnabled = true
+        leftAxis.axisLineWidth = 1
+        leftAxis.axisLineColor = RSSIConstants.axisBlack
         leftYAxisRenderer = RSSIGraphYAxisRenderer(viewPortHandler: leftYAxisRenderer.viewPortHandler,
                                                    axis: leftAxis,
-                                                             transformer: leftYAxisRenderer.transformer)
+                                                   transformer: leftYAxisRenderer.transformer)
     }
     
     private func setupXAxis() {
@@ -80,7 +82,7 @@ class RSSIGraphLineChartView: LineChartView {
         xAxis.drawAxisLineEnabled = false
         xAxisRenderer = RSSIGraphXAxisRenderer(viewPortHandler: xAxisRenderer.viewPortHandler,
                                                axis: xAxis,
-                                                         transformer: xAxisRenderer.transformer)
+                                               transformer: xAxisRenderer.transformer)
     }
     
     private func setupLabels() {
@@ -94,7 +96,7 @@ class RSSIGraphLineChartView: LineChartView {
         leftAxis.addLimitLine(axisLine)
         
         for i in stride(from: leftAxis.axisMinimum, through: leftAxis.axisMaximum, by: leftAxis.granularity) {
-            guard i != 0 else { continue }
+            guard i != -100 else { continue }
             
             let gridLine = createGridLine(withColor: color, andPosition: i)
             
@@ -112,7 +114,7 @@ class RSSIGraphLineChartView: LineChartView {
     }
     
     private func createAxisLine(withColor color: UIColor) -> ChartLimitLine {
-        let axisLine = ChartLimitLine(limit: 0, label: "")
+        let axisLine = ChartLimitLine(limit: -100.0, label: "")
         
         axisLine.lineColor = color
         axisLine.lineWidth = 1
@@ -138,7 +140,8 @@ class RSSIGraphLineChartView: LineChartView {
         leftAxis.axisMaximum = RSSIConstants.startYAxisMaximum
         xAxis.axisMinimum = RSSIConstants.startXAxisMinimum
         xAxis.axisMaximum = RSSIConstants.startXAxisMaximum
-
+        
+        self.highlightValues(nil)
         lineData?.clearValues()
         data = LineChartData()
         setVisibleXRangeMinimum(RSSIConstants.maxNumberOfVisibleXValues)
@@ -172,7 +175,7 @@ class RSSIGraphLineChartView: LineChartView {
             if let _ = xAxis.limitLines.first(where: { Int($0.limit) == Int(i) }) {
                 continue
             }
-            let gridLine = createGridLine(withColor: RSSIConstants.axisRed, andPosition: i)
+            let gridLine = createGridLine(withColor: RSSIConstants.axisBlack, andPosition: i)
             
             xAxis.addLimitLine(gridLine)
         }

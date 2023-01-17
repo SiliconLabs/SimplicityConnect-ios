@@ -14,8 +14,7 @@
 @interface SILBrowserFilterViewController () <UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *backImage;
-@property (weak, nonatomic) IBOutlet UIButton *searchButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *applyFiltersButton;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 @property (weak, nonatomic) IBOutlet UITextView *searchByDeviceNameTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *clearTextImageByDeviceName;
@@ -24,16 +23,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *minRangeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxRangeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dBmValueLabel;
-@property (weak, nonatomic) IBOutlet UILabel *savedSearchesLabel;
 @property (weak, nonatomic) IBOutlet UISlider *dBmSlider;
 @property (weak, nonatomic) IBOutlet UIView *seachByDeviceNameView;
 @property (weak, nonatomic) IBOutlet UILabel *favouriteAreaTitleLabel;
 @property (weak, nonatomic) IBOutlet SILSwitch *favouriteSwitch;
 
-@property (weak, nonatomic) IBOutlet UIButton *beaconTypeAreaButton;
-@property (weak, nonatomic) IBOutlet UIButton *savedSearchesAreaButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beaconTypeContainerHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *savedSearchesContainerHeight;
 @property (weak, nonatomic) IBOutlet UILabel *connectableTittleLabel;
 @property (weak, nonatomic) IBOutlet SILSwitch *connectableSwitch;
 
@@ -61,14 +55,13 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [self setAppearanceForBeaconType];
     [self setAppearanceForFavouriteArea];
     [self setAppearanceForConnectableArea];
-    [self setAppearanceForSavedSearches];
     [self setAppearanceForButtonInFooterView];
     self.viewModel = [SILBrowserFilterViewModel sharedInstance];
     [self updateFilterView];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     self.viewModel = nil;
 }
 
@@ -281,38 +274,8 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 #pragma mark - Appearance for Beacon Type Area
 
 - (void)setAppearanceForBeaconType {
-    [self setAppearanceForBeaconTypeLabel];
-    [self setImageForBeaconTypeButton];
-    [self updateHeightForBeaconTypeContainer];
-}
-
-- (void)setAppearanceForBeaconTypeLabel {
     [_beaconTypeLabel setFont:[UIFont robotoBoldWithSize:[UIFont getMiddleFontSize]]];
     _beaconTypeLabel.textColor = [UIColor sil_primaryTextColor];
-}
-
-- (void)setImageForBeaconTypeButton {
-    [_beaconTypeAreaButton setImage:[[UIImage imageNamed:SILImageChevronCollapsed] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState: UIControlStateNormal];
-    [_beaconTypeAreaButton setImage:[[UIImage imageNamed:SILImageChevronExpanded] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
-    _beaconTypeAreaButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-}
-
-- (IBAction)beaconTypeAreaButtonTapped:(id)sender {
-    [self updateBeaconTypeViewModel];
-    [_beaconTypeAreaButton setSelected:self.viewModel.isBeaconTypeExpanded];
-    [self updateHeightForBeaconTypeContainer];
-}
-
-- (void)updateBeaconTypeViewModel {
-    self.viewModel.isBeaconTypeExpanded = !self.viewModel.isBeaconTypeExpanded;
-}
-
-- (void)updateHeightForBeaconTypeContainer {
-    if (self.viewModel.isBeaconTypeExpanded) {
-        _beaconTypeContainerHeight.constant = self.viewModel.beaconTypeTableViewHeight;
-    } else {
-        _beaconTypeContainerHeight.constant = CollapsedViewHeight;
-    }
 }
 
 # pragma mark - Appearance for Favourite Area
@@ -359,59 +322,23 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 
 #pragma mark - Appearance for Saved Searches Area
 
-- (void)setAppearanceForSavedSearches {
-    [self setAppearanceForSavedSearchesLabel];
-    [self setImageForSavedSearchesButton];
-    [self updateHeightForSavedSearchesContainer];
-}
-
-- (void)setAppearanceForSavedSearchesLabel {
-    [_savedSearchesLabel setFont:[UIFont robotoBoldWithSize:[UIFont getMiddleFontSize]]];
-    _savedSearchesLabel.textColor = [UIColor sil_primaryTextColor];
-}
-
-- (void)setImageForSavedSearchesButton {
-    [_savedSearchesAreaButton setImage:[[UIImage imageNamed:SILImageChevronCollapsed] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState: UIControlStateNormal];
-    [_savedSearchesAreaButton setImage:[[UIImage imageNamed:SILImageChevronExpanded] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
-    _savedSearchesAreaButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-}
-
-- (IBAction)savedSearchesButtonTapped:(id)sender {
-    [self updateSavedSearchesViewModel];
-    [_savedSearchesAreaButton setSelected:self.viewModel.isSavedSearchesExpaned];
-    [self updateHeightForSavedSearchesContainer];
-}
-
 - (void)updateSavedSearchesViewModel {
     self.viewModel.isSavedSearchesExpaned = !self.viewModel.isSavedSearchesExpaned;
-}
-
-- (void)updateHeightForSavedSearchesContainer {
-    if (self.viewModel.isSavedSearchesExpaned) {
-        _savedSearchesContainerHeight.constant = self.viewModel.savedSearchesTableViewHeight;
-    } else {
-        _savedSearchesContainerHeight.constant = CollapsedViewHeight;
-    }
 }
 
 #pragma mark - Appearance for Footer View
 
 - (void)setAppearanceForButtonInFooterView {
-    [self setAppearanceForSearchButton];
-    [self setAppearanceForSaveButton];
+    [self setAppearanceForApplyFiltersButton];
     [self setAppearanceForResetButton];
     [self setAppearanceForExitButton];
     [self addGestureRecognizerForBackImage];
 }
 
-- (void)setAppearanceForSearchButton {
-    _searchButton.layer.cornerRadius = CornerRadiusForButtons;
-    [_searchButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
-    _searchButton.titleLabel.textColor = [UIColor sil_backgroundColor];
-}
-
-- (void)setAppearanceForSaveButton {
-    [_saveButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
+- (void)setAppearanceForApplyFiltersButton {
+    _applyFiltersButton.layer.cornerRadius = CornerRadiusForButtons;
+    [_applyFiltersButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
+    _applyFiltersButton.titleLabel.textColor = [UIColor sil_backgroundColor];
 }
 
 - (void)setAppearanceForResetButton {
@@ -419,7 +346,7 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 }
 
 - (void)setAppearanceForExitButton {
-    _backImage.image = [[UIImage imageNamed:SILImageExitView] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    _backImage.image = [UIImage systemImageNamed:@"xmark"];
 }
 
 # pragma mark - Handle tap gestures for buttons in Footer View
@@ -433,17 +360,13 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [_delegate backButtonWasTapped];
 }
 
-- (IBAction)searchButtonTapped:(id)sender {
-    [_delegate searchButtonWasTapped:_viewModel];
-}
-
-- (IBAction)saveButtonTapped:(id)sender {
-    [_viewModel saveCurrentFilterDataToSavedSearches];
+- (IBAction)applyFiltersButtonTapped:(id)sender {
+    [_delegate applyFiltersButtonWasTapped:_viewModel];
 }
 
 - (IBAction)resetButtonTapped:(id)sender {
     [_viewModel clearViewModelData];
-    [_delegate searchButtonWasTapped:_viewModel];
+    [_delegate applyFiltersButtonWasTapped:_viewModel];
     [_delegate backButtonWasTapped];
 }
 

@@ -15,13 +15,20 @@ class SILPropertyStackView: UIStackView {
     @IBOutlet weak var indicateButton: UIButton!
     @IBOutlet weak var notifyButton: UIButton!
     
-    @IBOutlet var buttons: [UIButton]!
+    @IBOutlet weak var writeLabel: UILabel!
+    @IBOutlet weak var readLabel: UILabel!
+    @IBOutlet weak var indicateLabel: UILabel!
+    @IBOutlet weak var notifyLabel: UILabel!
     
-    var propertyColor: UIColor = UIColor.sil_primaryText() {
+    @IBOutlet var buttons: [UIButton]!
+    @IBOutlet var labels: [UILabel]!
+    
+    var propertyColor: UIColor = UIColor.sil_regularBlue() {
         didSet {
             for button in buttons {
                 button.setTitleColor(propertyColor, for: .normal)
                 button.setTitleShadowColor(propertyColor, for: .normal)
+                button.imageView?.tintColor = propertyColor
             }
             setNeedsLayout()
             layoutSubviews()
@@ -31,40 +38,44 @@ class SILPropertyStackView: UIStackView {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupButtonsAppearance()
-        for button in buttons {
-            button.isHidden = true
-        }
+        hideLabelsAndButtons()
     }
     
     private func setupButtonsAppearance() {
-        let writeImage = writeButton.currentImage?.withRenderingMode(.alwaysTemplate)
-        writeButton.setImage(writeImage, for: .normal)
-        writeButton.contentVerticalAlignment = .fill
-        let readImage = readButton.currentImage?.withRenderingMode(.alwaysTemplate)
-        readButton.setImage(readImage, for: .normal)
-        readButton.contentVerticalAlignment = .fill
-        let indicateImage = indicateButton.currentImage?.withRenderingMode(.alwaysTemplate)
-        indicateButton.setImage(indicateImage, for: .normal)
-        indicateButton.contentVerticalAlignment = .fill
-        let notifyImage = notifyButton.currentImage?.withRenderingMode(.alwaysTemplate)
-        notifyButton.setImage(notifyImage, for: .normal)
-        notifyButton.contentVerticalAlignment = .fill
+        for button in buttons {
+            let image = button.currentImage?.withRenderingMode(.alwaysTemplate)
+            button.setImage(image, for: .normal)
+            button.imageView?.tintColor = propertyColor
+            button.contentVerticalAlignment = .fill
+        }
     }
     
-    func updateProperties(_ properties: [SILGattConfigurationProperty]) {
+    private func hideLabelsAndButtons() {
         for button in buttons {
             button.isHidden = true
         }
+        
+        for label in labels {
+            label.isHidden = true
+        }
+    }
+    
+    func updateProperties(_ properties: [SILGattConfigurationProperty]) {
+        hideLabelsAndButtons()
         for property in properties {
             switch property.type {
             case .read:
                 readButton.isHidden = false
+                readLabel.isHidden = false
             case .write, .writeWithoutResponse:
                 writeButton.isHidden = false
+                writeLabel.isHidden = false
             case .indicate:
                 indicateButton.isHidden = false
+                indicateLabel.isHidden = false
             case .notify:
                 notifyButton.isHidden = false
+                notifyLabel.isHidden = false
             }
         }
     }

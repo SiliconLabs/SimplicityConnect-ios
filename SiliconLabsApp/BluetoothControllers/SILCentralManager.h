@@ -43,6 +43,6 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 - (void)addScanForPeripheralsObserver:(nonnull id)observer selector:(nonnull SEL)aSelector;
 - (void)removeScanForPeripheralsObserver:(nonnull id)observer;
 
-- (void)disconnectFromPeripheral:(CBPeripheral *)peripheral;
+- (void)disconnectFromPeripheral:(nonnull CBPeripheral *)peripheral;
 
 @end

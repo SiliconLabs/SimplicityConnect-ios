@@ -9,10 +9,9 @@
 import Foundation
 import SVProgressHUD
 
-class SILWifiCommissioningViewController: UIViewController, UIGestureRecognizerDelegate, SILWifiCommissioningPasswordPopupDelegate, SILWifiCommissioningViewModelDelegate, SILWifiCommissioningDisconnectPopupDelegate, WYPopoverControllerDelegate {
+class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioningPasswordPopupDelegate, SILWifiCommissioningViewModelDelegate, SILWifiCommissioningDisconnectPopupDelegate, WYPopoverControllerDelegate {
     
     @IBOutlet weak var onStartDisconnectView: UIView!
-    @IBOutlet var navigationBar: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var firmwareVersionLabel: UILabel!
     @IBOutlet weak var firmwareVersionBar: UIView!
@@ -33,6 +32,7 @@ class SILWifiCommissioningViewController: UIViewController, UIGestureRecognizerD
         viewModel.delegate = self
         viewModel.viewDidLoad()
         setupTableRefreshControl()
+        setLeftAlignedTitle("Wifi Commissioning")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,23 +40,19 @@ class SILWifiCommissioningViewController: UIViewController, UIGestureRecognizerD
         setupShadows()
         subscribeToViewModel()
         viewModel.viewWillAppear()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewModel.viewWillDisappear()
         disposeBag.invalidateTokens()
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     // MARK: Setup methods
     
     private func setupShadows() {
-        self.navigationBar.superview?.bringSubviewToFront(navigationBar)
         self.firmwareVersionBar.superview?.bringSubviewToFront(firmwareVersionBar)
         self.firmwareVersionBar.addShadow()
     }
@@ -133,10 +129,6 @@ class SILWifiCommissioningViewController: UIViewController, UIGestureRecognizerD
     }
     
     // MARK: Button actions
-    
-    @IBAction func backButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
     
     @IBAction func disconnectOnStart(_ sender: UIButton) {
         self.showDisconnectPopup()

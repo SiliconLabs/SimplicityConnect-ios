@@ -21,9 +21,8 @@ protocol SILRangeTestBluetoothConnectionsHandler: class {
     var filter: DiscoveredPeripheralFilter { get }
 }
 
-class SILRangeTestAppContainerViewController: UIViewController, UITabBarControllerDelegate, UIGestureRecognizerDelegate {
+class SILRangeTestAppContainerViewController: UIViewController, UITabBarControllerDelegate {
     
-    @IBOutlet weak var navigationBar: UIView!
     @IBOutlet weak var tabSelection: UISegmentedControl!
     
     var tabController: UITabBarController!
@@ -31,19 +30,19 @@ class SILRangeTestAppContainerViewController: UIViewController, UITabBarControll
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationBar.addShadow()
-        navigationBar.superview?.bringSubviewToFront(navigationBar)
+        setLeftAlignedTitle("Range Test")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }
     
-    @IBAction func backButtonTapped(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
-
+    
     @IBAction func didSelectTab(_ sender: Any) {
         tabController?.selectedIndex = tabSelection.selectedSegmentIndex
     }

@@ -59,9 +59,6 @@ static float kTableRefreshInterval = 1;
 
 @interface SILDebugServicesViewController () <UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate, SILDescriptorTableViewCellDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *rssiImageView;
 @property (strong, nonatomic) NSMutableArray *allServiceModels;
 @property (strong, nonatomic) NSArray *modelsToDisplay;
 @property (nonatomic) BOOL isUpdatingFirmware;
@@ -75,20 +72,12 @@ static float kTableRefreshInterval = 1;
 @property (strong, nonatomic) WYPopoverController *popoverController;
 @property (weak, nonatomic) IBOutlet UIView *presentationView;
 @property (strong, nonatomic) SILDebugHeaderView *headerView;
-@property (weak, nonatomic) IBOutlet UIButton *menuButton;
-@property (weak, nonatomic) IBOutlet UIView *aboveSpaceSaveAreaView;
-@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
-@property (weak, nonatomic) IBOutlet UIButton *connectionsButton;
-@property (weak, nonatomic) IBOutlet UIButton *logButton;
-@property (weak, nonatomic) IBOutlet UIView *expandableControllerView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *expandableControllerHeight;
+
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
-@property (strong, nonatomic) SILBluetoothBrowserExpandableViewManager* browserExpandableViewManager;
-@property (weak, nonatomic) IBOutlet UIView *menuContainer;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *menuOptionHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topRefreshImageConstraint;
 @property (weak, nonatomic) IBOutlet SILRefreshImageView *refreshImageView;
-@property (weak, nonatomic) IBOutlet UIView *topButtonsView;
+@property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
+@property (weak, nonatomic) IBOutlet UIButton *otaButton;
 
 @end
 
@@ -98,27 +87,19 @@ static float kTableRefreshInterval = 1;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.menuButton setHidden:YES];
-    [self.menuContainer setHidden:YES];
     [self registerNibsAndSetUpSizing];
     [self startServiceSearch];
-    [self setupNavigationBar];
     [self setupBrowserExpandableViewManager];
-    [self setupButtonsTabBar];
     [self setupConnectionsViewModel];
-    [self updateConnectionsButtonTitle];
-    [self hideRSSIView];
     self.isUpdatingFirmware = NO;
     [self setupRefreshImageView];
-    [self.topButtonsView addShadow];
+    [self setupButtons];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.deviceNameLabel.text = self.peripheral.name;
     self.peripheral.delegate = self;
     [self registerForNotifications];
-    [self addObserverForUpdateConnectionsButtonTitle];
     [self installRSSITimer];
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
 }
@@ -126,7 +107,6 @@ static float kTableRefreshInterval = 1;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissPopoverIfExist];
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
     [self removeUnfiredTimers];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -149,10 +129,6 @@ static float kTableRefreshInterval = 1;
     }
 }
 
-- (IBAction)backButtonWasTapped:(id)sender {
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
 - (void)performOTAAction {
     self.isUpdatingFirmware = YES;
     self.otaUICoordinator = [[SILOTAUICoordinator alloc] initWithPeripheral:self.peripheral
@@ -162,22 +138,20 @@ static float kTableRefreshInterval = 1;
     [self.otaUICoordinator initiateOTAFlow];
 }
 
-
-- (void)setupNavigationBar {
-    self.aboveSpaceSaveAreaView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-    self.navigationBarView.backgroundColor = [UIColor sil_siliconLabsRedColor];
-}
-
 - (void)setupBrowserExpandableViewManager {
     self.cornerRadius = CornerRadiusStandardValue;
-    self.browserExpandableViewManager = [[SILBluetoothBrowserExpandableViewManager alloc] initWithOwnerViewController:self];
-    [self.browserExpandableViewManager setReferenceForPresentationView:self.presentationView andDiscoveredDevicesView:self.discoveredDevicesView];
-    [self.browserExpandableViewManager setReferenceForExpandableControllerView:self.expandableControllerView andExpandableControllerHeight:self.expandableControllerHeight];
-    [self.browserExpandableViewManager setValueForCornerRadius:self.cornerRadius];
 }
- 
-- (void)setupButtonsTabBar {
-    [self.browserExpandableViewManager setupButtonsTabBarWithLog:self.logButton connections:self.connectionsButton];
+
+- (void)setupButtons {
+    [self setLeftAlignedTitle:self.peripheral.name];
+    UIBarButtonItem *logButton = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"logsIcon"]
+                                                                  style:UIBarButtonItemStylePlain
+                                                                 target:self
+                                                                 action:@selector(logButtonWasTapped)];
+    [self.navigationItem setRightBarButtonItems:@[logButton]];
+    
+    self.otaButton.hidden = ![self.peripheral hasOTAService];
+    [self.otaButton addTarget:self action:@selector(performOTAAction) forControlEvents:UIControlEventPrimaryActionTriggered];
 }
 
 - (void)setIsUpdatingFirmware:(BOOL)isUpdatingFirmware {
@@ -228,11 +202,6 @@ static float kTableRefreshInterval = 1;
     self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
 }
 
-- (void)hideRSSIView {
-    [self.rssiLabel setHidden:YES];
-    [self.rssiImageView setHidden:YES];
-}
-
 #pragma mark -Lazy Intanstiation
 
 - (NSMutableArray *)allServiceModels {
@@ -249,65 +218,10 @@ static float kTableRefreshInterval = 1;
     return _modelsToDisplay;
 }
 
-#pragma mark - Menu
-
-- (IBAction)menuButtonWasTapped:(id)sender {
-    [self showMenu];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"OpenMenuSegue"]) {
-        SILDebugServicesMenuViewController* menuVC = (SILDebugServicesMenuViewController*) segue.destinationViewController;
-        menuVC.delegate = self;
-        [menuVC addMenuOptionWithTitle:@"OTA DFU" completion:^{
-            [self performOTAAction];
-            [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-        }];
-        self.menuOptionHeight.constant = [menuVC getMenuOptionHeight];
-    }
-}
-
-- (void)performActionForMenuOptionUsing:(void (^ NS_NOESCAPE)(void))completion {
-    [self hideMenu];
-    completion();
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
-    [self hideMenu];
-}
-
-- (void)showMenu {
-    [self.menuContainer setHidden:NO];
-    self.tableView.userInteractionEnabled = NO;
-}
-
-- (void)hideMenu {
-    [self.menuContainer setHidden:YES];
-    self.tableView.userInteractionEnabled = YES;
-}
-
 // MARK: - Swipe Actions
 
 - (IBAction)swipeToServer:(UISwipeGestureRecognizer *)sender {
-    self.tabBarController.selectedIndex = 1;
-    [(SILTabBar *)self.tabBarController.tabBar setMuliplierForSelectedIndex:1];
-}
-
-#pragma mark - Expandable Controllers
-
-- (IBAction)connectionsButtonTapped:(id)sender {
-    SILBrowserConnectionsViewController* connectionsVC = [self.browserExpandableViewManager connectionsButtonWasTappedAction];
-    if (connectionsVC.delegate == nil) {
-        connectionsVC.delegate = self;
-    }
-}
-
-- (IBAction)logButtonWasTapped:(id)sender {
-    SILBrowserLogViewController* logVC = [self.browserExpandableViewManager logButtonWasTappedAction];
-    if (logVC.delegate == nil) {
-        logVC.delegate = self;
-    }
+    [(SILTabBarController *)self.tabBarController selectItemWithIndex:1];
 }
 
 #pragma mark - SILOTAUICoordinatorDelegate
@@ -315,10 +229,12 @@ static float kTableRefreshInterval = 1;
 - (void)otaUICoordinatorDidFishishOTAFlow:(SILOTAUICoordinator *)coordinator {
     [self.navigationController popViewControllerAnimated:YES];
     self.isUpdatingFirmware = NO;
+    self.peripheral.delegate = self;
 }
 
 - (void)otaUICoordinatorDidCancelOTAFlow:(SILOTAUICoordinator *)coordinator {
     self.isUpdatingFirmware = NO;
+    self.peripheral.delegate = self;
 }
 
 #pragma mark - Notifications
@@ -328,10 +244,6 @@ static float kTableRefreshInterval = 1;
                                              selector:@selector(didDisconnectPeripheralNotifcation:)
                                                  name:SILCentralManagerDidDisconnectPeripheralNotification
                                                object:self.centralManager];
-}
-
-- (void)addObserverForUpdateConnectionsButtonTitle {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectionsButtonTitle) name:SILNotificationReloadConnectionsTableView object:nil];
 }
 
 - (void)addObserverForDisplayToastResponse {
@@ -355,11 +267,6 @@ static float kTableRefreshInterval = 1;
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
-}
-
-- (void)updateConnectionsButtonTitle {
-    NSUInteger connections = [self.connectionsViewModel.peripherals count];
-    [self.browserExpandableViewManager updateConnectionsButtonTitle:connections];
 }
 
 #pragma mark - Timers
@@ -522,17 +429,25 @@ static float kTableRefreshInterval = 1;
             [cell addShadowWhenInMid];
         }
     }
-    cell.contentView.backgroundColor = UIColor.whiteColor;
     cell.clipsToBounds = NO;
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    CGRect size = CGRectMake(tableView.bounds.origin.x, tableView.bounds.origin.y, tableView.bounds.size.width, 20);
+    CGRect size = CGRectMake(tableView.bounds.origin.x, tableView.bounds.origin.y, tableView.bounds.size.width, 16);
     UIView * view = [[UIView alloc] initWithFrame:size];
     view.backgroundColor = UIColor.clearColor;
     return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [SILTableViewWithShadowCells tableView:tableView viewForFooterInSection:section withHeight:12];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 12;
 }
 
 #pragma mark - SILServiceCellDelegate
@@ -566,7 +481,7 @@ static float kTableRefreshInterval = 1;
     serviceCell.serviceNameLabel.text = [serviceTableModel name];
     serviceCell.serviceUuidLabel.text = [serviceTableModel hexUuidString] ?: @"";
     [serviceCell configureAsExpandanble:[serviceTableModel canExpand]];
-    [serviceCell customizeMoreInfoText:serviceTableModel.isExpanded];
+    [serviceCell expandIfAllowed:serviceTableModel.isExpanded];
     [serviceCell layoutIfNeeded];
     return serviceCell;
 }
@@ -813,7 +728,6 @@ static float kTableRefreshInterval = 1;
         if (!title) {
             title = self.peripheral.name ?: DefaultDeviceName;
         }
-        self.deviceNameLabel.text = title;
         self.tableView.hidden = NO;
         self.headerView.hidden = NO;
         for (CBService *service in peripheral.services) {
@@ -823,6 +737,7 @@ static float kTableRefreshInterval = 1;
         [self markTableForUpdate];
     }
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverServices: " andPeripheral:peripheral andError:error]];
+    self.otaButton.hidden = !peripheral.hasOTAService;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
@@ -836,7 +751,6 @@ static float kTableRefreshInterval = 1;
             [peripheral discoverDescriptorsForCharacteristic:characteristic];
         }
         [self markTableForUpdate];
-        [self configureOtaButtonWithPeripheral:peripheral];
     }
 
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDiscoverCharacteristics: " andPeripheral:peripheral andError:error]];
@@ -876,11 +790,9 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    NSString *message;
     SILCharacteristicTableModel *characteristicTableModel = [self findCharacteristicTableModelForCharacteristic:characteristic];
     if (error) {
         NSLog(@"Write failed, restoring backup");
-        message = [NSString stringWithFormat:@"Write failed. Error: code=%ld \"%@\"", (long)error.code, error.localizedDescription];
         [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didWriteValueForCharacteristic: Write failed, restoring backup " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
         if ([self isATTError:error]) {
             [self showErrorDetailsPopoupWithError:error];
@@ -889,7 +801,6 @@ static float kTableRefreshInterval = 1;
         [characteristicTableModel writeFailed];
     } else {
         NSLog(@"Write successful, updating read value");
-        message = @"Write successful!";
         [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didWriteValueForCharacteristic: Write successful! " andCharacteristic:characteristic andPeripheral:peripheral andError:error]];
         [self showToastWithMessage:@"Characteristic write success"
                          toastType:ToastTypeInfo
@@ -901,8 +812,6 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
-    [self.rssiLabel setHidden:NO];
-    [self.rssiImageView setHidden:NO];
     NSMutableString* rssiDescription = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@", RSSI]];
     [rssiDescription appendString:@" dBm"];
     self.rssiLabel.text = rssiDescription;
@@ -1122,14 +1031,6 @@ static float kTableRefreshInterval = 1;
     self.tableNeedsRefresh = NO;
 }
 
-- (void)configureOtaButtonWithPeripheral:(CBPeripheral *)peripheral {
-    if ([peripheral hasOTAService]) {
-        [self.menuButton setHidden:NO];
-    } else {
-        [self.menuButton setHidden:YES];
-    }
-}
-
 // SLMAIN-333 - This is a workaround to disconnect and reconnect to the peripheral when dynamic services/characteristics are toggled.
 // If this isn't done, services cannot be refreshed more than once.
 - (void)refresh {
@@ -1163,33 +1064,6 @@ static float kTableRefreshInterval = 1;
     [self removeTimer];
 }
 
-#pragma mark - SILBrowserLogViewControllerDelegate
-
-- (void)logViewBackButtonPressed {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-}
-
-#pragma mark - SILBrowserConnectionViewControllerDelegate
-
-- (void)connectionsViewBackButtonPressed {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-}
-
-- (void)presentDetailsViewControllerForIndex:(NSInteger)index {
-    [self.browserExpandableViewManager removeExpandingControllerIfNeeded];
-    SILConnectedPeripheralDataModel* connectedPeripheral = self.connectionsViewModel.peripherals[index];
-    self.peripheral = connectedPeripheral.peripheral;
-    [self.refreshControl removeFromSuperview];
-    self.refreshControl = nil;
-    self.allServiceModels = nil;
-    [self viewWillDisappear:YES];
-    [self viewDidDisappear:YES];
-    [self viewDidLoad];
-    [self viewWillAppear:YES];
-    [self viewDidAppear:YES];
-    [self.connectionsViewModel updateConnectionsView:index];
-}
-
 #pragma mark - SILDebugCharacteristicEncodingFieldTableViewCellDelegate
 
 - (void)copyButtonWasClicked {
@@ -1206,6 +1080,12 @@ static float kTableRefreshInterval = 1;
 
 - (void)closePopover:(void (^)(void))completion {
     [self.popoverController dismissPopoverAnimated:YES completion:completion];
+}
+
+- (void)logButtonWasTapped {
+    UIStoryboard *logViewStoryboard = [UIStoryboard storyboardWithName:SILAppBluetoothBrowserHome bundle:nil];
+    SILBrowserLogViewController *logViewController = [logViewStoryboard instantiateViewControllerWithIdentifier:SILSceneLog];
+    [self.navigationController pushViewController:logViewController animated:YES];
 }
 
 @end

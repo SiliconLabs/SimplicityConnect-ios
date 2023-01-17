@@ -31,7 +31,6 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
     var connectedDeviceBarHeight: CGFloat = 70.0
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet var navigationBar: UIView!
     
     @IBOutlet weak var colorSlider: UISlider?
     @IBOutlet weak var brightnessSlider: UISlider?
@@ -77,12 +76,14 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        setLeftAlignedTitle("Blinky")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         interaction?.checkMissingSensors()
         interaction?.updateView()
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -91,6 +92,7 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
             interaction?.toggleLed(2)
         }
         showRGB = false
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     override func viewDidDisappear(_ animated: Bool) {

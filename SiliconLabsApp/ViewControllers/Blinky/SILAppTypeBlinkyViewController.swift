@@ -9,14 +9,13 @@
 import UIKit
 import SVProgressHUD
 
-class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate, SILThunderboardConnectedDeviceBar, UIGestureRecognizerDelegate {
+class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate, SILThunderboardConnectedDeviceBar {
     
     var connectedDeviceView: ConnectedDeviceBarView?
     var connectedDeviceBarHeight: CGFloat = 70.0
     
     @IBOutlet var lightBulbButton: UIButton!
     @IBOutlet var virtualButtonImage: UIImageView!
-    @IBOutlet var navigationBar: UIView!
     
     public var deviceConnector: DeviceConnection?
     public var connectedPeripheral: CBPeripheral?
@@ -30,20 +29,26 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
         super.viewDidLoad()
         
         setupLightBulbButton()
-        setupNavigationBarShadow()
         viewModel = SILBlinkyViewModel(deviceConnector: self.deviceConnector!, connectedPeripheral: self.connectedPeripheral!, name: deviceName)
         subscribeToViewModel()
         viewModel?.viewDidLoad()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        setLeftAlignedTitle("Blinky")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel?.removeObserverAndDisconnect()
         self.disposeBag.invalidateTokens()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     private func setupLightBulbButton() -> Void {
@@ -103,11 +108,6 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
             }
         }
         disposeBag.add(token: connectedDeviceDataSubscription!)
-    }
-
-    private func setupNavigationBarShadow() {
-        self.navigationBar.superview?.bringSubviewToFront(navigationBar)
-        navigationBar.addShadow()
     }
     
     @objc func displayBluetoothDisabledAlert() {

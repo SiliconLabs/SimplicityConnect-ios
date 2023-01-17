@@ -29,6 +29,16 @@ class SILTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         delegate = self
+        setupNavigationItem()
+    }
+    
+    private func setupNavigationItem() {
+        guard let selectedViewController else { return }
+        self.title = selectedViewController.title
+        self.navigationItem.rightBarButtonItems  = selectedViewController.navigationItem.rightBarButtonItems
+        self.navigationItem.leftBarButtonItems  = selectedViewController.navigationItem.leftBarButtonItems
+        self.navigationItem.hidesBackButton = selectedViewController.navigationItem.hidesBackButton
+        self.navigationItem.leftItemsSupplementBackButton = selectedViewController.navigationItem.leftItemsSupplementBackButton
     }
 
     func setupTabsAppearance() {
@@ -60,7 +70,7 @@ class SILTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     func isIPadOS12() -> Bool {
         if let systemVersion = Float(UIDevice.current.systemVersion) {
-            return systemVersion < Float(SystemVersion) && UI_USER_INTERFACE_IDIOM() == .pad
+            return systemVersion < Float(SystemVersion) && UIDevice.current.userInterfaceIdiom == .pad
         }
         return false
     }
@@ -76,5 +86,11 @@ class SILTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
         let silTabBar = tabBar as? SILTabBar
         silTabBar?.setMuliplierForSelectedIndex(index!)
+        setupNavigationItem()
+    }
+    
+    func selectItem(index: Int) {
+        self.selectedViewController = viewControllers![index]
+        self.delegate?.tabBarController?(self, didSelect: selectedViewController!)
     }
 }

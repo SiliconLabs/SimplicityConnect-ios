@@ -258,8 +258,6 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 }
 
 - (void)writeFileDataToCharacteristic:(CBCharacteristic *)characteristic {
-    const CBCharacteristicWriteType writeType = self.delegate.characteristicWriteType;
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSData *data;
         if (self.location + self.length > self.fileData.length) {

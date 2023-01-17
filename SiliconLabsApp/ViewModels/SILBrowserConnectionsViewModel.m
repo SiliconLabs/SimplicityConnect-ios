@@ -80,7 +80,8 @@
 
 - (void)addNewConnectedPeripheral:(CBPeripheral*)peripheral {
     if ([self isUniquePeripheral:peripheral]) {
-        SILConnectedPeripheralDataModel* connectedPeripheral = [[SILConnectedPeripheralDataModel alloc] initWithPeripheral:peripheral andIsSelected:NO];
+        SILDiscoveredPeripheral *discoveredPeripheral = [self.centralManager discoveredPeripheralForPeripheral:peripheral];
+        SILConnectedPeripheralDataModel* connectedPeripheral = [[SILConnectedPeripheralDataModel alloc] initWithPeripheral:discoveredPeripheral andIsSelected:NO];
         [_allPeripherals addObject:connectedPeripheral];
         _peripherals = [_allPeripherals copy];
         [self updateConnectionsView:[_allPeripherals count] - 1];
@@ -90,8 +91,9 @@
      
 - (void)disconnectAllPeripheral {
     for (SILConnectedPeripheralDataModel* connectedPeripheral in _allPeripherals) {
-        [_centralManager disconnectFromPeripheral:connectedPeripheral.peripheral];
+        [_centralManager disconnectFromPeripheral:connectedPeripheral.discoveredPeripheral.peripheral];
     }
+    [self postReloadConnectionTableViewNotification];
 }
 
 - (void)disconnectPeripheral:(NSNotification*)notification {
@@ -100,10 +102,11 @@
     NSUInteger index = [indexNumber unsignedIntValue];
     
     SILConnectedPeripheralDataModel* connectedPeripheral = _peripherals[index];
-    [_centralManager disconnectFromPeripheral:connectedPeripheral.peripheral];
+    [_centralManager disconnectFromPeripheral:connectedPeripheral.discoveredPeripheral.peripheral];
 }
 
 - (void)postReloadConnectionTableViewNotification {
+    [self notifyObjectChanged];
     [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationReloadConnectionsTableView object:self userInfo:nil];
 }
 
@@ -127,11 +130,11 @@
     int errorCode = [errorCodeString intValue];
     
     for (SILConnectedPeripheralDataModel* connectedPeripheral in _peripherals) {
-        if ([connectedPeripheral.peripheral.identifier.UUIDString isEqualToString:uuid]) {
+        if ([connectedPeripheral.discoveredPeripheral.peripheral.identifier.UUIDString isEqualToString:uuid]) {
             [self.allPeripherals removeObject:connectedPeripheral];
             self.peripherals = [self.allPeripherals copy];
             if (errorCode != 0) {
-                [self.toastsToDisplayList addObject:[[SILDisconnectionToastModel alloc] initWithPeripheralName:connectedPeripheral.peripheral.name errorCode:errorCode peripheralWasConnected:YES]];
+                [self.toastsToDisplayList addObject:[[SILDisconnectionToastModel alloc] initWithPeripheralName:connectedPeripheral.discoveredPeripheral.peripheral.name errorCode:errorCode peripheralWasConnected:YES]];
             }
         }
     }
@@ -141,7 +144,7 @@
 
 - (BOOL)isUniquePeripheral:(CBPeripheral*)peripheral {
     for (SILConnectedPeripheralDataModel* connectedPeripheral in _peripherals) {
-        if ([connectedPeripheral.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
+        if ([connectedPeripheral.discoveredPeripheral.peripheral.identifier.UUIDString isEqualToString:peripheral.identifier.UUIDString]) {
             return NO;
         }
     }
@@ -189,6 +192,16 @@
 
 - (BOOL)areConnections {
     return _allPeripherals.count > 0;
+}
+
+- (void)disconnectPeripheralWithIdentifier:(NSString *)cellIdentifier {
+    NSUInteger index = [self.peripherals indexOfObjectPassingTest:^BOOL(SILConnectedPeripheralDataModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj.discoveredPeripheral.identityKey isEqualToString:cellIdentifier];
+    }];
+    
+    if (index != NSNotFound){
+        [self.centralManager disconnectFromPeripheral: self.peripherals[index].discoveredPeripheral.peripheral];
+    }
 }
 
 @end

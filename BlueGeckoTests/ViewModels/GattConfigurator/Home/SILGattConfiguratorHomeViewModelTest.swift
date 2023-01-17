@@ -204,34 +204,5 @@ class SILGattConfiguratorHomeViewModelTest : QuickSpec {
             }
         }
         
-        describe("openMenu(sourceView:)") {
-            func testShowingMenu() {
-                let sourceView = UIView()
-                self.wireframe.sourceView = sourceView
-                self.testObj.openMenu(sourceView: sourceView)
-                expect(self.wireframe.menuPresented).to(equal(true))
-            }
-                        
-            it("show menu option and then invoke option at 0") {
-                testShowingMenu()
-                self.wireframe.invokeMenuOption0()
-                
-                expect(self.repository.configutationCount).to(equal(1))
-            }
-            
-            it("show menu option and then invoke option at 1") {
-                testShowingMenu()
-                self.wireframe.invokeMenuOption1()
-                
-                // TODO
-            }
-            
-            it("show menu option and then invoke option at 2") {
-                testShowingMenu()
-                self.wireframe.invokeMenuOption2()
-                
-                // TODO
-            }
-        }
     }
 }

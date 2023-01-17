@@ -12,7 +12,7 @@ import Foundation
 class SILSwitch: UIControl {
     
     @IBInspectable
-    public var onColor: UIColor = UIColor(hexString: "0086D9")!
+    public var onColor: UIColor = UIColor.sil_regularBlue()
     
     @IBInspectable
     public var offColor: UIColor = UIColor.lightGray
@@ -44,11 +44,11 @@ class SILSwitch: UIControl {
     private func initView() {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap(sender:))))
         
-        layer.cornerRadius = 2
+        layer.cornerRadius = 12
         
         switchView = UIView()
         switchView.translatesAutoresizingMaskIntoConstraints = false
-        switchView.layer.cornerRadius = 2
+        switchView.layer.cornerRadius = 10
         switchView.backgroundColor = UIColor.white
 
         addSubview(switchView)

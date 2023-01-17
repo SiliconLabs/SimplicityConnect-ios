@@ -151,7 +151,7 @@ class SettingsViewController: UITableViewController, SILAppSelectionHelpViewCont
         tableView.rowHeight          = UITableView.automaticDimension
         tableView.estimatedRowHeight = 42
         
-        automaticallyAdjustsScrollViewInsets = true
+        tableView.contentInsetAdjustmentBehavior = .automatic
         view.backgroundColor = StyleColor.lightGray
         tableView?.backgroundColor = StyleColor.lightGray
 

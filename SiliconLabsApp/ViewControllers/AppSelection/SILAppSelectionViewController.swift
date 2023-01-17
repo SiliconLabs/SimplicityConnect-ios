@@ -11,50 +11,26 @@ import SVProgressHUD
 
 @objcMembers
 class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate {
-    var appsArray: [SILApp] = [SILApp]()
+    var appsArray: [SILApp] = SILApp.demoApps()
     var isDisconnectedIntentionally: Bool = false
 
     @IBOutlet var allSpace: UIView!
     @IBOutlet weak var tilesSpace: UIStackView!
     @IBOutlet weak var appsView: UIView!
     @IBOutlet weak var appCollectionView: UICollectionView!
-    @IBOutlet weak var infoImage: UIImageView!
-    @IBOutlet weak var aboveSafeAreaView: UIView!
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var navigationBarTitleLabel: UILabel!
     private var devicePopoverController: WYPopoverController?
 
     private var peripheralManagerSubscription: SILObservableToken?
     private var disposeBag = SILObservableTokenBag()
     private var peripheralManager: SILThroughputPeripheralManager!
     
-    @IBAction func swipeToDemo(_ sender: UISwipeGestureRecognizer) {
-        changeAppsView(0)
-    }
-    
-    @IBAction func swipeToDevelop(_ sender: UISwipeGestureRecognizer) {
-        changeAppsView(1)
-    }
-    
-    private func changeAppsView(_ viewIndex: Int) {
-        let silTabBarController = tabBarController as! SILTabBarController
-        let silTabBar = silTabBarController.tabBar as! SILTabBar
-        
-        silTabBar.setMuliplierForSelectedIndex(viewIndex)
-        silTabBarController.defaultIndex = viewIndex
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupAppCollectionView()
         self.setupBackground()
-        self.setupNavigationBar()
         self.addObserverForNonIntentionallyBackFromThermometer()
         self.isDisconnectedIntentionally = false
         SILBluetoothModelManager.shared()?.populateModels()
-        self.allSpace.bringSubviewToFront(self.navigationBarView)
-        self.appCollectionView.bounces = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -88,31 +64,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         self.allSpace.backgroundColor = UIColor.sil_background()
         self.appsView.backgroundColor = UIColor.sil_background()
     }
-    
-    private func setupNavigationBar() {
-        self.setupNavigationBarBackgroundColor()
-        self.setupNavigationBarTitleLabel()
-        self.addGestureRecognizerForInfoImage()
-    }
-
-    private func setupNavigationBarBackgroundColor() {
-        self.aboveSafeAreaView.backgroundColor = UIColor.sil_siliconLabsRed()
-        self.navigationBarView.backgroundColor = UIColor.sil_siliconLabsRed()
-    }
-    
-    private func setupNavigationBarTitleLabel() {
-        self.navigationBarTitleLabel.font = UIFont.robotoMedium(size: CGFloat(SILNavigationBarTitleFontSize))
-        self.navigationBarTitleLabel.textColor = UIColor.sil_background()
-    }
-
-    private func addGestureRecognizerForInfoImage() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedInfoImage(_:)))
-        self.infoImage.addGestureRecognizer(tap)
-    }
-    
-    @objc private func tappedInfoImage(_ gestureRecognizer: UIGestureRecognizer) {
-        self.presentAppSelectionInfoViewController(animated: true)
-    }
 
     private func addObserverForNonIntentionallyBackFromThermometer() {
         NotificationCenter.default.addObserver(self, selector: #selector(setIsDisconnectedIntentionallyFlag), name: NSNotification.Name(rawValue: "NotIntentionallyBackFromThermometer"), object:nil)
@@ -141,41 +92,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         selectionViewController.delegate = self
         
         self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
-    }  
-    
-    private func presentCalibrationViewController(animated: Bool) {
-        debugPrint("Do nothing - app is deprecated")
-    }
-
-    private func showRetailBeaconApp(app: SILApp!, animated: Bool) {
-        debugPrint("Do nothing - app is deprecated")
-    }
-
-    private func showBluetoothBrowser(app: SILApp!, animated: Bool) {
-        let storyboard = UIStoryboard(name: "SILAppBluetoothBrowser", bundle: nil)
-        if let viewController = storyboard.instantiateInitialViewController() {
-            self.navigationController?.pushViewController(viewController, animated: animated)
-        }
-    }
-
-    private func showAdvertiser(app: SILApp!, animated: Bool) {
-        let wireframe: SILAdvertiserHomeWireframeType = SILAdvertiserHomeWireframe()
-        self.navigationController?.pushViewController(wireframe.viewController, animated: true)
-        wireframe.releaseViewController()
-    }
-
-    private func showGattConfigurator(app: SILApp!, animated: Bool) {
-        let wireframe : SILGattConfiguratorHomeWireframeType = SILGattConfiguratorHomeWireframe()
-        self.navigationController?.pushViewController(wireframe.viewController, animated: animated)
-        wireframe.releaseViewController()
-    }
-
-    private func showHomeKitDebug(app: SILApp!, animated: Bool) {
-        #if ENABLE_HOMEKIT
-            let viewController = SILHomeKitDebugDeviceViewController()
-            viewController.app = app
-            self.navigationController?.pushViewController(viewController!, animated: animated)
-        #endif
     }
 
     private func showRangeTest(app: SILApp!, animated: Bool) {
@@ -230,30 +146,12 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             
         case .typeRangeTest:
             self.showRangeTest(app: app, animated: true)
-            
-        case .typeRetailBeacon:
-            self.showRetailBeaconApp(app: app, animated: true)
-            
-        case .bluetoothBrowser:
-            self.showBluetoothBrowser(app: app, animated: true)
-            
-        case .typeAdvertiser:
-            self.showAdvertiser(app: app, animated: true)
-            
-        case .typeHomeKitDebug:
-            self.showHomeKitDebug(app: app, animated: true)
 
-        case .typeGATTConfigurator:
-            self.showGattConfigurator(app: app, animated: true)
-            
         case .iopTest:
             self.presentDeviceSelectionViewController(app: app, shouldConnectWithPeripheral: false, animated: true) { $0!.advertisedLocalName?.contains("IOP") ?? false }
             
         case .typeWifiCommissioning:
             self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
-            
-        case .typeRSSIGraph:
-            self.showRSSIGraph(app: app, animated: true)
             
         default:
             return
@@ -284,7 +182,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let minimumLineSpacing = 16.0
         let width = floor(Double((self.appCollectionView.frame.size.width - self.appCollectionView.contentInset.left - self.appCollectionView.contentInset.right - self.appCollectionView.alignmentRectInsets.left - self.appCollectionView.alignmentRectInsets.right)) / cellsInRow) - minimumLineSpacing
         
-        let height = 182.0
+        let height = 168.0
         
         return CGSize(width: width, height: height)
     }

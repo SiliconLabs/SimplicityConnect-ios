@@ -35,6 +35,8 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
     
     private var usedButtons: [UIButton] = []
     
+    var filterIsSelected = false
+    
     init(withOwnerViewController viewController: UIViewController) {
         super.init()
         self.browserViewController = viewController
@@ -58,50 +60,39 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
     }
     
     func setupButtonsTabBar(log logButton: UIButton, connections connectionsButton: UIButton) {
-        self.logButton = logButton;
-        self.connectionsButton = connectionsButton;
+        self.logButton = logButton
+        self.connectionsButton = connectionsButton
         [logButton, connectionsButton].forEach {
             usedButtons.append($0)
         }
-        setupLogButton()
         setupConnectionButton()
     }
     
     func setupButtonsTabBar(log logButton: UIButton, connections connectionsButton: UIButton, filter filterButton: UIButton, andFilterIsActive isActive: Bool, andSortButton sortButton: UIButton) {
-        self.logButton = logButton;
-        self.connectionsButton = connectionsButton;
-        self.filterButton = filterButton;
-        self.sortButton = sortButton;
+        self.logButton = logButton
+        self.connectionsButton = connectionsButton
+        self.filterButton = filterButton
+        self.sortButton = sortButton
         [logButton, connectionsButton, filterButton, sortButton].forEach {
             usedButtons.append($0)
         }
-        setupLogButton()
         setupConnectionButton()
         setupFilterButtonWhereIsFilterActive(isActive)
         setupSortButton()
     }
-    
-    private func setupLogButton() {
-        logButton?.setImage(UIImage(named: SILImageLogOff)!.withRenderingMode(.alwaysOriginal), for: .normal)
-        logButton?.setImage(UIImage(named: SILImageLogOn)!.withRenderingMode(.alwaysOriginal), for: .selected)
-        setupButton(logButton!)
-    }
-    
+
     private func setupConnectionButton() {
         connectionsButton?.setImage(UIImage(named: SILImageConnectOff)!.withRenderingMode(.alwaysOriginal), for: .normal)
         connectionsButton?.setImage(UIImage(named: SILImageConnectOn)!.withRenderingMode(.alwaysOriginal), for: .selected)
-        setupButton(connectionsButton!)
     }
     
     private func setupFilterButtonWhereIsFilterActive(_ isFilterActive: Bool) {
         updateFilterIsActiveFilter(isFilterActive)
-        setupButton(filterButton!)
     }
     
     private func setupSortButton() {
         sortButton?.setImage(UIImage(named: SILImageSortOff)!.withRenderingMode(.alwaysOriginal), for: .normal)
         sortButton?.setImage(UIImage(named: SILImageSortOn)!.withRenderingMode(.alwaysOriginal), for: .selected)
-        setupButton(sortButton!)
     }
     
     private func setupButton(_ button: UIButton) {
@@ -183,7 +174,7 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
             prepareSceneForRemoveExpandingController()
         }
         
-        return logVC;
+        return logVC
     }
     
     func connectionsButtonWasTappedAction() -> SILBrowserConnectionsViewController? {
@@ -197,35 +188,21 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
             prepareSceneForRemoveExpandingController()
         }
         
-        return connectionVC;
+        return connectionVC
     }
     
     func filterButtonWasTappedAction() -> SILBrowserFilterViewController? {
         var filterVC: SILBrowserFilterViewController? = nil
         
-        if !filterButton!.isSelected {
+        if filterIsSelected {
             let storyboard = UIStoryboard(name: SILAppBluetoothBrowserHome, bundle: nil)
             filterVC = storyboard.instantiateViewController(withIdentifier: SILSceneFilter) as? SILBrowserFilterViewController
-            handleButtonSelect(self.filterButton!, andViewController: filterVC!)
+            handleButtonSelect(UIButton(), andViewController: filterVC!)
         } else {
             prepareSceneForRemoveExpandingController()
         }
-        
-        return filterVC;
-    }
-    
-    func sortButtonWasTappedAction() -> SILSortViewController? {
-        var sortVC: SILSortViewController? = nil
-        
-        if !sortButton!.isSelected {
-            let storyboard = UIStoryboard(name: SILAppBluetoothBrowserHome, bundle: nil)
-            sortVC = storyboard.instantiateViewController(withIdentifier: SILSceneSort) as? SILSortViewController
-            handleButtonSelect(self.sortButton!, andViewController: sortVC!)
-        } else {
-            prepareSceneForRemoveExpandingController()
-        }
-        
-        return sortVC;
+
+        return filterVC
     }
     
     private func handleButtonSelect(_ button: UIButton, andViewController vc: UIViewController, wasSortButtonSelected: Bool = false) {
@@ -237,9 +214,9 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
         prepareSceneDependOnButtonSelection(wasAnyButtonSelected)
 
         insertIntoContainerExpandableController(vc)
-        let isNeededAnimate = wasSortButtonSelected || !wasAnyButtonSelected || willBeSortButtonSelected;
+        let isNeededAnimate = wasSortButtonSelected || !wasAnyButtonSelected || willBeSortButtonSelected
         animateExpandableViewController(isNeeded: isNeededAnimate)
-        self.expandingViewController = vc;
+        self.expandingViewController = vc
     }
     
     // MARK: Public appearance methods
@@ -295,18 +272,18 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
     }
     
     private func customizeExpandableViewAppearance() {
-        self.cornerRadius = 20.0;
+        self.cornerRadius = 20.0
         if sortButton?.isSelected ?? false {
             let sortVM = SILSortViewModel._sharedInstance
             expandableControllerHeight!.constant = sortVM.getViewControllerHeight()
             return
         }
-        self.expandableControllerHeight!.constant = self.presentationView!.frame.size.height * 0.9;
+        self.expandableControllerHeight!.constant = self.presentationView!.frame.size.height * 0.9
     }
     
     private func customizeSceneWithoutExpandableViewContoller() {
-        self.cornerRadius = 0.0;
-        self.expandableControllerHeight!.constant = CollapsedViewHeight;
+        self.cornerRadius = 0.0
+        self.expandableControllerHeight?.constant = CollapsedViewHeight
     }
     
     private func removeExpandableViewController() {
@@ -323,6 +300,7 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
         animateExpandableViewController()
         removeBlurEffectView()
         restoreFilterBar()
+        self.filterIsSelected = false
     }
     
     private func restoreFilterBar() {
@@ -334,7 +312,7 @@ class SILBluetoothBrowserExpandableViewManager: NSObject {
     }
         
     private func attachBlurEffectView() {
-        self.effectView.frame = self.presentationView!.frame;
+        self.effectView.frame = self.presentationView!.frame
         self.discoveredDevicesView?.addSubview(self.effectView)
     }
 

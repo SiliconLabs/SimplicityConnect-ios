@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -17,6 +17,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILLocalNameSettingViewController" customModule="BlueGecko" customModuleProvider="target">
             <connections>
+                <outlet property="descriptionLabel" destination="TkD-Xr-aIm" id="Zo3-KC-Hfc"/>
                 <outlet property="localNameTextField" destination="8cn-Gc-D79" id="7Ux-R3-dYf"/>
                 <outlet property="saveButton" destination="ti9-Ja-AfU" id="IWe-Df-SG1"/>
                 <outlet property="view" destination="iN0-l3-epB" id="D57-Hc-xDA"/>
@@ -24,17 +25,17 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="573" height="196"/>
+            <rect key="frame" x="0.0" y="0.0" width="573" height="220"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ATz-gt-vnR">
-                    <rect key="frame" x="0.0" y="0.0" width="573" height="196"/>
+                    <rect key="frame" x="0.0" y="0.0" width="573" height="220"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DVM-AN-Es5" userLabel="headerView">
                             <rect key="frame" x="0.0" y="0.0" width="573" height="48"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0aF-lM-yrq">
-                                    <rect key="frame" x="233" y="13.5" width="107.5" height="21"/>
+                                    <rect key="frame" x="233.5" y="13.5" width="106.5" height="21.5"/>
                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -51,42 +52,43 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uRl-t1-XW6">
-                            <rect key="frame" x="0.0" y="48" width="573" height="102"/>
+                            <rect key="frame" x="0.0" y="48" width="573" height="126"/>
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8cn-Gc-D79">
-                                    <rect key="frame" x="10" y="34" width="553" height="34"/>
+                                    <rect key="frame" x="10" y="45.5" width="553" height="35"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="35" id="z2h-f0-SeL"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TkD-Xr-aIm">
+                                    <rect key="frame" x="10" y="12" width="39.5" height="21.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
+                                <constraint firstItem="8cn-Gc-D79" firstAttribute="top" secondItem="TkD-Xr-aIm" secondAttribute="bottom" constant="12" id="GIi-s0-nad"/>
+                                <constraint firstItem="TkD-Xr-aIm" firstAttribute="leading" secondItem="uRl-t1-XW6" secondAttribute="leading" constant="10" id="Q7c-IJ-x3D"/>
                                 <constraint firstAttribute="trailing" secondItem="8cn-Gc-D79" secondAttribute="trailing" constant="10" id="X8u-4H-bnn"/>
+                                <constraint firstItem="TkD-Xr-aIm" firstAttribute="top" secondItem="uRl-t1-XW6" secondAttribute="top" constant="12" id="hLU-na-3yT"/>
                                 <constraint firstItem="8cn-Gc-D79" firstAttribute="leading" secondItem="uRl-t1-XW6" secondAttribute="leading" constant="10" id="sW6-RD-WMP"/>
                                 <constraint firstItem="8cn-Gc-D79" firstAttribute="centerY" secondItem="uRl-t1-XW6" secondAttribute="centerY" id="yTv-N9-Zp5"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fOY-rG-5gu" userLabel="buttonView">
-                            <rect key="frame" x="0.0" y="150" width="573" height="46"/>
+                            <rect key="frame" x="0.0" y="174" width="573" height="46"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="0q0-Ky-6Vu">
                                     <rect key="frame" x="10" y="0.0" width="553" height="36"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xcl-KY-n5r" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Xu-93-7Rv">
                                             <rect key="frame" x="0.0" y="0.0" width="177.5" height="36"/>
-                                            <state key="normal" title="Clear">
-                                                <color key="titleColor" name="sil_regularBlueColor"/>
-                                            </state>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
-                                                    <real key="value" value="15"/>
-                                                </userDefinedRuntimeAttribute>
-                                                <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
-                                            </userDefinedRuntimeAttributes>
-                                            <connections>
-                                                <action selector="onClear:" destination="-1" eventType="touchUpInside" id="jCo-Rw-9fq"/>
-                                            </connections>
-                                        </button>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oag-bI-UaD" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
                                             <rect key="frame" x="187.5" y="0.0" width="178" height="36"/>
                                             <state key="normal" title="Cancel"/>
@@ -144,22 +146,16 @@
         </view>
     </objects>
     <designables>
-        <designable name="Xcl-KY-n5r">
-            <size key="intrinsicContentSize" width="56" height="37"/>
-        </designable>
         <designable name="oag-bI-UaD">
-            <size key="intrinsicContentSize" width="69" height="37"/>
+            <size key="intrinsicContentSize" width="62" height="34"/>
         </designable>
         <designable name="ti9-Ja-AfU">
-            <size key="intrinsicContentSize" width="53" height="37"/>
+            <size key="intrinsicContentSize" width="49" height="34"/>
         </designable>
     </designables>
     <resources>
         <namedColor name="sil_bgGreyColor">
             <color red="0.94509803921568625" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="sil_regularBlueColor">
-            <color red="0.0" green="0.52549019607843139" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

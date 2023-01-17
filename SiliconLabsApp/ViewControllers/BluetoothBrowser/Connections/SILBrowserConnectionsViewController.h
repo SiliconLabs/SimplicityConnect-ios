@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SILBrowserConnectionsViewController : UIViewController
 
 @property (retain, nonatomic) id <SILBrowserConnectionsViewControllerDelegate> delegate;
-
+- (void)disconnectAllTapped;
 @end
 
 NS_ASSUME_NONNULL_END

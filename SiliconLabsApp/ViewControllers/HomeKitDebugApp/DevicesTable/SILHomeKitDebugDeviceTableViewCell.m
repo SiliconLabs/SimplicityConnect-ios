@@ -30,7 +30,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom() == UIUserInterfaceIdiomPad) {
         [self configureIPadCell];
     }
     

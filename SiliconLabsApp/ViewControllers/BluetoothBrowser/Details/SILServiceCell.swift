@@ -16,6 +16,8 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
     @IBOutlet weak var serviceUuidLabel: UILabel!
     @IBOutlet weak var moreInfoButton: UIButton!
     @IBOutlet weak var nameEditButton: UIButton!
+    @IBOutlet weak var affordanceImage: UIImageView!
+    @IBOutlet weak var dividerView: UIView!
     
     @objc weak var delegate: SILMapCellDelegate!
     
@@ -48,11 +50,14 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
     @objc
     func configureAsExpandanble(_ canExpand: Bool) {
         self.moreInfoButton.isHidden = !canExpand
+        self.affordanceImage.isHidden = !canExpand
+        self.dividerView.isHidden = !canExpand
     }
     
     @objc
     func expandIfAllowed(_ isExpanding: Bool) {
         customizeMoreInfoText(isExpanding)
+        customizeArrow(isExpanding)
     }
     
     @IBAction func editName(_ sender: UIButton) {
@@ -70,6 +75,14 @@ class SILServiceCell: SILCell, SILMapCellProtocol {
             moreInfoButton.setTitle("Less Info", for: .normal)
         } else {
             moreInfoButton.setTitle("More Info", for: .normal)
+        }
+    }
+    
+    internal func customizeArrow(_ isExpanding: Bool) {
+        if isExpanding {
+            affordanceImage.image = UIImage(named: "chevron_expanded")
+        } else {
+            affordanceImage.image = UIImage(named: "chevron_collapsed")
         }
     }
 }

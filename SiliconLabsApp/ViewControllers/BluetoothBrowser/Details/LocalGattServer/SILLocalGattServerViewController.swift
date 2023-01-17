@@ -11,7 +11,7 @@ import Foundation
 import Foundation
 
 @objcMembers
-class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILBrowserLogViewControllerDelegate, SILBrowserConnectionsViewControllerDelegate, SILDebugServicesMenuViewControllerDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate, SILDescriptorTableViewCellDelegate {
+class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CBPeripheralDelegate, UIScrollViewDelegate, SILDebugPopoverViewControllerDelegate, WYPopoverControllerDelegate, SILCharacteristicEditEnablerDelegate, SILOTAUICoordinatorDelegate, SILDebugCharacteristicCellDelegate, SILServiceCellDelegate, SILDebugCharacteristicEncodingFieldTableViewCellDelegate, SILErrorDetailsViewControllerDelegate, SILDescriptorTableViewCellDelegate {
     
     private let kSpacerCellIdentifieer = "spacer"
     private let kCornersCellIdentifieer = "corners"
@@ -27,10 +27,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     let tokenBag = SILObservableTokenBag()
     var gattConfiguratorService = SILGattConfiguratorService.shared
     private var runningConfiguration: SILGattConfigurationEntity?
-    
-    @IBOutlet weak var deviceNameLabel: UILabel!
-    @IBOutlet weak var rssiLabel: UILabel!
-    @IBOutlet weak var rssiImageView: UIImageView!
     
     var allServiceModels: [SILServiceTableModel] = []
     var modelsToDisplay: [AnyHashable] = []
@@ -51,43 +47,24 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     var popoverController: WYPopoverController?
     @IBOutlet weak var presentationView: UIView!
     var headerView: SILDebugHeaderView?
-    @IBOutlet weak var menuButton: UIButton!
-    @IBOutlet weak var aboveSpaceSaveAreaView: UIView!
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var connectionsButton: UIButton!
-    @IBOutlet weak var logButton: UIButton!
-    @IBOutlet weak var expandableControllerView: UIView!
-    @IBOutlet weak var expandableControllerHeight: NSLayoutConstraint!
     var connectionsViewModel: SILBrowserConnectionsViewModel!
-    var browserExpandableViewManager: SILBluetoothBrowserExpandableViewManager!
-    @IBOutlet weak var menuContainer: UIView!
-    @IBOutlet weak var menuOptionHeight: NSLayoutConstraint!
     @IBOutlet weak var topRefreshImageConstraint: NSLayoutConstraint!
     @IBOutlet weak var refreshImageView: SILRefreshImageView!
-    @IBOutlet weak var topButtonsView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        menuButton.isHidden = true
-        menuContainer.isHidden = true
         registerNibsAndSetUpSizing()
+        setupCornerRadius()
         setupNavigationBar()
-        setupBrowserExpandableViewManager()
-        setupButtonsTabBar()
         setupConnectionsViewModel()
-        updateConnectionsButtonTitle()
-        hideRSSIView()
         isUpdatingFirmware = false
         setupRefreshImageView()
-        topButtonsView.addShadow()
         peripheral.delegate = self
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        deviceNameLabel.text = peripheral.name
         registerForNotifications()
-        addObserverForUpdateConnectionsButtonTitle()
         installRSSITimer()
         observeLocalGattServer()
     }
@@ -95,7 +72,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         dismissPopoverIfExist()
-        browserExpandableViewManager?.removeExpandingControllerIfNeeded()
         removeUnfiredTimers()
         tokenBag.invalidateTokens()
         NotificationCenter.default.removeObserver(self)
@@ -114,10 +90,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         }
     }
 
-    @IBAction func backButtonWasTapped(_ sender: Any) {
-        navigationController?.popViewController(animated: false)
-    }
-    
     func performOTAAction() {
         isUpdatingFirmware = true
         otaUICoordinator = SILOTAUICoordinator(peripheral: peripheral, centralManager: centralManager, presenting: self)
@@ -125,21 +97,16 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         otaUICoordinator!.initiateOTAFlow()
     }
     
-    func setupNavigationBar() {
-        aboveSpaceSaveAreaView.backgroundColor = UIColor.sil_siliconLabsRed()
-        navigationBarView.backgroundColor = UIColor.sil_siliconLabsRed()
+    private func setupCornerRadius() {
+        cornerRadius = CornerRadiusStandardValue
     }
     
-    func setupBrowserExpandableViewManager() {
-        cornerRadius = CornerRadiusStandardValue
-        browserExpandableViewManager = SILBluetoothBrowserExpandableViewManager(withOwnerViewController: self)
-        browserExpandableViewManager?.setReferenceFor(presentationView: presentationView, andDiscoveredDevicesView: discoveredDevicesView)
-        browserExpandableViewManager?.setReferenceForExpandableControllerView(expandableControllerView, andExpandableControllerHeight: expandableControllerHeight)
-        browserExpandableViewManager?.setValueFor(cornerRadius: cornerRadius)
-    }
-
-    func setupButtonsTabBar() {
-        browserExpandableViewManager?.setupButtonsTabBar(log: logButton, connections: connectionsButton)
+    private func setupNavigationBar() {
+        self.setLeftAlignedTitle(self.peripheral.name ?? DefaultDeviceName)
+        
+        let logButton = UIBarButtonItem(image: UIImage(named: "logsIcon"), style: .plain, target: self, action: #selector(logButtonWasTapped))
+        
+        self.navigationItem.rightBarButtonItems = [logButton]
     }
     
     func setupRefreshImageView() {
@@ -175,6 +142,7 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     func observeLocalGattServer() {
         self.gattConfiguratorService.runningGattConfiguration.observe { gattConfiguration in
             self.runningConfiguration = gattConfiguration
+            self.allServiceModels = []
             self.buildAllServiceModels()
             self.refreshTable()
         }.putIn(bag: tokenBag)
@@ -184,71 +152,20 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         connectionsViewModel = SILBrowserConnectionsViewModel.sharedInstance()
     }
 
-    func hideRSSIView() {
-        rssiLabel.isHidden = true
-        rssiImageView.isHidden = true
-    }
-    
-    // MARK: - Menu
-    
-    @IBAction func menuButtonWasTapped(_ sender: Any) {
-        showMenu()
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "OpenMenuFromLocalSegue", let menuVC = segue.destination as? SILDebugServicesMenuViewController {
-            menuVC.delegate = self
-            menuVC.addMenuOption(title: "OTA DFU") { [self] in
-                performOTAAction()
-                browserExpandableViewManager?.removeExpandingControllerIfNeeded()
-            }
-            menuOptionHeight.constant = menuVC.getMenuOptionHeight()
-        }
-    }
-    
-    func performActionForMenuOption(using completion: () -> ()) {
-        hideMenu()
-        completion()
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        hideMenu()
-    }
-
-    func showMenu() {
-        menuContainer.isHidden = false
-        tableView.isUserInteractionEnabled = false
-    }
-
-    func hideMenu() {
-        menuContainer.isHidden = true
-    }
-    
     // MARK: - Swipe Actions
     
     @IBAction func swipeToClient(_ sender: UISwipeGestureRecognizer) {
         let silTabBarController = tabBarController as! SILTabBarController
-        let silTabBar = silTabBarController.tabBar as! SILTabBar
-        
-        silTabBar.setMuliplierForSelectedIndex(0)
-        silTabBarController.defaultIndex = 0
+        silTabBarController.selectItem(index: 0)
     }
     
     // MARK: - Expandable Controllers
     
-    @IBAction func connectionsButtonTapped(_ sender: Any) {
-        let connectionsVC = browserExpandableViewManager?.connectionsButtonWasTappedAction()
-        if connectionsVC?.delegate == nil {
-            connectionsVC?.delegate = self
-        }
-    }
-    
     @IBAction func logButtonWasTapped(_ sender: Any) {
-        let logVC = browserExpandableViewManager?.logButtonWasTappedAction()
-        if logVC?.delegate == nil {
-            logVC?.delegate = self
-        }
+        let storyboard = UIStoryboard(name: SILAppBluetoothBrowserHome, bundle: nil)
+        let logVC = storyboard.instantiateViewController(withIdentifier: SILSceneLog) as! SILBrowserLogViewController
+        
+        self.navigationController?.pushViewController(logVC, animated: true)
     }
     
     // MARK: - SILOTAUICoordinatorDelegate
@@ -270,10 +187,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
             selector: #selector(didDisconnectPeripheralNotifcation(_:)),
             name: NSNotification.Name.SILCentralManagerDidDisconnectPeripheral,
             object: centralManager)
-    }
-    
-    func addObserverForUpdateConnectionsButtonTitle() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateConnectionsButtonTitle), name: NSNotification.Name(rawValue: SILNotificationReloadConnectionsTableView), object: nil)
     }
 
     func addObserverForDisplayToastResponse() {
@@ -298,11 +211,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
                 navigationController?.popViewController(animated: true)
             }
         }
-    }
-    
-    @objc func updateConnectionsButtonTitle() {
-        let connections = connectionsViewModel.peripherals.count
-        browserExpandableViewManager.updateConnectionsButtonTitle(UInt(connections))
     }
     
     // MARK: - Timers
@@ -451,10 +359,18 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let size = CGRect(x: tableView.bounds.origin.x, y: tableView.bounds.origin.y, width: tableView.bounds.size.width, height: 20)
+        let size = CGRect(x: tableView.bounds.origin.x, y: tableView.bounds.origin.y, width: tableView.bounds.size.width, height: 16)
         let view = UIView(frame: size)
         view.backgroundColor = UIColor.clear
         return view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        12
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return SILTableViewWithShadowCells.tableView(tableView, viewForFooterInSection: section, withHeight: 12)
     }
     
     // MARK: - SILServiceCellDelegate
@@ -731,11 +647,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         if let error = error {
             debugPrint(error.localizedDescription)
         }
-        rssiLabel.isHidden = false
-        rssiImageView.isHidden = false
-        var rssiDescription = "\(RSSI)"
-        rssiDescription += " dBm"
-        rssiLabel.text = rssiDescription
     }
     
     // MARK: - Add or Update Attribute Models
@@ -900,38 +811,7 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         modelsToDisplay = buildDisplayArray()
         tableView.reloadData()
     }
-    
-    func configureOtaButton(with peripheral: CBPeripheral?) {
-        if let peripheral = peripheral, peripheral.hasOTAService() {
-            menuButton.isHidden = false
-        } else {
-            menuButton.isHidden = true
-        }
-    }
 
-    // MARK: - SILBrowserLogViewControllerDelegate
-
-    func logViewBackButtonPressed() {
-        browserExpandableViewManager.removeExpandingControllerIfNeeded()
-    }
-    
-    // MARK: - SILBrowserConnectionViewControllerDelegate
-    
-    func connectionsViewBackButtonPressed() {
-        browserExpandableViewManager.removeExpandingControllerIfNeeded()
-    }
-    
-    func presentDetailsViewController(for index: Int) {
-        browserExpandableViewManager.removeExpandingControllerIfNeeded()
-        let connectedPeripheral = connectionsViewModel.peripherals[index] as SILConnectedPeripheralDataModel
-        peripheral = connectedPeripheral.peripheral
-        allServiceModels = []
-        viewDidLoad()
-        viewWillAppear(true)
-        viewDidAppear(true)
-        connectionsViewModel.updateConnectionsView(index)
-    }
-    
     // MARK: - SILDebugCharacteristicEncodingFieldTableViewCellDelegate
     
     func copyButtonWasClicked() {

@@ -12,15 +12,16 @@ class SILLocalNameSettingViewController: UIViewController, SILLocalNameSettingVi
     
     @IBOutlet weak var localNameTextField: UITextField!
     @IBOutlet weak var saveButton: SILPrimaryButton!
+    @IBOutlet weak var descriptionLabel: UILabel!
     
     var viewModel: SILLocalNameSettingViewModel!
     
     override var preferredContentSize: CGSize {
         get {
             if UIDevice.current.userInterfaceIdiom == .pad {
-                return CGSize(width: 500, height: 170)
+                return CGSize(width: 500, height: 210)
             } else {
-                return CGSize(width: 350, height: 170)
+                return CGSize(width: 350, height: 210)
             }
         }
         set {
@@ -33,11 +34,12 @@ class SILLocalNameSettingViewController: UIViewController, SILLocalNameSettingVi
         viewModel.viewDelegate = self
         localNameTextField.addTarget(self, action: #selector(editingChanged(_:)), for: .allEditingEvents)
         localNameTextField.text = viewModel.completeLocalName
-        localNameTextField.becomeFirstResponder()
+        descriptionLabel.text = "The name will appear in the scan results"
     }
-
-    @IBAction func onClear(_ sender: UIButton) {
-        viewModel.onClear()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        localNameTextField.becomeFirstResponder()
     }
     
     @IBAction func onCancel(_ sender: UIButton) {

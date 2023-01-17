@@ -10,8 +10,6 @@ import Foundation
 import SVProgressHUD
 
 class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate {
-    @IBOutlet weak var navigationBar: UIView!
-    
     @IBOutlet weak var speedGaugeView: SILThroughputGaugeView!
     
     @IBOutlet weak var notificationsTestButton: UIButton!
@@ -42,8 +40,6 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationBar.addShadow()
-        self.navigationBar.superview?.bringSubviewToFront(self.navigationBar)
         self.buttonsView.addShadow()
         self.addShadowForOptionsView()
         self.setImagesForSelectionModeButtons()
@@ -52,6 +48,8 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
         
         viewModel = SILThroughputViewModel(peripheralManager: peripheralManager, centralManager: centralManager, connectedPeripheral: connectedPeripheral)
         viewModel.viewDidLoad()
+        
+        setLeftAlignedTitle("Throughput")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,12 +58,21 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
         subscribeToConnectionParameters()
         subscribeToViewControllerUpdateEvents()
         
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel.unregisterAndStopTests()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     private func addShadowForOptionsView() {

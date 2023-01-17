@@ -13,10 +13,6 @@ import SVProgressHUD
 class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SILGattConfiguratorHomeViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var allSpace: UIStackView!
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var menuButton: UIButton!
-    @IBOutlet weak var aboveSafeAreaView: UIView!
-    @IBOutlet weak var navigationBarTitleLabel: UILabel!
     @IBOutlet weak var configurationsTableView: UITableView!
     @IBOutlet weak var exportCheckBoxTableView: UITableView!
     @IBOutlet weak var noConfigurationsView: UIStackView!
@@ -30,34 +26,29 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     var dataSource: [SILGattConfiguratorCellViewModel] = []
     var checkBoxDataSource: [SILGattConfiguratorCheckBoxCellViewModel] = []
     
+    private weak var floatingButtonSettings: FloatingButtonSettings?
     private var tokenBag = SILObservableTokenBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         setupNormalModeView()
         disallowMultipleButtonTouches()
         setupLogic()
         viewModel.viewDidLoad()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    func setupNavigationBar() {
-        navigationBarView.backgroundColor = UIColor.sil_siliconLabsRed()
-        aboveSafeAreaView.backgroundColor = UIColor.sil_siliconLabsRed()
-        
-        navigationBarTitleLabel.font = UIFont.robotoMedium(size: CGFloat(SILGattConfiguratorNavigationBarTitleFontSize))
-        navigationBarTitleLabel.textColor = UIColor.sil_background()
-        
-        navigationBarView.addShadow()
-        allSpace.bringSubviewToFront(navigationBarView)
+    func setupFloatingButton(_ settings: FloatingButtonSettings) {
+        floatingButtonSettings = settings
+        floatingButtonSettings?.setButtonText("Create New")
+        floatingButtonSettings?.setPresented(!viewModel.isExportModeTurnOn)
     }
     
     private func setupNormalModeView() {
@@ -76,11 +67,9 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
             self.exportButton.isEnabled = enable
         }.putIn(bag: tokenBag)
         
-        viewModel.isMenuEnabled.observe { enabled in
-            self.menuButton.isEnabled = enabled
-        }.putIn(bag: tokenBag)
         
         viewModel.isExportModeOn.observe { isOn in
+            self.floatingButtonSettings?.setPresented(!isOn)
             self.exportButtonView.isHidden = !isOn
             self.exportViewHeight.constant = isOn ? 70.0 : 0.0
             self.exportCheckBoxTableViewWidthConstraint.constant = isOn ? 52.0 : 16.0
@@ -100,18 +89,6 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         }.putIn(bag: tokenBag)
     }
 
-    @IBAction func onBackTouch(_ sender: Any) {
-        viewModel.onBack()
-    }
-    
-    func popViewController() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    @IBAction func onMenuTouch(_ sender: UIButton) {
-        viewModel.openMenu(sourceView: sender)
-    }
-    
     @IBAction func onExport(_ sender: UIButton) {
         showProgressView(status: "Exporting")
         viewModel.export(onFinish: { filesToShare in
@@ -130,14 +107,6 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     
     private func hideProgressView() {
         SVProgressHUD.dismiss()
-    }
-    
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.isEqual(self.navigationController?.interactivePopGestureRecognizer) {
-            navigationController?.popToViewController(self, animated: true)
-            return true
-        }
-        return false
     }
     
     // MARK: SILGattConfiguratorHomeViewDelegate
@@ -177,7 +146,7 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let serverCellHeight: CGFloat = 100.0
+        let serverCellHeight: CGFloat = 120.0
         let characteristicCellHeight: CGFloat = 80.0
         
         if tableView == self.configurationsTableView {
@@ -193,12 +162,25 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         return 0;
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 12.0
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.configurationsTableView {
             return dataSource[section].serviceCells.count + 1
         } else {
             return 1
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return self.numberOfSections(in: tableView) - 1 == section ?
+        SILTableViewWithShadowCells.tableView(tableView, viewForFooterInSection: section, withHeight: LastFooterHeight) : nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return self.numberOfSections(in: tableView) - 1 == section ? LastFooterHeight : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -272,11 +254,7 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 10.0)
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return SILTableViewWithShadowCells.tableView(tableView, viewForFooterInSection: section, withHeight: 8.0)
+        return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 8.0)
     }
 }
 

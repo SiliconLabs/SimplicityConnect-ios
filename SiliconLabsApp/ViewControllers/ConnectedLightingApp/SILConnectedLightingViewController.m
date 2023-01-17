@@ -41,7 +41,6 @@ NSString * const SILLightEventOff = @"Light Off";
     SILLightState lightState;
 }
 
-@property (weak, nonatomic) IBOutlet UIView *navigationBar;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIImageView *lightStateImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *lastEventSourceImageView;
@@ -229,8 +228,7 @@ NSString * const SILLightEventOff = @"Light Off";
     self.contentView.layer.cornerRadius = 16;
     [self.contentView addShadow];
     
-    [self.navigationBar addShadow];
-    [self.navigationBar.superview bringSubviewToFront:self.navigationBar];
+    [self setLeftAlignedTitle:@"Connected Lighting"];
     
     [self.lastEventImageContentView setHidden:YES];
 }
@@ -256,6 +254,16 @@ NSString * const SILLightEventOff = @"Light Off";
         [self disconnectPeripheral];
     }
     [self stopObservingCentralManagerNotifications];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.tabBarController hideTabBarAndUpdateFrames];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController.tabBarController showTabBarAndUpdateFrames];
 }
 
 #pragma mark - Central Manager Notifications

@@ -12,8 +12,8 @@ import UIKit
 class SILBrowserMappingsSegmentedControl: SILSegmentedControl {
     
     enum SegmentType: Int {
-        case characteristics = 0
-        case services = 1
+        case services = 0
+        case characteristics = 1
     }
     
     var segmentType: SegmentType {

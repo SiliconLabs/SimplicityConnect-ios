@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-class SILIOPTesterViewModel: NSObject {
+class SILIOPTesterViewModel: NSObject, ObservableObject {
     private var iopCentralManager: SILIOPTesterCentralManager = SILIOPTesterCentralManager()
     private var browserCentralManager = SILCentralManager(serviceUUIDs: [])
     private var peripheral: CBPeripheral?
@@ -30,7 +30,7 @@ class SILIOPTesterViewModel: NSObject {
     var testCasesInProgress: SILObservable<String> = SILObservable(initialValue: "")
     
     private var testCaseResults: SILTestCaseResults!
-    private var timestamp: Date!
+    private var timestamp: Date?
     private var firmwareInfo: SILIOPTestFirmwareInfo?
     private var connectionParameters: SILIOPTestConnectionParameters?
     private var testReport: SILIOPTestReport?
@@ -165,13 +165,13 @@ class SILIOPTesterViewModel: NSObject {
                     weakSelf.endTesting()
                     return
                 }
-                
+                weakSelf.objectWillChange.send()
                 switch weakSelf.cellViewModels[i].status {
                 case .passed(details: _):
                     weakSelf.runNextTestIfPossible(index: i)
                     
                 case .failed(reason: _),
-                     .uknown(reason: _):
+                     .unknown(reason: _):
                     if weakSelf.iopTest[i].isMandatory {
                         weakSelf.markRestTestsAsFailed(fromTestAtIndex: i + 1, andfromTestID: testResults.last!.testID)
                         weakSelf.endTesting()
@@ -202,7 +202,7 @@ class SILIOPTesterViewModel: NSObject {
                     testResultText.append(" \(reason.description)")
                 }
         
-            case let .uknown(reason: reason):
+            case let .unknown(reason: reason):
                 if let reason = reason {
                     testResultText.append(" \(reason)")
                 }
@@ -287,7 +287,7 @@ class SILIOPTesterViewModel: NSObject {
         }
     }
     
-    private func endTesting() {
+    func endTesting() {
         debugPrint("END TESTING")
         stopTest()
         prepareTestReport()
@@ -297,7 +297,7 @@ class SILIOPTesterViewModel: NSObject {
     private func prepareTestReport() {
         let deviceInfo = UIDevice.getCurrentDeviceInfo()
                 
-        testReport = SILIOPTestReport(timestamp: timestamp,
+        testReport = SILIOPTestReport(timestamp: timestamp ?? Date(),
                                       phoneInfo: SILIOPTestPhoneInfo(phoneName: deviceInfo.modelName, phoneOSVersion: deviceInfo.SystemVersion),
                                       firmwareInfo: firmwareInfo,
                                       connectionParameters: connectionParameters,
@@ -305,7 +305,7 @@ class SILIOPTesterViewModel: NSObject {
     }
     
     func getReportFile() -> URL {
-        let fileWriter = SILIOPFileWriter(firmware: firmwareInfo?.firmware ?? .unknown, timestamp: timestamp)
+        let fileWriter = SILIOPFileWriter(firmware: firmwareInfo?.firmware ?? .unknown, timestamp: timestamp ?? Date())
         
         if fileWriter.createEmptyFile(atPath: fileWriter.getFilePath), let testReport = testReport {
             let report = testReport.generateReport()

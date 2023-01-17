@@ -72,7 +72,7 @@ class SILThroughputGaugeView: UIView {
         drawSegments(center: center, radius: radius)
         drawAnimateGaugePath(center: center, radius: radius)
         drawLabels(center: center, radius: radius - borderWidth)
-        if UI_USER_INTERFACE_IDIOM() == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             drawHand(center: center, height: 80, width: 25)
         } else {
             drawHand(center: center, height: 60, width: 25)

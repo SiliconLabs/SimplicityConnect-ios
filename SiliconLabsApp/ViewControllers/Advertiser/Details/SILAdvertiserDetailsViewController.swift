@@ -8,13 +8,7 @@
 
 import UIKit
 
-class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSource, UIGestureRecognizerDelegate {
-    @IBOutlet weak var aboveSafeAreaView: UIView!
-    
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var navigationBarTitleLabel: UILabel!
-    
-    @IBOutlet weak var saveButton: UIButton!
+class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var advertisingSetNameTextField: UITextField!
     
@@ -50,13 +44,20 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAppearance()
+        setupNavigationBar()
         setupLogic()
         setupKeyboardHandling()
         setupExecutionTime()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     override func viewDidLayoutSubviews() {
@@ -98,19 +99,15 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
         viewModel.updateRadioButtons(completion: { [weak self] newState in self?.updateRadioButtons(with: newState) })
     }
     
+    func setupNavigationBar() {
+        self.navigationItem.title = viewModel.advertisingSetName
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "save"),
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(onSaveTouch))
+    }
+    
     func setupAppearance() {
-        aboveSafeAreaView.backgroundColor = UIColor.sil_siliconLabsRed()
-
-        navigationBarView.backgroundColor = UIColor.sil_siliconLabsRed()
-        navigationBarTitleLabel.font = UIFont.robotoMedium(size: CGFloat(SILNavigationBarTitleFontSize))
-        navigationBarTitleLabel.textColor = UIColor.sil_background()
-        
-        navigationBarView.layer.shadowColor = UIColor.black.cgColor
-        navigationBarView.layer.shadowOpacity = 0.5
-        navigationBarView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        navigationBarView.layer.shadowRadius = 2
-        allSpaceStackView.bringSubviewToFront(navigationBarView)
-        
         bodyContainer.layer.cornerRadius = CornerRadiusStandardValue
         bodyContainer.layer.shadowColor = UIColor.black.cgColor
         bodyContainer.layer.shadowOpacity = 0.3
@@ -131,7 +128,6 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
     }
     
     func setupLogic() {
-        navigationBarTitleLabel.text = viewModel.advertisingSetName
         advertisingSetNameTextField.text = viewModel.advertisingSetName
         advertisingDataTableView.dataSource = self
         scanResponseTableView.dataSource = self
@@ -177,18 +173,13 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
             }
         }
     }
-
-    @IBAction func onBackTouch(_ sender: Any) {
-        viewModel.backToHome()
-    }
     
-    @IBAction func onSaveTouch(_ sender: UIButton) {
+    @objc private func onSaveTouch(_ sender: UIButton) {
         viewModel.save()
     }
     
     @IBAction func didChangeAdvertisingSetName(_ sender: UITextField) {
         viewModel.update(advertisingSetName: sender.text)
-        navigationBarTitleLabel.text = sender.text
     }
     
     @IBAction func addDataType(_ sender: UIButton) {
@@ -255,7 +246,6 @@ class SILAdvertiserDetailsViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    // oddzielne cellki w table VIEW XDDD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == advertisingDataTableView {
             let cellViewModel = advertisingDataSource[indexPath.row]

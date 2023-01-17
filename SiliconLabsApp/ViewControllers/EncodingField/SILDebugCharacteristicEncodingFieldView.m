@@ -43,6 +43,10 @@
 - (void)commonInit {
     [[NSBundle mainBundle] loadNibNamed:@"SILDebugCharacteristicEncodingFieldView" owner:self options:nil];
     [self addSubview:self.contentView];
+    self.layer.borderColor = [UIColor.blackColor CGColor];
+    self.layer.borderWidth = 1;
+    self.layer.cornerRadius = 4;
+    self.layer.masksToBounds = YES;
 }
 
 - (IBAction)copyButtonClicked:(id)sender {

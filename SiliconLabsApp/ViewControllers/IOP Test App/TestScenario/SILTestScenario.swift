@@ -20,7 +20,7 @@ enum SILTestStatus: RawRepresentable {
     case inProgress
     case passed(details: String?)
     case failed(reason: SILTestFailureReason?)
-    case uknown(reason: String?)
+    case unknown(reason: String?)
     case none
     
     var rawValue: String {
@@ -33,7 +33,7 @@ enum SILTestStatus: RawRepresentable {
             return "Pass"
         case .failed(reason: _):
             return "Fail"
-        case .uknown:
+        case .unknown:
             return "N/A"
         case .none:
             return ""
@@ -50,7 +50,7 @@ enum SILTestStatus: RawRepresentable {
         } else  if rawValue == "Failed" {
             self = .failed(reason: nil)
         } else if rawValue == "N/A" {
-            self = .uknown(reason: nil)
+            self = .unknown(reason: nil)
         } else {
             self = .none
         }

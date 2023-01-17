@@ -158,7 +158,7 @@ static float kTableRefreshInterval = 1;
     self.servicesTableView.rowHeight = UITableViewAutomaticDimension;
     self.servicesTableView.sectionHeaderHeight = 40;
     self.servicesTableView.hidden = YES;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom() == UIUserInterfaceIdiomPad) {
         self.servicesTableViewLeadingConstraint.constant = kTableViewEdgePadding;
         self.servicesTableViewTrailingConstraint.constant = kTableViewEdgePadding;
         self.servicesTableView.estimatedRowHeight = 96;

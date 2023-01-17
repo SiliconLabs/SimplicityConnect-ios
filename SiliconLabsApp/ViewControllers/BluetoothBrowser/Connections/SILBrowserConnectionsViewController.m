@@ -12,12 +12,12 @@
 #import "SILBrowserConnectionsViewModel.h"
 #import "SILConnectedPeripheralDataModel.h"
 #import "NSString+SILBrowserNotifications.h"
+#import "SILBluetoothBrowser+Constants.h"
+#import "SILDebugServicesViewController.h"
 
-@interface SILBrowserConnectionsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface SILBrowserConnectionsViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *connectionsTableView;
-@property (weak, nonatomic) IBOutlet UIButton *disconnectAllButton;
-@property (weak, nonatomic) IBOutlet UIImageView *backImage;
-
+@property (weak, nonatomic) IBOutlet UIView *emptyView;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* viewModel;
 
 @end
@@ -28,13 +28,11 @@
     [super viewDidLoad];
     [self registerNibs];
     [self hideScrollIndicators];
-    [self setAppearanceForFooterView];
-    [self addGestureRecognizerForBackImage];
     _viewModel = [SILBrowserConnectionsViewModel sharedInstance];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableView) name:SILNotificationReloadConnectionsTableView object:nil];
 }
 
-- (IBAction)disconnectAllTapped:(id)sender {
+- (void)disconnectAllTapped {
     [_viewModel disconnectAllPeripheral];
     [_delegate connectionsViewBackButtonPressed];
 }
@@ -42,7 +40,7 @@
 - (void)registerNibs {
     _connectionsTableView.delegate = self;
     _connectionsTableView.dataSource = self;
-    [_connectionsTableView registerNib:[UINib nibWithNibName:NSStringFromClass([SILBrowserConnectionsTableViewCell class]) bundle:nil] forCellReuseIdentifier:NSStringFromClass([SILBrowserConnectionsTableViewCell class])];
+    [_connectionsTableView registerNib:[UINib nibWithNibName:NSStringFromClass([SILBrowserConnectionsTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"SILConnectedDeviceViewCell"];
 }
 
 - (void)hideScrollIndicators {
@@ -50,67 +48,103 @@
     [_connectionsTableView setShowsVerticalScrollIndicator:NO];
 }
 
-- (void)setAppearanceForFooterView {
-    [self setAppearanceForDisconnectAllButton];
-    [self setAppearanceForBackImage];
-}
-
-- (void)setAppearanceForDisconnectAllButton {
-    _disconnectAllButton.layer.cornerRadius = CornerRadiusForButtons;
-    [_disconnectAllButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getSmallFontSize]]];
-    _disconnectAllButton.titleLabel.textColor = [UIColor sil_backgroundColor];
-    _disconnectAllButton.backgroundColor = [UIColor sil_siliconLabsRedColor];
-}
-
-- (void)setAppearanceForBackImage {
-    _backImage.image = [[UIImage imageNamed:SILImageExitView] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-}
-
-- (void)addGestureRecognizerForBackImage {
-    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedBackImage:)];
-    [_backImage addGestureRecognizer:tap];
-}
-
-- (void)tappedBackImage:(UIGestureRecognizer *)gestureRecognizer {
-    [_delegate connectionsViewBackButtonPressed];
-}
-
 # pragma mark - Log Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    NSInteger amountOfPeripherals = [_viewModel.peripherals count];
+    
+    self.emptyView.hidden = amountOfPeripherals > 0;
+    self.connectionsTableView.hidden = amountOfPeripherals == 0;
+    
+    return amountOfPeripherals;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_viewModel.peripherals count];
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SILBrowserConnectionsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILBrowserConnectionsTableViewCell class]) forIndexPath:indexPath];
-    SILConnectedPeripheralDataModel* peripheral = _viewModel.peripherals[indexPath.row];
-    [cell setDeviceName:peripheral.peripheral.name index:indexPath.row andIsSelected:peripheral.isSelected];
+    SILBrowserDeviceViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"SILConnectedDeviceViewCell" forIndexPath:indexPath];
+    SILConnectedPeripheralDataModel* peripheralModel = _viewModel.peripherals[indexPath.section];
+    cell.delegate = self;
+    SILDiscoveredPeripheral *discoveredPeripheral = peripheralModel.discoveredPeripheral;
+    NSString* cellIdentifier = discoveredPeripheral.identityKey;
+    cell.cellIdentifier = cellIdentifier;
+    NSString *deviceName = discoveredPeripheral.advertisedLocalName;
+    cell.rssiLabel.text = discoveredPeripheral.rssiDescription;
+    cell.title.text = deviceName;
+    if ([deviceName isEqualToString:EmptyText] || deviceName == nil) {
+        cell.title.text = DefaultDeviceName;
+    }
+    
+    cell.uuidLabel.text = discoveredPeripheral.uuid.UUIDString;
+    long long advertisingIntervalsInMS = discoveredPeripheral.advertisingInterval * 1000;
+    
+    NSMutableString* advertisingIntervalText = [NSMutableString stringWithFormat:@"%lld", advertisingIntervalsInMS];
+    [advertisingIntervalText appendString:AppendingMS];
+    
+    cell.advertisingIntervalLabel.text = advertisingIntervalText;
+    
+    if (discoveredPeripheral.isConnectable) {
+        cell.connectableLabel.text = SILDiscoveredPeripheralConnectableDevice;
+        [cell setDisconnectButtonAppearance];
+    } else {
+        cell.connectableLabel.text = SILDiscoveredPeripheralNonConnectableDevice;
+        [cell setHiddenButtonAppearance];
+    }
+    cell.beaconLabel.text = discoveredPeripheral.beacon.name;
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 1.0;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
-    view.tintColor = [UIColor clearColor];
+    return 132.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [_viewModel updateConnectionsView:indexPath.row];
-    [_delegate presentDetailsViewControllerForIndex:indexPath.row];
+    [_viewModel updateConnectionsView:indexPath.section];
+    [self presentDetailsViewControllerWithPeripheral:self.viewModel.peripherals[indexPath.section].discoveredPeripheral.peripheral];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [SILTableViewWithShadowCells tableView:tableView willDisplay:cell forRowAt:indexPath];
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [SILTableViewWithShadowCells tableView:tableView viewForHeaderInSection:section withHeight: 20.0];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 12;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [self numberOfSectionsInTableView:tableView] - 1 == section ? [SILTableViewWithShadowCells tableView:tableView viewForFooterInSection:section withHeight:LastFooterHeight] : nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return [self numberOfSectionsInTableView:tableView] - 1 == section ? LastFooterHeight : 0;
 }
 
 - (void)reloadTableView {
     [_connectionsTableView reloadData];
+}
+
+- (void)connectButtonTappedInCell:(SILBrowserDeviceViewCell * _Nullable)cell {
+    [self.viewModel disconnectPeripheralWithIdentifier:cell.cellIdentifier];
+}
+
+- (void)presentDetailsViewControllerWithPeripheral:(CBPeripheral *)peripheral {
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:SILAppBluetoothBrowserDetails bundle:nil];
+    SILBrowserDetailsTabBarController * detailsTabBarController = [storyboard instantiateViewControllerWithIdentifier: @"SILDetailsTabBarController"];
+    SILDebugServicesViewController* detailsVC = detailsTabBarController.viewControllers[0];
+    detailsVC.peripheral = peripheral;
+    detailsVC.centralManager = self.viewModel.centralManager;
+    SILLocalGattServerViewController* localGattServerVC = detailsTabBarController.viewControllers[1];
+    localGattServerVC.peripheral = peripheral;
+    localGattServerVC.centralManager = self.viewModel.centralManager;
+    [self.navigationController pushViewController:detailsTabBarController animated:YES];
 }
 
 @end

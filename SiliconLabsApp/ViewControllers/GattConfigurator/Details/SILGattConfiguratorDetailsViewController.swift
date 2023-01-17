@@ -8,13 +8,9 @@
 
 import UIKit
 
-class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
-    @IBOutlet weak var aboveSafeAreaView: UIView!
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var navigationBarTitleLabel: UILabel!
     @IBOutlet weak var allSpaceStackView: UIStackView!
-    
     @IBOutlet weak var gattConfigurationName: UITextField!
     @IBOutlet weak var tableView: UITableView!
     var viewModel: SILGattConfiguratorDetailsViewModel!
@@ -24,26 +20,26 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupAppearance()
+        setupNavigationBar()
         setupLogic()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }
     
-    func setupAppearance() {
-        aboveSafeAreaView.backgroundColor = UIColor.sil_siliconLabsRed()
-
-        navigationBarView.backgroundColor = UIColor.sil_siliconLabsRed()
-        navigationBarTitleLabel.font = UIFont.robotoMedium(size: CGFloat(SILGattConfiguratorNavigationBarTitleFontSize))
-        navigationBarTitleLabel.textColor = UIColor.sil_background()
-        
-        navigationBarView.layer.shadowColor = UIColor.black.cgColor
-        navigationBarView.layer.shadowOpacity = 0.5
-        navigationBarView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        navigationBarView.layer.shadowRadius = 2
-        allSpaceStackView.bringSubviewToFront(navigationBarView)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    }
+    
+    func setupNavigationBar() {
+        self.navigationItem.title = viewModel.gattConfigurationName
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "save"),
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(onSaveTouch))
     }
     
     func setupLogic() {
@@ -51,7 +47,6 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
         tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
 
-        navigationBarTitleLabel.text = viewModel.gattConfigurationName
         gattConfigurationName.text = viewModel.gattConfigurationName
         gattConfigurationName.delegate = self
         
@@ -64,22 +59,16 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
         }
     }
     
-
-    @IBAction func onSaveTouch(_ sender: UIButton) {
+    @objc private func onSaveTouch(_ sender: UIButton) {
         viewModel.save()
     }
     
-    @IBAction func onBackTouch(_ sender: UIButton) {
-        viewModel.backToHome()
-    }
-
     @IBAction func onAddServiceTouch(_ sender: UIButton) {
         viewModel.addService()
     }
     
     @IBAction func didChangeGattConfigurationName(_ sender: UITextField) {
         viewModel.update(gattConfigurationName: sender.text)
-        navigationBarTitleLabel.text = sender.text
     }
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

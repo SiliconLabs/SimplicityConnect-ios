@@ -121,7 +121,7 @@ static NSInteger const kTableViewEdgePaddingPrime = 36;
 }
 
 - (void)setUpDevicesTableView {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         self.devicesTableViewLeadingConstraint.constant = kTableViewEdgePaddingPrime;
         self.devicesTableViewTrailingConstraint.constant = kTableViewEdgePaddingPrime;
     } else {

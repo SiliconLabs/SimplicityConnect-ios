@@ -79,3 +79,4 @@
 #import "SILConnectedLightingViewController.h"
 #import "SILAppSelectionHelpViewController.h"
 #import "SILDeviceSelectionCollectionViewCell.h"
+#import "SILAppearance.h"

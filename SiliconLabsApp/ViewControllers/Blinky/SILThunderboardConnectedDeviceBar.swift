@@ -43,7 +43,7 @@ extension SILThunderboardConnectedDeviceBar where Self: UIViewController {
                 connectedDeviceView.heightAnchor.constraint(equalToConstant: connectedDeviceBarHeight),
                 connectedDeviceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 connectedDeviceView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                connectedDeviceView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                connectedDeviceView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             ])
             
             connectedDeviceView.addShadow()

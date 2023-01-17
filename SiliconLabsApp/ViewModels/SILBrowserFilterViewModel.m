@@ -75,6 +75,7 @@
     self.isActiveFilterFromSavedSearches = NO;
     [self fillBeaconTypesArray];
     [self postReloadFilterViewNotification];
+    [self fillSavedSearches];
 }
 
 - (void)returnStateFrom:(SILBrowserSavedSearches*)savedSearch {

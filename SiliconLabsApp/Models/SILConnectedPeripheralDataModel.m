@@ -15,10 +15,10 @@
 
 @implementation SILConnectedPeripheralDataModel
 
-- (instancetype)initWithPeripheral:(CBPeripheral*)peripheral andIsSelected:(BOOL)isSelected {
+- (instancetype)initWithPeripheral:(SILDiscoveredPeripheral*)peripheral andIsSelected:(BOOL)isSelected {
     self = [super init];
     if (self) {
-        self.peripheral = peripheral;
+        self.discoveredPeripheral = peripheral;
         self.isSelected = isSelected;
     }
     return self;

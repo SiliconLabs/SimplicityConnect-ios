@@ -12,18 +12,12 @@ typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppTypeConnectedLighting,
     SILAppTypeHealthThermometer,
     SILAppTypeBlinky,
-    SILAppTypeRetailBeacon,
-    SILAppBluetoothBrowser,
-    SILAppTypeHomeKitDebug,
     SILAppTypeRangeTest,
-    SILAppTypeAdvertiser,
     SILAppIopTest,
-    SILAppTypeGATTConfigurator,
     SILAppTypeThroughput,
     SILAppTypeMotion,
     SILAppTypeEnvironment,
-    SILAppTypeWifiCommissioning,
-    SILAppTypeRSSIGraph
+    SILAppTypeWifiCommissioning
 };
 
 @interface SILApp : NSObject
@@ -34,9 +28,8 @@ typedef NS_ENUM(NSInteger, SILAppType) {
 @property (strong, nonatomic) NSDictionary *showcasedProfiles;
 @property (strong, nonatomic) NSString *imageName;
 
-+ (NSArray *)demoApps;
-+ (NSArray *)developApps;
-
++ (NSArray<SILApp *> *)demoApps;
 + (SILApp *)rangeTestApp;
++ (SILApp *)iopTestApp;
 
 @end

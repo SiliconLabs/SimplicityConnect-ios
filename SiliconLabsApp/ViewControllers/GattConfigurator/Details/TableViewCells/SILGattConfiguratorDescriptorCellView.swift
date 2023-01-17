@@ -49,7 +49,7 @@ class SILGattConfiguratorDescriptorCellView: SILCell, SILCellView {
         if let canBeModified = viewModel?.descriptor.canBeModified {
             DispatchQueue.main.async {
                 self.buttonStackView.isHidden = !canBeModified
-                let labelColor = canBeModified ? UIColor.sil_primaryText()! : UIColor.sil_boulder()!
+                let labelColor = canBeModified ? UIColor.sil_regularBlue()! : UIColor.sil_boulder()!
                 self.descriptorNameLabel.textColor = labelColor
                 self.descriptorUUIDLabel.textColor = labelColor
                 self.descriptorValueLabel.textColor = labelColor

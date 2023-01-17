@@ -19,7 +19,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.contentBackground.backgroundColor = [UIColor sil_bgGreyColor];
-    BOOL isIPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    BOOL isIPad = UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad;
     self.dividerView.hidden = isIPad;
 }
 

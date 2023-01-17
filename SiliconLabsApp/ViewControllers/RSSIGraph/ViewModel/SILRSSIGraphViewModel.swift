@@ -29,16 +29,14 @@ class SILRSSGraphViewModel {
     
     lazy var filter: BehaviorRelay<FilterClosure> = BehaviorRelay(value: filterHelper.getFilterOfType(.none))
     
-    lazy var sortOption: BehaviorRelay<SILSortOption> = BehaviorRelay(value: .none)
-    
     lazy var selected: PublishRelay<[PeripheralData]> = PublishRelay()
     
     lazy var refresh = PublishRelay<Void>()
     
     private lazy var _peripherals = BehaviorRelay<[PeripheralData]>(value: [])
     
-    lazy var peripherals = Observable.combineLatest(_peripherals, selected.startWith([]), sortOption, filter)
-        .map { (peripherals, selectedPeripherals, sortOption, filter) -> [PeripheralData] in
+    lazy var peripherals = Observable.combineLatest(_peripherals, selected.startWith([]), filter)
+        .map { (peripherals, selectedPeripherals, filter) -> [PeripheralData] in
             // filter
             var peripherals = peripherals.filter { filter($0) }
 
@@ -50,19 +48,6 @@ class SILRSSGraphViewModel {
                 }
             }
             
-            // sort
-            switch sortOption {
-            case .ascendingRSSI:
-                return peripherals.sorted() { $0.lastRSSIMeasurement < $1.lastRSSIMeasurement }
-            case .descendingRSSI:
-                return peripherals.sorted() { $0.lastRSSIMeasurement > $1.lastRSSIMeasurement }
-            case .AZ:
-                return peripherals.sorted() { $0.name < $1.name }
-            case .ZA:
-                return peripherals.sorted() { $0.name > $1.name }
-            default:
-                break
-            }
             return peripherals
         }
 
@@ -159,6 +144,10 @@ class SILRSSGraphViewModel {
     
     private func stopScanning() {
         self.scanningDisposeBag = DisposeBag()
+    }
+    
+    func sortByRSSI() {
+        _peripherals.accept(_peripherals.value.sorted(by: { $0.lastRSSIMeasurement > $1.lastRSSIMeasurement }))
     }
     
     func export(onFinish: @escaping ([URL]) -> ()) {

@@ -20,6 +20,16 @@ class SILBrowserDetailsTabBarController: SILTabBarController {
         self.tabBar.isTranslucent = false
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    }
+    
     func setupRemoteTabItem() {
         tabBar.items?[0].selectedImage = UIImage(named: SILDetailsTabBarRemoteOn)?.withRenderingMode(.alwaysOriginal)
         tabBar.items?[0].image = UIImage(named: SILDetailsTabBarRemoteOff)?.withRenderingMode(.alwaysOriginal)

@@ -9,12 +9,12 @@
 import Foundation
 
 class SILAppSelectionCollectionViewCell: UICollectionViewCell {
-    @IBOutlet private weak var roundedView: UIView!
+    @IBOutlet private weak var roundedView: UIView?
     
-    @IBOutlet weak var imageView: UIView!
-    @IBOutlet weak var iconImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var imageView: UIView?
+    @IBOutlet weak var iconImageView: UIImageView?
+    @IBOutlet weak var titleLabel: UILabel?
+    @IBOutlet weak var descriptionLabel: UILabel?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,12 +34,13 @@ class SILAppSelectionCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupIconImageView() {
-        iconImageView.layer.masksToBounds = true
+        iconImageView?.layer.masksToBounds = true
+        iconImageView?.backgroundColor = .white
     }
 
     private func setupCellRoundedAppearance() {
-        roundedView.layer.masksToBounds = true
-        roundedView.layer.cornerRadius = CGFloat(CornerRadiusStandardValue)
+        roundedView?.layer.masksToBounds = true
+        roundedView?.layer.cornerRadius = CGFloat(CornerRadiusStandardValue)
     }
 
     override func prepareForReuse() {
@@ -51,8 +52,9 @@ class SILAppSelectionCollectionViewCell: UICollectionViewCell {
     }
 
     func setFieldsIn(_ appData: SILApp?) {
-        titleLabel.text = appData?.title
-        descriptionLabel.text = appData?.appDescription
-        iconImageView.image = UIImage(named: appData?.imageName ?? "")
+        titleLabel?.text = appData?.title
+        titleLabel?.textColor = .sil_regularBlue()
+        descriptionLabel?.text = appData?.appDescription
+        iconImageView?.image = UIImage(named: appData?.imageName ?? "")
     }
 }

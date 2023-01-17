@@ -10,5 +10,5 @@ import Foundation
 
 @objc protocol SILBrowserDeviceViewCellDelegate: class {
     func favouriteButtonTappedInCell(_ cell: SILBrowserDeviceViewCell?)
-    func connectViewButtonTappedInCell(_ cell: SILBrowserDeviceViewCell?)
+    func connectButtonTappedInCell(_ cell: SILBrowserDeviceViewCell?)
 }

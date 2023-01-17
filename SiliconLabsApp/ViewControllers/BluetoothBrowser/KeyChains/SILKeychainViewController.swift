@@ -14,7 +14,6 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var segments: SILBrowserMappingsSegmentedControl!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var infoImage: UIImageView!
     
     var popoverController: WYPopoverController?
     var realmCharacteristicsNotificationToken: NotificationToken? = nil
@@ -52,6 +51,7 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
         setupNotificationToken()
         setupInfoImage()
+        self.setLeftAlignedTitle("UUID Dictionary")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -106,8 +106,7 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func setupInfoImage() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedInfoImage(_:)))
-        self.infoImage.addGestureRecognizer(tapGesture)
+        self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "help_white"), style: .plain, target: self, action: #selector(tappedInfoImage(_:))), animated: false)
     }
     
     @objc private func tappedInfoImage(_ regognizer: UIGestureRecognizer) {
@@ -129,10 +128,6 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    @IBAction func back(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
     @IBAction func segmentChanged(_ sender: SILBrowserMappingsSegmentedControl) {
         tableView.reloadData()
     }
@@ -145,11 +140,6 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func swipeToServices(_ sender: Any) {
         segments.selectedSegmentIndex = 1
         tableView.reloadData()
-    }
-    
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        self.navigationController?.popViewController(animated: true)
-        return false
     }
 }
 

@@ -37,7 +37,7 @@
 #pragma mark - UIViewController Methods
 
 - (CGSize)preferredContentSize {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return CGSizeMake(540, 390);
     } else {
         return CGSizeMake(296, 350);

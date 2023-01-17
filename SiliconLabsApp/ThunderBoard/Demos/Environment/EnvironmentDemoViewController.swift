@@ -29,6 +29,8 @@ class EnvironmentDemoViewController: DemoViewController, EnvironmentDemoInteract
         collectionView.backgroundColor = UIColor.clear
         collectionView.delegate = self
         
+        setupNavigationBar()
+        
         dataSource.activeViewModels.debounce(.milliseconds(500), scheduler: MainScheduler.instance).bind(to: collectionView.rx.items(cellIdentifier: EnvironmentCollectionViewCell.cellIdentifier, cellType: EnvironmentCollectionViewCell.self)){(_, element, cell) in
             cell.configureCell(with: element)
         }.disposed(by: disposeBag)
@@ -58,6 +60,7 @@ class EnvironmentDemoViewController: DemoViewController, EnvironmentDemoInteract
         super.viewWillAppear(animated)
         self.interaction?.checkMissingSensors()
         self.interaction?.updateView()
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -65,8 +68,17 @@ class EnvironmentDemoViewController: DemoViewController, EnvironmentDemoInteract
         deviceConnector?.disconnectAllDevices()
     }
     
-    @IBAction func backButton() {
-        self.navigationController?.popViewController(animated: true)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    }
+    
+    private func setupNavigationBar() {
+        setLeftAlignedTitle("Environment")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "developOff"),
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(settingsButtonPressed))
     }
     
     // MARK: - EnvironmentDemoInteractionOutput
@@ -87,7 +99,7 @@ class EnvironmentDemoViewController: DemoViewController, EnvironmentDemoInteract
         }
     }
     
-    @IBAction func settingsButtonPressed() {
+    @objc private  func settingsButtonPressed(_sender: UIButton) {
         let settings = UIStoryboard(name: "SettingsViewController", bundle: nil).instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsNavigationController
         self.navigationController?.present(settings, animated: true, completion: nil)
     }

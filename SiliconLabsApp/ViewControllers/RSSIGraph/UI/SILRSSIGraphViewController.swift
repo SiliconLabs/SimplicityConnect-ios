@@ -14,13 +14,8 @@ import SVProgressHUD
 
 class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    @IBOutlet var navigationBar: UIView!
-    @IBOutlet weak var bottomBarView: UIView!
-    @IBOutlet weak var scanningButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var sortButton: UIButton!
-    @IBOutlet weak var filterButton: UIButton!
-    @IBOutlet weak var exportButton: SILPrimaryButton!
+    weak var floatingButtonSettings: FloatingButtonSettings?
     
     @IBOutlet weak var chartContainerView: UIView!
     
@@ -45,6 +40,11 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
         setupCollectionView()
         subscribeChartToViewModel()
         setupScanningAction()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.applyFiltersButtonWasTapped(SILBrowserFilterViewModel.sharedInstance())
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -79,11 +79,6 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     private func setupAppearance() {
         chartContainerView.addShadow()
         chartContainerView.layer.cornerRadius = cornerRadius
-        bottomBarView.addShadow()
-        let sortImage = sortButton.currentImage?.withRenderingMode(.alwaysTemplate)
-        sortButton.setImage(sortImage, for: .normal)
-        let filterImage = filterButton.currentImage?.withRenderingMode(.alwaysTemplate)
-        filterButton.setImage(filterImage, for: .normal)
     }
     
     private func subscribeChartToViewModel() {
@@ -96,41 +91,55 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
             .disposed(by: disposeBag)
     }
     
+    func scanningButtonTapped() {
+        viewModel.isScanning.accept(!viewModel.isScanning.value)
+    }
+    
+    func sortButtonTapped() {
+        print("Sort button tapped in RSSI")
+        viewModel.sortByRSSI()
+    }
+    
+    func filterButtonTapped() {
+        let storyboard = UIStoryboard(name: SILAppBluetoothBrowserHome, bundle: nil)
+        let filterVC = storyboard.instantiateViewController(withIdentifier: SILSceneFilter) as! SILBrowserFilterViewController
+        
+        filterVC.delegate = self
+        
+        self.present(filterVC, animated: true)
+    }
+    
+    fileprivate func setupButtonText() {
+        if self.viewModel.isScanning.value {
+            floatingButtonSettings?.setButtonText(TitleForScanningButtonDuringScanning)
+            floatingButtonSettings?.setColor(.sil_siliconLabsRed())
+        } else {
+            floatingButtonSettings?.setButtonText(TitleForScanningButtonWhenIsNotScanning)
+            floatingButtonSettings?.setColor(.sil_regularBlue())
+        }
+    }
+    
+    func setFloatingButton(settings: FloatingButtonSettings){
+        self.floatingButtonSettings = settings
+        setupButtonText()
+    }
+    
+    func exportButtonTapped() {
+        self.showProgressView(status: "Exporting")
+        self.viewModel.export(onFinish: { [weak self] filesToShare in
+            guard let self = self else { return }
+            self.hideProgressView()
+            self.showSharingExportFiles(filesToShare: filesToShare)
+        })
+    }
+    
     private func setupScanningAction() {
-        scanningButton.rx.tap
-            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-            .scan(viewModel.isScanning.value) { lastState, _ in
-                return !lastState
-            }
-            .bind(to: viewModel.isScanning)
-            .disposed(by: disposeBag)
-        
-        exportButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.showProgressView(status: "Exporting")
-                self.viewModel.export(onFinish: { [weak self] filesToShare in
-                    guard let self = self else { return }
-                    self.hideProgressView()
-                    self.showSharingExportFiles(filesToShare: filesToShare)
-                })
-            })
-            .disposed(by: disposeBag)
-        
         viewModel.isScanning
             .bind(with: self) { _self, scaninngState in
                 if scaninngState {
-                    _self.setStopScanningButton()
                     _self.chartView.startChart()
-                } else {
-                    _self.setStartScanningButton()
                 }
-            }
-            .disposed(by: disposeBag)
-        
-        viewModel.exportEnable
-            .bind(with: self) { _self, state in
-                _self.exportButton.isEnabled = state
+                self.setupButtonText()
             }
             .disposed(by: disposeBag)
         
@@ -144,30 +153,10 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
             .disposed(by: disposeBag)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-
-    @IBAction func backButtonTapped() -> Void {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showSortVC", let sortVC = segue.destination as? SILSortViewController {
-            sortVC.delegate = self
-        } else if segue.identifier == "showFilterVC", let filterVC = segue.destination as? SILBrowserFilterViewController {
+        if segue.identifier == "showFilterVC", let filterVC = segue.destination as? SILBrowserFilterViewController {
             filterVC.delegate = self
         }
-    }
-    
-    private func setStopScanningButton() {
-        scanningButton.backgroundColor = UIColor.sil_siliconLabsRed()
-        scanningButton.setTitle(TitleForScanningButtonDuringScanning, for: .normal)
-    }
-    
-    private func setStartScanningButton() {
-        scanningButton.backgroundColor = UIColor.sil_regularBlue()
-        scanningButton.setTitle(TitleForScanningButtonWhenIsNotScanning, for: .normal)
     }
     
     private func showProgressView(status: String) {
@@ -183,8 +172,8 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
         let rssiGraphSubject = "RSSI Graph Export"
         self.showSharingExportFiles(filesToShare: filesToShare,
                                     subject: rssiGraphSubject,
-                                    sourceView: self.exportButton,
-                                    sourceRect: self.exportButton.bounds,
+                                    sourceView: self.view,
+                                    sourceRect: self.view.bounds,
                                     completionWithItemsHandler: nil)
     }
     
@@ -196,18 +185,12 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 }
 
-extension SILRSSIGraphViewController: SILSortViewControllerDelegate {
-    func sortOptionWasSelected(with option: SILSortOption) {
-        viewModel.sortOption.accept(option)
-    }
-}
-
 extension SILRSSIGraphViewController: SILBrowserFilterViewControllerDelegate {
     func backButtonWasTapped() {
         self.navigationController?.dismiss(animated: true)
     }
     
-    func searchButtonWasTapped(_ vm: SILBrowserFilterViewModel) {
+    func applyFiltersButtonWasTapped(_ vm: SILBrowserFilterViewModel) {
         self.chartView.redrawChart()
         viewModel.applyFilter(vm)
         self.navigationController?.dismiss(animated: true)

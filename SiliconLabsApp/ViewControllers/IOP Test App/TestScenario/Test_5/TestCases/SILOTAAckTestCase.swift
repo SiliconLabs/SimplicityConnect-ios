@@ -51,12 +51,12 @@ class SILOTAAckTestCase: SILTestCase {
         }
         
         guard let _ = firmwareInfo else {
-            self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .uknown(reason: "Firmware Info is nil."))
+            self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Firmware Info is nil."))
             return
         }
         
         guard firmwareInfo!.firmware != .unknown else {
-            self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .uknown(reason: "Board not supported."))
+            self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Board not supported."))
             return
         }
         
@@ -182,7 +182,7 @@ class SILOTAAckTestCase: SILTestCase {
             
         case .unknown:
             self.invalidateObservableTokens()
-            self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .uknown(reason: "Unsupported board."))
+            self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Unsupported board."))
         }
         
         self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.originalVersion)

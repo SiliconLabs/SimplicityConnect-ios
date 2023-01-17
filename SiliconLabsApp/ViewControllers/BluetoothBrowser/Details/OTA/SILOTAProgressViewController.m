@@ -10,7 +10,7 @@
 #import "EXTKeyPathCoding.h"
 #import <KVOController/FBKVOController.h>
 #import <MZTimerLabel/MZTimerLabel.h>
-#import "SILBigRedButton.h"
+#import "SILBigBlueButton.h"
 #import "SILOTAHUDView.h"
 #import "UICircularProgressRing.h"
 @import UICircularProgressRing;
@@ -24,7 +24,7 @@ static NSString * const kSILTimerFormat = @"m:ss";
 @property (weak, nonatomic) IBOutlet UICircularProgressRing *progressRing;
 @property (weak, nonatomic) IBOutlet UILabel *percentNumberLabel;
 @property (weak, nonatomic) IBOutlet UILabel *uploadRateNumberLabel;
-@property (weak, nonatomic) IBOutlet SILBigRedButton *doneButton;
+@property (weak, nonatomic) IBOutlet SILBigBlueButton *doneButton;
 @property (weak, nonatomic) IBOutlet UILabel *timerDisplayLabel;
 @property (strong, nonatomic) MZTimerLabel *timerLabel;
 @property (weak, nonatomic) IBOutlet UIView *interiorProgressView;

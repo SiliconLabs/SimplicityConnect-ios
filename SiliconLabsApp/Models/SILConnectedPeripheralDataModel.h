@@ -11,10 +11,10 @@
 
 @interface SILConnectedPeripheralDataModel : NSObject
 
-@property (nonatomic, strong, readwrite) CBPeripheral* peripheral;
+@property (nonatomic, strong, readwrite) SILDiscoveredPeripheral* discoveredPeripheral;
 @property (nonatomic, readwrite) BOOL isSelected;
 
-- (instancetype)initWithPeripheral:(CBPeripheral*)peripheral andIsSelected:(BOOL)isSelected;
+- (instancetype)initWithPeripheral:(SILDiscoveredPeripheral*)peripheral andIsSelected:(BOOL)isSelected;
 
 @end
 

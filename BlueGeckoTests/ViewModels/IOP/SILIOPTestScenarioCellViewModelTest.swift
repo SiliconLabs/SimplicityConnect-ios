@@ -89,15 +89,15 @@ class SILIOPTestScenarioCellViewModelTest: QuickSpec {
             it("all tests are in uknown state - should return unknown status of entire test scenario") {
                 self.testObject = SILIOPTestScenarioCellViewModel(name: self.testName,
                                                                   description: self.testDescription,
-                                                                  testCaseStatuses: [.uknown(reason: nil), .uknown(reason: nil), .uknown(reason: nil)])
+                                                                  testCaseStatuses: [.unknown(reason: nil), .unknown(reason: nil), .unknown(reason: nil)])
                 
-                expect(self.testObject.status == .uknown(reason: nil)).to(beTrue())
+                expect(self.testObject.status == .unknown(reason: nil)).to(beTrue())
             }
             
             it("one of test unknown but testing in progress - should return in progress status of entire test scenario") {
                 self.testObject = SILIOPTestScenarioCellViewModel(name: self.testName,
                                                                   description: self.testDescription,
-                                                                  testCaseStatuses: [.uknown(reason: nil), .waiting, .waiting])
+                                                                  testCaseStatuses: [.unknown(reason: nil), .waiting, .waiting])
                 
                 expect(self.testObject.status == .inProgress).to(beTrue())
             }
@@ -105,7 +105,7 @@ class SILIOPTestScenarioCellViewModelTest: QuickSpec {
             it("one of test unknown, rest of tests passed - should return passed status of entire test scenario") {
                 self.testObject = SILIOPTestScenarioCellViewModel(name: self.testName,
                                                                   description: self.testDescription,
-                                                                  testCaseStatuses: [.uknown(reason: nil), .passed(details: nil), .passed(details: nil)])
+                                                                  testCaseStatuses: [.unknown(reason: nil), .passed(details: nil), .passed(details: nil)])
                 
                 expect(self.testObject.status == .passed(details: nil)).to(beTrue())
             }
@@ -113,7 +113,7 @@ class SILIOPTestScenarioCellViewModelTest: QuickSpec {
             it("one of test unknown, one passed, one failed - should return failed status of entire test scenario") {
                 self.testObject = SILIOPTestScenarioCellViewModel(name: self.testName,
                                                                   description: self.testDescription,
-                                                                  testCaseStatuses: [.uknown(reason: nil), .failed(reason: nil), .passed(details: nil)])
+                                                                  testCaseStatuses: [.unknown(reason: nil), .failed(reason: nil), .passed(details: nil)])
                 
                 expect(self.testObject.status == .failed(reason: nil)).to(beTrue())
             }

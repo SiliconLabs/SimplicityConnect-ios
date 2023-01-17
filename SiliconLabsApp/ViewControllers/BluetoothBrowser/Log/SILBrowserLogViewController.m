@@ -14,13 +14,8 @@
 #import "NSString+SILBrowserNotifications.h"
 
 @interface SILBrowserLogViewController () <UITableViewDataSource, UITableViewDelegate>
-@property (weak, nonatomic) IBOutlet UIView *filterLogViewContainer;
 @property (weak, nonatomic) IBOutlet UITableView *logTableView;
-@property (weak, nonatomic) IBOutlet UIButton *clearLogButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
-@property (weak, nonatomic) IBOutlet UIButton *filterLogButton;
-@property (weak, nonatomic) IBOutlet UIImageView *backImage;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterLogViewHeight;
 
 @property (strong, nonatomic) SILBrowserLogViewModel* viewModel;
 
@@ -28,18 +23,23 @@
 
 @implementation SILBrowserLogViewController
 
-UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setupFilterLogViewContainer];
     [self registerNibs];
     [self setTableViewBehaviours];
     [self hideScrollIndicators];
     [self setAppearanceForFooterView];
-    [self addGestureRecognizerForBackImage];
     [self addObserverForReloadTableView];
     [self setupViewModel];
+    [self scrollToBottomIfNeeded];
+    [self setupNavigationBar];
+}
+
+- (void)setupNavigationBar {
+    [self setLeftAlignedTitle:@"Activity Log"];
+    UIBarButtonItem *backBarButton = [UIBarButtonItem.alloc initWithImage:[UIImage systemImageNamed:@"chevron.left"] style:UIBarButtonItemStyleDone target:self action:@selector(backButtonTapped)];
+    self.navigationItem.leftBarButtonItems = @[backBarButton, self.navigationItem.leftBarButtonItem];
+    self.navigationItem.leftItemsSupplementBackButton = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -48,9 +48,14 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
     [self scrollToBottomIfNeeded];
 }
 
-- (void)setupFilterLogViewContainer {
-    [_filterLogViewContainer setHidden:YES];
-    _filterLogViewHeight.constant = 0;
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.tabBarController hideTabBarAndUpdateFrames];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController.tabBarController showTabBarAndUpdateFrames];
 }
 
 - (void)registerNibs {
@@ -72,38 +77,16 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
 
 - (void)setAppearanceForFooterView {
     [self setAppearanceForShareButton];
-    [self setAppearanceForClearLogButton];
-    [self setAppearanceForFilterLogButton];
-    [self setAppearanceForBackImage];
 }
 
 - (void)setAppearanceForShareButton {
-    _shareButton.layer.cornerRadius = CornerRadiusForButtons;
+    _shareButton.layer.cornerRadius = _shareButton.bounds.size.width / 2;
     [_shareButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
     _shareButton.titleLabel.textColor = [UIColor sil_backgroundColor];
-    _shareButton.imageEdgeInsets = ImageInsetsForShareButton;
 }
 
-- (void)setAppearanceForClearLogButton {
-    [_clearLogButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
-}
-
-- (void)setAppearanceForFilterLogButton {
-    [_filterLogButton.titleLabel setFont:[UIFont robotoMediumWithSize:[UIFont getMiddleFontSize]]];
-}
-
-- (void)setAppearanceForBackImage {
-    _backImage.image = [[UIImage imageNamed:SILImageExitView] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-}
-
-- (IBAction)filterLogTapped:(id)sender {
-    BOOL isVisibleFilterLogViewContainer = _filterLogViewContainer.isHidden;
-    if (isVisibleFilterLogViewContainer) {
-        _filterLogViewHeight.constant = 40;
-    } else {
-        _filterLogViewHeight.constant = 0;
-    }
-    [_filterLogViewContainer setHidden:!isVisibleFilterLogViewContainer];
+- (IBAction)backButtonTapped {
+    [self.navigationController popViewControllerAnimated:true];
 }
 
 - (IBAction)shareButtonTapped:(id)sender {
@@ -116,15 +99,6 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
     }
     [self presentViewController:sharingActivity animated:YES completion:nil];
 
-}
-
-- (void)addGestureRecognizerForBackImage {
-    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedBackImage:)];
-    [_backImage addGestureRecognizer:tap];
-}
-
-- (void)tappedBackImage:(UIGestureRecognizer *)gestureRecognizer {
-    [_delegate logViewBackButtonPressed];
 }
 
 - (void)addObserverForReloadTableView {
@@ -149,6 +123,12 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
     SILBrowserLogTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SILBrowserLogTableViewCell class]) forIndexPath:indexPath];
     SILLogDataModel* log = _viewModel.logs[indexPath.row];
     [cell setValues:log];
+    
+    if (indexPath.row % 2 == 0) {
+        cell.backgroundColor = UIColor.sil_backgroundColor;
+    } else {
+        cell.backgroundColor = UIColor.sil_bgWhiteColor;
+    }
     return cell;
 }
 
@@ -165,10 +145,6 @@ UIEdgeInsets const ImageInsetsForShareButton = {0, 0, 0 ,8};
             atScrollPosition:UITableViewScrollPositionBottom
             animated:YES];
     }
-}
-
-- (IBAction)clearLogButtonƒWasTapped:(id)sender {
-    [_viewModel clearLogs];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {

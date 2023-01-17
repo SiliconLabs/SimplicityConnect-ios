@@ -27,12 +27,12 @@ struct PeripheralDataFilterHelper {
     func getFilterOfType(_ type: FilterType) -> FilterClosure {
         switch type {
         case let .deviceName(name):
-            return !name.isEmpty ? { $0.name.contains(name) } : noneFilter
+            return !name.isEmpty ? { $0.name.lowercased().contains(name.lowercased()) } : noneFilter
         case let .rssiMinimum(minRSSI):
             return { $0.lastRSSIMeasurement > minRSSI }
         case let .beaconTypes(beaconTypes):
             let selectedBeaconTypes = beaconTypes.filter { $0.isSelected }
-            var selectedBeaconTypesFilters: [FilterClosure] = [noneFilter]
+            var selectedBeaconTypesFilters: [FilterClosure] = selectedBeaconTypes.isEmpty ? [noneFilter] : []
             for beaconType in selectedBeaconTypes {
                 selectedBeaconTypesFilters.append({ peripheralData in
                     peripheralData.peripheral.beacon.name.contains(beaconType.beaconName)
@@ -40,7 +40,7 @@ struct PeripheralDataFilterHelper {
             }
             return orFilters(selectedBeaconTypesFilters)
         case let .isFavourite(isFavourite):
-            return isFavourite ? { $0.peripheral.isFavourite } : noneFilter
+            return isFavourite ? { SILFavoritePeripheral.isFavorite($0.peripheral) } : noneFilter
         case let .isConnectable(isConnectable):
             return isConnectable ? { $0.peripheral.isConnectable } : noneFilter
         case .none:

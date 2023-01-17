@@ -25,6 +25,7 @@
 - (BOOL)isConnectedPeripheral:(CBPeripheral*)peripheral;
 - (void)clearViewModelData;
 - (BOOL)areConnections;
+- (void)disconnectPeripheralWithIdentifier:(NSString *)cellIdentifier;
 
 @end
 

@@ -62,23 +62,6 @@ class SILAdvertiserHomeViewModel {
         advertiserNotification.askForPermission()
     }
     
-    func openMenu(sourceView: UIView) {
-        wireframe.presentContextMenu(sourceView: sourceView, options: [
-            ContextMenuOption(title: "Device name") { [weak self] in
-                print("Selected device name")
-                self?.setLocalName()
-            },
-            ContextMenuOption(title: "Create new") { [weak self] in
-                print("Selected create new")
-                self?.createAdvertiser()
-            },
-            ContextMenuOption(enabled: !runningAdvertisers.isEmpty, title: "Switch all OFF") { [weak self] in
-                print("Selected switch all off")
-                self?.switchAllOff()
-            },
-        ])
-    }
-    
     func setLocalName() {
         weak var weakSelf = self
 
@@ -89,7 +72,7 @@ class SILAdvertiserHomeViewModel {
     
     func createAdvertiser() {
         let advertiser = SILAdvertisingSetEntity()
-        advertiser.name = "New adv"
+        advertiser.name = "New Advertiser"
         repository.add(advertiser: advertiser)
     }
     

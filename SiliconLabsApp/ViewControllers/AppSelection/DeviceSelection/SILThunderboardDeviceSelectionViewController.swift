@@ -70,7 +70,7 @@ class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionVi
     
     override var preferredContentSize: CGSize {
         get {
-            if UI_USER_INTERFACE_IDIOM() == .pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 return CGSize(width: 540, height: 606)
             } else {
                 return CGSize(width: 296, height: 447)

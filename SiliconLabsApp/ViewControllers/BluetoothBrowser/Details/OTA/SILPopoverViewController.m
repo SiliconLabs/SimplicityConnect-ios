@@ -41,6 +41,8 @@ static CGSize const kSILPopoverIPadSize = { 540.0, 400.0 };
     [super viewDidLoad];
     [self ip_addChildViewController:self.contentViewController toView:self.contentView];
     [self.contentViewController.view autoPinEdgesToSuperviewEdges];
+    self.contentView.layer.cornerRadius = CornerRadiusStandardValue;
+    self.contentView.layer.masksToBounds = YES;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate
@@ -94,7 +96,7 @@ static CGSize const kSILPopoverIPadSize = { 540.0, 400.0 };
 }
 
 - (CGSize)sizeForController:(UIViewController *)toVC {
-    BOOL isIPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    BOOL isIPad = (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad);
     CGSize size = isIPad ? kSILPopoverIPadSize : kSILPopoverIPhoneSize;
     if ([toVC conformsToProtocol:@protocol(SILPopoverViewControllerSizeConstraints)]) {
         UIViewController <SILPopoverViewControllerSizeConstraints> *vc = (UIViewController <SILPopoverViewControllerSizeConstraints> *)toVC;

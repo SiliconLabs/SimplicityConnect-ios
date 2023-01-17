@@ -147,14 +147,14 @@
     NSString *readImageString = SILImageNamePropertyReadDisabled;
     self.readPropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.readPropertyButton setImage:[UIImage imageNamed:readImageString] forState:UIControlStateNormal];
-    [self.readPropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
+    self.readPropertyButton.tintColor = [UIColor sil_boulderColor];
 }
 
 - (void)writeButtonAppearance {
     NSString *writeImageString = SILImageNamePropertyWriteDisabled;
     self.writePropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.writePropertyButton setImage:[UIImage imageNamed:writeImageString] forState:UIControlStateNormal];
-    [self.writePropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
+    [self.writePropertyButton setTintColor:[UIColor sil_boulderColor]];
 }
 
 
@@ -163,9 +163,9 @@
     self.indicatePropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.indicatePropertyButton setImage:[UIImage imageNamed:indicateImageString] forState:UIControlStateNormal];
     if (condition) {
-        [self.indicatePropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
+        [self.indicatePropertyButton setTintColor:[UIColor sil_regularBlueColor]];
     } else {
-        [self.indicatePropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
+        [self.indicatePropertyButton setTintColor:[UIColor sil_boulderColor]];
     }
 }
 
@@ -174,9 +174,9 @@
     self.notifyPropertyButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.notifyPropertyButton setImage:[UIImage imageNamed:notifyImageString] forState:UIControlStateNormal];
     if (condition) {
-        [self.notifyPropertyButton setTitleColor:[UIColor sil_regularBlueColor] forState:UIControlStateNormal];
+        [self.notifyPropertyButton setTintColor:[UIColor sil_regularBlueColor]];
     } else {
-        [self.notifyPropertyButton setTitleColor:[UIColor sil_boulderColor] forState:UIControlStateNormal];
+        [self.notifyPropertyButton setTintColor:[UIColor sil_boulderColor]];
     }
 }
 

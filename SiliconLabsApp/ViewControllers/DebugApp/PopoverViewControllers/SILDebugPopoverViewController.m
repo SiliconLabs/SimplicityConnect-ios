@@ -13,7 +13,7 @@
 #pragma mark - Lifecycle
 
 - (CGSize)preferredContentSize {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return CGSizeMake(500, 770);
     } else {
         return CGSizeMake(300, 500);

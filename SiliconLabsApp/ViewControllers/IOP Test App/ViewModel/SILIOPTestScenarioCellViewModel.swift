@@ -8,12 +8,13 @@
 
 import Foundation
 
-class SILIOPTestScenarioCellViewModel: SILCellViewModel {
+class SILIOPTestScenarioCellViewModel: SILCellViewModel, ObservableObject {
     var reusableIdentifier = "SILIOPTestScenarioCellView"
     var name: String
     var description: String
     private var previousStatus: SILTestStatus = .none
-    
+    @Published private var testCaseStatuses: [SILTestStatus]
+
     var shouldUpdateView: Bool {
         if status == .waiting {
             return true
@@ -33,18 +34,18 @@ class SILIOPTestScenarioCellViewModel: SILCellViewModel {
             }
 
             if testCaseStatuses.allSatisfy({ status in
-                if case .uknown(reason: _) = status {
+                if case .unknown(reason: _) = status {
                     return true
                 }
                 
                 return false
             }) {
-                return .uknown(reason: nil)
+                return .unknown(reason: nil)
             }
             
             if testCaseStatuses.allSatisfy({ status in
                 switch status {
-                case .passed(details: _), .uknown(reason: _):
+                case .passed(details: _), .unknown(reason: _):
                     return true
                 
                 default:
@@ -58,8 +59,6 @@ class SILIOPTestScenarioCellViewModel: SILCellViewModel {
         }
     }
     
-    private var testCaseStatuses: [SILTestStatus]
-
     init(name: String, description: String, testCaseStatuses: [SILTestStatus]) {
         self.name = name
         self.description = description

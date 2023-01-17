@@ -25,7 +25,7 @@
 @implementation SILCalibrationViewController
 
 - (CGSize)preferredContentSize {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return CGSizeMake(540, 600);
     } else {
         return CGSizeMake(296, 496);
@@ -33,7 +33,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+    [super viewWillAppear:animated];
 
     self.debugSwitch.on = [SILSettings displayDebugValues];
 

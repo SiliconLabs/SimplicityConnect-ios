@@ -8,12 +8,8 @@
 
 import UIKit
 
-class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDelegate, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
+class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDelegate, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var allSpace: UIStackView!
-    @IBOutlet weak var aboveSafeAreaView: UIView!
-    @IBOutlet weak var navigationBarView: UIView!
-    @IBOutlet weak var navigationBarTitleLabel: UILabel!
-    @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noAdvertisersView: UIView!
     
@@ -22,35 +18,11 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         
         tableView.dataSource = self
         tableView.delegate = self
         
         viewModel.viewDidLoad()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-    
-    func setupNavigationBar() {
-        navigationBarView.backgroundColor = UIColor.sil_siliconLabsRed()
-        aboveSafeAreaView.backgroundColor = UIColor.sil_siliconLabsRed()
-        
-        navigationBarTitleLabel.font = UIFont.robotoMedium(size: CGFloat(SILNavigationBarTitleFontSize))
-        navigationBarTitleLabel.textColor = UIColor.sil_background()
-        
-        navigationBarView.addShadow()
-        allSpace.bringSubviewToFront(navigationBarView)
-    }
-
-    @IBAction func onBackTouch(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    @IBAction func onMenuTouch(_ sender: UIButton) {
-        viewModel.openMenu(sourceView: sender)
     }
     
     // MARK: SILAdvertiserHomeViewDelegate
@@ -73,10 +45,23 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            return 80.0
+            return 120.0
         } else {
             return UITableView.automaticDimension
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return self.numberOfSections(in: tableView) - 1 == section ?
+        SILTableViewWithShadowCells.tableView(tableView, viewForFooterInSection: section, withHeight: LastFooterHeight) : nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return self.numberOfSections(in: tableView) - 1 == section ? LastFooterHeight : 0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 12.0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,14 +98,7 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 20.0)
+        return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 8.0)
     }
     
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.isEqual(navigationController?.interactivePopGestureRecognizer) {
-            navigationController?.popViewController(animated: true)
-            return true
-        }
-        return false
-    }
 }

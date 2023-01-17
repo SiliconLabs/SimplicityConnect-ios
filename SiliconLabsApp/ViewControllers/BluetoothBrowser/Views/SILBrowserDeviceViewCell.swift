@@ -13,7 +13,7 @@ import UIKit
 class SILBrowserDeviceViewCell: SILCell {
     
     @IBOutlet weak var title: UILabel!
-    @IBOutlet weak var favouritesButton: UIButton!
+    @IBOutlet weak var favouritesButton: UIButton?
     @IBOutlet weak var connectButton: SILBrowserButton!
     @IBOutlet weak var btImageView: UIImageView!
     @IBOutlet weak var wifiImageView: UIImageView!
@@ -27,6 +27,7 @@ class SILBrowserDeviceViewCell: SILCell {
     @IBOutlet weak var connectButtonWidth: NSLayoutConstraint!
     @IBOutlet weak var disconnectButtonWidth: NSLayoutConstraint!
     @IBOutlet weak var hiddenButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var affordanceImage: UIImageView?
     
     weak var delegate: SILBrowserDeviceViewCellDelegate!
     var cellIdentifier: String?
@@ -39,9 +40,10 @@ class SILBrowserDeviceViewCell: SILCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        setExpanded(false)
         title.text = ""
-        favouritesButton.isHighlighted = false
-        favouritesButton.isSelected = false
+        favouritesButton?.isHighlighted = false
+        favouritesButton?.isSelected = false
         connectButton.isHighlighted = false
         connectButton.isSelected = false
         connectButton.isHidden = false
@@ -57,12 +59,20 @@ class SILBrowserDeviceViewCell: SILCell {
         delegate = nil
     }
     
+    func setExpanded(_ isExpanded: Bool) {
+        if isExpanded {
+            affordanceImage?.image = UIImage(systemName: "chevron.up")
+        } else {
+            affordanceImage?.image = UIImage(systemName: "chevron.down")
+        }
+    }
+    
     @IBAction func favourite(_ sender: UIButton) {
         self.delegate?.favouriteButtonTappedInCell(self)
     }
     
     @IBAction func connect(_ sender: SILBrowserButton) {
-        self.delegate?.connectViewButtonTappedInCell(self)
+        self.delegate?.connectButtonTappedInCell(self)
     }
     
     internal func setDisconnectButtonAppearance() {
