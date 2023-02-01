@@ -40,6 +40,8 @@
     UIBarButtonItem *backBarButton = [UIBarButtonItem.alloc initWithImage:[UIImage systemImageNamed:@"chevron.left"] style:UIBarButtonItemStyleDone target:self action:@selector(backButtonTapped)];
     self.navigationItem.leftBarButtonItems = @[backBarButton, self.navigationItem.leftBarButtonItem];
     self.navigationItem.leftItemsSupplementBackButton = NO;
+    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem.alloc initWithImage:[UIImage systemImageNamed:@"clear"] style:UIBarButtonItemStyleDone target:self action:@selector(clearButtonTapped)];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -87,6 +89,10 @@
 
 - (IBAction)backButtonTapped {
     [self.navigationController popViewControllerAnimated:true];
+}
+
+- (IBAction)clearButtonTapped {
+    [self.viewModel clearLogs];
 }
 
 - (IBAction)shareButtonTapped:(id)sender {

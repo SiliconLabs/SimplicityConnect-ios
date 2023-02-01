@@ -15,9 +15,8 @@ class SILBrowserDetailsTabBarController: SILTabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defaultIndex = RemoteTabIndex
-        setupRemoteTabItem()
-        setupLocalTabItem()
         self.tabBar.isTranslucent = false
+        self.tabBar.tintColor = .sil_regularBlue()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,15 +27,5 @@ class SILBrowserDetailsTabBarController: SILTabBarController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
-    }
-    
-    func setupRemoteTabItem() {
-        tabBar.items?[0].selectedImage = UIImage(named: SILDetailsTabBarRemoteOn)?.withRenderingMode(.alwaysOriginal)
-        tabBar.items?[0].image = UIImage(named: SILDetailsTabBarRemoteOff)?.withRenderingMode(.alwaysOriginal)
-    }
-
-    func setupLocalTabItem() {
-        tabBar.items?[1].selectedImage = UIImage(named: SILDetailsTabBarLocalOn)?.withRenderingMode(.alwaysOriginal)
-        tabBar.items?[1].image = UIImage(named: SILDetailsTabBarLocalOff)?.withRenderingMode(.alwaysOriginal)
     }
 }

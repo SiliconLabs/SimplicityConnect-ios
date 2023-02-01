@@ -22,6 +22,7 @@ extension UITabBarController {
         view.frame = CGRect(x: view.frame.origin.x,
                             y: view.frame.origin.y,
                             width: view.frame.size.width,
-                            height: view.frame.height - tabBar.bounds.size.height)
+                            height: view.frame.height - tabBar.frame.size.height)
+        tabBar.layoutIfNeeded()
     }
 }

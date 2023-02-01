@@ -26,7 +26,11 @@ struct ScannerView: UIViewControllerRepresentable, PickerTabSubview {
     }
     
     var buttons : [NavBarButton] {
-        [NavBarButton(id: "Filter button", image: Image("filterIcon"), action: {
+        [NavBarButton(id: "Mapping button", image: Image( "icon - dictionary - book"), action: {
+            print("Mappings button in ScannerView is tapped")
+            viewController.mapButtonTapped()
+        }),
+         NavBarButton(id: "Filter button", image: Image("filterIcon"), action: {
             print("Filter button in ScannerView is tapped")
             viewController.filterIsSelected.toggle()
             viewController.filterButtonTapped()
@@ -34,11 +38,7 @@ struct ScannerView: UIViewControllerRepresentable, PickerTabSubview {
          NavBarButton(id: "Sort button", image: Image("sortIcon"), action: {
             print("Sort button in ScannerView is tapped")
             viewController.sortButtonTapped()
-        }),
-          NavBarButton(id: "Mapping button", image: Image( "icon - dictionary - book"), action: {
-             print("Mappings button in ScannerView is tapped")
-             viewController.mapButtonTapped()
-         })]
+        })]
     }
     
     var title: String = "Scanner"

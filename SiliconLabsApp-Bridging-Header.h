@@ -80,3 +80,4 @@
 #import "SILAppSelectionHelpViewController.h"
 #import "SILDeviceSelectionCollectionViewCell.h"
 #import "SILAppearance.h"
+#import "SILBrowserLogViewModel.h"

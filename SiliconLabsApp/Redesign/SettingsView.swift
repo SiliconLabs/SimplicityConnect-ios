@@ -24,7 +24,9 @@ struct SettingsView: View {
                 }
                 Spacer()
                 Text("App version \(version)").padding(.bottom, 20)
-            }.background(Color(.sil_background()))
+            }
+            .frame(maxWidth: .infinity)
+            .background(Color(.sil_background()))
         } trailingInNavBar: {
             EmptyView()
         }
@@ -48,6 +50,7 @@ fileprivate struct LabelView: UIViewRepresentable {
         label.isSelectable = true
         label.font = .systemFont(ofSize: 22)
         label.text = text
+        label.tintColor = .blue
         return label
     }
 

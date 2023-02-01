@@ -211,17 +211,8 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == configurationsTableView {
-            exportCheckBoxTableView.contentOffset = configurationsTableView.contentOffset
-            if exportCheckBoxTableView.contentOffset.y < 0.0 {
-                exportCheckBoxTableView.contentOffset = CGPoint(x: 0.0, y: 0.0)
-            }
-        } else if scrollView == exportCheckBoxTableView {
-            configurationsTableView.contentOffset = exportCheckBoxTableView.contentOffset
-            if configurationsTableView.contentOffset.y < 0.0 {
-                configurationsTableView.contentOffset = CGPoint(x: 0.0, y: 0.0)
-            }
-        }
+        exportCheckBoxTableView.contentOffset = scrollView.contentOffset
+        configurationsTableView.contentOffset = scrollView.contentOffset
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

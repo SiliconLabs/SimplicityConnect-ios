@@ -38,7 +38,7 @@ struct MainNavigationView: View {
             
             SettingsView()
                 .tabItem {
-                    Image(systemName: "gearshape.fill")
+                    Image(systemName: "gearshape")
                     Text("Settings")
                 }.tag(4)
         }

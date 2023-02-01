@@ -78,6 +78,7 @@ static float kTableRefreshInterval = 1;
 @property (weak, nonatomic) IBOutlet SILRefreshImageView *refreshImageView;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
 @property (weak, nonatomic) IBOutlet UIButton *otaButton;
+@property (weak, nonatomic) IBOutlet UIView *infoView;
 
 @end
 
@@ -94,6 +95,7 @@ static float kTableRefreshInterval = 1;
     self.isUpdatingFirmware = NO;
     [self setupRefreshImageView];
     [self setupButtons];
+    [self setupInfoShadow];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -140,6 +142,11 @@ static float kTableRefreshInterval = 1;
 
 - (void)setupBrowserExpandableViewManager {
     self.cornerRadius = CornerRadiusStandardValue;
+}
+
+- (void)setupInfoShadow {
+    self.infoView.layer.zPosition = 1;
+    [self.infoView addShadow];
 }
 
 - (void)setupButtons {

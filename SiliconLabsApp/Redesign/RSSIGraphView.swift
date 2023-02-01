@@ -36,17 +36,17 @@ struct RSSIGraphView: UIViewControllerRepresentable, PickerTabSubview  {
     }
     
     var buttons : [NavBarButton] {
-        [NavBarButton(id: "Filter button",image: Image("filterIcon"), action: {
+        [NavBarButton(id: "Share button",image: Image( "shareWhite"), action: {
+            print("Share button in RSSI Graph is tapped")
+            viewController.exportButtonTapped()
+        }),
+         NavBarButton(id: "Filter button",image: Image("filterIcon"), action: {
             print("Filter button in  RSSI Graph is tapped")
             viewController.filterButtonTapped()
         }),
          NavBarButton(id: "Sort button",image: Image("sortIcon"), action: {
             print("Sort button in RSSI Graph is tapped")
             viewController.sortButtonTapped()
-        }),
-         NavBarButton(id: "Share button",image: Image( "shareWhite"), action: {
-            print("Share button in RSSI Graph is tapped")
-            viewController.exportButtonTapped()
         })]
     }
     

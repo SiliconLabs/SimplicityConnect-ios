@@ -59,66 +59,22 @@
                                                                         <action selector="toggleEnableSwitch:" destination="t9v-lt-KGN" eventType="valueChanged" id="zsO-ca-6Ls"/>
                                                                     </connections>
                                                                 </view>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="connectable" translatesAutoresizingMaskIntoConstraints="NO" id="VDx-vA-MJ2">
-                                                                    <rect key="frame" x="16" y="16" width="40" height="40"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon - bluetooth" translatesAutoresizingMaskIntoConstraints="NO" id="VDx-vA-MJ2">
+                                                                    <rect key="frame" x="16" y="16" width="50" height="50"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="40" id="oMM-Y5-7BU"/>
-                                                                        <constraint firstAttribute="width" constant="40" id="pJl-oc-K4o"/>
+                                                                        <constraint firstAttribute="height" constant="50" id="oMM-Y5-7BU"/>
+                                                                        <constraint firstAttribute="width" constant="50" id="pJl-oc-K4o"/>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="moY-Tp-E5r">
-                                                                    <rect key="frame" x="20" y="71" width="346" height="0.5"/>
-                                                                    <color key="backgroundColor" red="0.59465128776459997" green="0.7334150514970067" blue="0.94328004121780396" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                    <rect key="frame" x="20" y="79" width="346" height="0.5"/>
+                                                                    <color key="backgroundColor" name="sil_boulderColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="0.5" id="v3j-6H-x34"/>
                                                                     </constraints>
                                                                 </view>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U6M-Nc-yb9">
-                                                                    <rect key="frame" x="16" y="74" width="120" height="41"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eXm-rw-PDf">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="41"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="width" constant="40" id="5om-gy-jQf"/>
-                                                                                <constraint firstAttribute="height" constant="40" id="kLg-QM-u7V"/>
-                                                                            </constraints>
-                                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <inset key="contentEdgeInsets" minX="9" minY="9" maxX="9" maxY="9"/>
-                                                                            <state key="normal" image="EditDisabled"/>
-                                                                            <connections>
-                                                                                <action selector="editAdvertiser:" destination="t9v-lt-KGN" eventType="touchUpInside" id="ZvC-qm-7Tg"/>
-                                                                            </connections>
-                                                                        </button>
-                                                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="70O-mT-bLx">
-                                                                            <rect key="frame" x="40" y="0.0" width="40" height="41"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="40" id="Ole-Cr-CJO"/>
-                                                                                <constraint firstAttribute="width" constant="40" id="dIW-wl-Mu5"/>
-                                                                            </constraints>
-                                                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
-                                                                            <state key="normal" image="icon - copy"/>
-                                                                            <connections>
-                                                                                <action selector="copyAdvertiserSet:" destination="t9v-lt-KGN" eventType="touchUpInside" id="jeF-f0-CvH"/>
-                                                                            </connections>
-                                                                        </button>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hUR-qt-YR2">
-                                                                            <rect key="frame" x="80" y="0.0" width="40" height="41"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="width" constant="40" id="a19-55-Mol"/>
-                                                                                <constraint firstAttribute="height" constant="40" id="zj1-cL-rpa"/>
-                                                                            </constraints>
-                                                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <inset key="contentEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
-                                                                            <state key="normal" image="sil_trash"/>
-                                                                            <connections>
-                                                                                <action selector="removeAdvertiser:" destination="t9v-lt-KGN" eventType="touchUpInside" id="rbr-3R-H1R"/>
-                                                                            </connections>
-                                                                        </button>
-                                                                    </subviews>
-                                                                </stackView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5R-S1-Xn6">
-                                                                    <rect key="frame" x="76" y="25" width="44" height="21.5"/>
+                                                                    <rect key="frame" x="86" y="25" width="44.5" height="29.5"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -130,28 +86,69 @@
                                                                         <constraint firstAttribute="height" constant="30" id="yI7-XL-TfV"/>
                                                                     </constraints>
                                                                 </imageView>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ba5-dN-AUz">
+                                                                    <rect key="frame" x="20" y="79" width="120" height="40"/>
+                                                                    <subviews>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wih-GY-VtS">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="40" id="9w6-Rg-uF2"/>
+                                                                                <constraint firstAttribute="width" constant="40" id="MbZ-2S-DSp"/>
+                                                                            </constraints>
+                                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="contentEdgeInsets" minX="9" minY="9" maxX="9" maxY="9"/>
+                                                                            <state key="normal" image="EditDisabled"/>
+                                                                            <connections>
+                                                                                <action selector="editAdvertiser:" destination="t9v-lt-KGN" eventType="touchUpInside" id="wWW-5L-Y0T"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8zu-36-Jn2">
+                                                                            <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="40" id="JXZ-7y-6Cb"/>
+                                                                                <constraint firstAttribute="height" constant="40" id="O1R-cN-Klo"/>
+                                                                            </constraints>
+                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
+                                                                            <state key="normal" image="icon - copy"/>
+                                                                            <connections>
+                                                                                <action selector="copyAdvertiserSet:" destination="t9v-lt-KGN" eventType="touchUpInside" id="PgE-Lu-tV6"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dxS-TT-Tt6">
+                                                                            <rect key="frame" x="80" y="0.0" width="40" height="40"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="40" id="6a8-5x-8uJ"/>
+                                                                                <constraint firstAttribute="width" constant="40" id="Ili-e4-l1e"/>
+                                                                            </constraints>
+                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="contentEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
+                                                                            <state key="normal" image="sil_trash"/>
+                                                                            <connections>
+                                                                                <action selector="removeAdvertiser:" destination="t9v-lt-KGN" eventType="touchUpInside" id="arU-9R-oP5"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                    </subviews>
+                                                                </stackView>
                                                             </subviews>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="Q5R-S1-Xn6" firstAttribute="leading" secondItem="VDx-vA-MJ2" secondAttribute="trailing" constant="20" id="092-Ko-q2A"/>
                                                                 <constraint firstItem="VDx-vA-MJ2" firstAttribute="top" secondItem="baZ-Lq-3jv" secondAttribute="top" constant="16" id="33j-w5-Doc"/>
                                                                 <constraint firstItem="07w-Xo-uPb" firstAttribute="top" secondItem="baZ-Lq-3jv" secondAttribute="top" constant="16" id="34M-8W-r59"/>
-                                                                <constraint firstItem="U6M-Nc-yb9" firstAttribute="leading" secondItem="VDx-vA-MJ2" secondAttribute="leading" id="9Kc-1M-dAI"/>
                                                                 <constraint firstAttribute="trailing" secondItem="07w-Xo-uPb" secondAttribute="trailing" constant="18" id="Bfq-nr-R4g"/>
                                                                 <constraint firstAttribute="trailing" secondItem="1JR-jz-HFo" secondAttribute="trailing" constant="16" id="C0a-qB-iia"/>
                                                                 <constraint firstAttribute="bottom" secondItem="1JR-jz-HFo" secondAttribute="bottom" constant="11" id="K8w-hs-IVh"/>
                                                                 <constraint firstItem="VDx-vA-MJ2" firstAttribute="leading" secondItem="baZ-Lq-3jv" secondAttribute="leading" constant="16" id="Sde-Ph-UPc"/>
-                                                                <constraint firstItem="moY-Tp-E5r" firstAttribute="top" secondItem="VDx-vA-MJ2" secondAttribute="bottom" constant="15" id="SvA-qc-UJA"/>
                                                                 <constraint firstAttribute="trailing" secondItem="moY-Tp-E5r" secondAttribute="trailing" constant="16" id="VLC-QL-smK"/>
-                                                                <constraint firstItem="70O-mT-bLx" firstAttribute="top" secondItem="VDx-vA-MJ2" secondAttribute="bottom" constant="18" id="Xbh-OQ-m3x"/>
+                                                                <constraint firstItem="Ba5-dN-AUz" firstAttribute="leading" secondItem="baZ-Lq-3jv" secondAttribute="leading" constant="20" symbolic="YES" id="gRt-RS-oWf"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Ba5-dN-AUz" secondAttribute="bottom" constant="1" id="lGb-Ug-jAY"/>
                                                                 <constraint firstItem="moY-Tp-E5r" firstAttribute="top" secondItem="Q5R-S1-Xn6" secondAttribute="bottom" constant="24.5" id="lbi-XD-ZTe"/>
                                                                 <constraint firstItem="Q5R-S1-Xn6" firstAttribute="top" secondItem="baZ-Lq-3jv" secondAttribute="top" constant="25" id="nLj-0f-sju"/>
+                                                                <constraint firstItem="Ba5-dN-AUz" firstAttribute="top" secondItem="moY-Tp-E5r" secondAttribute="top" id="ogu-pE-tQi"/>
                                                                 <constraint firstItem="moY-Tp-E5r" firstAttribute="leading" secondItem="baZ-Lq-3jv" secondAttribute="leadingMargin" id="ve5-Ed-Iec"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
-                                                        <constraints>
-                                                            <constraint firstAttribute="bottom" secondItem="U6M-Nc-yb9" secondAttribute="bottom" constant="5" id="A2P-aO-msj"/>
-                                                        </constraints>
                                                         <connections>
                                                             <outlet property="affordanceImage" destination="1JR-jz-HFo" id="yeX-Fb-qLw"/>
                                                             <outlet property="enableSwitch" destination="07w-Xo-uPb" id="sCB-Wa-7hb"/>
@@ -173,7 +170,7 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Advertiser Type " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cLl-0R-Aie">
-                                                                    <rect key="frame" x="16" y="22" width="101.5" height="18"/>
+                                                                    <rect key="frame" x="16" y="22" width="100.5" height="18"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="18" id="kdC-dl-4pH"/>
                                                                     </constraints>
@@ -182,7 +179,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Advertiser value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LrS-JT-dfz" userLabel="Value Label">
-                                                                    <rect key="frame" x="16" y="48" width="100" height="16.5"/>
+                                                                    <rect key="frame" x="16" y="48" width="100.5" height="16.5"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -268,14 +265,17 @@
         </scene>
     </scenes>
     <resources>
-        <image name="EditDisabled" width="30" height="30"/>
+        <image name="EditDisabled" width="16" height="15"/>
         <image name="advertiser-no-devices-image" width="38" height="48"/>
         <image name="chevron_collapsed" width="14" height="9"/>
-        <image name="connectable" width="17" height="19.5"/>
-        <image name="icon - copy" width="20" height="20"/>
+        <image name="icon - bluetooth" width="35" height="35"/>
+        <image name="icon - copy" width="13" height="15"/>
         <image name="sil_trash" width="30" height="30"/>
         <namedColor name="sil_backgroundColor">
             <color red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_boulderColor">
+            <color red="0.47843137254901963" green="0.47058823529411764" blue="0.47058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="sil_secondaryBackgroundColor">
             <color red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

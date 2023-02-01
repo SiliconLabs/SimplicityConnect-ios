@@ -37,7 +37,7 @@ class SILBaseWireframe: NSObject, SILBaseWireframeType {
     }
     
     func presentToastAlert(message : String, toastType: ToastType, shouldHasSizeOfText: Bool, completion: @escaping () -> ()) {
-        self.viewController.showToastOverKeyboard(message: message, toastType: toastType, shouldHasSizeOfText: shouldHasSizeOfText, completion: completion)
+        self.viewController.showToast(message: message, toastType: toastType, shouldHasSizeOfText: shouldHasSizeOfText, completion: completion)
     }
 }
 

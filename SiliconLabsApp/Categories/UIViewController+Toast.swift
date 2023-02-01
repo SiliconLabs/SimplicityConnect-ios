@@ -40,32 +40,18 @@ extension UIViewController {
     }
     
     @objc
-    func showToastOverKeyboard(message : String, toastType: ToastType, shouldHasSizeOfText: Bool, completion: @escaping () -> ()) {
-        let AnimationDuration = 0.5
-        let AnimationDelay = displayParameters(for: toastType).delay
-        let toastLabel = getToastLabel(shouldHasSizeOfText: shouldHasSizeOfText, withMessage: message, toastType: toastType)
-        UIApplication.shared.windows.last?.addSubview(toastLabel)
-        UIView.animate(withDuration: AnimationDuration, delay: AnimationDelay, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
-            toastLabel.removeFromSuperview()
-            completion()
-        })
-    }
-    
-    @objc
     func getToastLabel(shouldHasSizeOfText:Bool, withMessage message: String, toastType: ToastType) -> UILabel {
         let values = displayParameters(for: toastType)
         let toastMargin = values.margin
-        let toastBottomSpacing = values.bottomSpacing
+        let toastTopSpacing = values.topSpacing
         let toastLabel = UILabel()
         if shouldHasSizeOfText {
             let toastSize = countSizeOfText(message, withFont: UIFont.robotoMedium(size: 14.0)!)
-            toastLabel.frame =  CGRect(x: (self.view.frame.width - toastSize.width - toastMargin) / 2, y: self.view.frame.height - toastBottomSpacing, width: toastSize.width + toastMargin, height: toastSize.height + toastMargin)
+            toastLabel.frame =  CGRect(x: (self.view.frame.width - toastSize.width - toastMargin) / 2, y: self.view.safeAreaInsets.top + toastTopSpacing, width: toastSize.width + toastMargin, height: toastSize.height + toastMargin)
         }
         else {
             let toastHeight = values.height
-            toastLabel.frame = CGRect(x: toastMargin, y: self.view.frame.size.height - toastBottomSpacing, width: self.view.frame.size.width - 2 * toastMargin, height: toastHeight)
+            toastLabel.frame = CGRect(x: toastMargin, y: self.view.safeAreaInsets.top + toastTopSpacing, width: self.view.frame.size.width - 2 * toastMargin, height: toastHeight)
         }
         toastLabel.backgroundColor = values.backgroundColor.withAlphaComponent(0.8)
         toastLabel.textColor = values.labelTextColor
@@ -84,20 +70,20 @@ extension UIViewController {
     }
     
     @nonobjc
-    private func displayParameters(for toastType: ToastType) -> (delay: Double, height: CGFloat, margin: CGFloat,  bottomSpacing: CGFloat, labelTextColor: UIColor, backgroundColor: UIColor) {
+    private func displayParameters(for toastType: ToastType) -> (delay: Double, height: CGFloat, margin: CGFloat,  topSpacing: CGFloat, labelTextColor: UIColor, backgroundColor: UIColor) {
         switch toastType {
         case .disconnectionError:
-            return (3.0, 60.0, 16.0, 130.0, UIColor.white, UIColor.sil_siliconLabsRed())
+            return (3.0, 60.0, 16.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .gattPropertiesError:
-            return (3.0, 60.0, 16.0, 65.0, UIColor.white, UIColor.sil_siliconLabsRed())
+            return (3.0, 60.0, 16.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .info:
-            return (3.0, 60.0, 32.0, 130.0, UIColor.black, UIColor.sil_bgGrey())
+            return (3.0, 60.0, 32.0, 24.0, UIColor.black, UIColor.sil_bgGrey())
         case .characteristicPasteAlert:
-            return (3.0, 60.0, 32.0, 100.0, UIColor.white, UIColor.sil_siliconLabsRed())
+            return (3.0, 60.0, 32.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .characteristicError:
-            return (3.0, 60.0, 16.0, 110.0, UIColor.white, UIColor.sil_siliconLabsRed())
+            return (3.0, 60.0, 16.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .advertiserTimeLimitError:
-            return (3.0, 60.0, 32.0, 130.0, UIColor.white, UIColor.sil_siliconLabsRed())
+            return (3.0, 60.0, 32.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         @unknown default:
             return (0.0, 0.0, 0.0, 0.0, UIColor.white, .white)
         }

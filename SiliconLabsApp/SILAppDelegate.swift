@@ -21,6 +21,7 @@ class SILAppDelegate : UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics.sharedInstance()])
         SILRealmConfiguration.updateRealmConfigurationIfNeeded()
         SILBluetoothModelManager.shared().populateModels()
+        SILBrowserLogViewModel.sharedInstance().clearLogs()
         SILBrowserConnectionsViewModel.sharedInstance().centralManager = SILCentralManager(serviceUUIDs: [])
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = UIHostingController(rootView: MainNavigationView())

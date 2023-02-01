@@ -39,6 +39,11 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.showThermometerPopover()
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.appCollectionView.collectionViewLayout.invalidateLayout()
+    }
 
     private func setupAppCollectionView() {
         self.registerNibs()
