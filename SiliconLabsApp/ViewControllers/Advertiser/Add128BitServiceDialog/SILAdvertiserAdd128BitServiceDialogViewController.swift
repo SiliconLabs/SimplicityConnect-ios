@@ -9,7 +9,7 @@
 import UIKit
 
 class SILAdvertiserAdd128BitServiceDialogViewController: UIViewController, SILAdvertiserAdd128BitServiceDialogViewDelegate, UITextFieldDelegate {
-    @IBOutlet weak var uuidTextField: UITextField!
+    @IBOutlet weak var uuidTextField: SILTextField!
     @IBOutlet weak var saveButton: SILPrimaryButton!
     
     var viewModel: SILAdvertiserAdd128BitServiceDialogViewModel!

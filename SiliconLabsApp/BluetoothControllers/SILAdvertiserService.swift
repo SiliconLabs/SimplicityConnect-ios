@@ -107,7 +107,7 @@ class SILAdvertiserService: NSObject, CBPeripheralManagerDelegate {
             peripheral.startAdvertising(advertisementData)
             
             if (runningAdvertiser.advertiser.isExecutionTime) {
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + runningAdvertiser.advertiser.executionTime, execute: {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(runningAdvertiser.advertiser.executionTime / 1000), execute: {
                     self.stop(advertiser: runningAdvertiser.advertiser)
                 })
             }

@@ -10,7 +10,7 @@ import Foundation
 
 @IBDesignable
 class SILPrimaryButton: UIButton {
-    private static let primaryColor = UIColor(hexString: "0086D9")!
+    private static let primaryColor = UIColor.sil_regularBlue()!
     private static let disabledColor = UIColor.lightGray
     
     private let shadowLayer = CAShapeLayer()
@@ -97,7 +97,7 @@ class SILPrimaryButton: UIButton {
     private func setupBorder() {
         if hasBorder {
             layer.borderWidth = 1
-            layer.borderColor = isEnabled ? Self.primaryColor.cgColor : Self.disabledColor.cgColor
+            layer.borderColor = Self.disabledColor.cgColor
         } else {
             layer.borderWidth = 0
         }

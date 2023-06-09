@@ -71,29 +71,28 @@ class SILGraphView: UIView {
             }
             .disposed(by: disposeBag)
         
-        input.asObservable()
+        input.asObservable().observe(on: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .flatMap { Observable.from($0) }
             .filter { [weak self] (dataSet) in
                 guard let self = self else { return false }
                 return self.chartView.checkIfDataSetExist(withLabel: dataSet.uuid)
             }
-            .flatMap { [weak self] data -> Observable<(String, SILRSSIMeasurement, UIColor)> in
-                guard let self = self else { return .never() }
-                data.peripheral.rssiMeasurementTable.rssiMeasurements.value.forEach { self.addOrUpdateDataForPeripheral(data.uuid, measurement: $0, withColor: data.color) }
-                return Observable.combineLatest(
-                    Observable.just(data.uuid),
+            .flatMap { data -> Observable<(String, SILRSSIMeasurement, UIColor)> in
+                return Observable.from(data.peripheral.rssiMeasurementTable.rssiMeasurements.value).map { (data.peripheral.identityKey, $0, data.color) }.concat(Observable.combineLatest(
+                    Observable.just(data.peripheral.identityKey),
                     data.peripheral.rssiMeasurementTable.lastMeasurement.asObservable(),
                     Observable.just(data.color)
-                )
+                ))
             }
-            .map { (uuid: $0, measurement: $1, color: $2) }
+            .map { (id: $0, measurement: $1, color: $2) }
             .bind(with: self) { _self, val in
-                let (uuid, measurement, color) = val
-                _self.addOrUpdateDataForPeripheral(uuid, measurement: measurement, withColor: color)
+                let (id, measurement, color) = val
+                _self.addOrUpdateDataForPeripheral(id, measurement: measurement, withColor: color)
             }
             .disposed(by: disposeBag)
         
         refresh.asObservable()
+            .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
             .bind(with: self) { _self, _ in
                 _self.refreshGraph()
             }
@@ -101,7 +100,6 @@ class SILGraphView: UIView {
     }
     
     func startChart() {
-        self.resetTime()
         self.chartView.resetChart()
     }
     
@@ -111,8 +109,8 @@ class SILGraphView: UIView {
         self.setupInput()
     }
     
-    private func resetTime() {
-        self.referenceDate = Date()
+    func setStartTime(time : Date) {
+        self.referenceDate = time
     }
     
     func refreshGraph() {

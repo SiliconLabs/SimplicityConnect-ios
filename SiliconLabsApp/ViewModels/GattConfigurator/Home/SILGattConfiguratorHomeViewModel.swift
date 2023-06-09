@@ -31,7 +31,7 @@ class SILGattConfiguratorHomeViewModel {
     let isExportModeOn: SILObservable<Bool> = SILObservable(initialValue: false)
     
     let fileWriter = SILFileWriter(exportDirName: "SILGattConfiguratorExport")
-    
+    var isActiveScrollingUp: Bool = false
     var isExportModeTurnOn: Bool = false {
         didSet {
             isExportModeOn.value = isExportModeTurnOn
@@ -89,7 +89,7 @@ class SILGattConfiguratorHomeViewModel {
         
         createdFilesDict[fileName] = index
         
-        return fileWriter.getFilePath(withName: fileName)
+        return fileWriter.getFilePath(withName: fileName, fileExtension: "xml")
     }
     
     func export(onFinish: @escaping ([URL]) -> ()) {

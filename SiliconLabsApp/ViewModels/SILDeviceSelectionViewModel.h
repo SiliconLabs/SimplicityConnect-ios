@@ -24,5 +24,7 @@ typedef BOOL (^DiscoveredPeripheralFilter)(SILDiscoveredPeripheral *);
 
 - (void)updateDiscoveredPeripheralsWithDiscoveredPeripherals:(NSArray<SILDiscoveredPeripheral*>*)discoveredPeripherals;
 - (NSString *)selectDeviceString;
+- (NSString *)selectDeviceInfoString;
+- (NSDictionary *)selectDeviceHyperlinks;
 
 @end

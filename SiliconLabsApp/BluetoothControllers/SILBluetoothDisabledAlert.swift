@@ -23,6 +23,7 @@ enum SILBluetoothDisabledAlert: Int {
     case environment
     case wifiCommissioning
     case rssiGraph
+    case eslDemo
     
     var title: String {
         "Bluetooth Disabled"
@@ -58,6 +59,8 @@ enum SILBluetoothDisabledAlert: Int {
             return "\(backMsg) \(turnOnMsg) use WiFi Commissioning"
         case .rssiGraph:
             return "\(backMsg) \(turnOnMsg) use RSSI Graph"
+        case .eslDemo:
+            return "\(backMsg) \(turnOnMsg) use ESL Demo"
         }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 import SVProgressHUD
 
 @objcMembers
-class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILAppSelectionInfoViewControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate {
+class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate {
     var appsArray: [SILApp] = SILApp.demoApps()
     var isDisconnectedIntentionally: Bool = false
 
@@ -91,9 +91,10 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     }
     
     private func presentThunderboardDeviceSelection(app: SILApp!, animated: Bool, filter: ((Device) -> Bool)? = nil) {
+        var viewModel = SILDeviceSelectionViewModel(appType: app)
         let thunderboardCentralManager = BleManager()
         let interaction = DeviceSelectionInteraction(scanner: thunderboardCentralManager, connector: thunderboardCentralManager, appType: app.appType, filter: filter)
-        let selectionViewController = SILThunderboardDeviceSelectionViewController(interaction: interaction, appType: app.appType)
+        let selectionViewController = SILThunderboardDeviceSelectionViewController(interaction: interaction, appType: app.appType, deviceSelectionViewModel: viewModel!)
         selectionViewController.delegate = self
         
         self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
@@ -158,13 +159,12 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         case .typeWifiCommissioning:
             self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
             
+        case .typeESLDemo:
+            self.presentDeviceSelectionViewController(app: app, animated: true)
+            
         default:
             return
         }
-    }
-
-    private func infoButtonTapped(recognizer: UITapGestureRecognizer) {
-        self.presentAppSelectionInfoViewController(animated: true)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -238,12 +238,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                     self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
                 }
                 
-            case .iopTest:
-                let storyboard = UIStoryboard(name: "SILIOPTest", bundle: nil)
-                if let iopVC = storyboard.instantiateInitialViewController() as? SILIOPTesterViewController {
-                    iopVC.deviceNameToSearch = peripheral.advertisedLocalName
-                    self.navigationController?.pushViewController(iopVC, animated: true)
-
+            case .typeESLDemo:
+                if let eslDemoController = UIStoryboard(name: "SILAppTypeESLDemo", bundle: nil).instantiateInitialViewController() as? SILESLDemoViewController, let peripheral = peripheral.peripheral {
+                    let eslPeripheralDelegate = SILESLPeripheralDelegate(peripheral: peripheral,
+                                                                         peripheralReferences: SILESLPeripheralGATTReferences())
+                    eslDemoController.viewModel = SILESLDemoViewModel(centralManager: viewController.centralManager!,
+                                                                      peripheralDelegate: eslPeripheralDelegate)
+                    self.navigationController?.pushViewController(eslDemoController, animated: true)
                 }
                 
             default:
@@ -268,18 +269,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             healthThermometerController.app = viewController.viewModel.app
             healthThermometerController.connectedPeripheral = peripheral
             self.navigationController?.pushViewController(healthThermometerController, animated: true)
-        }
-    }
-
-    func presentAppSelectionInfoViewController(animated: Bool) {
-        let infoViewController = SILAppSelectionInfoViewController()
-        infoViewController.delegate = self
-        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: infoViewController, presenting: self, delegate: self, animated: true)
-    }
-    
-    func didFinishInfo(with infoViewController: SILAppSelectionInfoViewController!) {
-        self.devicePopoverController?.dismissPopover(animated: true) {
-            self.devicePopoverController = nil
         }
     }
     

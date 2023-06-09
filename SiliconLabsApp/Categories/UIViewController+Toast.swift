@@ -103,4 +103,15 @@ extension UIViewController {
         }
         return controller
     }
+    
+    func addObserverForDisplayToastResponse() {
+        NotificationCenter.default.addObserver(self, selector:#selector(displayToast(_:)), name: NSNotification.Name(rawValue: SILNotificationDisplayToastResponse), object: nil)
+    }
+    
+    @objc private func displayToast(_ notification: Notification) {
+        let ErrorMessage = notification.userInfo?[SILNotificationKeyDescription] as? String ?? ""
+        self.showToast(message: ErrorMessage, toastType: .disconnectionError) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: SILNotificationDisplayToastRequest), object: nil)
+        }
+    }
 }

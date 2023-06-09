@@ -24,7 +24,7 @@ static NSString * const kSILTimerFormat = @"m:ss";
 @property (weak, nonatomic) IBOutlet UICircularProgressRing *progressRing;
 @property (weak, nonatomic) IBOutlet UILabel *percentNumberLabel;
 @property (weak, nonatomic) IBOutlet UILabel *uploadRateNumberLabel;
-@property (weak, nonatomic) IBOutlet SILBigBlueButton *doneButton;
+@property (weak, nonatomic) IBOutlet SILPrimaryButton *doneButton;
 @property (weak, nonatomic) IBOutlet UILabel *timerDisplayLabel;
 @property (strong, nonatomic) MZTimerLabel *timerLabel;
 @property (weak, nonatomic) IBOutlet UIView *interiorProgressView;
@@ -61,11 +61,10 @@ const CGFloat kAngleAtTopWrapAround = 270.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.doneButton.enabled = NO;
+    self.doneButton.layer.cornerRadius = 4.0;
     self.timerLabel = [[MZTimerLabel alloc] initWithLabel:self.timerDisplayLabel];
     self.timerLabel.timeFormat = kSILTimerFormat;
-    _hudView.informationLabel.text = @"OTA Device Firmware Update";
-    _hudView.peripheralIdentifierLabel.text = [_hudPeripheralViewModel peripheralIdentifier];
-    _hudView.mtuValueLabel.text = [_hudPeripheralViewModel peripheralMaximumWriteValueLength];
+    self.hudView.otaInfoLabel.text = @"";
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

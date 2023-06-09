@@ -34,8 +34,7 @@ struct AdvertiserView: UIViewControllerRepresentable, PickerTabSubview {
     }
     
     func setFloatingButton(settings: FloatingButtonSettings) {
-        settings.setButtonText("Create New")
-        settings.setPresented(true)
+        advertiserViewController.setupFloatingButton(settings)
     }
     
     func floatingButtonAction() {

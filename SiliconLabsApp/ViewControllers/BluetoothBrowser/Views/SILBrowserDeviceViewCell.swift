@@ -10,7 +10,7 @@ import UIKit
 
 @IBDesignable
 @objcMembers
-class SILBrowserDeviceViewCell: SILCell {
+class SILBrowserDeviceViewCell: SILCell, SILConfigurableCell {
     
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var favouritesButton: UIButton?
@@ -22,49 +22,27 @@ class SILBrowserDeviceViewCell: SILCell {
     @IBOutlet weak var rssiLabel: UILabel!
     @IBOutlet weak var beaconLabel: UILabel!
     @IBOutlet weak var connectingIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var uuidLabel: UILabel!
     @IBOutlet weak var advertisingIntervalLabel: UILabel!
-    @IBOutlet weak var connectButtonWidth: NSLayoutConstraint!
-    @IBOutlet weak var disconnectButtonWidth: NSLayoutConstraint!
-    @IBOutlet weak var hiddenButtonWidth: NSLayoutConstraint!
     @IBOutlet weak var affordanceImage: UIImageView?
     
-    weak var delegate: SILBrowserDeviceViewCellDelegate!
-    var cellIdentifier: String?
+    weak var delegate: SILBrowserDeviceViewCellDelegate?
+    var viewModel : SILDiscoveredPeripheralDisplayDataViewModel? 
     
     override func awakeFromNib() {
         super.awakeFromNib()
         connectingIndicator.isHidden = true
-        setHiddenButtonAppearance()
+        setAppearanceForConnectButton(connected: false, connectable: false)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        setExpanded(false)
-        title.text = ""
-        favouritesButton?.isHighlighted = false
-        favouritesButton?.isSelected = false
-        connectButton.isHighlighted = false
-        connectButton.isSelected = false
-        connectButton.isHidden = false
-        connectableLabel.text = ""
-        rssiLabel.text = ""
-        beaconLabel.text = ""
-        uuidLabel.text = ""
-        advertisingIntervalLabel.text = "0 ms"
-        connectingIndicator.isHidden = true
-        connectButton.isHidden = false
-        setHiddenButtonAppearance()
-        cellIdentifier = nil
         delegate = nil
+        viewModel = nil
     }
     
-    func setExpanded(_ isExpanded: Bool) {
-        if isExpanded {
-            affordanceImage?.image = UIImage(systemName: "chevron.up")
-        } else {
-            affordanceImage?.image = UIImage(systemName: "chevron.down")
-        }
+    private func configureExpandedArrow(_ isExpanded: Bool) {
+        let imageName = isExpanded ? "chevron.up" : "chevron.down"
+        affordanceImage?.image = UIImage(systemName: imageName)
     }
     
     @IBAction func favourite(_ sender: UIButton) {
@@ -75,36 +53,44 @@ class SILBrowserDeviceViewCell: SILCell {
         self.delegate?.connectButtonTappedInCell(self)
     }
     
-    internal func setDisconnectButtonAppearance() {
-        setConstraintsForDisconnectButton()
-        connectButton.isHidden = false
-        connectButton.setTitle("Disconnect", for: .normal)
-        connectButton.backgroundColor = UIColor.sil_siliconLabsRed()
-        self.contentView.setNeedsUpdateConstraints()
+    private func setAppearanceForConnectButton(connected : Bool, connectable: Bool) {
+        connectButton.isHidden = !connectable
+        connectButton.setTitle(!connected ? "Connect" : "Disconnect", for: .normal)
+        connectButton.backgroundColor = !connected ? .sil_regularBlue() : .sil_siliconLabsRed()
     }
     
-    private func setConstraintsForDisconnectButton() {
-        NSLayoutConstraint.deactivate([connectButtonWidth, hiddenButtonWidth])
-        NSLayoutConstraint.activate([disconnectButtonWidth])
+    func configure() {
+        guard let discoveredPeripheral = viewModel?.discoveredPeripheral else { return }
+        
+        configureLabels(discoveredPeripheral)
+        configureButtons(discoveredPeripheral)
+        configureExpandedArrow(viewModel?.isExpanded ?? false)
+        configureConnectingIndicator()
     }
     
-    internal func setConnectButtonAppearance() {
-        setConstraintsForConnectButton()
-        connectButton.isHidden = false
-        connectButton.setTitle("Connect", for: .normal)
-        connectButton.backgroundColor = UIColor.sil_regularBlue()
-        self.contentView.setNeedsUpdateConstraints()
+    fileprivate func configureConnectingIndicator() {
+        connectingIndicator.isHidden = viewModel?.isConnecting != true
+        if viewModel?.isConnecting == true {
+            connectingIndicator.startAnimating()
+        } else {
+            connectingIndicator.stopAnimating()
+        }
     }
     
-    private func setConstraintsForConnectButton() {
-        NSLayoutConstraint.deactivate([disconnectButtonWidth, hiddenButtonWidth])
-        NSLayoutConstraint.activate([connectButtonWidth])
+    fileprivate func configureLabels(_ discoveredPeripheral: SILDiscoveredPeripheral) {
+        let deviceName = discoveredPeripheral.advertisedLocalName
+        let advertisingIntervalsInMS = discoveredPeripheral.advertisingInterval * 1000;
+        
+        advertisingIntervalLabel.text = "\(advertisingIntervalsInMS.rounded()) ms"
+        rssiLabel.text = discoveredPeripheral.rssiDescription()
+        beaconLabel.text = discoveredPeripheral.beacon.name
+        title.text = deviceName?.isEmpty == false ? deviceName : DefaultDeviceName
+        connectableLabel.text = discoveredPeripheral.isConnectable ? SILDiscoveredPeripheralConnectableDevice : SILDiscoveredPeripheralNonConnectableDevice
     }
     
-    internal func setHiddenButtonAppearance() {
-        connectButton.isHidden = true
-        NSLayoutConstraint.deactivate([connectButtonWidth, disconnectButtonWidth])
-        NSLayoutConstraint.activate([hiddenButtonWidth])
-        self.contentView.setNeedsUpdateConstraints()
+    fileprivate func configureButtons(_ discoveredPeripheral: SILDiscoveredPeripheral) {
+        let isConnected = SILBrowserConnectionsViewModel.sharedInstance().isConnectedPeripheral(discoveredPeripheral.peripheral)
+        favouritesButton?.isSelected = discoveredPeripheral.isFavourite
+        setAppearanceForConnectButton(connected: isConnected, connectable: discoveredPeripheral.isConnectable && !discoveredPeripheral.hasTimedOut)
     }
 }

@@ -32,6 +32,7 @@ extern NSString * const SILImageNameHomeBlinky;
 extern NSString * const SILImageNameHomeMotion;
 extern NSString * const SILImageNameHomeEnvironment;
 extern NSString * const SILImageNameHomeWifiCommissioning;
+extern NSString * const SILImageNameHomeESLDemo;
 
 extern NSString * const SILImageNameKeyboard;
 extern NSString * const SILImageNameKeyboardCheckmark;

@@ -10,12 +10,12 @@ import Foundation
 
 class SILRemoveServiceListWarningDialogViewModel {
     private let wireframe: SILAdvertiserDetailsWireframe
-    private let onOkCallback: (Bool) -> Void
+    private let onYes: (Bool) -> Void
     
     private var disableWarning: Bool = false
     
-    init(wireframe: SILAdvertiserDetailsWireframe, onOk: @escaping (Bool) -> Void) {
-        self.onOkCallback = onOk
+    init(wireframe: SILAdvertiserDetailsWireframe, onYes: @escaping (Bool) -> Void) {
+        self.onYes = onYes
         self.wireframe = wireframe
     }
     
@@ -23,12 +23,12 @@ class SILRemoveServiceListWarningDialogViewModel {
         self.disableWarning = disableWarning
     }
     
-    func onOk() {
+    func onYesCallback() {
         wireframe.dismissPopover()
-        onOkCallback(disableWarning)
+        onYes(disableWarning)
     }
     
-    func onCancel() {
+    func onNoCallback() {
         wireframe.dismissPopover()
     }
 }

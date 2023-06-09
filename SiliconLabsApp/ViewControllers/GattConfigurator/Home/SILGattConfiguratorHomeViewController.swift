@@ -29,26 +29,49 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     private weak var floatingButtonSettings: FloatingButtonSettings?
     private var tokenBag = SILObservableTokenBag()
     
+    private lazy var uiScrollViewDelegate = SILUIScrollViewDelegate(onHideUIElements: { [weak self] in
+        guard let self = self else { return }
+        self.floatingButtonSettings?.setPresented(false)
+        self.viewModel.isActiveScrollingUp = true
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }, onShowUIElements: { [weak self] in
+        guard let self = self else { return }
+        self.floatingButtonSettings?.setPresented(true)
+        self.viewModel.isActiveScrollingUp = false
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    })
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNormalModeView()
         disallowMultipleButtonTouches()
         setupLogic()
+        setupTableViews()
         viewModel.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.floatingButtonSettings?.setPresented(true)
+        self.viewModel.isActiveScrollingUp = false
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
+    fileprivate func setupTableViews() {
+        if #available(iOS 15.0, *) {
+            configurationsTableView.sectionHeaderTopPadding = 0
+            exportCheckBoxTableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
     func setupFloatingButton(_ settings: FloatingButtonSettings) {
         floatingButtonSettings = settings
         floatingButtonSettings?.setButtonText("Create New")
-        floatingButtonSettings?.setPresented(!viewModel.isExportModeTurnOn)
+        floatingButtonSettings?.setPresented(!viewModel.isExportModeTurnOn && !viewModel.isActiveScrollingUp)
     }
     
     private func setupNormalModeView() {
@@ -210,11 +233,6 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         }
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        exportCheckBoxTableView.contentOffset = scrollView.contentOffset
-        configurationsTableView.contentOffset = scrollView.contentOffset
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == self.configurationsTableView {
             tableView.deselectRow(at: indexPath, animated: true)
@@ -284,5 +302,18 @@ extension SILGattConfiguratorHomeViewController: UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         debugPrint("DID CANCEL")
         controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension SILGattConfiguratorHomeViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        uiScrollViewDelegate.scrollViewWillBeginDragging(scrollView)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        uiScrollViewDelegate.scrollViewDidScroll(scrollView)
+        
+        exportCheckBoxTableView.contentOffset = scrollView.contentOffset
+        configurationsTableView.contentOffset = scrollView.contentOffset
     }
 }

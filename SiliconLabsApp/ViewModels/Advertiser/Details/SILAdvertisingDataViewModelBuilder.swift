@@ -45,7 +45,7 @@ class SILAdvertisingDataViewModelBuilder {
         
         let name = service?.name ?? "Unknown Service"
         
-        return "0x\(uuid) - \(name)"
+        return "0x\(uuid) \(name)"
     }
     
     func add(completeList128: [String]?, addService: @escaping () -> Void, removeService: @escaping (Int) -> Void, removeList: @escaping () -> Void) {

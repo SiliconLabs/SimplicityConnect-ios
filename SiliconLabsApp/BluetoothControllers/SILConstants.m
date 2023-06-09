@@ -19,6 +19,7 @@ NSString * const SILServiceNumberConnectedLightingProprietary = @"63f596e4-b583-
 NSString * const SILServiceNumberConnectedLightingThread = @"dd1c077d-d306-4b30-846a-4f55cc35767a";
 NSString * const SILServiceNumberConnectedLightingZigbee = @"BAE55B96-7D19-458D-970C-50613D801BC9";
 NSString * const SILServiceNumberRangeTest = @"530AA649-17E6-4D62-9F20-9E393B177E63";
+NSString * const SILServiceNumberESLServiceControl = @"35100001-4B1D-B16B-00B1-35018BADF00D";
 
 NSString * const SILCharacteristicNumberAlertLevel = @"2A06";
 NSString * const SILCharacteristicNumberTXPowerLevel = @"2A07";
@@ -31,6 +32,7 @@ NSString * const SILCharacteristicNumberDMPSourceAddress = @"82A1CB54-3921-4C9C-
 
 NSString * const SILDiscoveredPeripheralConnectableDevice = @"Connectable";
 NSString * const SILDiscoveredPeripheralNonConnectableDevice = @"N-connectable";
+NSString * const SILPeerRemovedPairingMessage = @"The peripheral can't be connected because of peripheral has removed pairing information. Please go to the Settings of your device and remove the pair with peripheral, then try to connect again.";
 
 NSInteger const SILConstantsStrongSignalThreshold = -50;
 NSInteger const SILConstantsMediumSignalThreshold = -80;

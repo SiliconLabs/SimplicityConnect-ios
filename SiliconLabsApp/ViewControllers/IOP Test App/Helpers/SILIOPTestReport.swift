@@ -121,9 +121,10 @@ struct SILIOPTestConnectionParameters {
 
     let mtu_size: Int
     let pdu_size: Int
-    let interval: Int
+    let interval: Double
     let latency: Int
     let supervision_timeout: Int
+    let phy: Int
     
     func generateReport() -> String {
         let reportBuilder = SILIOPTestReportBuilder()

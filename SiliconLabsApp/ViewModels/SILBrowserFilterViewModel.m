@@ -154,7 +154,7 @@
     if (_isActiveFilterFromSavedSearches != isActiveFilterFromSavedSearches) {
         _isActiveFilterFromSavedSearches = isActiveFilterFromSavedSearches;
         if (_isActiveFilterFromSavedSearches == NO) {
-            [self updateSavedSearches:NoDeviceFoundedIndex];
+            [self updateSavedSearches:NoDeviceFoundIndex];
         }
     }
 }
@@ -190,7 +190,7 @@
 - (void)changeStateOfIsActiveFilterFromSavedSearchesIfNeeded {
     if (_isActiveFilterFromSavedSearches == YES) {
         _isActiveFilterFromSavedSearches = NO;
-        [self updateSavedSearches:NoDeviceFoundedIndex];
+        [self updateSavedSearches:NoDeviceFoundIndex];
     }
 }
 
@@ -258,7 +258,7 @@
 # pragma mark - Saved Searches
 
 - (void)updateSavedSearches:(NSInteger)index {
-    if (index != NoDeviceFoundedIndex) {
+    if (index != NoDeviceFoundIndex) {
         [self returnValuesFromSavedSearchesWithIndex:index];
     }
     

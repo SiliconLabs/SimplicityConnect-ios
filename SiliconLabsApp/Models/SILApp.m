@@ -20,7 +20,8 @@
                 [self throughputApp],
                 [self motionApp],
                 [self environmentApp],
-                [self wifiCommissioningApp]
+                [self wifiCommissioningApp],
+                [self eslDemoApp],
             ];
 }
 
@@ -94,6 +95,14 @@
                                description:@"Wi-Fi commissioning over BLE."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeWifiCommissioning];
+}
+
++ (SILApp *)eslDemoApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeESLDemo
+                                     title:@"ESL Demo"
+                               description:@"Add/commission ESL tags by scanning its QR code and control them from the UI."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeESLDemo];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

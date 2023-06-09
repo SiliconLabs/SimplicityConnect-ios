@@ -14,7 +14,9 @@
 
 @property (nonatomic, readonly) SILDiscoveredPeripheral *discoveredPeripheral;
 @property (nonatomic, readonly) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
+@property (nonatomic, readwrite) BOOL isExpanded;
+@property (nonatomic, readwrite) BOOL isConnecting;
 
 - (instancetype)initWithDiscoveredPeripheralDisplayData:(SILDiscoveredPeripheral *)discoveredPeripheral;
-
+- (void)toggleFavorite;
 @end

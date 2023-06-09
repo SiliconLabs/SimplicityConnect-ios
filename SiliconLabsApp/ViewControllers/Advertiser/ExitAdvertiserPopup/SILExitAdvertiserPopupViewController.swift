@@ -11,12 +11,13 @@ import UIKit
 class SILExitAdvertiserPopupViewController: UIViewController {
 
     @IBOutlet weak var confirmSwitch: SILSwitch!
-    
+    @IBOutlet weak var yesButton: UIButton!
     var viewModel: SILExitAdvertiserPopupViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         confirmSwitch.isOn = false
+        yesButton.layer.cornerRadius = 4.0
     }
     
     override var preferredContentSize: CGSize {

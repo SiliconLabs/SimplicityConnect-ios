@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILOTAProgressViewController">
             <connections>
-                <outlet property="doneButton" destination="No9-RK-8vh" id="sRj-0H-fcB"/>
+                <outlet property="doneButton" destination="No9-RK-8vh" id="l5f-cy-bbn"/>
                 <outlet property="hudView" destination="CVW-hS-Hh2" id="6HX-XK-jpw"/>
                 <outlet property="interiorCompletedView" destination="CGs-7A-tkc" id="UZO-Zs-8Nq"/>
                 <outlet property="interiorProgressView" destination="Fct-pD-1nm" id="3Ws-e4-UVl"/>
@@ -173,7 +174,7 @@
                             <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                         </view>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGs-7A-tkc" userLabel="Interior Completed View">
-                            <rect key="frame" x="134" y="175.5" width="107" height="121"/>
+                            <rect key="frame" x="140" y="178" width="98" height="119"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="updateCheckmark" translatesAutoresizingMaskIntoConstraints="NO" id="kCK-IB-JKn" userLabel="Update Checkmark Image">
                                     <rect key="frame" x="18.5" y="0.0" width="70" height="72"/>
@@ -195,11 +196,11 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="JrN-3z-swB" firstAttribute="centerX" secondItem="CGs-7A-tkc" secondAttribute="centerX" id="4QH-u2-GRj"/>
+                                <constraint firstItem="JrN-3z-swB" firstAttribute="centerX" secondItem="CGs-7A-tkc" secondAttribute="centerX" constant="4.5" id="4QH-u2-GRj"/>
                                 <constraint firstItem="kCK-IB-JKn" firstAttribute="top" secondItem="CGs-7A-tkc" secondAttribute="top" id="5BA-kj-9XQ"/>
-                                <constraint firstItem="JrN-3z-swB" firstAttribute="width" secondItem="CGs-7A-tkc" secondAttribute="width" id="LmS-HD-twd"/>
-                                <constraint firstAttribute="bottom" secondItem="JrN-3z-swB" secondAttribute="bottom" id="Ucm-wU-Kfg"/>
-                                <constraint firstItem="kCK-IB-JKn" firstAttribute="centerX" secondItem="CGs-7A-tkc" secondAttribute="centerX" id="daD-Qw-CEZ"/>
+                                <constraint firstItem="JrN-3z-swB" firstAttribute="width" secondItem="CGs-7A-tkc" secondAttribute="width" constant="9" id="LmS-HD-twd"/>
+                                <constraint firstAttribute="bottom" secondItem="JrN-3z-swB" secondAttribute="bottom" constant="-2" id="Ucm-wU-Kfg"/>
+                                <constraint firstItem="kCK-IB-JKn" firstAttribute="centerX" secondItem="CGs-7A-tkc" secondAttribute="centerX" constant="4.5" id="daD-Qw-CEZ"/>
                                 <constraint firstItem="JrN-3z-swB" firstAttribute="top" secondItem="kCK-IB-JKn" secondAttribute="bottom" constant="6" id="xLc-6q-p2H"/>
                             </constraints>
                         </view>
@@ -207,48 +208,64 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="Fct-pD-1nm" firstAttribute="top" secondItem="Meg-tN-Xsh" secondAttribute="top" constant="32" id="14v-W9-nxV"/>
-                        <constraint firstItem="CGs-7A-tkc" firstAttribute="top" secondItem="Meg-tN-Xsh" secondAttribute="top" constant="30" id="6O2-YW-ijV"/>
+                        <constraint firstItem="CGs-7A-tkc" firstAttribute="top" secondItem="Meg-tN-Xsh" secondAttribute="top" constant="32.5" id="6O2-YW-ijV"/>
                         <constraint firstItem="Meg-tN-Xsh" firstAttribute="centerX" secondItem="8Pv-V7-Bb3" secondAttribute="centerX" id="9vL-a8-KNG"/>
                         <constraint firstItem="Meg-tN-Xsh" firstAttribute="centerY" secondItem="8Pv-V7-Bb3" secondAttribute="centerY" id="hc6-C1-Qsy"/>
                         <constraint firstItem="Fct-pD-1nm" firstAttribute="centerX" secondItem="Meg-tN-Xsh" secondAttribute="centerX" id="kBO-0e-UMh"/>
-                        <constraint firstItem="CGs-7A-tkc" firstAttribute="centerX" secondItem="Meg-tN-Xsh" secondAttribute="centerX" id="yAw-hm-Mwh"/>
+                        <constraint firstItem="CGs-7A-tkc" firstAttribute="centerX" secondItem="Meg-tN-Xsh" secondAttribute="centerX" constant="1.5" id="yAw-hm-Mwh"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="No9-RK-8vh" customClass="SILBigBlueButton">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9gD-77-OsY">
                     <rect key="frame" x="0.0" y="619" width="375" height="48"/>
-                    <color key="backgroundColor" name="sil_regularBlueColor"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="No9-RK-8vh" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                            <rect key="frame" x="245" y="9" width="70" height="30"/>
+                            <color key="backgroundColor" name="sil_regularBlueColor"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="70" id="3er-id-6nj"/>
+                                <constraint firstAttribute="height" constant="30" id="kyP-CQ-y8O"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="didTapDoneButton:" destination="-1" eventType="touchUpInside" id="HcA-ki-JJJ"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="48" id="4Sa-yr-7g6"/>
+                        <constraint firstAttribute="height" constant="48" id="JSA-ZX-z4c"/>
+                        <constraint firstAttribute="trailing" secondItem="No9-RK-8vh" secondAttribute="trailing" constant="60" id="PcJ-gO-Cv9"/>
+                        <constraint firstItem="No9-RK-8vh" firstAttribute="centerY" secondItem="9gD-77-OsY" secondAttribute="centerY" id="WKr-sH-znZ"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                    <state key="normal" title="DONE">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="didTapDoneButton:" destination="-1" eventType="touchUpInside" id="HcA-ki-JJJ"/>
-                    </connections>
-                </button>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="No9-RK-8vh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0Vw-dg-gLB"/>
                 <constraint firstItem="CVW-hS-Hh2" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="8XN-zi-Nxk"/>
                 <constraint firstItem="8Pv-V7-Bb3" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="9m6-eA-imV"/>
+                <constraint firstItem="9gD-77-OsY" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="BIA-mn-FRM"/>
+                <constraint firstItem="9gD-77-OsY" firstAttribute="top" secondItem="8Pv-V7-Bb3" secondAttribute="bottom" id="D0H-t4-nfB"/>
                 <constraint firstItem="CVW-hS-Hh2" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="N0W-Pp-93j"/>
-                <constraint firstAttribute="trailing" secondItem="No9-RK-8vh" secondAttribute="trailing" id="OVB-MW-oO1"/>
-                <constraint firstItem="No9-RK-8vh" firstAttribute="top" secondItem="8Pv-V7-Bb3" secondAttribute="bottom" id="QsU-c6-cbr"/>
                 <constraint firstAttribute="trailing" secondItem="8Pv-V7-Bb3" secondAttribute="trailing" id="SdC-aP-MTo"/>
                 <constraint firstItem="8Pv-V7-Bb3" firstAttribute="top" secondItem="CVW-hS-Hh2" secondAttribute="bottom" id="eBy-Pm-yYN"/>
+                <constraint firstAttribute="bottom" secondItem="9gD-77-OsY" secondAttribute="bottom" id="hQj-ey-D7o"/>
                 <constraint firstAttribute="trailing" secondItem="CVW-hS-Hh2" secondAttribute="trailing" id="khl-3G-iZ0"/>
-                <constraint firstAttribute="bottom" secondItem="No9-RK-8vh" secondAttribute="bottom" id="ppt-KY-76z"/>
+                <constraint firstItem="9gD-77-OsY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qCR-gM-7Vo"/>
+                <constraint firstAttribute="trailing" secondItem="9gD-77-OsY" secondAttribute="trailing" id="rfH-r0-Osh"/>
             </constraints>
-            <point key="canvasLocation" x="-440.5" y="23.5"/>
+            <point key="canvasLocation" x="-440.80000000000001" y="22.938530734632685"/>
         </view>
     </objects>
     <resources>
-        <image name="updateCheckmark" width="72" height="72"/>
+        <image name="updateCheckmark" width="36" height="36"/>
         <namedColor name="sil_regularBlueColor">
             <color red="0.058823529411764705" green="0.3843137254901961" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

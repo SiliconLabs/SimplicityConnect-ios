@@ -11,8 +11,8 @@ import UIKit
 class SILCreateGattCharacteristicViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var characteristicNameField: UITextField!
-    @IBOutlet weak var characteristicUUIDField: UITextField!
+    @IBOutlet weak var characteristicNameField: SILTextField!
+    @IBOutlet weak var characteristicUUIDField: SILTextField!
     
     @IBOutlet weak var readSwitch: SILSwitch!
     @IBOutlet weak var writeSwitch: SILSwitch!
@@ -96,7 +96,7 @@ class SILCreateGattCharacteristicViewController: UIViewController, UITextViewDel
         
         viewModel.isSaveButtonEnabled.observe { enabled in
             weakSelf?.saveButton.isEnabled = enabled
-            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.systemBlue : UIColor.lightGray
+            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.sil_regularBlue() : UIColor.lightGray
         }.putIn(bag: tokenBag)
         observeProperties()
         updateCheckboxes()

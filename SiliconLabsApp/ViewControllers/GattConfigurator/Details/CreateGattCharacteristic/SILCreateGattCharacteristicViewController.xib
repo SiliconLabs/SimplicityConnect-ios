@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -68,7 +68,6 @@
                             </variation>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" name="sil_bgGreyColor"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="450" id="1zS-tE-rOy"/>
                         <constraint firstItem="44U-T4-Lrg" firstAttribute="centerX" secondItem="ymP-Jf-NzE" secondAttribute="centerX" id="WRk-Wi-eLZ"/>
@@ -80,24 +79,30 @@
                     <rect key="frame" x="0.0" y="48" width="450" height="386"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0T2-c6-CEm">
-                            <rect key="frame" x="0.0" y="0.0" width="450" height="1179"/>
+                            <rect key="frame" x="0.0" y="0.0" width="450" height="1003.5"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="fcW-Jv-vEn">
-                                    <rect key="frame" x="0.0" y="0.0" width="450" height="1163"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="450" height="987.5"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZyY-EA-2k5">
-                                            <rect key="frame" x="0.0" y="0.0" width="450" height="114"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="450" height="110"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8X1-Mk-mo7">
-                                                    <rect key="frame" x="16" y="16" width="418" height="82"/>
+                                                    <rect key="frame" x="16" y="16" width="418" height="78"/>
                                                     <subviews>
-                                                        <textField opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Characteristic name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eFl-sw-M6a">
-                                                            <rect key="frame" x="0.0" y="0.0" width="418" height="38"/>
+                                                        <textField opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Characteristic name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eFl-sw-M6a" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="418" height="34"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="34" id="g7W-MM-9YJ"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                         </textField>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="16/128-bit UUID" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qu1-6f-jqw">
-                                                            <rect key="frame" x="0.0" y="48" width="418" height="34"/>
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="16/128-bit UUID" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qu1-6f-jqw" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="44" width="418" height="34"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="34" id="8wf-Ae-e3U"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                             <connections>
@@ -116,7 +121,7 @@
                                             </constraints>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C9E-6u-ZLw">
-                                            <rect key="frame" x="0.0" y="114" width="450" height="90"/>
+                                            <rect key="frame" x="0.0" y="110" width="450" height="90"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yhs-VJ-EgR">
                                                     <rect key="frame" x="0.0" y="0.0" width="295" height="90"/>
@@ -170,14 +175,14 @@
                                             </constraints>
                                         </stackView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y5A-GU-ZBc" userLabel="SeparatorView">
-                                            <rect key="frame" x="0.0" y="204" width="450" height="1"/>
+                                            <rect key="frame" x="0.0" y="200" width="450" height="1"/>
                                             <color key="backgroundColor" name="sil_silverColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="cDi-tB-tAx"/>
                                             </constraints>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dcs-FF-1d8">
-                                            <rect key="frame" x="0.0" y="205" width="450" height="79"/>
+                                            <rect key="frame" x="0.0" y="201" width="450" height="79"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hbt-KP-DWs">
                                                     <rect key="frame" x="0.0" y="0.0" width="295" height="79"/>
@@ -255,14 +260,14 @@
                                             </subviews>
                                         </stackView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ztz-kQ-Q4I" userLabel="SeparatorView">
-                                            <rect key="frame" x="0.0" y="284" width="450" height="1"/>
+                                            <rect key="frame" x="0.0" y="280" width="450" height="1"/>
                                             <color key="backgroundColor" name="sil_silverColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="CLR-yl-24w"/>
                                             </constraints>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXd-av-edo">
-                                            <rect key="frame" x="0.0" y="285" width="450" height="404"/>
+                                            <rect key="frame" x="0.0" y="281" width="450" height="404"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IV6-XF-RcT">
                                                     <rect key="frame" x="0.0" y="0.0" width="295" height="404"/>
@@ -386,14 +391,14 @@
                                             </subviews>
                                         </stackView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pic-dq-3B7" userLabel="SeparatorView">
-                                            <rect key="frame" x="0.0" y="689" width="450" height="1"/>
+                                            <rect key="frame" x="0.0" y="685" width="450" height="1"/>
                                             <color key="backgroundColor" name="sil_silverColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="AHs-JT-Ahm"/>
                                             </constraints>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3hR-OR-57m">
-                                            <rect key="frame" x="0.0" y="690" width="450" height="152"/>
+                                            <rect key="frame" x="0.0" y="686" width="450" height="152"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-XA-39C">
                                                     <rect key="frame" x="0.0" y="0.0" width="295" height="152"/>
@@ -506,17 +511,17 @@
                                             </subviews>
                                         </stackView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XfG-M4-Xp0" userLabel="SeparatorView">
-                                            <rect key="frame" x="0.0" y="842" width="450" height="1"/>
+                                            <rect key="frame" x="0.0" y="838" width="450" height="1"/>
                                             <color key="backgroundColor" name="sil_silverColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="gla-A1-52o"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oWV-Bn-dJg">
-                                            <rect key="frame" x="0.0" y="843" width="450" height="320"/>
+                                            <rect key="frame" x="0.0" y="839" width="450" height="148.5"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rww-Id-ame">
-                                                    <rect key="frame" x="16" y="16" width="418" height="304"/>
+                                                    <rect key="frame" x="16" y="16" width="418" height="132.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initial Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bA0-yO-5Cl">
                                                             <rect key="frame" x="0.0" y="0.0" width="418" height="15.5"/>
@@ -526,16 +531,17 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="skx-1n-O1U">
-                                                            <rect key="frame" x="0.0" y="20.5" width="418" height="89"/>
+                                                            <rect key="frame" x="0.0" y="20.5" width="418" height="34"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text (ascii)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="64P-j6-7gz">
-                                                                    <rect key="frame" x="8" y="8" width="64" height="73"/>
+                                                                    <rect key="frame" x="8" y="8" width="64" height="18"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="ARg-Rj-SSe">
-                                                                    <rect key="frame" x="396" y="41" width="14" height="9"/>
+                                                                    <rect key="frame" x="396" y="13.5" width="14" height="9"/>
+                                                                    <color key="tintColor" name="sil_primaryTextColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="9" id="LcH-Vw-yGU"/>
                                                                         <constraint firstAttribute="width" constant="14" id="uDp-LB-lfh"/>
@@ -548,14 +554,18 @@
                                                                 <constraint firstAttribute="trailing" secondItem="ARg-Rj-SSe" secondAttribute="trailing" constant="8" id="AvD-yu-Fe0"/>
                                                                 <constraint firstItem="64P-j6-7gz" firstAttribute="leading" secondItem="skx-1n-O1U" secondAttribute="leading" constant="8" id="B8V-XD-Qwp"/>
                                                                 <constraint firstItem="64P-j6-7gz" firstAttribute="top" secondItem="skx-1n-O1U" secondAttribute="top" constant="8" id="DYR-QN-LAh"/>
+                                                                <constraint firstAttribute="height" constant="34" id="KuW-2c-Fqe"/>
                                                                 <constraint firstAttribute="bottom" secondItem="64P-j6-7gz" secondAttribute="bottom" constant="8" id="VQz-zj-1ZK"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ev7-Aq-K7p" userLabel="InitialTextValue">
-                                                            <rect key="frame" x="0.0" y="114.5" width="418" height="90"/>
+                                                            <rect key="frame" x="0.0" y="59.5" width="418" height="34"/>
                                                             <subviews>
-                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert text" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="06v-3N-BWK">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="418" height="90"/>
+                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert text" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="06v-3N-BWK" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="418" height="34"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="34" id="q1U-2M-MEC"/>
+                                                                    </constraints>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <textInputTraits key="textInputTraits"/>
                                                                 </textField>
@@ -569,18 +579,21 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MGe-4O-hw2" userLabel="InitialHexValue">
-                                                            <rect key="frame" x="0.0" y="209.5" width="418" height="94.5"/>
+                                                            <rect key="frame" x="0.0" y="98.5" width="418" height="34"/>
                                                             <subviews>
-                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert hex" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GwT-cj-scX">
-                                                                    <rect key="frame" x="22" y="0.0" width="396" height="94.5"/>
+                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert hex" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GwT-cj-scX" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
+                                                                    <rect key="frame" x="18" y="0.0" width="400" height="34"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="34" id="a7A-aL-5Nq"/>
+                                                                    </constraints>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <textInputTraits key="textInputTraits"/>
                                                                     <connections>
                                                                         <outlet property="delegate" destination="-1" id="FJf-gd-aIx"/>
                                                                     </connections>
                                                                 </textField>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cdh-aY-w9n">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="14" height="94.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cdh-aY-w9n">
+                                                                    <rect key="frame" x="2" y="0.0" width="14" height="34"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="14" id="lka-vF-XBp"/>
                                                                     </constraints>
@@ -593,8 +606,9 @@
                                                             <constraints>
                                                                 <constraint firstItem="GwT-cj-scX" firstAttribute="top" secondItem="MGe-4O-hw2" secondAttribute="top" id="09L-T8-W79"/>
                                                                 <constraint firstItem="Cdh-aY-w9n" firstAttribute="top" secondItem="MGe-4O-hw2" secondAttribute="top" id="HLR-aS-ARd"/>
-                                                                <constraint firstItem="GwT-cj-scX" firstAttribute="leading" secondItem="Cdh-aY-w9n" secondAttribute="trailing" constant="8" id="SJ3-WS-sCO"/>
-                                                                <constraint firstItem="Cdh-aY-w9n" firstAttribute="leading" secondItem="MGe-4O-hw2" secondAttribute="leading" id="ei2-mK-sfI"/>
+                                                                <constraint firstItem="GwT-cj-scX" firstAttribute="leading" secondItem="Cdh-aY-w9n" secondAttribute="trailing" constant="2" id="SJ3-WS-sCO"/>
+                                                                <constraint firstItem="Cdh-aY-w9n" firstAttribute="leading" secondItem="MGe-4O-hw2" secondAttribute="leading" constant="2" id="ei2-mK-sfI"/>
+                                                                <constraint firstItem="GwT-cj-scX" firstAttribute="leading" secondItem="MGe-4O-hw2" secondAttribute="leading" constant="18" id="jNh-AG-3dh"/>
                                                                 <constraint firstAttribute="bottom" secondItem="GwT-cj-scX" secondAttribute="bottom" id="mKG-f6-UH7"/>
                                                                 <constraint firstAttribute="trailing" secondItem="GwT-cj-scX" secondAttribute="trailing" id="rMW-Za-hst"/>
                                                                 <constraint firstAttribute="bottom" secondItem="Cdh-aY-w9n" secondAttribute="bottom" id="sjw-15-L9G"/>
@@ -641,9 +655,11 @@
                     <rect key="frame" x="16" y="450" width="418" height="33"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tqc-N4-gx2" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="132.5" height="33"/>
+                            <rect key="frame" x="0.0" y="1.5" width="132.5" height="30"/>
                             <color key="tintColor" systemColor="systemBlueColor"/>
-                            <state key="normal" title="Clear"/>
+                            <state key="normal" title="Clear">
+                                <color key="titleColor" name="sil_regularBlueColor"/>
+                            </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
                             </userDefinedRuntimeAttributes>
@@ -652,9 +668,11 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iHa-V2-IQe" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                            <rect key="frame" x="142.5" y="0.0" width="133" height="33"/>
+                            <rect key="frame" x="142.5" y="1.5" width="133" height="30"/>
                             <color key="tintColor" systemColor="systemBlueColor"/>
-                            <state key="normal" title="Cancel"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" name="sil_regularBlueColor"/>
+                            </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
                             </userDefinedRuntimeAttributes>
@@ -663,9 +681,11 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jo3-FH-Epj" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                            <rect key="frame" x="285.5" y="0.0" width="132.5" height="33"/>
+                            <rect key="frame" x="285.5" y="1.5" width="132.5" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" title="Save"/>
+                            <state key="normal" title="Save">
+                                <color key="titleColor" name="sil_regularBlueColor"/>
+                            </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
                                     <real key="value" value="14"/>
@@ -700,25 +720,25 @@
     </objects>
     <designables>
         <designable name="Tqc-N4-gx2">
-            <size key="intrinsicContentSize" width="49" height="33"/>
+            <size key="intrinsicContentSize" width="36" height="30"/>
         </designable>
         <designable name="iHa-V2-IQe">
-            <size key="intrinsicContentSize" width="59" height="33"/>
+            <size key="intrinsicContentSize" width="48" height="30"/>
         </designable>
         <designable name="jo3-FH-Epj">
-            <size key="intrinsicContentSize" width="47" height="33"/>
+            <size key="intrinsicContentSize" width="34" height="30"/>
         </designable>
     </designables>
     <resources>
         <image name="chevron_collapsed" width="14" height="9"/>
-        <namedColor name="sil_bgGreyColor">
-            <color red="0.94509803921568625" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="sil_masalaColor">
             <color red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="sil_primaryTextColor">
             <color red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_regularBlueColor">
+            <color red="0.058823529411764705" green="0.3843137254901961" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="sil_silverChaliceColor">
             <color red="0.6470588235294118" green="0.6470588235294118" blue="0.6470588235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

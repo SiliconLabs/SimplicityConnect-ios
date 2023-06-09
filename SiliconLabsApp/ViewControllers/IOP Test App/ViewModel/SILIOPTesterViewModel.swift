@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreBluetooth
+import UIKit
 
 class SILIOPTesterViewModel: NSObject, ObservableObject {
     private var iopCentralManager: SILIOPTesterCentralManager = SILIOPTesterCentralManager()
@@ -43,6 +44,8 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     
     var testStateStatus: SILObservable<TestState> = SILObservable(initialValue: .initiated)
     var bluetoothState: SILObservable<Bool> = SILObservable(initialValue: true)
+    
+    let deviceModelName = UIDevice.current.model
     
     //MARK: INITIALIZATION
     
@@ -256,6 +259,8 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
             if let connectionParameters = connectionParameters {
                 testParameters["mtu_size"] = connectionParameters.mtu_size as NSObject
                 testParameters["pdu_size"] = connectionParameters.pdu_size as NSObject
+                testParameters["interval"] = connectionParameters.interval as NSObject
+                testParameters["phy"] = connectionParameters.phy as NSObject
             }
             if let firmwareInfo = dict["firmwareInfo"] as? SILIOPTestFirmwareInfo {
                 self.firmwareInfo = firmwareInfo
@@ -295,17 +300,19 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     }
     
     private func prepareTestReport() {
-        let deviceInfo = UIDevice.getCurrentDeviceInfo()
+        let deviceSystemVersion = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
                 
         testReport = SILIOPTestReport(timestamp: timestamp ?? Date(),
-                                      phoneInfo: SILIOPTestPhoneInfo(phoneName: deviceInfo.modelName, phoneOSVersion: deviceInfo.SystemVersion),
+                                      phoneInfo: SILIOPTestPhoneInfo(phoneName: self.deviceModelName, phoneOSVersion: deviceSystemVersion),
                                       firmwareInfo: firmwareInfo,
                                       connectionParameters: connectionParameters,
                                       testCaseResults: testCaseResults)
     }
     
     func getReportFile() -> URL {
-        let fileWriter = SILIOPFileWriter(firmware: firmwareInfo?.firmware ?? .unknown, timestamp: timestamp ?? Date())
+        let fileWriter = SILIOPFileWriter(firmware: firmwareInfo?.firmware ?? .unknown,
+                                          timestamp: timestamp ?? Date(),
+                                          deviceModelName: deviceModelName)
         
         if fileWriter.createEmptyFile(atPath: fileWriter.getFilePath), let testReport = testReport {
             let report = testReport.generateReport()

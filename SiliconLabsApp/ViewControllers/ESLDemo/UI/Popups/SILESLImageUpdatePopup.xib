@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILESLImageUpdatePopup" customModule="BlueGecko" customModuleProvider="target">
+            <connections>
+                <outlet property="notesLabel" destination="PmE-aA-5Ty" id="Cb8-N9-U1P"/>
+                <outlet property="showImageAfterUpdateButton" destination="B2K-Jq-6yl" id="eiz-VF-tqU"/>
+                <outlet property="slot0ImageView" destination="KzP-Md-aHB" id="PhB-if-HQf"/>
+                <outlet property="slot1ImageView" destination="eLu-b8-mhc" id="Sp3-rs-vpW"/>
+                <outlet property="uploadButton" destination="tYd-xS-RGI" id="6de-sC-I4J"/>
+                <outlet property="view" destination="OOr-pQ-9mo" id="KGr-4I-OWl"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="OOr-pQ-9mo">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="450"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KWU-Sd-0ZA">
+                    <rect key="frame" x="0.0" y="16" width="414" height="48"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upload new image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e6e-RJ-gDR">
+                            <rect key="frame" x="20" y="13.33333333333333" width="158" height="21.666666666666671"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <color key="textColor" red="0.18823529410000001" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="e6e-RJ-gDR" firstAttribute="centerY" secondItem="KWU-Sd-0ZA" secondAttribute="centerY" id="nsX-BN-OIA"/>
+                        <constraint firstItem="e6e-RJ-gDR" firstAttribute="leading" secondItem="KWU-Sd-0ZA" secondAttribute="leading" constant="20" id="su8-vQ-g1h"/>
+                        <constraint firstAttribute="width" constant="414" id="wX8-nJ-buv"/>
+                        <constraint firstAttribute="height" constant="48" id="xO1-4T-ZRM"/>
+                    </constraints>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="5hJ-pR-6oS">
+                    <rect key="frame" x="20" y="64" width="310" height="370"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u4Y-5X-SSb" userLabel="Description">
+                            <rect key="frame" x="0.0" y="0.0" width="310" height="78"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="78" id="owr-NZ-joM"/>
+                            </constraints>
+                            <string key="text">Select a slot on ESL Tag on which you wish to upload new image. Choosing taken slot will result in overriding stored image with the new one.</string>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.18823529410000001" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5g-jr-9IY" userLabel="Slots">
+                            <rect key="frame" x="0.0" y="94" width="310" height="100"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grayRectangle" translatesAutoresizingMaskIntoConstraints="NO" id="KzP-Md-aHB" userLabel="Slot0">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="KzP-Md-aHB" secondAttribute="height" multiplier="1:1" id="mxL-f2-eHE"/>
+                                    </constraints>
+                                </imageView>
+                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grayRectangle" translatesAutoresizingMaskIntoConstraints="NO" id="eLu-b8-mhc" userLabel="Slot1">
+                                    <rect key="frame" x="132" y="0.0" width="100" height="100"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="eLu-b8-mhc" secondAttribute="height" multiplier="1:1" id="dWz-dS-sfU"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="KzP-Md-aHB" firstAttribute="leading" secondItem="o5g-jr-9IY" secondAttribute="leading" id="50G-JV-NkU"/>
+                                <constraint firstItem="eLu-b8-mhc" firstAttribute="top" secondItem="KzP-Md-aHB" secondAttribute="top" id="Z59-rl-wlc"/>
+                                <constraint firstAttribute="height" constant="100" id="dBQ-D4-h0F"/>
+                                <constraint firstItem="eLu-b8-mhc" firstAttribute="leading" secondItem="KzP-Md-aHB" secondAttribute="trailing" constant="32" id="eqK-4t-G73"/>
+                                <constraint firstItem="KzP-Md-aHB" firstAttribute="centerY" secondItem="o5g-jr-9IY" secondAttribute="centerY" id="gOi-jk-DMC"/>
+                                <constraint firstItem="KzP-Md-aHB" firstAttribute="height" secondItem="o5g-jr-9IY" secondAttribute="height" id="nmm-Lq-rns"/>
+                                <constraint firstItem="eLu-b8-mhc" firstAttribute="centerY" secondItem="o5g-jr-9IY" secondAttribute="centerY" id="qdd-EQ-jYv"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B2K-Jq-6yl" userLabel="Show Image After Update">
+                            <rect key="frame" x="0.0" y="210" width="310" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="24" id="YQI-D2-nke"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Show image after the update" image="checkBoxInactive">
+                                <color key="titleColor" name="sil_primaryTextColor"/>
+                            </state>
+                            <connections>
+                                <action selector="showImageAfterUpdateTapped:" destination="-1" eventType="touchUpInside" id="6hk-7n-cr6"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PmE-aA-5Ty" userLabel="Notes">
+                            <rect key="frame" x="0.0" y="250" width="310" height="68"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q1c-NU-Rpl" userLabel="buttonView">
+                            <rect key="frame" x="0.0" y="334" width="310" height="36"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYd-xS-RGI" userLabel="Upload" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                    <rect key="frame" x="210" y="-1" width="100" height="36"/>
+                                    <color key="backgroundColor" name="sil_strongBlueColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="100" id="brR-iS-gaX"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                    <state key="normal" title="Upload">
+                                        <color key="titleColor" name="sil_bgWhiteColor"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="uploadButtonWasTapped:" destination="-1" eventType="touchUpInside" id="MSg-eV-PPb"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uGB-mk-bEL" userLabel="Cancel">
+                                    <rect key="frame" x="94" y="-2" width="100" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="100" id="XBs-XQ-U9c"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                    <state key="normal" title="Cancel">
+                                        <color key="titleColor" name="sil_strongBlueColor"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="cancelButtonWasTapped:" destination="-1" eventType="touchUpInside" id="vQP-6W-2Xv"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="tYd-xS-RGI" secondAttribute="trailing" id="Edp-fx-UlL"/>
+                                <constraint firstAttribute="bottom" secondItem="uGB-mk-bEL" secondAttribute="bottom" constant="2" id="Smc-Cr-NAZ"/>
+                                <constraint firstAttribute="bottom" secondItem="tYd-xS-RGI" secondAttribute="bottom" constant="1" id="Xa3-ZJ-xdd"/>
+                                <constraint firstItem="uGB-mk-bEL" firstAttribute="top" secondItem="Q1c-NU-Rpl" secondAttribute="top" constant="-2" id="kXu-lE-yw6"/>
+                                <constraint firstAttribute="height" constant="48" id="kwQ-M1-wD3">
+                                    <variation key="widthClass=compact" constant="36"/>
+                                </constraint>
+                                <constraint firstItem="tYd-xS-RGI" firstAttribute="leading" secondItem="uGB-mk-bEL" secondAttribute="trailing" constant="16" id="l3Z-2n-Ld2"/>
+                                <constraint firstItem="tYd-xS-RGI" firstAttribute="top" secondItem="Q1c-NU-Rpl" secondAttribute="top" constant="-1" id="qE0-fi-iFX"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="Dc1-vS-C0w"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="5hJ-pR-6oS" secondAttribute="trailing" constant="20" id="3dK-s7-NzK"/>
+                <constraint firstItem="KWU-Sd-0ZA" firstAttribute="leading" secondItem="OOr-pQ-9mo" secondAttribute="leading" id="6FL-yf-wid"/>
+                <constraint firstAttribute="bottom" secondItem="5hJ-pR-6oS" secondAttribute="bottom" constant="16" id="Lef-st-D5t"/>
+                <constraint firstItem="5hJ-pR-6oS" firstAttribute="top" secondItem="KWU-Sd-0ZA" secondAttribute="bottom" id="g28-1d-ZwH"/>
+                <constraint firstItem="KWU-Sd-0ZA" firstAttribute="top" secondItem="OOr-pQ-9mo" secondAttribute="top" constant="16" id="mjn-i9-i1O"/>
+                <constraint firstItem="5hJ-pR-6oS" firstAttribute="leading" secondItem="OOr-pQ-9mo" secondAttribute="leading" constant="20" id="vK5-eY-PX9"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="18.320610687022899" y="85.563380281690144"/>
+        </view>
+    </objects>
+    <designables>
+        <designable name="tYd-xS-RGI">
+            <size key="intrinsicContentSize" width="58" height="34"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="checkBoxInactive" width="24" height="24"/>
+        <image name="grayRectangle" width="438" height="438"/>
+        <namedColor name="sil_bgWhiteColor">
+            <color red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_primaryTextColor">
+            <color red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_strongBlueColor">
+            <color red="0.0" green="0.45882352941176469" blue="0.75294117647058822" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

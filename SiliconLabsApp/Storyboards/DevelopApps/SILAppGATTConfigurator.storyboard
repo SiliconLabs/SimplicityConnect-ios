@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zb0-pk-Ztj">
-    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
@@ -10,6 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Roboto-Bold.ttf">
+            <string>Roboto-Bold</string>
+        </array>
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
         </array>
@@ -23,30 +26,30 @@
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="zb0-pk-Ztj" customClass="SILGattConfiguratorHomeViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sFh-A3-fjq">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gZH-G9-mww" userLabel="All Space">
-                                <rect key="frame" x="0.0" y="24" width="1024" height="1322"/>
+                                <rect key="frame" x="0.0" y="59" width="430" height="839"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R3i-9w-Y58">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1322"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="430" height="839"/>
                                         <subviews>
                                             <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="120" estimatedRowHeight="120" sectionHeaderHeight="20" sectionFooterHeight="8" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EV4-2d-d33">
-                                                <rect key="frame" x="52" y="0.0" width="956" height="1252"/>
+                                                <rect key="frame" x="52" y="0.0" width="362" height="769"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorCellView" rowHeight="120" id="9ms-En-bP8" customClass="SILGattConfiguratorCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="50" width="956" height="120"/>
+                                                        <rect key="frame" x="0.0" y="50" width="362" height="120"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9ms-En-bP8" id="VT8-FM-J87">
-                                                            <rect key="frame" x="0.0" y="0.0" width="956" height="120"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="362" height="120"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fdf-to-wB1" customClass="SILSwitch" customModule="BlueGecko" customModuleProvider="target">
-                                                                    <rect key="frame" x="896" y="23" width="44" height="24"/>
+                                                                    <rect key="frame" x="302" y="19" width="44" height="24"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="44" id="0zn-xH-9xG"/>
@@ -68,7 +71,7 @@
                                                                                 <constraint firstAttribute="height" constant="40" id="NsJ-Sv-ipR"/>
                                                                                 <constraint firstAttribute="width" constant="40" id="U2Q-Au-h6o"/>
                                                                             </constraints>
-                                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
                                                                             <inset key="contentEdgeInsets" minX="9" minY="9" maxX="9" maxY="9"/>
                                                                             <state key="normal" image="EditDisabled"/>
                                                                             <connections>
@@ -81,7 +84,7 @@
                                                                                 <constraint firstAttribute="width" constant="40" id="CL9-aM-bCk"/>
                                                                                 <constraint firstAttribute="height" constant="40" id="oiU-ye-Jcc"/>
                                                                             </constraints>
-                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
                                                                             <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
                                                                             <state key="normal" image="icon - copy"/>
                                                                             <connections>
@@ -94,7 +97,7 @@
                                                                                 <constraint firstAttribute="height" constant="40" id="U6x-mN-Ic0"/>
                                                                                 <constraint firstAttribute="width" constant="40" id="fb0-eM-eJB"/>
                                                                             </constraints>
-                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
                                                                             <inset key="contentEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
                                                                             <state key="normal" image="sil_trash"/>
                                                                             <connections>
@@ -104,14 +107,14 @@
                                                                     </subviews>
                                                                 </stackView>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9RB-Az-Wpe">
-                                                                    <rect key="frame" x="16" y="71.5" width="924" height="0.5"/>
+                                                                    <rect key="frame" x="16" y="71.666666666666671" width="330" height="0.3333333333333286"/>
                                                                     <color key="backgroundColor" name="sil_boulderColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="0.5" id="aj7-s7-3cg"/>
                                                                     </constraints>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="X Services" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ekQ-Wb-ghO">
-                                                                    <rect key="frame" x="82" y="46" width="60.5" height="15.5"/>
+                                                                    <rect key="frame" x="82" y="46" width="60.333333333333343" height="15.333333333333336"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -124,7 +127,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New GATT Server 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HSa-Ff-kAw">
-                                                                    <rect key="frame" x="82" y="18" width="798" height="22"/>
+                                                                    <rect key="frame" x="82" y="18" width="204" height="22"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="22" id="KMa-1s-2XK"/>
                                                                     </constraints>
@@ -132,20 +135,21 @@
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="dQK-xD-HOY">
-                                                                    <rect key="frame" x="910" y="79" width="30" height="30"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dQK-xD-HOY">
+                                                                    <rect key="frame" x="323" y="88" width="23" height="13"/>
+                                                                    <color key="tintColor" name="sil_primaryTextColor"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="30" id="sfx-aH-dIU"/>
-                                                                        <constraint firstAttribute="width" constant="30" id="xs3-nB-RDg"/>
+                                                                        <constraint firstAttribute="height" constant="23" id="sfx-aH-dIU"/>
+                                                                        <constraint firstAttribute="width" constant="23" id="xs3-nB-RDg"/>
                                                                     </constraints>
                                                                 </imageView>
                                                             </subviews>
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
                                                                 <constraint firstItem="HSa-Ff-kAw" firstAttribute="top" secondItem="VT8-FM-J87" secondAttribute="top" constant="18" id="0D2-ZW-3ab"/>
-                                                                <constraint firstItem="dQK-xD-HOY" firstAttribute="top" secondItem="9RB-Az-Wpe" secondAttribute="bottom" constant="7" id="0Vb-Og-xQD"/>
                                                                 <constraint firstItem="ekQ-Wb-ghO" firstAttribute="top" secondItem="HSa-Ff-kAw" secondAttribute="bottom" constant="6" id="2MY-xs-gW4"/>
                                                                 <constraint firstItem="Fdf-to-wB1" firstAttribute="top" secondItem="VT8-FM-J87" secondAttribute="topMargin" constant="8" id="2yI-LF-Ig7"/>
+                                                                <constraint firstItem="dQK-xD-HOY" firstAttribute="centerY" secondItem="qor-TT-lCE" secondAttribute="centerY" id="CGi-wD-nCT"/>
                                                                 <constraint firstItem="ekQ-Wb-ghO" firstAttribute="leading" secondItem="Lyr-oU-ChZ" secondAttribute="trailing" constant="16" id="FGa-i2-p1p"/>
                                                                 <constraint firstAttribute="bottom" secondItem="kHC-LW-zF3" secondAttribute="bottom" constant="6" id="FKt-46-bh6"/>
                                                                 <constraint firstItem="Lyr-oU-ChZ" firstAttribute="leading" secondItem="VT8-FM-J87" secondAttribute="leading" constant="16" id="VdH-XB-b50"/>
@@ -171,21 +175,21 @@
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SILGattConfiguratorAdTypeCellView" rowHeight="80" id="O47-X0-0vT" customClass="SILGattConfiguratorServiceInfoCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="170" width="956" height="80"/>
+                                                        <rect key="frame" x="0.0" y="170" width="362" height="80"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="O47-X0-0vT" id="ME5-Qc-OUk">
-                                                            <rect key="frame" x="0.0" y="0.0" width="956" height="80"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="362" height="80"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ts-E2-Dpd" userLabel="Separator View">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="956" height="1"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="362" height="1"/>
                                                                     <color key="backgroundColor" name="sil_secondaryBackgroundColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="1" id="dEP-2T-0WO"/>
                                                                     </constraints>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x180D - Heart Rate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mWG-BE-YK5">
-                                                                    <rect key="frame" x="16" y="17" width="126.5" height="18"/>
+                                                                    <rect key="frame" x="16.000000000000007" y="17" width="126.66666666666669" height="18"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="18" id="MKd-sm-avg"/>
                                                                     </constraints>
@@ -194,7 +198,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 Characteristic" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NGR-XR-HsI" userLabel="Value Label">
-                                                                    <rect key="frame" x="16" y="43" width="98" height="14"/>
+                                                                    <rect key="frame" x="16" y="43" width="98" height="18"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -226,7 +230,7 @@
                                                 </connections>
                                             </tableView>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="20" sectionFooterHeight="8" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRF-D3-0R1" userLabel="ExportCheckBoxTableView">
-                                                <rect key="frame" x="0.0" y="0.0" width="52" height="1252"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="52" height="769"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="52" id="cDP-uK-MCo"/>
@@ -291,22 +295,22 @@
                                                 </connections>
                                             </tableView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="oDC-t1-13f">
-                                                <rect key="frame" x="16" y="597" width="992" height="128"/>
+                                                <rect key="frame" x="16" y="355.66666666666669" width="398" height="128"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="GPF-Ng-gXh">
-                                                        <rect key="frame" x="0.0" y="0.0" width="992" height="56"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="398" height="56"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="56" id="87u-2f-ZGB"/>
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allows you to create a local  GATT database" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ONB-t2-4tn">
-                                                        <rect key="frame" x="0.0" y="72" width="992" height="20"/>
+                                                        <rect key="frame" x="0.0" y="72" width="398" height="20"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No configured GATT servers" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pkT-F2-vFc">
-                                                        <rect key="frame" x="0.0" y="108" width="992" height="20"/>
+                                                        <rect key="frame" x="0.0" y="107.99999999999994" width="398" height="20"/>
                                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -314,13 +318,13 @@
                                                 </subviews>
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bbO-B5-mTL" userLabel="Export Button View">
-                                                <rect key="frame" x="0.0" y="1252" width="1024" height="70"/>
+                                                <rect key="frame" x="0.0" y="769" width="430" height="70"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Eb1-Ai-B4U">
-                                                        <rect key="frame" x="357" y="16" width="310" height="38"/>
+                                                        <rect key="frame" x="110" y="16" width="210" height="38"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tQy-8s-MQR" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="150" height="38"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="100" height="38"/>
                                                                 <color key="backgroundColor" red="0.85098039219999999" green="0.1176470588" blue="0.1647058824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="100" id="cga-dh-PoY">
@@ -337,7 +341,7 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUc-vW-COR" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                <rect key="frame" x="160" y="0.0" width="150" height="38"/>
+                                                                <rect key="frame" x="110" y="0.0" width="100" height="38"/>
                                                                 <state key="normal" title="Cancel"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
@@ -407,38 +411,41 @@
             <objects>
                 <viewController storyboardIdentifier="GattConfiguratorDetails" id="pCI-pE-agh" customClass="SILGattConfiguratorDetailsViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N5q-vK-iKi">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Prk-bS-jFd" userLabel="All Space">
-                                <rect key="frame" x="0.0" y="24" width="1024" height="1342"/>
+                                <rect key="frame" x="0.0" y="59" width="430" height="873"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kNl-XS-u0H">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1342"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="430" height="873"/>
                                         <subviews>
                                             <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="20" sectionFooterHeight="8" translatesAutoresizingMaskIntoConstraints="NO" id="5vt-4g-vd4">
-                                                <rect key="frame" x="16" y="0.0" width="992" height="1342"/>
+                                                <rect key="frame" x="16" y="0.0" width="398" height="873"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="separatorColor" name="sil_bgWhiteColor"/>
                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <view key="tableHeaderView" contentMode="scaleToFill" id="FgG-H6-FTq" userLabel="HeaderView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="992" height="100"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="100"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AJU-IT-GJI">
-                                                            <rect key="frame" x="0.0" y="14" width="992" height="72.5"/>
+                                                            <rect key="frame" x="0.0" y="13.666666666666664" width="398" height="72.666666666666686"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gatt Server Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JuM-0T-pa9">
-                                                                    <rect key="frame" x="0.0" y="16" width="98.5" height="14.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GATT Server Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JuM-0T-pa9">
+                                                                    <rect key="frame" x="0.0" y="16" width="136.33333333333334" height="14.666666666666664"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="14.5" id="8u9-Sw-Z3h"/>
                                                                     </constraints>
-                                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ury-7U-SJl">
-                                                                    <rect key="frame" x="0.0" y="38.5" width="992" height="34"/>
+                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ury-7U-SJl" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
+                                                                    <rect key="frame" x="0.0" y="38.666666666666671" width="398" height="34"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="34" id="gWg-J0-bep"/>
+                                                                    </constraints>
                                                                     <color key="textColor" name="sil_subtleTextColor"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                                     <textInputTraits key="textInputTraits" autocorrectionType="no"/>
@@ -466,11 +473,11 @@
                                                     </constraints>
                                                 </view>
                                                 <view key="tableFooterView" contentMode="scaleToFill" id="hkQ-0q-u3z" userLabel="FooterView">
-                                                    <rect key="frame" x="0.0" y="703" width="992" height="80"/>
+                                                    <rect key="frame" x="0.0" y="711" width="398" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aWz-69-34d" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="16" width="130" height="48"/>
+                                                            <rect key="frame" x="134" y="16" width="130" height="48"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="130" id="QhP-Ri-bcX"/>
                                                             </constraints>
@@ -488,21 +495,45 @@
                                                     </subviews>
                                                     <color key="backgroundColor" name="sil_backgroundColor"/>
                                                     <constraints>
+                                                        <constraint firstItem="aWz-69-34d" firstAttribute="centerX" secondItem="hkQ-0q-u3z" secondAttribute="centerX" id="VIv-bm-bMw"/>
                                                         <constraint firstAttribute="bottom" secondItem="aWz-69-34d" secondAttribute="bottom" constant="16" id="VV6-dJ-LSM"/>
                                                         <constraint firstItem="aWz-69-34d" firstAttribute="top" secondItem="hkQ-0q-u3z" secondAttribute="top" constant="16" id="l8R-TW-pOe"/>
-                                                        <constraint firstItem="aWz-69-34d" firstAttribute="leading" secondItem="hkQ-0q-u3z" secondAttribute="leading" id="oAx-za-4Gu"/>
                                                     </constraints>
                                                 </view>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorServiceCellView" rowHeight="110" id="8qv-8R-Q0a" customClass="SILGattConfiguratorServiceCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="150" width="992" height="110"/>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorServiceCellView" rowHeight="140" id="8qv-8R-Q0a" customClass="SILGattConfiguratorServiceCellView" customModule="BlueGecko" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="150" width="398" height="140"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8qv-8R-Q0a" id="ZpF-x1-B0i">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="110"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="140"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Service" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FfR-Re-OjK">
+                                                                    <rect key="frame" x="16" y="16" width="139" height="20"/>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
+                                                                    <color key="textColor" name="sil_regularBlueColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x1809" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gaT-Xl-OTz">
+                                                                    <rect key="frame" x="16.000000000000004" y="41" width="46.333333333333343" height="17"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="17" id="U3l-LZ-bLC"/>
+                                                                    </constraints>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRIMARY SERVICE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hO2-30-Enf">
+                                                                    <rect key="frame" x="16.000000000000007" y="58" width="117.66666666666669" height="17"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="17" id="ZCK-1k-lXL"/>
+                                                                    </constraints>
+                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                                    <color key="textColor" name="sil_subtleTextColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gyn-sG-HjQ">
-                                                                    <rect key="frame" x="891" y="5" width="80" height="40"/>
+                                                                    <rect key="frame" x="8" y="84" width="80" height="40"/>
                                                                     <subviews>
                                                                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AN4-ZZ-e5e">
                                                                             <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
@@ -510,9 +541,9 @@
                                                                                 <constraint firstAttribute="width" constant="40" id="BEh-Hb-aEB"/>
                                                                                 <constraint firstAttribute="height" constant="40" id="GF1-4Q-NS7"/>
                                                                             </constraints>
-                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
                                                                             <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
-                                                                            <state key="normal" image="icon - copy"/>
+                                                                            <state key="normal" image="copy-icon"/>
                                                                             <connections>
                                                                                 <action selector="onCopyTouch:" destination="8qv-8R-Q0a" eventType="touchUpInside" id="U1h-ye-OGE"/>
                                                                             </connections>
@@ -525,63 +556,57 @@
                                                                             </constraints>
                                                                             <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <inset key="contentEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
-                                                                            <state key="normal" image="sil_trash"/>
+                                                                            <state key="normal" image="delete_trash"/>
                                                                             <connections>
                                                                                 <action selector="onDeleteTouch:" destination="8qv-8R-Q0a" eventType="touchUpInside" id="lXj-QP-gA8"/>
                                                                             </connections>
                                                                         </button>
                                                                     </subviews>
                                                                 </stackView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unknown Service" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FfR-Re-OjK">
-                                                                    <rect key="frame" x="16" y="16" width="139" height="22.5"/>
-                                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
-                                                                    <color key="textColor" name="sil_primaryTextColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x1809" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gaT-Xl-OTz">
-                                                                    <rect key="frame" x="16" y="43.5" width="46.5" height="17"/>
+                                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htm-tZ-ip0">
+                                                                    <rect key="frame" x="362" y="94" width="20" height="20"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="17" id="U3l-LZ-bLC"/>
+                                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="QhD-Ea-U0K"/>
+                                                                        <constraint firstAttribute="height" constant="20" id="VOi-iv-oMW"/>
                                                                     </constraints>
-                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRIMARY SERVICE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hO2-30-Enf">
-                                                                    <rect key="frame" x="16" y="60.5" width="117.5" height="17"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="17" id="ZCK-1k-lXL"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                                                    <color key="textColor" name="sil_subtleTextColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htm-tZ-ip0">
-                                                                    <rect key="frame" x="16" y="85" width="61" height="17"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" id="QhD-Ea-U0K"/>
-                                                                        <constraint firstAttribute="height" constant="17" id="VOi-iv-oMW"/>
-                                                                    </constraints>
-                                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                                                    <state key="normal" title="More Info">
+                                                                    <state key="normal" image="chevron_down">
                                                                         <color key="titleColor" name="sil_regularBlueColor"/>
                                                                     </state>
                                                                 </button>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kvq-6l-pm1" userLabel="DividerView">
+                                                                    <rect key="frame" x="16" y="79" width="366" height="1"/>
+                                                                    <color key="backgroundColor" name="sil_lineGreyColor"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="1" id="GCB-Wm-R9Y"/>
+                                                                    </constraints>
+                                                                </view>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCi-hJ-MHo" userLabel="DividerView">
+                                                                    <rect key="frame" x="16" y="128" width="366" height="1"/>
+                                                                    <color key="backgroundColor" name="sil_lineGreyColor"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="1" id="b4i-pZ-P15"/>
+                                                                    </constraints>
+                                                                </view>
                                                             </subviews>
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
                                                                 <constraint firstItem="FfR-Re-OjK" firstAttribute="top" secondItem="ZpF-x1-B0i" secondAttribute="top" constant="16" id="0H2-5T-99o"/>
-                                                                <constraint firstItem="htm-tZ-ip0" firstAttribute="leading" secondItem="hO2-30-Enf" secondAttribute="leading" id="3Ey-lU-OYE"/>
                                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gaT-Xl-OTz" secondAttribute="trailing" constant="8" id="5JN-Wv-n6J"/>
+                                                                <constraint firstAttribute="bottom" secondItem="gyn-sG-HjQ" secondAttribute="bottom" constant="16" id="5yJ-1L-TGf"/>
+                                                                <constraint firstItem="dyj-py-JPe" firstAttribute="top" secondItem="kvq-6l-pm1" secondAttribute="bottom" constant="4" id="DG6-LT-jsl"/>
                                                                 <constraint firstItem="hO2-30-Enf" firstAttribute="top" secondItem="gaT-Xl-OTz" secondAttribute="bottom" id="Gyd-X4-yQb"/>
+                                                                <constraint firstAttribute="trailing" secondItem="htm-tZ-ip0" secondAttribute="trailing" constant="16" id="HYg-on-aev"/>
                                                                 <constraint firstItem="FfR-Re-OjK" firstAttribute="leading" secondItem="ZpF-x1-B0i" secondAttribute="leading" constant="16" id="J3c-bG-4HC"/>
-                                                                <constraint firstAttribute="bottom" secondItem="htm-tZ-ip0" secondAttribute="bottom" constant="8" id="Kai-Fm-c4j"/>
-                                                                <constraint firstAttribute="trailingMargin" secondItem="gyn-sG-HjQ" secondAttribute="trailing" constant="5" id="UM1-EV-IXT"/>
+                                                                <constraint firstItem="gyn-sG-HjQ" firstAttribute="leading" secondItem="ZpF-x1-B0i" secondAttribute="leading" constant="8" id="JrF-nh-Daq"/>
+                                                                <constraint firstItem="kvq-6l-pm1" firstAttribute="top" secondItem="hO2-30-Enf" secondAttribute="bottom" constant="4" id="KqV-q0-kgd"/>
+                                                                <constraint firstItem="kvq-6l-pm1" firstAttribute="leading" secondItem="ZpF-x1-B0i" secondAttribute="leading" constant="16" id="PPJ-8t-0Fh"/>
+                                                                <constraint firstAttribute="trailing" secondItem="CCi-hJ-MHo" secondAttribute="trailing" constant="16" id="UBz-Qa-7uF"/>
+                                                                <constraint firstItem="CCi-hJ-MHo" firstAttribute="top" secondItem="AN4-ZZ-e5e" secondAttribute="bottom" constant="4" id="UQo-ZV-iTQ"/>
+                                                                <constraint firstItem="htm-tZ-ip0" firstAttribute="centerY" secondItem="dyj-py-JPe" secondAttribute="centerY" id="jjB-Ia-6ru"/>
+                                                                <constraint firstItem="CCi-hJ-MHo" firstAttribute="leading" secondItem="ZpF-x1-B0i" secondAttribute="leading" constant="16" id="kXI-w9-dtF"/>
                                                                 <constraint firstItem="gaT-Xl-OTz" firstAttribute="leading" secondItem="FfR-Re-OjK" secondAttribute="leading" id="lbz-pr-Quv"/>
+                                                                <constraint firstAttribute="trailing" secondItem="kvq-6l-pm1" secondAttribute="trailing" constant="16" id="mDw-Nx-t9c"/>
                                                                 <constraint firstItem="hO2-30-Enf" firstAttribute="leading" secondItem="gaT-Xl-OTz" secondAttribute="leading" id="rW0-iV-HtG"/>
-                                                                <constraint firstItem="gyn-sG-HjQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FfR-Re-OjK" secondAttribute="trailing" constant="8" id="sqB-kg-bbW"/>
-                                                                <constraint firstItem="hO2-30-Enf" firstAttribute="top" secondItem="htm-tZ-ip0" secondAttribute="bottom" constant="-41.5" id="uc1-7k-Ucf"/>
-                                                                <constraint firstItem="gyn-sG-HjQ" firstAttribute="top" secondItem="ZpF-x1-B0i" secondAttribute="top" constant="5" id="zYW-bI-swJ"/>
                                                                 <constraint firstItem="gaT-Xl-OTz" firstAttribute="top" secondItem="FfR-Re-OjK" secondAttribute="bottom" constant="5" id="zeU-BV-EJu"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
@@ -593,42 +618,42 @@
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorCharacteristicCellView" rowHeight="104" id="5PE-dK-QkU" customClass="SILGattConfiguratorCharacteristicCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="260" width="992" height="104"/>
+                                                        <rect key="frame" x="0.0" y="290" width="398" height="104"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5PE-dK-QkU" id="79R-rF-P5A">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="104"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="104"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wWe-nR-RJw">
-                                                                    <rect key="frame" x="16" y="0.0" width="960" height="104"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="104"/>
                                                                     <subviews>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E5J-Ij-0P9">
-                                                                            <rect key="frame" x="835" y="5" width="120" height="40"/>
+                                                                            <rect key="frame" x="262" y="5" width="120" height="40"/>
                                                                             <subviews>
-                                                                                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4yb-2H-g2t">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                                                                                    <constraints>
-                                                                                        <constraint firstAttribute="width" constant="40" id="Onc-zU-Dyp"/>
-                                                                                        <constraint firstAttribute="height" constant="40" id="bZz-bW-Ufj"/>
-                                                                                    </constraints>
-                                                                                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                    <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
-                                                                                    <state key="normal" image="icon - copy"/>
-                                                                                    <connections>
-                                                                                        <action selector="onCopyTouch:" destination="5PE-dK-QkU" eventType="touchUpInside" id="Q4b-n9-dVY"/>
-                                                                                    </connections>
-                                                                                </button>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q00-BG-usj">
-                                                                                    <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="40" id="4Wg-Yz-XGS"/>
                                                                                         <constraint firstAttribute="width" constant="40" id="H2e-AT-kBV"/>
                                                                                     </constraints>
-                                                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <color key="tintColor" name="sil_primaryTextColor"/>
                                                                                     <inset key="contentEdgeInsets" minX="9" minY="9" maxX="9" maxY="9"/>
-                                                                                    <state key="normal" image="EditDisabled"/>
+                                                                                    <state key="normal" image="edit-icon"/>
                                                                                     <connections>
                                                                                         <action selector="onEditTouch:" destination="5PE-dK-QkU" eventType="touchUpInside" id="1yg-ry-4JN"/>
+                                                                                    </connections>
+                                                                                </button>
+                                                                                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4yb-2H-g2t">
+                                                                                    <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstAttribute="width" constant="40" id="Onc-zU-Dyp"/>
+                                                                                        <constraint firstAttribute="height" constant="40" id="bZz-bW-Ufj"/>
+                                                                                    </constraints>
+                                                                                    <color key="tintColor" name="sil_primaryTextColor"/>
+                                                                                    <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
+                                                                                    <state key="normal" image="copy-icon"/>
+                                                                                    <connections>
+                                                                                        <action selector="onCopyTouch:" destination="5PE-dK-QkU" eventType="touchUpInside" id="Q4b-n9-dVY"/>
                                                                                     </connections>
                                                                                 </button>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i88-Xk-Wel">
@@ -637,9 +662,9 @@
                                                                                         <constraint firstAttribute="height" constant="40" id="3nL-oV-E18"/>
                                                                                         <constraint firstAttribute="width" constant="40" id="nfA-pY-Ult"/>
                                                                                     </constraints>
-                                                                                    <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <color key="tintColor" name="sil_primaryTextColor"/>
                                                                                     <inset key="contentEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
-                                                                                    <state key="normal" image="sil_trash"/>
+                                                                                    <state key="normal" image="delete_trash"/>
                                                                                     <connections>
                                                                                         <action selector="onDeleteTouch:" destination="5PE-dK-QkU" eventType="touchUpInside" id="dR8-nV-4Ed"/>
                                                                                     </connections>
@@ -647,25 +672,28 @@
                                                                             </subviews>
                                                                         </stackView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aerobic Heart Rate Lower Limit" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P4I-9N-Zkl">
-                                                                            <rect key="frame" x="16" y="12" width="803" height="33"/>
+                                                                            <rect key="frame" x="16" y="12" width="230" height="33"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="33" id="wZY-GQ-yeV"/>
                                                                             </constraints>
-                                                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                                                            <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="14"/>
                                                                             <color key="textColor" name="sil_primaryTextColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID: 0x2A1E" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uZB-oc-idy">
-                                                                            <rect key="frame" x="16" y="50" width="79.5" height="14"/>
+                                                                            <rect key="frame" x="16" y="50" width="79.666666666666671" height="14"/>
                                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                                             <color key="textColor" name="sil_primaryTextColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" alignment="firstBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="KBj-pD-ZLy" customClass="SILPropertyStackView" customModule="BlueGecko" customModuleProvider="target">
-                                                                            <rect key="frame" x="8" y="72" width="936" height="24"/>
+                                                                            <rect key="frame" x="13" y="72" width="369" height="24"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" tag="1" contentMode="center" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yjI-zo-6lV" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="74" height="24"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="32" height="24"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstAttribute="width" constant="32" id="epJ-mc-flG"/>
+                                                                                    </constraints>
                                                                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
                                                                                     <color key="tintColor" name="sil_regularBlueColor"/>
                                                                                     <inset key="imageEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
@@ -684,7 +712,10 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRM-ZP-pjW" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                    <rect key="frame" x="74" y="0.0" width="56.5" height="24"/>
+                                                                                    <rect key="frame" x="67" y="0.0" width="24" height="24"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstAttribute="width" constant="24" id="Qsi-97-6Vh"/>
+                                                                                    </constraints>
                                                                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
                                                                                     <color key="tintColor" name="sil_regularBlueColor"/>
                                                                                     <inset key="titleEdgeInsets" minX="1" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -694,7 +725,7 @@
                                                                                     </state>
                                                                                 </button>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLD-xa-4OH">
-                                                                                    <rect key="frame" x="95" y="0.0" width="35" height="24"/>
+                                                                                    <rect key="frame" x="91" y="0.0" width="35" height="24"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="24" id="OHO-sL-mJm"/>
                                                                                         <constraint firstAttribute="width" constant="35" id="ULp-BD-U74"/>
@@ -704,7 +735,7 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <button opaque="NO" tag="3" contentMode="scaleAspectFit" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XoC-Tc-waw" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                    <rect key="frame" x="130.5" y="0.0" width="58" height="24"/>
+                                                                                    <rect key="frame" x="126" y="0.0" width="30" height="24"/>
                                                                                     <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
                                                                                     <color key="tintColor" name="sil_regularBlueColor"/>
                                                                                     <state key="normal" image="Notify">
@@ -712,7 +743,7 @@
                                                                                     </state>
                                                                                 </button>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FPW-qm-YPt">
-                                                                                    <rect key="frame" x="160" y="0.0" width="40" height="24"/>
+                                                                                    <rect key="frame" x="156" y="0.0" width="40" height="24"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" constant="40" id="BDw-dl-cU0"/>
                                                                                         <constraint firstAttribute="height" constant="24" id="qwx-rY-TVh"/>
@@ -722,7 +753,7 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <button opaque="NO" tag="2" contentMode="scaleAspectFit" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMR-jb-1J6" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                    <rect key="frame" x="200" y="0.0" width="30" height="24"/>
+                                                                                    <rect key="frame" x="196" y="0.0" width="30" height="24"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" constant="30" id="cH9-2A-w7c"/>
                                                                                         <constraint firstAttribute="height" constant="24" id="pm2-zf-Yef"/>
@@ -736,7 +767,7 @@
                                                                                     </state>
                                                                                 </button>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Indicate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QWV-th-LfE">
-                                                                                    <rect key="frame" x="230" y="0.0" width="55" height="24"/>
+                                                                                    <rect key="frame" x="226" y="0.0" width="55" height="24"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" constant="55" id="39p-Lm-8k3"/>
                                                                                         <constraint firstAttribute="height" constant="24" id="7s0-1u-zjU"/>
@@ -746,8 +777,8 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4rs-1M-SwT">
-                                                                                    <rect key="frame" x="285" y="0.0" width="651" height="24"/>
-                                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                                    <rect key="frame" x="281" y="0.0" width="88" height="24"/>
+                                                                                    <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                                                 </view>
                                                                             </subviews>
                                                                             <constraints>
@@ -780,14 +811,14 @@
                                                                             </connections>
                                                                         </stackView>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" name="sil_bgGreyColor"/>
+                                                                    <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="E5J-Ij-0P9" secondAttribute="trailing" constant="5" id="Buz-sN-RSM"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="E5J-Ij-0P9" secondAttribute="trailing" constant="16" id="Buz-sN-RSM"/>
                                                                         <constraint firstItem="P4I-9N-Zkl" firstAttribute="top" secondItem="wWe-nR-RJw" secondAttribute="top" constant="12" id="JGs-yY-0oY"/>
                                                                         <constraint firstItem="E5J-Ij-0P9" firstAttribute="top" secondItem="wWe-nR-RJw" secondAttribute="top" constant="5" id="WWe-TV-bKI"/>
                                                                         <constraint firstItem="P4I-9N-Zkl" firstAttribute="leading" secondItem="wWe-nR-RJw" secondAttribute="leading" constant="16" id="ahr-nE-QAE"/>
                                                                         <constraint firstItem="KBj-pD-ZLy" firstAttribute="top" secondItem="uZB-oc-idy" secondAttribute="bottom" constant="8" id="mj1-cf-dQE"/>
-                                                                        <constraint firstItem="KBj-pD-ZLy" firstAttribute="leading" secondItem="wWe-nR-RJw" secondAttribute="leading" constant="8" id="oYT-rz-bP7"/>
+                                                                        <constraint firstItem="KBj-pD-ZLy" firstAttribute="leading" secondItem="wWe-nR-RJw" secondAttribute="leading" constant="13" id="oYT-rz-bP7"/>
                                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="uZB-oc-idy" secondAttribute="trailing" constant="8" id="qgr-2B-ZPQ"/>
                                                                         <constraint firstAttribute="bottom" secondItem="KBj-pD-ZLy" secondAttribute="bottom" constant="8" id="rgt-Xz-dQf"/>
                                                                         <constraint firstAttribute="trailing" secondItem="KBj-pD-ZLy" secondAttribute="trailing" constant="16" id="rrp-lU-gsf"/>
@@ -799,9 +830,9 @@
                                                             </subviews>
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
-                                                                <constraint firstItem="wWe-nR-RJw" firstAttribute="leading" secondItem="79R-rF-P5A" secondAttribute="leading" constant="16" id="2jh-2P-5ca"/>
+                                                                <constraint firstItem="wWe-nR-RJw" firstAttribute="leading" secondItem="79R-rF-P5A" secondAttribute="leading" id="2jh-2P-5ca"/>
                                                                 <constraint firstAttribute="bottom" secondItem="wWe-nR-RJw" secondAttribute="bottom" id="8ad-KY-2O5"/>
-                                                                <constraint firstAttribute="trailing" secondItem="wWe-nR-RJw" secondAttribute="trailing" constant="16" id="C2P-b5-PwR"/>
+                                                                <constraint firstAttribute="trailing" secondItem="wWe-nR-RJw" secondAttribute="trailing" id="C2P-b5-PwR"/>
                                                                 <constraint firstItem="wWe-nR-RJw" firstAttribute="top" secondItem="79R-rF-P5A" secondAttribute="top" id="noO-A1-ZiO"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
@@ -813,51 +844,51 @@
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorDescriptorTitleCellView" rowHeight="31" id="fAI-LU-TZU" customClass="SILGattConfiguratorDescriptorTitleCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="364" width="992" height="31"/>
+                                                        <rect key="frame" x="0.0" y="394" width="398" height="31"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fAI-LU-TZU" id="8eG-vt-jLJ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="31"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="31"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1v3-HF-FxC">
-                                                                    <rect key="frame" x="16" y="0.0" width="960" height="31"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="31"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ziM-Sm-IsT" userLabel="Separator View">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="960" height="1"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="1"/>
                                                                             <color key="backgroundColor" name="sil_secondaryBackgroundColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="1" id="Gkw-78-EHd"/>
                                                                             </constraints>
                                                                         </view>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Descriptors" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3N8-4I-mNj">
-                                                                            <rect key="frame" x="16" y="-1" width="912" height="33"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Descriptors:" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3N8-4I-mNj">
+                                                                            <rect key="frame" x="32" y="-1" width="334" height="33"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="33" id="Fvk-06-5jE"/>
                                                                             </constraints>
-                                                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="13"/>
+                                                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                                             <color key="textColor" name="sil_primaryTextColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" name="sil_bgGreyColor"/>
+                                                                    <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                                     <constraints>
                                                                         <constraint firstItem="3N8-4I-mNj" firstAttribute="centerY" secondItem="1v3-HF-FxC" secondAttribute="centerY" id="1dQ-TV-Jxf"/>
                                                                         <constraint firstAttribute="trailing" secondItem="ziM-Sm-IsT" secondAttribute="trailing" id="CFo-zX-6Nx"/>
                                                                         <constraint firstItem="ziM-Sm-IsT" firstAttribute="top" secondItem="1v3-HF-FxC" secondAttribute="top" id="JFu-ga-dca"/>
                                                                         <constraint firstAttribute="trailing" secondItem="3N8-4I-mNj" secondAttribute="trailing" constant="32" id="X84-xL-oXH"/>
                                                                         <constraint firstItem="ziM-Sm-IsT" firstAttribute="leading" secondItem="1v3-HF-FxC" secondAttribute="leading" id="XVZ-pr-gZW"/>
-                                                                        <constraint firstItem="3N8-4I-mNj" firstAttribute="leading" secondItem="1v3-HF-FxC" secondAttribute="leading" constant="16" id="moV-lD-x2m"/>
+                                                                        <constraint firstItem="3N8-4I-mNj" firstAttribute="leading" secondItem="1v3-HF-FxC" secondAttribute="leading" constant="32" id="moV-lD-x2m"/>
                                                                     </constraints>
                                                                 </view>
                                                             </subviews>
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
                                                                 <constraint firstItem="1v3-HF-FxC" firstAttribute="top" secondItem="8eG-vt-jLJ" secondAttribute="top" id="DaX-O0-Ryz"/>
-                                                                <constraint firstItem="1v3-HF-FxC" firstAttribute="leading" secondItem="8eG-vt-jLJ" secondAttribute="leading" constant="16" id="Yvv-Wc-N4B"/>
+                                                                <constraint firstItem="1v3-HF-FxC" firstAttribute="leading" secondItem="8eG-vt-jLJ" secondAttribute="leading" id="Yvv-Wc-N4B"/>
                                                                 <constraint firstItem="1v3-HF-FxC" firstAttribute="top" secondItem="8eG-vt-jLJ" secondAttribute="top" id="ZNL-y8-9NP"/>
                                                                 <constraint firstAttribute="bottom" secondItem="1v3-HF-FxC" secondAttribute="bottom" id="a0E-wH-1OS"/>
-                                                                <constraint firstItem="1v3-HF-FxC" firstAttribute="leading" secondItem="8eG-vt-jLJ" secondAttribute="leading" constant="16" id="g8g-jQ-N9d"/>
-                                                                <constraint firstAttribute="trailing" secondItem="1v3-HF-FxC" secondAttribute="trailing" constant="16" id="gg7-Ma-1aD"/>
+                                                                <constraint firstItem="1v3-HF-FxC" firstAttribute="leading" secondItem="8eG-vt-jLJ" secondAttribute="leading" id="g8g-jQ-N9d"/>
+                                                                <constraint firstAttribute="trailing" secondItem="1v3-HF-FxC" secondAttribute="trailing" id="gg7-Ma-1aD"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <connections>
@@ -865,52 +896,52 @@
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorDescriptorCellView" rowHeight="121" id="7VL-ze-l0w" customClass="SILGattConfiguratorDescriptorCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="395" width="992" height="121"/>
+                                                        <rect key="frame" x="0.0" y="425" width="398" height="121"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7VL-ze-l0w" id="xXp-e3-nHw">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="121"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="121"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tg5-he-Yi1">
-                                                                    <rect key="frame" x="16" y="0.0" width="960" height="121"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="121"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c4c-cN-abr">
-                                                                            <rect key="frame" x="16" y="0.0" width="928" height="121"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="121"/>
                                                                             <subviews>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Bf-7F-Hpm">
-                                                                                    <rect key="frame" x="0.0" y="120" width="928" height="1"/>
+                                                                                    <rect key="frame" x="0.0" y="120" width="398" height="1"/>
                                                                                     <color key="backgroundColor" name="sil_secondaryBackgroundColor"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="1" id="uGh-Up-qPN"/>
                                                                                     </constraints>
                                                                                 </view>
                                                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OoS-yU-Djw">
-                                                                                    <rect key="frame" x="803" y="5" width="120" height="40"/>
+                                                                                    <rect key="frame" x="262" y="5" width="120" height="40"/>
                                                                                     <subviews>
-                                                                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CTJ-Aj-XN0">
-                                                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                                                                                            <constraints>
-                                                                                                <constraint firstAttribute="width" constant="40" id="PG9-LI-5VM"/>
-                                                                                                <constraint firstAttribute="height" constant="40" id="kGs-p5-ykd"/>
-                                                                                            </constraints>
-                                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                            <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
-                                                                                            <state key="normal" image="icon - copy"/>
-                                                                                            <connections>
-                                                                                                <action selector="onCopyTouch:" destination="7VL-ze-l0w" eventType="touchUpInside" id="D7Z-Q5-U1q"/>
-                                                                                            </connections>
-                                                                                        </button>
                                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yg2-pA-FXJ">
-                                                                                            <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="width" constant="40" id="C8b-3p-ATm"/>
                                                                                                 <constraint firstAttribute="height" constant="40" id="OBC-fm-gyd"/>
                                                                                             </constraints>
-                                                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
                                                                                             <inset key="contentEdgeInsets" minX="9" minY="9" maxX="9" maxY="9"/>
                                                                                             <state key="normal" image="EditDisabled"/>
                                                                                             <connections>
                                                                                                 <action selector="onEditTouch:" destination="7VL-ze-l0w" eventType="touchUpInside" id="pq1-rH-qRd"/>
+                                                                                            </connections>
+                                                                                        </button>
+                                                                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CTJ-Aj-XN0">
+                                                                                            <rect key="frame" x="40" y="0.0" width="40" height="40"/>
+                                                                                            <constraints>
+                                                                                                <constraint firstAttribute="width" constant="40" id="PG9-LI-5VM"/>
+                                                                                                <constraint firstAttribute="height" constant="40" id="kGs-p5-ykd"/>
+                                                                                            </constraints>
+                                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
+                                                                                            <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
+                                                                                            <state key="normal" image="copy-icon"/>
+                                                                                            <connections>
+                                                                                                <action selector="onCopyTouch:" destination="7VL-ze-l0w" eventType="touchUpInside" id="D7Z-Q5-U1q"/>
                                                                                             </connections>
                                                                                         </button>
                                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lfz-PS-qsb">
@@ -919,9 +950,9 @@
                                                                                                 <constraint firstAttribute="height" constant="40" id="EGF-oR-Oir"/>
                                                                                                 <constraint firstAttribute="width" constant="40" id="ykg-RS-3ct"/>
                                                                                             </constraints>
-                                                                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                            <color key="tintColor" name="sil_primaryTextColor"/>
                                                                                             <inset key="contentEdgeInsets" minX="11" minY="11" maxX="11" maxY="11"/>
-                                                                                            <state key="normal" image="sil_trash"/>
+                                                                                            <state key="normal" image="delete_trash"/>
                                                                                             <connections>
                                                                                                 <action selector="onDeleteTouch:" destination="7VL-ze-l0w" eventType="touchUpInside" id="Ci7-AT-BZV"/>
                                                                                             </connections>
@@ -929,16 +960,16 @@
                                                                                     </subviews>
                                                                                 </stackView>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aerobic Heart Rate Lower Limit" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Cy-1k-hsX">
-                                                                                    <rect key="frame" x="16" y="8" width="787" height="40.5"/>
+                                                                                    <rect key="frame" x="32" y="8" width="230" height="40.666666666666664"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="33" id="Ofw-Sb-Jm2"/>
                                                                                     </constraints>
-                                                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
+                                                                                    <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="12"/>
                                                                                     <color key="textColor" name="sil_primaryTextColor"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID: 0x2A1E" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GpP-nw-Mf6">
-                                                                                    <rect key="frame" x="16" y="50.5" width="73.5" height="14.5"/>
+                                                                                    <rect key="frame" x="32.000000000000007" y="50.666666666666664" width="73.666666666666686" height="14.333333333333336"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="14.5" id="ZgW-aH-gOl"/>
                                                                                     </constraints>
@@ -947,7 +978,7 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" alignment="firstBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="uTl-MC-zFD" customClass="SILPropertyStackView" customModule="BlueGecko" customModuleProvider="target">
-                                                                                    <rect key="frame" x="8" y="89" width="904" height="24"/>
+                                                                                    <rect key="frame" x="26" y="89" width="356" height="24"/>
                                                                                     <subviews>
                                                                                         <button opaque="NO" tag="1" contentMode="scaleAspectFit" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRZ-mE-QsZ" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="32" height="24"/>
@@ -969,13 +1000,13 @@
                                                                                                 <constraint firstAttribute="height" constant="24" id="dxB-RX-DfS"/>
                                                                                             </constraints>
                                                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                                                                            <color key="textColor" name="sil_regularBlueColor"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ish-cQ-ltd" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                            <rect key="frame" x="67" y="0.0" width="28" height="24"/>
+                                                                                            <rect key="frame" x="67" y="0.0" width="24" height="24"/>
                                                                                             <constraints>
-                                                                                                <constraint firstAttribute="width" constant="28" id="3bO-yM-FT0"/>
+                                                                                                <constraint firstAttribute="width" constant="24" id="3bO-yM-FT0"/>
                                                                                                 <constraint firstAttribute="height" constant="24" id="gMa-zI-yjU"/>
                                                                                             </constraints>
                                                                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
@@ -986,17 +1017,17 @@
                                                                                             </state>
                                                                                         </button>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0YW-CV-wTf">
-                                                                                            <rect key="frame" x="95" y="0.0" width="35" height="24"/>
+                                                                                            <rect key="frame" x="91" y="0.0" width="35" height="24"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="width" constant="35" id="Q9d-5U-oNB"/>
                                                                                                 <constraint firstAttribute="height" constant="24" id="X5D-xZ-ylh"/>
                                                                                             </constraints>
                                                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                                                                            <color key="textColor" name="sil_regularBlueColor"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                         <button opaque="NO" tag="3" contentMode="scaleAspectFit" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cIT-Cf-Nz1" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                            <rect key="frame" x="130" y="0.0" width="30" height="24"/>
+                                                                                            <rect key="frame" x="126" y="0.0" width="30" height="24"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="width" constant="30" id="s8W-PA-QbR"/>
                                                                                                 <constraint firstAttribute="height" constant="24" id="vqF-tX-ATs"/>
@@ -1010,17 +1041,17 @@
                                                                                             </state>
                                                                                         </button>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTl-PG-XT3">
-                                                                                            <rect key="frame" x="160" y="0.0" width="40" height="24"/>
+                                                                                            <rect key="frame" x="156" y="0.0" width="40" height="24"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="width" constant="40" id="CfC-e6-8Te"/>
                                                                                                 <constraint firstAttribute="height" constant="24" id="fMa-5B-fsJ"/>
                                                                                             </constraints>
                                                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                                                                            <color key="textColor" name="sil_regularBlueColor"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                         <button opaque="NO" tag="2" contentMode="scaleAspectFit" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aPc-ti-Dmy" customClass="SILAnimatedUIButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                                            <rect key="frame" x="200" y="0.0" width="36" height="24"/>
+                                                                                            <rect key="frame" x="196" y="0.0" width="36" height="24"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="width" constant="36" id="DeS-0E-eaw"/>
                                                                                                 <constraint firstAttribute="height" constant="24" id="GQt-Sp-M20"/>
@@ -1034,18 +1065,18 @@
                                                                                             </state>
                                                                                         </button>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Indicate" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="coq-Qe-mcb">
-                                                                                            <rect key="frame" x="236" y="0.0" width="55" height="24"/>
+                                                                                            <rect key="frame" x="232" y="0.0" width="55" height="24"/>
                                                                                             <constraints>
                                                                                                 <constraint firstAttribute="width" constant="55" id="Bq7-kJ-KCQ"/>
                                                                                                 <constraint firstAttribute="height" constant="24" id="pBD-ST-NBP"/>
                                                                                             </constraints>
                                                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                                            <color key="textColor" name="sil_primaryTextColor"/>
+                                                                                            <color key="textColor" name="sil_regularBlueColor"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
                                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WeZ-qt-uWk">
-                                                                                            <rect key="frame" x="291" y="0.0" width="613" height="24"/>
-                                                                                            <color key="backgroundColor" name="sil_bgWhiteColor"/>
+                                                                                            <rect key="frame" x="287" y="0.0" width="69" height="24"/>
+                                                                                            <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                                                         </view>
                                                                                     </subviews>
                                                                                     <constraints>
@@ -1079,7 +1110,7 @@
                                                                                     </connections>
                                                                                 </stackView>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value: (in hex)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zKJ-Be-Poh">
-                                                                                    <rect key="frame" x="16" y="67" width="75.5" height="14"/>
+                                                                                    <rect key="frame" x="32.000000000000007" y="67" width="75.666666666666686" height="14"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="14" id="dBh-EY-drY"/>
                                                                                     </constraints>
@@ -1088,13 +1119,13 @@
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                             </subviews>
-                                                                            <color key="backgroundColor" name="sil_bgWhiteColor"/>
+                                                                            <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="trailing" secondItem="OoS-yU-Djw" secondAttribute="trailing" constant="5" id="1tO-OT-APq"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="OoS-yU-Djw" secondAttribute="trailing" constant="16" id="1tO-OT-APq"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="8Bf-7F-Hpm" secondAttribute="trailing" id="1vy-I4-A7Z"/>
                                                                                 <constraint firstItem="OoS-yU-Djw" firstAttribute="leading" secondItem="2Cy-1k-hsX" secondAttribute="trailing" id="2CR-0W-tDc"/>
                                                                                 <constraint firstItem="2Cy-1k-hsX" firstAttribute="top" secondItem="c4c-cN-abr" secondAttribute="top" constant="8" id="4EA-4F-inn"/>
-                                                                                <constraint firstItem="2Cy-1k-hsX" firstAttribute="leading" secondItem="c4c-cN-abr" secondAttribute="leading" constant="16" id="65g-IQ-LgL"/>
+                                                                                <constraint firstItem="2Cy-1k-hsX" firstAttribute="leading" secondItem="c4c-cN-abr" secondAttribute="leading" constant="32" id="65g-IQ-LgL"/>
                                                                                 <constraint firstItem="zKJ-Be-Poh" firstAttribute="top" secondItem="GpP-nw-Mf6" secondAttribute="bottom" constant="2" id="Bmk-M3-nDX"/>
                                                                                 <constraint firstItem="GpP-nw-Mf6" firstAttribute="top" secondItem="2Cy-1k-hsX" secondAttribute="bottom" constant="2" id="CHo-4q-hy0"/>
                                                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GpP-nw-Mf6" secondAttribute="trailing" constant="8" id="FMy-lf-iXc"/>
@@ -1105,15 +1136,15 @@
                                                                                 <constraint firstItem="GpP-nw-Mf6" firstAttribute="leading" secondItem="2Cy-1k-hsX" secondAttribute="leading" id="YzU-Z7-Zrv"/>
                                                                                 <constraint firstItem="OoS-yU-Djw" firstAttribute="top" secondItem="c4c-cN-abr" secondAttribute="top" constant="5" id="b33-Vm-waR"/>
                                                                                 <constraint firstItem="zKJ-Be-Poh" firstAttribute="leading" secondItem="2Cy-1k-hsX" secondAttribute="leading" id="edR-ck-q3a"/>
-                                                                                <constraint firstItem="uTl-MC-zFD" firstAttribute="leading" secondItem="c4c-cN-abr" secondAttribute="leading" constant="8" id="f7G-fy-2Ds"/>
+                                                                                <constraint firstItem="uTl-MC-zFD" firstAttribute="leading" secondItem="c4c-cN-abr" secondAttribute="leading" constant="26" id="f7G-fy-2Ds"/>
                                                                                 <constraint firstItem="8Bf-7F-Hpm" firstAttribute="leading" secondItem="c4c-cN-abr" secondAttribute="leading" id="lpw-i3-fGN"/>
                                                                             </constraints>
                                                                         </view>
                                                                     </subviews>
                                                                     <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                                     <constraints>
-                                                                        <constraint firstItem="c4c-cN-abr" firstAttribute="leading" secondItem="Tg5-he-Yi1" secondAttribute="leading" constant="16" id="ASf-bO-PvN"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="c4c-cN-abr" secondAttribute="trailing" constant="16" id="DTy-6K-xXS"/>
+                                                                        <constraint firstItem="c4c-cN-abr" firstAttribute="leading" secondItem="Tg5-he-Yi1" secondAttribute="leading" id="ASf-bO-PvN"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="c4c-cN-abr" secondAttribute="trailing" id="DTy-6K-xXS"/>
                                                                         <constraint firstAttribute="bottom" secondItem="c4c-cN-abr" secondAttribute="bottom" id="Y4z-HM-Qvi"/>
                                                                         <constraint firstItem="c4c-cN-abr" firstAttribute="top" secondItem="Tg5-he-Yi1" secondAttribute="top" id="tP3-Ey-Pxw"/>
                                                                     </constraints>
@@ -1123,8 +1154,8 @@
                                                             <constraints>
                                                                 <constraint firstItem="Tg5-he-Yi1" firstAttribute="top" secondItem="xXp-e3-nHw" secondAttribute="top" id="6bd-g4-89o"/>
                                                                 <constraint firstAttribute="bottom" secondItem="Tg5-he-Yi1" secondAttribute="bottom" id="6mR-Df-EyQ"/>
-                                                                <constraint firstAttribute="trailing" secondItem="Tg5-he-Yi1" secondAttribute="trailing" constant="16" id="Zz0-LF-OZ0"/>
-                                                                <constraint firstItem="Tg5-he-Yi1" firstAttribute="leading" secondItem="xXp-e3-nHw" secondAttribute="leading" constant="16" id="yY0-6n-gdM"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Tg5-he-Yi1" secondAttribute="trailing" id="Zz0-LF-OZ0"/>
+                                                                <constraint firstItem="Tg5-he-Yi1" firstAttribute="leading" secondItem="xXp-e3-nHw" secondAttribute="leading" id="yY0-6n-gdM"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <connections>
@@ -1139,64 +1170,33 @@
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorDescriptorShadowCellView" rowHeight="16" id="yu1-6I-aod" customClass="SILGattConfiguratorDesciptorShadowCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="516" width="992" height="16"/>
+                                                        <rect key="frame" x="0.0" y="546" width="398" height="16"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yu1-6I-aod" id="gS1-YS-2rv">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="16"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
-                                                            <subviews>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zxo-Es-AVk">
-                                                                    <rect key="frame" x="16" y="0.0" width="960" height="16"/>
-                                                                    <subviews>
-                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oQq-f2-k7f" userLabel="ShadowView">
-                                                                            <rect key="frame" x="16" y="0.0" width="928" height="14"/>
-                                                                            <color key="backgroundColor" name="sil_bgWhiteColor"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="3" id="EtS-U2-X2k"/>
-                                                                            </constraints>
-                                                                        </view>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" name="sil_bgGreyColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="oQq-f2-k7f" secondAttribute="trailing" constant="16" id="8FG-3G-m4m"/>
-                                                                        <constraint firstItem="oQq-f2-k7f" firstAttribute="top" secondItem="zxo-Es-AVk" secondAttribute="top" id="ab7-qI-QDb"/>
-                                                                        <constraint firstItem="oQq-f2-k7f" firstAttribute="leading" secondItem="zxo-Es-AVk" secondAttribute="leading" constant="16" id="cbf-3C-7bX"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="oQq-f2-k7f" secondAttribute="bottom" constant="2" id="crx-ww-zLs"/>
-                                                                    </constraints>
-                                                                </view>
-                                                            </subviews>
-                                                            <color key="backgroundColor" name="sil_bgWhiteColor"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="zxo-Es-AVk" secondAttribute="trailing" constant="16" id="4zc-WB-yVt"/>
-                                                                <constraint firstItem="zxo-Es-AVk" firstAttribute="top" secondItem="gS1-YS-2rv" secondAttribute="top" id="fQS-CU-aLH"/>
-                                                                <constraint firstItem="zxo-Es-AVk" firstAttribute="leading" secondItem="gS1-YS-2rv" secondAttribute="leading" constant="16" id="ilz-P5-Eia"/>
-                                                                <constraint firstAttribute="bottom" secondItem="zxo-Es-AVk" secondAttribute="bottom" id="rfm-nW-C7p"/>
-                                                            </constraints>
+                                                            <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                         </tableViewCellContentView>
-                                                        <connections>
-                                                            <outlet property="characteristicShadowView" destination="zxo-Es-AVk" id="axZ-dD-laj"/>
-                                                            <outlet property="descriptorShadowView" destination="oQq-f2-k7f" id="UHh-OS-uDB"/>
-                                                        </connections>
                                                     </tableViewCell>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorDescriptorButtonCellView" rowHeight="70" id="q6f-Xl-1gi" customClass="SILGattConfiguratorDescriptorButtonCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="532" width="992" height="70"/>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorDescriptorButtonCellView" rowHeight="48" id="q6f-Xl-1gi" customClass="SILGattConfiguratorDescriptorButtonCellView" customModule="BlueGecko" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="562" width="398" height="48"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="q6f-Xl-1gi" id="9Vc-Ru-xIh">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="70"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="48"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3b4-VH-Umy">
-                                                                    <rect key="frame" x="16" y="0.0" width="960" height="70"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="48"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fM1-NP-3Il" userLabel="Separator View">
-                                                                            <rect key="frame" x="0.0" y="69" width="960" height="1"/>
+                                                                            <rect key="frame" x="0.0" y="47" width="398" height="1"/>
                                                                             <color key="backgroundColor" name="sil_secondaryBackgroundColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="1" id="Uho-GQ-QlX"/>
                                                                             </constraints>
                                                                         </view>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39M-jn-4xy" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                            <rect key="frame" x="16" y="16" width="103" height="37"/>
+                                                                            <rect key="frame" x="158.66666666666666" y="16" width="81" height="15"/>
                                                                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                             <state key="normal" title="Add Descriptor"/>
                                                                             <userDefinedRuntimeAttributes>
@@ -1211,9 +1211,9 @@
                                                                     </subviews>
                                                                     <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                                     <constraints>
+                                                                        <constraint firstItem="39M-jn-4xy" firstAttribute="centerX" secondItem="3b4-VH-Umy" secondAttribute="centerX" id="0dv-xr-ddG"/>
                                                                         <constraint firstAttribute="bottom" secondItem="fM1-NP-3Il" secondAttribute="bottom" id="1Vc-gx-oma"/>
                                                                         <constraint firstItem="39M-jn-4xy" firstAttribute="top" secondItem="3b4-VH-Umy" secondAttribute="top" constant="16" id="Exw-SN-iYw"/>
-                                                                        <constraint firstItem="39M-jn-4xy" firstAttribute="leading" secondItem="3b4-VH-Umy" secondAttribute="leading" constant="16" id="U7E-v2-ONU"/>
                                                                         <constraint firstItem="fM1-NP-3Il" firstAttribute="top" secondItem="39M-jn-4xy" secondAttribute="bottom" constant="16" id="VJv-5H-owj"/>
                                                                         <constraint firstItem="fM1-NP-3Il" firstAttribute="leading" secondItem="3b4-VH-Umy" secondAttribute="leading" id="h7H-cF-mVZ"/>
                                                                         <constraint firstAttribute="trailing" secondItem="fM1-NP-3Il" secondAttribute="trailing" id="nnF-Ia-BrL"/>
@@ -1222,26 +1222,27 @@
                                                             </subviews>
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
-                                                                <constraint firstItem="3b4-VH-Umy" firstAttribute="leading" secondItem="9Vc-Ru-xIh" secondAttribute="leading" constant="16" id="QF1-34-OZ2"/>
+                                                                <constraint firstItem="3b4-VH-Umy" firstAttribute="leading" secondItem="9Vc-Ru-xIh" secondAttribute="leading" id="QF1-34-OZ2"/>
                                                                 <constraint firstItem="3b4-VH-Umy" firstAttribute="top" secondItem="9Vc-Ru-xIh" secondAttribute="top" id="naW-Pt-cII"/>
                                                                 <constraint firstAttribute="bottom" secondItem="3b4-VH-Umy" secondAttribute="bottom" id="pzI-Bt-YE6"/>
-                                                                <constraint firstAttribute="trailing" secondItem="3b4-VH-Umy" secondAttribute="trailing" constant="16" id="vfF-uo-Tez"/>
+                                                                <constraint firstAttribute="trailing" secondItem="3b4-VH-Umy" secondAttribute="trailing" id="vfF-uo-Tez"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
                                                         <connections>
+                                                            <outlet property="addDescriptorButton" destination="39M-jn-4xy" id="s6H-gl-ULW"/>
                                                             <outlet property="separatorView" destination="fM1-NP-3Il" id="1UX-1c-BzP"/>
                                                             <outlet property="shadowView" destination="3b4-VH-Umy" id="xHD-rA-r2U"/>
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SILGattConfiguratorCharacteristicShadowCellView" rowHeight="5" id="1He-jH-mIH" customClass="SILGattConfiguratorCharacteristicShadowCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="602" width="992" height="5"/>
+                                                        <rect key="frame" x="0.0" y="610" width="398" height="5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1He-jH-mIH" id="8Lw-IT-DtQ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="903-Aj-Ca1" userLabel="ShadowView">
-                                                                    <rect key="frame" x="16" y="0.0" width="960" height="3"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="3"/>
                                                                     <color key="backgroundColor" name="sil_bgGreyColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="3" id="kv6-aA-q8E"/>
@@ -1250,8 +1251,8 @@
                                                             </subviews>
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="903-Aj-Ca1" secondAttribute="trailing" constant="16" id="Dnu-Ph-a8N"/>
-                                                                <constraint firstItem="903-Aj-Ca1" firstAttribute="leading" secondItem="8Lw-IT-DtQ" secondAttribute="leading" constant="16" id="PxZ-wc-8OI"/>
+                                                                <constraint firstAttribute="trailing" secondItem="903-Aj-Ca1" secondAttribute="trailing" id="Dnu-Ph-a8N"/>
+                                                                <constraint firstItem="903-Aj-Ca1" firstAttribute="leading" secondItem="8Lw-IT-DtQ" secondAttribute="leading" id="PxZ-wc-8OI"/>
                                                                 <constraint firstItem="903-Aj-Ca1" firstAttribute="top" secondItem="8Lw-IT-DtQ" secondAttribute="top" id="d4f-C7-R5U"/>
                                                                 <constraint firstAttribute="bottom" secondItem="903-Aj-Ca1" secondAttribute="bottom" constant="2" id="eYm-f9-TPh"/>
                                                             </constraints>
@@ -1261,14 +1262,14 @@
                                                         </connections>
                                                     </tableViewCell>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SILGattConfiguratorCharacteristicButtonCellView" rowHeight="68" id="sXH-4o-eCe" customClass="SILGattConfiguratorCharacteristicButtonCellView" customModule="BlueGecko" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="607" width="992" height="68"/>
+                                                        <rect key="frame" x="0.0" y="615" width="398" height="68"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sXH-4o-eCe" id="P91-yn-vvU">
-                                                            <rect key="frame" x="0.0" y="0.0" width="992" height="68"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="68"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aIE-27-sB8" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                                                                    <rect key="frame" x="16" y="16" width="160" height="36"/>
+                                                                    <rect key="frame" x="119" y="16" width="160" height="36"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="160" id="nas-Ua-WQ2"/>
                                                                     </constraints>
@@ -1287,7 +1288,7 @@
                                                             <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="aIE-27-sB8" secondAttribute="bottom" constant="16" id="31y-bd-Hvh"/>
-                                                                <constraint firstItem="aIE-27-sB8" firstAttribute="leading" secondItem="P91-yn-vvU" secondAttribute="leading" constant="16" id="RlO-lp-ny1"/>
+                                                                <constraint firstItem="aIE-27-sB8" firstAttribute="centerX" secondItem="P91-yn-vvU" secondAttribute="centerX" id="kem-hZ-cBe"/>
                                                                 <constraint firstItem="aIE-27-sB8" firstAttribute="top" secondItem="P91-yn-vvU" secondAttribute="top" constant="16" id="tXu-GI-x8l"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
@@ -1327,21 +1328,21 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JVH-5k-qeo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1210.9756097560976" y="170.33898305084747"/>
+            <point key="canvasLocation" x="1209.7674418604652" y="169.9570815450644"/>
         </scene>
     </scenes>
     <designables>
         <designable name="39M-jn-4xy">
-            <size key="intrinsicContentSize" width="103" height="32"/>
+            <size key="intrinsicContentSize" width="81" height="27"/>
         </designable>
         <designable name="NUc-vW-COR">
             <size key="intrinsicContentSize" width="48" height="30"/>
         </designable>
         <designable name="aIE-27-sB8">
-            <size key="intrinsicContentSize" width="141" height="34"/>
+            <size key="intrinsicContentSize" width="117" height="29"/>
         </designable>
         <designable name="aWz-69-34d">
-            <size key="intrinsicContentSize" width="108" height="36"/>
+            <size key="intrinsicContentSize" width="86" height="31"/>
         </designable>
         <designable name="tQy-8s-MQR">
             <size key="intrinsicContentSize" width="53" height="34"/>
@@ -1354,7 +1355,11 @@
         <image name="Notify" width="30" height="30"/>
         <image name="Read" width="43" height="30"/>
         <image name="Vector" width="49" height="49"/>
-        <image name="chevron_collapsed" width="14" height="9"/>
+        <image name="chevron.down" catalog="system" width="128" height="70"/>
+        <image name="chevron_down" width="13" height="8"/>
+        <image name="copy-icon" width="16" height="16"/>
+        <image name="delete_trash" width="14" height="16"/>
+        <image name="edit-icon" width="16" height="15"/>
         <image name="frame" width="68" height="68"/>
         <image name="icon - copy" width="13" height="15"/>
         <image name="sil_trash" width="30" height="30"/>
@@ -1369,6 +1374,9 @@
         </namedColor>
         <namedColor name="sil_boulderColor">
             <color red="0.47843137254901963" green="0.47058823529411764" blue="0.47058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_lineGreyColor">
+            <color red="0.85098039215686272" green="0.85098039215686272" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="sil_masalaColor">
             <color red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

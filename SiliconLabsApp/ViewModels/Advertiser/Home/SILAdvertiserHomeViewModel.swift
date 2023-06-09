@@ -26,7 +26,7 @@ class SILAdvertiserHomeViewModel {
     private var runningAdvertisers: [SILAdvertisingSetEntity] = []
     
     var cellViewModels: [SILAdvertiserCellViewModel] = []
-    
+    var isActiveScrollingUp: Bool = false
     private let advertiserNotification: SILAdvertiserNotification
     
     init(wireframe: SILAdvertiserHomeWireframe, view: SILAdvertiserHomeViewDelegate, service: SILAdvertiserService, repository: SILAdvertisingSetRepository, settings: SILAdvertiserSettings) {

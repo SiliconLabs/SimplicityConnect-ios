@@ -118,7 +118,6 @@ class SILGattConfiguratorServiceCellViewModel: SILCellViewModel {
             descriptorModels.append(descriptorCellModel)
             if descriptorIndex == characteristic.descriptors.count - 1 {
                 descriptorCellModel.isLast = true
-                descriptorModels.append(SILGattConfiguratorDescriptorShadowCellViewModel())
             }
         }
         return descriptorModels

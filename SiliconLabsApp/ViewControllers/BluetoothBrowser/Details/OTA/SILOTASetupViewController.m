@@ -28,8 +28,11 @@ static NSString * const kSILOTAChooseFileCTA = @"CHOOSE FILE";
 @interface SILOTASetupViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate,
 SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *otaMethodSegmentedControl;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *otaModeSegmentedControl;
+@property (weak, nonatomic) IBOutlet SILRadioButton *typePartialButton;
+@property (weak, nonatomic) IBOutlet SILRadioButton *typeFullButton;
+@property (weak, nonatomic) IBOutlet SILRadioButton *modeReliabilityButton;
+@property (weak, nonatomic) IBOutlet SILRadioButton *modeSpeedButton;
+
 @property (weak, nonatomic) IBOutlet UITableView *fileSelectionTableView;
 @property (weak, nonatomic) IBOutlet UIButton *startOTAButton;
 @property (weak, nonatomic) IBOutlet SILOTAHUDView *hudView;
@@ -60,12 +63,11 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
     _fileSelectionTableView.rowHeight = UITableViewAutomaticDimension;
     [self setupViewModel];
     [self registerNibs];
+    [self addGestureRecognizersForRadioButtonsViews];
     [self configureUIForFirmwareUpdateViewModel:self.firmwareUpdateViewModel];
     [_hudView stateDependentHidden:YES];
-    _hudView.informationLabel.text = [_hudPeripheralViewModel peripheralName];
     _hudView.otaStatusLabel.text = @"OTA Device Firmware Update";
-    _hudView.peripheralIdentifierLabel.text = [_hudPeripheralViewModel peripheralIdentifier];
-    [_hudView.mtuView setHidden:YES];
+    _startOTAButton.layer.cornerRadius = 4.0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -73,6 +75,44 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
 }
 
 #pragma mark - Setup
+
+- (void)addGestureRecognizersForRadioButtonsViews {
+    UITapGestureRecognizer *typePartialButtonTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTypePartialButton:)];
+    [self.typePartialButton addGestureRecognizer:typePartialButtonTapped];
+    
+    UITapGestureRecognizer *typeFullButtonTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTypeFullButton:)];
+    [self.typeFullButton addGestureRecognizer:typeFullButtonTapped];
+    
+    UITapGestureRecognizer *modeReliabilityButtonTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapModeReliabilityButton:)];
+    [self.modeReliabilityButton addGestureRecognizer:modeReliabilityButtonTapped];
+    
+    UITapGestureRecognizer *modeSpeedButtonTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapModeSpeedButton:)];
+    [self.modeSpeedButton addGestureRecognizer:modeSpeedButtonTapped];
+}
+
+- (void)tapTypePartialButton:(UITapGestureRecognizer *)sender {
+    self.firmwareUpdateViewModel.updateMethod = SILOTAMethodPartial;
+    [self.typeFullButton deselect];
+    [self.typePartialButton select];
+}
+
+- (void)tapTypeFullButton:(UITapGestureRecognizer *)sender {
+    self.firmwareUpdateViewModel.updateMethod = SILOTAMethodFull;
+    [self.typePartialButton deselect];
+    [self.typeFullButton select];
+}
+
+- (void)tapModeReliabilityButton:(UITapGestureRecognizer *)sender {
+    self.firmwareUpdateViewModel.updateMode = SILOTAModeReliability;
+    [self.modeSpeedButton deselect];
+    [self.modeReliabilityButton select];
+}
+
+- (void)tapModeSpeedButton:(UITapGestureRecognizer *)sender {
+    self.firmwareUpdateViewModel.updateMode = SILOTAModeSpeed;
+    [self.modeReliabilityButton deselect];
+    [self.modeSpeedButton select];
+}
 
 - (void)setupViewModel {
     SILOTAFirmwareUpdate *firmwareUpdate = [SILOTAFirmwareUpdate new];
@@ -91,14 +131,6 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
     [self.delegate otaSetupViewControllerDidCancel:self];
 }
 
-- (IBAction)didSelectOTAMethodSegment:(UISegmentedControl *)sender {
-    self.firmwareUpdateViewModel.updateMethod = ([sender selectedSegmentIndex] == 1) ? SILOTAMethodFull : SILOTAMethodPartial;
-}
-
-- (IBAction)didSelectOTAModeSegment:(UISegmentedControl *)sender {
-    self.firmwareUpdateViewModel.updateMode = ([sender selectedSegmentIndex] == 1) ? SILOTAModeSpeed : SILOTAModeReliability;
-}
-
 - (IBAction)didTapStartOTAButton:(id)sender {
     [self.delegate otaSetupViewControllerEnterDFUModeForFirmwareUpdate:self.firmwareUpdateViewModel.otaFirmwareUpdate];
 }
@@ -106,12 +138,30 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
 #pragma mark - Helpers
 
 - (void)configureUIForFirmwareUpdateViewModel:(SILOTAFirmwareUpdateViewModel *)firmwareUpdateViewModel {
-    const SILOTAMethod otaMethod = firmwareUpdateViewModel.updateMethod;
-    const SILOTAMode otaMode = firmwareUpdateViewModel.updateMode;
-    self.otaMethodSegmentedControl.selectedSegmentIndex = (otaMethod == SILOTAMethodPartial) ? 0 : 1;
-    self.otaModeSegmentedControl.selectedSegmentIndex = (otaMode == SILOTAModeReliability) ? 0 : 1;
+    [self updateOTAMethodView:firmwareUpdateViewModel.updateMethod];
+    [self updateOTAModeView:firmwareUpdateViewModel.updateMode];
     self.startOTAButton.enabled = firmwareUpdateViewModel.shouldEnableStartOTAButton;
     [self.fileSelectionTableView reloadData];
+}
+
+- (void)updateOTAMethodView:(SILOTAMethod)otaMethod {
+    if (otaMethod == SILOTAMethodPartial) {
+        [self.typeFullButton deselect];
+        [self.typePartialButton select];
+    } else {
+        [self.typePartialButton deselect];
+        [self.typeFullButton select];
+    }
+}
+
+- (void)updateOTAModeView:(SILOTAMode)otaMode {
+    if (otaMode == SILOTAModeReliability) {
+        [self.modeSpeedButton deselect];
+        [self.modeReliabilityButton select];
+    } else {
+        [self.modeReliabilityButton deselect];
+        [self.modeSpeedButton select];
+    }
 }
 
 #pragma mark - SILOTAFirmwareUpdateViewModelDelegate

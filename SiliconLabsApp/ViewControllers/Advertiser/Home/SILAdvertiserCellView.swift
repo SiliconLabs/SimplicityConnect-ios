@@ -57,9 +57,9 @@ class SILAdvertiserCellView: SILCell, SILAdvertiserHomeCellView {
     
     private func changeAffordanceImageWhenCellIsTapped() {
         if(state?.isExpanded == true) {
-            affordanceImage.image = UIImage(named: "chevron_expanded")
+            affordanceImage.image = UIImage(systemName: "chevron.up")
         } else {
-            affordanceImage.image = UIImage(named: "chevron_collapsed")
+            affordanceImage.image = UIImage(systemName: "chevron.down")
         }
     }
     

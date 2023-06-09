@@ -10,6 +10,7 @@ import UIKit
 
 class SILRemoveServiceListWarningDialogViewController: UIViewController {
     
+    @IBOutlet weak var yesButton: UIButton!
     var viewModel: SILRemoveServiceListWarningDialogViewModel!
     
     override var preferredContentSize: CGSize {
@@ -21,15 +22,20 @@ class SILRemoveServiceListWarningDialogViewController: UIViewController {
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        yesButton.layer.cornerRadius = 4.0
+    }
+    
     @IBAction func onSwitchChange(_ sender: SILSwitch) {
         viewModel.onSwitchChange(disableWarning: sender.isOn)
     }
     
-    @IBAction func onOk(_ sender: UIButton) {
-        viewModel.onOk()
+    @IBAction func onYes(_ sender: UIButton) {
+        viewModel.onYesCallback()
     }
     
-    @IBAction func onCancel(_ sender: UIButton) {
-        viewModel.onCancel()
+    @IBAction func onNo(_ sender: UIButton) {
+        viewModel.onNoCallback()
     }
 }

@@ -17,9 +17,6 @@ class SILGattConfiguratorDesciptorShadowCellView: SILCell, SILCellView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        characteristicShadowView.addShadow(withOffset: SILCellShadowOffset,
-                  radius: SILCellShadowRadius)
-        descriptorShadowView.addShadow(withOffset: SILCellShadowOffset, radius: SILCellShadowRadius)
     }
     
     override func prepareForReuse() {

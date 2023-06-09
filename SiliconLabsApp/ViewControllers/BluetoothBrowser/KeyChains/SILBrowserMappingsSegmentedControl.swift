@@ -9,7 +9,7 @@
 import UIKit
 
 @IBDesignable
-class SILBrowserMappingsSegmentedControl: SILSegmentedControl {
+class SILBrowserMappingsSegmentedControl: UISegmentedControl {
     
     enum SegmentType: Int {
         case services = 0

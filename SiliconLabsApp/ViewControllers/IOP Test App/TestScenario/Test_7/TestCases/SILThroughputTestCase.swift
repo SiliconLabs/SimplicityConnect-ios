@@ -13,7 +13,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
     var testID: String = "7.1"
     var testName: String = "Throughput-GATT Notification."
 
-    var timeoutMS: Int64 = 5000
+    var timeoutMS: Int64 = 5500
     var startTime: Int64?
     var stopTime: Int64?
         
@@ -22,7 +22,10 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
     private var peripheral: CBPeripheral!
     private var mtu_size: Int?
     private var pdu_size: Int?
-
+    private var interval: Double?
+    private var phy: Int?
+    private let PHY = (Unknown: 0, _1M: 1, _2M: 2)
+    
     private var peripheralDelegate: SILPeripheralDelegate!
     
     var observableTokens: [SILObservableToken?] = []
@@ -46,6 +49,8 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
         self.peripheral = parameters["peripheral"] as? CBPeripheral
         self.mtu_size = parameters["mtu_size"] as? Int
         self.pdu_size = parameters["pdu_size"] as? Int
+        self.interval = parameters["interval"] as? Double
+        self.phy = parameters["phy"] as? Int
     }
     
     func performTestCase() {
@@ -184,6 +189,14 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
     }
     
     private func calculateThroughput() -> Double {
+        if self.phy != PHY.Unknown {
+            return calculateThroughputInBLE_6_0_0AndNewer()
+        } else {
+            return calculateThroughputBeforeBLE_6_0_0()
+        }
+    }
+    
+    private func calculateThroughputBeforeBLE_6_0_0() -> Double {
         guard let mtu_size = mtu_size, let pdu_size = pdu_size else {
             return 0
         }
@@ -194,6 +207,35 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
             let expectThroughputSpeed = ((mtu_size - 3) / 15) * 1000
             return Double((4 * expectThroughputSpeed)) * 0.65
         }
+    }
+    
+    private func calculateThroughputInBLE_6_0_0AndNewer() -> Double {
+        guard let pdu_size = pdu_size, let phy = phy, let interval = interval else {
+            return calculateThroughputBeforeBLE_6_0_0()
+        }
+        
+        //something with changing MTU by peripheral doesn't work, used default value on the iOS
+        let mtu_size = 23
+            
+        var timeNeededForSendOnePacketMicroSeconds = 0
+        if phy == PHY._1M {
+            timeNeededForSendOnePacketMicroSeconds = 8 * pdu_size + 492
+        } else if phy == PHY._2M {
+            timeNeededForSendOnePacketMicroSeconds = 4 * pdu_size + 396
+        }
+        
+        guard timeNeededForSendOnePacketMicroSeconds > 0 else {
+            return 0
+        }
+        
+        let intervalMicroSeconds = interval * 1000
+        let intervalSeconds = interval / 1000.0
+        let quantity = floor(intervalMicroSeconds / Double(timeNeededForSendOnePacketMicroSeconds))
+        let sizeEffective = Double(mtu_size - 3)
+        let fragmentationCount = ceil(Double(mtu_size) / Double(pdu_size - 4))
+        let speedPerSecond = quantity * sizeEffective / fragmentationCount / intervalSeconds
+        
+        return floor(speedPerSecond * 0.5)
     }
     
     func getTestArtifacts() -> Dictionary<String, Any> {

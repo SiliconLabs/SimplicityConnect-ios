@@ -18,16 +18,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *fileNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *uploadTypeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fileTotalBytesLabel;
-@property (weak, nonatomic) IBOutlet UILabel *informationLabel;
-@property (weak, nonatomic) IBOutlet UILabel *peripheralIdentifierLabel;
 @property (weak, nonatomic) IBOutlet UILabel *otaStatusLabel;
-@property (weak, nonatomic) IBOutlet UIView *mtuView;
-@property (weak, nonatomic) IBOutlet UILabel *mtuValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fileCountLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constrainBottomSeparatorBelowFile;
 @property (weak, nonatomic) IBOutlet UILabel *finalUploadRateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *finalUploadTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *finalUploadBytesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *otaInfoLabel;
 
 - (void)stateDependentHidden:(BOOL)hidden;
 

@@ -36,6 +36,7 @@ class SILDiscoveredPeripheral: NSObject {
     
     var isFavourite = false
     var isConnectable = false
+    var hasTimedOut = false
     
     private var lastTimestamp = 0.0
     private var packetReceivedCount: Int64 = 0
@@ -104,6 +105,7 @@ class SILDiscoveredPeripheral: NSObject {
         rssi RSSI: NSNumber,
         andDiscoveringTimestamp timestamp: Double
     ) {
+        hasTimedOut = false
         advertisedLocalName = advertisementData[CBAdvertisementDataLocalNameKey] as? String ?? peripheral!.name
         advertisedServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID]
         txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? NSNumber

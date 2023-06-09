@@ -14,10 +14,12 @@ class SILGattConfiguratorDescriptorButtonCellView: SILCell, SILCellView {
     
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var separatorView: UIView!
+    @IBOutlet weak var addDescriptorButton: SILPrimaryButton!
     
     override func layoutSubviews() {
         super.layoutSubviews()
         shadowView.addShadow(withOffset: SILCellShadowOffset, radius: SILCellShadowRadius)
+        addDescriptorButton.setupOutlineButton()
     }
     
     override func prepareForReuse() {

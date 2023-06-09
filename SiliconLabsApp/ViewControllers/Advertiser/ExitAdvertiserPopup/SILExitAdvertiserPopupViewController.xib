@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -13,15 +13,13 @@
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
         </array>
-        <array key="Roboto-Regular.ttf">
-            <string>Roboto-Regular</string>
-        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILExitAdvertiserPopupViewController" customModule="BlueGecko" customModuleProvider="target">
             <connections>
                 <outlet property="confirmSwitch" destination="gir-cQ-qSM" id="L7m-YX-hce"/>
                 <outlet property="view" destination="uMU-yK-zIT" id="sF9-od-3L8"/>
+                <outlet property="yesButton" destination="b2p-1G-LCd" id="N3D-MV-Cq2"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -30,41 +28,34 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dAm-hV-6Y4" userLabel="headerView">
-                    <rect key="frame" x="0.0" y="0.0" width="500" height="48"/>
+                    <rect key="frame" x="0.0" y="0.0" width="500" height="72"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unsaved changes" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V5M-0T-UZH">
-                            <rect key="frame" x="179" y="13.5" width="142.5" height="21"/>
-                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
+                            <rect key="frame" x="20" y="25.5" width="152.5" height="21.5"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
-                            <variation key="widthClass=compact">
-                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
-                            </variation>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" name="sil_bgGreyColor"/>
                     <constraints>
+                        <constraint firstItem="V5M-0T-UZH" firstAttribute="leading" secondItem="dAm-hV-6Y4" secondAttribute="leading" constant="20" id="8AK-Yi-sbm"/>
                         <constraint firstAttribute="height" constant="72" id="F6d-4T-eHf">
                             <variation key="widthClass=compact" constant="48"/>
                         </constraint>
-                        <constraint firstItem="V5M-0T-UZH" firstAttribute="centerX" secondItem="dAm-hV-6Y4" secondAttribute="centerX" id="Luq-g6-1oz"/>
                         <constraint firstItem="V5M-0T-UZH" firstAttribute="centerY" secondItem="dAm-hV-6Y4" secondAttribute="centerY" id="TFq-GW-vzC"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z0u-2i-dnX">
-                    <rect key="frame" x="20" y="48" width="460" height="176"/>
+                    <rect key="frame" x="40" y="72" width="420" height="140"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MV7-yX-0Px">
-                            <rect key="frame" x="0.0" y="10" width="460" height="83"/>
+                            <rect key="frame" x="0.0" y="10" width="420" height="65"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your advertisement set has unsaved changes. Do you wish to save them?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mAl-g8-r7S" userLabel="descLabel">
-                                    <rect key="frame" x="0.0" y="24" width="460" height="35.5"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                    <rect key="frame" x="0.0" y="16" width="420" height="33.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
-                                    <variation key="widthClass=compact">
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                    </variation>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -75,19 +66,16 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y3N-oD-ecg" userLabel="SwitchView">
-                            <rect key="frame" x="0.0" y="93" width="460" height="83"/>
+                            <rect key="frame" x="0.0" y="75" width="420" height="65"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do not give this warning again" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t3k-7T-GRs">
-                                    <rect key="frame" x="64" y="32.5" width="200.5" height="18"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                    <rect key="frame" x="64" y="24" width="194.5" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
-                                    <variation key="widthClass=compact">
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                    </variation>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gir-cQ-qSM" customClass="SILSwitch" customModule="BlueGecko" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="29.5" width="44" height="24"/>
+                                    <rect key="frame" x="0.0" y="20.5" width="44" height="24"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="24" id="mXl-KL-2f0"/>
@@ -123,10 +111,10 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qXs-zW-4yA" userLabel="buttonView">
-                    <rect key="frame" x="60" y="229" width="380" height="36"/>
+                    <rect key="frame" x="150" y="217" width="250" height="48"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2p-1G-LCd">
-                            <rect key="frame" x="0.0" y="0.0" width="185" height="36"/>
+                            <rect key="frame" x="130" y="8" width="120" height="32"/>
                             <color key="backgroundColor" name="sil_regularBlueColor"/>
                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
                             <state key="normal" title="Yes">
@@ -137,7 +125,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4T-gp-XZd">
-                            <rect key="frame" x="195" y="0.0" width="185" height="36"/>
+                            <rect key="frame" x="0.0" y="8" width="120" height="32"/>
                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
                             <state key="normal" title="No">
                                 <color key="titleColor" name="sil_masalaColor"/>
@@ -149,17 +137,15 @@
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="f4T-gp-XZd" secondAttribute="bottom" id="8St-mq-Qxc"/>
-                        <constraint firstItem="f4T-gp-XZd" firstAttribute="top" secondItem="qXs-zW-4yA" secondAttribute="top" id="CA0-5U-Sxf"/>
-                        <constraint firstItem="f4T-gp-XZd" firstAttribute="leading" secondItem="b2p-1G-LCd" secondAttribute="trailing" constant="10" id="K4D-i9-c0x"/>
-                        <constraint firstItem="b2p-1G-LCd" firstAttribute="top" secondItem="qXs-zW-4yA" secondAttribute="top" id="MC7-mt-OBO"/>
-                        <constraint firstItem="f4T-gp-XZd" firstAttribute="width" secondItem="b2p-1G-LCd" secondAttribute="width" id="Ojo-gV-ld6"/>
-                        <constraint firstItem="b2p-1G-LCd" firstAttribute="leading" secondItem="qXs-zW-4yA" secondAttribute="leading" id="SdZ-Kf-Oq9"/>
-                        <constraint firstAttribute="bottom" secondItem="b2p-1G-LCd" secondAttribute="bottom" id="qmn-0z-fyR"/>
+                        <constraint firstItem="b2p-1G-LCd" firstAttribute="leading" secondItem="f4T-gp-XZd" secondAttribute="trailing" constant="10" id="3lr-A8-45l"/>
+                        <constraint firstItem="f4T-gp-XZd" firstAttribute="leading" secondItem="qXs-zW-4yA" secondAttribute="leading" id="QJb-5E-iGl"/>
+                        <constraint firstAttribute="trailing" secondItem="b2p-1G-LCd" secondAttribute="trailing" id="XpA-x3-pCE"/>
+                        <constraint firstItem="f4T-gp-XZd" firstAttribute="centerY" secondItem="qXs-zW-4yA" secondAttribute="centerY" id="ocj-J9-BFx"/>
                         <constraint firstAttribute="height" constant="48" id="r8d-OG-075">
                             <variation key="widthClass=compact" constant="36"/>
                         </constraint>
-                        <constraint firstAttribute="trailing" secondItem="f4T-gp-XZd" secondAttribute="trailing" id="wgd-dl-AcJ"/>
+                        <constraint firstItem="b2p-1G-LCd" firstAttribute="width" secondItem="f4T-gp-XZd" secondAttribute="width" id="wE5-gp-28N"/>
+                        <constraint firstItem="b2p-1G-LCd" firstAttribute="centerY" secondItem="qXs-zW-4yA" secondAttribute="centerY" id="wrF-bU-5OU"/>
                     </constraints>
                 </view>
             </subviews>
@@ -167,7 +153,6 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="qXs-zW-4yA" secondAttribute="bottom" constant="5" id="46O-6J-4WL"/>
-                <constraint firstItem="qXs-zW-4yA" firstAttribute="centerX" secondItem="uMU-yK-zIT" secondAttribute="centerX" id="66Y-aa-cLC"/>
                 <constraint firstItem="Z0u-2i-dnX" firstAttribute="top" secondItem="dAm-hV-6Y4" secondAttribute="bottom" id="Adi-wl-E49"/>
                 <constraint firstItem="dAm-hV-6Y4" firstAttribute="top" secondItem="uMU-yK-zIT" secondAttribute="top" id="EJb-qr-63j"/>
                 <constraint firstItem="Z0u-2i-dnX" firstAttribute="leading" secondItem="uMU-yK-zIT" secondAttribute="leading" constant="40" id="TNd-8Z-bIa">
@@ -180,8 +165,8 @@
                 <constraint firstAttribute="trailing" secondItem="qXs-zW-4yA" secondAttribute="trailing" constant="100" id="gnp-3f-MQk">
                     <variation key="widthClass=compact" constant="60"/>
                 </constraint>
-                <constraint firstItem="qXs-zW-4yA" firstAttribute="leading" secondItem="uMU-yK-zIT" secondAttribute="leading" constant="100" id="l8i-oE-HpR">
-                    <variation key="widthClass=compact" constant="60"/>
+                <constraint firstItem="qXs-zW-4yA" firstAttribute="leading" secondItem="uMU-yK-zIT" secondAttribute="leading" constant="150" id="l8i-oE-HpR">
+                    <variation key="widthClass=compact" constant="200"/>
                 </constraint>
                 <constraint firstAttribute="trailing" secondItem="dAm-hV-6Y4" secondAttribute="trailing" id="vGZ-kh-IdY"/>
                 <constraint firstItem="dAm-hV-6Y4" firstAttribute="leading" secondItem="uMU-yK-zIT" secondAttribute="leading" id="yz3-OX-ZIv"/>
@@ -191,9 +176,6 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="sil_bgGreyColor">
-            <color red="0.94509803921568625" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="sil_bgWhiteColor">
             <color red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -201,7 +183,7 @@
             <color red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="sil_regularBlueColor">
-            <color red="0.0" green="0.52549019607843139" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.058823529411764705" green="0.3843137254901961" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

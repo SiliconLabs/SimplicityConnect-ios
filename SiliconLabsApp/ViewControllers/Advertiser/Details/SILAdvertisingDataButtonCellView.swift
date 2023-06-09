@@ -27,6 +27,7 @@ class SILAdvertisingDataButtonCellView: UITableViewCell, SILCellView {
     
     func updateView() {
         button.setTitle(viewModel?.title, for: UIControl.State.normal)
+        button.setupOutlineButton()
     }
     
     @IBAction func onButtonTouch(_ sender: Any) {

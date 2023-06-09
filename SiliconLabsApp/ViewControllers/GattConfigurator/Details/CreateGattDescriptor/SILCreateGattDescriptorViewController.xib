@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -76,7 +76,7 @@
                                                 <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8X1-Mk-mo7">
                                                     <rect key="frame" x="16" y="16" width="418" height="103"/>
                                                     <subviews>
-                                                        <textField opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Descriptor name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eFl-sw-M6a">
+                                                        <textField opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Descriptor name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eFl-sw-M6a" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="418" height="34"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="34" id="jYU-c1-Adh"/>
@@ -84,7 +84,7 @@
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                         </textField>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="16/128-bit UUID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qu1-6f-jqw">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="16/128-bit UUID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qu1-6f-jqw" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="44" width="418" height="34"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits"/>
@@ -167,7 +167,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ev7-Aq-K7p" userLabel="InitialTextValue">
                                                             <rect key="frame" x="0.0" y="39" width="418" height="34"/>
                                                             <subviews>
-                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="06v-3N-BWK">
+                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="06v-3N-BWK" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="418" height="34"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <textInputTraits key="textInputTraits"/>
@@ -184,8 +184,8 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MGe-4O-hw2" userLabel="InitialHexValue">
                                                             <rect key="frame" x="0.0" y="78" width="418" height="55"/>
                                                             <subviews>
-                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert hex" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GwT-cj-scX">
-                                                                    <rect key="frame" x="22" y="0.0" width="396" height="34"/>
+                                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert hex" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GwT-cj-scX" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
+                                                                    <rect key="frame" x="18" y="0.0" width="400" height="34"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                                     <textInputTraits key="textInputTraits"/>
                                                                     <connections>
@@ -193,7 +193,7 @@
                                                                     </connections>
                                                                 </textField>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cdh-aY-w9n">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="14" height="34"/>
+                                                                    <rect key="frame" x="2" y="0.0" width="14" height="34"/>
                                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="13"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -216,8 +216,8 @@
                                                                 <constraint firstItem="Vn3-w4-Hzu" firstAttribute="top" secondItem="GwT-cj-scX" secondAttribute="bottom" constant="5" id="El2-1k-jkS"/>
                                                                 <constraint firstItem="Cdh-aY-w9n" firstAttribute="top" secondItem="MGe-4O-hw2" secondAttribute="top" id="HLR-aS-ARd"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Vn3-w4-Hzu" secondAttribute="trailing" id="P8R-2x-PMf"/>
-                                                                <constraint firstItem="GwT-cj-scX" firstAttribute="leading" secondItem="Cdh-aY-w9n" secondAttribute="trailing" constant="8" id="SJ3-WS-sCO"/>
-                                                                <constraint firstItem="Cdh-aY-w9n" firstAttribute="leading" secondItem="MGe-4O-hw2" secondAttribute="leading" id="ei2-mK-sfI"/>
+                                                                <constraint firstItem="GwT-cj-scX" firstAttribute="leading" secondItem="Cdh-aY-w9n" secondAttribute="trailing" constant="2" id="SJ3-WS-sCO"/>
+                                                                <constraint firstItem="Cdh-aY-w9n" firstAttribute="leading" secondItem="MGe-4O-hw2" secondAttribute="leading" constant="2" id="ei2-mK-sfI"/>
                                                                 <constraint firstAttribute="height" constant="55" id="lRH-ao-V9A"/>
                                                                 <constraint firstAttribute="trailing" secondItem="GwT-cj-scX" secondAttribute="trailing" id="rMW-Za-hst"/>
                                                                 <constraint firstAttribute="bottom" secondItem="Vn3-w4-Hzu" secondAttribute="bottom" constant="5" id="tyP-py-T6c"/>
@@ -270,7 +270,7 @@
                     <rect key="frame" x="16" y="383" width="418" height="33"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tqc-N4-gx2" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="132.5" height="33"/>
+                            <rect key="frame" x="0.0" y="1.5" width="132.5" height="30"/>
                             <color key="tintColor" systemColor="systemBlueColor"/>
                             <state key="normal" title="Clear"/>
                             <userDefinedRuntimeAttributes>
@@ -281,7 +281,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iHa-V2-IQe" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                            <rect key="frame" x="142.5" y="0.0" width="133" height="33"/>
+                            <rect key="frame" x="142.5" y="1.5" width="133" height="30"/>
                             <color key="tintColor" systemColor="systemBlueColor"/>
                             <state key="normal" title="Cancel"/>
                             <userDefinedRuntimeAttributes>
@@ -292,7 +292,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jo3-FH-Epj" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
-                            <rect key="frame" x="285.5" y="0.0" width="132.5" height="33"/>
+                            <rect key="frame" x="285.5" y="1.5" width="132.5" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Save"/>
                             <userDefinedRuntimeAttributes>
@@ -329,13 +329,13 @@
     </objects>
     <designables>
         <designable name="Tqc-N4-gx2">
-            <size key="intrinsicContentSize" width="49" height="33"/>
+            <size key="intrinsicContentSize" width="36" height="30"/>
         </designable>
         <designable name="iHa-V2-IQe">
-            <size key="intrinsicContentSize" width="59" height="33"/>
+            <size key="intrinsicContentSize" width="48" height="30"/>
         </designable>
         <designable name="jo3-FH-Epj">
-            <size key="intrinsicContentSize" width="47" height="33"/>
+            <size key="intrinsicContentSize" width="34" height="30"/>
         </designable>
     </designables>
     <resources>

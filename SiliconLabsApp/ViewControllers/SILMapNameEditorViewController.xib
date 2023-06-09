@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -68,23 +66,17 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TTf-VS-zg3" userLabel="Field container">
-                    <rect key="frame" x="0.0" y="72" width="300" height="70"/>
+                    <rect key="frame" x="0.0" y="72" width="300" height="36"/>
                     <subviews>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter a value for this field" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Os-OH-INL">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter a value for this field" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Os-OH-INL" customClass="SILTextField" customModule="BlueGecko" customModuleProvider="target">
                             <rect key="frame" x="16" y="10" width="268" height="32"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="32" id="i5n-TY-9fH"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
+                            <color key="textColor" red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zd8-i6-RQ4" userLabel="Baseline">
-                            <rect key="frame" x="16" y="42" width="268" height="1"/>
-                            <color key="backgroundColor" red="0.81625092030000002" green="0.81622648239999995" blue="0.81624031070000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="CHp-z2-FYp"/>
-                            </constraints>
-                        </view>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name field cannot be empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHU-0D-WjK">
                             <rect key="frame" x="16" y="50" width="238" height="20"/>
                             <constraints>
@@ -98,88 +90,62 @@
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="Zd8-i6-RQ4" secondAttribute="trailing" constant="16" id="0Jx-79-aLQ"/>
                         <constraint firstAttribute="trailing" secondItem="5Os-OH-INL" secondAttribute="trailing" constant="16" id="5Em-FP-8sL"/>
                         <constraint firstItem="dHU-0D-WjK" firstAttribute="top" secondItem="5Os-OH-INL" secondAttribute="bottom" constant="8" id="DWD-sX-2cR"/>
-                        <constraint firstItem="Zd8-i6-RQ4" firstAttribute="top" secondItem="5Os-OH-INL" secondAttribute="bottom" id="Hme-kP-hKZ"/>
                         <constraint firstItem="dHU-0D-WjK" firstAttribute="leading" secondItem="TTf-VS-zg3" secondAttribute="leading" constant="16" id="N2d-bh-xly"/>
                         <constraint firstItem="5Os-OH-INL" firstAttribute="top" secondItem="TTf-VS-zg3" secondAttribute="top" constant="10" id="XDN-BX-JRZ"/>
                         <constraint firstItem="5Os-OH-INL" firstAttribute="leading" secondItem="TTf-VS-zg3" secondAttribute="leading" constant="16" id="ree-ea-3aD"/>
-                        <constraint firstItem="Zd8-i6-RQ4" firstAttribute="leading" secondItem="TTf-VS-zg3" secondAttribute="leading" constant="16" id="w8D-Ro-MhL"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5hZ-46-jnS" userLabel="Bottom Bar">
-                    <rect key="frame" x="0.0" y="142" width="300" height="48"/>
+                    <rect key="frame" x="0.0" y="108" width="300" height="48"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dxa-2h-yEO">
-                            <rect key="frame" x="0.0" y="0.0" width="300" height="48"/>
+                            <rect key="frame" x="10" y="0.0" width="280" height="38"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-Vp-lxn">
-                                    <rect key="frame" x="0.0" y="0.0" width="150" height="48"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REI-ox-SSv">
-                                    <rect key="frame" x="150" y="0.0" width="150" height="48"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZpR-4m-sQI" userLabel="Cancel Button">
-                                            <rect key="frame" x="34" y="11" width="50" height="26"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="26" id="7X2-VX-e0T"/>
-                                                <constraint firstAttribute="width" constant="50" id="S7Q-W0-Y6d"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
-                                            <state key="normal" title="Cancel">
-                                                <color key="titleColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="cancel:" destination="-1" eventType="touchUpInside" id="x1P-TT-X3B"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1HO-Rv-IuO" userLabel="Save Button" customClass="SILRoundedButton" customModule="BlueGecko" customModuleProvider="target">
-                                            <rect key="frame" x="92" y="11" width="50" height="26"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="26" id="2k9-p4-ocS"/>
-                                                <constraint firstAttribute="width" constant="50" id="fPL-jC-3hN"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
-                                            <state key="normal" title="Save">
-                                                <color key="titleColor" name="sil_masalaColor"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="save:" destination="-1" eventType="touchUpInside" id="e8m-cw-KVu"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <constraints>
-                                        <constraint firstItem="ZpR-4m-sQI" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="1HO-Rv-IuO" secondAttribute="leading" constant="8" id="10p-mU-rLX"/>
-                                        <constraint firstItem="1HO-Rv-IuO" firstAttribute="leading" secondItem="ZpR-4m-sQI" secondAttribute="trailing" constant="8" id="B8d-y1-1OC"/>
-                                        <constraint firstItem="1HO-Rv-IuO" firstAttribute="centerY" secondItem="REI-ox-SSv" secondAttribute="centerY" id="NRn-nA-Br8"/>
-                                        <constraint firstItem="ZpR-4m-sQI" firstAttribute="baseline" secondItem="1HO-Rv-IuO" secondAttribute="baseline" id="eal-wm-wMj"/>
-                                        <constraint firstItem="1HO-Rv-IuO" firstAttribute="trailing" secondItem="REI-ox-SSv" secondAttribute="trailing" constant="-8" id="k0y-I2-VmO"/>
-                                    </constraints>
-                                </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZpR-4m-sQI" userLabel="Cancel Button" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="140" height="38"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <state key="normal" title="Cancel">
+                                        <color key="titleColor" red="0.0" green="0.45882352941176469" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
+                                            <integer key="value" value="14"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="NO"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="cancel:" destination="-1" eventType="touchUpInside" id="x1P-TT-X3B"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1HO-Rv-IuO" userLabel="Save Button" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                                    <rect key="frame" x="140" y="0.0" width="140" height="38"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <state key="normal" title="Save">
+                                        <color key="titleColor" red="0.0" green="0.45882352941176469" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="fontSize">
+                                            <integer key="value" value="14"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="hasBackground" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="save:" destination="-1" eventType="touchUpInside" id="e8m-cw-KVu"/>
+                                    </connections>
+                                </button>
                             </subviews>
-                            <constraints>
-                                <constraint firstAttribute="trailing" secondItem="REI-ox-SSv" secondAttribute="trailing" id="1E5-pf-dMl"/>
-                                <constraint firstItem="REI-ox-SSv" firstAttribute="leading" secondItem="hcD-Vp-lxn" secondAttribute="trailing" id="5tG-cn-QDL"/>
-                                <constraint firstItem="REI-ox-SSv" firstAttribute="top" secondItem="dxa-2h-yEO" secondAttribute="top" id="BnX-9G-i63"/>
-                                <constraint firstItem="hcD-Vp-lxn" firstAttribute="leading" secondItem="dxa-2h-yEO" secondAttribute="leading" id="LgX-PR-Mnz"/>
-                                <constraint firstItem="REI-ox-SSv" firstAttribute="leading" secondItem="hcD-Vp-lxn" secondAttribute="trailing" id="OTM-se-QUW"/>
-                                <constraint firstAttribute="bottom" secondItem="REI-ox-SSv" secondAttribute="bottom" id="g6P-jm-HmN"/>
-                                <constraint firstItem="hcD-Vp-lxn" firstAttribute="top" secondItem="dxa-2h-yEO" secondAttribute="top" id="o04-wG-eLb"/>
-                                <constraint firstAttribute="bottom" secondItem="hcD-Vp-lxn" secondAttribute="bottom" id="xyf-2b-fqD"/>
-                            </constraints>
                         </stackView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="dxa-2h-yEO" firstAttribute="centerX" secondItem="5hZ-46-jnS" secondAttribute="centerX" id="6tT-Zn-HsT"/>
+                        <constraint firstAttribute="trailing" secondItem="dxa-2h-yEO" secondAttribute="trailing" constant="10" id="Dzs-xW-z1X"/>
                         <constraint firstAttribute="height" constant="48" id="J7N-rl-3ce"/>
                         <constraint firstItem="dxa-2h-yEO" firstAttribute="top" secondItem="5hZ-46-jnS" secondAttribute="top" id="Rv9-1e-8JD"/>
-                        <constraint firstItem="dxa-2h-yEO" firstAttribute="centerY" secondItem="5hZ-46-jnS" secondAttribute="centerY" id="d2G-kZ-ILQ"/>
-                        <constraint firstItem="dxa-2h-yEO" firstAttribute="leading" secondItem="5hZ-46-jnS" secondAttribute="leading" id="rH3-tL-x4m"/>
+                        <constraint firstItem="dxa-2h-yEO" firstAttribute="leading" secondItem="5hZ-46-jnS" secondAttribute="leading" constant="10" id="rH3-tL-x4m"/>
+                        <constraint firstAttribute="bottom" secondItem="dxa-2h-yEO" secondAttribute="bottom" constant="10" id="tna-3m-PN6"/>
                     </constraints>
                 </view>
             </subviews>
@@ -203,15 +169,10 @@
     </objects>
     <designables>
         <designable name="1HO-Rv-IuO">
-            <size key="intrinsicContentSize" width="31" height="29"/>
+            <size key="intrinsicContentSize" width="32" height="29"/>
+        </designable>
+        <designable name="ZpR-4m-sQI">
+            <size key="intrinsicContentSize" width="45" height="29"/>
         </designable>
     </designables>
-    <resources>
-        <namedColor name="sil_masalaColor">
-            <color red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

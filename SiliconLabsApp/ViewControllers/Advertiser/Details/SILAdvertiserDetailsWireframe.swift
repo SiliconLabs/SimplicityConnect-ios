@@ -58,7 +58,7 @@ class SILAdvertiserDetailsWireframe: SILBaseWireframe, SILAdvertiserDetailsWiref
     
     func presentRemoveServiceListWarningDialog(onOk: @escaping (Bool) -> Void) {
         let vc = SILRemoveServiceListWarningDialogViewController()
-        vc.viewModel = SILRemoveServiceListWarningDialogViewModel(wireframe: self, onOk: onOk)
+        vc.viewModel = SILRemoveServiceListWarningDialogViewModel(wireframe: self, onYes: onOk)
         
         popover = WYPopoverController.sil_presentCenterPopover(withContentViewController: vc, presenting: viewController, delegate: self, animated: true)
     }

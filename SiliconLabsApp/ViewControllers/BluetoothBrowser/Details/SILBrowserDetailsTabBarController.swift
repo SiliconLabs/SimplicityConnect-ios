@@ -28,4 +28,16 @@ class SILBrowserDetailsTabBarController: SILTabBarController {
         super.viewWillDisappear(animated)
         self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
+    
+    func setupViewControllers(peripheral: CBPeripheral, centralManager: SILCentralManager) {
+        let clientDeviceController = viewControllers?[0] as? SILDebugServicesViewController
+        let serverController = viewControllers?[1] as? SILLocalGattServerViewController
+        
+        clientDeviceController?.peripheral = peripheral
+        clientDeviceController?.centralManager = centralManager
+        
+        serverController?.peripheral = peripheral
+        serverController?.centralManager = centralManager
+        
+    }
 }

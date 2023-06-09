@@ -37,9 +37,7 @@ struct ActiveConnectionsView: UIViewControllerRepresentable, PickerTabSubview {
     }
     
     func setFloatingButton(settings: FloatingButtonSettings) {
-        settings.setButtonText("Disconnect All")
-        settings.setPresented(true)
-        settings.setColor(.sil_regularBlue())
+        viewController.setupFloatingButtonSettings(settings)
     }
     
     func floatingButtonAction() {

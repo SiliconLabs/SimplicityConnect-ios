@@ -14,8 +14,8 @@ class SILCreateGattServiceViewController: UIViewController, UITextFieldDelegate 
     @IBOutlet weak var serviceTypePicker: UIView!
     @IBOutlet weak var serviceTypePickerLabel: UILabel!
     @IBOutlet weak var serviceTypePickerCollapseImage: UIImageView!
-    @IBOutlet weak var serviceNameField: UITextField!
-    @IBOutlet weak var serviceUUIDField: UITextField!
+    @IBOutlet weak var serviceNameField: SILTextField!
+    @IBOutlet weak var serviceUUIDField: SILTextField!
     @IBOutlet weak var mandatoryServicesLabel: UILabel!
     @IBOutlet weak var mandatoryServicesCheckBox: SILCheckBox!
     @IBOutlet weak var clearButton: UIButton!
@@ -53,7 +53,7 @@ class SILCreateGattServiceViewController: UIViewController, UITextFieldDelegate 
     
     func setupServiceTypePicker() {
         serviceTypePicker.layer.borderWidth = 1
-        serviceTypePicker.layer.borderColor = UIColor.black.cgColor
+        serviceTypePicker.layer.borderColor = UIColor.sil_primaryText().cgColor
         serviceTypePicker.layer.cornerRadius = CornerRadiusForButtons
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(onServiceTypePickerTouch(_:)))
         serviceTypePicker.addGestureRecognizer(recognizer)
@@ -77,7 +77,7 @@ class SILCreateGattServiceViewController: UIViewController, UITextFieldDelegate 
         
         viewModel.isSaveButtonEnabled.observe { enabled in
             weakSelf?.saveButton.isEnabled = enabled
-            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.systemBlue : UIColor.lightGray
+            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.sil_regularBlue() : UIColor.lightGray
         }.putIn(bag: tokenBag)
         
         viewModel.isSelected16BitService.observe { enabled in

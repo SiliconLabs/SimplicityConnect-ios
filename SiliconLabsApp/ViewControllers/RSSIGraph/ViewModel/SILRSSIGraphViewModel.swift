@@ -39,7 +39,6 @@ class SILRSSGraphViewModel {
         .map { (peripherals, selectedPeripherals, filter) -> [PeripheralData] in
             // filter
             var peripherals = peripherals.filter { filter($0) }
-
             // map selected
             if let selected = selectedPeripherals.first {
                 peripherals = peripherals.map { PeripheralData(color: $0.uuid == selected.uuid ? $0.color : RSSIConstants.graphLineDisabled,
@@ -121,6 +120,18 @@ class SILRSSGraphViewModel {
     private func startScanning() {
         _peripherals.accept([])
         
+        newPeripherals.asObservable()
+            .filter {
+                newPeripheral in
+                let x = !self._peripherals.value.contains(where: { $0.uuid == newPeripheral.uuid })
+                return x
+            }
+            .scan([PeripheralData]()) { $0 + [$1] }
+            .bind(to: _peripherals)
+            .disposed(by: scanningDisposeBag)
+        
+        peripherals.subscribe(onNext: { debugPrint($0.count) }).disposed(by: scanningDisposeBag)
+        
         centralManager
             .discoveredPeripherals
             .flatMap {
@@ -133,13 +144,7 @@ class SILRSSGraphViewModel {
             .bind(to: refresh)
             .disposed(by: scanningDisposeBag)
         
-        newPeripherals.asObservable()
-            .filter { newPeripheral in !self._peripherals.value.contains(where: { $0.uuid == newPeripheral.uuid }) }
-            .scan([PeripheralData]()) { $0 + [$1] }
-            .bind(to: _peripherals)
-            .disposed(by: scanningDisposeBag)
         
-        peripherals.subscribe(onNext: { debugPrint($0.count) }).disposed(by: disposeBag)
     }
     
     private func stopScanning() {

@@ -36,8 +36,12 @@ class SILFileWriter : NSObject {
         }
     }
     
-    func getFilePath(withName name: String, fileExtension: String = "xml") -> String {
-        return (self.exportDirPath as NSString).appendingPathComponent(name).appending(".\(fileExtension)")
+    func getFilePath(withName name: String, fileExtension: String? = nil) -> String {
+        if let fileExtension = fileExtension {
+            return (self.exportDirPath as NSString).appendingPathComponent(name).appending(".\(fileExtension)")
+        } else {
+            return (self.exportDirPath as NSString).appendingPathComponent(name)
+        }
     }
     
     private var exportDirPath: String {
@@ -66,6 +70,20 @@ class SILFileWriter : NSObject {
             return false
         }
         fileHandle?.seekToEndOfFile()
+        fileHandle?.write(data)
+        
+        return true
+    }
+    
+    func write(data: Data?) -> Bool {
+        if fileHandle == nil {
+            return false
+        }
+        
+        guard let data = data else {
+            return false
+        }
+    
         fileHandle?.write(data)
         
         return true

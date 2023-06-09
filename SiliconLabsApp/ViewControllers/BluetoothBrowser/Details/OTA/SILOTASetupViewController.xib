@@ -5,16 +5,24 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SILOTASetupViewController">
             <connections>
                 <outlet property="fileSelectionTableView" destination="Uju-fv-EeI" id="8Xt-Cd-8lK"/>
                 <outlet property="hudView" destination="5yN-eK-7ac" id="IkB-3T-A8L"/>
-                <outlet property="otaMethodSegmentedControl" destination="jCO-h4-C6j" id="CmT-Zv-vFB"/>
-                <outlet property="otaModeSegmentedControl" destination="5lv-4H-luq" id="Fhf-Jd-DBz"/>
+                <outlet property="modeReliabilityButton" destination="trC-sF-qQ2" id="oI9-ce-71c"/>
+                <outlet property="modeSpeedButton" destination="IQI-jv-qp7" id="OPx-sc-DPT"/>
                 <outlet property="startOTAButton" destination="h0r-z8-LOc" id="j9A-3B-i58"/>
+                <outlet property="typeFullButton" destination="GY5-k3-8sr" id="Ag8-um-ZJB"/>
+                <outlet property="typePartialButton" destination="LkL-2c-Wje" id="Gbc-Iv-sR0"/>
                 <outlet property="view" destination="q9h-tL-CcT" id="YvX-Bv-UgQ"/>
             </connections>
         </placeholder>
@@ -23,152 +31,275 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5yN-eK-7ac" userLabel="HUD View" customClass="SILOTAHUDView">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
-                    <color key="backgroundColor" name="sil_regularBlueColor"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="110"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="88" id="FtM-Sx-F1Z"/>
+                        <constraint firstAttribute="height" constant="110" id="FtM-Sx-F1Z"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5RX-lV-GVk" userLabel="Method View">
-                    <rect key="frame" x="0.0" y="88" width="375" height="50"/>
+                    <rect key="frame" x="0.0" y="110" width="375" height="50"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="METHOD" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lpl-QJ-E4Y" userLabel="Method Label">
-                            <rect key="frame" x="22" y="18" width="52" height="14.5"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="12"/>
-                            <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lpl-QJ-E4Y" userLabel="Method Label">
+                            <rect key="frame" x="22" y="16.5" width="36" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.18823529411764706" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jCO-h4-C6j" userLabel="OTA Type Selector">
-                            <rect key="frame" x="194" y="10.5" width="159" height="30"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LkL-2c-Wje" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                            <rect key="frame" x="160" y="10" width="105" height="30"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IKy-7C-3vj">
+                                    <rect key="frame" x="8" y="7" width="16" height="16"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="IKy-7C-3vj" secondAttribute="height" multiplier="1:1" id="irt-Mb-Isz"/>
+                                        <constraint firstAttribute="width" constant="16" id="qg7-6N-0Ko"/>
+                                    </constraints>
+                                    <state key="normal" image="radio_button_active"/>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Partial" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RFm-pa-XEB">
+                                    <rect key="frame" x="32" y="6.5" width="65" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" red="0.18823529411764706" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="29" id="OvU-Fm-UVx"/>
+                                <constraint firstItem="RFm-pa-XEB" firstAttribute="centerY" secondItem="LkL-2c-Wje" secondAttribute="centerY" id="5Jr-iI-Pwc"/>
+                                <constraint firstItem="RFm-pa-XEB" firstAttribute="leading" secondItem="IKy-7C-3vj" secondAttribute="trailing" constant="8" id="6PE-iY-9bq"/>
+                                <constraint firstItem="IKy-7C-3vj" firstAttribute="centerY" secondItem="LkL-2c-Wje" secondAttribute="centerY" id="CK3-Kz-vFx"/>
+                                <constraint firstAttribute="width" constant="105" id="NRc-ie-4Nr"/>
+                                <constraint firstAttribute="trailing" secondItem="RFm-pa-XEB" secondAttribute="trailing" constant="8" id="ffE-Jy-W8o"/>
+                                <constraint firstAttribute="height" constant="30" id="gtC-i9-gD7"/>
+                                <constraint firstItem="IKy-7C-3vj" firstAttribute="leading" secondItem="LkL-2c-Wje" secondAttribute="leading" constant="8" id="w96-TN-Q1k"/>
                             </constraints>
-                            <segments>
-                                <segment title="Partial"/>
-                                <segment title="Full"/>
-                            </segments>
-                            <color key="tintColor" red="0.84313725490196079" green="0.12156862745098039" blue="0.16470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="didSelectOTAMethodSegment:" destination="-1" eventType="valueChanged" id="zsP-Sx-7Dl"/>
+                                <outlet property="descriptionLabel" destination="RFm-pa-XEB" id="PAz-xs-m87"/>
+                                <outlet property="radioButton" destination="IKy-7C-3vj" id="dWV-q1-7PR"/>
                             </connections>
-                        </segmentedControl>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GY5-k3-8sr" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                            <rect key="frame" x="265" y="10" width="90" height="30"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pzK-Xh-SHI">
+                                    <rect key="frame" x="8" y="7" width="16" height="16"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="pzK-Xh-SHI" secondAttribute="height" multiplier="1:1" id="40r-Xy-z8G"/>
+                                        <constraint firstAttribute="width" constant="16" id="tff-h3-Ltf"/>
+                                    </constraints>
+                                    <state key="normal" image="radio_button_active"/>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Full" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tsR-OT-dqN">
+                                    <rect key="frame" x="32" y="6.5" width="50" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" red="0.18823529411764706" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="tsR-OT-dqN" firstAttribute="leading" secondItem="pzK-Xh-SHI" secondAttribute="trailing" constant="8" id="6dH-Vd-OK4"/>
+                                <constraint firstAttribute="height" constant="30" id="8v1-66-1jE"/>
+                                <constraint firstItem="tsR-OT-dqN" firstAttribute="centerY" secondItem="GY5-k3-8sr" secondAttribute="centerY" id="BZI-kh-Nba"/>
+                                <constraint firstAttribute="width" constant="90" id="MTB-qg-JUm"/>
+                                <constraint firstAttribute="trailing" secondItem="tsR-OT-dqN" secondAttribute="trailing" constant="8" id="QCB-q2-2hR"/>
+                                <constraint firstItem="pzK-Xh-SHI" firstAttribute="leading" secondItem="GY5-k3-8sr" secondAttribute="leading" constant="8" id="VIm-p0-sYF"/>
+                                <constraint firstItem="pzK-Xh-SHI" firstAttribute="centerY" secondItem="GY5-k3-8sr" secondAttribute="centerY" id="dgd-Ns-j0f"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="descriptionLabel" destination="tsR-OT-dqN" id="EM2-iF-Re8"/>
+                                <outlet property="radioButton" destination="pzK-Xh-SHI" id="xOa-W0-cGc"/>
+                            </connections>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="A4V-Nx-WAn"/>
+                        <constraint firstItem="GY5-k3-8sr" firstAttribute="centerY" secondItem="5RX-lV-GVk" secondAttribute="centerY" id="DiR-X4-GJ0"/>
                         <constraint firstItem="lpl-QJ-E4Y" firstAttribute="centerY" secondItem="5RX-lV-GVk" secondAttribute="centerY" id="Heh-JG-e7Z"/>
                         <constraint firstItem="lpl-QJ-E4Y" firstAttribute="leading" secondItem="5RX-lV-GVk" secondAttribute="leading" constant="22" id="P6K-H5-K9K"/>
-                        <constraint firstItem="jCO-h4-C6j" firstAttribute="centerY" secondItem="5RX-lV-GVk" secondAttribute="centerY" id="aAd-NH-JN6"/>
-                        <constraint firstAttribute="trailing" secondItem="jCO-h4-C6j" secondAttribute="trailing" constant="22" id="lyT-6X-VRT"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CeB-9b-WdH" userLabel="Splitter">
-                    <rect key="frame" x="35" y="138" width="305" height="1"/>
-                    <color key="backgroundColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="1" id="QBh-TV-Y3O"/>
+                        <constraint firstItem="GY5-k3-8sr" firstAttribute="leading" secondItem="LkL-2c-Wje" secondAttribute="trailing" id="TOp-ZK-y8C"/>
+                        <constraint firstItem="LkL-2c-Wje" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lpl-QJ-E4Y" secondAttribute="trailing" constant="20" id="ava-OO-IJc"/>
+                        <constraint firstAttribute="trailing" secondItem="GY5-k3-8sr" secondAttribute="trailing" constant="20" id="o7U-o8-hgn"/>
+                        <constraint firstItem="LkL-2c-Wje" firstAttribute="centerY" secondItem="5RX-lV-GVk" secondAttribute="centerY" id="r2s-cx-ZVe"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XMm-v1-5gI" userLabel="Mode View">
-                    <rect key="frame" x="0.0" y="139" width="375" height="50"/>
+                    <rect key="frame" x="0.0" y="161" width="375" height="50"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MODE" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhO-HP-XGH" userLabel="Mode Label">
-                            <rect key="frame" x="22" y="18" width="36.5" height="14.5"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="12"/>
-                            <color key="textColor" red="0.47843137250000001" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mode:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhO-HP-XGH" userLabel="Mode Label">
+                            <rect key="frame" x="22" y="16.5" width="41" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.18823529411764706" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5lv-4H-luq" userLabel="OTA Type Selector">
-                            <rect key="frame" x="194" y="10.5" width="159" height="30"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trC-sF-qQ2" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                            <rect key="frame" x="160" y="10" width="105" height="30"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FUC-bW-R2X">
+                                    <rect key="frame" x="8" y="7" width="16" height="16"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="16" id="Ef3-Qw-Vcz"/>
+                                        <constraint firstAttribute="width" secondItem="FUC-bW-R2X" secondAttribute="height" multiplier="1:1" id="MjM-S8-GGx"/>
+                                    </constraints>
+                                    <state key="normal" image="radio_button_active"/>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reliability" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wX8-vf-0bS">
+                                    <rect key="frame" x="32" y="6.5" width="65" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" red="0.18823529410000001" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="29" id="U7k-Bj-5pZ"/>
+                                <constraint firstAttribute="height" constant="30" id="AxK-uk-4Vl"/>
+                                <constraint firstItem="FUC-bW-R2X" firstAttribute="leading" secondItem="trC-sF-qQ2" secondAttribute="leading" constant="8" id="OQ5-dD-6ma"/>
+                                <constraint firstAttribute="width" constant="105" id="R5P-YW-6CU"/>
+                                <constraint firstItem="FUC-bW-R2X" firstAttribute="centerY" secondItem="trC-sF-qQ2" secondAttribute="centerY" id="aTW-xN-sp9"/>
+                                <constraint firstItem="wX8-vf-0bS" firstAttribute="centerY" secondItem="trC-sF-qQ2" secondAttribute="centerY" id="fFc-Np-jv2"/>
+                                <constraint firstAttribute="trailing" secondItem="wX8-vf-0bS" secondAttribute="trailing" constant="8" id="tYJ-Jn-8zE"/>
+                                <constraint firstItem="wX8-vf-0bS" firstAttribute="leading" secondItem="FUC-bW-R2X" secondAttribute="trailing" constant="8" id="wN9-Wm-djg"/>
                             </constraints>
-                            <segments>
-                                <segment title="Reliability"/>
-                                <segment title="Speed"/>
-                            </segments>
-                            <color key="tintColor" red="0.84313725490000002" green="0.1215686275" blue="0.1647058824" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="didSelectOTAModeSegment:" destination="-1" eventType="valueChanged" id="9B8-IW-7bG"/>
+                                <outlet property="descriptionLabel" destination="wX8-vf-0bS" id="DHv-Qj-dri"/>
+                                <outlet property="radioButton" destination="FUC-bW-R2X" id="cSy-7b-z0I"/>
                             </connections>
-                        </segmentedControl>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IQI-jv-qp7" customClass="SILRadioButton" customModule="BlueGecko" customModuleProvider="target">
+                            <rect key="frame" x="265" y="10" width="90" height="30"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DQ0-Ou-yef">
+                                    <rect key="frame" x="8" y="7" width="16" height="16"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="16" id="W6i-ao-ok1"/>
+                                        <constraint firstAttribute="width" secondItem="DQ0-Ou-yef" secondAttribute="height" multiplier="1:1" id="oK1-8g-hfQ"/>
+                                    </constraints>
+                                    <state key="normal" image="radio_button_active"/>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAF-Ow-Cua">
+                                    <rect key="frame" x="32" y="6.5" width="50" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" red="0.18823529410000001" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="qAF-Ow-Cua" firstAttribute="centerY" secondItem="IQI-jv-qp7" secondAttribute="centerY" id="5kx-ZF-LcO"/>
+                                <constraint firstItem="DQ0-Ou-yef" firstAttribute="leading" secondItem="IQI-jv-qp7" secondAttribute="leading" constant="8" id="KjN-5d-Aee"/>
+                                <constraint firstAttribute="trailing" secondItem="qAF-Ow-Cua" secondAttribute="trailing" constant="8" id="Ofn-AY-dbo"/>
+                                <constraint firstItem="DQ0-Ou-yef" firstAttribute="centerY" secondItem="IQI-jv-qp7" secondAttribute="centerY" id="WW7-GX-ksT"/>
+                                <constraint firstAttribute="height" constant="30" id="dVO-wz-TYO"/>
+                                <constraint firstItem="qAF-Ow-Cua" firstAttribute="leading" secondItem="DQ0-Ou-yef" secondAttribute="trailing" constant="8" id="jzh-yh-H6o"/>
+                                <constraint firstAttribute="width" constant="90" id="vD8-uv-QAT"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="descriptionLabel" destination="qAF-Ow-Cua" id="Skw-iA-XJ0"/>
+                                <outlet property="radioButton" destination="DQ0-Ou-yef" id="MPj-wR-0OB"/>
+                            </connections>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="trC-sF-qQ2" firstAttribute="centerY" secondItem="XMm-v1-5gI" secondAttribute="centerY" id="0Oo-lH-LS6"/>
+                        <constraint firstAttribute="trailing" secondItem="IQI-jv-qp7" secondAttribute="trailing" constant="20" id="1o7-ap-4bo"/>
+                        <constraint firstItem="IQI-jv-qp7" firstAttribute="centerY" secondItem="XMm-v1-5gI" secondAttribute="centerY" id="4BT-3g-63U"/>
                         <constraint firstItem="jhO-HP-XGH" firstAttribute="centerY" secondItem="XMm-v1-5gI" secondAttribute="centerY" id="5i0-bA-zcX"/>
+                        <constraint firstItem="IQI-jv-qp7" firstAttribute="leading" secondItem="trC-sF-qQ2" secondAttribute="trailing" id="CkB-GX-Gm0"/>
                         <constraint firstAttribute="height" constant="50" id="gYn-dq-w95"/>
-                        <constraint firstAttribute="trailing" secondItem="5lv-4H-luq" secondAttribute="trailing" constant="22" id="hOA-Io-lWf"/>
                         <constraint firstItem="jhO-HP-XGH" firstAttribute="leading" secondItem="XMm-v1-5gI" secondAttribute="leading" constant="22" id="tdO-IH-o9H"/>
-                        <constraint firstItem="5lv-4H-luq" firstAttribute="centerY" secondItem="XMm-v1-5gI" secondAttribute="centerY" id="vBo-Al-Wce"/>
+                        <constraint firstItem="trC-sF-qQ2" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jhO-HP-XGH" secondAttribute="trailing" constant="20" id="wqv-3M-tRv"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Uju-fv-EeI">
-                    <rect key="frame" x="0.0" y="189" width="375" height="429"/>
+                    <rect key="frame" x="0.0" y="211" width="375" height="407"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="YCf-OX-DhQ"/>
                         <outlet property="delegate" destination="-1" id="ujn-Mw-aS7"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h0r-z8-LOc" customClass="SILBigBlueButton">
-                    <rect key="frame" x="188" y="619" width="187" height="48"/>
-                    <color key="backgroundColor" name="sil_regularBlueColor"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                    <state key="normal" title="OTA UPDATE">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="didTapStartOTAButton:" destination="-1" eventType="touchUpInside" id="Dcn-Y1-bS2"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-aO-xfC" customClass="SILBigBlueButton">
-                    <rect key="frame" x="0.0" y="619" width="187" height="48"/>
-                    <color key="backgroundColor" name="sil_regularBlueColor"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SPR-T1-Sjq">
+                    <rect key="frame" x="0.0" y="618" width="375" height="48"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UAd-aO-xfC">
+                            <rect key="frame" x="135" y="9" width="80" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="B9p-Cm-Rdo"/>
+                                <constraint firstAttribute="width" constant="80" id="WFd-YG-G8e"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" name="sil_regularBlueColor"/>
+                            </state>
+                            <connections>
+                                <action selector="didTapCancelButton:" destination="-1" eventType="touchUpInside" id="8Q2-a2-tz0"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h0r-z8-LOc" customClass="SILPrimaryButton" customModule="BlueGecko" customModuleProvider="target">
+                            <rect key="frame" x="235" y="9" width="80" height="30"/>
+                            <color key="backgroundColor" systemColor="linkColor"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="gmB-Hi-woT"/>
+                                <constraint firstAttribute="height" constant="30" id="kcO-1p-kzP"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <state key="normal" title="Upload">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="didTapStartOTAButton:" destination="-1" eventType="touchUpInside" id="Dcn-Y1-bS2"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="48" id="B6b-pI-Y0R"/>
+                        <constraint firstAttribute="height" constant="48" id="52y-rM-1N7"/>
+                        <constraint firstItem="h0r-z8-LOc" firstAttribute="centerY" secondItem="SPR-T1-Sjq" secondAttribute="centerY" id="SMf-AL-8Nm"/>
+                        <constraint firstAttribute="trailing" secondItem="h0r-z8-LOc" secondAttribute="trailing" constant="60" id="TFs-4R-tHH"/>
+                        <constraint firstItem="UAd-aO-xfC" firstAttribute="centerY" secondItem="SPR-T1-Sjq" secondAttribute="centerY" id="avQ-tB-hPH"/>
+                        <constraint firstItem="h0r-z8-LOc" firstAttribute="leading" secondItem="UAd-aO-xfC" secondAttribute="trailing" constant="20" id="lOA-Wj-7mr"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                    <state key="normal" title="CANCEL">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="didTapCancelButton:" destination="-1" eventType="touchUpInside" id="8Q2-a2-tz0"/>
-                    </connections>
-                </button>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="5RX-lV-GVk" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="14K-5h-XDs"/>
                 <constraint firstAttribute="trailing" secondItem="Uju-fv-EeI" secondAttribute="trailing" id="1Og-Sz-mhJ"/>
-                <constraint firstItem="CeB-9b-WdH" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" constant="35" id="4VQ-Hf-SWv"/>
                 <constraint firstItem="XMm-v1-5gI" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="5dE-Xc-FYz"/>
-                <constraint firstItem="UAd-aO-xfC" firstAttribute="width" secondItem="h0r-z8-LOc" secondAttribute="width" id="79G-1x-9la"/>
                 <constraint firstAttribute="trailing" secondItem="5yN-eK-7ac" secondAttribute="trailing" id="9Du-aC-BYk"/>
+                <constraint firstItem="SPR-T1-Sjq" firstAttribute="width" secondItem="q9h-tL-CcT" secondAttribute="width" id="JMr-SG-jgr"/>
                 <constraint firstItem="5RX-lV-GVk" firstAttribute="top" secondItem="5yN-eK-7ac" secondAttribute="bottom" id="JPw-W1-4rV"/>
-                <constraint firstItem="jCO-h4-C6j" firstAttribute="width" secondItem="5lv-4H-luq" secondAttribute="width" id="KU6-Z8-219"/>
-                <constraint firstItem="XMm-v1-5gI" firstAttribute="top" secondItem="CeB-9b-WdH" secondAttribute="bottom" id="Pnp-qU-ixk"/>
+                <constraint firstItem="XMm-v1-5gI" firstAttribute="top" secondItem="5RX-lV-GVk" secondAttribute="bottom" constant="1" id="QFb-rs-6bz"/>
+                <constraint firstAttribute="bottom" secondItem="SPR-T1-Sjq" secondAttribute="bottom" constant="1" id="QbB-LI-0fJ"/>
                 <constraint firstItem="Uju-fv-EeI" firstAttribute="top" secondItem="XMm-v1-5gI" secondAttribute="bottom" id="UbD-Ne-p27"/>
                 <constraint firstItem="Uju-fv-EeI" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="XVH-Gf-Mh0"/>
-                <constraint firstItem="h0r-z8-LOc" firstAttribute="centerY" secondItem="UAd-aO-xfC" secondAttribute="centerY" id="apd-gh-Slp"/>
                 <constraint firstAttribute="trailing" secondItem="5RX-lV-GVk" secondAttribute="trailing" id="bpt-gs-NWg"/>
                 <constraint firstItem="5yN-eK-7ac" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="iHH-yB-JsA"/>
-                <constraint firstItem="UAd-aO-xfC" firstAttribute="leading" secondItem="q9h-tL-CcT" secondAttribute="leading" id="ics-3j-cU5"/>
-                <constraint firstItem="CeB-9b-WdH" firstAttribute="top" secondItem="5RX-lV-GVk" secondAttribute="bottom" id="ihl-oQ-6hv"/>
-                <constraint firstItem="UAd-aO-xfC" firstAttribute="height" secondItem="h0r-z8-LOc" secondAttribute="height" id="jqj-VP-UoD"/>
+                <constraint firstItem="SPR-T1-Sjq" firstAttribute="centerX" secondItem="q9h-tL-CcT" secondAttribute="centerX" id="iZX-mq-z7C"/>
                 <constraint firstItem="5yN-eK-7ac" firstAttribute="top" secondItem="q9h-tL-CcT" secondAttribute="top" id="kix-ah-Elc"/>
-                <constraint firstItem="UAd-aO-xfC" firstAttribute="top" secondItem="Uju-fv-EeI" secondAttribute="bottom" constant="1" id="nwd-SG-olU"/>
-                <constraint firstAttribute="trailing" secondItem="CeB-9b-WdH" secondAttribute="trailing" constant="35" id="qVh-lz-B72"/>
-                <constraint firstAttribute="bottom" secondItem="UAd-aO-xfC" secondAttribute="bottom" id="sRA-RK-0hf"/>
-                <constraint firstItem="h0r-z8-LOc" firstAttribute="leading" secondItem="UAd-aO-xfC" secondAttribute="trailing" constant="1" id="wdk-Il-RRJ"/>
-                <constraint firstAttribute="trailing" secondItem="h0r-z8-LOc" secondAttribute="trailing" id="xaK-09-9ED"/>
+                <constraint firstItem="SPR-T1-Sjq" firstAttribute="top" secondItem="Uju-fv-EeI" secondAttribute="bottom" id="wqv-gJ-fdV"/>
                 <constraint firstAttribute="trailing" secondItem="XMm-v1-5gI" secondAttribute="trailing" id="ySd-FW-7uY"/>
             </constraints>
             <point key="canvasLocation" x="32.799999999999997" y="52.623688155922046"/>
         </view>
     </objects>
+    <designables>
+        <designable name="h0r-z8-LOc">
+            <size key="intrinsicContentSize" width="58" height="34"/>
+        </designable>
+    </designables>
     <resources>
+        <image name="radio_button_active" width="112.5" height="112.5"/>
         <namedColor name="sil_regularBlueColor">
-            <color red="0.058823529411764705" green="0.38431372549019605" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.058823529411764705" green="0.3843137254901961" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

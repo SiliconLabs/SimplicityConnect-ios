@@ -27,7 +27,6 @@ extern NSString * _Nonnull const SILCentralManagerErrorKey;
 @property (nonnull, strong, nonatomic) CBCentralManager *centralManager;
 @property (nullable, strong, nonatomic) CBPeripheral *connectedPeripheral;
 
-- (nonnull instancetype)initWithServiceUUID:(nonnull CBUUID *)serviceUUID;
 - (nonnull instancetype)initWithServiceUUIDs:(nonnull NSArray *)serviceUUIDs;
 
 - (nonnull NSArray<SILDiscoveredPeripheral *> *)discoveredPeripherals;

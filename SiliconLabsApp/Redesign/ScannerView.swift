@@ -22,7 +22,7 @@ struct ScannerView: UIViewControllerRepresentable, PickerTabSubview {
     
     func floatingButtonAction() {
         print("Floating button in ScannerView")
-        viewController.scanningButtonWasTapped(self)
+        viewController.scanningButtonWasTapped()
     }
     
     var buttons : [NavBarButton] {
@@ -32,7 +32,6 @@ struct ScannerView: UIViewControllerRepresentable, PickerTabSubview {
         }),
          NavBarButton(id: "Filter button", image: Image("filterIcon"), action: {
             print("Filter button in ScannerView is tapped")
-            viewController.filterIsSelected.toggle()
             viewController.filterButtonTapped()
         }),
          NavBarButton(id: "Sort button", image: Image("sortIcon"), action: {

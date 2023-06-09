@@ -31,10 +31,6 @@ class SILAdvertisingDataValueCellView: UITableViewCell, SILCellView {
     
     func setupAppearance() {
         valueContainerView.layer.cornerRadius = 4
-        valueContainerView.layer.shadowColor = UIColor.black.cgColor
-        valueContainerView.layer.shadowOpacity = 0.3
-        valueContainerView.layer.shadowOffset = CGSize.zero
-        valueContainerView.layer.shadowRadius = 2
         valueContainerView.layer.shouldRasterize = true
         valueContainerView.layer.rasterizationScale = UIScreen.main.scale
     }

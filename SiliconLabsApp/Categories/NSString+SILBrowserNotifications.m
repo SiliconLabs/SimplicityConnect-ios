@@ -10,6 +10,7 @@
 
 NSString * const SILNotificationReloadBrowserTable = @"ReloadBrowserTable";
 NSString * const SILNotificationReloadConnectionsTableView = @"ReloadConnectionsTableView";
+NSString * const SILNotificationRefreshBrowserTable = @"RefreshBrowserTable";
 NSString * const SILNotificationDeleteSavedSearch = @"DeleteSavedSearch";
 NSString * const SILNotificationTableViewContentSize = @"contentSize";
 NSString * const SILNotificationReloadSavedSearchesTableViewHeight = @"ReloadSavedSearchesTableView";

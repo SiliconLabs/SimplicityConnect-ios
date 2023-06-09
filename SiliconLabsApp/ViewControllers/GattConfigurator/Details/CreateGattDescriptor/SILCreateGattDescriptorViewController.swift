@@ -73,7 +73,7 @@ class SILCreateGattDescriptorViewController: UIViewController, UITextViewDelegat
         
         viewModel.isSaveButtonEnabled.observe { enabled in
             weakSelf?.saveButton.isEnabled = enabled
-            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.systemBlue : UIColor.lightGray
+            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.sil_regularBlue() : UIColor.lightGray
         }.putIn(bag: tokenBag)
         
         viewModel.descriptorTypeObservable.observe { descriptorUuidType in

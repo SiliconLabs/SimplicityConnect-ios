@@ -38,7 +38,7 @@ class SILGattConfiguratorCharacteristicCellView: SILCell, SILCellView {
     
     private func didSetViewModel() {
         self.characteristicNameLabel.text = viewModel?.name == "" ? "Unknown characteristc" : viewModel?.name
-        self.characteristicUUIDLabel.text = viewModel?.characteristicUUID
+        addAttributedTextToLabel(label: characteristicUUIDLabel, boldText: "UUID: ", regularText: viewModel?.characteristicUUID)
         propertyStackView.updateProperties(viewModel?.characteristic.properties ?? [])
     }
     
@@ -52,5 +52,22 @@ class SILGattConfiguratorCharacteristicCellView: SILCell, SILCellView {
     
     @IBAction func onDeleteTouch(_ sender: UIButton) {
         viewModel?.deleteGattCharacteristic()
+    }
+    
+    private func addAttributedTextToLabel(label: UILabel, boldText: String, regularText: String?) {
+        let boldAttribute = [
+            NSAttributedString.Key.font: UIFont.robotoMedium(size: 12)!
+           ]
+           let regularAttribute = [
+            NSAttributedString.Key.font: UIFont.robotoRegular(size: 12)!
+           ]
+        
+        let boldText = NSAttributedString(string: boldText, attributes: boldAttribute)
+        let regularText = NSAttributedString(string: regularText ?? " ", attributes: regularAttribute)
+        let newString = NSMutableAttributedString()
+        newString.append(boldText)
+        newString.append(regularText)
+        
+        label.attributedText = newString
     }
 }

@@ -26,7 +26,7 @@ class SILGattConfiguratorCharacteristicCellViewModel: SILCellViewModel {
          characteristicModification: EntityModification<SILGattConfigurationCharacteristicEntity>) {
         self.characteristic = characteristic
         self.name = characteristic.name ?? "Unknown Characteristic"
-        self.characteristicUUID = "UUID: 0x\(characteristic.cbuuidString.uppercased())"
+        self.characteristicUUID = "0x\(characteristic.cbuuidString.uppercased())"
         self.onCopy = characteristicModification.onCopy
         self.onEdit = characteristicModification.onEdit
         self.onDelete = characteristicModification.onDelete

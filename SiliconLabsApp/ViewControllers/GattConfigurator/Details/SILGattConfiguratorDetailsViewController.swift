@@ -8,10 +8,10 @@
 
 import UIKit
 
-class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var allSpaceStackView: UIStackView!
-    @IBOutlet weak var gattConfigurationName: UITextField!
+    @IBOutlet weak var gattConfigurationName: SILTextField!
     @IBOutlet weak var tableView: UITableView!
     var viewModel: SILGattConfiguratorDetailsViewModel!
     var dataSource: [SILGattConfiguratorServiceCellViewModel] = []
@@ -27,15 +27,21 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     func setupNavigationBar() {
         self.navigationItem.title = viewModel.gattConfigurationName
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(backButtonTouch))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "save"),
                                                                  style: .plain,
                                                                  target: self,
@@ -58,6 +64,10 @@ class SILGattConfiguratorDetailsViewController: UIViewController, UITableViewDel
             weakSelf?.tableView.reloadData()
         }
     }
+    
+    @objc private func backButtonTouch(_ sender: UIButton) {
+        viewModel.backToHome()
+      }
     
     @objc private func onSaveTouch(_ sender: UIButton) {
         viewModel.save()

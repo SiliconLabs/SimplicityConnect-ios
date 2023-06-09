@@ -10,7 +10,6 @@
 #import "SILBrowserConnectionsTableViewCell.h"
 #import "UIImage+SILImages.h"
 #import "SILBrowserConnectionsViewModel.h"
-#import "SILConnectedPeripheralDataModel.h"
 #import "NSString+SILBrowserNotifications.h"
 #import "SILBluetoothBrowser+Constants.h"
 #import "SILDebugServicesViewController.h"
@@ -19,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *connectionsTableView;
 @property (weak, nonatomic) IBOutlet UIView *emptyView;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* viewModel;
+@property (nonatomic, weak) FloatingButtonSettings *floatingButtonSettings;
+@property (nonatomic, strong) SILUIScrollViewDelegate *uiScrollViewDelegate;
 
 @end
 
@@ -28,8 +29,16 @@
     [super viewDidLoad];
     [self registerNibs];
     [self hideScrollIndicators];
+    [self setupScrollViewBehaviour];
     _viewModel = [SILBrowserConnectionsViewModel sharedInstance];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableView) name:SILNotificationReloadConnectionsTableView object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.floatingButtonSettings setPresented:YES];
+    self.viewModel.isActiveScrollingUp = NO;
+    [self.navigationController.tabBarController showTabBarAndUpdateFrames];
 }
 
 - (void)disconnectAllTapped {
@@ -46,6 +55,19 @@
 - (void)hideScrollIndicators {
     [_connectionsTableView setShowsHorizontalScrollIndicator:NO];
     [_connectionsTableView setShowsVerticalScrollIndicator:NO];
+}
+
+- (void)setupScrollViewBehaviour {
+    __weak __typeof__(self) weakSelf = self;
+    self.uiScrollViewDelegate = [[SILUIScrollViewDelegate alloc] initOnHideUIElements:^(void) {
+        [weakSelf.floatingButtonSettings setPresented:NO];
+        weakSelf.viewModel.isActiveScrollingUp = YES;
+        [weakSelf.navigationController.tabBarController hideTabBarAndUpdateFrames];
+    } onShowUIElements:^(void) {
+        [weakSelf.floatingButtonSettings setPresented:YES];
+        weakSelf.viewModel.isActiveScrollingUp = NO;
+        [weakSelf.navigationController.tabBarController showTabBarAndUpdateFrames];
+    }];
 }
 
 # pragma mark - Log Table View
@@ -65,34 +87,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SILBrowserDeviceViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"SILConnectedDeviceViewCell" forIndexPath:indexPath];
-    SILConnectedPeripheralDataModel* peripheralModel = _viewModel.peripherals[indexPath.section];
     cell.delegate = self;
-    SILDiscoveredPeripheral *discoveredPeripheral = peripheralModel.discoveredPeripheral;
-    NSString* cellIdentifier = discoveredPeripheral.identityKey;
-    cell.cellIdentifier = cellIdentifier;
-    NSString *deviceName = discoveredPeripheral.advertisedLocalName;
-    cell.rssiLabel.text = discoveredPeripheral.rssiDescription;
-    cell.title.text = deviceName;
-    if ([deviceName isEqualToString:EmptyText] || deviceName == nil) {
-        cell.title.text = DefaultDeviceName;
-    }
+    cell.viewModel = _viewModel.peripherals[indexPath.section];
     
-    cell.uuidLabel.text = discoveredPeripheral.uuid.UUIDString;
-    long long advertisingIntervalsInMS = discoveredPeripheral.advertisingInterval * 1000;
-    
-    NSMutableString* advertisingIntervalText = [NSMutableString stringWithFormat:@"%lld", advertisingIntervalsInMS];
-    [advertisingIntervalText appendString:AppendingMS];
-    
-    cell.advertisingIntervalLabel.text = advertisingIntervalText;
-    
-    if (discoveredPeripheral.isConnectable) {
-        cell.connectableLabel.text = SILDiscoveredPeripheralConnectableDevice;
-        [cell setDisconnectButtonAppearance];
-    } else {
-        cell.connectableLabel.text = SILDiscoveredPeripheralNonConnectableDevice;
-        [cell setHiddenButtonAppearance];
-    }
-    cell.beaconLabel.text = discoveredPeripheral.beacon.name;
+    [cell configure];
     
     return cell;
 }
@@ -102,7 +100,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [_viewModel updateConnectionsView:indexPath.section];
     [self presentDetailsViewControllerWithPeripheral:self.viewModel.peripherals[indexPath.section].discoveredPeripheral.peripheral];
 }
 
@@ -132,7 +129,7 @@
 }
 
 - (void)connectButtonTappedInCell:(SILBrowserDeviceViewCell * _Nullable)cell {
-    [self.viewModel disconnectPeripheralWithIdentifier:cell.cellIdentifier];
+    [self.viewModel disconnectPeripheralWithIdentifier:cell.viewModel.discoveredPeripheral.identityKey];
 }
 
 - (void)presentDetailsViewControllerWithPeripheral:(CBPeripheral *)peripheral {
@@ -145,6 +142,21 @@
     localGattServerVC.peripheral = peripheral;
     localGattServerVC.centralManager = self.viewModel.centralManager;
     [self.navigationController pushViewController:detailsTabBarController animated:YES];
+}
+
+- (void)setupFloatingButtonSettings:(FloatingButtonSettings *)settings {
+    self.floatingButtonSettings = settings;
+    [self.floatingButtonSettings setButtonText:@"Disconnect All"];
+    [self.floatingButtonSettings setPresented:!self.viewModel.isActiveScrollingUp];
+    [self.floatingButtonSettings setColor:[UIColor sil_regularBlueColor]];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.uiScrollViewDelegate scrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.uiScrollViewDelegate scrollViewWillBeginDragging:scrollView];
 }
 
 @end

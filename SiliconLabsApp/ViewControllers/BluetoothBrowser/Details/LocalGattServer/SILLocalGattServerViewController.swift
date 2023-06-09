@@ -48,8 +48,7 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     @IBOutlet weak var presentationView: UIView!
     var headerView: SILDebugHeaderView?
     var connectionsViewModel: SILBrowserConnectionsViewModel!
-    @IBOutlet weak var topRefreshImageConstraint: NSLayoutConstraint!
-    @IBOutlet weak var refreshImageView: SILRefreshImageView!
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,8 +56,8 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         setupCornerRadius()
         setupNavigationBar()
         setupConnectionsViewModel()
+        setupRefreshControl()
         isUpdatingFirmware = false
-        setupRefreshImageView()
         peripheral.delegate = self
     }
 
@@ -67,6 +66,7 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         registerForNotifications()
         installRSSITimer()
         observeLocalGattServer()
+        self.setLeftAlignedTitle(SILAdvertiserSettings.shared.completeLocalName)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -77,6 +77,13 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         NotificationCenter.default.removeObserver(self)
     }
 
+    func setupRefreshControl() {
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.addTarget(self,
+                                      action: #selector(refreshTable), for: .valueChanged)
+        self.tableView.addSubview(self.refreshControl)
+    }
+    
     func dismissPopoverIfExist() {
         if let popoverController = popoverController {
             popoverController.dismissPopover(animated: true)
@@ -102,24 +109,11 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
     }
     
     private func setupNavigationBar() {
-        self.setLeftAlignedTitle(self.peripheral.name ?? DefaultDeviceName)
-        
         let logButton = UIBarButtonItem(image: UIImage(named: "logsIcon"), style: .plain, target: self, action: #selector(logButtonWasTapped))
         
         self.navigationItem.rightBarButtonItems = [logButton]
     }
     
-    func setupRefreshImageView() {
-        refreshImageView.model = SILRefreshImageModel(
-            constraint: topRefreshImageConstraint,
-            withEmpty: presentationView,
-            with: tableView,
-            andWithReloadAction: { [self] in
-                refreshTable()
-            })
-        refreshImageView.setup()
-    }
-
     // MARK: - setup
     
     func registerNibsAndSetUpSizing() {
@@ -188,20 +182,8 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
             name: NSNotification.Name.SILCentralManagerDidDisconnectPeripheral,
             object: centralManager)
     }
-
-    func addObserverForDisplayToastResponse() {
-        NotificationCenter.default.addObserver(self, selector: #selector(displayToast(_:)), name: NSNotification.Name(rawValue: SILNotificationDisplayToastResponse), object: nil)
-    }
     
     // MARK: - Notification Methods
-    
-    @objc func displayToast(_ notification: Notification?) {
-        if let errorMessage = notification?.userInfo?[SILNotificationKeyDescription] as? String {
-            showToast(message: errorMessage, toastType: .disconnectionError) {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: SILNotificationDisplayToastRequest), object: nil)
-            }
-        }
-    }
     
     @objc func didDisconnectPeripheralNotifcation(_ notification: Notification?) {
         let uuid = notification?.userInfo?[SILNotificationKeyUUID] as? String
@@ -390,11 +372,6 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         rect.size = headerView?.frame.size ?? .zero
         rect.origin.y = max(0, -(scrollView.contentOffset.y + rect.size.height))
         headerView?.frame = rect
-        if scrollView.contentOffset.y < 0 {
-            scrollView.contentOffset = CGPoint.zero
-        } else {
-            tableView.isScrollEnabled = true
-        }
     }
     
     // MARK: - Configure Cells
@@ -407,6 +384,7 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
         serviceCell.serviceUuidLabel.text = serviceTableModel.hexUuidString() ?? ""
         serviceCell.configureAsExpandanble(serviceTableModel.canExpand())
         serviceCell.customizeMoreInfoText(serviceTableModel.isExpanded)
+        serviceCell.customizeArrow(serviceTableModel.isExpanded)
         serviceCell.layoutIfNeeded()
         return serviceCell
     }
@@ -809,6 +787,7 @@ class SILLocalGattServerViewController: UIViewController, UITableViewDelegate, U
 
     func refreshTable() {
         modelsToDisplay = buildDisplayArray()
+        refreshControl.endRefreshing()
         tableView.reloadData()
     }
 

@@ -11,6 +11,5 @@
 
 @class SILBrowserFilterViewController;
 @protocol SILBrowserFilterViewControllerDelegate <NSObject>
-- (void)backButtonWasTapped;
-- (void)applyFiltersButtonWasTapped:(SILBrowserFilterViewModel*)viewModel;
+- (void)applyFilters:(SILBrowserFilterViewModel*)viewModel;
 @end

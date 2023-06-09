@@ -38,6 +38,10 @@ class SILDiscoverTestConnectionParameters {
     private var isVersionNumberLesserThan3_3_0: Bool {
         return stackVersion.versionCompare("3.3.0") == .orderedAscending
     }
+    
+    private var isVersionNumberGreaterThan6_0_0: Bool {
+        return stackVersion.versionCompare("6.0.0") == .orderedDescending || stackVersion.versionCompare("6.0.0") == .orderedSame
+    }
  
     init() { }
     
@@ -144,14 +148,23 @@ class SILDiscoverTestConnectionParameters {
                         let indexOfFirstData = weakSelf.isVersionNumberLesserThan3_3_0 ? 1 : 0
                         let mtu_size: Int = arrayData[indexOfFirstData]
                         let pdu_size: Int = arrayData[indexOfFirstData + 1]
-                        let interval: Int = Int(Double(arrayData[indexOfFirstData + 2]) * 1.25)
+                        let interval: Double = Double(arrayData[indexOfFirstData + 2]) * 1.25
                         let latency: Int = arrayData[indexOfFirstData + 3]
-                        let supervision_timeout: Int = arrayData[indexOfFirstData + 4]
+                        var supervision_timeout: Int = arrayData[indexOfFirstData + 4]
+                        if weakSelf.isVersionNumberGreaterThan6_0_0 {
+                            supervision_timeout = supervision_timeout * 10
+                        }
+                        var phy: Int = 0
+                        if weakSelf.isVersionNumberGreaterThan6_0_0 {
+                            phy = arrayData[indexOfFirstData + 5]
+                        }
+                        
                         weakSelf.connectionParameters = SILIOPTestConnectionParameters(mtu_size: mtu_size,
-                                                                                  pdu_size: pdu_size,
-                                                                                  interval: interval,
-                                                                                  latency: latency,
-                                                                                  supervision_timeout: supervision_timeout)
+                                                                                       pdu_size: pdu_size,
+                                                                                       interval: interval,
+                                                                                       latency: latency,
+                                                                                       supervision_timeout: supervision_timeout,
+                                                                                       phy: phy)
                         weakSelf.setCompletedIfPossible()
                         return
                     }

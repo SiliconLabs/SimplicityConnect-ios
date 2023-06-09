@@ -14,8 +14,10 @@ class SILAbstractDeviceSelectionViewController: UIViewController, UICollectionVi
     @IBOutlet weak var deviceCollectionView: UICollectionView!
     @IBOutlet weak var selectDeviceLabel: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
-    
-    private var reloadDataTimer: Timer?
+    @IBOutlet weak var infoTextView: UITextView!
+    @IBOutlet weak var deviceListLabel: UILabel!
+    @IBOutlet weak var deviceListSpinner: UIImageView!
+    @IBOutlet weak var emptyDeviceListView: UIView!
     
     let SILDeviceSelectionViewControllerReloadThreshold: CGFloat = 1.0
 
@@ -31,6 +33,13 @@ class SILAbstractDeviceSelectionViewController: UIViewController, UICollectionVi
         super.viewDidLoad()
         self.deviceCollectionView.register(UINib(nibName: String(describing: SILDeviceSelectionCollectionViewCell.self), bundle: nil), forCellWithReuseIdentifier: SILDeviceSelectionCollectionViewCellIdentifier)
         self.setupTextLabels()
+        self.setupTextView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        adjustUITextViewHeight(textView: infoTextView)
+        UIView.addContinuousRotationAnimation(to: deviceListSpinner.layer, withFullRotationDuration: 2, forKey: "testingI")
     }
 
     @IBAction func didPressCancelButton(_ sender: Any) {}
@@ -51,7 +60,17 @@ class SILAbstractDeviceSelectionViewController: UIViewController, UICollectionVi
     // MARK: - Setup Methods
     
     func setupTextLabels() {
-        selectDeviceLabel.text = "Select a Bluetooth Device"
+        selectDeviceLabel.text = "Select a BLE Device"
+    }
+    
+    func setupTextView() {
+        infoTextView.text = ""
+    }
+    
+    func adjustUITextViewHeight(textView : UITextView) {
+        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.sizeToFit()
+        textView.isScrollEnabled = false
     }
     
     // MARK: UICollectionViewDelegateFlowLayout

@@ -19,6 +19,7 @@ extern NSString * const SILServiceNumberConnectedLightingProprietary;
 extern NSString * const SILServiceNumberConnectedLightingThread;
 extern NSString * const SILServiceNumberConnectedLightingZigbee;
 extern NSString * const SILServiceNumberRangeTest;
+extern NSString * const SILServiceNumberESLServiceControl;
 
 extern NSString * const SILCharacteristicNumberAlertLevel;
 extern NSString * const SILCharacteristicNumberTXPowerLevel;
@@ -31,6 +32,7 @@ extern NSString * const SILCharacteristicNumberDMPSourceAddress;
 
 extern NSString * const SILDiscoveredPeripheralConnectableDevice;
 extern NSString * const SILDiscoveredPeripheralNonConnectableDevice;
+extern NSString * const SILPeerRemovedPairingMessage;
 
 extern NSInteger const SILConstantsStrongSignalThreshold;
 extern NSInteger const SILConstantsMediumSignalThreshold;

@@ -10,6 +10,7 @@
 
 extern NSString * const SILNotificationReloadBrowserTable;
 extern NSString * const SILNotificationReloadConnectionsTableView;
+extern NSString * const SILNotificationRefreshBrowserTable;
 extern NSString * const SILNotificationDeleteSavedSearch;
 extern NSString * const SILNotificationTableViewContentSize;
 extern NSString * const SILNotificationReloadSavedSearchesTableViewHeight;

@@ -31,10 +31,14 @@ class SILRealmConfiguration : NSObject {
     // - added fields for Gatt Configurations import and export
     static let SchemeVersionEFR_2_3_2: UInt64 = 4
     
+    // Updated:
+    // - changed type of property SILAdvertisingSetEntity.executionTime from ‘double’ to ‘int’
+    static let SchemeVersionEFR_2_6_2: UInt64 = 5
+    
     @objc
     static func updateRealmConfigurationIfNeeded() {
         let configuration = Realm.Configuration(
-            schemaVersion: SILRealmConfiguration.SchemeVersionEFR_2_3_2,
+            schemaVersion: SILRealmConfiguration.SchemeVersionEFR_2_6_2,
             migrationBlock: { migration, oldSchemeVersion in
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_0_3 {
                     SILRealmConfiguration.performUpdateDatabaseForEFR_2_0_3(migration: migration)
@@ -45,6 +49,9 @@ class SILRealmConfiguration : NSObject {
                 }
                 if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_3_2 {
                     SILRealmConfiguration.performUpdateDatabaseForEFR_2_3_2(migration: migration)
+                }
+                if oldSchemeVersion < SILRealmConfiguration.SchemeVersionEFR_2_6_2 {
+                    SILRealmConfiguration.performUpdateDatabaseForEFR_2_6_2(migration: migration)
                 }
             }
         )
@@ -108,6 +115,13 @@ class SILRealmConfiguration : NSObject {
         addFieldsTofGattConfigurationEntities(migration: migration)
         setFixedVariableLength(migration: migration, type: "SILGattConfigurationCharacteristicEntity")
         setFixedVariableLength(migration: migration, type: "SILGattConfigurationDescriptorEntity")
+    }
+    
+    private static func performUpdateDatabaseForEFR_2_6_2(migration: Migration) {
+        migration.enumerateObjects(ofType: SILAdvertisingSetEntity.className()) { oldObject, newObject in
+            let oldTime = oldObject!["executionTime"] as? NSNumber
+            newObject!["executionTime"] = oldTime?.intValue ?? 0
+        }
     }
     
     private static func setDefaultValue(migration: Migration, type: String, fieldName: String, value: Any?) {

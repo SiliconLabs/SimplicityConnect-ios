@@ -42,18 +42,17 @@ class SILGattConfiguratorDescriptorCellView: SILCell, SILCellView {
     }
     
     private func didSetViewModel() {
-        self.descriptorUUIDLabel.text = viewModel?.descriptorUUID
-        self.separatorView.isHidden = viewModel?.isLast ?? false
-        self.descriptorValueLabel.text = viewModel?.valueString
+        addAttributedTextToLabel(label: descriptorUUIDLabel, boldText: "UUID: ", regularText: viewModel?.descriptorUUID)
+        addAttributedTextToLabel(label: descriptorValueLabel, boldText: "Value: ", regularText: viewModel?.valueString)
         propertyStackView.updateProperties(viewModel?.descriptor.properties ?? [])
         if let canBeModified = viewModel?.descriptor.canBeModified {
             DispatchQueue.main.async {
                 self.buttonStackView.isHidden = !canBeModified
-                let labelColor = canBeModified ? UIColor.sil_regularBlue()! : UIColor.sil_boulder()!
+                let labelColor = UIColor.sil_primaryText()!
                 self.descriptorNameLabel.textColor = labelColor
                 self.descriptorUUIDLabel.textColor = labelColor
                 self.descriptorValueLabel.textColor = labelColor
-                self.propertyStackView.propertyColor = labelColor
+                self.propertyStackView.propertyColor =  UIColor.sil_regularBlue()!
                 self.descriptorNameLabel.text = self.viewModel?.name == "" ? "Unknown descriptor" : canBeModified ?  self.viewModel?.name : "\(self.viewModel?.name ?? "") (predefined)"
             }
         }
@@ -69,5 +68,22 @@ class SILGattConfiguratorDescriptorCellView: SILCell, SILCellView {
     
     @IBAction func onDeleteTouch(_ sender: UIButton) {
         viewModel?.deleteGattDescriptor()
+    }
+    
+    private func addAttributedTextToLabel(label: UILabel, boldText: String, regularText: String?) {
+        let boldAttribute = [
+            NSAttributedString.Key.font: UIFont.robotoMedium(size: 12)!
+           ]
+           let regularAttribute = [
+            NSAttributedString.Key.font: UIFont.robotoRegular(size: 12)!
+           ]
+        
+        let boldText = NSAttributedString(string: boldText, attributes: boldAttribute)
+        let regularText = NSAttributedString(string: regularText ?? " ", attributes: regularAttribute)
+        let newString = NSMutableAttributedString()
+        newString.append(boldText)
+        newString.append(regularText)
+        
+        label.attributedText = newString
     }
 }

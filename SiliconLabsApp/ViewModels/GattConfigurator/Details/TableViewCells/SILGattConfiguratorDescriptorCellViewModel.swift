@@ -29,7 +29,7 @@ class SILGattConfiguratorDescriptorCellViewModel: SILCellViewModel {
         self.descriptor = descriptor
         self.name = descriptor.name ?? "Unknown descriptor"
         self.valueString = ""
-        self.descriptorUUID = "UUID: 0x\(descriptor.cbuuidString.uppercased())"
+        self.descriptorUUID = "0x\(descriptor.cbuuidString.uppercased())"
         self.onCopy = descriptorModification.onCopy
         self.onEdit = descriptorModification.onEdit
         self.onDelete = descriptorModification.onDelete
@@ -39,11 +39,11 @@ class SILGattConfiguratorDescriptorCellViewModel: SILCellViewModel {
     private func setValue() {
         switch descriptor.initialValueType {
         case .none:
-            self.valueString = "Value:"
+            self.valueString = " "
         case .hex:
-            self.valueString = "Value: 0x\(descriptor.initialValue!)"
+            self.valueString = "0x\(descriptor.initialValue!)"
         case .text:
-            self.valueString = "Value: \(descriptor.initialValue!)"
+            self.valueString = "\(descriptor.initialValue!)"
         }
     }
     

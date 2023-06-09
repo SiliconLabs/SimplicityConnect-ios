@@ -46,7 +46,7 @@ class SILAdvertisingSetEntity: Object {
     }
     
     var isExecutionTime: Bool = false
-    var executionTime: Double = 10
+    var executionTime: Int = 10
     
     override public static func primaryKey() -> String? {
         return "uuid"

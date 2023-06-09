@@ -15,14 +15,46 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     
     var viewModel: SILAdvertiserHomeViewModel!
     var dataSource: [SILAdvertiserCellViewModel] = []
+    private weak var floatingButtonSettings: FloatingButtonSettings?
+    
+    private lazy var uiScrollViewDelegate = SILUIScrollViewDelegate(onHideUIElements: { [weak self] in
+        guard let self = self else { return }
+        self.floatingButtonSettings?.setPresented(false)
+        self.viewModel.isActiveScrollingUp = true
+        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
+    }, onShowUIElements: { [weak self] in
+        guard let self = self else { return }
+        self.floatingButtonSettings?.setPresented(true)
+        self.viewModel.isActiveScrollingUp = false
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    })
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupTableView()
+        viewModel.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.floatingButtonSettings?.setPresented(true)
+        self.viewModel.isActiveScrollingUp = false
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    }
+    
+    fileprivate func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
-        
-        viewModel.viewDidLoad()
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
+    }
+    
+    func setupFloatingButton(_ settings: FloatingButtonSettings) {
+        floatingButtonSettings = settings
+        floatingButtonSettings?.setButtonText("Create New")
+        floatingButtonSettings?.setPresented(!viewModel.isActiveScrollingUp)
     }
     
     // MARK: SILAdvertiserHomeViewDelegate
@@ -101,4 +133,14 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
         return SILTableViewWithShadowCells.tableView(tableView, viewForHeaderInSection: section, withHeight: 8.0)
     }
     
+}
+
+extension SILAdvertiserHomeViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        uiScrollViewDelegate.scrollViewWillBeginDragging(scrollView)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        uiScrollViewDelegate.scrollViewDidScroll(scrollView)
+    }
 }

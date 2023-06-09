@@ -8,24 +8,24 @@
 
 import Foundation
 
-
-import Foundation
-
 class SILIOPFileWriter : NSObject {
     fileprivate var fileHandle: FileHandle?
     
-    var timestamp: Date
-    var firmware: SILIOPFirmware
+    private var timestamp: Date
+    private var firmware: SILIOPFirmware
+    private var deviceModelName: String
     
     override init() {
         firmware = .unknown
         timestamp = Date()
+        deviceModelName = "Unknown"
         super.init()
     }
     
-    init(firmware: SILIOPFirmware, timestamp: Date) {
+    init(firmware: SILIOPFirmware, timestamp: Date, deviceModelName: String) {
         self.firmware = firmware
         self.timestamp = timestamp
+        self.deviceModelName = deviceModelName
     }
     
     var getFileUrl: URL {
@@ -61,7 +61,7 @@ class SILIOPFileWriter : NSObject {
     
     private var getLogFileName: String {
         let nowString = longStyleDateFormatter().string(from: timestamp)
-        return String(format: "%@_%@_%@.txt", UIDevice.deviceName.replacingOccurrences(of: " ", with: "_"), firmware.rawValue, nowString.replacingOccurrences(of: " ", with: "_"))
+        return String(format: "%@_%@_%@.txt", self.deviceModelName.replacingOccurrences(of: " ", with: "_"), firmware.rawValue, nowString.replacingOccurrences(of: " ", with: "_"))
     }
     
     var getFilePath: String {

@@ -63,11 +63,6 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 @implementation SILCentralManager
 
-- (instancetype)initWithServiceUUID:(CBUUID *)serviceUUID {
-    NSAssert(serviceUUID != nil, @"initWithServiceUUID with a nil serviceUUID");
-    return [self initWithServiceUUIDs:@[serviceUUID]];
-}
-
 - (instancetype)initWithServiceUUIDs:(NSArray *)serviceUUIDs {
     self = [super init];
     if (self) {
@@ -184,9 +179,10 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 - (void)filterDiscoveredPeripheralByTimeout {
     BOOL didRemovePeripherals = NO;
     for (SILDiscoveredPeripheral *discoveredPeripheral in [self discoveredPeripherals]) {
-        if (![discoveredPeripheral.rssiMeasurementTable hasRSSIMeasurementInPastTimeInterval:SILCentralManagerDiscoveryTimeoutThreshold]) {
+        if (![discoveredPeripheral.rssiMeasurementTable hasRSSIMeasurementInPastTimeInterval:SILCentralManagerDiscoveryTimeoutThreshold]
+            && discoveredPeripheral.peripheral.state != CBPeripheralStateConnected) {
             didRemovePeripherals = YES;
-            [self.discoveredPeripheralMapping removeObjectForKey:discoveredPeripheral.identityKey];
+            discoveredPeripheral.hasTimedOut = YES;
         }
     }
     if (didRemovePeripherals) {
@@ -275,7 +271,11 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 }
 
 - (void)toggleScanning {
-    if ([self shouldScanForDevices]) {
+    if (self.centralManager.state == CBManagerStateUnknown) {
+        [NSTimer scheduledTimerWithTimeInterval:1 repeats:false block:^(NSTimer * _Nonnull timer) {
+            [self toggleScanning];
+        }];
+    } else if ([self shouldScanForDevices]) {
         [self startScanning];
     } else {
         [self stopScanning];

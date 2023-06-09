@@ -9,7 +9,10 @@
 extension UITextView {
 
   func addHyperLinksToText(originalAttributedText: NSAttributedString, hyperLinks: [String: String]) {
-    let attributedOriginalText = NSMutableAttributedString(attributedString: originalAttributedText)
+    let fontAttribute = [
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)
+    ]
+    let attributedOriginalText = NSMutableAttributedString(string: originalAttributedText.string, attributes: fontAttribute)
     for (hyperLink, urlString) in hyperLinks {
         let linkRange = attributedOriginalText.mutableString.range(of: hyperLink)
         attributedOriginalText.addAttribute(NSAttributedString.Key.link, value: urlString, range: linkRange)

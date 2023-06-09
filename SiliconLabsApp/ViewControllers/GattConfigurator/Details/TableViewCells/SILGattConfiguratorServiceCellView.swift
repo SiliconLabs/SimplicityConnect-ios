@@ -36,8 +36,9 @@ class SILGattConfiguratorServiceCellView: SILCell, SILCellView {
             self.serviceNameLabel.text = viewModel.name == "" ? "Unknown service" : viewModel.name
             self.serviceUUIDLabel.text = viewModel.serviceUUID
             self.serviceTypeLabel.text = viewModel.serviceType
-            let title = viewModel.isExpanded ? "Less info" : "More info"
-            self.moreInfoButton.setTitle(title, for: .normal)
+            let imageName = viewModel.isExpanded ? "chevron_up" : "chevron_down"
+            self.moreInfoButton.setImage(UIImage(named: imageName), for: .normal)
+            self.moreInfoButton.tintColor = UIColor.sil_regularBlue()
         }
     }
     

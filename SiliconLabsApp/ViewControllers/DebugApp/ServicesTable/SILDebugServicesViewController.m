@@ -38,7 +38,6 @@
 #import "SILUUIDProvider.h"
 #import "SILOTAUICoordinator.h"
 #import "SILLogDataModel.h"
-#import "SILConnectedPeripheralDataModel.h"
 #import "BlueGecko.pch"
 #import "SILBrowserLogViewController.h"
 #import "SILBrowserConnectionsViewController.h"
@@ -46,8 +45,6 @@
 #import "SILBrowserConnectionsViewModel.h"
 #import "NSString+SILBrowserNotifications.h"
 #import "SILBluetoothBrowser+Constants.h"
-#import "SILRefreshImageView.h"
-#import "SILRefreshImageModel.h"
 #import "UIView+SILShadow.h"
 
 static NSString * const kSpacerCellIdentifieer = @"spacer";
@@ -74,8 +71,6 @@ static float kTableRefreshInterval = 1;
 @property (strong, nonatomic) SILDebugHeaderView *headerView;
 
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* connectionsViewModel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topRefreshImageConstraint;
-@property (weak, nonatomic) IBOutlet SILRefreshImageView *refreshImageView;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
 @property (weak, nonatomic) IBOutlet UIButton *otaButton;
 @property (weak, nonatomic) IBOutlet UIView *infoView;
@@ -93,13 +88,13 @@ static float kTableRefreshInterval = 1;
     [self setupBrowserExpandableViewManager];
     [self setupConnectionsViewModel];
     self.isUpdatingFirmware = NO;
-    [self setupRefreshImageView];
     [self setupButtons];
     [self setupInfoShadow];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setupRefreshControl];
     self.peripheral.delegate = self;
     [self registerForNotifications];
     [self installRSSITimer];
@@ -113,6 +108,15 @@ static float kTableRefreshInterval = 1;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)setupRefreshControl {
+    self.refreshControl = [UIRefreshControl new];
+    [self.refreshControl addTarget:self
+                            action:@selector(refresh)
+                  forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+}
+
+
 - (void)dismissPopoverIfExist {
     if (self.popoverController) {
         [self.popoverController dismissPopoverAnimated:YES];
@@ -120,15 +124,10 @@ static float kTableRefreshInterval = 1;
 }
 
 - (void)removeUnfiredTimers {
-    [self removeTimer:self.tableRefreshTimer];
-    [self removeTimer:self.rssiTimer];
-}
-
-- (void)removeTimer:(NSTimer *)timer {
-    if (timer) {
-        [timer invalidate];
-        timer = nil;
-    }
+    [self.tableRefreshTimer invalidate];
+    self.tableRefreshTimer = nil;
+    [self.rssiTimer invalidate];
+    self.rssiTimer = nil;
 }
 
 - (void)performOTAAction {
@@ -169,16 +168,6 @@ static float kTableRefreshInterval = 1;
     } else {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:SILNotificationDisplayToastResponse object:nil];
     }
-}
-
-- (void)setupRefreshImageView {
-    _refreshImageView.model = [[SILRefreshImageModel alloc] initWithConstraint:self.topRefreshImageConstraint
-                                                                 withEmptyView:self.presentationView
-                                                                 withTableView:self.tableView
-                                                           andWithReloadAction:^{
-                                                                                [self refresh];
-                                                                                }];
-    [_refreshImageView setup];
 }
 
 #pragma mark - setup
@@ -251,17 +240,6 @@ static float kTableRefreshInterval = 1;
                                              selector:@selector(didDisconnectPeripheralNotifcation:)
                                                  name:SILCentralManagerDidDisconnectPeripheralNotification
                                                object:self.centralManager];
-}
-
-- (void)addObserverForDisplayToastResponse {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayToast:) name:SILNotificationDisplayToastResponse object:nil];
-}
-
-- (void)displayToast:(NSNotification*)notification {
-    NSString* ErrorMessage = notification.userInfo[SILNotificationKeyDescription];
-    [self showToastWithMessage:ErrorMessage toastType:ToastTypeDisconnectionError completion:^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:SILNotificationDisplayToastRequest object:nil];
-    }];
 }
 
 #pragma mark - Notification Methods
@@ -472,11 +450,6 @@ static float kTableRefreshInterval = 1;
     CGRect rect = view.frame;
     rect.origin.y = MAX(0, -(scrollView.contentOffset.y + rect.size.height));
     self.headerView.frame = rect;
-    if (scrollView.contentOffset.y < 0) {
-        scrollView.contentOffset = CGPointZero;
-    } else {
-        [self.tableView setScrollEnabled:YES];
-    }
 }
 
 #pragma mark - Configure Cells
@@ -727,14 +700,6 @@ static float kTableRefreshInterval = 1;
             [self showErrorDetailsPopoupWithError:error];
         }
     } else {
-        NSString* title;
-        SILDiscoveredPeripheral* discoveredPeripheral = [self.centralManager discoveredPeripheralForPeripheral:self.peripheral];
-        if (discoveredPeripheral) {
-            title = discoveredPeripheral.advertisedLocalName;
-        }
-        if (!title) {
-            title = self.peripheral.name ?: DefaultDeviceName;
-        }
         self.tableView.hidden = NO;
         self.headerView.hidden = NO;
         for (CBService *service in peripheral.services) {

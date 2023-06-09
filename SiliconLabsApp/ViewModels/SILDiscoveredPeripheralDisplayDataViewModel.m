@@ -13,7 +13,6 @@
 
 @property (nonatomic, readwrite) SILDiscoveredPeripheral *discoveredPeripheral;
 @property (nonatomic, readwrite) NSArray<SILAdvertisementDataViewModel *> *advertisementDataViewModels;
-
 @end
 
 @implementation SILDiscoveredPeripheralDisplayDataViewModel
@@ -24,6 +23,7 @@
     self = [super self];
     if (self) {
         _discoveredPeripheral = discoveredPeripheral;
+        _isExpanded = NO;
     }
     
     return self;
@@ -103,5 +103,12 @@
     return mutableAdvModels;
 }
 
+- (void)toggleFavorite {
+    if (self.discoveredPeripheral.isFavourite) {
+        [SILFavoritePeripheral remove:self];
+    } else {
+        [SILFavoritePeripheral add:self];
+    }
+}
 
 @end

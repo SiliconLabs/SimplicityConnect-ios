@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad10_2" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -54,7 +54,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="810" height="36.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-70 dBm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZp-cz-FfV">
-                                                <rect key="frame" x="32" y="8" width="66" height="20"/>
+                                                <rect key="frame" x="32" y="8" width="66.5" height="20.5"/>
                                                 <color key="backgroundColor" name="sil_bgWhiteColor"/>
                                                 <edgeInsets key="layoutMargins" top="8" left="32" bottom="8" right="8"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -451,21 +451,12 @@
                                                     <constraint firstAttribute="bottomMargin" secondItem="1Ob-vb-KdI" secondAttribute="bottom" id="sGb-js-lTg"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aNH-xz-qzz" customClass="SILRefreshImageView">
-                                                <rect key="frame" x="387.5" y="62.5" width="35" height="35"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="35" id="adX-Bi-hUy"/>
-                                                    <constraint firstAttribute="width" secondItem="aNH-xz-qzz" secondAttribute="height" multiplier="1:1" id="lN3-0W-YCI"/>
-                                                </constraints>
-                                            </view>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="q15-Wj-dDo" secondAttribute="trailing" id="9mV-7g-ReI"/>
-                                            <constraint firstItem="aNH-xz-qzz" firstAttribute="centerY" secondItem="IXW-Ap-Hlm" secondAttribute="top" constant="80" id="F6O-cW-FHX"/>
                                             <constraint firstAttribute="bottom" secondItem="q15-Wj-dDo" secondAttribute="bottom" id="FxE-X5-oA7"/>
                                             <constraint firstItem="q15-Wj-dDo" firstAttribute="top" secondItem="IXW-Ap-Hlm" secondAttribute="top" id="MR0-MU-u5d"/>
                                             <constraint firstItem="q15-Wj-dDo" firstAttribute="leading" secondItem="IXW-Ap-Hlm" secondAttribute="leading" id="Z3B-7c-l2b"/>
-                                            <constraint firstItem="aNH-xz-qzz" firstAttribute="centerX" secondItem="IXW-Ap-Hlm" secondAttribute="centerX" id="nLg-cc-DQG"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -501,10 +492,8 @@
                         <outlet property="infoView" destination="MIy-3i-3rg" id="IBM-Pm-0cz"/>
                         <outlet property="otaButton" destination="mMx-dk-ebm" id="Yiy-qh-uMm"/>
                         <outlet property="presentationView" destination="Xe1-Jy-pxc" id="bOc-7J-gbF"/>
-                        <outlet property="refreshImageView" destination="aNH-xz-qzz" id="iQ6-vg-JLP"/>
                         <outlet property="rssiLabel" destination="vZp-cz-FfV" id="v8J-6t-OHn"/>
                         <outlet property="tableView" destination="1Ob-vb-KdI" id="4T4-14-Guv"/>
-                        <outlet property="topRefreshImageConstraint" destination="F6O-cW-FHX" id="9xF-TK-e0T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AS7-BY-l9a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -598,7 +587,7 @@
                                                                         </label>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r3F-Li-rw5" userLabel="Divider">
                                                                             <rect key="frame" x="8" y="72" width="762" height="1"/>
-                                                                            <color key="backgroundColor" red="0.59465128779999998" green="0.73341505149999997" blue="0.94328004119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                            <color key="backgroundColor" name="sil_boulderColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="1" id="VT0-iu-JVT"/>
                                                                             </constraints>
@@ -632,6 +621,7 @@
                                                                         </button>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron_collapsed" translatesAutoresizingMaskIntoConstraints="NO" id="6Db-YM-PNz">
                                                                             <rect key="frame" x="750" y="81" width="20" height="20"/>
+                                                                            <color key="tintColor" name="sil_boulderColor"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="20" id="5kj-uu-HsL"/>
                                                                                 <constraint firstAttribute="height" constant="20" id="G19-Oe-nJU"/>
@@ -931,20 +921,11 @@
                                                     <constraint firstAttribute="trailing" secondItem="xFT-Fn-iCs" secondAttribute="trailing" constant="16" id="nND-xk-YnF"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ibj-hH-JRa" customClass="SILRefreshImageView">
-                                                <rect key="frame" x="387.5" y="62.5" width="35" height="35"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="Ibj-hH-JRa" secondAttribute="height" multiplier="1:1" id="Hse-hr-cVb"/>
-                                                    <constraint firstAttribute="width" constant="35" id="Rjk-5i-gtt"/>
-                                                </constraints>
-                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstItem="Ibj-hH-JRa" firstAttribute="centerY" secondItem="Tme-f3-zrL" secondAttribute="top" constant="80" id="E2L-zi-hPp"/>
                                             <constraint firstAttribute="bottom" secondItem="zga-ac-BgT" secondAttribute="bottom" id="GUe-Sm-yMz"/>
                                             <constraint firstAttribute="trailing" secondItem="zga-ac-BgT" secondAttribute="trailing" id="JUN-vH-hK9"/>
-                                            <constraint firstItem="Ibj-hH-JRa" firstAttribute="centerX" secondItem="Tme-f3-zrL" secondAttribute="centerX" id="nFH-g3-XxM"/>
                                             <constraint firstItem="zga-ac-BgT" firstAttribute="leading" secondItem="Tme-f3-zrL" secondAttribute="leading" id="v9L-1c-g9A"/>
                                             <constraint firstItem="zga-ac-BgT" firstAttribute="top" secondItem="Tme-f3-zrL" secondAttribute="top" id="xKw-bf-5gj"/>
                                         </constraints>
@@ -976,9 +957,7 @@
                     <connections>
                         <outlet property="discoveredDevicesView" destination="zga-ac-BgT" id="BlP-ZG-HzS"/>
                         <outlet property="presentationView" destination="MYw-b7-us0" id="ADl-ZB-QbT"/>
-                        <outlet property="refreshImageView" destination="Ibj-hH-JRa" id="gqt-xY-QyT"/>
                         <outlet property="tableView" destination="xFT-Fn-iCs" id="UYV-Kx-yJY"/>
-                        <outlet property="topRefreshImageConstraint" destination="E2L-zi-hPp" id="2cW-nE-ARj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TWY-oy-dJL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -999,7 +978,7 @@
         <image name="ReadDisabled" width="30" height="30"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="chevron_collapsed" width="14" height="9"/>
-        <image name="configureTabIcon" width="48" height="48"/>
+        <image name="configureTabIcon" width="24" height="24"/>
         <image name="testTabIcon" width="24" height="24"/>
         <image name="writeIcon" width="38.5" height="29.5"/>
         <namedColor name="sil_backgroundColor">

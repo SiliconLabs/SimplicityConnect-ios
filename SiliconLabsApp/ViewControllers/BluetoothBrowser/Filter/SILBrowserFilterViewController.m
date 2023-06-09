@@ -357,17 +357,18 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 }
 
 - (void)tappedBackImage:(UIGestureRecognizer *)gestureRecognizer {
-    [_delegate backButtonWasTapped];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)applyFiltersButtonTapped:(id)sender {
-    [_delegate applyFiltersButtonWasTapped:_viewModel];
+    [_delegate applyFilters:_viewModel];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)resetButtonTapped:(id)sender {
     [_viewModel clearViewModelData];
-    [_delegate applyFiltersButtonWasTapped:_viewModel];
-    [_delegate backButtonWasTapped];
+    [_delegate applyFilters:_viewModel];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark - Update Filter Values

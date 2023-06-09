@@ -27,7 +27,7 @@ class SILAdvertiserDetailsViewModel {
     private var isCompleteLocalName: Bool
     private var currentState: SILTimeLimitRadioButtonState
     private var isExecutionTime: Bool
-    private var executionTime: Double
+    private var executionTime: Int
     private var executionTimeString: String
     
     init(wireframe: SILAdvertiserDetailsWireframe, repository: SILAdvertisingSetRepository, serviceRepository: SILGattAssignedNumbersRepository, service: SILAdvertiserService, settings: SILAdvertiserSettings, advertiser: SILAdvertisingSetEntity) {
@@ -46,7 +46,7 @@ class SILAdvertiserDetailsViewModel {
         self.currentState = advertiser.isExecutionTime ? .withLimit : .noLimit
         self.isExecutionTime = advertiser.isExecutionTime
         self.executionTime = advertiser.executionTime
-        self.executionTimeString = String(Int(advertiser.executionTime * 1000))
+        self.executionTimeString = String(advertiser.executionTime)
         
         self.advertisingData = SILObservable(initialValue: [])
         self.advertisingDataBytesAvailable = SILObservable(initialValue: 28)
@@ -85,11 +85,12 @@ class SILAdvertiserDetailsViewModel {
             return true
         }
         if let timeInt = Int(timeString ?? "") {
-            if timeInt < 10 || timeInt > 655350 {
+            if timeInt < 10 || timeInt > 65350 {
                 return false
+            } else {
+                executionTime = timeInt
+                return true
             }
-            executionTime = Double(timeInt) / 1000.0
-            return true
         } else {
             return false
         }
@@ -97,8 +98,7 @@ class SILAdvertiserDetailsViewModel {
     
     func getExecutionTimeString() -> String {
         let value = executionTime
-        let intValue = Int(value * 1000)
-        return String(intValue)
+        return String(value)
     }
     
     func addDataType(sourceView: UIView) {
@@ -267,7 +267,7 @@ class SILAdvertiserDetailsViewModel {
             return true
         }
         
-        let advertiserTimeString = String(Int(advertiser.executionTime * 1000))
+        let advertiserTimeString = String(advertiser.executionTime)
         if self.executionTimeString != advertiserTimeString {
             return true
         }

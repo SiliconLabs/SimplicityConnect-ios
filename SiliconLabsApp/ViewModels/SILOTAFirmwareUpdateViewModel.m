@@ -10,8 +10,8 @@
 #import "SILKeyValueViewModel.h"
 #import "SILOTAFirmwareFile.h"
 
-static NSString * const kSILKeyNameForPartialOTA = @"APPLICATION";
-static NSString * const kSILKeyNameForFullOTA = @"APPLOADER";
+static NSString * const kSILKeyNameForPartialOTA = @"Application:";
+static NSString * const kSILKeyNameForFullOTA = @"Apploader:";
 
 @interface SILOTAFirmwareUpdateViewModel ()
 
@@ -27,6 +27,8 @@ static NSString * const kSILKeyNameForFullOTA = @"APPLOADER";
     self = [super init];
     if (self) {
         _otaFirmwareUpdate = otaFirmwareUpdate;
+        _updateMode = SILOTAModeReliability;
+        _updateMethod = SILOTAMethodPartial;
     }
     return self;
 }

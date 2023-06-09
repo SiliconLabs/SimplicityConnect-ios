@@ -37,3 +37,7 @@ class SILCell: UITableViewCell {
         self.layer.cornerRadius = CornerRadiusStandardValue
     }
 }
+
+@objc protocol SILConfigurableCell {
+    @objc func configure()
+}

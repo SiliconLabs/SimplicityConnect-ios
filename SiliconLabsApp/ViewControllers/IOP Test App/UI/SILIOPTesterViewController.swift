@@ -41,7 +41,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
         if let deviceNameToSearch = deviceNameToSearch {
             firmwareNameLabel.text = "Firmware Name: \(deviceNameToSearch)"
         }
-        deviceNameLabel.text = "Device Name: \(UIDevice.deviceName)"
+        deviceNameLabel.text = "Device Name: \(viewModel?.deviceModelName ?? "Unknown")"
         self.setLeftAlignedTitle("Interoperability Test")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "shareWhite"),
                                                                  style: .plain,

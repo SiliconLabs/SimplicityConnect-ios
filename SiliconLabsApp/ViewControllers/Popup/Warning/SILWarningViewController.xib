@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -12,9 +12,6 @@
     <customFonts key="customFonts">
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
-        </array>
-        <array key="Roboto-Regular.ttf">
-            <string>Roboto-Regular</string>
         </array>
     </customFonts>
     <objects>
@@ -37,22 +34,18 @@
                     <rect key="frame" x="0.0" y="0.0" width="500" height="48"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remove Advertiser?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M7P-W0-S46">
-                            <rect key="frame" x="168.5" y="13.5" width="163" height="21"/>
-                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
+                            <rect key="frame" x="20" y="13.5" width="173" height="21.5"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
-                            <variation key="widthClass=compact">
-                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="18"/>
-                            </variation>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" name="sil_bgGreyColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="72" id="1sn-SB-wPr">
                             <variation key="widthClass=compact" constant="48"/>
                         </constraint>
+                        <constraint firstItem="M7P-W0-S46" firstAttribute="leading" secondItem="OhU-CL-zYV" secondAttribute="leading" constant="20" id="nBQ-zB-8Ly"/>
                         <constraint firstItem="M7P-W0-S46" firstAttribute="centerY" secondItem="OhU-CL-zYV" secondAttribute="centerY" id="sef-AB-W4u"/>
-                        <constraint firstItem="M7P-W0-S46" firstAttribute="centerX" secondItem="OhU-CL-zYV" secondAttribute="centerX" id="t15-xj-aNa"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hyl-f6-b3u">
@@ -62,13 +55,10 @@
                             <rect key="frame" x="0.0" y="10" width="460" height="83"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you sure you want to delete Advertiser?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CK4-jn-rNH" userLabel="descLabel">
-                                    <rect key="frame" x="0.0" y="33" width="460" height="17.5"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                    <rect key="frame" x="0.0" y="33" width="460" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
-                                    <variation key="widthClass=compact">
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                    </variation>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -93,13 +83,10 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do not give this warning again" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r5z-fN-YRj">
-                                    <rect key="frame" x="69" y="32.5" width="203" height="18"/>
-                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
+                                    <rect key="frame" x="69" y="33" width="194.5" height="17"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
-                                    <variation key="widthClass=compact">
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                    </variation>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -127,21 +114,13 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bzW-6W-3Yu" userLabel="buttonView">
-                    <rect key="frame" x="60" y="229" width="380" height="36"/>
+                    <rect key="frame" x="260" y="229" width="210" height="36"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aAS-jJ-Y8q">
-                            <rect key="frame" x="0.0" y="0.0" width="185" height="36"/>
-                            <color key="backgroundColor" name="sil_regularBlueColor"/>
-                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
-                            <state key="normal" title="OK">
-                                <color key="titleColor" name="sil_bgWhiteColor"/>
-                            </state>
-                            <connections>
-                                <action selector="okButtonWasTapped:" destination="-1" eventType="touchUpInside" id="3np-7y-EGN"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JVz-06-0kA">
-                            <rect key="frame" x="195" y="0.0" width="185" height="36"/>
+                            <rect key="frame" x="0.0" y="2" width="100" height="32"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="100" id="5wg-EK-sEp"/>
+                            </constraints>
                             <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
                             <state key="normal" title="Cancel">
                                 <color key="titleColor" name="sil_masalaColor"/>
@@ -150,20 +129,31 @@
                                 <action selector="cancelButtonWasTapped:" destination="-1" eventType="touchUpInside" id="EDI-lI-8eF"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aAS-jJ-Y8q">
+                            <rect key="frame" x="110" y="2" width="100" height="32"/>
+                            <color key="backgroundColor" name="sil_regularBlueColor"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="100" id="dhk-1T-KaM"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="17"/>
+                            <state key="normal" title="OK">
+                                <color key="titleColor" name="sil_bgWhiteColor"/>
+                            </state>
+                            <connections>
+                                <action selector="okButtonWasTapped:" destination="-1" eventType="touchUpInside" id="3np-7y-EGN"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstItem="JVz-06-0kA" firstAttribute="width" secondItem="aAS-jJ-Y8q" secondAttribute="width" id="BMX-KE-6FW"/>
-                        <constraint firstAttribute="bottom" secondItem="JVz-06-0kA" secondAttribute="bottom" id="S5D-Qe-jar"/>
-                        <constraint firstAttribute="trailing" secondItem="JVz-06-0kA" secondAttribute="trailing" id="bsK-PW-VFz"/>
-                        <constraint firstAttribute="bottom" secondItem="aAS-jJ-Y8q" secondAttribute="bottom" id="kih-v3-TlA"/>
-                        <constraint firstItem="JVz-06-0kA" firstAttribute="top" secondItem="bzW-6W-3Yu" secondAttribute="top" id="n0P-wC-GWD"/>
+                        <constraint firstItem="JVz-06-0kA" firstAttribute="leading" secondItem="bzW-6W-3Yu" secondAttribute="leading" id="9kE-au-CTL"/>
+                        <constraint firstItem="JVz-06-0kA" firstAttribute="centerY" secondItem="bzW-6W-3Yu" secondAttribute="centerY" id="HKV-ry-TGy"/>
+                        <constraint firstItem="aAS-jJ-Y8q" firstAttribute="centerY" secondItem="bzW-6W-3Yu" secondAttribute="centerY" id="Kxh-78-qHD"/>
+                        <constraint firstItem="aAS-jJ-Y8q" firstAttribute="leading" secondItem="JVz-06-0kA" secondAttribute="trailing" constant="10" id="i1n-h3-8cW"/>
                         <constraint firstAttribute="height" constant="48" id="nUs-6c-Ypc">
                             <variation key="widthClass=compact" constant="36"/>
                         </constraint>
-                        <constraint firstItem="JVz-06-0kA" firstAttribute="leading" secondItem="aAS-jJ-Y8q" secondAttribute="trailing" constant="10" id="nqT-Nd-707"/>
-                        <constraint firstItem="aAS-jJ-Y8q" firstAttribute="leading" secondItem="bzW-6W-3Yu" secondAttribute="leading" id="osl-Xd-WqU"/>
-                        <constraint firstItem="aAS-jJ-Y8q" firstAttribute="top" secondItem="bzW-6W-3Yu" secondAttribute="top" id="uqs-nb-iJr"/>
+                        <constraint firstAttribute="width" constant="210" id="rJN-xv-Pbe"/>
                     </constraints>
                 </view>
             </subviews>
@@ -172,16 +162,10 @@
             <constraints>
                 <constraint firstItem="OhU-CL-zYV" firstAttribute="top" secondItem="TCa-1E-s4a" secondAttribute="top" id="7HE-aF-oRz"/>
                 <constraint firstAttribute="bottom" secondItem="bzW-6W-3Yu" secondAttribute="bottom" constant="5" id="7WW-9e-GW0"/>
-                <constraint firstItem="bzW-6W-3Yu" firstAttribute="leading" secondItem="TCa-1E-s4a" secondAttribute="leading" constant="100" id="ByW-Gy-qQ8">
-                    <variation key="widthClass=compact" constant="60"/>
-                </constraint>
                 <constraint firstAttribute="trailing" secondItem="Hyl-f6-b3u" secondAttribute="trailing" constant="40" id="E6N-j8-cfd">
                     <variation key="widthClass=compact" constant="20"/>
                 </constraint>
-                <constraint firstAttribute="trailing" secondItem="bzW-6W-3Yu" secondAttribute="trailing" constant="100" id="Rrd-N0-6cU">
-                    <variation key="widthClass=compact" constant="60"/>
-                </constraint>
-                <constraint firstItem="bzW-6W-3Yu" firstAttribute="centerX" secondItem="TCa-1E-s4a" secondAttribute="centerX" id="m7E-1w-zkG"/>
+                <constraint firstItem="EA1-ty-cXL" firstAttribute="trailing" secondItem="bzW-6W-3Yu" secondAttribute="trailing" constant="30" id="EvQ-lb-33Y"/>
                 <constraint firstItem="Hyl-f6-b3u" firstAttribute="leading" secondItem="TCa-1E-s4a" secondAttribute="leading" constant="40" id="mVl-lH-lZf">
                     <variation key="widthClass=compact" constant="20"/>
                 </constraint>
@@ -191,13 +175,10 @@
                 <constraint firstItem="bzW-6W-3Yu" firstAttribute="top" secondItem="Hyl-f6-b3u" secondAttribute="bottom" constant="5" id="w49-5F-cW2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="-17.39130434782609" y="-4.3526785714285712"/>
+            <point key="canvasLocation" x="-17.39130434782609" y="-4.6875"/>
         </view>
     </objects>
     <resources>
-        <namedColor name="sil_bgGreyColor">
-            <color red="0.94509803921568625" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="sil_bgWhiteColor">
             <color red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -205,7 +186,7 @@
             <color red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="sil_regularBlueColor">
-            <color red="0.0" green="0.52549019607843139" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.058823529411764705" green="0.3843137254901961" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

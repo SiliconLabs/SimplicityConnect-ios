@@ -11,13 +11,20 @@ import UIKit
 import SwiftUI
 import Fabric
 import Crashlytics
-
+import CoreHaptics
 
 class SILAppDelegate : UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
+    static var supportsHaptics: Bool = false
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         SILAppearance.setupAppearance()
+        
+        let hapticCapability = CHHapticEngine.capabilitiesForHardware()
+        SILAppDelegate.supportsHaptics = hapticCapability.supportsHaptics
+        debugPrint("Device supports haptics? \(SILAppDelegate.supportsHaptics)")
+        
         Fabric.with([Crashlytics.sharedInstance()])
         SILRealmConfiguration.updateRealmConfigurationIfNeeded()
         SILBluetoothModelManager.shared().populateModels()

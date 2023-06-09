@@ -9,7 +9,7 @@
 import UIKit
 
 class SILAdvertiserAdd16BitServiceDialogViewController: UIViewController, SILAdvertiserAdd16BitServiceDialogViewDelegate {
-    @IBOutlet weak var serviceNameTextField: UITextField!
+    @IBOutlet weak var serviceNameTextField: SILTextField!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
@@ -38,7 +38,7 @@ class SILAdvertiserAdd16BitServiceDialogViewController: UIViewController, SILAdv
         
         viewModel.isSaveButtonEnabled.observe { enabled in
             weakSelf?.saveButton.isEnabled = enabled
-            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.systemBlue : UIColor.lightGray
+            weakSelf?.saveButton.backgroundColor = enabled ? UIColor.sil_regularBlue() : UIColor.lightGray
         }.putIn(bag: tokenBag)
     }
     

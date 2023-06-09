@@ -23,10 +23,12 @@ class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionVi
     var delegate: SILThunderboardDeviceSelectionViewControllerDelegate?
     private var interaction: DeviceSelectionInteraction?
     private var appType: SILAppType?
+    var viewModel: SILDeviceSelectionViewModel!
     
-    init(interaction: DeviceSelectionInteraction, appType: SILAppType) {
+    init(interaction: DeviceSelectionInteraction, appType: SILAppType, deviceSelectionViewModel viewModel: SILDeviceSelectionViewModel) {
         self.interaction = interaction
         self.appType = appType
+        self.viewModel = viewModel
         super.init()
     }
     
@@ -45,6 +47,14 @@ class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionVi
         super.viewWillDisappear(animated)
         self.interaction?.stopScanning()
         self.unregisterForDisconnecting()
+    }
+    
+    override func setupTextLabels() {
+        self.selectDeviceLabel.text = viewModel.selectDeviceString()
+    }
+    
+    override func setupTextView() {
+        self.infoTextView.addHyperLinksToText(originalAttributedText: NSAttributedString(string: viewModel.selectDeviceInfoString()), hyperLinks: viewModel.selectDeviceHyperlinks() as! [String : String])
     }
     
     @IBAction override func didPressCancelButton(_ sender: Any) {
@@ -115,6 +125,14 @@ class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionVi
     }
     
     func bleScanningListUpdated() {
+        if interaction!.discoveredDevices.count > 0 {
+            emptyDeviceListView.isHidden = true
+            deviceListSpinner.layer.removeAllAnimations()
+            deviceListSpinner.isHidden = true
+        }
+        
+        deviceListLabel.text = "DEVICE LIST (\(interaction!.discoveredDevices.count))"
+        
         self.deviceCollectionView.reloadData()
     }
     

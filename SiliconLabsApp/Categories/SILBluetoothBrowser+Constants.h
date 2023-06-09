@@ -11,7 +11,7 @@
 extern NSString* const EmptyText;
 extern float const StarterDBMValue;
 extern CGFloat const CollapsedViewHeight;
-extern NSInteger const NoDeviceFoundedIndex;
+extern NSInteger const NoDeviceFoundIndex;
 extern const float AnimationExpandableControllerTime;
 extern const float AnimationExpandableControllerDelay;
 extern NSInteger DefaultDBMValue;
@@ -35,3 +35,8 @@ extern CGFloat CornerRadiusStandardValue;
 extern NSString * const CannotWriteEmptyTextToCharacteristic;
 extern NSString * const FillAllMandatoryFields;
 extern CGFloat LastFooterHeight;
+extern NSString * const TitleForScanningButtonDuringScanning;
+extern NSString * const TitleForScanningButtonWhenIsNotScanning;
+extern const float TABLE_FRESH_INTERVAL;
+extern NSString * const ActiveScanningText;
+extern NSString * const DisabledScanningText;

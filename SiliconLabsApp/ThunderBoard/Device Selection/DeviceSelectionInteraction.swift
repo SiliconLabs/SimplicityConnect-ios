@@ -55,7 +55,7 @@ class DeviceSelectionInteraction : DeviceScannerDelegate, DeviceConnectionDelega
     
     fileprivate var deviceScanner: DeviceScanner?
     fileprivate var deviceConnector: DeviceConnection?
-    fileprivate var discoveredDevices = Array<DiscoveredDevice>()
+    var discoveredDevices = Array<DiscoveredDevice>()
     
     fileprivate var autoConnectDeviceName: String?
     fileprivate var abandonAutoConnectTimer: WeakTimer?

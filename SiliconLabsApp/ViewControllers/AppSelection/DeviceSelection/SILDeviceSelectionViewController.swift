@@ -52,6 +52,10 @@ class SILDeviceSelectionViewController: SILAbstractDeviceSelectionViewController
         self.selectDeviceLabel.text = viewModel.selectDeviceString()
     }
     
+    override func setupTextView() {
+        self.infoTextView.addHyperLinksToText(originalAttributedText: NSAttributedString(string: viewModel.selectDeviceInfoString()), hyperLinks: viewModel.selectDeviceHyperlinks() as! [String : String])
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -119,6 +123,13 @@ class SILDeviceSelectionViewController: SILAbstractDeviceSelectionViewController
             viewModel.hasDataChanged = false
 
             viewModel.updateDiscoveredPeripherals(with: centralManager?.discoveredPeripherals())
+            if viewModel.discoveredDevices.count > 0 {
+                emptyDeviceListView.isHidden = true
+                deviceListSpinner.layer.removeAllAnimations()
+                deviceListSpinner.isHidden = true
+            }
+            
+            deviceListLabel.text = "DEVICE LIST (\(viewModel.discoveredDevices.count))"
             deviceCollectionView.reloadData()
         }
     }
@@ -204,8 +215,9 @@ class SILDeviceSelectionViewController: SILAbstractDeviceSelectionViewController
             bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .throughput)
         case .typeBlinky:
             bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .blinky)
-        case .iopTest:
-            bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .interoperabilityTest)
+        case .typeESLDemo:
+            bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .eslDemo)
+            
         default:
             return
         }

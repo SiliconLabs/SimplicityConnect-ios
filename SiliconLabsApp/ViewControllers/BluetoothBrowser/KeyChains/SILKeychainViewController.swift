@@ -106,7 +106,7 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func setupInfoImage() {
-        self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "help_white"), style: .plain, target: self, action: #selector(tappedInfoImage(_:))), animated: false)
+        self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(systemName: "questionmark.circle"), style: .plain, target: self, action: #selector(tappedInfoImage(_:))), animated: false)
     }
     
     @objc private func tappedInfoImage(_ regognizer: UIGestureRecognizer) {
@@ -114,17 +114,6 @@ class SILKeychainViewController: UIViewController, UIGestureRecognizerDelegate {
         if let infoViewController = storyboard.instantiateViewController(withIdentifier: "KeychainInfo") as? SILKeychainInfoViewController {
             infoViewController.delegate = self
             self.popoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: infoViewController, presenting:self, delegate:self as? WYPopoverControllerDelegate, animated:true)
-        }
-    }
-    
-    private func addObserverForDisplayToastResponse() {
-        NotificationCenter.default.addObserver(self, selector:#selector(displayToast(_:)), name: NSNotification.Name(rawValue: SILNotificationDisplayToastResponse), object: nil)
-    }
-    
-    @objc private func displayToast(_ notification: Notification) {
-        let ErrorMessage = notification.userInfo?[SILNotificationKeyDescription] as? String ?? ""
-        self.showToast(message: ErrorMessage, toastType: .disconnectionError) {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: SILNotificationDisplayToastRequest), object: nil)
         }
     }
     

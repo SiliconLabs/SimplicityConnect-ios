@@ -44,7 +44,11 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.applyFiltersButtonWasTapped(SILBrowserFilterViewModel.sharedInstance())
+        self.applyFilters(SILBrowserFilterViewModel.sharedInstance())
+        self.chartView.setStartTime(time: ScannerTabSettings.sharedInstance.scanningStartedTime)
+        if !ScannerTabSettings.sharedInstance.scanningPausedByUser {
+            self.viewModel.isScanning.accept(true)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -92,6 +96,11 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     }
     
     func scanningButtonTapped() {
+        if viewModel.isScanning.value {
+            ScannerTabSettings.sharedInstance.scanningStartedTime = Date()
+        }
+        ScannerTabSettings.sharedInstance.scanningPausedByUser = viewModel.isScanning.value
+        self.chartView.setStartTime(time: ScannerTabSettings.sharedInstance.scanningStartedTime)
         viewModel.isScanning.accept(!viewModel.isScanning.value)
     }
     
@@ -186,14 +195,10 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
 }
 
 extension SILRSSIGraphViewController: SILBrowserFilterViewControllerDelegate {
-    func backButtonWasTapped() {
-        self.navigationController?.dismiss(animated: true)
-    }
     
-    func applyFiltersButtonWasTapped(_ vm: SILBrowserFilterViewModel) {
+    func applyFilters(_ vm: SILBrowserFilterViewModel) {
         self.chartView.redrawChart()
         viewModel.applyFilter(vm)
-        self.navigationController?.dismiss(animated: true)
     }
 }
 
