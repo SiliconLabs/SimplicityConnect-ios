@@ -61,6 +61,22 @@ EFR Connect helps developers create and troubleshoot Bluetooth applications runn
 - Export results log
 
 
+## How to build project
+To build project you need Install [Cocoapods](https://cocoapods.org/). 
+Run command `pod install` in the main folder of the project and then use generated `SiliconLabsApp.xcworkspace` file to open project. Use `BlueGecko` scheme to run or test app.
+
+
+## How to start developing
+Applications are written using [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) pattern. 
+The View Controllers layer (also a starting point for each of app - Demo, IOP, Browser, Develop) is in the `<project_directory>/ViewController` folder. 
+You can find there references to View Models and the Models that are used in the specific applications. 
+Each app has mostly separated files so is almost unlikely that modifying one part of code is going to break other app. 
+For storing data we are using [Realm](https://realm.io/) database. 
+Please notice that you must take care of migrations when you are modifying scheme of objects (modify `SILRealmConfiguration.swift` file).
+At `<project_directory>/Supporting Files` you can find XMLs of [SIG Group](https://www.bluetooth.com/) defined GATT services, characteristics and descriptors. 
+The IOP test suites are in folder `<project_directory>/ViewControllers/IOP Test App/TestScenario`. 
+The OTA related code is located in `<project_directory>/ViewControllers/BluetoothBrowser/Details/OTA`.
+
 
 ## Additional information
 The app can be found on the [Google PlayStore](https://play.google.com/store/apps/details?id=com.siliconlabs.bledemo&hl=en) and [Apple App Store](https://apps.apple.com/us/app/blue-gecko/id1030932759).
