@@ -20,7 +20,7 @@ class SILAppDelegate : UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         SILAppearance.setupAppearance()
-        
+        applicationStart()
         let hapticCapability = CHHapticEngine.capabilitiesForHardware()
         SILAppDelegate.supportsHaptics = hapticCapability.supportsHaptics
         debugPrint("Device supports haptics? \(SILAppDelegate.supportsHaptics)")
@@ -33,6 +33,11 @@ class SILAppDelegate : UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = UIHostingController(rootView: MainNavigationView())
         window?.makeKeyAndVisible()
+
         return true
+    }
+    func applicationStart(){
+        print("Hello this is my first code.")
+        
     }
 }
