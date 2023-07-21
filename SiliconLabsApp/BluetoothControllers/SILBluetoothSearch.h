@@ -4,7 +4,7 @@
 //
 //  Created by Ayal Spitz on 5/17/17.
 //  Copyright © 2017 SiliconLabs. All rights reserved.
-//
+//  Test commit for verify write access
 
 #import <Foundation/Foundation.h>
 
