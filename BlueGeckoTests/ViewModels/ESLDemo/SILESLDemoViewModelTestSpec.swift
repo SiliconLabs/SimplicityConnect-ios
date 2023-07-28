@@ -143,14 +143,12 @@ class SILESLDemoViewModelTestSpec: QuickSpec {
 
         describe("provisionTag") {
             it("should call perform on runner and finish with success") {
-                let btAddress = SILBluetoothAddress(address: "", addressType: .public)
                 let provisionCommandMock = mock(SILESLProvisioningTag.self).initialize(peripheral: self.peripheralMock,
                                                                                        peripheralReferences: self.peripheralReferencesMock,
                                                                                        commandRunnerFactory: self.commandRunnerFactoryMock,
-                                                                                       address: btAddress,
-                                                                                       passcode: nil)
+                                                                                       qrData: [UInt8]())
                 
-                given(self.commandRunnerFactoryMock.createCommandProvisioning(peripheral: self.peripheralMock, peripheralReferences: any(), commandRunnerFactory: self.commandRunnerFactoryMock, address: any(), passcode: any())).willReturn(provisionCommandMock)
+                given(self.commandRunnerFactoryMock.createCommandProvisioning(peripheral: self.peripheralMock, peripheralReferences: any(), commandRunnerFactory: self.commandRunnerFactoryMock, qrData: any())).willReturn(provisionCommandMock)
        
                 let publishRelay: PublishRelay<Result<SILESLDemoViewModelState, SILESLCommandGenericError>> = PublishRelay()
                 given(provisionCommandMock.commandResult).willReturn(publishRelay)
@@ -160,7 +158,7 @@ class SILESLDemoViewModelTestSpec: QuickSpec {
                     expectedState = commandState
                 }).disposed(by: self.disposeBag)
                 
-                self.sut.provisionTag(with: btAddress, passcode: "1234")
+                self.sut.provisionTag(with: [UInt8]())
                 publishRelay.accept(.success(.provisioningInProgressConfig))
                 
                 verify(provisionCommandMock.perform(timeout: 10.0)).wasCalled(1)
@@ -168,14 +166,12 @@ class SILESLDemoViewModelTestSpec: QuickSpec {
             }
             
             it("should call perform on runner and finish with failure") {
-                let btAddress = SILBluetoothAddress(address: "", addressType: .public)
                 let provisionCommandMock = mock(SILESLProvisioningTag.self).initialize(peripheral: self.peripheralMock,
                                                                                        peripheralReferences: self.peripheralReferencesMock,
                                                                                        commandRunnerFactory: self.commandRunnerFactoryMock,
-                                                                                       address: btAddress,
-                                                                                       passcode: nil)
+                                                                                       qrData: [UInt8]())
                 
-                given(self.commandRunnerFactoryMock.createCommandProvisioning(peripheral: self.peripheralMock, peripheralReferences: any(), commandRunnerFactory: self.commandRunnerFactoryMock, address: any(), passcode: any())).willReturn(provisionCommandMock)
+                given(self.commandRunnerFactoryMock.createCommandProvisioning(peripheral: self.peripheralMock, peripheralReferences: any(), commandRunnerFactory: self.commandRunnerFactoryMock, qrData: any())).willReturn(provisionCommandMock)
        
                 let publishRelay: PublishRelay<Result<SILESLDemoViewModelState, SILESLCommandGenericError>> = PublishRelay()
                 given(provisionCommandMock.commandResult).willReturn(publishRelay)
@@ -185,7 +181,7 @@ class SILESLDemoViewModelTestSpec: QuickSpec {
                     expectedState = commandState
                 }).disposed(by: self.disposeBag)
                 
-                self.sut.provisionTag(with: btAddress, passcode: "1234")
+                self.sut.provisionTag(with: [UInt8]())
                 publishRelay.accept(.failure(.timeout))
                 
                 verify(provisionCommandMock.perform(timeout: 10.0)).wasCalled(1)

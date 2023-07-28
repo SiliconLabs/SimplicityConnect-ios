@@ -20,6 +20,17 @@ class SILESLCommandConnectTestSpec: QuickSpec {
     var sut: SILESLCommandConnect!
     
     override func spec() {
+        describe("raw data") {
+            it("should prepare connect from raw data") {
+                let btAddress = "8c:f6:81:b8:82:b2"
+                let dataToSend = "connect \(btAddress)".bytes
+                
+                self.sut = SILESLCommandConnect(qrData: dataToSend)
+                
+                expect(self.sut.dataToSend).to(equal(dataToSend))
+            }
+        }
+        
         describe("connect bt_addr") {
             it("should prepare data for public address") {
                 let btAddress = "8c:f6:81:b8:82:b2"
@@ -31,24 +42,12 @@ class SILESLCommandConnectTestSpec: QuickSpec {
                 expect(self.sut.dataToSend).to(equal(dataToSend))
             }
             
-            it("should prepare data for public address with passcode") {
-                let btAddress = "8c:f6:81:b8:82:b2"
-                let passcode = "1234"
-                self.address = SILAddress.btAddress(SILBluetoothAddress(address: btAddress, addressType: .public))
-                self.sut = SILESLCommandConnect(address: self.address, passcode: passcode)
-                
-                let dataToSend = "connect \(btAddress) \(passcode)".bytes
-                
-                expect(self.sut.dataToSend).to(equal(dataToSend))
-            }
-            
-            it("should prepare data for static address with passcode") {
+            it("should prepare data for static address") {
                 let btAddress = "X"
-                let passcode = "1234"
                 self.address = SILAddress.btAddress(SILBluetoothAddress(address: btAddress, addressType: .static))
-                self.sut = SILESLCommandConnect(address: self.address, passcode: passcode)
+                self.sut = SILESLCommandConnect(address: self.address)
                 
-                let dataToSend = "connect \(btAddress) static \(passcode)".bytes
+                let dataToSend = "connect \(btAddress) static".bytes
                 
                 expect(self.sut.dataToSend).to(equal(dataToSend))
             }
@@ -65,11 +64,10 @@ class SILESLCommandConnectTestSpec: QuickSpec {
             
             it("should prepare data for rand_nonres address") {
                 let btAddress = "XXX"
-                let passcode = "4321"
                 self.address = SILAddress.btAddress(SILBluetoothAddress(address: btAddress, addressType: .rand_nonres))
-                self.sut = SILESLCommandConnect(address: self.address, passcode: passcode)
+                self.sut = SILESLCommandConnect(address: self.address)
                 
-                let dataToSend = "connect \(btAddress) rand_nonres \(passcode)".bytes
+                let dataToSend = "connect \(btAddress) rand_nonres".bytes
                 
                 expect(self.sut.dataToSend).to(equal(dataToSend))
             }
@@ -82,17 +80,6 @@ class SILESLCommandConnectTestSpec: QuickSpec {
                 self.sut = SILESLCommandConnect(address: self.address)
                 
                 let dataToSend = "connect \(eslId)".bytes
-                
-                expect(self.sut.dataToSend).to(equal(dataToSend))
-            }
-            
-            it("should prepare data for esl_id with passcode") {
-                let eslId = 55
-                let passcode = "56789"
-                self.address = SILAddress.eslId(SILESLIdAddress.unicast(id: 55))
-                self.sut = SILESLCommandConnect(address: self.address, passcode: passcode)
-                
-                let dataToSend = "connect \(eslId) \(passcode)".bytes
                 
                 expect(self.sut.dataToSend).to(equal(dataToSend))
             }

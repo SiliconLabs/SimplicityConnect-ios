@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct MainNavigationView: View {
     @State var pickedTag = 2
@@ -54,18 +53,3 @@ struct MainNavigationView_Previews: PreviewProvider {
         MainNavigationView()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

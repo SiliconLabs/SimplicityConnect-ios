@@ -19,6 +19,7 @@
 @property (strong, nonatomic, readwrite) SILBluetoothBitModel *bit;
 @property (strong, nonatomic, readwrite) SILBluetoothFieldModel *fieldModel;
 @property (strong, nonatomic) NSString *toggleValue;
+@property (strong, nonatomic) NSArray *binaryArray;
 
 @end
 
@@ -44,7 +45,27 @@
         return nil;
     }
     
-    return ((SILBluetoothEnumerationModel *)self.bit.enumerations[[self.toggleState intValue]]).value;
+    NSMutableString *description = [[NSMutableString alloc] init];
+    BOOL firstAppend = YES;
+    
+    for (int i = 0; i < self.bit.enumerations.count; i++) {
+        NSNumber *binaryValue = self.binaryArray[i];
+        if ([binaryValue intValue] == 1) {
+            if (!firstAppend) {
+                [description appendString:@"\n"];
+            } else {
+                firstAppend = NO;
+            }
+            
+            [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[i]).value];
+        }
+    }
+    
+    if ([description isEqualToString:@""]) {
+        [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[0]).value];
+    }
+    
+    return [description copy];
 }
 
 - (NSString *)secondaryTitle {
@@ -59,10 +80,10 @@
 //@discussion current implementation has this called by SILBitFieldFieldModel, which handles correct length
 - (NSInteger)consumeValue:(NSData *)value fromIndex:(NSInteger)index {
     value = [self reverseDataIfNeeded:value];
-    NSArray *binaryArray = [[SILCharacteristicFieldValueResolver sharedResolver] binaryArrayFromValue:value forFormat:self.fieldModel.format];
+    self.binaryArray = [[SILCharacteristicFieldValueResolver sharedResolver] binaryArrayFromValue:value forFormat:self.fieldModel.format];
     
-    if (self.bit.index < binaryArray.count) {
-        NSNumber *binaryValue = binaryArray[self.bit.index];
+    if (self.bit.index < self.binaryArray.count) {
+        NSNumber *binaryValue = self.binaryArray[self.bit.index];
         for (SILBluetoothEnumerationModel *enumerationModel in self.bit.enumerations) {
             if (enumerationModel.key == [binaryValue integerValue]) {
                 self.toggleState = binaryValue;

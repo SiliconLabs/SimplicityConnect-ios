@@ -12,6 +12,7 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     @IBOutlet weak var allSpace: UIStackView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noAdvertisersView: UIView!
+    @IBOutlet weak var controllerHeight: NSLayoutConstraint!
     
     var viewModel: SILAdvertiserHomeViewModel!
     var dataSource: [SILAdvertiserCellViewModel] = []
@@ -21,12 +22,10 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
         guard let self = self else { return }
         self.floatingButtonSettings?.setPresented(false)
         self.viewModel.isActiveScrollingUp = true
-        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }, onShowUIElements: { [weak self] in
         guard let self = self else { return }
         self.floatingButtonSettings?.setPresented(true)
         self.viewModel.isActiveScrollingUp = false
-        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     })
     
     override func viewDidLoad() {
@@ -39,8 +38,8 @@ class SILAdvertiserHomeViewController: UIViewController, SILAdvertiserHomeViewDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.floatingButtonSettings?.setPresented(true)
+        self.floatingButtonSettings?.controllerHeight = self.controllerHeight
         self.viewModel.isActiveScrollingUp = false
-        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     fileprivate func setupTableView() {

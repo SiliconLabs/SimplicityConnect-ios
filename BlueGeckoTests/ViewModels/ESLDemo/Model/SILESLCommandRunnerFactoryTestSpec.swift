@@ -34,8 +34,7 @@ class SILESLCommandRunnerFactoryTestSpec: QuickSpec {
                 let provisioning = self.sut.createCommandProvisioning(peripheral: self.peripheralMock,
                                                                       peripheralReferences: self.peripheralReferencesMock,
                                                                       commandRunnerFactory: self.sut,
-                                                                      address: SILBluetoothAddress(address: "", addressType: .public),
-                                                                      passcode: "12345")
+                                                                      qrData: [UInt8]())
              
                 expect(provisioning.isKind(of: SILESLProvisioningTag.self)).to(beTrue())
             }
@@ -56,11 +55,18 @@ class SILESLCommandRunnerFactoryTestSpec: QuickSpec {
         }
         
         describe("createCommandConnectRunner") {
-            it("should create proper object") {
+            it("should create proper object with address") {
                 let connectRunner = self.sut.createCommandConnectRunner(peripheral: self.peripheralMock,
                                                                         peripheralReferences: self.peripheralReferencesMock,
-                                                                        address: self.addressMock,
-                                                                        passcode: "12345")
+                                                                        address: self.addressMock)
+             
+                expect(connectRunner.isKind(of: SILESLCommandConnectRunner.self)).to(beTrue())
+            }
+            
+            it("should create proper object with qrCode") {
+                let connectRunner = self.sut.createCommandConnectRunner(peripheral: self.peripheralMock,
+                                                                        peripheralReferences: self.peripheralReferencesMock,
+                                                                        qrData: [UInt8]())
              
                 expect(connectRunner.isKind(of: SILESLCommandConnectRunner.self)).to(beTrue())
             }

@@ -62,12 +62,11 @@ class SILESLDemoViewModel {
     }
     
     //MARK: Provisioning
-    func provisionTag(with address: SILBluetoothAddress, passcode: String? = nil) {
+    func provisionTag(with qrData: [UInt8]) {
         let provisioningTag = commandRunnerFactory.createCommandProvisioning(peripheral: peripheral,
                                                                              peripheralReferences: peripheralReferences,
                                                                              commandRunnerFactory: commandRunnerFactory,
-                                                                             address: address,
-                                                                             passcode: passcode)
+                                                                             qrData: qrData)
         currentRunningCommand = provisioningTag
         
         provisioningTag.commandResult.asObservable().subscribe(onNext: { [weak self] result in

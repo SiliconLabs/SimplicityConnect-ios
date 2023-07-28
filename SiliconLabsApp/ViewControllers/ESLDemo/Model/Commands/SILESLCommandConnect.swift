@@ -15,29 +15,44 @@ class SILESLCommandConnect: SILESLCommand {
     let name = "connect"
     let opcode: UInt8 = 0
     
-    private let address: SILAddress
-    private let passcode: String?
+    private let address: SILAddress?
+    private let qrData: [UInt8]?
+
+    var dataToSend: [UInt8] {
+        get {
+            if let qrData = qrData {
+                return qrData
+            } else {
+                let command = getFullCommand()
+                return command.bytes
+            }
+        }
+    }
     
-    init(address: SILAddress, passcode: String? = nil) {
+    init(qrData: [UInt8]) {
+        self.qrData = qrData
+        self.address = nil
+    }
+    
+    init(address: SILAddress) {
         self.address = address
-        self.passcode = passcode
+        self.qrData = nil
     }
     
     func getFullCommand() -> String {
+        guard let address = address else {
+            return ""
+        }
+        
         var command = name
         command.append(" ")
         command.append(address.rawValue)
-        
+            
         if case .btAddress(let address) = address, address.addressType != .public {
             command.append(" ")
             command.append(address.addressType.rawValue)
         }
-        
-        if let passcode = passcode {
-            command.append(" ")
-            command.append(passcode)
-        }
-        
+            
         return command
     }
 }

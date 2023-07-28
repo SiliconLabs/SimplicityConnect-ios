@@ -121,13 +121,12 @@ extension QRScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
             if let barCodeObject = videoPreviewLayer.transformedMetadataObject(for: metadataObj) {
                 qrCodeFrameView?.frame = barCodeObject.bounds
             }
-
-            if let metadata = metadataObj.stringValue {
-                let qrData = viewModel.readQR(metadata: metadata)
-                delegate?.setQRData(qrData)
-                navigationController?.popViewController(animated: true)
-                dismiss(animated: true, completion: nil)
-            }
+                if let metadata = metadataObj.stringValue {
+                    let qrData = viewModel.readQR(metadata: metadata)
+                    delegate?.setQRData(qrData)
+                    navigationController?.popViewController(animated: true)
+                    dismiss(animated: true, completion: nil)
+                }
         }
     }
 }

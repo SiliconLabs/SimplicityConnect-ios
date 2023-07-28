@@ -13,13 +13,11 @@ class SILESLCommandRunnerFactory {
     func createCommandProvisioning(peripheral: CBPeripheral,
                                    peripheralReferences: SILESLPeripheralGATTReferences,
                                    commandRunnerFactory: SILESLCommandRunnerFactory,
-                                   address: SILBluetoothAddress,
-                                   passcode: String? = nil) -> SILESLProvisioningTag {
+                                   qrData: [UInt8]) -> SILESLProvisioningTag {
         return SILESLProvisioningTag(peripheral: peripheral,
                                      peripheralReferences: peripheralReferences,
                                      commandRunnerFactory: commandRunnerFactory,
-                                     address: address,
-                                     passcode: passcode)
+                                     qrData: qrData)
     }
     
     func createCommandImageUpdate(peripheral: CBPeripheral,
@@ -40,13 +38,19 @@ class SILESLCommandRunnerFactory {
     
     func createCommandConnectRunner(peripheral: CBPeripheral,
                                     peripheralReferences: SILESLPeripheralGATTReferences,
-                                    address: SILAddress,
-                                    passcode: String? = nil) -> SILESLCommandConnectRunner {
-        let connectCommand = SILESLCommandConnect(address: address,
-                                                  passcode: passcode)
-        return SILESLCommandConnectRunner(peripheral: peripheral,
-                                          peripheralReferences: peripheralReferences,
-                                          command: connectCommand)
+                                    qrData: [UInt8]? = nil,
+                                    address: SILAddress? = nil) -> SILESLCommandConnectRunner {
+        if let qrData = qrData {
+            let connectCommand = SILESLCommandConnect(qrData: qrData)
+            return SILESLCommandConnectRunner(peripheral: peripheral,
+                                              peripheralReferences: peripheralReferences,
+                                              command: connectCommand)
+        } else {
+            let connectCommand = SILESLCommandConnect(address: address!)
+            return SILESLCommandConnectRunner(peripheral: peripheral,
+                                              peripheralReferences: peripheralReferences,
+                                              command: connectCommand)
+        }
     }
     
     func createCommandDisconnectRunner(peripheral: CBPeripheral,

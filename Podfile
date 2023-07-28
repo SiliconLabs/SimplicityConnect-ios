@@ -24,6 +24,7 @@ def shared_pods
     pod 'AEXML'
     pod 'RxSwift',    '~> 6.2.0'
     pod 'RxCocoa',    '~> 6.2.0'
+    pod 'Introspect'
 end
 
 def test_pods

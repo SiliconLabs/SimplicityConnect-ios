@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *noDevicesFoundImageView;
 @property (weak, nonatomic) IBOutlet UIStackView *noDevicesFoundStackView;
 @property (weak, nonatomic) IBOutlet UILabel *noDevicesFoundLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *controllerHeight;
 
 @property (strong, nonatomic) SILBrowserViewModel *browserViewModel;
 @property (nonatomic, weak) FloatingButtonSettings *floatingButtonSettings;
@@ -95,11 +96,9 @@
     SILUIScrollViewDelegate *uiScrollViewDelegate = [[SILUIScrollViewDelegate alloc] initOnHideUIElements:^(void) {
         [weakSelf.floatingButtonSettings setPresented:NO];
         weakSelf.browserViewModel.isActiveScrollingUp = YES;
-        [weakSelf.navigationController.tabBarController hideTabBarAndUpdateFrames];
     } onShowUIElements:^(void) {
         [weakSelf.floatingButtonSettings setPresented:YES];
         weakSelf.browserViewModel.isActiveScrollingUp = NO;
-        [weakSelf.navigationController.tabBarController showTabBarAndUpdateFrames];
     }];
     
     self.tableDelegate = [SILBrowserTableViewDelegate.alloc initWithBrowserViewModel:self.browserViewModel
@@ -213,6 +212,7 @@
 
 - (void)setupFloatingButtonSettings:(FloatingButtonSettings *)settings {
     self.floatingButtonSettings = settings;
+    self.floatingButtonSettings.controllerHeight = self.controllerHeight;
     [self setScanningAppearance];
 }
 

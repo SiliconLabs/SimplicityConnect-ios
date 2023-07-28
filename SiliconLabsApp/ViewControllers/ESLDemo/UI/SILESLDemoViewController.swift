@@ -14,7 +14,7 @@ import SVProgressHUD
 import WYPopoverController
 
 protocol QRMetadataDelegate: class {
-    func setQRData(_ qrData: ESLQRData?)
+    func setQRData(_ data: ESLQRData?)
 }
 
 class SILESLDemoViewController: UIViewController, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, QRMetadataDelegate, UIDocumentPickerDelegate, WYPopoverControllerDelegate {
@@ -79,10 +79,10 @@ class SILESLDemoViewController: UIViewController, UIGestureRecognizerDelegate, U
         }
     }
     
-    func setQRData(_ qrData: ESLQRData?) {
-        if let qrData = qrData {
+    func setQRData(_ data: ESLQRData?) {
+        if let qrData = data {
             if !viewModel.tagWithAddressIsProvisioned(qrData.bluetoothAddress) {
-                viewModel.provisionTag(with: qrData.bluetoothAddress, passcode: qrData.passcode)
+                viewModel.provisionTag(with: qrData.rawData)
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.alertWithOKButton(title: "Error", message: "Tag is already provisioned")
