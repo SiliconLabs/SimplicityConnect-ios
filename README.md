@@ -27,6 +27,7 @@ EFR Connect includes many demos to test sample apps in the Silicon Labs GSDK qui
 - **Motion**: Control a 3D render of a Silicon Labs Thunderboard or Dev Kit that follows the phyiscal board movements.
 - **Environment**: Read and display the data from the on-board sensors on a Silicon Labs Thunderboard or Dev Kit.
 - **Wi-Fi Commissioning**: Commission a Wi-Fi device over BLE.
+- **Bluetooth Electronic Shelf Labels (ESL)**: Adds and commissions ESL tags to the system network by scanning the tag's QR code with the mobile device's camera and provides the user a UI to view the list commissioned tags and control them.
 
 ## Development Features
 EFR Connect helps developers create and troubleshoot Bluetooth applications running on Silicon Labs’ BLE hardware. Here’s a rundown of some example functionalities.
@@ -59,6 +60,22 @@ EFR Connect helps developers create and troubleshoot Bluetooth applications runn
 - Runs a sequence of BLE operations to verify interoperability
 - Export results log
 
+
+## How to build project
+To build project you need Install [Cocoapods](https://cocoapods.org/). 
+Run command `pod install` in the main folder of the project and then use generated `SiliconLabsApp.xcworkspace` file to open project. Use `BlueGecko` scheme to run or test app.
+
+
+## How to start developing
+Applications are written using [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) pattern. 
+The View Controllers layer (also a starting point for each of app - Demo, IOP, Browser, Develop) is in the `<project_directory>/ViewController` folder. 
+You can find there references to View Models and the Models that are used in the specific applications. 
+Each app has mostly separated files so is almost unlikely that modifying one part of code is going to break other app. 
+For storing data we are using [Realm](https://realm.io/) database. 
+Please notice that you must take care of migrations when you are modifying scheme of objects (modify `SILRealmConfiguration.swift` file).
+At `<project_directory>/Supporting Files` you can find XMLs of [SIG Group](https://www.bluetooth.com/) defined GATT services, characteristics and descriptors. 
+The IOP test suites are in folder `<project_directory>/ViewControllers/IOP Test App/TestScenario`. 
+The OTA related code is located in `<project_directory>/ViewControllers/BluetoothBrowser/Details/OTA`.
 
 
 ## Additional information
