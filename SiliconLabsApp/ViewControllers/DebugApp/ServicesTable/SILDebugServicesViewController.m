@@ -383,6 +383,17 @@ static float kTableRefreshInterval = 1;
         if ([model isKindOfClass:[SILEncodingPseudoFieldRowModel class]]) {
             return 132.0;
         }
+        if ([model isKindOfClass:[SILBitRowModel class]]) {
+            SILBitRowModel* modelCharacteristic = (SILBitRowModel*)model;
+            CGFloat tableHeight = 0.0;
+            
+            CGSize size = CGSizeMake(self.tableView.bounds.size.width - 120, CGFLOAT_MAX);
+            CGRect rect = [[modelCharacteristic primaryTitle] boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:nil context:nil];
+            tableHeight += ceil(rect.size.height);
+            
+            return 60.0 + tableHeight;
+        }
+        
         return 81.0;
     }
 }

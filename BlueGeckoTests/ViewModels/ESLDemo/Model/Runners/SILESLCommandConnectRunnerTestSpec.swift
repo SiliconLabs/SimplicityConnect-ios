@@ -28,9 +28,9 @@ class SILESLCommandConnectRunnerTestSpec: QuickSpec {
     override func spec() {
         beforeEach {
             self.address = .eslId(.broadcast)
-            self.commandMock = mock(SILESLCommandConnect.self).initialize(address: self.address, passcode: nil)
+            self.commandMock = mock(SILESLCommandConnect.self).initialize(address: self.address)
             let defaultMock = SILESLPeripheralMockFactory().getDefault()
-            given(self.commandMock.getFullCommand()).willReturn("")
+            given(self.commandMock.getDataToSend()).willReturn([UInt8]())
             self.eslDemoServiceMock = defaultMock.eslDemoServiceMock
             self.eslControlPointMock = defaultMock.eslControlPointMock
             self.peripheralMock = defaultMock.peripheralMock

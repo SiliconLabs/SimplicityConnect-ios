@@ -21,6 +21,7 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     @IBOutlet weak var exportCheckBoxTableViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var exportButton: SILPrimaryButton!
     @IBOutlet weak var cancelExportButton: SILPrimaryButton!
+    @IBOutlet weak var controllerHeight: NSLayoutConstraint!
     
     var viewModel: SILGattConfiguratorHomeViewModel!
     var dataSource: [SILGattConfiguratorCellViewModel] = []
@@ -33,12 +34,10 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         guard let self = self else { return }
         self.floatingButtonSettings?.setPresented(false)
         self.viewModel.isActiveScrollingUp = true
-        self.navigationController?.tabBarController?.hideTabBarAndUpdateFrames()
     }, onShowUIElements: { [weak self] in
         guard let self = self else { return }
         self.floatingButtonSettings?.setPresented(true)
         self.viewModel.isActiveScrollingUp = false
-        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     })
     
     override func viewDidLoad() {
@@ -54,7 +53,6 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
         super.viewWillAppear(animated)
         self.floatingButtonSettings?.setPresented(true)
         self.viewModel.isActiveScrollingUp = false
-        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -70,6 +68,7 @@ class SILGattConfiguratorHomeViewController: UIViewController, UITableViewDataSo
     
     func setupFloatingButton(_ settings: FloatingButtonSettings) {
         floatingButtonSettings = settings
+        floatingButtonSettings?.controllerHeight = controllerHeight
         floatingButtonSettings?.setButtonText("Create New")
         floatingButtonSettings?.setPresented(!viewModel.isExportModeTurnOn && !viewModel.isActiveScrollingUp)
     }

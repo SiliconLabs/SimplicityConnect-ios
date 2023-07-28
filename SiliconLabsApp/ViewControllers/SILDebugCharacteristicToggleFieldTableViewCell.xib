@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="ipad11_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,8 +23,8 @@
                             <constraint firstAttribute="height" constant="1" id="txe-k3-x3e"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Toggle Value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" preferredMaxLayoutWidth="231" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
-                        <rect key="frame" x="16" y="11" width="79" height="16.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.54000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Toggle Value" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="LeD-xP-tdg" userLabel="Value">
+                        <rect key="frame" x="16" y="11" width="220" height="16.5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="ZKe-CF-DCe"/>
                         </constraints>
@@ -67,6 +67,7 @@
                         <variation key="heightClass=regular-widthClass=regular" constant="-24"/>
                     </constraint>
                     <constraint firstItem="LeD-xP-tdg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="dmZ-xr-Zxk"/>
+                    <constraint firstItem="x9P-mS-BnE" firstAttribute="leading" secondItem="LeD-xP-tdg" secondAttribute="trailing" constant="16" id="e5w-3V-4mD"/>
                     <constraint firstItem="AtO-zN-4aI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="f3H-qb-Up1"/>
                     <constraint firstItem="x9P-mS-BnE" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="kXS-jY-hek"/>
                 </constraints>
@@ -85,7 +86,7 @@
                 <outlet property="toggleFieldLabel" destination="LeD-xP-tdg" id="mNO-Pr-v7P"/>
                 <outlet property="topSeparatorView" destination="AtO-zN-4aI" id="woh-1N-1v9"/>
             </connections>
-            <point key="canvasLocation" x="701.5" y="414.5"/>
+            <point key="canvasLocation" x="701.43884892086339" y="414.321608040201"/>
         </tableViewCell>
     </objects>
 </document>

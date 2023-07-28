@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import Introspect
 
 struct PickerTabView: View {
     @State var pickerTagChosen = 0
@@ -54,8 +55,11 @@ struct PickerTabView: View {
                     }
                 }
             }
-            
-        })
+        }).introspectTabBarController { uiTabBarController in
+            uiTabBarController.setTabBarVisible(visible: floatingButtonSetting.isPresented,
+                                                animated: true,
+                                                controllerHeight: floatingButtonSetting.controllerHeight)
+        }
     }
 }
 
@@ -77,6 +81,7 @@ protocol PickerTabSubview : View {
     var text: String = ""
     var isPresented: Bool = false
     var color : UIColor = .sil_regularBlue()
+    @IBOutlet weak var controllerHeight: NSLayoutConstraint?
     
     @objc func setButtonText(_ text: String) {
         if text != self.text {

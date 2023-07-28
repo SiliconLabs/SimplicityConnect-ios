@@ -17,6 +17,7 @@
 @interface SILBrowserConnectionsViewController () <UITableViewDataSource, UITableViewDelegate, SILBrowserDeviceViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *connectionsTableView;
 @property (weak, nonatomic) IBOutlet UIView *emptyView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *controllerHeight;
 @property (strong, nonatomic) SILBrowserConnectionsViewModel* viewModel;
 @property (nonatomic, weak) FloatingButtonSettings *floatingButtonSettings;
 @property (nonatomic, strong) SILUIScrollViewDelegate *uiScrollViewDelegate;
@@ -38,7 +39,6 @@
     [super viewWillAppear:animated];
     [self.floatingButtonSettings setPresented:YES];
     self.viewModel.isActiveScrollingUp = NO;
-    [self.navigationController.tabBarController showTabBarAndUpdateFrames];
 }
 
 - (void)disconnectAllTapped {
@@ -62,11 +62,9 @@
     self.uiScrollViewDelegate = [[SILUIScrollViewDelegate alloc] initOnHideUIElements:^(void) {
         [weakSelf.floatingButtonSettings setPresented:NO];
         weakSelf.viewModel.isActiveScrollingUp = YES;
-        [weakSelf.navigationController.tabBarController hideTabBarAndUpdateFrames];
     } onShowUIElements:^(void) {
         [weakSelf.floatingButtonSettings setPresented:YES];
         weakSelf.viewModel.isActiveScrollingUp = NO;
-        [weakSelf.navigationController.tabBarController showTabBarAndUpdateFrames];
     }];
 }
 
@@ -146,6 +144,7 @@
 
 - (void)setupFloatingButtonSettings:(FloatingButtonSettings *)settings {
     self.floatingButtonSettings = settings;
+    self.floatingButtonSettings.controllerHeight = self.controllerHeight;
     [self.floatingButtonSettings setButtonText:@"Disconnect All"];
     [self.floatingButtonSettings setPresented:!self.viewModel.isActiveScrollingUp];
     [self.floatingButtonSettings setColor:[UIColor sil_regularBlueColor]];

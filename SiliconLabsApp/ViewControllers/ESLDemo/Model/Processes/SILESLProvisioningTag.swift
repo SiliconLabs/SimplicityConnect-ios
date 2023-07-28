@@ -19,33 +19,29 @@ class SILESLProvisioningTag: NSObject, SILESLCommandRunner {
     private let peripheral: CBPeripheral
     private var peripheralReferences: SILESLPeripheralGATTReferences
     private let commandRunnerFactory: SILESLCommandRunnerFactory
-    private let address: SILBluetoothAddress
-    private var passcode: String?
+    private let qrData: [UInt8]
     private var timeout: TimeInterval! = 0.0
     private var currentRunningCommand: (any SILESLCommandRunner)?
     var commandResult: PublishRelay<Result<SILESLDemoViewModelState, SILESLCommandGenericError>> = PublishRelay()
     private var disposeBag = DisposeBag()    
-    private var eslAddress: SILESLIdAddress?
+    var eslAddress: SILESLIdAddress?
     private var imageIndex: UInt?
     
     init(peripheral: CBPeripheral,
          peripheralReferences: SILESLPeripheralGATTReferences,
          commandRunnerFactory: SILESLCommandRunnerFactory,
-         address: SILBluetoothAddress,
-         passcode: String? = nil) {
+         qrData: [UInt8]) {
         self.peripheral = peripheral
         self.peripheralReferences = peripheralReferences
         self.commandRunnerFactory = commandRunnerFactory
-        self.address = address
-        self.passcode = passcode
+        self.qrData = qrData
         super.init()
     }
     
     func perform(timeout: TimeInterval) {
         let connect = commandRunnerFactory.createCommandConnectRunner(peripheral: peripheral,
                                                                       peripheralReferences: peripheralReferences,
-                                                                      address: .btAddress(address),
-                                                                      passcode: passcode)
+                                                                      qrData: qrData)
         currentRunningCommand = connect
         self.timeout = timeout
         connect.commandResult.asObservable().subscribe(onNext: { [weak self] result in
@@ -95,7 +91,6 @@ class SILESLProvisioningTag: NSObject, SILESLCommandRunner {
                                                                               imageIndex: imageIndex,
                                                                               imageFile: imageFile)
         currentRunningCommand = imageUpdate
-        
         self.eslAddress = address
         
         imageUpdate.commandResult.asObservable().subscribe(onNext: { [weak self] result in
@@ -107,7 +102,7 @@ class SILESLProvisioningTag: NSObject, SILESLCommandRunner {
             case .success:
                 if let imageUpdateCommand = imageUpdateCommand {
                     let requestData = imageUpdateCommand.getRequestData()
-                    self.imageIndex = imageUpdateCommand.getRequestData().imageIndex
+                    self.imageIndex = requestData.imageIndex
                     self.commandResult.accept(.success(.processInProgressDisplayImage(address: address, imageIndex: Int(requestData.imageIndex), imageFile: requestData.imageFile)))
                     self.disconnectConnectedTag(showImageAfterUpdate: showImageAfterUpdate)
                 }

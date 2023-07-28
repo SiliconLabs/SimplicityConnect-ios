@@ -30,7 +30,7 @@ class SILESLProvisioningTagTestSpec: QuickSpec {
             self.sut = SILESLProvisioningTag(peripheral: self.peripheralMock,
                                              peripheralReferences: self.peripheralReferencesMock,
                                              commandRunnerFactory: self.commandRunnerFactoryMock,
-                                             address: .init(address: "", addressType: .public))
+                                             qrData: [UInt8]())
         }
         
         afterEach {
@@ -39,11 +39,10 @@ class SILESLProvisioningTagTestSpec: QuickSpec {
         
         describe("perform(timeout:)") {
             it("should call function and return success") {
-                let btAddress = SILBluetoothAddress(address: "", addressType: .public)
-                let connectCommandMock = mock(SILESLCommandConnect.self).initialize(address: .btAddress(btAddress), passcode: "1234")
+                let connectCommandMock = mock(SILESLCommandConnect.self).initialize(qrData: [UInt8]())
                 let connect = mock(SILESLCommandConnectRunner.self).initialize(peripheral: self.peripheralMock, peripheralReferences: self.peripheralReferencesMock, command: connectCommandMock)
                 
-                given(self.commandRunnerFactoryMock.createCommandConnectRunner(peripheral: self.peripheralMock, peripheralReferences: any(), address: any(), passcode: any())).willReturn(connect)
+                given(self.commandRunnerFactoryMock.createCommandConnectRunner(peripheral: self.peripheralMock, peripheralReferences: any(), qrData: any(), address: nil)).willReturn(connect)
                 
                 let publishRelay: PublishRelay<Result<Bool, SILESLCommandGenericError>> = PublishRelay()
                 given(connect.commandResult).willReturn(publishRelay)
@@ -62,11 +61,10 @@ class SILESLProvisioningTagTestSpec: QuickSpec {
             }
             
             it("should call function and return error") {
-                let btAddress = SILBluetoothAddress(address: "", addressType: .public)
-                let connectCommandMock = mock(SILESLCommandConnect.self).initialize(address: .btAddress(btAddress), passcode: "1234")
+                let connectCommandMock = mock(SILESLCommandConnect.self).initialize(qrData: [UInt8]())
                 let connect = mock(SILESLCommandConnectRunner.self).initialize(peripheral: self.peripheralMock, peripheralReferences: self.peripheralReferencesMock, command: connectCommandMock)
                 
-                given(self.commandRunnerFactoryMock.createCommandConnectRunner(peripheral: self.peripheralMock, peripheralReferences: any(), address: any(), passcode: any())).willReturn(connect)
+                given(self.commandRunnerFactoryMock.createCommandConnectRunner(peripheral: self.peripheralMock, peripheralReferences: any(), qrData: any(), address: nil)).willReturn(connect)
                 
                 let publishRelay: PublishRelay<Result<Bool, SILESLCommandGenericError>> = PublishRelay()
                 given(connect.commandResult).willReturn(publishRelay)

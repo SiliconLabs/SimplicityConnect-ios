@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C4A-b7-qrY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C4A-b7-qrY">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -21,19 +21,19 @@
         <!--Advertiser Home View Controller-->
         <scene sceneID="tG1-AQ-h3Z">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="C4A-b7-qrY" customClass="SILAdvertiserHomeViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="C4A-b7-qrY" customClass="SILAdvertiserHomeViewController" customModule="BlueGecko" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HSZ-rj-3cd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MCj-k0-yA1" userLabel="All Space">
-                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="848"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A08-5C-Fjd">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                                         <subviews>
                                             <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="20" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3XP-N5-L7f">
-                                                <rect key="frame" x="16" y="0.0" width="382" height="814"/>
+                                                <rect key="frame" x="16" y="0.0" width="382" height="848"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -208,7 +208,7 @@
                                                 </prototypes>
                                             </tableView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="1CB-5i-lbu">
-                                                <rect key="frame" x="16" y="333" width="382" height="148"/>
+                                                <rect key="frame" x="16" y="350" width="382" height="148"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="advertiser-no-devices-image" translatesAutoresizingMaskIntoConstraints="NO" id="rtt-c3-ffB">
                                                         <rect key="frame" x="0.0" y="0.0" width="382" height="56"/>
@@ -248,7 +248,7 @@
                         <viewLayoutGuide key="safeArea" id="dZU-WE-pjU"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="dZU-WE-pjU" firstAttribute="bottom" secondItem="MCj-k0-yA1" secondAttribute="bottom" id="St8-Lu-oDN"/>
+                            <constraint firstAttribute="bottom" secondItem="MCj-k0-yA1" secondAttribute="bottom" id="St8-Lu-oDN"/>
                             <constraint firstItem="dZU-WE-pjU" firstAttribute="trailing" secondItem="MCj-k0-yA1" secondAttribute="trailing" id="hO7-ST-4RK"/>
                             <constraint firstItem="MCj-k0-yA1" firstAttribute="top" secondItem="dZU-WE-pjU" secondAttribute="top" id="iYF-5J-3bg"/>
                             <constraint firstItem="MCj-k0-yA1" firstAttribute="leading" secondItem="dZU-WE-pjU" secondAttribute="leading" id="nrb-g2-HxJ"/>
@@ -256,6 +256,7 @@
                     </view>
                     <connections>
                         <outlet property="allSpace" destination="MCj-k0-yA1" id="JMM-zs-JJq"/>
+                        <outlet property="controllerHeight" destination="St8-Lu-oDN" id="RDi-nK-of7"/>
                         <outlet property="noAdvertisersView" destination="1CB-5i-lbu" id="b1A-zR-R7j"/>
                         <outlet property="tableView" destination="3XP-N5-L7f" id="flt-LS-pYL"/>
                     </connections>

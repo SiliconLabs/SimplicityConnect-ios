@@ -31,25 +31,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Gjd-rs-Qvx" userLabel="All Space">
-                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="848"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MW9-lN-Pgh" userLabel="Presentation View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZKl-3b-7u7" userLabel="Content View">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QvJ-0t-qnm" userLabel="Discovered Devices View">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5uG-2f-0z3" userLabel="Browser Stack">
-                                                                <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mmJ-dg-Dyq" userLabel="Browser">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                                                                         <subviews>
                                                                             <tableView contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="huc-iN-eY1">
-                                                                                <rect key="frame" x="16" y="0.0" width="382" height="814"/>
+                                                                                <rect key="frame" x="16" y="0.0" width="382" height="848"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <prototypes>
@@ -424,7 +424,7 @@
                                                                                 </connections>
                                                                             </tableView>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CMs-5G-emG" userLabel="No Devices Found Stack View">
-                                                                                <rect key="frame" x="57" y="322" width="300" height="170"/>
+                                                                                <rect key="frame" x="57" y="339" width="300" height="170"/>
                                                                                 <subviews>
                                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jgo-j3-l2S" userLabel="No Devices Found Image View">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="300" height="141"/>
@@ -499,16 +499,17 @@
                         <viewLayoutGuide key="safeArea" id="oK9-IF-SLD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Gjd-rs-Qvx" firstAttribute="height" secondItem="oK9-IF-SLD" secondAttribute="height" id="K0U-oZ-086"/>
-                            <constraint firstItem="Gjd-rs-Qvx" firstAttribute="width" secondItem="oK9-IF-SLD" secondAttribute="width" id="Ne5-vV-LjP"/>
-                            <constraint firstItem="Gjd-rs-Qvx" firstAttribute="centerX" secondItem="oK9-IF-SLD" secondAttribute="centerX" id="Pyf-aW-2NC"/>
-                            <constraint firstItem="Gjd-rs-Qvx" firstAttribute="centerY" secondItem="oK9-IF-SLD" secondAttribute="centerY" id="TBQ-b0-HiF"/>
+                            <constraint firstItem="oK9-IF-SLD" firstAttribute="trailing" secondItem="Gjd-rs-Qvx" secondAttribute="trailing" id="2o4-5s-Td9"/>
+                            <constraint firstItem="Gjd-rs-Qvx" firstAttribute="leading" secondItem="oK9-IF-SLD" secondAttribute="leading" id="SfT-7h-xRV"/>
+                            <constraint firstAttribute="bottom" secondItem="Gjd-rs-Qvx" secondAttribute="bottom" id="aJw-4H-XUp"/>
+                            <constraint firstItem="Gjd-rs-Qvx" firstAttribute="top" secondItem="oK9-IF-SLD" secondAttribute="top" id="vMz-Tl-E6i"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="browserTableView" destination="huc-iN-eY1" id="xaL-AT-5Zs"/>
+                        <outlet property="controllerHeight" destination="aJw-4H-XUp" id="6bG-7x-9XZ"/>
                         <outlet property="discoveredDevicesView" destination="QvJ-0t-qnm" id="GB2-iz-h3o"/>
                         <outlet property="noDevicesFoundImageView" destination="oHc-jd-mYp" id="CI7-5n-4FL"/>
                         <outlet property="noDevicesFoundLabel" destination="DYw-SX-SLm" id="Gnz-bg-tgB"/>
@@ -573,7 +574,7 @@
                                 </constraints>
                             </view>
                             <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="j8f-it-E7l" userLabel="Connections Table View">
-                                <rect key="frame" x="16" y="48" width="382" height="814"/>
+                                <rect key="frame" x="16" y="48" width="382" height="848"/>
                                 <color key="backgroundColor" name="sil_backgroundColor"/>
                                 <color key="separatorColor" name="sil_backgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" name="sil_backgroundColor"/>
@@ -610,7 +611,7 @@
                         <constraints>
                             <constraint firstItem="j8f-it-E7l" firstAttribute="leading" secondItem="Bcg-K3-R1J" secondAttribute="leading" constant="16" id="41x-YF-0Sa"/>
                             <constraint firstItem="Bcg-K3-R1J" firstAttribute="bottom" secondItem="IwV-GG-ilV" secondAttribute="bottom" id="4hI-J4-fSU"/>
-                            <constraint firstItem="Bcg-K3-R1J" firstAttribute="bottom" secondItem="j8f-it-E7l" secondAttribute="bottom" id="EQf-29-Yet"/>
+                            <constraint firstAttribute="bottom" secondItem="j8f-it-E7l" secondAttribute="bottom" id="EQf-29-Yet"/>
                             <constraint firstItem="Bcg-K3-R1J" firstAttribute="trailing" secondItem="IwV-GG-ilV" secondAttribute="trailing" id="She-Lf-gUW"/>
                             <constraint firstItem="IwV-GG-ilV" firstAttribute="top" secondItem="Bcg-K3-R1J" secondAttribute="top" id="ZOF-sz-UOq"/>
                             <constraint firstItem="j8f-it-E7l" firstAttribute="top" secondItem="Bcg-K3-R1J" secondAttribute="top" id="aRe-xD-62Y"/>
@@ -620,6 +621,7 @@
                     </view>
                     <connections>
                         <outlet property="connectionsTableView" destination="j8f-it-E7l" id="Rpi-BU-K0T"/>
+                        <outlet property="controllerHeight" destination="EQf-29-Yet" id="6t6-D6-EmF"/>
                         <outlet property="emptyView" destination="IwV-GG-ilV" id="4O0-gC-cd5"/>
                     </connections>
                 </viewController>
