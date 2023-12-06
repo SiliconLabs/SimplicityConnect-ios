@@ -40,6 +40,37 @@
     return self;
 }
 
+// COMMENTED FOR BELOW FIX - (NSString *)primaryTitle:
+
+//- (NSString *)primaryTitle {
+//    if (self.toggleState == nil) {
+//        return nil;
+//    }
+//
+//    NSMutableString *description = [[NSMutableString alloc] init];
+//    BOOL firstAppend = YES;
+//
+//    for (int i = 0; i < self.bit.enumerations.count; i++) {
+//        NSNumber *binaryValue = self.binaryArray[i];
+//        if ([binaryValue intValue] == 1) {
+//            if (!firstAppend) {
+//                [description appendString:@"\n"];
+//            } else {
+//                firstAppend = NO;
+//            }
+//
+//            [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[i]).value];
+//        }
+//    }
+//
+//    if ([description isEqualToString:@""]) {
+//        [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[0]).value];
+//    }
+//
+//    return [description copy];
+//}
+
+// HEART RATE NOTIFY TITELE
 - (NSString *)primaryTitle {
     if (self.toggleState == nil) {
         return nil;
@@ -47,26 +78,49 @@
     
     NSMutableString *description = [[NSMutableString alloc] init];
     BOOL firstAppend = YES;
-    
+    int bitCount = 0;
+    int index = 0;
     for (int i = 0; i < self.bit.enumerations.count; i++) {
         NSNumber *binaryValue = self.binaryArray[i];
         if ([binaryValue intValue] == 1) {
             if (!firstAppend) {
                 [description appendString:@"\n"];
+                bitCount++;
             } else {
                 firstAppend = NO;
             }
+            //[description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[i]).value];
             
-            [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[i]).value];
+            // NEW ADD FOR BTN0 & BTN1 FIX
+            if (self.bit.enumerations.count == 4){
+                if(bitCount == 1){
+                    [description appendString:@""];
+                    index =  1;
+                }else{
+                    if (i == 1){
+                      [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[2]).value];
+                    }else if (i == 2){
+                        [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[1]).value];
+                    }
+                }
+            }else{
+                [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[0]).value];
+            }
         }
     }
     
     if ([description isEqualToString:@""]) {
         [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[0]).value];
+    }else{
+        //NEW ADD FOR BTN0 & BTN1 FIX
+        if (index == 1){
+            description = [[NSMutableString alloc] init];
+            [description appendString:((SILBluetoothEnumerationModel *)self.bit.enumerations[3]).value];
+        }
     }
-    
     return [description copy];
 }
+
 
 - (NSString *)secondaryTitle {
     return [NSString stringWithFormat: @"%@ - %@", self.fieldModel.name, self.bit.name];

@@ -56,10 +56,16 @@ struct PickerTabView: View {
                 }
             }
         }).introspectTabBarController { uiTabBarController in
-            uiTabBarController.setTabBarVisible(visible: floatingButtonSetting.isPresented,
+            uiTabBarController.setTabBarVisible(visible: true,
                                                 animated: true,
                                                 controllerHeight: floatingButtonSetting.controllerHeight)
         }
+        // Keeping commented code for future referance for tabbar hide.
+//        { uiTabBarController in
+//            uiTabBarController.setTabBarVisible(visible: floatingButtonSetting.isPresented,
+//                                                animated: true,
+//                                                controllerHeight: floatingButtonSetting.controllerHeight)
+//        }
     }
 }
 

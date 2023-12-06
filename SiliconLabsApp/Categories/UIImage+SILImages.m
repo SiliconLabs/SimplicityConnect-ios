@@ -33,6 +33,7 @@ NSString * const SILImageNameHomeMotion = @"demo icon - motion";
 NSString * const SILImageNameHomeEnvironment = @"demo icon - environment";
 NSString * const SILImageNameHomeWifiCommissioning = @"icon - wifi commissioning";
 NSString * const SILImageNameHomeESLDemo = @"esl_icon";
+NSString * const SILImageNameHomeMatterDemo = @"matter_icon";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";

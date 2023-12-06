@@ -17,6 +17,7 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     @IBOutlet weak var collectionView: UICollectionView!
     weak var floatingButtonSettings: FloatingButtonSettings?
     
+    @IBOutlet weak var noDataFouldLabel: UILabel!
     @IBOutlet weak var chartContainerView: UIView!
     
     private let TitleForScanningButtonDuringScanning = "Stop Scanning"
@@ -29,11 +30,12 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     @IBOutlet weak var chartView: SILGraphView!
     
     private let cornerRadius: CGFloat = 16.0
+    private var loaderTimer: Timer? = nil
     
     deinit {
         debugPrint("SILRSSIGraphViewController deinit")
     }
-    
+    // RSSI GRAPH...
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAppearance()
@@ -44,27 +46,34 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.showProgressView(status: "Loading")
+        loaderTimer = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: false)
+
         self.applyFilters(SILBrowserFilterViewModel.sharedInstance())
         self.chartView.setStartTime(time: ScannerTabSettings.sharedInstance.scanningStartedTime)
         if !ScannerTabSettings.sharedInstance.scanningPausedByUser {
             self.viewModel.isScanning.accept(true)
         }
+        noDataFouldLabel.isHidden = false
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.viewModel.isScanning.accept(false)
     }
-    
+    @objc func fireTimer() {
+        hideProgressView()
+        loaderTimer?.invalidate()
+    }
     private func setupCollectionView() {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         viewModel.peripherals.asDriver(onErrorJustReturn: [])
             .throttle(.milliseconds(300))
             .drive(collectionView.rx.items(cellIdentifier: "rssiGraphPeripheralCell",
                                            cellType: SILRSSIGraphDiscoveredDeviceCellCollectionViewCell.self)) { _, data, cell in
-                cell.color = data.color
-                cell.deviceNameLabel.text = data.name
-                cell.uuidLabel.text = data.uuid
+                    cell.color = data.color
+                    cell.deviceNameLabel.text = data.name
+                    cell.uuidLabel.text = data.uuid
             }
             .disposed(by: disposeBag)
         
@@ -95,6 +104,7 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
             .disposed(by: disposeBag)
     }
     
+    // Scanning Button Tapped
     func scanningButtonTapped() {
         if viewModel.isScanning.value {
             ScannerTabSettings.sharedInstance.scanningStartedTime = Date()
@@ -108,7 +118,7 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
         print("Sort button tapped in RSSI")
         viewModel.sortByRSSI()
     }
-    
+   
     func filterButtonTapped() {
         let storyboard = UIStoryboard(name: SILAppBluetoothBrowserHome, bundle: nil)
         let filterVC = storyboard.instantiateViewController(withIdentifier: SILSceneFilter) as! SILBrowserFilterViewController
@@ -206,6 +216,12 @@ extension SILRSSIGraphViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = collectionView.bounds.height
         let width = height + 20
+        
+        if width > 20 {
+            noDataFouldLabel.isHidden = true
+        } else {
+            noDataFouldLabel.isHidden = false
+        }
         return CGSize(width: width, height: height)
     }
     

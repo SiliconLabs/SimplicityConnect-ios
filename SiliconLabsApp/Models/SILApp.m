@@ -22,6 +22,7 @@
                 [self environmentApp],
                 [self wifiCommissioningApp],
                 [self eslDemoApp],
+                [self matterDemoApp],
             ];
 }
 
@@ -105,6 +106,13 @@
                                  imageName:SILImageNameHomeESLDemo];
 }
 
++ (SILApp *)matterDemoApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeMatterDemo
+                                     title:@"Matter Demo"
+                               description:@"Add/commission Matter tags by scanning its QR code and control them from the UI."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeMatterDemo];
+}
 - (instancetype)initWithAppType:(SILAppType)appType
                            title:(NSString *)title
                      description:(NSString *)description

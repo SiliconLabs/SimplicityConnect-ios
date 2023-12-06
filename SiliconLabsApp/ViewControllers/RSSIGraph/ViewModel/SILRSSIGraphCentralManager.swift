@@ -20,7 +20,7 @@ fileprivate struct Constants {
 class SILRSSIGraphCentralManager: NSObject {
         
     private let manager : SILCentralManager
-    
+    // START SCANNING
     lazy var discoveredPeripherals: Observable<[SILDiscoveredPeripheral]> =
     peripheralsFound.asObservable().throttle(.milliseconds(300), scheduler: MainScheduler.instance)
         .do(onSubscribe: { [weak self] in
