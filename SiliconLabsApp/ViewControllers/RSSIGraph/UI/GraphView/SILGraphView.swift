@@ -54,7 +54,7 @@ class SILGraphView: UIView {
         setupLeftArrowButton()
         setupRightArrowButton()
     }
-    
+    // GRAPH DATA
     private func setupInput() {
         input.asObservable()
             .flatMap { Observable.from($0) }
@@ -100,7 +100,9 @@ class SILGraphView: UIView {
     }
     
     func startChart() {
-        self.chartView.resetChart()
+        DispatchQueue.main.async {
+            self.chartView.resetChart()
+        }
     }
     
     func redrawChart() {

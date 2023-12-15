@@ -36,6 +36,7 @@ class SILAppSelectionCollectionViewCell: UICollectionViewCell {
     private func setupIconImageView() {
         iconImageView?.layer.masksToBounds = true
         iconImageView?.backgroundColor = .white
+        iconImageView?.tintColor = .sil_regularBlue()
     }
 
     private func setupCellRoundedAppearance() {

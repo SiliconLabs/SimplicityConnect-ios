@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Matter Home View Controller-->
+        <scene sceneID="7jL-ck-khZ">
+            <objects>
+                <viewController storyboardIdentifier="MatterHomeViewController" id="wVa-jw-2dU" customClass="MatterHomeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hNO-ja-RWI">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UmY-AO-zWV">
+                                <rect key="frame" x="47.666666666666657" y="198" width="319" height="300"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Device Found" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xyc-Qr-s9f">
+                                        <rect key="frame" x="20" y="50" width="279" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="1Mn-MG-fAY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="24"/>
+                                        <color key="textColor" name="sil_subtleTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
+                                        </variation>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan your matter device to add." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="45r-MC-BxU">
+                                        <rect key="frame" x="0.0" y="77" width="319" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="89w-nj-nP3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                        <color key="textColor" name="sil_subtleTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
+                                        </variation>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fs6-L4-yVy" customClass="FRHyperLabel">
+                                        <rect key="frame" x="10" y="290" width="299" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="8"/>
+                                        <color key="textColor" name="sil_subtleTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Xyc-Qr-s9f" firstAttribute="top" secondItem="UmY-AO-zWV" secondAttribute="top" constant="50" id="4AU-Ey-eHn"/>
+                                    <constraint firstAttribute="trailing" secondItem="fs6-L4-yVy" secondAttribute="trailing" constant="10" id="5vJ-Li-vtV"/>
+                                    <constraint firstAttribute="bottom" secondItem="fs6-L4-yVy" secondAttribute="bottom" constant="10" id="8IQ-wW-WHn"/>
+                                    <constraint firstItem="fs6-L4-yVy" firstAttribute="leading" secondItem="UmY-AO-zWV" secondAttribute="leading" constant="10" id="BYM-dT-5Sk"/>
+                                    <constraint firstAttribute="trailing" secondItem="45r-MC-BxU" secondAttribute="trailing" id="Sdb-TD-ntB"/>
+                                    <constraint firstItem="45r-MC-BxU" firstAttribute="top" secondItem="Xyc-Qr-s9f" secondAttribute="bottom" constant="2" id="VcU-Iw-I19"/>
+                                    <constraint firstAttribute="width" constant="319" id="fiP-NA-v16"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xyc-Qr-s9f" secondAttribute="trailing" constant="20" id="gRg-Zv-LXh"/>
+                                    <constraint firstItem="Xyc-Qr-s9f" firstAttribute="leading" secondItem="UmY-AO-zWV" secondAttribute="leading" constant="20" id="u9u-qc-Io0"/>
+                                    <constraint firstAttribute="height" constant="300" id="vxb-9E-r1L"/>
+                                    <constraint firstItem="45r-MC-BxU" firstAttribute="leading" secondItem="UmY-AO-zWV" secondAttribute="leading" id="yg6-1U-0re"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="5Jo-vZ-KkQ">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <color key="backgroundColor" name="sil_backgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="wVa-jw-2dU" id="x75-oQ-SbB"/>
+                                    <outlet property="delegate" destination="wVa-jw-2dU" id="PGF-1p-Gtg"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="UXC-JB-x9y"/>
+                        <color key="backgroundColor" name="sil_backgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="5Jo-vZ-KkQ" firstAttribute="leading" secondItem="UXC-JB-x9y" secondAttribute="leading" id="9fx-iX-Nte"/>
+                            <constraint firstItem="5Jo-vZ-KkQ" firstAttribute="trailing" secondItem="UXC-JB-x9y" secondAttribute="trailing" id="BlE-6f-Zdd"/>
+                            <constraint firstItem="UmY-AO-zWV" firstAttribute="centerY" secondItem="hNO-ja-RWI" secondAttribute="centerY" constant="-20" id="BtD-Dw-Q61"/>
+                            <constraint firstItem="5Jo-vZ-KkQ" firstAttribute="top" secondItem="hNO-ja-RWI" secondAttribute="top" id="Crl-yA-ZG2"/>
+                            <constraint firstItem="5Jo-vZ-KkQ" firstAttribute="bottom" secondItem="UXC-JB-x9y" secondAttribute="bottom" id="GdC-Mt-QBM"/>
+                            <constraint firstItem="UmY-AO-zWV" firstAttribute="centerX" secondItem="hNO-ja-RWI" secondAttribute="centerX" id="TB5-hb-Hjf"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="guidanceLabel" destination="fs6-L4-yVy" id="5kA-4y-4KR"/>
+                        <outlet property="noDevicesAddedView" destination="UmY-AO-zWV" id="4Mr-iB-CDK"/>
+                        <outlet property="tableView" destination="5Jo-vZ-KkQ" id="ycz-Xa-dye"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CNB-Sg-VCU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131.8840579710145" y="659.51086956521749"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="sil_backgroundColor">
+            <color red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sil_subtleTextColor">
+            <color red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

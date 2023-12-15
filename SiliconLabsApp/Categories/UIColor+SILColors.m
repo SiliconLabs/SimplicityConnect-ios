@@ -88,4 +88,8 @@
     return [UIColor colorNamed: @"sil_silverColor"];
 }
 
++ (UIColor *)sil_yellowColor {
+    return [UIColor colorNamed: @"sil_yellowColor"];
+}
+
 @end

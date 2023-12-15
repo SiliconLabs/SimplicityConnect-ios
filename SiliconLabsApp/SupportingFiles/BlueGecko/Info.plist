@@ -47,6 +47,17 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mt</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>Fabric</key>
@@ -65,6 +76,15 @@
 	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSEnvironment</key>
+	<dict>
+		<key>CommissioningCustomFlowLedgerUrl</key>
+		<string>https://dcl.dev.dsr-corporation.com/api/modelinfo/models</string>
+		<key>CommissioningCustomFlowReturnUrl</key>
+		<string>mt://modelinfo?payload</string>
+		<key>CommissioningCustomFlowUseMockFlag</key>
+		<true/>
+	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
@@ -73,8 +93,16 @@
 	<string>This app uses Bluetooth and Bluetooth Low Energy (BLE) to connect to and control your Silicon Labs devices.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app uses Bluetooth and Bluetooth Low Energy (BLE) to connect to and control your Silicon Labs devices.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_matter._tcp</string>
+		<string>_matterc._udp</string>
+		<string>_matterd._udp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>This app uses Camera to scan QR codes.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Network usage is required for discovering accessories</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Location required for use of Retail Beacons.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

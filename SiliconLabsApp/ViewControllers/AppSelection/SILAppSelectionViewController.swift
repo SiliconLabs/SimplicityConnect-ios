@@ -33,6 +33,11 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         SILBluetoothModelManager.shared()?.populateModels()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if self.isDisconnectedIntentionally {
@@ -115,6 +120,12 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         }
     }
     
+    private func moveToMatterDemoView() {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "SILMatterDemo", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MatterHomeViewController")
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+    
     private func didSelectApp(app: SILApp!) {
         debugPrint("didSelectItem \(String(describing: app.title))")
         switch app.appType {
@@ -161,6 +172,9 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             
         case .typeESLDemo:
             self.presentDeviceSelectionViewController(app: app, animated: true)
+            
+        case .typeMatterDemo:
+            moveToMatterDemoView()
             
         default:
             return

@@ -20,14 +20,18 @@
 
 @implementation SILDebugCharacteristicToggleFieldTableViewCell
 
+// FIX HEART RATE ON OR OFF
 - (void)configureWithBitRowModel:(SILBitRowModel *)bitRowModel {
     self.model = bitRowModel;
     
     self.toggleFieldLabel.text = [bitRowModel primaryTitle] ?: @"Unknown Value";
     self.toggleCategoryLabel.text = [bitRowModel secondaryTitle] ?: @"";
     
-    NSString *toggleState = [bitRowModel.toggleState intValue] ? @"ON" : @"OFF";
-    UIColor *stateColor = [bitRowModel.toggleState intValue] ? [UIColor colorWithWhite:0 alpha:0.54] : [UIColor colorWithWhite:0 alpha:0.26];
+    // MADE CHANGE
+    //NSString *toggleState = [bitRowModel.toggleState intValue] ? @"ON" : @"OFF";
+    NSString *toggleState = [bitRowModel.toggleState intValue] ? @"OFF" : @"OFF";
+    //UIColor *stateColor = [bitRowModel.toggleState intValue] ? [UIColor colorWithWhite:0 alpha:0.54] : [UIColor colorWithWhite:0 alpha:0.26];
+    UIColor *stateColor = [UIColor colorWithWhite:0 alpha:0.26];
     self.nonWritableLabel.text = toggleState;
     self.nonWritableLabel.textColor = stateColor;
     self.nonWritableLabel.hidden = NO;
