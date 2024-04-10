@@ -5645,7 +5645,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" d4644999f9acaab70a6af52eebed37881b8dc107 3ac40070001448c72125e7becb3d822cc0a1f74a30c6327231b6eb046bdd7e4e\n";
+			shellScript = "
+";
 		};
 		0C2FCBD31F9A542300F4F259 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6909,7 +6910,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "EFR Connect";
@@ -6922,12 +6923,12 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.8.0;
+				MARKETING_VERSION = 2.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6947,11 +6948,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = NO;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Entitlements.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Silicon Laboratories Inc (52444FG85C)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Silicon Laboratories Inc (52444FG85C)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 52444FG85C;
@@ -6964,16 +6965,16 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/BlueGecko.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/SiliconLabsApp/SupportingFiles/BlueGecko/Info.plist";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.8.0;
+				MARKETING_VERSION = 2.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BlueGeckoDemoApp Distribution";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "BlueGeckoDemoApp Distribution";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = BlueGeckoSimplicityDemoApp_Distribution;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "SiliconLabsApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

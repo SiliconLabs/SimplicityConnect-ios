@@ -25,8 +25,6 @@
 
 #define NETWORK_CHIP_PREFIX @"CHIP-"
 
-#define NOT_APPLICABLE_STRING @"N/A"
-
 @interface QRCodeViewController ()
 
 @property (nonatomic, strong) AVCaptureSession * captureSession;
@@ -71,6 +69,8 @@ NSString *ssidStr;
 NSString *passwordStr;
 NSNumber * nodeIdAfterCommision;
 NSNumber * deviceTypeAfterCommission;
+NSString * savedStrQrCode;
+NSError * savedError;
 
 // MARK: UI Setup
 
@@ -81,6 +81,9 @@ NSNumber * deviceTypeAfterCommission;
     self.pairButton.layer.cornerRadius = 8;
     self.hintLbl.text = @"Please position the camera to point at the QR Code. \n\nManual QR code payload ID:";
     
+    _qrCodeInfoView.hidden = TRUE;
+    _qrCodeInfoBGView.layer.cornerRadius = 10;
+    _qrCodeInfoButton.layer.cornerRadius = 5;
     _addDeviceNameView.hidden = TRUE;
     _addDeviceNamePopupView.layer.cornerRadius = 5;
     _addDeviceButton.layer.cornerRadius = 5;
@@ -108,6 +111,8 @@ NSNumber * deviceTypeAfterCommission;
     [super viewDidLoad];
     [self setupUI];
     
+    savedStrQrCode = @"";
+    savedError = nil;
     dispatch_queue_t callbackQueue = dispatch_queue_create("com.csa.matter.qrcodevc.callback", DISPATCH_QUEUE_SERIAL);
     self.chipController = InitializeMTR();
     [self.chipController setDeviceControllerDelegate:self queue:callbackQueue];
@@ -165,19 +170,7 @@ NSNumber * deviceTypeAfterCommission;
                     return;
                 }
                 self->_descriptorClusterDeviceTypeStruct = value[0];
-                //NSLog(@" deviceType:= %@",_descriptorClusterDeviceTypeStruct.deviceType);
-               
-                //Commented for flow change
-//                NSMutableDictionary * deviceDic = [[NSMutableDictionary alloc] init];
-//                [deviceDic setObject:self->_descriptorClusterDeviceTypeStruct.deviceType forKey:@"deviceType"];
-//                [deviceDic setObject:nodeId forKey:@"nodeId"];
-//                [deviceDic setObject:@1 forKey:@"endPoint"];
-//                [deviceDic setObject:@"1" forKey:@"isConnected"];
-//                [MKdeviceListTemp addObject:deviceDic];
-//                NSLog(@"deviceListTemp:- %@",MKdeviceListTemp);
-//                [[NSUserDefaults standardUserDefaults] setObject:MKdeviceListTemp forKey:@"saved_list"];
-//                [[NSUserDefaults standardUserDefaults] synchronize];
-                
+                               
                 nodeIdAfterCommision = nodeId;
                 deviceTypeAfterCommission = self->_descriptorClusterDeviceTypeStruct.deviceType;
                 
@@ -268,7 +261,45 @@ NSNumber * deviceTypeAfterCommission;
     }
 }
 
+- (NSString *)discoveryCapabilities:(MTRSetupPayload *)payload {
+    if (payload.rendezvousInformation == nil) {
+        return @"Unknown";
+    }
+    switch ([payload.rendezvousInformation unsignedLongValue]) {
+        case MTRDiscoveryCapabilitiesNone:
+            return @"Unknown";
+        case MTRDiscoveryCapabilitiesOnNetwork:
+        case MTRDiscoveryCapabilitiesBLE:
+            return @"BLE";
+        case MTRDiscoveryCapabilitiesAllMask:
+            return @"Default";
+        case MTRDiscoveryCapabilitiesSoftAP:
+            return @"Wi-Fi";
+        default: return @"Default";
+    }
+}
+
 // MARK: UI Helper methods
+
+- (void) showQRCodeInfo:(MTRSetupPayload *) payload strQrCode:(NSString *)strQrCode error:(NSError *)error {
+    _qrCodeInfoView.hidden = FALSE;
+        
+    savedStrQrCode = strQrCode;
+    savedError = error;
+    
+    _versionLabel.text = [NSString stringWithFormat: @" Version:  %@", payload.version];
+    _vendorIdLabel.text = [NSString stringWithFormat: @" Vendor ID:  %@", payload.vendorID];
+    _productIdLabel.text = [NSString stringWithFormat: @" Product ID:  %@", payload.productID];
+    _discriminatorLabel.text = [NSString stringWithFormat: @" Discriminator:  %@", payload.discriminator];
+    if (@available(iOS 16.1, *)) {
+        _setupPinCodeLabel.text = [NSString stringWithFormat: @" Set up PIN Code:  %@", payload.setUpPINCode];
+    } else {
+        _setupPinCodeLabel.text = @"N/A";
+    }
+    NSString * discoveryCapabilities = [self discoveryCapabilities: payload];
+    _discoveryCapabilitiesLabel.text = [NSString stringWithFormat: @" Discovery Capabilities: %@", discoveryCapabilities];
+    _commissioningFlow.text = [NSString stringWithFormat: @" Commissioning Flow:  %lu", payload.commissioningFlow];
+}
 
 - (void)manualCodeInitialState {
     _activityIndicator.hidden = YES;
@@ -784,15 +815,9 @@ NSNumber * deviceTypeAfterCommission;
     NSError * error;
     _setupPayload = [parser populatePayload: &error];
     NSLog(@" _setupPayload:-  %@", _setupPayload);
-    //ALERT...
+    // Show QR code info in popup with delay
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        //Commented for flow change...
-        //        [self postScanningQRCodeState];
-        //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, INDICATOR_DELAY), dispatch_get_main_queue(), ^{
-        //            [self displayQRCodeInSetupPayloadView:self->_setupPayload rawPayload:qrCode error:error];
-        //        });
-        [self commissioningOption:qrCode error:error];
-        
+        [self showQRCodeInfo:self.setupPayload strQrCode:qrCode error:error];
     });
 }
 
@@ -819,6 +844,17 @@ NSNumber * deviceTypeAfterCommission;
 }
 
 // MARK: IBActions
+
+- (IBAction)cancelQRInfoPopup:(id)sender {
+    _qrCodeInfoView.hidden = TRUE;
+    [self refresh];
+}
+
+- (IBAction)qrCodeInfoOkAction:(id)sender {
+    _qrCodeInfoView.hidden = TRUE;
+    [self commissioningOption:savedStrQrCode error:savedError];
+}
+
 - (IBAction)addDeviceNameAction:(id)sender {
     // add device name
     NSString *trimmedTextFieldText = [self.nameInputTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -917,10 +953,7 @@ NSNumber * deviceTypeAfterCommission;
                                                          style:UIAlertActionStyleDefault
                                                        handler:^(UIAlertAction * action)
                                  {
-        // CHANGE...
         // [self postScanningQRCodeState];
-        NSLog(@"you pressed No, thanks button");
-        // call method whatever u need
         isThread = @"WIFI";
         //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, INDICATOR_DELAY), dispatch_get_main_queue(), ^{
         //            [self displayQRCodeInSetupPayloadView:self->_setupPayload rawPayload:strQrCode error:error];

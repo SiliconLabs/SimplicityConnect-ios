@@ -132,6 +132,7 @@ SILOTAFirmwareUpdateViewModelDelegate, UIDocumentPickerDelegate>
 }
 
 - (IBAction)didTapStartOTAButton:(id)sender {
+    NSLog(@" == Success flow Step-1 == Click upload start button == ");
     [self.delegate otaSetupViewControllerEnterDFUModeForFirmwareUpdate:self.firmwareUpdateViewModel.otaFirmwareUpdate];
 }
 

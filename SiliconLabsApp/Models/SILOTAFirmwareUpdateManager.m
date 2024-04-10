@@ -18,7 +18,7 @@
 #import "SILHomeKitManager.h"
 #endif
 
-static NSTimeInterval const kSILDurationBeforeUpdatingDFUStatusToWaiting = 2.0;
+static NSTimeInterval const kSILDurationBeforeUpdatingDFUStatusToWaiting = 10.0;
 static NSInteger const kSILOTAByteAlignment = 4;
 static unsigned char kSILOTAByteAlignmentPadding[] = {0xFF, 0xFF, 0xFF, 0xFF};
 static char const kSILInitiateDFUData = 0x00;
@@ -128,8 +128,12 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
     self.fileCompletion = completion;
 
     if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
-        [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
+        NSLog(@" ===== Success flow Step-3 == write initial single byte value 0x00 ====== ");
+        
+        const char kSILInitiateDFUDataTemp = 0x00;
+        [self writeSingleByteValue:kSILInitiateDFUDataTemp toCharacteristic:[self.peripheral otaControlCharacteristic]];
     } else {
+        NSLog(@" ==== fail flow Step-2 == write single byte value ====== ");
         [self disconnectConnectedPeripheral];
     }
 
@@ -142,6 +146,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 }
 
 - (void)endCycleDevice {
+    NSLog(@" ===== Step-4 == Remove Peripherals Observer from scan list ====== ");
     [self.centralManager removeScanForPeripheralsObserver:self];
 }
 
@@ -156,6 +161,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
     self.fileCompletion = completion;
     self.fileProgress = progress;
     self.firmwareUpdateMode = SILFirmwareModeUpdateFile;
+    
     [self uploadFile:file];
 }
 
@@ -235,7 +241,8 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 
 - (void)uploadFile:(SILOTAFirmwareFile *)file {
     self.expectingToDisconnectFromPeripheral = NO;
-    [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
+    const char kSILInitiateDFUDataTemp = 0x00;
+    [self writeSingleByteValue:kSILInitiateDFUDataTemp toCharacteristic:[self.peripheral otaControlCharacteristic]];
     self.otaControlWriteMode = SILOTAControlWriteModeInitiating;
     
     // TODO: Move something executing here to a background queue. There is too much happening on the main queue at this
@@ -248,6 +255,8 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
             // WriteWithoutResponse.
             self.length = [SILOTAFirmwareUpdateManager maximumByteAlignedWriteValueLengthForPeripheral:self.peripheral forType:CBCharacteristicWriteWithoutResponse];
             if (self.location < self.fileData.length) {
+                
+                // steps to upload data
                 [self writeFileDataToCharacteristic:[self.peripheral otaDataCharacteristic]];
             }
         } else {
@@ -268,6 +277,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
                 NSInteger requiredAdditionalLength = kSILOTAByteAlignment - lengthPastByteAlignmentBoundary;
                 [mutableData appendBytes:kSILOTAByteAlignmentPadding length:requiredAdditionalLength];
             }
+            
             data = [[NSData alloc] initWithData:mutableData];
             self.location = self.location + currentLength;
         } else {
@@ -279,6 +289,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
             self.currentWriteCharacteristic = characteristic;
         }
         
+        NSLog(@" == Success flow Step-8 == write FW data to peripheral- %@ data == ", data);
         [self.peripheral writeValue:data forCharacteristic:characteristic type:self.delegate.characteristicWriteType];
     });
 }
@@ -314,6 +325,7 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
         SILCharacteristicTableModel *characteristicTableModel = [[SILCharacteristicTableModel alloc] initWithCharacteristic:characteristic];
         NSData *data = [NSData dataWithBytes:&value length:1];
         [characteristicTableModel setIfAllowedFullWriteValue:data];
+        NSLog(@" == Success flow Step-4 == write type %ld == ", (long)writeType);
         [characteristicTableModel writeIfAllowedToPeripheral:self.peripheral withWriteType:writeType error:&error];
     });
 }
