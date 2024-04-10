@@ -232,6 +232,7 @@ class SILWifiCommissioningViewModel {
         self.peripheralDelegate.notifyCharacteristic(characteristic: notifyCharacteristic)
     }
 
+    // handle Read Characteristic Value
     private func handleReadCharacteristicValue(_ value: Data) {
         let stringValue = String(data: value, encoding: .utf8)
         let bytes = value.bytes
@@ -252,14 +253,30 @@ class SILWifiCommissioningViewModel {
             }
             let firmwareVersion = stringValue![2..<2 + firmwareVersionLength]
             debugPrint("Firmware version", firmwareVersion)
-            self.wifiCommissioningState.value = .firmwareVersionRead(version: firmwareVersion)
+            //self.wifiCommissioningState.value = .firmwareVersionRead(version: firmwareVersion)
+            
+            // Adding code for Firmware version
+            var firmareVersionString = ""
+            for (index, val) in bytes[2..<11].enumerated() {
+                if index < 2 {
+                    let str = String(format:"%02X", val)
+                    firmareVersionString =  firmareVersionString + str
+                } else {
+                    if index != 7 {
+                        firmareVersionString = firmareVersionString + ".\(val)"
+                    }
+                }
+            }
+            self.wifiCommissioningState.value = .firmwareVersionRead(version: firmareVersionString)
+            //End
+            
             self.checkConnectionStatus()
             
         case .scan:
             self.givenAccessPointsNumber = secondByte
             self.writeCommandState = .scan
             debugPrint("Given access points number:", secondByte)
-
+            
         case .connectionStatus:
             guard self.writeCommandState == .connectionStatus else {
                 return
@@ -277,7 +294,7 @@ class SILWifiCommissioningViewModel {
                     self.wifiCommissioningState.value = .checkingStatusFinished(false)
                 }
             }
-        
+            
         case .join:
             guard wifiCommissioningState.value == .connectingStarted else {
                 return

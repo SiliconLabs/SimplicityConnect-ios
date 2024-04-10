@@ -160,6 +160,7 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
 - (void)presentAlertControllerWithError:(NSError *)error animated:(BOOL)animated {
     NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
     
+    NSLog(@" Error flow == Step-2 == show GATT error popup == ");
     if (underlyingError.domain == CBATTErrorDomain) {
         SILErrorDetailsViewController* errorDetailsViewController = [[SILErrorDetailsViewController alloc] initWithError:underlyingError
                                                                                                             delegate:self];
@@ -180,6 +181,7 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
 
     UIAlertAction *action = [self alertActionForError:error];
     [alert addAction:action];
+    NSLog(@" Error flow == Step-3 == show GATT error popup == ");
 
     [self.presentingViewController presentViewController:alert animated:YES completion:^{
         [self.otaTTL invalidate];
@@ -204,30 +206,36 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
 
 - (void)otaSetupViewControllerEnterDFUModeForFirmwareUpdate:(SILOTAFirmwareUpdate *)firmwareUpdate {
     [SVProgressHUD show];
-    
+    NSLog(@" == Success flow Step-2 == show progress bar == ");
     self.otaMode = firmwareUpdate.updateMode;
     __weak SILOTAUICoordinator *weakSelf = self;
-    [self scheduleOtaTTLWithInitiationByteSequence:YES];
+//    [self scheduleOtaTTLWithInitiationByteSequence:YES];
+    
+    
     [self.otaFirmwareUpdateManager cycleDeviceWithInitiationByteSequence:YES
                                                                 progress:^(SILDFUStatus status) {
                                                                     [SVProgressHUD setStatus:[weakSelf stringForDFUStatus:status]];
                                                                 } completion:^(CBPeripheral *peripheral, NSError *error) {
-                                                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                                                         [SVProgressHUD dismiss];
-                                                                         [self.otaTTL invalidate];
-                                                                         if (error == nil) {
-                                                                             weakSelf.peripheral = peripheral;
-                                                                             [weakSelf otaSetupViewControllerDidInitiateFirmwareUpdate:firmwareUpdate];
-                                                                         } else {
-                                                                             [weakSelf dismissPopoverWithCompletion:^{
-                                                                                 [weakSelf presentAlertControllerWithError:error animated:YES];
-                                                                             }];
-                                                                         }
-                                                                     });
+                                                                         NSTimeInterval delayInSeconds = 1.0;
+                                                                         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                                                         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                                                             [SVProgressHUD dismiss];
+//                                                                             [self.otaTTL invalidate];
+                                                                             if (error == nil) {
+                                                                                 weakSelf.peripheral = peripheral;
+                                                                                 NSLog(@" == Success flow Step-6 == Start uploadding data flow  == ");
+                                                                                 [weakSelf otaSetupViewControllerDidInitiateFirmwareUpdate:firmwareUpdate];
+                                                                             } else {
+                                                                                 [weakSelf dismissPopoverWithCompletion:^{
+                                                                                     [weakSelf presentAlertControllerWithError:error animated:YES];
+                                                                                 }];
+                                                                             }
+                                                                         });
                                                                 }];
 }
 
 - (void)scheduleOtaTTLWithInitiationByteSequence:(BOOL)withInitiationByteSequence {
+    NSLog(@" == Step-3 == setup popup message text == ");
     const NSUInteger TimeToFindApploader = 10;
     const NSUInteger TimeToSearchAdvertising = 5;
     NSTimeInterval otaTTL = withInitiationByteSequence ? TimeToFindApploader : TimeToSearchAdvertising;
@@ -235,6 +243,8 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
     self.otaTTL = [NSTimer scheduledTimerWithTimeInterval:otaTTL repeats:NO block:^(NSTimer * _Nonnull timer) {
         [self.otaFirmwareUpdateManager endCycleDevice];
         [SVProgressHUD dismiss];
+        NSLog(@" == Step-5 == dismiss popup and go back to previous screen == ");
+
         [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
         [self.presentingViewController.navigationController popViewControllerAnimated:YES];
         UIAlertAction *action = [UIAlertAction actionWithTitle:kSILOKButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -243,7 +253,7 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:kSILFirmwareUpdateUnknownErrorTitle message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
         [alertController addAction:action];
         [self.presentingViewController presentViewController:alertController animated:TRUE completion:^{
-            
+            NSLog(@" == Step-6 == present alert == ");
         }];
     }];
 }
@@ -274,10 +284,10 @@ static NSString * const kSILDeviceInOTAModeName = @"OTA";
             [weakSelf handleAppFileUploadCompletionForPeripheral:peripheral error:error];
         }
     };
-    
+    NSLog(@" == Success flow Step-7 == start show OTA circular Progress For Firmware File == ");
     [self showOTAProgressForFirmwareFile:firmwareFile ofType:firmwareFileType outOf:numberOfFilesToUpload withCompletion:^{
         [weakSelf.otaFirmwareUpdateManager uploadFile:firmwareFile
-                                             progress:^(NSInteger bytes, double fraction) {
+                                             progress:^(NSInteger bytes, double fraction) {            
                                                  [weakSelf handleFileUploadProgress:fraction uploadedBytes:bytes];
                                              }
                                            completion:uploadFileCompletion];
