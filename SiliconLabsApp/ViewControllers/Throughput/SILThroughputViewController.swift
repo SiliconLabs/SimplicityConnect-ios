@@ -9,7 +9,7 @@
 import Foundation
 import SVProgressHUD
 
-class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate {
+class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate, CBCentralManagerDelegate {
     @IBOutlet weak var speedGaugeView: SILThroughputGaugeView!
     
     @IBOutlet weak var notificationsTestButton: UIButton!
@@ -34,7 +34,8 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
     var peripheralManager: SILThroughputPeripheralManager!
     var centralManager: SILCentralManager!
     var connectedPeripheral: CBPeripheral!
-    
+    var manager: CBCentralManager!
+
     private var disposeBag = SILObservableTokenBag()
     
     override func viewDidLoad() {
@@ -50,6 +51,8 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
         viewModel.viewDidLoad()
         
         setLeftAlignedTitle("Throughput")
+        manager = CBCentralManager()
+        manager.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -182,7 +185,9 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
             
             switch state {
             case .invalidCommunicationWithEFR:
-                weakSelf.showCharacteristicArentNotyfingErrorDialog()
+                DispatchQueue.main.async {
+                    weakSelf.showCharacteristicArentNotyfingErrorDialog()
+                }
                 
             case .noSubscriber:
                 weakSelf.showNoSubscriberErrorDialog()
@@ -301,5 +306,26 @@ class SILThroughputViewController: UIViewController, UIGestureRecognizerDelegate
                                completion: { alertAction in
                                                 self.backToHomeScreenActions()
         })
+    }
+    
+    // MARK: - centralManagerDidUpdateState delegate 
+    @objc func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            break
+        case .poweredOff:
+            self.showBluetoothDisabledAlert()
+            break
+        case .resetting:
+            break
+        case .unauthorized:
+            break
+        case .unsupported:
+            break
+        case .unknown:
+            break
+        default:
+            break
+        }
     }
 }

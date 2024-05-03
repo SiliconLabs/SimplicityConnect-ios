@@ -110,7 +110,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         if let viewController = storyboard.instantiateInitialViewController() {
             self.navigationController?.pushViewController(viewController, animated: animated)
         }
-
     }
     
     private func showRSSIGraph(app: SILApp!, animated: Bool) {
@@ -406,4 +405,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.navigationController?.pushViewController(demoViewController, animated: true)
         }
     }
+    
+//    func dismissView(devicePopover: WYPopoverController) {
+//        print("dismiss popup mantosh ")
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            self.didDismissSILWifiOTAConfigViewController()
+//            self.didDismissDeviceSelectionViewController()
+//            print("deleted popup mantosh ")
+//        }
+//    }
 }

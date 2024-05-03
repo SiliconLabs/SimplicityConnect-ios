@@ -16,6 +16,7 @@ class ConnectedDeviceBarView: UIView {
     @IBOutlet weak var batteryStatusLabel: UILabel!
     @IBOutlet weak var batteryStatusImageView: BatteryIcon!
     @IBOutlet weak var firmwareVersionLabel: UILabel!
+    var defaultValue = 0
     
     var level: Int = 0 {
         didSet {
@@ -49,7 +50,12 @@ class ConnectedDeviceBarView: UIView {
             case .aa(let level):
                 self.level = level
             case .coinCell(let level):
-                self.level = level
+                if level == defaultValue {
+                    let initialBatteryLevel: Int = UserDefaults.standard.integer(forKey: "initialBatteryLevel")
+                    self.level = initialBatteryLevel
+                } else {
+                    self.level = level
+                }
             case .genericBattery(let level):
                 self.level = level
             }

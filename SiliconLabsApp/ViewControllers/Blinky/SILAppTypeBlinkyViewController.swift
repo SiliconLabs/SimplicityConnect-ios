@@ -39,6 +39,7 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
         super.viewDidDisappear(animated)
         viewModel?.removeObserverAndDisconnect()
         self.disposeBag.invalidateTokens()
+        UserDefaults.standard.removeObject(forKey: "initialBatteryLevel")
     }
     
     override func viewWillAppear(_ animated: Bool) {
