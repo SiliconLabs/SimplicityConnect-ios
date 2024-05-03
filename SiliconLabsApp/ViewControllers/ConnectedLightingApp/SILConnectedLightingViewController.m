@@ -49,6 +49,7 @@ NSString * const SILLightEventOff = @"Light Off";
 @property (weak, nonatomic) IBOutlet UILabel *lastEventSourceLabel;
 @property (weak, nonatomic) IBOutlet UIView *lastEventImageContentView;
 @property (strong, nonatomic) UISelectionFeedbackGenerator *feedbackGenerator;
+@property (nonatomic, strong) CBCentralManager *bluetoothManager;
 
 @end
 
@@ -231,6 +232,11 @@ NSString * const SILLightEventOff = @"Light Off";
     [self setLeftAlignedTitle:@"Connected Lighting"];
     
     [self.lastEventImageContentView setHidden:YES];
+    
+    if(!self.bluetoothManager) {
+        NSDictionary *options = @{CBCentralManagerOptionShowPowerAlertKey: @NO};
+        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate: self queue:nil options:options];
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -327,6 +333,25 @@ NSString * const SILLightEventOff = @"Light Off";
                                                             [CBUUID UUIDWithString:SILCharacteristicNumberDMPSourceAddress]
                                                             ]
                                                forService:service];
+    }
+}
+
+#pragma mark - Central Manager status
+
+- (void) showAlert: (NSString *) stateString {
+    UIAlertAction* okButton = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action) {
+                                    [self.navigationController popViewControllerAnimated:YES];
+                                }];
+
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Bluetooth Disabled" message:stateString preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:okButton];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    if (central.state == CBManagerStatePoweredOff) {
+        [self showAlert:@"You will be redirected to the home screen. Turn on Bluetoooth to use Connected Lighting"];
     }
 }
 

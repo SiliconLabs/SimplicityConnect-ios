@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate {
+class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILRangeTestModeSelectionViewControllerDelegate, CBCentralManagerDelegate {
     
     @IBOutlet weak var connectButton: SILPrimaryButton!
     
@@ -17,16 +17,22 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
     
     private var popoverController: WYPopoverController?
     weak var bluetoothConnectionsHandler: SILRangeTestBluetoothConnectionsHandler?
-
+    var manager: CBCentralManager!
+    var bleStatus: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         connectButton.isEnabled = false
+        manager = CBCentralManager()
+        manager.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        connect()
+        // show popup and connect if bluetooth is available
+        if bleStatus {
+            connect()
+        }
     }
     
     @IBAction func didTapConnect(_ sender: Any) {
@@ -101,5 +107,32 @@ class SILRangeTestSelectDeviceViewController: UIViewController, SILDeviceSelecti
     
     func popoverControllerDidDismissPopover(_ popoverController: WYPopoverController!) {
         self.popoverController = nil
+    }
+    
+    // MARK: - centralManagerDidUpdateState delegate
+    @objc func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            bleStatus = true
+            break
+        case .poweredOff:
+            self.popoverController?.dismissPopover(animated: true)
+            bleStatus = false
+            break
+        case .resetting:
+            bleStatus = false
+            break
+        case .unauthorized:
+            bleStatus = false
+            break
+        case .unsupported:
+            bleStatus = false
+            break
+        case .unknown:
+            bleStatus = false
+            break
+        default:
+            break
+        }
     }
 }

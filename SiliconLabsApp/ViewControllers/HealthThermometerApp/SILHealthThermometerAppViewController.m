@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
 @property (weak, nonatomic) IBOutlet SILThermometerSegmentedControl *typeControl;
 @property (assign, nonatomic) BOOL isConnected;
 @property (weak, nonatomic) IBOutlet UIStackView *presentationSpace;
+@property (nonatomic, strong) CBCentralManager *bluetoothManager;
 
 @end
 
@@ -226,6 +227,11 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     [self setup];
     self.temperatureMeasurements = [NSMutableArray array];
     [self setLeftAlignedTitle:@"Health Thermometer"];
+    
+    if(!self.bluetoothManager) {
+        NSDictionary *options = @{CBCentralManagerOptionShowPowerAlertKey: @NO};
+        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate: self queue:nil options:options];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -310,6 +316,25 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
                                                             [CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurement],
                                                             ]
                                                forService:service];
+    }
+}
+
+#pragma mark - Central Manager status 
+
+- (void) showAlert: (NSString *) stateString {
+    UIAlertAction* okButton = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action) {
+                                    [self.navigationController popViewControllerAnimated:YES];
+                                }];
+
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Bluetooth Disabled" message:stateString preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:okButton];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    if (central.state == CBManagerStatePoweredOff) {
+        [self showAlert:@"You will be redirected to the home screen. Turn on Bluetoooth to use Health Thermometer"];
     }
 }
 

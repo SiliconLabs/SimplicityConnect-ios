@@ -296,6 +296,8 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
                 return
             }
             
+            // battery level
+            UserDefaults.standard.set(Int(value), forKey: "initialBatteryLevel")
             self.updatePower(batteryLevel: Int(value))
             updateStateIfIsInitiated()
         }

@@ -21,16 +21,19 @@ protocol SILRangeTestBluetoothConnectionsHandler: class {
     var filter: DiscoveredPeripheralFilter { get }
 }
 
-class SILRangeTestAppContainerViewController: UIViewController, UITabBarControllerDelegate {
+class SILRangeTestAppContainerViewController: UIViewController, UITabBarControllerDelegate, CBCentralManagerDelegate {
     
     @IBOutlet weak var tabSelection: UISegmentedControl!
     
     var tabController: UITabBarController!
     var connectedPeripherals: [CBPeripheral] = []
-    
+    var manager: CBCentralManager!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setLeftAlignedTitle("Range Test")
+        manager = CBCentralManager()
+        manager.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,4 +106,27 @@ extension SILRangeTestAppContainerViewController: SILRangeTestBluetoothConnectio
             connectedPeripherals.append(peripheral)
         }
     }
+    
+    // MARK: - centralManagerDidUpdateState delegate
+    @objc func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            break
+        case .poweredOff:
+            self.bluetoothIsDisabled()
+            print(" main VC ")
+            break
+        case .resetting:
+            break
+        case .unauthorized:
+            break
+        case .unsupported:
+            break
+        case .unknown:
+            break
+        default:
+            break
+        }
+    }
+
 }
