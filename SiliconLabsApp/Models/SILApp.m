@@ -23,6 +23,7 @@
                 [self wifiCommissioningApp],
                 [self eslDemoApp],
                 [self matterDemoApp],
+                [self WifiOTADemoApp]
             ];
 }
 
@@ -113,6 +114,15 @@
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeMatterDemo];
 }
+
++ (SILApp *)WifiOTADemoApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeWifiOTA
+                                     title:@"Wi-fi OTA Demo"
+                               description:@"Control OTA Firmware update over Wi-Fi."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeWifiOtaDemo];
+}
+
 - (instancetype)initWithAppType:(SILAppType)appType
                            title:(NSString *)title
                      description:(NSString *)description

@@ -97,6 +97,47 @@
     return temperatureMeasurement;
 }
 
+// Decode Temperature Measurement Type 
++ (SILTemperatureMeasurement *)decodeTemperatureMeasurementWithTemptype:(NSData *)data {
+    SILTemperatureMeasurement *temperatureMeasurement = [[SILTemperatureMeasurement alloc] init];
+    uint8_t *dataPointer = (uint8_t *)data.bytes;
+    uint8_t flags = dataPointer[0];
+    
+    switch (flags) {
+        case 0x01:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeArmpit;
+            break;
+        case 0x02:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeBody;
+            break;
+        case 0x03:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeEar;
+            break;
+        case 0x04:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeFinger;
+            break;
+        case 0x05:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeGastroIntestinalTract;
+            break;
+        case 0x06:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeMouth;
+            break;
+        case 0x07:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeRectum;
+            break;
+        case 0x08:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeToe;
+            break;
+        case 0x09:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeTypanum;
+            break;
+        default:
+            temperatureMeasurement.temperatureType = SILTemperatureTypeUnknown;
+            break;
+    }
+    return temperatureMeasurement;
+}
+
 - (float)valueInCelsius {
     if (self.isFahrenheit) {
         return (self.value - 32.0f) * 5.0f / 9.0f;

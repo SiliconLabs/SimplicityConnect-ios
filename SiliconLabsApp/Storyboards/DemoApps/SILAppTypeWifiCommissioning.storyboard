@@ -38,20 +38,20 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nNb-Df-iUB" userLabel="Top Bar">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="36"/>
                                                         <subviews>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="stZ-z2-4CY" userLabel="FirmwareVersion">
-                                                                <rect key="frame" x="16" y="0.0" width="382" height="36"/>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZGh-Tr-Fp5" userLabel="FirmwareVersion">
+                                                                <rect key="frame" x="10" y="9" width="394" height="18"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firmware Version:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LoQ-p0-uGa">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="130" height="36"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firmware Version:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zrb-dD-hN6">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="130" height="18"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="130" id="zVE-3d-vvl"/>
+                                                                            <constraint firstAttribute="width" constant="130" id="mMc-LW-UYM"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- -" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngb-gD-s1M">
-                                                                        <rect key="frame" x="140" y="0.0" width="242" height="36"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- -" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvF-kX-htW">
+                                                                        <rect key="frame" x="140" y="0.0" width="254" height="18"/>
                                                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
@@ -60,11 +60,11 @@
                                                         </subviews>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
-                                                            <constraint firstItem="stZ-z2-4CY" firstAttribute="leading" secondItem="nNb-Df-iUB" secondAttribute="leading" constant="16" id="6NS-4r-xed"/>
-                                                            <constraint firstAttribute="bottom" secondItem="stZ-z2-4CY" secondAttribute="bottom" id="LAm-Z6-h9J"/>
-                                                            <constraint firstItem="stZ-z2-4CY" firstAttribute="top" secondItem="nNb-Df-iUB" secondAttribute="top" id="ST3-XV-7N6"/>
+                                                            <constraint firstItem="ZGh-Tr-Fp5" firstAttribute="leading" secondItem="nNb-Df-iUB" secondAttribute="leading" constant="10" id="2VY-IA-WbS"/>
+                                                            <constraint firstItem="ZGh-Tr-Fp5" firstAttribute="top" secondItem="nNb-Df-iUB" secondAttribute="top" constant="9" id="Fby-uo-t6e"/>
+                                                            <constraint firstAttribute="trailing" secondItem="ZGh-Tr-Fp5" secondAttribute="trailing" constant="10" id="SvU-JC-xah"/>
                                                             <constraint firstAttribute="height" constant="36" id="b9E-Nu-7VS"/>
-                                                            <constraint firstAttribute="trailing" secondItem="stZ-z2-4CY" secondAttribute="trailing" constant="16" id="oMP-k6-BfJ"/>
+                                                            <constraint firstAttribute="bottom" secondItem="ZGh-Tr-Fp5" secondAttribute="bottom" constant="9" id="vf9-Iz-2Qs"/>
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vWV-VY-WNb" userLabel="Table">
@@ -388,7 +388,7 @@
                     </view>
                     <connections>
                         <outlet property="firmwareVersionBar" destination="nNb-Df-iUB" id="4FZ-gY-uOK"/>
-                        <outlet property="firmwareVersionLabel" destination="ngb-gD-s1M" id="o5C-df-UMM"/>
+                        <outlet property="firmwareVersionLabel" destination="vvF-kX-htW" id="ES7-Cg-3ZF"/>
                         <outlet property="onStartDisconnectView" destination="2W0-yk-wSk" id="B4s-5u-I83"/>
                         <outlet property="tableView" destination="D9s-P5-Jf5" id="dM8-zp-3xQ"/>
                     </connections>

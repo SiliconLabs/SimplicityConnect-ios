@@ -17,6 +17,8 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
     fileprivate (set) var model: DeviceModel = .unknown
     fileprivate (set) var modelName: String = ""
     
+    var switchCoundValue: Int = 0
+    
     var name: String? {
         didSet {
             notifyConnectedDelegate()
@@ -381,6 +383,10 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
             case CBUUID.RGBLeds:
                 peripheral.discoverDescriptors(for: $0)
                 
+            case CBUUID.Digital:
+                peripheral.readValue(for: $0)
+                peripheral.discoverDescriptors(for: $0)
+                
             default:
                 // read all supported values
                 if $0.tb_supportsRead() {
@@ -403,6 +409,9 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
         if let rgbLedCountDescriptor = descriptors.first(where: { $0.uuid == CBUUID.RGBLedCount }) {
             peripheral.readValue(for: rgbLedCountDescriptor)
         }
+        if let digitalLedCountDescriptor = descriptors.first(where: { $0.uuid == CBUUID.NumberOfDigitals }) {
+            peripheral.readValue(for: digitalLedCountDescriptor)
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -419,13 +428,23 @@ class BleDevice : NSObject, Device, DemoConfiguration, CBPeripheralDelegate {
             return
         }
         
+        if descriptor.uuid == CBUUID.AutomationIO {
+            print(" AutomationIO descriptor uuid man == \(descriptor.uuid)")
+        }
+        
         if descriptor.uuid == CBUUID.RGBLedCount, let value = descriptor.value as? Data, let command = value.bytes.first {
             self.turnOnRGBLedCommand = command
+        }
+        if descriptor.uuid == CBUUID.NumberOfDigitals {
+            print(" NumberOfDigitals descriptor uuid man == \(descriptor.uuid)")
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         dispatch_main_sync {
+
+            //print("demp flow characteristic.uuid == \(characteristic.uuid)")
+            //print("demo flow descriptors uuid == \(characteristic.descriptors)")
             
             switch characteristic.uuid {
             case CBUUID.BatteryLevel:

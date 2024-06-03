@@ -33,6 +33,7 @@
 - (NSArray<SILAdvertisementDataViewModel *> *)advertisementDataViewModels {
     NSArray<SILAdvertisementDataModel *> *dataModels = [self advertisementDataModelsForPeripheral:self.discoveredPeripheral];
     
+    // Add advertisemet data to advertisementDataViewModels
     NSMutableArray<SILAdvertisementDataViewModel *> *viewModels = [NSMutableArray.alloc init];
     for (int index = 0; index < dataModels.count; index++) {
         SILAdvertisementDataViewModel *viewModel = [SILAdvertisementDataViewModel.alloc initWithAdvertisementDataModel:dataModels[index]];

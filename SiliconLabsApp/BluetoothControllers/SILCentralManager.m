@@ -134,8 +134,10 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 #pragma mark - Discovering Peripherals
 
 - (void)insertOrUpdateDiscoveredPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI andDiscoveringTimestamp:(double)timestamp {
+    
     NSString* peripheralIdentifier = [SILDiscoveredPeripheralIdentifierProvider provideKeyForCBPeripheral:peripheral];
     SILDiscoveredPeripheral *discoveredPeripheral = self.discoveredPeripheralMapping[peripheralIdentifier];
+    
     if (discoveredPeripheral) {
         [discoveredPeripheral updateWithAdvertisementData:advertisementData RSSI:RSSI andDiscoveringTimestamp:timestamp];
     } else {
@@ -330,7 +332,14 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
                                                       userInfo:nil];
 }
 
+// Get initial advertisement data
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
+     
+    // Uncomment to see initial advertisement data from central Manager
+    // NSLog(@"\n ============== \n");
+    // NSLog(@" advertisementData - %@", advertisementData);
+    // NSLog(@"\n ============== \n");
+
     if (![self isProbablyIBeacon:advertisementData]) {
         if (peripheral.identifier) {
             double timestamp = [self getTimestampWithAdvertisementData:advertisementData];

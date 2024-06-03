@@ -26,7 +26,7 @@
 #import "SILDebugCharacteristicEnumerationFieldTableViewCell.h"
 #import "SILDebugCharacteristicEncodingFieldTableViewCell.h"
 #import "SILDebugSpacerTableViewCell.h"
-#import <WYPopoverController/WYPopoverController.h>
+#import "WYPopoverController.h"
 #import "WYPopoverController+SILHelpers.h"
 #import "SILCharacteristicFieldValueResolver.h"
 #import "SILCharacteristicEditEnabler.h"
@@ -723,6 +723,7 @@ static float kTableRefreshInterval = 1;
     self.otaButton.hidden = !peripheral.hasOTAService;
 }
 
+// Scan flow 1st
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     if (error != nil) {
         if ([self isATTError:error]) {
@@ -730,6 +731,8 @@ static float kTableRefreshInterval = 1;
         }
     } else {
         for (CBCharacteristic *characteristic in service.characteristics) {
+            // NSLog(@" service :- %@", service);
+            // NSLog(@" Charactristics :- %@", characteristic);
             [self addOrUpdateModelForCharacteristic:characteristic forService:service];
             [peripheral discoverDescriptorsForCharacteristic:characteristic];
         }
@@ -766,6 +769,7 @@ static float kTableRefreshInterval = 1;
     }
 }
 
+// Get Discriptor value scan flow
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
     [self addOrUpdateModelForDescriptor:descriptor forCharacteristic:descriptor.characteristic];
     [self markTableForUpdate];

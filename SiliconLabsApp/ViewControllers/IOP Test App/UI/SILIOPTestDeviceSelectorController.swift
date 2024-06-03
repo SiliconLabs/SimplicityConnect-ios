@@ -41,7 +41,7 @@ class SILIOPTestDeviceSelectorController : UIViewController, SILDeviceSelectionV
             $0?.advertisedLocalName?.contains("IOP") ?? false
         }
     }
-    
+   
     func didTappedCancelButton() {
         self.dismissPopup()
     }
@@ -69,7 +69,6 @@ class SILIOPTestDeviceSelectorController : UIViewController, SILDeviceSelectionV
          let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel!, shouldConnect: shouldConnect)
          selectionViewController.centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
          selectionViewController.delegate = self
-         self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self,
-                                                                                     delegate: self, animated: true)
+         self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self,delegate: self, animated: true)
      }
 }

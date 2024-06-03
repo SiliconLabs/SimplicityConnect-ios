@@ -80,7 +80,6 @@ NSError * savedError;
     self.qrView.layer.cornerRadius = 8;
     self.pairButton.layer.cornerRadius = 8;
     self.hintLbl.text = @"Please position the camera to point at the QR Code. \n\nManual QR code payload ID:";
-    
     _qrCodeInfoView.hidden = TRUE;
     _qrCodeInfoBGView.layer.cornerRadius = 10;
     _qrCodeInfoButton.layer.cornerRadius = 5;
@@ -170,7 +169,6 @@ NSError * savedError;
                     return;
                 }
                 self->_descriptorClusterDeviceTypeStruct = value[0];
-                               
                 nodeIdAfterCommision = nodeId;
                 deviceTypeAfterCommission = self->_descriptorClusterDeviceTypeStruct.deviceType;
                 
@@ -815,9 +813,9 @@ NSError * savedError;
     NSError * error;
     _setupPayload = [parser populatePayload: &error];
     NSLog(@" _setupPayload:-  %@", _setupPayload);
-    // Show QR code info in popup with delay
+    // Show QR code info in popup
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [self showQRCodeInfo:self.setupPayload strQrCode:qrCode error:error];
+        [self showQRCodeInfo: self.setupPayload strQrCode: qrCode error: error];
     });
 }
 
@@ -938,14 +936,7 @@ NSError * savedError;
                                                          handler:^(UIAlertAction * action)
                                    {
         NSLog(@"you pressed Yes, please button");
-        // CHANGE...
-        // [self postScanningQRCodeState];
-        // call method whatever u need
         isThread = @"THREAD";
-        //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, INDICATOR_DELAY), dispatch_get_main_queue(), ^{
-        //            [self displayQRCodeInSetupPayloadView:self->_setupPayload rawPayload:strQrCode error:error];
-        //        });
-        
         [self retrieveAndSendThreadCredentials:strQrCode error:error];
     }];
     
@@ -953,7 +944,10 @@ NSError * savedError;
                                                          style:UIAlertActionStyleDefault
                                                        handler:^(UIAlertAction * action)
                                  {
+        // CHANGE...
         // [self postScanningQRCodeState];
+        NSLog(@"you pressed No, thanks button");
+        // call method whatever u need
         isThread = @"WIFI";
         //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, INDICATOR_DELAY), dispatch_get_main_queue(), ^{
         //            [self displayQRCodeInSetupPayloadView:self->_setupPayload rawPayload:strQrCode error:error];

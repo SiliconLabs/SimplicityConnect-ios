@@ -19,7 +19,8 @@ typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppTypeEnvironment,
     SILAppTypeWifiCommissioning,
     SILAppTypeESLDemo,
-    SILAppTypeMatterDemo
+    SILAppTypeMatterDemo,
+    SILAppTypeWifiOTA
 };
 
 @interface SILApp : NSObject

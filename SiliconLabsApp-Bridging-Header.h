@@ -79,3 +79,5 @@
 #import "SILAppearance.h"
 #import "SILBrowserLogViewModel.h"
 #import "SILDebugServicesViewController.h"
+#import "NetTest.h"
+#import "SILGetIPAddress.h"

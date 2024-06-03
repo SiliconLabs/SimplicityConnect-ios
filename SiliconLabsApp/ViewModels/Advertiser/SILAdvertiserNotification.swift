@@ -56,7 +56,7 @@ class SILAdvertiserNotification: NSObject, UNUserNotificationCenterDelegate {
             }
                         
             let content = UNMutableNotificationContent()
-            content.title = "EFR Connect"
+            content.title = "Simplicity Connect"
             content.body = "Advertiser is running..."
             content.badge = self.runningAdvertisers.count.number
             

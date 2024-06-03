@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSDate *measurementDate;
 
 + (SILTemperatureMeasurement *)decodeTemperatureMeasurementWithData:(NSData *)data;
++ (SILTemperatureMeasurement *)decodeTemperatureMeasurementWithTemptype:(NSData *)data;
 
 - (float)valueInCelsius;
 - (float)valueInFahrenheit;

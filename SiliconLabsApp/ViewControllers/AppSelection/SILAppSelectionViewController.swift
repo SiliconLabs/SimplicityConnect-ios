@@ -10,7 +10,9 @@ import Foundation
 import SVProgressHUD
 
 @objcMembers
-class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate {
+class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate {
+   
+    
     var appsArray: [SILApp] = SILApp.demoApps()
     var isDisconnectedIntentionally: Bool = false
 
@@ -110,6 +112,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         if let viewController = storyboard.instantiateInitialViewController() {
             self.navigationController?.pushViewController(viewController, animated: animated)
         }
+
     }
     
     private func showRSSIGraph(app: SILApp!, animated: Bool) {
@@ -123,6 +126,19 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let storyBoard : UIStoryboard = UIStoryboard(name: "SILMatterDemo", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MatterHomeViewController")
         self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+            
+    private func showWifiDisabledAlert() {
+        let message = "Please check your Wi-Fi connection to use Wi-Fi OTA Demo"
+        self.alertWithOKButton(title: "Wi-Fi Disabled", message: message, completion: { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
+    private func showWiFiOTAScreen() {
+        let OTAConfigViewController = SILWifiOTAConfigViewController()
+        OTAConfigViewController.delegate = self
+        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: OTAConfigViewController, presenting: self,delegate: self, animated: true)
     }
     
     private func didSelectApp(app: SILApp!) {
@@ -175,6 +191,16 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         case .typeMatterDemo:
             moveToMatterDemoView()
             
+        case .typeWifiOTA:
+            let status = Reachability().connectionStatus()
+            switch status {
+            case .unknown, .offline:
+                showWifiDisabledAlert()
+            case .online(.wwan):
+                showWiFiOTAScreen()
+            case .online(.wiFi):
+                showWiFiOTAScreen()
+            }
         default:
             return
         }
@@ -273,7 +299,9 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         
         self.devicePopoverController?.dismissPopover(animated: true)
     }
-
+    func didDismissSILWifiOTAConfigViewController() {
+        self.devicePopoverController?.dismissPopover(animated: true)
+    }
     func runHealthThermometer(viewController: SILDeviceSelectionViewController, peripheral: CBPeripheral) {
         let storyboard = UIStoryboard(name: "SILAppTypeHealthThermometer", bundle: nil)
         let controller = storyboard.instantiateInitialViewController()
@@ -405,13 +433,4 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.navigationController?.pushViewController(demoViewController, animated: true)
         }
     }
-    
-//    func dismissView(devicePopover: WYPopoverController) {
-//        print("dismiss popup mantosh ")
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            self.didDismissSILWifiOTAConfigViewController()
-//            self.didDismissDeviceSelectionViewController()
-//            print("deleted popup mantosh ")
-//        }
-//    }
 }
