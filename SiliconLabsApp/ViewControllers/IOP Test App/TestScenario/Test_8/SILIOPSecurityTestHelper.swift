@@ -35,6 +35,8 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
     private var iopTestPhase3TestedCharacteristic: CBCharacteristic!
     private var iopTestPhase3Service = SILIOPPeripheral.SILIOPTestPhase3.cbUUID
     
+    private let NotifyTest = "0x000400" //Added
+
     var testResult: SILObservable<SecurityTestResult?> = SILObservable(initialValue: nil)
     
     init(testedCharacteristic: CBUUID, initialValue: String, exceptedValue: String) {
@@ -122,18 +124,43 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
                 }
                 
                 weakSelf.iopTestPhase3TestedCharacteristic = pairingCharacteristic
-                
+                //ADDED NEW...
+                if weakSelf.initialValue == weakSelf.NotifyTest {
+                    guard pairingCharacteristic.properties.contains(.notify) else {
+                        weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Characteristic doesn't have notify property.")
+                        return
+                    }
+                    weakSelf.peripheralDelegate.notifyCharacteristic(characteristic: pairingCharacteristic, enabled: true)
+                }
+                //END
                 for characteristic in characteristics {
                     if characteristic.uuid == weakSelf.iopTestPhase3Control, let dataToWrite = weakSelf.initialValue.data(withCount: 1) {
                         weakSelf.invalidateObservableTokens()
                         weakSelf.setupCentralManagerSubscription()
-                        weakSelf.peripheralDelegate.writeToCharacteristic(data: dataToWrite, characteristic: characteristic, writeType: .withResponse)
+                        if self.initialValue == "0x000400"{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                print("Async after 2 seconds")
+                                weakSelf.iopCentralManager.disconnect(peripheral: weakSelf.peripheral)
+                            }
+
+                        }else{
+                            weakSelf.peripheralDelegate.writeToCharacteristic(data: dataToWrite, characteristic: characteristic, writeType: .withResponse)
+                        }
+                            
                         return
                     }
                 }
                 
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Failure when writing to a characteristic.")
+                //ADDED NEW...
+            case let .updateNotificationState(characteristic, _):
+                if(characteristic.uuid == weakSelf.iopTestPhase3TestedCharacteristicUUID){
+                    debugPrint("DID WRITE VALUE TO CCCD of characteristic\(characteristic)")
+                    return
+                }
                 
+                weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Failure when writing to CCCD of characteristic.")
+                //END
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestPhase3Control {
                     debugPrint("DID WRITE VALUE TO \(characteristic)")
@@ -141,7 +168,7 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
                 }
                 
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Failure when writing to a characteristic.")
-   
+                
             case .unknown:
                 break
                 
@@ -218,7 +245,7 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
                         return
                     }
                 }
-            
+                
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Service Test Phase 3 didn't found.")
                 
             case let .successForCharacteristics(characteristics):
@@ -230,9 +257,40 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
                 }
                 
                 weakSelf.iopTestPhase3TestedCharacteristic = pairingCharacteristic
-                weakSelf.peripheralDelegate.readCharacteristic(characteristic: pairingCharacteristic)
-                weakSelf.pairingTimer = Timer.scheduledTimer(timeInterval: weakSelf.timeout, target: self, selector: #selector(weakSelf.disconnectPeripheral), userInfo: nil, repeats: false)
+                //Comented
+                //weakSelf.peripheralDelegate.readCharacteristic(characteristic: pairingCharacteristic)
+                //weakSelf.pairingTimer = Timer.scheduledTimer(timeInterval: weakSelf.timeout, target: self, selector: #selector(weakSelf.disconnectPeripheral), userInfo: nil, repeats: false)
+                //ADDED NEW
+                if weakSelf.initialValue == weakSelf.NotifyTest {
+                    weakSelf.peripheralDelegate.discoverDescriptors(for: pairingCharacteristic)
+                    return
+                }else{
+                    weakSelf.iopTestPhase3TestedCharacteristic = pairingCharacteristic
+                    weakSelf.peripheralDelegate.readCharacteristic(characteristic: pairingCharacteristic)
+                    weakSelf.pairingTimer = Timer.scheduledTimer(timeInterval: weakSelf.timeout, target: self, selector: #selector(weakSelf.disconnectPeripheral), userInfo: nil, repeats: false)
+                }
                 
+            case let .successForDescriptors(descriptors):
+                guard let pairingDescriptor = descriptors.first(where: { descriptor in
+                    descriptor.uuid.uuidString == CBUUIDClientCharacteristicConfigurationString
+                }) else {
+                    weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Tested descriptor didn't found.")
+                    return
+                }
+                weakSelf.peripheralDelegate.readDescriptor(descriptor: pairingDescriptor)
+                
+            case let .successGetValueDescriptor(value: data, descriptor: descriptor):
+                guard descriptor.uuid.uuidString == CBUUIDClientCharacteristicConfigurationString else {
+                    weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Tested descriptor didn't found.")
+                    return
+                }
+                let valueDescriptor = (data as? NSNumber)?.stringValue
+                if valueDescriptor != weakSelf.exceptedValue {
+                    weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Wrong value in Client Characteristic Configuration Descriptor.")
+                    return
+                }
+                weakSelf.peripheralDelegate.notifyCharacteristic(characteristic: descriptor.characteristic!, enabled: false)
+                //END
             case let .successGetValue(value: data, characteristic: characteristic):
                 guard characteristic.uuid == weakSelf.iopTestPhase3TestedCharacteristicUUID else {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Tested characteristic didn't found.")
@@ -246,7 +304,16 @@ class SILIOPSecurityTestHelper: SILTestCaseWithRetries {
                 } else if weakSelf.retryCount == 0 {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Wrong value in a characteristic.")
                 }
+                //ADDED NEW
+            case let .updateNotificationState(characteristic, _):
+                if(characteristic.uuid == weakSelf.iopTestPhase3TestedCharacteristicUUID){
+                    debugPrint("DID WRITE VALUE TO CCCD of characteristic\(characteristic)")
+                    weakSelf.testResult.value = SecurityTestResult(passed: true, description: "")
+                    return
+                }
                 
+                weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Failure when writing to CCCD of characteristic.")
+                //END
             case .failure(error: _):
                 weakSelf.pairingTimer?.invalidate()
                 

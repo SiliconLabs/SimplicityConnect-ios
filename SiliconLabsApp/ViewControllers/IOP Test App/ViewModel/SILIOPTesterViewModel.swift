@@ -83,7 +83,8 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
             SILIOPTester_Test5(),
             SILIOPTester_Test6(),
             SILIOPTester_Test7(),
-            SILIOPTester_Test8()
+            SILIOPTester_Test8(),
+            SILIOPTester_Test9()
         ]
     }
     
@@ -235,6 +236,8 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         updateParametersDictionary(newArtifacts: dict, testIndex: i)
         
         iopTest[i].invalidateObservableTokens()
+        print(iopTest)
+        print(iopTest.count)
         if i + 1 < iopTest.count {
             iopTest[i + 1].injectParameters(parameters: testParameters)
             iopTest[i + 1].performTestScenario()

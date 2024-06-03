@@ -82,7 +82,7 @@ NSString * const kAdModelTypeEddystoneBeacon = @"Eddystone Data";
             typeString = kAdModelTypeTXPowerLevel;
             break;
         case AdModelTypeManufacturerData:
-            typeString = kAdModelTypeManufacturerData;
+            typeString = kAdModelTypeManufacturerData; // Manufacturer Specific Data 
             break;
         case AdModelTypeAdvertisedServiceUUIDs16Bit:
             typeString = kAdModelTypeAdvertisedServiceUUIDs16Bit;

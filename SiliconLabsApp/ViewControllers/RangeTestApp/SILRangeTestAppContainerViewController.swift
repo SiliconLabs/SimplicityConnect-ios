@@ -114,7 +114,6 @@ extension SILRangeTestAppContainerViewController: SILRangeTestBluetoothConnectio
             break
         case .poweredOff:
             self.bluetoothIsDisabled()
-            print(" main VC ")
             break
         case .resetting:
             break
@@ -128,5 +127,4 @@ extension SILRangeTestAppContainerViewController: SILRangeTestBluetoothConnectio
             break
         }
     }
-
 }

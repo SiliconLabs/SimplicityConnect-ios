@@ -46,6 +46,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
     private var failureReson: String!
     private var finishOTAError: Error?
     
+    //IOP MANAGER...
     init(with peripheral: CBPeripheral, centralManager: SILCentralManager, otaMode: SILOTAMode) {
         super.init()
         self.setupOTAFirmWareModel()

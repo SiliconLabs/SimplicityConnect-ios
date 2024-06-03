@@ -24,6 +24,7 @@ extern NSString * const SILServiceNumberESLServiceControl;
 extern NSString * const SILCharacteristicNumberAlertLevel;
 extern NSString * const SILCharacteristicNumberTXPowerLevel;
 extern NSString * const SILCharacteristicNumberTemperatureMeasurement;
+extern NSString * const SILCharacteristicNumberTemperatureMeasurementType;
 extern NSString * const SILCharacteristicNumberHeartRateMeasurement;
 extern NSString * const SILCharacteristicNumberBodySensorLocation;
 extern NSString * const SILCharacteristicNumberDMPLightState;

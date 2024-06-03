@@ -46,7 +46,7 @@ class ConnectedDeviceBarView: UIView {
             case .usb:
                 level = 0
                 batteryStatusImageView.image = UIImage(named: "icon - usb - opt2")
-                batteryStatusLabel.text = ""
+                batteryStatusLabel.text = "USB Power"
             case .aa(let level):
                 self.level = level
             case .coinCell(let level):

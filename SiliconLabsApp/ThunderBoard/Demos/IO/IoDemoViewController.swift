@@ -92,6 +92,7 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
             interaction?.toggleLed(2)
         }
         showRGB = false
+        UserDefaults.standard.removeObject(forKey: "switchButtonCount")
         self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
     
@@ -138,7 +139,7 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
         showRGB = sender.isOn
         tableView.reloadData()
     }
-    
+    // Slider Values
     @IBAction func colorSliderChanged(_ sender: UISlider) {
         guard let color = colorForSliderValues() else {
             return
@@ -167,6 +168,23 @@ class IoDemoViewController: DemoViewController, IoDemoInteractionOutput, Connect
             if let switchView: SwitchView = cell.switches?[button] {
                 switchView.switchStatus = pressed ? .on : .off
             }
+        }
+        setUpSwitchCount()
+    }
+    
+    func setUpSwitchCount() {
+        let savedValue = UserDefaults.standard.string(forKey: "switchButtonCount")
+        guard let savedValue = savedValue else { return }
+        let intValue = Int(savedValue)!
+        if intValue == 1 {
+            hideSwitchButton(intValue)
+        }
+    }
+    
+    func hideSwitchButton(_ button: Int) {
+        if let cell: SwitchStatusCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SwitchStatusCell {
+            cell.switches[button].isHidden = true
+            cell.switchConstraint.constant = 27.0
         }
     }
     
@@ -279,19 +297,7 @@ extension IoDemoViewController: UITableViewDataSource {
         let identifier = cellData.identifier
         switch identifier {
         case "SwitchStatusCell":
-            if let cell: SwitchStatusCell = tableView.dequeueReusableCell(withIdentifier: "SwitchStatusCell", for: indexPath) as? SwitchStatusCell {
-                for switchView in cell.switches {
-                    switchView.isHidden = true
-                }
-                if switchNo == 0 {
-                    cell.switches[0].isHidden = false
-                    cell.switches[1].removeFromSuperview()
-                    cell.switchConstraint.constant = 27.0
-                } else {
-                    for switchView in cell.switches {
-                        switchView.isHidden = false
-                    }
-                }
+            if let cell: SwitchStatusCell = tableView.dequeueReusableCell(withIdentifier: "SwitchStatusCell", for: indexPath) as? SwitchStatusCell {                
                 return cell
             }
         case "LightsCell":
@@ -326,7 +332,7 @@ extension IoDemoViewController: UITableViewDataSource {
         case "ColorCell":
             if let cell: ColorCell = tableView.dequeueReusableCell(withIdentifier: "ColorCell", for: indexPath) as? ColorCell {
                 cell.colorSlider.isEnabled = showRGB
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.colorSliderChanged(cell.colorSlider)
                 }
                 return cell

@@ -21,18 +21,20 @@
 @property (weak, nonatomic) IBOutlet UITextField * _Nullable nameInputTextField;
 @property (weak, nonatomic) IBOutlet UIButton * _Nullable addDeviceButton;
 
-@property (weak, nonatomic) IBOutlet UIView * _Nullable qrCodeInfoView;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable qrCodeInfoLabel;
-@property (weak, nonatomic) IBOutlet UIButton * _Nullable qrCodeInfoButton;
-@property (weak, nonatomic) IBOutlet UIView * _Nullable qrCodeInfoBGView;
+@property (weak, nonatomic) IBOutlet UIView *qrCodeInfoView;
 
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable versionLabel;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable vendorIdLabel;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable productIdLabel;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable discriminatorLabel;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable setupPinCodeLabel;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable discoveryCapabilitiesLabel;
-@property (weak, nonatomic) IBOutlet UILabel * _Nullable commissioningFlow;
+@property (weak, nonatomic) IBOutlet UILabel * qrCodeInfoLabel;
+@property (weak, nonatomic) IBOutlet UIButton *  qrCodeInfoButton;
+@property (weak, nonatomic) IBOutlet UIView * qrCodeInfoBGView;
+
+@property (weak, nonatomic) IBOutlet UILabel * versionLabel;
+@property (weak, nonatomic) IBOutlet UILabel * vendorIdLabel;
+@property (weak, nonatomic) IBOutlet UILabel *  productIdLabel;
+@property (weak, nonatomic) IBOutlet UILabel *  discriminatorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *  setupPinCodeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *  discoveryCapabilitiesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *  commissioningFlow;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+
 
 @end

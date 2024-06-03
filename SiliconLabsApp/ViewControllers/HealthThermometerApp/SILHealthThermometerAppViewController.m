@@ -66,6 +66,11 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     [self updateRecentMeasurement];
 }
 
+- (void)setRecentTemperatureMeasurementType:(SILTemperatureMeasurement *)recentTemperatureMeasurement {
+    _recentTemperatureMeasurement = recentTemperatureMeasurement;
+    [self updateRecentMeasurementType];
+}
+
 - (void)addTemperatureMeasurement:(SILTemperatureMeasurement *)temperatureMeasurement animated:(BOOL)animated {
     if (self.temperatureMeasurements.count == 0) {
         [self.temperatureMeasurements addObject:temperatureMeasurement];
@@ -186,12 +191,20 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
         } else {
             self.recentTimeLabel.text = @"N/A";
         }
-
-        self.recentTypeLabel.text = SILTemperatureTypeDisplayName(self.recentTemperatureMeasurement.temperatureType);
+        
+//        self.recentTypeLabel.text = SILTemperatureTypeDisplayName(self.recentTemperatureMeasurement.temperatureType);
     } else {
         self.recentTemperatureLabel.text = @"0";
         self.recentTemperatureDecimalLabel.text = @"0";
         self.recentTimeLabel.text = @"N/A";
+        self.recentTypeLabel.text = @"N/A";
+    }
+}
+
+- (void)updateRecentMeasurementType {
+    if (self.recentTemperatureMeasurement) {
+        self.recentTypeLabel.text = SILTemperatureTypeDisplayName(self.recentTemperatureMeasurement.temperatureType);
+    } else {
         self.recentTypeLabel.text = @"N/A";
     }
 }
@@ -314,6 +327,7 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     for (CBService *service in self.connectedPeripheral.services) {
         [self.connectedPeripheral discoverCharacteristics:@[
                                                             [CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurement],
+                                                            [CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurementType],
                                                             ]
                                                forService:service];
     }
@@ -377,15 +391,22 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
     }
 }
 
+// DidDiscoverCharacteristicsForService call
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+
     if (error) {
         NSLog(@"didDiscoverCharacteristicsForService: %@ error: %@", service, error);
     } else {
         NSLog(@"didDiscoverCharacteristicsForService: %@ characteristics: %@", [peripheral services], service.characteristics);
         for (CBCharacteristic *characteristic in service.characteristics) {
+            // NSLog(@"didDiscoverCharacteristicsForService: %@",service);
+            // NSLog(@"char uuid %@", characteristic.UUID);
             if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurement]]) {
                 self.temperatureMeasurementCharacteristic = characteristic;
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+            } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurementType]]) {
+                // Read Characteristic Type
+                [peripheral readValueForCharacteristic:characteristic];
             }
         }
     }
@@ -398,6 +419,8 @@ typedef NS_ENUM(NSInteger, SILThermometerUnitControlType) {
         NSLog(@"didUpdateValueForCharacteristic: %@ data: %@", characteristic, [characteristic value]);
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurement]]) {
             self.recentTemperatureMeasurement = [SILTemperatureMeasurement decodeTemperatureMeasurementWithData:[characteristic value]];
+        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:SILCharacteristicNumberTemperatureMeasurementType]]) {
+            self.recentTemperatureMeasurementType = [SILTemperatureMeasurement decodeTemperatureMeasurementWithTemptype:[characteristic value]];
         }
     }
 }

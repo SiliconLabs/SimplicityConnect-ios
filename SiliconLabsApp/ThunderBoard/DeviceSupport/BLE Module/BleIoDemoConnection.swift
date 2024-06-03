@@ -41,6 +41,9 @@ class BleIoDemoConnection: IoDemoConnection {
     fileprivate let hasAnalogRgb: Bool
     fileprivate let ledWriteThrottle = Throttle(interval: 0.25) // up to four writes per second
 
+    private var descriptorModel: SILDescriptorTableModel!
+    var switchButtonCount: String = "0"
+
     init(device: BleDevice) {
         self.device = device
         
@@ -177,8 +180,22 @@ class BleIoDemoConnection: IoDemoConnection {
         }
 
         buttonMask = newMask
+        guard let descriptors = characteristic.descriptors else {
+            return
+        }
+        
+        for (descriptorIndex, descriptor) in descriptors.enumerated() {
+            if descriptorIndex == 2 {
+                let parser = SILBrowserDescriptorValueParser(withDescriptor: descriptor)
+                switchButtonCount = parser.getFormattedValue()
+                UserDefaults.standard.setValue(switchButtonCount, forKey: "switchButtonCount")
+            } else {
+                debugPrint("demo flow other descriptor ==  \(descriptor)")
+            }
+        }
     }
     
+    // Notify Button State to handel on/off
     fileprivate func notifyButtonState() {
         for index in digitalInputIndexes {
             self.connectionDelegate?.buttonPressed(index, pressed: isDigitalHigh(buttonMask, index: index))

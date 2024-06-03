@@ -127,9 +127,11 @@
     }
 }
 
+ // Update Read characteristic
 - (void)updateRead:(CBCharacteristic *)characteristic {
     if (characteristic.value) {
         self.lastReadValue = characteristic.value;
+        NSLog(@" lastReadValue = %@", self.lastReadValue);
         NSInteger readIndex = 0;
         
         [CrashlyticsKit setObjectValue:self.bluetoothModel.name forKey:@"characteristic_name"];
@@ -177,7 +179,7 @@
         }
         return NO;
     }
-    NSLog(@" == Success flow Step-5 == write 1'st and last data to peripheral %@ data == ", dataToWrite);
+    
     writeType = [self checkIfCharacteristicSupportsChosenWriteType:writeType];
     [peripheral writeValue:dataToWrite forCharacteristic:self.characteristic type:writeType];
     [self postRegisterLogNotification: [SILLogDataModel prepareLogDescriptionForWriteValueOfCharacteristic:self.characteristic andPeripheral:peripheral andError:*error andData:dataToWrite]];

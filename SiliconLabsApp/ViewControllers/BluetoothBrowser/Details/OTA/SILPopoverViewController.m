@@ -63,7 +63,6 @@ static CGSize const kSILPopoverIPadSize = { 540.0, 400.0 };
     return kSILPopoverTransitionDuration;
 }
 
-// popup animate Transition
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
 
     UIViewController* toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];

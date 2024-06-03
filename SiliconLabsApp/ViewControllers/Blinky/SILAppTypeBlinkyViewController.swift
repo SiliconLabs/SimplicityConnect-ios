@@ -38,8 +38,8 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel?.removeObserverAndDisconnect()
-        self.disposeBag.invalidateTokens()
         UserDefaults.standard.removeObject(forKey: "initialBatteryLevel")
+        self.disposeBag.invalidateTokens()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -126,6 +126,7 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
     
     @IBAction func backButtonTapped() -> Void {
         viewModel?.removeObserverAndDisconnect()
+        UserDefaults.standard.removeObject(forKey: "initialBatteryLevel")
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -148,6 +149,7 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer.isEqual(navigationController?.interactivePopGestureRecognizer) {
             viewModel?.removeObserverAndDisconnect()
+            UserDefaults.standard.removeObject(forKey: "initialBatteryLevel")
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
             }

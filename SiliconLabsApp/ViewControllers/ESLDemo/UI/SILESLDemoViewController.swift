@@ -11,7 +11,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SVProgressHUD
-import WYPopoverController
+//import WYPopoverController
 
 protocol QRMetadataDelegate: class {
     func setQRData(_ data: ESLQRData?)

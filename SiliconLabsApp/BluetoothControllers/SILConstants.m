@@ -24,6 +24,7 @@ NSString * const SILServiceNumberESLServiceControl = @"35100001-4B1D-B16B-00B1-3
 NSString * const SILCharacteristicNumberAlertLevel = @"2A06";
 NSString * const SILCharacteristicNumberTXPowerLevel = @"2A07";
 NSString * const SILCharacteristicNumberTemperatureMeasurement = @"2A1C";
+NSString * const SILCharacteristicNumberTemperatureMeasurementType = @"2A1D";
 NSString * const SILCharacteristicNumberHeartRateMeasurement = @"2A37";
 NSString * const SILCharacteristicNumberBodySensorLocation = @"2A38";
 NSString * const SILCharacteristicNumberDMPLightState = @"76E137AC-B15F-49D7-9C4C-E278E6492AD9";

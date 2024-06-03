@@ -232,7 +232,7 @@ class SILWifiCommissioningViewModel {
         self.peripheralDelegate.notifyCharacteristic(characteristic: notifyCharacteristic)
     }
 
-    // handle Read Characteristic Value
+    // Handle Read Characteristic Value
     private func handleReadCharacteristicValue(_ value: Data) {
         let stringValue = String(data: value, encoding: .utf8)
         let bytes = value.bytes
@@ -267,16 +267,15 @@ class SILWifiCommissioningViewModel {
                     }
                 }
             }
+            print("firmareVersionString \(firmareVersionString)")
             self.wifiCommissioningState.value = .firmwareVersionRead(version: firmareVersionString)
-            //End
-            
             self.checkConnectionStatus()
             
         case .scan:
             self.givenAccessPointsNumber = secondByte
             self.writeCommandState = .scan
             debugPrint("Given access points number:", secondByte)
-            
+
         case .connectionStatus:
             guard self.writeCommandState == .connectionStatus else {
                 return
@@ -294,7 +293,7 @@ class SILWifiCommissioningViewModel {
                     self.wifiCommissioningState.value = .checkingStatusFinished(false)
                 }
             }
-            
+        
         case .join:
             guard wifiCommissioningState.value == .connectingStarted else {
                 return

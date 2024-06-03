@@ -97,6 +97,7 @@ class SILAdvertiserCellViewModel: SILCellViewModel {
         completion()
     }
     
+    //  Add advertiser types info on list when user click drop-down button of cell
     private func calculateAdvertiserAdTypes() -> [SILAdvertiserAdTypeCellViewModel] {
         var advertiserTypes = [SILAdvertiserAdTypeCellViewModel]()
         

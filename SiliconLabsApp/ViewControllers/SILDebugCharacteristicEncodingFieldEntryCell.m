@@ -37,7 +37,7 @@
     if (self.index == 0) {
         self.valueTextField.keyboardType = UIKeyboardTypeDefault;
     } else if (self.index == 2) {
-        self.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
+        self.valueTextField.keyboardType = UIKeyboardTypeASCIICapable;
         [self.valueTextField addDoneButton];
     } else {
         self.valueTextField.keyboardType = UIKeyboardTypeASCIICapable;

@@ -295,7 +295,6 @@ class SILBlinkyPeripheralDelegate: NSObject, CBPeripheralDelegate {
                 state.value = .failure(reason: "Missing battery level characteristic value")
                 return
             }
-            
             // battery level
             UserDefaults.standard.set(Int(value), forKey: "initialBatteryLevel")
             self.updatePower(batteryLevel: Int(value))

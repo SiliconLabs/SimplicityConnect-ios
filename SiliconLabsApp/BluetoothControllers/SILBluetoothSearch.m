@@ -61,8 +61,7 @@
 
 #pragma mark - CBCentralManagerDelegate methods
 
-- (void)centralManager:(CBCentralManager *)central
- didDiscoverPeripheral:(CBPeripheral *)peripheral
+- (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral
      advertisementData:(NSDictionary<NSString *,id> *)advertisementData
                   RSSI:(NSNumber *)RSSI {
     

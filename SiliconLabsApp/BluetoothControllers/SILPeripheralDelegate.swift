@@ -11,7 +11,9 @@ import Foundation
 enum SILPeripheralDelegateStatus {
     case successForServices(_ services: [CBService])
     case successForCharacteristics(_ characteristics: [CBCharacteristic])
+    case successForDescriptors(_ descriptors: [CBDescriptor]) //Added
     case successGetValue(value: Data?, characteristic: CBCharacteristic)
+    case successGetValueDescriptor(value: Any?, descriptor: CBDescriptor) //Added
     case successWrite(characteristic: CBCharacteristic)
     case updateNotificationState(characteristic: CBCharacteristic, state: Bool)
     case servicesModified(peripheral: CBPeripheral)
@@ -39,6 +41,19 @@ class SILPeripheralDelegate: NSObject, CBPeripheralDelegate {
         status = SILObservable(initialValue: .unknown)
         return status
     }
+    //ADDED NEW...
+    func discoverDescriptors(for characteristic: CBCharacteristic) {
+        self.peripheral.discoverDescriptors(for: characteristic)
+    }
+    //ADDED NEW...
+    func readDescriptor(descriptor: CBDescriptor) {
+        self.peripheral.readValue(for: descriptor)
+    }
+    //ADDED NEW...
+    func writeToDescriptor(data: Data, descriptor: CBDescriptor) {
+        self.peripheral.writeValue(data, for: descriptor)
+    }
+    //END
     
     func discoverServices(services: [CBUUID]?) {
         self.peripheral.discoverServices(services)
@@ -121,4 +136,25 @@ class SILPeripheralDelegate: NSObject, CBPeripheralDelegate {
     func findCharacteristic(with characteristicUUID: CBUUID, in characteristics: [CBCharacteristic]) -> CBCharacteristic? {
         return characteristics.first(where: { characteristic in characteristic.uuid == characteristicUUID })
     }
+    
+    //ADDED NEW...
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
+        debugPrint("didDiscoverDescriptors*********")
+        if let error = error {
+            status.value = .failure(error: error)
+        } else {
+            status.value = .successForDescriptors(characteristic.descriptors!)
+        }
+    }
+
+    //ADDED NEW...
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
+        debugPrint("didUpdateValueForDescriptor*********")
+        if let error = error {
+            status.value = .failure(error: error)
+        } else {
+            status.value = .successGetValueDescriptor(value: descriptor.value, descriptor: descriptor)
+        }
+    }
+    //END
 }

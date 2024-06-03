@@ -18,12 +18,9 @@ import Foundation
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sectionViewModel = self.browserViewModel.peripheralViewModel(at: section) else { return 0 }
-        
-//        return sectionViewModel.isExpanded ? sectionViewModel.advertisementDataViewModels.count : 1
+        guard let sectionViewModel = self.browserViewModel.peripheralViewModel(at: section) else { return 0 } //2 
         // Add one cell count to show Manufacturer data, because cell count start from 1.
-        return sectionViewModel.isExpanded ? sectionViewModel.advertisementDataViewModels.count + 1 : 1
-
+        return sectionViewModel.isExpanded ? sectionViewModel.advertisementDataViewModels.count + 1 : 1        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
