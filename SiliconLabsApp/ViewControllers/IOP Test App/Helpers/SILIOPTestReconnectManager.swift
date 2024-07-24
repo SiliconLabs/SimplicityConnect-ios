@@ -41,6 +41,7 @@ class SILIOPTestReconnectManager: NSObject {
     }
     
     func reconnectToDevice(withName name: String) {
+        
         self.nameToReconnect = name
         self.setCentralManagerSubscription()
         
@@ -51,6 +52,7 @@ class SILIOPTestReconnectManager: NSObject {
                                               selector: #selector(self.scanIntervalTimerFired),
                                               userInfo: nil,
                                               repeats: false)
+        
     }
     
     private func setCentralManagerSubscription() {

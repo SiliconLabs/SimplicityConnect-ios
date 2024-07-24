@@ -56,16 +56,19 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
     func performTestCase() {
         guard iopCentralManager.bluetoothState else {
             self.publishTestResult(passed: false, description: "Bluetooth disabled!")
+            IOPLog().iopLogSwiftFunction(message: "FBluetooth disabled!")
             return
         }
         
         guard let _ = discoveredPeripheral else {
             self.publishTestResult(passed: false, description: "Discovered peripheral is nil.")
+            IOPLog().iopLogSwiftFunction(message: "Discovered peripheral is nil.")
             return
         }
         
         guard let _ = peripheral else {
             self.publishTestResult(passed: false, description: "Peripheral is nil.")
+            IOPLog().iopLogSwiftFunction(message: "Peripheral is nil.")
             return
         }
 
@@ -80,11 +83,15 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
             switch status {
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+
                 weakSelf.publishTestResult(passed: false, description: "Peripheral was disconnected with \(String(describing: error?.localizedDescription)).")
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+
                     weakSelf.publishTestResult(passed: false, description: "Bluetooth disabled.")
                 }
                 
@@ -93,6 +100,8 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
             
             default:
                 weakSelf.publishTestResult(passed: false, description: "Unknown failure from central manager.")
+                IOPLog().iopLogSwiftFunction(message: "Unknown failure from central manager.")
+
             }
         })
         disposeBag.add(token: centralManagerSubscription)
@@ -109,6 +118,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
             case let .successForServices(services):
                 guard let iopTestPhase3Service = services.first(where: { service in service.uuid == weakSelf.iopTestPhase3Service }) else {
                     weakSelf.publishTestResult(passed: false, description: "Service Test Phase 3 didn't found.")
+                    IOPLog().iopLogSwiftFunction(message: "Service Test Phase 3 didn't found.")
                     return
                 }
                 
@@ -119,6 +129,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
                     characteristic.uuid == weakSelf.iopTestPhase3ThroughputGATT
                 }) else {
                     weakSelf.publishTestResult(passed: false, description: "Throughput characteristic didn't found.")
+                    IOPLog().iopLogSwiftFunction(message: "Throughput characteristic didn't found.")
                     return
                 }
                 
@@ -132,6 +143,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
                 }
                 
                 weakSelf.publishTestResult(passed: false, description: "Failure when writing to a characteristic.")
+                IOPLog().iopLogSwiftFunction(message: "Failure when writing to a characteristic.")
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestPhase3ThroughputGATT, let data = data {
@@ -145,6 +157,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
                 }
                 
                 weakSelf.publishTestResult(passed: false, description: "Failure when notifying a characteristic.")
+                IOPLog().iopLogSwiftFunction(message: "Failure when notifying a characteristic.")
                 
             case let .updateNotificationState(characteristic: characteristic, state: state):
                 if characteristic.uuid == weakSelf.iopTestPhase3ThroughputGATT {
@@ -154,6 +167,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
                     } else {
                         let throughputSpped = Double(weakSelf.countCharacteristicThroughput / 5)
                         debugPrint("Throughput speed: \(throughputSpped) kbps")
+                        IOPLog().iopLogSwiftFunction(message: "Throughput speed: \(throughputSpped) kbps")
                         
                         let acceptableThroughput = weakSelf.calculateThroughput()
                         if acceptableThroughput == 0 {
@@ -172,6 +186,7 @@ class SILThroughputTestCase: SILTestCase, SILTestCaseTimeout {
                 
             default:
                 weakSelf.publishTestResult(passed: false, description: "Unknown failure from peripheral delegate.")
+                IOPLog().iopLogSwiftFunction(message: "Unknown failure from peripheral delegate.")
             }
         })
         disposeBag.add(token: peripheralDelegateSubscription)

@@ -9,6 +9,11 @@
 import Foundation
 import CoreBluetooth
 import UIKit
+import CocoaLumberjack
+
+protocol SILIOPTesterViewModelDelegate {
+    func notifyAfterAllTest()
+}
 
 class SILIOPTesterViewModel: NSObject, ObservableObject {
     private var iopCentralManager: SILIOPTesterCentralManager = SILIOPTesterCentralManager()
@@ -42,6 +47,7 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         case ended
     }
     
+   var SILIOPTesterViewModelDelegate:SILIOPTesterViewModelDelegate?
     var testStateStatus: SILObservable<TestState> = SILObservable(initialValue: .initiated)
     var bluetoothState: SILObservable<Bool> = SILObservable(initialValue: true)
     
@@ -100,7 +106,9 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         var testCaseResults = [SILTestResult]()
         for testScenario in iopTest {
             let testCaseStatuses: [SILTestStatus] = testScenario.tests.map { _ in return .waiting }
+            print(testScenario.tests)
             allTestCases += testScenario.tests.count
+            print(allTestCases)
             
             for testCase in testScenario.tests {
                 testCaseResults.append(SILTestResult(testID: testCase.testID, testName: testCase.testName, testStatus: .waiting))
@@ -135,13 +143,24 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         let failureStatus = SILTestStatus.failed(reason: SILTestFailureReason(description: "Mandatory test \(testID) failed."))
         testCaseResults.markTestAfterIndex(indexOfFailedTestID, with: failureStatus)
     }
-
+    private func prepareLoggerForTesting() {
+        //ViewModelServices.sharedInstance.bluetoothMeshNetworkManager.dropDatabase()
+        IOPLogFilePrinter.clearLogDir()
+        if let fileLogger = DDLog.allLoggers.last as? DDFileLogger {
+            fileLogger.rollLogFile(withCompletion: {
+                print("File rolled")
+            })
+        }
+    }
     func startTest() {
+        prepareLoggerForTesting()
         createNewIOPTest()
         setInitialUIState()
         timestamp = Date.init()
         testStateStatus.value = .running
         debugPrint("START TEST")
+        
+        IOPLog().iopLogSwiftFunction(message: "START TEST")
         
         testParameters = ["iopCentralManager": self.iopCentralManager,
                           "browserCentralManager": self.browserCentralManager,
@@ -154,11 +173,16 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
             observableTokens.append(iopTest[i].testResults.observe({ testResults in
                 if testResults.isEmpty { return }
                 guard let weakSelf = weakSelf else { return }
+                print("SOVAN TEST: \(self.iopTest[i])")
+                print("SOVAN TEST RESULT: \(testResults)")
+                print(i)
                 weakSelf.printTestResultInfo(testResults)
                 let newTestCaseStatuses: [SILTestStatus] = testResults.map { testResult in
                     weakSelf.testCaseResults.update(newTestResult: testResult)
                     return testResult.testStatus
                 }
+               
+               
                 weakSelf.cellViewModels[i].update(newTestCaseStatuses: newTestCaseStatuses)
                 weakSelf.updateTableViewWithCurrentTestScenarioIndex.value = i
                 weakSelf.inProgressTestCases = weakSelf.testCaseResults.testInProgressCount()
@@ -176,11 +200,17 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
                     
                 case .failed(reason: _),
                      .unknown(reason: _):
+                   
                     if weakSelf.iopTest[i].isMandatory {
                         weakSelf.markRestTestsAsFailed(fromTestAtIndex: i + 1, andfromTestID: testResults.last!.testID)
                         weakSelf.endTesting()
                     } else {
                         weakSelf.runNextTestIfPossible(index: i)
+                        if i == 6 {
+                            //print(i)
+                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 6 + 1, andfromTestID: testResults.last!.testID)
+                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 8 + 1, andfromTestID: testResults.last!.testID)
+                        }
                     }
                     
                 default:
@@ -196,6 +226,9 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     private func printTestResultInfo(_ testResults: [SILTestResult]) {
         for testResult in testResults {
             var testResultText = "TEST RESULT \(testResult.testID) \(testResult.testName) \(testResult.testStatus.rawValue)"
+            
+            IOPLog().iopLogSwiftFunction(message: "TEST RESULT \(testResult.testID) \(testResult.testName) \(testResult.testStatus.rawValue)")
+            print(testResult)
             switch testResult.testStatus {
             case let .passed(details: details):
                 if let details = details {
@@ -236,8 +269,8 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         updateParametersDictionary(newArtifacts: dict, testIndex: i)
         
         iopTest[i].invalidateObservableTokens()
-        print(iopTest)
-        print(iopTest.count)
+        //print(iopTest)
+       // print(iopTest.count)
         if i + 1 < iopTest.count {
             iopTest[i + 1].injectParameters(parameters: testParameters)
             iopTest[i + 1].performTestScenario()
@@ -297,12 +330,18 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     
     func endTesting() {
         debugPrint("END TESTING")
+        
+        IOPLog().iopLogSwiftFunction(message: "END TEST")
+        
         stopTest()
         prepareTestReport()
         testStateStatus.value = .ended
+        SILIOPTesterViewModelDelegate?.notifyAfterAllTest()
+        
     }
     
-    private func prepareTestReport() {
+    func prepareTestReport() {
+        IOPLog().iopLogSwiftFunction(message: "END TEST")
         let deviceSystemVersion = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
                 
         testReport = SILIOPTestReport(timestamp: timestamp ?? Date(),
@@ -313,18 +352,27 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     }
     
     func getReportFile() -> URL {
-        let fileWriter = SILIOPFileWriter(firmware: firmwareInfo?.firmware ?? .unknown,
-                                          timestamp: timestamp ?? Date(),
-                                          deviceModelName: deviceModelName)
-        
-        if fileWriter.createEmptyFile(atPath: fileWriter.getFilePath), let testReport = testReport {
-            let report = testReport.generateReport()
-            if fileWriter.openFile(filePath: fileWriter.getFilePath) {
-                _ = fileWriter.append(text: report)
-                fileWriter.closeFile()
+            let fileWriter = SILIOPFileWriter(firmware: self.firmwareInfo?.firmware ?? .unknown,
+                                              timestamp: self.timestamp ?? Date(),
+                                              deviceModelName: self.deviceModelName)
+            
+            
+            if fileWriter.createEmptyFile(atPath: fileWriter.getFilePath), let testReport = self.testReport {
+                let report = testReport.generateReport()
+                if fileWriter.openFile(filePath: fileWriter.getFilePath) {
+                    _ = fileWriter.append(text: report)
+                    fileWriter.closeFile()
+                }
             }
-        }
+       
         
         return  fileWriter.getFileUrl
+    }
+
+    func getConsolLogsFile() -> URL? {
+        if let fileLogger = DDLog.allLoggers.last as? DDFileLogger {
+            return URL(fileURLWithPath: fileLogger.currentLogFileInfo!.filePath)
+        }
+        return nil
     }
 }

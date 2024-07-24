@@ -46,10 +46,10 @@ class SILAppSelectionCollectionViewCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView = nil
-        iconImageView = nil
-        titleLabel = nil
-        descriptionLabel = nil
+//        imageView = nil
+//        iconImageView = nil
+//        titleLabel = nil
+//        descriptionLabel = nil
     }
 
     func setFieldsIn(_ appData: SILApp?) {

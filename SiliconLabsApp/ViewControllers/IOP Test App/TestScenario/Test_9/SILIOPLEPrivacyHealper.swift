@@ -54,21 +54,25 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
     func performTestCase() {
         guard iopCentralManager.bluetoothState else {
             self.testResult.value = SecurityTestResult(passed: false, description: "Bluetooth disabled!")
+            IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
             return
         }
         
         guard let _ = discoveredPeripheral else {
             self.testResult.value = SecurityTestResult(passed: false, description: "Discovered peripheral is nil.")
+            IOPLog().iopLogSwiftFunction(message: "Discovered peripheral is nil.")
             return
         }
         
         guard let _ = peripheral else {
             self.testResult.value = SecurityTestResult(passed: false, description: "Peripheral is nil.")
+            IOPLog().iopLogSwiftFunction(message: "Peripheral is nil.")
             return
         }
         
         guard let _ = peripheralDelegate else {
             self.testResult.value = SecurityTestResult(passed: false, description: "Peripheral delegate is nil.")
+            IOPLog().iopLogSwiftFunction(message: "Peripheral delegate is nil.")
             return
         }
         
@@ -77,6 +81,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                 
         guard let iopTestPhase3Service = self.peripheral.services?.first(where: { service in service.uuid == iopTestPhase3Service }) else {
             self.testResult.value = SecurityTestResult(passed: false, description: "Service Test Phase 3 didn't found.")
+            IOPLog().iopLogSwiftFunction(message: "Service Test Phase 3 didn't found.")
+
             return
         }
         
@@ -90,11 +96,17 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
             switch status {
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("PERIPHERAL DISCONNECTED WITH ERROR \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "PERIPHERAL DISCONNECTED WITH ERROR \(String(describing: error?.localizedDescription))")
+
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Not allowed disconnection.")
+                IOPLog().iopLogSwiftFunction(message: "Not allowed disconnection.")
+
                 
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Bluetooth disabled.")
                 }
                 
@@ -119,6 +131,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                     characteristic.uuid == weakSelf.iopTestPhase3TestedCharacteristicUUID
                 }) else {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Tested characteristic didn't found.")
+                    IOPLog().iopLogSwiftFunction(message: "Tested characteristic didn't found.")
+
                     return
                 }
                 
@@ -140,20 +154,28 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                 }
                 
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Failure when writing to a characteristic.")
+                IOPLog().iopLogSwiftFunction(message: "Failure when writing to a characteristic.")
+
                 
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestPhase3Control {
                     debugPrint("DID WRITE VALUE TO \(characteristic)")
+                    IOPLog().iopLogSwiftFunction(message: "DID WRITE VALUE TO \(characteristic)")
+
                     return
                 }
                 
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Failure when writing to a characteristic.")
+                IOPLog().iopLogSwiftFunction(message: "Failure when writing to a characteristic.")
+
    
             case .unknown:
                 break
                 
             default:
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Uknown failure from peripheral delegate.")
+                IOPLog().iopLogSwiftFunction(message: "Uknown failure from peripheral delegate.")
+
             }
         })
         disposeBag.add(token: peripheralDelegateSubscription)
@@ -168,6 +190,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
             self.iopCentralManager.connect(to: self.discoveredPeripheral)
         } else {
             self.testResult.value = SecurityTestResult(passed: false, description: "Exceeded an allowed number of attempts.")
+            IOPLog().iopLogSwiftFunction(message: "Exceeded an allowed number of attempts.")
+
         }
     }
     
@@ -178,6 +202,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
             switch status {
             case let .connected(peripheral: peripheral):
                 debugPrint("PERIPHERAL CONNECTED")
+                IOPLog().iopLogSwiftFunction(message: "PERIPHERAL CONNECTED")
+
                 weakSelf.peripheral = peripheral
                 weakSelf.connectionTimeout?.invalidate()
                 weakSelf.peripheralDelegate.updatePeripheral(peripheral: peripheral)
@@ -185,6 +211,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                 weakSelf.reconnectedPeripheralDelegateSubscription()
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("PERIPHERAL DISCONNECTED WITH ERROR \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "PERIPHERAL DISCONNECTED WITH ERROR \(String(describing: error?.localizedDescription))")
+
                 weakSelf.pairingTimer?.invalidate()
                 if weakSelf.retryCount > 0 {
                     weakSelf.retryCount = weakSelf.retryCount - 1
@@ -192,16 +220,22 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                     weakSelf.iopCentralManager.connect(to: weakSelf.discoveredPeripheral)
                 } else {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Exceeded an allowed number of attempts.")
+                    IOPLog().iopLogSwiftFunction(message: "Exceeded an allowed number of attempts.")
+
                 }
                 
             case let .failToConnect(peripheral: _, error: error):
                 weakSelf.pairingTimer?.invalidate()
                 weakSelf.connectionTimeout?.invalidate()
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Fail to connect to peripheral with error \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "Fail to connect to peripheral with error \(String(describing: error?.localizedDescription))")
+
                 
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+
                     weakSelf.connectionTimeout?.invalidate()
                     weakSelf.pairingTimer?.invalidate()
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Bluetooth disabled.")
@@ -220,6 +254,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
         connectionTimeout = nil
         iopCentralManager.disconnect(peripheral: peripheral)
         testResult.value = SecurityTestResult(passed: false, description: "Peripheral wasn't reconnected in 10 seconds.")
+        IOPLog().iopLogSwiftFunction(message: "Peripheral wasn't reconnected in 10 seconds")
+
     }
     
     private func reconnectedPeripheralDelegateSubscription() {
@@ -236,12 +272,16 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                 }
             
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Service Test Phase 3 didn't found.")
+                IOPLog().iopLogSwiftFunction(message: "Service Test Phase 3 didn't found.")
+
                 
             case let .successForCharacteristics(characteristics):
                 guard let pairingCharacteristic = characteristics.first(where: { characteristic in
                     characteristic.uuid == weakSelf.iopTestPhase3TestedCharacteristicUUID
                 }) else {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Tested characteristic didn't found.")
+                    IOPLog().iopLogSwiftFunction(message: "Tested characteristic didn't found.")
+
                     return
                 }
                 
@@ -252,6 +292,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
             case let .successGetValue(value: data, characteristic: characteristic):
                 guard characteristic.uuid == weakSelf.iopTestPhase3TestedCharacteristicUUID else {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Tested characteristic didn't found.")
+                    IOPLog().iopLogSwiftFunction(message: "Tested characteristic didn't found.")
+
                     return
                 }
                 
@@ -261,6 +303,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                     weakSelf.testResult.value = SecurityTestResult(passed: true, description: "")
                 } else if weakSelf.retryCount == 0 {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Wrong value in a characteristic.")
+                    IOPLog().iopLogSwiftFunction(message: "Wrong value in a characteristic.")
+
                 }
                 
             case .failure(error: _):
@@ -268,6 +312,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
                 
                 if weakSelf.retryCount == 0 {
                     weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Exceeded an allowed number of attempts.")
+                    IOPLog().iopLogSwiftFunction(message: "Exceeded an allowed number of attempts.")
+
                 }
                 
             case .unknown:
@@ -276,6 +322,8 @@ class SILIOPLEPrivacyHealper: SILTestCaseWithRetries {
             default:
                 weakSelf.pairingTimer?.invalidate()
                 weakSelf.testResult.value = SecurityTestResult(passed: false, description: "Unknown failure from peripheral delegate.")
+                IOPLog().iopLogSwiftFunction(message: "Unknown failure from peripheral delegate.")
+
             }
         })
         disposeBag.add(token: peripheralDelegateSubscription)

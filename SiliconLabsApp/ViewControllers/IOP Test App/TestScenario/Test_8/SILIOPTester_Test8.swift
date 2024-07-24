@@ -24,7 +24,7 @@ class SILIOPTester_Test8: SILTestScenario {
         appendTestCase(testCase: SILSecurity_7_2TestCase())
         appendTestCase(testCase: SILSecurity_7_3TestCase())
         appendTestCase(testCase: SILSecurity_7_4TestCase())
-        appendTestCase(testCase: SILSecurity_7_5TestCase()) //Added
+        appendTestCase(testCase: SILSecurity_7_5TestCase())
         testResults.value = privTestResults
     }
     

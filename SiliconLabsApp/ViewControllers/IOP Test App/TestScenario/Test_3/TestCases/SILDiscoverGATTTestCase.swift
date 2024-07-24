@@ -78,11 +78,13 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
             switch status {
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
                 weakSelf.notifyError(reason: "Peripheral was disconnected with \(String(describing: error?.localizedDescription)).")
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
                     weakSelf.notifyError(reason: "Bluetooth disabled.")
                 }
                 

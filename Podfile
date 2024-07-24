@@ -24,6 +24,7 @@ def shared_pods
     pod 'RxSwift',    '~> 6.2.0'
     pod 'RxCocoa',    '~> 6.2.0'
     pod 'Introspect'
+    pod 'CocoaLumberjack/Swift'
 end
 
 def test_pods

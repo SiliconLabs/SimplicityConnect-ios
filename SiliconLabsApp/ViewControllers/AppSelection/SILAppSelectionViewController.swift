@@ -127,6 +127,11 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MatterHomeViewController")
         self.navigationController?.pushViewController(nextViewController, animated: true)
     }
+    private func moveToSILWifiSensorsDemoView() {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "SILWifiSensors", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILWifiSensorsHomeView")
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
             
     private func showWifiDisabledAlert() {
         let message = "Please check your Wi-Fi connection to use Wi-Fi OTA Demo"
@@ -201,6 +206,8 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             case .online(.wiFi):
                 showWiFiOTAScreen()
             }
+        case .typeWifiSensor:
+            moveToSILWifiSensorsDemoView()
         default:
             return
         }

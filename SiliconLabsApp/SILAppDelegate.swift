@@ -12,6 +12,7 @@ import SwiftUI
 import Fabric
 import Crashlytics
 import CoreHaptics
+import CocoaLumberjack
 
 class SILAppDelegate : UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -33,6 +34,19 @@ class SILAppDelegate : UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = UIHostingController(rootView: MainNavigationView())
         window?.makeKeyAndVisible()
+        
+        setupLogs()
+        
         return true
+    }
+    private func setupLogs() {
+        DDLog.add(DDOSLogger.sharedInstance)
+        
+        let fileLogger: DDFileLogger = DDFileLogger() // File Logger
+        fileLogger.rollingFrequency = 60 * 60 * 24 // 24 hours
+        fileLogger.logFileManager.maximumNumberOfLogFiles = 30
+        fileLogger.maximumFileSize = 1024 * 1024 * 10 // 10 MiB
+        DDLog.add(fileLogger)
+        //SBMLogger.sharedInstance().delegate = self;
     }
 }

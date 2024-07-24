@@ -69,6 +69,7 @@ class SILScanTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWithRetries {
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
                     weakSelf.invalidateTestTimer()
                     weakSelf.scanTimer?.invalidate()
                     weakSelf.iopCentralManager.stopScanning()
@@ -80,6 +81,7 @@ class SILScanTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWithRetries {
             
             default:
                 weakSelf.publishTestResult(passed: false, description: "Unknown failure from central manager")
+                IOPLog().iopLogSwiftFunction(message: "Unknown failure from central manager")
             }
         })
         disposeBag.add(token: centralManagerBluetoothStateSubscription)
@@ -106,8 +108,10 @@ class SILScanTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWithRetries {
                 let testTime = weakSelf.stopTestTimerWithResult()
                 if testTime < weakSelf.timeoutMS {
                     weakSelf.publishTestResult(passed: true, description: "(Testing time: \(testTime)ms, Acceptable Time: \(weakSelf.timeoutMS)ms).")
+                    IOPLog().iopLogSwiftFunction(message: "(Testing time: \(testTime)ms, Acceptable Time: \(weakSelf.timeoutMS)ms).")
                 } else {
                     weakSelf.publishTestResult(passed: false, description: "Peripheral was discovered but not in \(weakSelf.timeoutMS)ms")
+                    IOPLog().iopLogSwiftFunction(message: "Peripheral was discovered but not in \(weakSelf.timeoutMS)ms")
                 }
             }
         })
@@ -131,6 +135,7 @@ class SILScanTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWithRetries {
         self.iopCentralManager.stopScanning()
         self.publishTestResult(passed: false,
                                description: "Peripheral with name \(String(describing: self.peripheralLocalName)) wasn't found in any of 5 attempts of scanning for \(self.timeoutMS) ms")
+        IOPLog().iopLogSwiftFunction(message: "Peripheral with name \(String(describing: self.peripheralLocalName)) wasn't found in any of 5 attempts of scanning for \(self.timeoutMS) ms")
     }
     
     // Artifacts

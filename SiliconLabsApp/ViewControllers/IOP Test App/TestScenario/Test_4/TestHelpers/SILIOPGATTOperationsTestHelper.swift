@@ -42,11 +42,13 @@ class SILIOPGATTOperationsTestHelper {
             switch status {
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
                 weakTestCase.publishTestResult(passed: false, description: "Peripheral was disconnected with \(String(describing: error?.localizedDescription)).")
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
                     weakTestCase.publishTestResult(passed: false, description: "Bluetooth disabled.")
                 }
                 
@@ -84,6 +86,7 @@ class SILIOPGATTOperationsTestHelper {
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
                     debugPrint("DATA \(String(describing: data?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if data?.hexa() == exceptedValue {
                         weakTestCase.publishTestResult(passed: true)
                     } else {
@@ -136,6 +139,7 @@ class SILIOPGATTOperationsTestHelper {
             case let .successWrite(characteristic):
                 if characteristic.uuid == characteristicUUID {
                     debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
                     weakTestCase.publishTestResult(passed: true)
                     return
                 }
@@ -185,6 +189,7 @@ class SILIOPGATTOperationsTestHelper {
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
                     debugPrint("DATA \(String(describing: data?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if data?.hexa() == exceptedValue {
                         weakTestCase.publishTestResult(passed: true)
                     } else {
@@ -232,6 +237,7 @@ class SILIOPGATTOperationsTestHelper {
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
                     debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
                     peripheralDelegate.readCharacteristic(characteristic: characteristic)
                     return
                 }
@@ -241,6 +247,7 @@ class SILIOPGATTOperationsTestHelper {
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
                     debugPrint("DATA \(String(describing: data?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if data?.hexa() == exceptedValue {
                         weakTestCase.publishTestResult(passed: true)
                     } else {

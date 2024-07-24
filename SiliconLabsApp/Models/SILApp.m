@@ -23,7 +23,8 @@
                 [self wifiCommissioningApp],
                 [self eslDemoApp],
                 [self matterDemoApp],
-                [self WifiOTADemoApp]
+                [self WifiOTADemoApp],
+                [self WifiSensorDemoApp]
             ];
 }
 
@@ -117,10 +118,17 @@
 
 + (SILApp *)WifiOTADemoApp {
     return [[SILApp alloc] initWithAppType:SILAppTypeWifiOTA
-                                     title:@"Wi-fi OTA Demo"
+                                     title:@"Wi-Fi OTA Demo"
                                description:@"Control OTA Firmware update over Wi-Fi."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeWifiOtaDemo];
+}
++ (SILApp *)WifiSensorDemoApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeWifiSensor
+                                     title:@"Wi-Fi Sensors"
+                               description:@"Read and display sensor data from the dev kit sensors."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeWiFiSensor];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

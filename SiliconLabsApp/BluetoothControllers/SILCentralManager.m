@@ -16,6 +16,7 @@
 #import "SILWeakNotificationPair.h"
 #import "SILConstants.h"
 #import "NSString+SILBrowserNotifications.h"
+#import "BlueGecko-Swift.h"
 #if ENABLE_HOMEKIT
 #import <HomeKit/HomeKit.h>
 #endif
@@ -58,7 +59,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 @property (nonatomic, strong) NSArray<CLBeaconRegion *> *regions;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-
+@property (nonatomic, strong) IOPLog *logObj;
 @end
 
 @implementation SILCentralManager
@@ -73,6 +74,7 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
         [self setupNotifications];
         [self setupBeaconMonitoring];
         self.connectionsViewModel = [SILBrowserConnectionsViewModel sharedInstance];
+        _logObj = [[IOPLog alloc] init];
     }
     return self;
 }
@@ -124,9 +126,14 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
     if (self.connectedPeripheral) {
         NSLog(@"Disconnected from connected peripheral");
+        
+        [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"Disconnected from connected peripheral: %@", self.connectedPeripheral]];
+        
         [self disconnectFromPeripheral:self.connectedPeripheral];
     } else if (self.connectingPeripheral) {
         NSLog(@"Disconnect from connecting peripheral");
+        
+        [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"Disconnect from connecting peripheral: %@", self.connectingPeripheral]];
         [self disconnectFromPeripheral:self.connectingPeripheral];
     }
 }
@@ -383,6 +390,8 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
     NSLog(@"didConnectPeripheral: %@", peripheral);
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"didConnectPeripheral: %@", peripheral]];
+
     [self removeUnfiredConnectionTimeoutTimer];
     self.connectingPeripheral = nil;
     self.connectedPeripheral = peripheral;
@@ -398,6 +407,11 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
     NSLog(@"didFailToConnectPeripheral: %@", peripheral.name);
     NSLog(@"error: %@", error);
+    
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"didDisconnectPeripheral: %@", peripheral]];
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"didDisconnectPeripheral: %@", peripheral.name]];
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"error: %@", error]];
+    
     [self removeUnfiredConnectionTimeoutTimer];
     [self handleConnectionFailureWithError:error];
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didFailToConnectPeripheral: " andPeripheral:peripheral andError:error]];
@@ -408,6 +422,10 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     NSLog(@"didDisconnectPeripheral: %@", peripheral.name);
     NSLog(@"error: %@", error);
     
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"didDisconnectPeripheral: %@", peripheral]];
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"didDisconnectPeripheral: %@", peripheral.name]];
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"error: %@", error]];
+    
     BOOL wasConnected = [self.connectionsViewModel isConnectedPeripheral:peripheral];
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo[SILCentralManagerPeripheralKey] = peripheral;
@@ -415,7 +433,9 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     if (error) {
         userInfo[SILCentralManagerErrorKey] = error;
     }
-        
+    
+    [_logObj iopLogSwiftFunctionWithMessage:[NSString stringWithFormat:@"UserInfo: %@", userInfo]];
+
     [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerDidDisconnectPeripheralNotification
                                                         object:self
                                                         userInfo:userInfo];

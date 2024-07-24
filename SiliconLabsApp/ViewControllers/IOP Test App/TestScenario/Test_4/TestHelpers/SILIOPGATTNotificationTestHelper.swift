@@ -121,6 +121,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
                     debugPrint("DATA \(String(describing: data?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     weakSelf.testTimeoutTimer?.invalidate()
                     if let data = data?.hexa(), weakSelf.exceptedValue.contains(data) {
                         weakSelf.observableTokens.append(weakSelf.centralManagerSubscription)
@@ -135,6 +136,8 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
             
             case let .updateNotificationState(characteristic: characteristic, state: state):
                 debugPrint("Notification \(state) on characteristic \(characteristic)")
+                IOPLog().iopLogSwiftFunction(message: "Notification \(state) on characteristic \(characteristic)")
+
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID, state == true {
                     weakSelf.testTimeoutTimer?.invalidate()
                     let testTime = weakSelf.stopTestTimerWithResult()
@@ -183,6 +186,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
                 switch status {
                 case let .updateNotificationState(characteristic: characteristic, state: state):
                     debugPrint("Notification \(state) on characteristic \(characteristic)")
+                    IOPLog().iopLogSwiftFunction(message: "Notification \(state) on characteristic \(characteristic)")
                     if characteristic.uuid == weakSelf.testedCharacteristicUUID, state == false {
                         weakSelf.invalidateOldSubscriptions()
                         weakSelf.test()

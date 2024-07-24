@@ -68,12 +68,14 @@ class SILDiscoverFirmwareInfo {
             switch status {
             case let .disconnected(peripheral: _, error: error):
                 debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
                 weakSelf.invalidateObservableTokens()
                 weakSelf.state.value = .failed
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
                     weakSelf.invalidateObservableTokens()
                     weakSelf.state.value = .failed
                 }

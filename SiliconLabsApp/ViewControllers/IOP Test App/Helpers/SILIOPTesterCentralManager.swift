@@ -84,9 +84,15 @@ enum SILIOPTesterCentralManagerConnectionStatus {
     func connect(to discoveredPeripheral: SILDiscoveredPeripheral) {
         guard let peripheral = discoveredPeripheral.peripheral else {
             debugPrint("CENTRAL MANAGER discovered peripheral is nil!")
+            
+        IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER discovered peripheral is nil!")
+            
             return
         }
         debugPrint("CONNECTING PERIPHERAL \(String(describing: peripheral))")
+        
+        IOPLog().iopLogSwiftFunction(message: "CONNECTING PERIPHERAL \(String(describing: peripheral))")
+        
         self.centralManager.connect(peripheral)
     }
     
@@ -98,31 +104,52 @@ enum SILIOPTesterCentralManagerConnectionStatus {
         switch central.state {
         case .poweredOff:
             debugPrint("CENTRAL MANAGER powered off")
+            
+            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER powered off")
+            
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .poweredOn:
             debugPrint("CENTRAL MANAGER powered on")
+            
+            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER powered on")
+            
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: true)
         case .resetting:
             debugPrint("CENTRAL MANAGER resetting")
+            
+            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER powered resetting")
+
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .unauthorized:
             debugPrint("CENTRAL MANAGER unauthorized")
+            
+            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER unauthorized")
+
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .unknown:
             debugPrint("CENTRAL MANAGER unknown")
+            
+            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER unknown")
+
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .unsupported:
             debugPrint("CENTRAL MANAGER UNSUPPORTED")
+            
+            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER UNSUPPORTED")
+
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         debugPrint("DID DISCOVER PERIPHERAL \(peripheral)")
+        
+        IOPLog().iopLogSwiftFunction(message: "DID DISCOVER PERIPHERAL \(peripheral)")
+
         if let discoveredPeripheral = self.discoveredPeripherals.first(where: { discoveredPeripheral in discoveredPeripheral.peripheral == peripheral }) {
             discoveredPeripheral.update(withAdvertisementData: advertisementData, rssi: RSSI, andDiscoveringTimestamp: Date.timeIntervalBetween1970AndReferenceDate)
         } else {
@@ -133,16 +160,25 @@ enum SILIOPTesterCentralManagerConnectionStatus {
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         debugPrint("DID CONNECT \(peripheral)")
+        
+        IOPLog().iopLogSwiftFunction(message: "DID CONNECT \(peripheral)")
+
         publishConnectionStatus.value = .connected(peripheral: peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         debugPrint("DID DISCONNECT \(peripheral) WITH ERROR \(error.debugDescription)")
+        
+        IOPLog().iopLogSwiftFunction(message: "DID DISCONNECT \(peripheral) WITH ERROR \(error.debugDescription)")
+
         publishConnectionStatus.value = .disconnected(peripheral: peripheral, error: error)
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         debugPrint("DID FAIL TO CONNECT \(peripheral) WITH EROR \(error.debugDescription)")
+        
+        IOPLog().iopLogSwiftFunction(message: "DID FAIL TO CONNECT \(peripheral) WITH EROR \(error.debugDescription)")
+
         publishConnectionStatus.value = .failToConnect(peripheral: peripheral, error: error)
     }
 }

@@ -102,6 +102,7 @@ class SILIOPLengthVariableTestHelper {
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
                     debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
                     weakSelf.peripheralDelegate.readCharacteristic(characteristic: characteristic)
                     return
                 }
@@ -111,6 +112,7 @@ class SILIOPLengthVariableTestHelper {
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
                     debugPrint("DATA \(String(describing: data?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if weakSelf.isFirstSubtest, data?.hexa() == weakSelf.exceptedValue_Subtest1 {
                         weakSelf.isFirstSubtest = false
                         if let dataToWrite = weakSelf.expectedValue_Subtest2.data(withCount: 4) {

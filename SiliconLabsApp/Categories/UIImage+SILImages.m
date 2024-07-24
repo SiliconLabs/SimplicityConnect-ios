@@ -35,6 +35,9 @@ NSString * const SILImageNameHomeWifiCommissioning = @"icon - wifi commissioning
 NSString * const SILImageNameHomeESLDemo = @"esl_icon";
 NSString * const SILImageNameHomeMatterDemo = @"matter_icon";
 NSString * const SILImageNameHomeWifiOtaDemo = @"wifi_ota_icon";
+//NSString * const SILImageNameHomeWifiSensor = @"icon - wifi commissioning";
+NSString * const SILImageNameHomeWiFiSensor = @"WiFi_sensore_icon";
+
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";

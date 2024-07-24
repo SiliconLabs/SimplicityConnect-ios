@@ -77,6 +77,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
     
     @objc private func didConnectPeripheral(notification: Notification) {
         debugPrint("didConnectPeripheral**********OTA")
+        IOPLog().iopLogSwiftFunction(message: "didConnectPeripheral**********OTA")
         if self.otaProgress == .unknown {
             self.otaProgress = .reconnected
         } else if self.otaProgress == .initiated || self.otaProgress == .reconnected {
@@ -84,11 +85,13 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         } else {
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "Not allowed connection to peripheral.")
+            IOPLog().iopLogSwiftFunction(message: "Not allowed connection to peripheral.")
         }
     }
     
     @objc private func didDisconnectPeripheral(notification: Notification) {
         debugPrint("didDisconnectPeripheral**********OTA")
+        IOPLog().iopLogSwiftFunction(message: "didDisconnectPeripheral**********OTA")
         if self.otaProgress == .reconnected {
             self.otaProgress = .initiated
         } else if self.otaProgress == .finished {
@@ -101,20 +104,25 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
             self.unregisterNotifications()
             self.failureReson =  "Not allowed disconnection from peripheral."
             self.waitForChangeTopController()
+            IOPLog().iopLogSwiftFunction(message: "Not allowed disconnection from peripheral.")
         }
     }
     
     @objc private func didFailToConnectPeripheral(notification: Notification) {
         debugPrint("didFailToConnectPeripheral**********OTA")
+        IOPLog().iopLogSwiftFunction(message: "didFailToConnectPeripheral**********OTA")
         self.unregisterNotifications()
         self.otaTestStatus.value = .failure(reason: "Fail to connect to peripheral.")
+        IOPLog().iopLogSwiftFunction(message: "Fail to connect to peripheral.")
     }
     
     @objc private func bluetoothDisabled() {
         debugPrint("bluetoothDisabled**********OTA")
+        IOPLog().iopLogSwiftFunction(message: "bluetoothDisabled**********OTA")
         self.unregisterNotifications()
         self.dismissPopoverWithCompletion(completion: nil)
         self.otaTestStatus.value = .failure(reason: "Bluetooth disabled.")
+        IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled.")
     }
     
     func setupOTAFirmWareModel() {
@@ -170,6 +178,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         guard let fileToUpdate = self.fileToUpdate else {
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "File to update not found.")
+            IOPLog().iopLogSwiftFunction(message: "File to update not found.")
             return
         }
         
@@ -182,10 +191,12 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
             } else {
                 self.unregisterNotifications()
                 self.otaTestStatus.value = .failure(reason: "Peripheral disconnected when choosing a file.")
+                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected when choosing a file.")
             }
         } else {
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "Chosen file isn't EBL or GBL file")
+            IOPLog().iopLogSwiftFunction(message: "Chosen file isn't EBL or GBL file")
         }
     }
     
@@ -196,6 +207,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         } else {
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "No chosen file.")
+            IOPLog().iopLogSwiftFunction(message: "No chosen file.")
         }
     }
     
@@ -221,6 +233,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
                 } else {
                     self.unregisterNotifications()
                     self.otaTestStatus.value = .failure(reason: "Error during a file update.")
+                    IOPLog().iopLogSwiftFunction(message: "Error during a file update.")
                 }
             }
         })
@@ -235,6 +248,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
                 self.handleFileUploadProgress(progress: fraction, uploadedBytes: bytes)
             }, completion: { (peripheral, error) in
                 print("Completed Flash")
+                IOPLog().iopLogSwiftFunction(message: "Completed Flash")
                 self.handleAppFileUploadCompletionForPeripheral(peripheral: peripheral, error: error)
                 self.finishOTAError = error
                 if self.finishOTAError == nil {
@@ -244,6 +258,7 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
                     self.unregisterNotifications()
                     self.dismissPopoverWithCompletion(completion: {
                         self.otaTestStatus.value = .failure(reason: "Error during a file update.")
+                        IOPLog().iopLogSwiftFunction(message: "Error during a file update.")
                     })
                 }
             })

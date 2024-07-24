@@ -88,19 +88,23 @@ class SILIOPTester_Test4 : SILTestScenario {
             switch state {
             case .initiated:
                 debugPrint("DISCOVER FIRMWARE INFO INITIATED")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE INFO INITIATED")
                 break
                 
             case .running:
                 debugPrint("DISCOVER FIRMWARE INFO RUNNING")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE INFO RUNNING")
                 break
                 
             case .failed:
                 debugPrint("DISCOVER FIRMWARE INFO FAILED")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE INFO FAILED")
                 weakSelf.tests[0].performTestCase()
                 break
                 
             case let .completed(stackVersion: stackVersion):
                 debugPrint("DISCOVER FIRMWARE COMPLETED")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE COMPLETED")
                 weakSelf.parameters["stackVersion"] = stackVersion
                 weakSelf.stackVersion = stackVersion
                 weakSelf.discoverRFUFeatures.injectParameters(parameters: weakSelf.parameters)
@@ -120,19 +124,23 @@ class SILIOPTester_Test4 : SILTestScenario {
             switch state {
             case .initiated:
                 debugPrint("DISCOVER RFU INITIATED")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU INITIATED")
                 break
                 
             case .running:
                 debugPrint("DISCOVER RFU RUNNING")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU RUNNING")
                 break
                 
             case .failed:
                 debugPrint("DISCOVER RFU FAILED")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU FAILED")
                 weakSelf.tests[0].performTestCase()
                 break
                 
             case let .completed(firmwareInfo: firmwareInfo, connectionParameters: connectionParameters):
                 debugPrint("DISCOVER RFU COMPLETED")
+                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU COMPLETED")
                 weakSelf.firmwareInfo = firmwareInfo
                 weakSelf.connectionParameters = connectionParameters
                 weakSelf.tests[0].performTestCase()

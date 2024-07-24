@@ -47,21 +47,25 @@ class SILOTAAckTestCase: SILTestCase {
     func performTestCase() {
         guard iopCentralManager.bluetoothState else {
             self.publishTestResult(passed: false, description: "Bluetooth disabled!")
+            IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
             return
         }
         
         guard let _ = firmwareInfo else {
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Firmware Info is nil."))
+            IOPLog().iopLogSwiftFunction(message: "Firmware Info is nil.")
             return
         }
         
         guard firmwareInfo!.firmware != .unknown else {
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Board not supported."))
+            IOPLog().iopLogSwiftFunction(message: "Board not supported.")
             return
         }
         
         guard let _ = peripheral else {
             self.publishTestResult(passed: false, description: "Peripheral is nil.")
+            IOPLog().iopLogSwiftFunction(message: "Peripheral is nil.")
             return
         }
         
@@ -82,12 +86,14 @@ class SILOTAAckTestCase: SILTestCase {
             case let .disconnected(peripheral: peripheral, error: error):
                 if peripheral === weakSelf.peripheral {
                     debugPrint("DISCONNECTED WITH \(String(describing: error?.localizedDescription))")
+                    IOPLog().iopLogSwiftFunction(message: "DISCONNECTED WITH \(String(describing: error?.localizedDescription))")
                     weakSelf.scanUsingBrowserBluetoothManager()
                 }
                 
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
                     weakSelf.otaUpdateManager = nil
                     weakSelf.publishTestResult(passed: false, description: "Bluetooth disabled.")
                 }
@@ -96,6 +102,7 @@ class SILOTAAckTestCase: SILTestCase {
                 break
                 
             default:
+                IOPLog().iopLogSwiftFunction(message: "Unknown failure reason from IOP Central Manager.")
                 weakSelf.publishTestResult(passed: false, description: "Unknown failure reason from IOP Central Manager.")
             }
         })
@@ -116,6 +123,7 @@ class SILOTAAckTestCase: SILTestCase {
     
     @objc private func didReceiveScanForPeripheralChange() {
         debugPrint("DID RECEIVE")
+        IOPLog().iopLogSwiftFunction(message: "DID RECEIVE")
         weak var weakSelf = self
         let discoveredPeripheral = browserCentralManager.discoveredPeripherals().first(where: { peripheral in
             guard let weakSelf = weakSelf else { return false }
@@ -146,12 +154,15 @@ class SILOTAAckTestCase: SILTestCase {
             case .success:
                 weakSelf.otaUpdateManager = nil
                 weakSelf.invalidateObservableTokens()
-                
-                weakSelf.reconnectToDevice()
-                
+                UserDefaults.standard.setValue("IOP_Test_2", forKey: "deviceNameAfterOtaUpdate")
+               // weakSelf.reconnectToDevice(passed: true)
+                weakSelf.publishTestResult(passed: true)
             case let .failure(reason: reason):
                 weakSelf.otaUpdateManager = nil
-                weakSelf.publishTestResult(passed: false, description: reason)
+            
+                UserDefaults.standard.setValue("IOP_Test_1", forKey: "deviceNameAfterOtaUpdate")
+                weakSelf.browserCentralManager.disconnect(from: self.peripheral )
+                weakSelf.reconnectToDevice(passed: false,description: reason)
                 
             case .unknown:
                 break
@@ -183,6 +194,7 @@ class SILOTAAckTestCase: SILTestCase {
         case .unknown:
             self.invalidateObservableTokens()
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Unsupported board."))
+            IOPLog().iopLogSwiftFunction(message: "Unsupported board.")
         }
         
         self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.originalVersion)
@@ -191,6 +203,7 @@ class SILOTAAckTestCase: SILTestCase {
     @objc private func scanIntervalTimerFired() {
         stopScanning()
         self.publishTestResult(passed: false, description: "Peripheral didn't found.")
+        IOPLog().iopLogSwiftFunction(message: "Peripheral didn't found.")
     }
     
     func stopScanning() {
@@ -201,7 +214,7 @@ class SILOTAAckTestCase: SILTestCase {
         }
     }
     
-    private func reconnectToDevice() {
+    private func reconnectToDevice(passed: Bool, description: String? = nil) {
         weak var weakSelf = self
         let reconnectManager = SILIOPTestReconnectManager(with: peripheral, iopCentralManager: iopCentralManager)
         let reconnectManagerSubscription = reconnectManager.reconnectStatus.observe { reconnectStatus in
@@ -212,8 +225,12 @@ class SILOTAAckTestCase: SILTestCase {
                 weakSelf.peripheral = discoveredPeripheral?.peripheral
                 weakSelf.firmwareVersionAfterOtaAckUpdate = SILIOPFirmwareVersion(version: stackVersion)
                 weakSelf.invalidateObservableTokens()
-                weakSelf.publishTestResult(passed: true)
                 
+                if passed{
+                    weakSelf.publishTestResult(passed: true)
+                }else{
+                    weakSelf.publishTestResult(passed: passed, description: description)
+                }
             case let .failure(reason: reason):
                 weakSelf.publishTestResult(passed: false, description: reason)
                 

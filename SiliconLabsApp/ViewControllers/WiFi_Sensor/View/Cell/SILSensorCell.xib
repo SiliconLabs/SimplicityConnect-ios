@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SILSensorCell" id="gTV-IL-0wX" customClass="SILSensorCell" customModule="BlueGecko" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="109" height="117"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="109" height="117"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y0H-AP-g9D">
+                        <rect key="frame" x="0.0" y="0.0" width="109" height="109"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon - temp" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-6f-6bj">
+                                <rect key="frame" x="34.666666666666664" y="15" width="39.999999999999993" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="2ft-tY-QC3"/>
+                                    <constraint firstAttribute="height" constant="40" id="LDP-hw-ptm"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Air Pressure" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7UA-Ew-6Db">
+                                <rect key="frame" x="8" y="70" width="93" height="14"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="14" id="CVc-fy-fRK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
+                                <color key="textColor" red="0.48627450979999998" green="0.48627450979999998" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zva-qO-rTl">
+                                <rect key="frame" x="8" y="84" width="93" height="24"/>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="15"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Zva-qO-rTl" firstAttribute="top" secondItem="7UA-Ew-6Db" secondAttribute="bottom" id="3qd-qQ-wr0"/>
+                            <constraint firstItem="7UA-Ew-6Db" firstAttribute="top" secondItem="fYS-6f-6bj" secondAttribute="bottom" constant="15" id="9OW-8g-G3B"/>
+                            <constraint firstAttribute="trailing" secondItem="7UA-Ew-6Db" secondAttribute="trailing" constant="8" id="IL5-H7-fCK"/>
+                            <constraint firstItem="7UA-Ew-6Db" firstAttribute="leading" secondItem="Y0H-AP-g9D" secondAttribute="leading" constant="8" id="Rgq-jK-cDd"/>
+                            <constraint firstItem="fYS-6f-6bj" firstAttribute="top" secondItem="Y0H-AP-g9D" secondAttribute="top" constant="15" id="Tgu-AD-5NQ"/>
+                            <constraint firstItem="fYS-6f-6bj" firstAttribute="centerX" secondItem="Y0H-AP-g9D" secondAttribute="centerX" id="Vzu-xO-LLv"/>
+                            <constraint firstAttribute="trailing" secondItem="Zva-qO-rTl" secondAttribute="trailing" constant="8" id="Y0e-54-I3Y"/>
+                            <constraint firstItem="Zva-qO-rTl" firstAttribute="leading" secondItem="Y0H-AP-g9D" secondAttribute="leading" constant="8" id="dpf-E9-xi4"/>
+                            <constraint firstAttribute="bottom" secondItem="Zva-qO-rTl" secondAttribute="bottom" constant="1" id="vjw-9R-bbr"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Y0H-AP-g9D" secondAttribute="trailing" id="5lQ-Af-vLg"/>
+                <constraint firstAttribute="bottom" secondItem="Y0H-AP-g9D" secondAttribute="bottom" constant="8" id="Ddu-9E-Brg"/>
+                <constraint firstItem="Y0H-AP-g9D" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Fml-fn-8WS"/>
+                <constraint firstItem="Y0H-AP-g9D" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="MLc-xN-sbX"/>
+            </constraints>
+            <size key="customSize" width="112" height="110"/>
+            <connections>
+                <outlet property="canvasView" destination="Y0H-AP-g9D" id="GyX-e8-fAt"/>
+                <outlet property="sensorIconImage" destination="fYS-6f-6bj" id="OrL-cN-e6T"/>
+                <outlet property="sensorTitleLabel" destination="7UA-Ew-6Db" id="Ia0-Re-KmM"/>
+                <outlet property="sensorValueLabel" destination="Zva-qO-rTl" id="K2v-TS-rvT"/>
+            </connections>
+            <point key="canvasLocation" x="70.992366412213741" y="3.1690140845070425"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="icon - temp" width="40" height="40"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

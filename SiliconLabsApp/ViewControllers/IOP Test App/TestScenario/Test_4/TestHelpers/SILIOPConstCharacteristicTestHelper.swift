@@ -97,6 +97,7 @@ class SILIOPConstCharacteristicTestHelper {
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestCharacteristicTypesRWConstLen1 {
                     debugPrint("DATA \(String(describing: data?.hexa()))")
+                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if weakSelf.isFirstSubtest, data?.hexa() == weakSelf.ExceptedValue_Subtest1 {
                         weakSelf.isFirstSubtest = false
                         if let dataToWrite = weakSelf.ValueToWrite_Subtest2.data(withCount: 1) {

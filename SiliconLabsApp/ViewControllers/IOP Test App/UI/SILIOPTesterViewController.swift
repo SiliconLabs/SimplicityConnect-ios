@@ -11,7 +11,7 @@ import UIKit
 
 @objc
 @objcMembers
-class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SILIOPTesterViewModelDelegate {
     
     @IBOutlet weak var allSpace: UIStackView!
     @IBOutlet weak var tableView: UITableView!
@@ -153,15 +153,66 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     }
  
     @objc func shareTestResult() {
+        
+        let alert = UIAlertController(title: "Select log file.", message: "", preferredStyle: .alert)
+        let debugLog = UIAlertAction(title: "Application Debug Log", style: .default) { (action) in
+            self.shareLogFile(logType: "ConsoleLog")
+        }
+        
+        let resultLog = UIAlertAction(title: "Test Result Log", style: .default) { (action) in
+            self.shareLogFile(logType: "UILog")
+        }
+        
+       
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+        alert.addAction(resultLog)
+        alert.addAction(debugLog)
+        alert.addAction(cancelAction)
+        //alert.popoverPresentationController?.sourceView = self.btnShare
+        self.present(alert, animated: true, completion: nil)
+
+        
+        //Console:
+//         let fileSh = viewModel.getConsolLogsFile()
+//   
+////        if let file = viewModel.getMeshLogsFile() {
+////            self.shareTestResultTemp(fileURL: file, fileName: "Application/Mesh Logs")
+////        }
+//
+//        
+//        let iopTestLogSubject = "IOP Test Log"
+//        
+//        let activityViewController = UIActivityViewController(activityItems: [fileSh as Any], applicationActivities: nil)
+//        activityViewController.setValue(iopTestLogSubject, forKey: "Subject")
+//        activityViewController.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
+//        
+//        self.present(activityViewController, animated: true, completion: nil)
+    }
+    
+    func shareLogFile(logType: String)  {
         guard let viewModel = viewModel, currentTestState != .initiated else { return }
-        let filesToShare = [viewModel.getReportFile() as Any] as [Any]
-        let iopTestLogSubject = "IOP Test Log"
+        if logType == "UILog" {
+            viewModel.prepareTestReport()
+        }
         
-        let activityViewController = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
-        activityViewController.setValue(iopTestLogSubject, forKey: "Subject")
-        activityViewController.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
-        
-        self.present(activityViewController, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            var filesToShare:[Any] = []
+            if logType == "UILog" {
+                filesToShare = [viewModel.getReportFile() as Any]
+            }else if logType == "ConsoleLog" {
+                filesToShare = [viewModel.getConsolLogsFile() as Any]
+            }
+            
+            let iopTestLogSubject = "IOP Test Log"
+            
+            let activityViewController = UIActivityViewController(activityItems: filesToShare, applicationActivities: nil)
+            activityViewController.setValue(iopTestLogSubject, forKey: "Subject")
+            activityViewController.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
+            
+            self.present(activityViewController, animated: true, completion: nil)
+        }
+
     }
     
     private func showBluetoothDisabledAlert() {
@@ -176,6 +227,8 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
     func setupViewModel() {
         guard let deviceName =  self.deviceNameToSearch else { return }
         self.viewModel = SILIOPTesterViewModel(deviceNameToSearch: deviceName)
+        
+       self.viewModel?.SILIOPTesterViewModelDelegate = self
     }
     
     func showDocumentPickerView() {
@@ -218,6 +271,7 @@ class SILIOPTesterViewController: UIViewController, UITableViewDataSource, UITab
 extension SILIOPTesterViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         debugPrint("DID PICK")
+        IOPLog().iopLogSwiftFunction(message: "DID PICK")
         self.sendChosenUrl(urls: urls)
     }
     
@@ -231,7 +285,20 @@ extension SILIOPTesterViewController: UIDocumentPickerDelegate {
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         debugPrint("DID CANCEL")
+        IOPLog().iopLogSwiftFunction(message: "DID CANCEL PICKER")
         NotificationCenter.default.post(Notification(name: .SILIOPFileUrlChosen, object: nil, userInfo: nil))
         controller.dismiss(animated: true, completion: nil)
+    }
+}
+//MARK: SILIOPTesterViewModelDelegate
+extension SILIOPTesterViewController {
+    func notifyAfterAllTest() {
+        print("END")
+        DispatchQueue.main.async {
+            let SILIOPDeviceResetInfoPopupViewControllerObj = SILIOPDeviceResetInfoPopupViewController(nibName: "SILIOPDeviceResetInfoPopupViewController", bundle: nil)
+        SILIOPDeviceResetInfoPopupViewControllerObj.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+            self.present(SILIOPDeviceResetInfoPopupViewControllerObj, animated: false)
+        }
+ 
     }
 }

@@ -76,23 +76,29 @@ class SILConnectDeviceTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWith
                 if testTime < weakSelf.timeoutMS {
                     weakSelf.publishTestResult(passed: true,
                                                description: "(Testing time: \(testTime)ms, Acceptable Time: \(weakSelf.timeoutMS)ms).")
+                    IOPLog().iopLogSwiftFunction(message: "(Testing time: \(testTime)ms, Acceptable Time: \(weakSelf.timeoutMS)ms).")
                 } else {
                     weakSelf.notifyErrorInAttempt(reason: "Peripheral was connected but not in \(weakSelf.timeoutMS)ms")
+                    IOPLog().iopLogSwiftFunction(message: "Peripheral was connected but not in \(weakSelf.timeoutMS)ms")
+
                 }
 
                 break
                 
             case let .disconnected(peripheral: peripheral, error: error):
                 weakSelf.notifyErrorInAttempt(reason: "didDisconnectPeripheral \(peripheral) with error \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "didDisconnectPeripheral \(peripheral) with error \(String(describing: error?.localizedDescription))")
                 break
                 
             case let .failToConnect(peripheral: peripheral, error: error):
                 weakSelf.notifyErrorInAttempt(reason: "didFailToConnectPeripheral \(peripheral) with error \(String(describing: error?.localizedDescription))")
+                IOPLog().iopLogSwiftFunction(message: "didFailToConnectPeripheral \(peripheral) with error \(String(describing: error?.localizedDescription))")
                 break
                 
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
                     debugPrint("Bluetooth disabled!")
+                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
                     weakSelf.invalidateTestTimer()
                     weakSelf.connectTimer?.invalidate()
                     weakSelf.publishTestResult(passed: false, description: "Bluetooth disabled!")
@@ -120,6 +126,7 @@ class SILConnectDeviceTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWith
     
     private func notifyErrorInAttempt(reason: String) {
         debugPrint(reason)
+        IOPLog().iopLogSwiftFunction(message: "\(reason)")
         invalidateTestTimer()
         stopConnecting()
     }
@@ -129,6 +136,7 @@ class SILConnectDeviceTestCase: SILTestCase, SILTestCaseTimeout, SILTestCaseWith
         self.iopCentralManager.disconnect(peripheral: peripheral)
         self.publishTestResult(passed: false,
                                description: "Peripheral \(String(describing: self.cbPeripheral)) wasn't connected in any of 5 attempts of connecting for \(self.timeoutMS) ms")
+        IOPLog().iopLogSwiftFunction(message: "Peripheral \(String(describing: self.cbPeripheral)) wasn't connected in any of 5 attempts of connecting for \(self.timeoutMS) ms")
     }
         
     func getTestArtifacts() -> Dictionary<String, Any> {
