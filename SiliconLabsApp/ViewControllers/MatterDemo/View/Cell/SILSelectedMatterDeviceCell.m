@@ -7,6 +7,7 @@
 //
 
 #import "SILSelectedMatterDeviceCell.h"
+#include "CHIPUIViewUtils.h"
 
 @implementation SILSelectedMatterDeviceCell
 
@@ -36,7 +37,7 @@ NSMutableDictionary *deviceDic;
     }else if ([deviceType isEqualToString:@"10"]){
         //deviceName = [NSMutableString stringWithFormat:@"Door Lock - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"door_icon";
-    }else if ([deviceType isEqualToString:@"257"]){
+    }else if ([deviceType isEqualToString:DimmingLight] || [deviceType isEqualToString:EnhancedColorLight] || [deviceType isEqualToString:OnOffLight] || [deviceType isEqualToString:TemperatureColorLight]) { // 269 // 257 = before and 257 with wifi.
         //deviceName = [NSMutableString stringWithFormat:@"Light - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"light_icon";
     }else if ([deviceType isEqualToString:@"769"]){

@@ -82,16 +82,10 @@ MTRSubscribeParams * subParam;
 }
 
 - (void)updateResult:(NSString *)result {
-   
-    //NSLog(@" ######################## 2");
     
     if([result  isEqual: @"On"]){
-       // NSLog(@" ######################## 4");
-        
         [self updateImageStatus:TRUE];
     } else if ([result  isEqual: @"Off"]){
-        
-       // NSLog(@" ######################## 5");
         [self updateImageStatus:FALSE];
     } else{
         //
@@ -110,28 +104,20 @@ MTRSubscribeParams * subParam;
         if (chipDevice) {
             
             // DoorLock open
-            
-            if (@available(iOS 16.1, *)) {
+            [SVProgressHUD showWithStatus: @"InProgress..."];
                 MTRBaseClusterDoorLock * unlockLock = [[MTRBaseClusterDoorLock alloc] initWithDevice:chipDevice
                                                                                             endpoint:endpointVal
                                                                                                queue:dispatch_get_main_queue()];
                 
                 MTRDoorLockClusterUnlockDoorParams * unlockParams = [[MTRDoorLockClusterLockDoorParams alloc] init];
                 
-                if (@available(iOS 16.4, *)) {
                     [unlockLock unlockDoorWithParams:(unlockParams) completion:^(NSError * error) {
                         NSString * resultString = (error != nil)
                         ? [NSString stringWithFormat:@"An error occurred: 0x%02lx", error.code]
                         : @"On";
                         [self updateResult:resultString];
+                        [SVProgressHUD dismiss];
                     }];
-                } else {
-                    // Fallback on earlier versions
-                }
-            } else {
-                // if IOS version is < 16.1
-            }
-            
             
         } else {
             [self updateResult:[NSString stringWithFormat:@"Failed to establish a connection with the device"]];
@@ -150,29 +136,22 @@ MTRSubscribeParams * subParam;
     uint64_t _devId = nodeId.intValue;
     if (MTRGetConnectedDeviceWithID(_devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
         if (chipDevice) {
-            
+                        
             // DoorLock Close
-            
-            if (@available(iOS 16.1, *)) {
+            [SVProgressHUD showWithStatus: @"InProgress..."];
                 MTRBaseClusterDoorLock * unlockLock = [[MTRBaseClusterDoorLock alloc] initWithDevice:chipDevice
                                                                                             endpoint:endpointVal
                                                                                                queue:dispatch_get_main_queue()];
                 
                 MTRDoorLockClusterUnlockDoorParams * unlockParams = [[MTRDoorLockClusterLockDoorParams alloc] init];
                 
-                if (@available(iOS 16.4, *)) {
-                    [unlockLock lockDoorWithParams: unlockParams completion:^(NSError * error) {
-                        NSString * resultString = (error != nil)
-                        ? [NSString stringWithFormat:@"An error occurred: 0x%02lx", error.code]
-                        : @"Off";
-                        [self updateResult:resultString];
-                    }];
-                } else {
-                    // Fallback on earlier versions
-                }
-            } else {
-                // Fallback on earlier versions
-            }
+                [unlockLock lockDoorWithParams: unlockParams completion:^(NSError * error) {
+                    NSString * resultString = (error != nil)
+                    ? [NSString stringWithFormat:@"An error occurred: 0x%02lx", error.code]
+                    : @"Off";
+                    [self updateResult:resultString];
+                    [SVProgressHUD dismiss];
+                }];
         } else {
             [self updateResult:[NSString stringWithFormat:@"Failed to establish a connection with the device"]];
         }
@@ -216,9 +195,9 @@ MTRSubscribeParams * subParam;
             [unlockLock readAttributeLockStateWithCompletion:^(NSNumber * _Nullable value, NSError * _Nullable error) {
                 NSLog(@"chipDevice %@", value);
                 if ([value  isEqual: @2]) {
-                    [self updateResult:@"On"];
+                   // [self updateResult:@"On"];
                 } else {
-                    [self updateResult:@"Off"];
+                   // [self updateResult:@"Off"];
                 }
             }];
 
@@ -268,7 +247,7 @@ MTRSubscribeParams * subParam;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
           NSLog(@"Do some work");
-            [self readCurrentStateFromDevice];
+            //[self readCurrentStateFromDevice];
         });
        
     }

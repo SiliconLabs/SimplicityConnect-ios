@@ -104,6 +104,7 @@ NSError * savedError;
 - (void)dismissKeyboard {
     [_manualQrCodeTextField resignFirstResponder];
     [_nameInputTextField resignFirstResponder];
+    _baseViewTopConstraint.constant = 0;
 }
 
 - (void)viewDidLoad {
@@ -128,10 +129,6 @@ NSError * savedError;
     
     isThread = @"";
     
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -148,13 +145,13 @@ NSError * savedError;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     // unregister for keyboard notifications while not visible.
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)saveDevice:(NSNumber *)nodeId {
     uint64_t devId = nodeId.intValue;
-
+    
     if (MTRGetConnectedDeviceWithID(devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
         if (chipDevice) {
             MTRBaseClusterDescriptor * descriptorCluster =
@@ -176,7 +173,10 @@ NSError * savedError;
                     // Go back to with payload and add device
                     [SVProgressHUD dismiss];
                     [self->_delegate affterCommission:nodeId];
-                    self->_nameInputTextField.text = [CHIPUIViewUtils addDeviceTitle:[NSString stringWithFormat:@"%@",self->_descriptorClusterDeviceTypeStruct.deviceType]];
+                    // Add device name
+                    NSLog(@"Cluster DeviceType :- %@",self->_descriptorClusterDeviceTypeStruct.deviceType);
+
+                    self->_nameInputTextField.text = [CHIPUIViewUtils addDeviceTitle:[NSString stringWithFormat:@"%@",self->_descriptorClusterDeviceTypeStruct.deviceType]]; // 269 = thread // 257 = wifi (old)
                     self->_addDeviceNameView.hidden = FALSE;
                 });
             }];
@@ -281,7 +281,7 @@ NSError * savedError;
 
 - (void) showQRCodeInfo:(MTRSetupPayload *) payload strQrCode:(NSString *)strQrCode error:(NSError *)error {
     _qrCodeInfoView.hidden = FALSE;
-        
+    
     savedStrQrCode = strQrCode;
     savedError = error;
     
@@ -351,16 +351,16 @@ NSError * savedError;
     // reset the view and remove any preferences that were stored from a previous scan
     //    self->_setupPayloadView.hidden = NO;
     
-//    [self updateUIFields: payload rawPayload: rawPayload isManualCode: isManualCode];
+    //    [self updateUIFields: payload rawPayload: rawPayload isManualCode: isManualCode];
     [self parseOptionalData: payload];
     [self handleRendezVous: payload rawPayload: rawPayload];
 }
-    
+
 // Retrieve And Send WiFi Credentials
 - (void)retrieveAndSendWiFiCredentials:(NSString *)strQrCode error:(NSError *)error {
     alertControllerWifi = [UIAlertController alertControllerWithTitle:@"WiFi Configuration"
-                                        message:@"Input network SSID and password that your phone is connected to."
-                                 preferredStyle:UIAlertControllerStyleAlert];
+                                                              message:@"Input network SSID and password that your phone is connected to."
+                                                       preferredStyle:UIAlertControllerStyleAlert];
     [alertControllerWifi addTextFieldWithConfigurationHandler:^(UITextField * textField) {
         textField.placeholder = @"Network SSID";
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -396,8 +396,8 @@ NSError * savedError;
         }
     }];
     [alertControllerWifi addAction:[UIAlertAction actionWithTitle:@"Cancel"
-                                                        style:UIAlertActionStyleDefault
-                                                      handler:^(UIAlertAction * action) {
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
         [self refresh];
     }]];
     
@@ -434,7 +434,6 @@ NSError * savedError;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, INDICATOR_DELAY), dispatch_get_main_queue(), ^{
                 [self displayQRCodeInSetupPayloadView:self->_setupPayload rawPayload:strQrCode error:error];
             });
-
         }
     }]];
     [self presentViewController:alertControllerWifi animated:YES completion:nil];
@@ -664,7 +663,6 @@ NSError * savedError;
     }
 }
 
-
 - (void)parseOptionalData:(MTRSetupPayload *)payload {
     NSLog(@"Payload vendorID %@", payload.vendorID);
     BOOL isSameVendorID = [payload.vendorID isEqualToNumber:[NSNumber numberWithInt:EXAMPLE_VENDOR_ID]];
@@ -678,12 +676,10 @@ NSError * savedError;
         if (!tag) {
             continue;
         }
-        
         BOOL isTypeString = [info.infoType isEqualToNumber:[NSNumber numberWithInt:MTROptionalQRCodeInfoTypeString]];
         if (!isTypeString) {
             return;
         }
-        
         NSString * infoValue = info.stringValue;
         switch (tag.unsignedCharValue) {
             case EXAMPLE_VENDOR_TAG_IP:
@@ -862,7 +858,6 @@ NSError * savedError;
     }else{
         [self showAlertPopup:@"Please enter a device name."];
     }
-    
 }
 
 - (IBAction)startScanningQRCode:(id)sender {
@@ -971,6 +966,7 @@ NSError * savedError;
     
     [self presentViewController:alert animated:YES completion:nil];
 }
+
 - (void)deviceSaveInLocalDB:(NSNumber *)deviceTypeId nodeId:(NSNumber *)nodeid deviceTitle:(NSString *)deviceTitleValue{
     NSMutableDictionary * deviceDic = [[NSMutableDictionary alloc] init];
     [deviceDic setObject:deviceTypeId forKey:@"deviceType"];
@@ -990,62 +986,20 @@ NSError * savedError;
 
 // MARK: TextField Delegates
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    // Prevent crashing undo bug – see note below.
-    if(range.length + range.location > textField.text.length)
-    {
-        return NO;
-    }
-    
-    NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    return newLength <= 30;
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    _baseViewTopConstraint.constant = -200;
+    return true;
 }
 
 - (BOOL)resignFirstResponder {
+    _baseViewTopConstraint.constant = 0;
     return true;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
+    _baseViewTopConstraint.constant = 0;
     return YES;
-}
-
--(void)keyboardWillShow {
-    // Animate the current view out of the way
-    
-    if (self.view.frame.origin.y <= 0) {
-        [self setViewMovedUp:YES];
-    } else if (self.view.frame.origin.y > 0) {
-        [self setViewMovedUp:NO];
-    }
-}
-
--(void)keyboardWillHide {
-    if (self.view.frame.origin.y >= 0) {
-        [self setViewMovedUp:YES];
-    } else if (self.view.frame.origin.y < 0) {
-        [self setViewMovedUp:NO];
-    }
-}
-
-// Move the view up/down whenever the keyboard is shown/dismissed
--(void)setViewMovedUp:(BOOL)movedUp {
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
-    
-    CGRect rect = self.view.frame;
-    if (movedUp) {
-        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
-        // 2. increase the size of the view so that the area behind the keyboard is covered up.
-        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
-        rect.size.height += kOFFSET_FOR_KEYBOARD;
-    }
-    else {
-        // revert back to the normal state.
-        rect.origin.y += kOFFSET_FOR_KEYBOARD;
-        rect.size.height -= kOFFSET_FOR_KEYBOARD;
-    }
-    self.view.frame = rect;
 }
 
 @synthesize description;
@@ -1090,6 +1044,5 @@ NSError * savedError;
         [self.viewController presentViewController:alertController animated:YES completion:nil];
     });
 }
-
 @end
 

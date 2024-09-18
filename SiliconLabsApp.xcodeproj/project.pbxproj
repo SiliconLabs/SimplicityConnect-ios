@@ -980,6 +980,8 @@
 		4D9E26252212CA7000617DBA /* SILRangeTestBoardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E26242212CA7000617DBA /* SILRangeTestBoardInfo.swift */; };
 		4D9E26262212CA7000617DBA /* SILRangeTestBoardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E26242212CA7000617DBA /* SILRangeTestBoardInfo.swift */; };
 		4D9E26272212CA7000617DBA /* SILRangeTestBoardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E26242212CA7000617DBA /* SILRangeTestBoardInfo.swift */; };
+		7206ACE02C5B5C94008A6696 /* Matter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CA8FBF2ABCBAD300FE70BA /* Matter.framework */; };
+		7206ACE12C5B5C94008A6696 /* Matter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 72CA8FBF2ABCBAD300FE70BA /* Matter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		721423922AD69E8B00DC3FA2 /* PlugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 721423912AD69E8B00DC3FA2 /* PlugViewController.m */; };
 		7254545F2ACC1710003967CA /* Cluster.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7254545E2ACC1710003967CA /* Cluster.storyboard */; };
 		725454622ACC82B9003967CA /* WindowOpenCloseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 725454612ACC82B9003967CA /* WindowOpenCloseViewController.m */; };
@@ -988,8 +990,6 @@
 		7254546B2ACC8895003967CA /* TemperatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7254546A2ACC8895003967CA /* TemperatureViewController.m */; };
 		7269F9782AF427D400246507 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7269F9772AF427D400246507 /* QRCodeViewController.m */; };
 		729B0EDB2A99DC050019C33C /* MatterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729B0EDA2A99DC050019C33C /* MatterViewModel.swift */; };
-		72CA8FC02ABCBAD400FE70BA /* Matter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CA8FBF2ABCBAD300FE70BA /* Matter.framework */; };
-		72CA8FC12ABCBAD400FE70BA /* Matter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 72CA8FBF2ABCBAD300FE70BA /* Matter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		72CA8FCB2ABCBB7B00FE70BA /* CHIPUIViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 72CA8FC52ABCBB7B00FE70BA /* CHIPUIViewUtils.m */; };
 		72CA8FCC2ABCBB7B00FE70BA /* FabricKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 72CA8FC72ABCBB7B00FE70BA /* FabricKeys.m */; };
 		72CA8FCD2ABCBB7B00FE70BA /* DefaultsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 72CA8FCA2ABCBB7B00FE70BA /* DefaultsUtils.m */; };
@@ -1207,13 +1207,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		72CA8FC22ABCBAD400FE70BA /* Embed Frameworks */ = {
+		7206ACE22C5B5C94008A6696 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				72CA8FC12ABCBAD400FE70BA /* Matter.framework in Embed Frameworks */,
+				7206ACE12C5B5C94008A6696 /* Matter.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2334,11 +2334,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C2FCB971F9A542300F4F259 /* CoreBluetooth.framework in Frameworks */,
+				7206ACE02C5B5C94008A6696 /* Matter.framework in Frameworks */,
 				0C2FCB991F9A542300F4F259 /* CoreLocation.framework in Frameworks */,
 				0C2FCB9A1F9A542300F4F259 /* QuartzCore.framework in Frameworks */,
 				FCFE74AF68F9F5BE332F46B6 /* Pods_BlueGecko.framework in Frameworks */,
 				2E8E6EB82B8DC74A00906697 /* SystemConfiguration.framework in Frameworks */,
-				72CA8FC02ABCBAD400FE70BA /* Matter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5449,7 +5449,7 @@
 				0C2FCB961F9A542300F4F259 /* Frameworks */,
 				0C2FCB9C1F9A542300F4F259 /* Resources */,
 				0C2FCBD31F9A542300F4F259 /* [CP] Embed Pods Frameworks */,
-				72CA8FC22ABCBAD400FE70BA /* Embed Frameworks */,
+				7206ACE22C5B5C94008A6696 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7221,7 +7221,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 2;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "Si Connect";
@@ -7239,7 +7239,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.9.1;
+				MARKETING_VERSION = 2.9.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -7263,7 +7263,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 2;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 52444FG85C;
@@ -7281,7 +7281,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.9.1;
+				MARKETING_VERSION = 2.9.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BlueGeckoDemoApp Distribution";
