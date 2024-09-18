@@ -185,7 +185,7 @@
         deviceTitle = [NSMutableString stringWithFormat:@"Window Cover"];
     }else if ([deviceType isEqualToString:@"10"]){
         deviceTitle = [NSMutableString stringWithFormat:@"Door Lock"];
-    }else if ([deviceType isEqualToString:@"257"]){
+    }else if ([deviceType isEqualToString:DimmingLight] || [deviceType isEqualToString:EnhancedColorLight] || [deviceType isEqualToString:OnOffLight] || [deviceType isEqualToString:TemperatureColorLight])  {
         deviceTitle = [NSMutableString stringWithFormat:@"Light"];
     }else if ([deviceType isEqualToString:@"769"]){
         deviceTitle = [NSMutableString stringWithFormat:@"Thermostat"];

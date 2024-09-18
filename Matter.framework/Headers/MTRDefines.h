@@ -17,14 +17,43 @@
 
 #import <Foundation/Foundation.h>
 
+#pragma mark - Overridable options
+
+/**
+ * @define `MTR_NO_AVAILABILITY`
+ * Turns off availability annotations, to allow compiling a version of
+ * Matter.framework for "local use", not as a system framework.
+ */
+#ifndef MTR_NO_AVAILABILITY
+#define MTR_NO_AVAILABILITY 0
+#endif
+
+/**
+ * @define `MTR_ENABLE_PROVISIONAL`
+ * Makes provisional spec features available for evaluation / testing purposes.
+ * The usual API / ABI stability guarantees DO NOT APPLY to provisional features.
+ */
+#ifndef MTR_ENABLE_PROVISIONAL
+#define MTR_ENABLE_PROVISIONAL 0
+#endif
+
+/**
+ * @define `MTR_ENABLE_UNSTABLE_API`
+ * Makes unstbale APIs available for evaluation / testing purposes.
+ * The usual API / ABI stability guarantees DO NOT APPLY to unstable APIs.
+ */
+#ifndef MTR_ENABLE_UNSTABLE_API
+#define MTR_ENABLE_UNSTABLE_API 0
+#endif
+
 #pragma mark - Attribute macros
 
 #define MTR_EXPORT __attribute__((visibility("default")))
 
 #ifdef __cplusplus
-#define MTR_EXTERN extern "C" MTR_EXPORT
+#define MTR_EXTERN extern "C"
 #else
-#define MTR_EXTERN extern MTR_EXPORT
+#define MTR_EXTERN extern
 #endif
 
 #if __has_attribute(__swift_attr__)
@@ -33,22 +62,48 @@
 #define MTR_SWIFT_DISFAVORED_OVERLOAD
 #endif
 
-#pragma mark - Deprecation macros (can be overriden via build system)
+#pragma mark - Availability / deprecation
 
-#ifndef MTR_DEPRECATED
-#define MTR_DEPRECATED(...) API_DEPRECATED(__VA_ARGS__) MTR_SWIFT_DISFAVORED_OVERLOAD
+// clang-format off
+#define _MTR_IMPLICIT_EXPORT                                    \
+    _Pragma("clang diagnostic push")                            \
+    _Pragma("clang diagnostic ignored \"-Wignored-attributes\"")\
+    MTR_EXPORT                                                  \
+    _Pragma("clang diagnostic pop")
+// clang-format on
+
+#define _MTR_DEPRECATED _MTR_IMPLICIT_EXPORT MTR_SWIFT_DISFAVORED_OVERLOAD
+#define _MTR_UNAVAILABLE _MTR_IMPLICIT_EXPORT NS_UNAVAILABLE
+
+// clang-format off
+#if MTR_NO_AVAILABILITY
+#define MTR_DEPRECATED(...)                     _MTR_DEPRECATED
+#define MTR_DEPRECATED_WITH_REPLACEMENT(...)    _MTR_DEPRECATED
+#define MTR_AVAILABLE(...)                      _MTR_IMPLICIT_EXPORT
+#else
+#define MTR_DEPRECATED(...)                     _MTR_DEPRECATED API_DEPRECATED(__VA_ARGS__)
+#define MTR_DEPRECATED_WITH_REPLACEMENT(...)    _MTR_DEPRECATED API_DEPRECATED_WITH_REPLACEMENT(__VA_ARGS__)
+#define MTR_AVAILABLE(...)                      _MTR_IMPLICIT_EXPORT API_AVAILABLE(__VA_ARGS__)
+#endif // MTR_NO_AVAILABILITY
+// clang-format on
+
+#define MTR_NEWLY_DEPRECATED(message) _MTR_IMPLICIT_EXPORT
+#define MTR_NEWLY_AVAILABLE _MTR_IMPLICIT_EXPORT
+
+#if MTR_ENABLE_PROVISIONAL
+#define MTR_PROVISIONALLY_AVAILABLE MTR_NEWLY_AVAILABLE
+#else
+#define MTR_PROVISIONALLY_AVAILABLE _MTR_UNAVAILABLE
 #endif
 
-#ifndef MTR_DEPRECATED_WITH_REPLACEMENT
-#define MTR_DEPRECATED_WITH_REPLACEMENT(...) API_DEPRECATED_WITH_REPLACEMENT(__VA_ARGS__) MTR_SWIFT_DISFAVORED_OVERLOAD
+#if MTR_ENABLE_UNSTABLE_API
+#define MTR_UNSTABLE_API MTR_NEWLY_AVAILABLE
+#else
+#define MTR_UNSTABLE_API _MTR_UNAVAILABLE
 #endif
 
-#ifndef MTR_NEWLY_DEPRECATED
-#define MTR_NEWLY_DEPRECATED(message)
-#endif
-
-#ifndef MTR_NEWLY_AVAILABLE
-#define MTR_NEWLY_AVAILABLE
+#ifndef MTR_PER_CONTROLLER_STORAGE_ENABLED
+#define MTR_PER_CONTROLLER_STORAGE_ENABLED 1
 #endif
 
 #pragma mark - Types

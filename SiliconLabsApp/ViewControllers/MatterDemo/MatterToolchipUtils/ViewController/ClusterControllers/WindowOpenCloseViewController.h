@@ -11,7 +11,9 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WindowOpenCloseViewController : UIViewController
+#define kOFFSET_FOR_KEYBOARD 50.0
+
+@interface WindowOpenCloseViewController : UIViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *clusterImage;
@@ -20,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSNumber * nodeId;
 @property (strong, nonatomic) NSNumber * endPoint;
 @property (weak, nonatomic) IBOutlet UILabel *deviceCurrentStatusLabel;
+@property (weak, nonatomic) IBOutlet UIButton *liftButton;
+@property (weak, nonatomic) IBOutlet UIButton *tiltButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *windowViewTopConstraints;
+@property (weak, nonatomic) IBOutlet UITextField *liftInputTextField;
+@property (weak, nonatomic) IBOutlet UITextField *tiltInputTextField;
+
 @end
 
 NS_ASSUME_NONNULL_END

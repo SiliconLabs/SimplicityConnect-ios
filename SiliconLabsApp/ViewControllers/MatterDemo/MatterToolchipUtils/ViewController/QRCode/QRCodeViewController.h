@@ -35,6 +35,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *  discoveryCapabilitiesLabel;
 @property (weak, nonatomic) IBOutlet UILabel *  commissioningFlow;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-
-
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *baseViewTopConstraint;
 @end

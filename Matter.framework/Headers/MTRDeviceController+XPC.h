@@ -18,7 +18,9 @@
 #import <Foundation/Foundation.h>
 
 #import <Matter/MTRCluster.h>
+#import <Matter/MTRDefines.h>
 #import <Matter/MTRDeviceController.h>
+#import <Matter/MTRDiagnosticLogsType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,7 +44,7 @@ typedef void (^MTRValuesHandler)(id _Nullable values, NSError * _Nullable error)
  */
 + (MTRDeviceController *)sharedControllerWithID:(id<NSCopying> _Nullable)controllerID
                                 xpcConnectBlock:(MTRXPCConnectBlock)xpcConnectBlock
-    API_AVAILABLE(ios(16.4), macos(13.3), watchos(9.4), tvos(16.4));
+    MTR_AVAILABLE(ios(16.4), macos(13.3), watchos(9.4), tvos(16.4));
 
 /**
  * Returns an encoded values object to send over XPC for read, write and command interactions
@@ -79,26 +81,18 @@ typedef void (^MTRValuesHandler)(id _Nullable values, NSError * _Nullable error)
 /**
  * Returns an NSXPCInterface configured for MTRDeviceControllerServerProtocol.
  */
-+ (NSXPCInterface *)xpcInterfaceForServerProtocol API_AVAILABLE(ios(16.5), macos(13.4), watchos(9.5), tvos(16.5));
++ (NSXPCInterface *)xpcInterfaceForServerProtocol MTR_AVAILABLE(ios(16.5), macos(13.4), watchos(9.5), tvos(16.5));
 
 /**
  * Returns an NSXPCInterface configured for MTRDeviceControllerClientProtocol.
  */
-+ (NSXPCInterface *)xpcInterfaceForClientProtocol API_AVAILABLE(ios(16.5), macos(13.4), watchos(9.5), tvos(16.5));
++ (NSXPCInterface *)xpcInterfaceForClientProtocol MTR_AVAILABLE(ios(16.5), macos(13.4), watchos(9.5), tvos(16.5));
 @end
 
 /**
  * Protocol that remote object must support over XPC
  */
 @protocol MTRDeviceControllerServerProtocol <NSObject>
-
-@optional
-/**
- * Gets device controller ID corresponding to a specific fabric ID
- */
-- (void)getDeviceControllerWithFabricId:(uint64_t)fabricId
-                             completion:(MTRDeviceControllerGetterHandler)completion
-    MTR_DEPRECATED("This never called.", ios(16.1, 16.4), macos(13.0, 13.3), watchos(9.1, 9.4), tvos(16.1, 16.4));
 
 @required
 /**
@@ -181,6 +175,24 @@ typedef void (^MTRValuesHandler)(id _Nullable values, NSError * _Nullable error)
                                clusterId:(NSNumber * _Nullable)clusterId
                              attributeId:(NSNumber * _Nullable)attributeId
                               completion:(MTRValuesHandler)completion;
+
+@optional
+
+/**
+ * Gets device controller ID corresponding to a specific fabric ID
+ */
+- (void)getDeviceControllerWithFabricId:(uint64_t)fabricId
+                             completion:(MTRDeviceControllerGetterHandler)completion
+    MTR_DEPRECATED("This never called.", ios(16.1, 16.4), macos(13.0, 13.3), watchos(9.1, 9.4), tvos(16.1, 16.4));
+
+/**
+ * Requests downloading some logs
+ */
+- (void)downloadLogWithController:(id _Nullable)controller
+                           nodeId:(NSNumber *)nodeId
+                             type:(MTRDiagnosticLogType)type
+                          timeout:(NSTimeInterval)timeout
+                       completion:(void (^)(NSString * _Nullable url, NSError * _Nullable error))completion MTR_NEWLY_AVAILABLE;
 
 @end
 

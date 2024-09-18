@@ -36,7 +36,6 @@ class SILAppDelegate : UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         setupLogs()
-        
         return true
     }
     private func setupLogs() {

@@ -4,6 +4,7 @@
 #import "DefaultsUtils.h"
 #import "DeviceSelector.h"
 #import <Matter/Matter.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 
 @interface OnOffViewController ()
 @property (nonatomic, strong) DeviceSelector * deviceSelector;
@@ -181,36 +182,7 @@ MTRSubscribeParams * subParamLight;
         // Fallback on earlier versions
     }
     
-//    NSInteger endpointVal = endPoint.intValue;
-//    uint64_t _devId = nodeId.intValue;
-//    [self updateResult:[NSString stringWithFormat:@"On command sent on endpoint %@", @(endpointVal)]];
-//
-//    if (MTRGetConnectedDeviceWithID(_devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
-//        if (chipDevice) {
-//
-//            // Toggle
-//            if (@available(iOS 16.1, *)) {
-//                MTRBaseClusterOnOff * on = [[MTRBaseClusterOnOff alloc] initWithDevice:chipDevice
-//                                                                              endpoint:endpointVal
-//                                                                                 queue:dispatch_get_main_queue()];
-//                if (@available(iOS 16.1, *)) {
-//                    [onOffLight toggleWithCompletion:^(NSError * _Nullable error) {
-//                        [self readDeviceStateAfterToggle];
-//                    }];
-//                } else {
-//                    // Fallback on earlier versions
-//                }
-//            } else {
-//                // Fallback on earlier versions
-//            }
-//        } else {
-//            [self updateResult:[NSString stringWithFormat:@"Failed to establish a connection with the device"]];
-//        }
-//    })) {
-//        [self updateResult:[NSString stringWithFormat:@"Waiting for connection with the device"]];
-//    } else {
-//        [self updateResult:[NSString stringWithFormat:@"Failed to trigger the connection with the device"]];
-//    }
+
 }
 
 -(void) readCurrentStateFromDevice {

@@ -146,6 +146,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: OTAConfigViewController, presenting: self,delegate: self, animated: true)
     }
     
+    //  Device Select App
     private func didSelectApp(app: SILApp!) {
         debugPrint("didSelectItem \(String(describing: app.title))")
         switch app.appType {

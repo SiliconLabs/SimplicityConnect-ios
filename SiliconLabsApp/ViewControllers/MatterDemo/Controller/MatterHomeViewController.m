@@ -221,7 +221,7 @@ int commissiond;
     NSNumber *endPointNumber = [deviceDic valueForKey:@"endPoint"];
     NSString *connectedDevice = [deviceDic valueForKey:@"isConnected"];
     if ([connectedDevice isEqual:@"1"]){
-        [self pushLightOnOffCluster:[NSString stringWithFormat:@"%@",[deviceDic valueForKey:@"deviceType"]] node:nodeNumber endpoint:endPointNumber];
+        [self pushToClusterView:[NSString stringWithFormat:@"%@",[deviceDic valueForKey:@"deviceType"]] node:nodeNumber endpoint:endPointNumber];
     }
 }
 
@@ -273,7 +273,7 @@ int commissiond;
     }
 }
 
-- (void)pushLightOnOffCluster:(NSString *)deviceType node:(NSNumber *)nodeId endpoint:(NSNumber *)endPoint {
+- (void)pushToClusterView:(NSString *)deviceType node:(NSNumber *)nodeId endpoint:(NSNumber *)endPoint {
     
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"Cluster" bundle:[NSBundle mainBundle]];
     
@@ -287,7 +287,7 @@ int commissiond;
         _doorLockViewController.nodeId = nodeId;
         _doorLockViewController.endPoint = endPoint;
         [self.navigationController pushViewController:_doorLockViewController animated: YES];
-    } else if ([deviceType isEqualToString:@"257"]){
+    } else if ([deviceType isEqualToString:DimmingLight] || [deviceType isEqualToString:EnhancedColorLight] || [deviceType isEqualToString:OnOffLight] || [deviceType isEqualToString:TemperatureColorLight]){
         _onOffViewController = [story instantiateViewControllerWithIdentifier:@"OnOffViewController"];
         _onOffViewController.nodeId = nodeId;
         _onOffViewController.endPoint = endPoint;
@@ -337,8 +337,9 @@ int commissiond;
 
 - (IBAction)refressListScreen:(id)sender {
     // refressListScreen
-    isTimerOn = 0;
-    [self updateListOfDevice];
+//    isTimerOn = 0;
+//    [self updateListOfDevice];
+    [self viewDidLoad];
 }
 
 
@@ -516,18 +517,16 @@ int commissiond;
 -(void)refreshTable{
     deviceListTemp = [[NSMutableArray alloc] init];
     deviceListTemp = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"saved_list"]];
-    [_tableView reloadData];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (deviceListTemp.count > 0) {
             self.tableView.hidden = NO;
             self.noDevicesAddedView.hidden = YES;
-
         } else {
             self.tableView.hidden = YES;
             self.noDevicesAddedView.hidden = NO;
-
         }
     });
+    [_tableView reloadData];
 }
 #pragma mark - Timers
 
