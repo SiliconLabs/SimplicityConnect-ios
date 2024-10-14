@@ -10,7 +10,8 @@ import Foundation
 import SVProgressHUD
 
 @objcMembers
-class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate {
+class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate, SILWifiCommissioningViewControllerDelegate {
+    
    
     
     var appsArray: [SILApp] = SILApp.demoApps()
@@ -26,6 +27,11 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     private var disposeBag = SILObservableTokenBag()
     private var peripheralManager: SILThroughputPeripheralManager!
     
+    
+
+    private var viewModel: SILWifiCommissioningViewModel!
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupAppCollectionView()
@@ -93,8 +99,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let selectionViewController = SILDeviceSelectionViewController(deviceSelectionViewModel: viewModel!, shouldConnect: shouldConnect)
         selectionViewController.centralManager = SILBrowserConnectionsViewModel.sharedInstance()!.centralManager!
         selectionViewController.delegate = self
-        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self,
-                                                                                    delegate: self, animated: true)
+        self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: selectionViewController, presenting: self, delegate: self, animated: true)
     }
     
     private func presentThunderboardDeviceSelection(app: SILApp!, animated: Bool, filter: ((Device) -> Bool)? = nil) {
@@ -130,7 +135,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     private func moveToSILWifiSensorsDemoView() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "SILWifiSensors", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILWifiSensorsHomeView")
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.navigationController?.pushViewController(nextViewController, animated: false)
     }
             
     private func showWifiDisabledAlert() {
@@ -208,12 +213,18 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                 showWiFiOTAScreen()
             }
         case .typeWifiSensor:
-            moveToSILWifiSensorsDemoView()
+            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "WIFI_SENSOR" }
+            //localNetworkCheck()
         default:
             return
         }
     }
-
+//    func localNetworkCheck() {
+//        let networkOb = SILNetworkCheck()
+//        networkOb.requestAuthorization { val in
+//            print(val)
+//        }
+//    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.appsArray.count
     }
@@ -282,6 +293,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                 if let wifiCommissioningController = UIStoryboard(name: "SILAppTypeWifiCommissioning", bundle: nil).instantiateInitialViewController() as? SILWifiCommissioningViewController {
                     wifiCommissioningController.centralManager = viewController.centralManager
                     wifiCommissioningController.connectedPeripheral = peripheral.peripheral
+                    wifiCommissioningController.demoScreenName = "typeWifiCommissioning"
                     self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
                 }
                 
@@ -293,13 +305,27 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                                                                       peripheralDelegate: eslPeripheralDelegate)
                     self.navigationController?.pushViewController(eslDemoController, animated: true)
                 }
+            case .typeWifiSensor:
+                if let wifiCommissioningController = UIStoryboard(name: "SILAppTypeWifiCommissioning", bundle: nil).instantiateInitialViewController() as? SILWifiCommissioningViewController {
+                    wifiCommissioningController.centralManager = viewController.centralManager
+                    wifiCommissioningController.connectedPeripheral = peripheral.peripheral
+                    wifiCommissioningController.demoScreenName = "typeWifiSensor"
+                    wifiCommissioningController.delegateWifiCommissioning = self
+                    self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
+                }
                 
             default:
                 break
             }
         }
     }
-    
+        
+    private func showBluetoothDisabledWarningTemp() {
+        let bluetoothDisabledAlert = SILBluetoothDisabledAlert.wifiCommissioning
+        self.alertWithOKButton(title: bluetoothDisabledAlert.title, message: bluetoothDisabledAlert.message) { _ in
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     func didDismissDeviceSelectionViewController() {
         if let peripheralManager = peripheralManager {
             peripheralManager.stopAdvertising()
@@ -439,6 +465,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             demoViewController.addConnectedDeviceBar(bottomNotchHeight: 0.0)
             connection.device.connectedDelegate = demoViewController
             self.navigationController?.pushViewController(demoViewController, animated: true)
+        }
+    }
+    
+    // MARK: SILWifiCommissioningViewControllerDelegate
+    func onceDeviceIsConnect(isConnectedDevice: Bool) {
+        if isConnectedDevice {
+            moveToSILWifiSensorsDemoView()
         }
     }
 }

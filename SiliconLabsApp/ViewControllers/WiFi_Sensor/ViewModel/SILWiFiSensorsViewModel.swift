@@ -30,32 +30,70 @@ class SILWiFiSensorsViewModel {
     typealias completionBlockSensors = (_ sensorsData: [Any]?, _ APIClientError:Error?) -> Void
     typealias completionBlock = (_ sensorsData: Dictionary<String, Any>?, _ APIClientError:Error?) -> Void
     
-    
     var sensorsData: [Any] = []
     let APIRequestdispatchGroup = DispatchGroup()
     let sensorConcurrentQueue = DispatchQueue(label: "com.gcd.sensordispatchGroup", attributes: .concurrent)
     var countInt = 0
     
         
-    func getSensors() {
+  
+
+    
+    func getAllSensor<T:Codable>(completionBlockSensor: @escaping (_ ReponsData: T?, _ APIClientError:Error?) -> Void)  {
+        APIRequest.sharedInstance.getApiCall(url: "all_sensors") { ReponsData, APIClientError in
+            if APIClientError == nil {
+                do {
+//                    let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
+//                    print(json)
+//                    let string = String(data: ReponsData ?? Data(), encoding: .utf8)!
+//                    print(string)
+                    let decodaData = try JSONDecoder().decode(T.self, from: ReponsData ?? Data())
+                    completionBlockSensor(decodaData, APIClientError)
+
+                } catch {
+                    print(APIClientError)
+                    completionBlockSensor(nil, APIClientError)
+                }
+            }else{
+                print(APIClientError)
+                completionBlockSensor(nil, APIClientError)
+            }
+        }
+    }
+    func getAllSensorValue() {
+        getAllSensor {  (_ responseValue: SILWifiSensorsHomeViewModel?, APIClientError)  in
+            //print(responseValue)
+            if let responseData = responseValue{
+                self.refromArray(allData: responseData)
+            }else{
+                self.SILWiFiSensorsViewModelDelegate?.notifySensorsData(sensorsData: [])
+            }
+            
+        }
+    }
+    
+   private func refromArray(allData: SILWifiSensorsHomeViewModel){
         sensorsData = []
         for val in SensorType.allSensors{
             var valOfSensor = ""
             var tempDic = Dictionary<String, Any>()
             switch val {
             case SensorType.temp.rawValue:
-                tempDic = ["title": "\(val)", "value": temperature]
+                tempDic = ["title": "\(val)", "value": allData.temperature.temperatureCelcius]
             case SensorType.humudity.rawValue:
-                tempDic = ["title": "\(val)", "value": humidity]
+                tempDic = ["title": "\(val)", "value": allData.humidity.humidityPercentage]
             case SensorType.ambient.rawValue:
                 //valOfSensor = "AL:\(ambientLightLux) WL:\(whiteLightLux)"
                 //valOfSensor = "\(ambientLightLux) lx"
-                tempDic = ["title": "\(val)", "value": ["ambient_light_lux": ambientLightLux, "white_light_lux": whiteLightLux]]
+                tempDic = ["title": "\(val)", "value": ["ambient_light_lux": allData.light.ambientLightLux, "white_light_lux": allData.light.whiteLightLux]]
             case SensorType.motion.rawValue:
-                let motionDic = ["gyroscope": gyroscope, "accelerometer": accelerometer]
+                let gyroscopeDic = ["x": allData.gyroscope.x, "y": allData.gyroscope.y, "z": allData.gyroscope.z]
+                let accelerometerDic = ["x": allData.accelerometer.x, "y": allData.accelerometer.y, "z": allData.accelerometer.z]
+                let motionDic = ["gyroscope": gyroscopeDic, "accelerometer": accelerometerDic]
                 tempDic = ["title": "\(val)", "value": motionDic]
             case SensorType.led.rawValue:
-                tempDic = ["title": "\(val)", "value": led]
+                let ledDic = ["red": allData.led.red, "green": allData.led.green, "blue": allData.led.blue]
+                tempDic = ["title": "\(val)", "value": ledDic]
                 
             default:
                 print("Have you done something new?")
@@ -63,6 +101,7 @@ class SILWiFiSensorsViewModel {
             //let tempDic = ["title": "\(val)", "value": valOfSensor]
             sensorsData.append(tempDic)
         }
+        
         if sensorsData.count > 0 {
             print(sensorsData)
             SILWiFiSensorsViewModelDelegate?.notifySensorsData(sensorsData: sensorsData)
@@ -71,25 +110,6 @@ class SILWiFiSensorsViewModel {
         }
     }
 
-    
-    func getAllSensor()  {
-        APIRequest.sharedInstance.getApiCall(url: "all_sensors") { ReponsData, APIClientError in
-            if APIClientError == nil {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
-                    print(json)
-//                    if let temperatureDic: Dictionary = json as? Dictionary<String, Any>{
-//                        self.temperature = "\(temperatureDic["temperature_celcius"] ?? "")"
-//                    }
-                } catch {
-                    print(APIClientError)
-                }
-            }else{
-                print(APIClientError)
-            }
-        }
-    }
-    
     func getAllSensorData(){
         if self.countInt == 0 {
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
@@ -234,6 +254,42 @@ class SILWiFiSensorsViewModel {
         APIRequestdispatchGroup.wait()
         print("All functions completed wait")
     }
+    
+    private func getSensors() {
+         sensorsData = []
+         for val in SensorType.allSensors{
+             var valOfSensor = ""
+             var tempDic = Dictionary<String, Any>()
+             switch val {
+             case SensorType.temp.rawValue:
+                 tempDic = ["title": "\(val)", "value": temperature]
+             case SensorType.humudity.rawValue:
+                 tempDic = ["title": "\(val)", "value": humidity]
+             case SensorType.ambient.rawValue:
+                 //valOfSensor = "AL:\(ambientLightLux) WL:\(whiteLightLux)"
+                 //valOfSensor = "\(ambientLightLux) lx"
+                 tempDic = ["title": "\(val)", "value": ["ambient_light_lux": ambientLightLux, "white_light_lux": whiteLightLux]]
+             case SensorType.motion.rawValue:
+                 let motionDic = ["gyroscope": gyroscope, "accelerometer": accelerometer]
+                 tempDic = ["title": "\(val)", "value": motionDic]
+             case SensorType.led.rawValue:
+                 tempDic = ["title": "\(val)", "value": led]
+                 
+             default:
+                 print("Have you done something new?")
+             }
+             //let tempDic = ["title": "\(val)", "value": valOfSensor]
+             sensorsData.append(tempDic)
+         }
+         if sensorsData.count > 0 {
+             print(sensorsData)
+             SILWiFiSensorsViewModelDelegate?.notifySensorsData(sensorsData: sensorsData)
+         }else{
+             SILWiFiSensorsViewModelDelegate?.notifySensorsData(sensorsData: sensorsData)
+         }
+     }
+    
+    
     func getTemperatureData(completionBlock: @escaping completionBlock)  {
         APIRequest.sharedInstance.getApiCall(url: "temperature") { ReponsData, APIClientError in
             if APIClientError == nil {

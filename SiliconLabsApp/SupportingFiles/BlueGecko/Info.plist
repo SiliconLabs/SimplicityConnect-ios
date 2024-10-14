@@ -89,12 +89,21 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>This app uses Bluetooth and Bluetooth Low Energy (BLE) to connect to and control your Silicon Labs devices.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app uses Bluetooth and Bluetooth Low Energy (BLE) to connect to and control your Silicon Labs devices.</string>
 	<key>NSBonjourServices</key>
 	<array>
+		<string>_lnp._tcp</string>
+		<string>_bonjour._tcp</string>
 		<string>_matter._tcp</string>
 		<string>_matterc._udp</string>
 		<string>_matterd._udp</string>
@@ -110,7 +119,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location required for use of Retail Beacons.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Apple thinks the app accesses the user&apos;s photos but we don&apos;t know why.</string>
+	<string>Apple thinks the app accesses the user's photos but we don't know why.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Black.ttf</string>

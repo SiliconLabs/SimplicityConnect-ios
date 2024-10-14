@@ -33,7 +33,9 @@ class SILWiFiLEDViewController: UIViewController {
         //blubImg.image = LedImage.ledOnImage
         self.onBtn.backgroundColor = UIColor(named: "sil_boulderColor")
         self.offBtn.backgroundColor = UIColor(named: "sil_boulderColor")
-        ledStatus()
+        
+        //Comented: After BLE commissioning led status not to be check.
+       // ledStatus()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

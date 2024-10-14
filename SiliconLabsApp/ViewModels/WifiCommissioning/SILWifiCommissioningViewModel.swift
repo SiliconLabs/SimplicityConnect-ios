@@ -314,6 +314,9 @@ class SILWifiCommissioningViewModel {
                 accessPoint.connected = true
                 accessPoints[index] = accessPoint
                 print("ip", ipAddress, macAddress, value)
+                // Storing data
+                UserDefaults.standard.set("\(ipAddress)", forKey: "access_point_IPA")
+
                 self.selectedAccessPoint = accessPoint
                 self.updateAccessPoints(accessPoint)
                 self.wifiCommissioningState.value = .connected
