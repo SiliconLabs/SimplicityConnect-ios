@@ -21,6 +21,7 @@ class SILWifiSensorsHomeView: UIViewController, SILWiFiSensorsViewModelProtocol 
     
     //var timer = Timer()
     var sensorsData: [Any] = []
+    //var sensorsData: SILAllWiFiSensorModel!
     var sensorTypeStr: String = ""
     var apiCallTimer: Timer?
     
@@ -32,33 +33,65 @@ class SILWifiSensorsHomeView: UIViewController, SILWiFiSensorsViewModelProtocol 
         //setupNavigationBar()
         silwifiSensorsViewModelObject.SILWiFiSensorsViewModelDelegate = self
         updateUI()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        SVProgressHUD.show(withStatus: "Connecting")
         SVProgressHUD.show(withStatus: "Connecting")
-        sensorTypeStr = ""
-        silwifiSensorsViewModelObject.getTemperatureData { sensorsData, APIClientError in
-            if APIClientError == nil{
-                DispatchQueue.main.async {
-                    self.silwifiSensorsViewModelObject.getAllSensorData()
-                    //self.silwifiSensorsViewModelObject.getAllSensor()
-                }
+        let networkOb = SILNetworkCheck()
+        networkOb.requestAuthorization { val in
+            print(val)
+            if val {
+                self.apiCall()
             }else{
                 DispatchQueue.main.async {
                     SVProgressHUD.dismiss()
+                    self.showWifiDisabledAlert()
                 }
             }
         }
     }
     
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
     }
+    //MARK: Private func
+   private func apiCall(){
+        let seconds = 5.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            // Put your code which should be executed with a delay here
+            self.sensorTypeStr = ""
+            self.silwifiSensorsViewModelObject.getAllSensorValue()
+            
+//            self.silwifiSensorsViewModelObject.getTemperatureData { sensorsData, APIClientError in
+//                if APIClientError == nil{
+////                    DispatchQueue.main.async {
+////                        self.silwifiSensorsViewModelObject.getAllSensorData()
+////                        //self.silwifiSensorsViewModelObject.getAllSensor()
+////                    }
+//                    self.silwifiSensorsViewModelObject.getAllSensorValue()
+//                    
+//                }else{
+//                    DispatchQueue.main.async {
+//                        SVProgressHUD.dismiss()
+//                    }
+//                }
+//            }
+
+        }
+    }
     
+    private func showWifiDisabledAlert() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            let message = "Please enable local network access in Settings > Privacy & Security."
+            self.alertWithOKButton(title: "Local Network Disabled", message: message, completion: { _ in
+                self.navigationController?.popViewController(animated: true)
+            })
+        }
+    }
     private func updateUI() {
         setLeftAlignedTitle("WiFi Sensors")
         let nib = UINib(nibName: "SILSensorCell", bundle: nil)
@@ -68,6 +101,7 @@ class SILWifiSensorsHomeView: UIViewController, SILWiFiSensorsViewModelProtocol 
         sensorePopupView.isHidden = true
     }
     
+    //MARK: @IBAction
  @IBAction func cancelBtn(_ sender: UIButton) {
         sensorePopupView.isHidden = true
         sensorTypeStr = ""
@@ -231,8 +265,11 @@ extension SILWifiSensorsHomeView {
                 sensorePopupView.isHidden = true
                 //SILWiFiMotionVcCh
                 //let SILWiFiMotionViewControllerObj = storyboard.instantiateViewController(withIdentifier: "SILWiFiMotionVcCh")
-                let SILWiFiMotionViewControllerObj = storyboard.instantiateViewController(withIdentifier: "SILWiFiMotionViewController")
+                
+                //let motionDic = ["gyroscope": gyroscope, "accelerometer": accelerometer]
+                let SILWiFiMotionViewControllerObj = storyboard.instantiateViewController(withIdentifier: "SILWiFiMotionViewController") as! SILWiFiMotionViewController
                 SILWiFiMotionViewControllerObj.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                SILWiFiMotionViewControllerObj.motionData = sensorsDataDic
                 present(SILWiFiMotionViewControllerObj, animated: false)
                 
             default:

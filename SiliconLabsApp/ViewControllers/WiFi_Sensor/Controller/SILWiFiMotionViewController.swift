@@ -21,21 +21,32 @@ class SILWiFiMotionViewController: UIViewController, SILWiFiMotionSensorsViewMod
     var silWiFiMotionSensorsViewModel:SILWiFiMotionSensorsViewModel = SILWiFiMotionSensorsViewModel()
     var apiCallTimer: Timer?
     
-     var accelerationXStr: String = ""
-     var accelerationYStr: String = ""
-     var accelerationZStr: String = ""
+    private var accelerationXStr: String = ""
+    private var accelerationYStr: String = ""
+    private var accelerationZStr: String = ""
 
-    var orientationXStr: String = ""
-    var orientationYStr: String = ""
-    var orientationZStr: String = ""
+    private var orientationXStr: String = ""
+    private var orientationYStr: String = ""
+    private var orientationZStr: String = ""
+    var motionData: [String: Any]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         silWiFiMotionSensorsViewModel.SILWiFiMotionSensorsViewModelDelegate = self
         
-        let motionData = ["gyroscope": ["x": orientationXStr, "y": orientationYStr, "z": orientationZStr], "accelerometer": ["x": accelerationXStr, "y": accelerationYStr, "z": accelerationZStr]]
-        uiUpdate(sensorsData: motionData)
+        if let motionDataTemp = motionData?["value"] as? [String : Any] {
+            orientationXStr = (motionDataTemp["gyroscope"] as! [String : Any])["x"] as! String
+            orientationYStr = (motionDataTemp["gyroscope"] as! [String : Any])["y"] as! String
+            orientationZStr = (motionDataTemp["gyroscope"] as! [String : Any])["z"] as! String
+            
+            accelerationXStr = (motionDataTemp["accelerometer"] as! [String : Any])["x"] as! String
+            accelerationYStr = (motionDataTemp["accelerometer"] as! [String : Any])["y"] as! String
+            accelerationZStr = (motionDataTemp["accelerometer"] as! [String : Any])["z"] as! String
+            
+            let motionData = ["gyroscope": ["x": orientationXStr, "y": orientationYStr, "z": orientationZStr], "accelerometer": ["x": accelerationXStr, "y": accelerationYStr, "z": accelerationZStr]]
+            uiUpdate(sensorsData: motionData)
+        }
 
     }
     
@@ -79,6 +90,7 @@ class SILWiFiMotionViewController: UIViewController, SILWiFiMotionSensorsViewMod
         }
         
     }
+    //MARK: SILWiFiMotionSensorsViewModelProtocol
     func notifyMotionSensorsData(sensorsData: Dictionary<String, Any>?) {
         if let sensorsData = sensorsData {
             let aX = (sensorsData["accelerometer"] as? Dictionary<String, Any>)?["x"]

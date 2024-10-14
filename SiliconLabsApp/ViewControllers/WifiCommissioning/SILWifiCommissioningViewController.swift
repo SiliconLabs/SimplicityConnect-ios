@@ -9,6 +9,10 @@
 import Foundation
 import SVProgressHUD
 
+protocol SILWifiCommissioningViewControllerDelegate {
+    func onceDeviceIsConnect(isConnectedDevice: Bool)
+}
+
 class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioningPasswordPopupDelegate, SILWifiCommissioningViewModelDelegate, SILWifiCommissioningDisconnectPopupDelegate, WYPopoverControllerDelegate {
     
     @IBOutlet weak var onStartDisconnectView: UIView!
@@ -25,6 +29,8 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
     private var cellModels = [SILWifiCommissioningAPCellViewModel]()
     
     private var disposeBag = SILObservableTokenBag()
+    var demoScreenName: String = ""
+    var delegateWifiCommissioning:SILWifiCommissioningViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,9 +90,17 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                 if !isConnected {
                     self.viewModel.scan()
                 } else {
-                    self.showOnStartDisconnectView()
+                    //self.showOnStartDisconnectView()
+                    if self.demoScreenName == "typeWifiSensor" {
+                        self.navigationController?.popViewController(animated: false)
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true)
+                        //self.connectedPeripheral.readCharacteristic(characteristic: self.readCharacteristic)
+
+                    }else {
+                        self.showOnStartDisconnectView()
+                    }
+                    
                 }
-                
             case .disconnectingStarted:
                 SVProgressHUD.show(withStatus: "Disconnecting from access point...")
                 
@@ -111,6 +125,12 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
             case .connected:
                 SVProgressHUD.dismiss()
                 self.showToast(message: "Access Point connected successfuly", toastType: .info, completion: {})
+                if self.demoScreenName == "typeWifiSensor" {
+                    //self.moveToSILWifiSensorsDemoView()
+                    self.navigationController?.popViewController(animated: false)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true)
+                    //self.connectedPeripheral.readCharacteristic(characteristic: self.readCharacteristic)
+                }
                 
             case .connectionFailed:
                 SVProgressHUD.dismiss()
