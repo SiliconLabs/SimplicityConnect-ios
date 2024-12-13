@@ -137,6 +137,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILWifiSensorsHomeView")
         self.navigationController?.pushViewController(nextViewController, animated: false)
     }
+    
+    
+    private func moveToSILWifiThroughputDemoView() {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "WifiThroughputStoryboard", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILThroughputMainScreenVC")
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
             
     private func showWifiDisabledAlert() {
         let message = "Please check your Wi-Fi connection to use Wi-Fi OTA Demo"
@@ -214,7 +221,8 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             }
         case .typeWifiSensor:
             self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "WIFI_SENSOR" }
-            //localNetworkCheck()
+        case .typeWifiThroughput:
+            moveToSILWifiThroughputDemoView()
         default:
             return
         }

@@ -19,6 +19,7 @@
 #import "TemperatureSensorController.h"
 #import "OccupancySensorViewController.h"
 #import "ContactSensorViewController.h"
+#import "DishwasherViewController.h"
 #import "DefaultsUtils.h"
 #import "CHIPUIViewUtils.h"
 #import <Matter/Matter.h>
@@ -45,12 +46,15 @@
 @property (weak, nonatomic) TemperatureSensorController * temperatureSensorController;
 @property (weak, nonatomic) OccupancySensorViewController * occupancySensorViewController;
 @property (weak, nonatomic) ContactSensorViewController * contactSensorViewController;
+@property (weak, nonatomic) DishwasherViewController * dishwasherViewController;
 @property (strong, nonatomic) MTRDescriptorClusterDeviceTypeStruct * descriptorClusterDeviceTypeStruct;
 @property (strong, nonatomic) NSTimer *tempRefreshTimerHome;
+@property (weak, nonatomic) IBOutlet UIView *matterSetupInfoView;
 
 @end
 
 @implementation MatterHomeViewController
+
 NSMutableArray * deviceNodeList;
 NSMutableArray * deviceListTemp;
 int arrayCount;
@@ -81,7 +85,13 @@ int commissiond;
     // Load connected device
     [self setRightBarButton];
     [self initialSetup];
-    
+    self.matterSetupInfoView.hidden = true;
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.matterSetupInfoView.bounds];
+    self.matterSetupInfoView.layer.masksToBounds = NO;
+    self.matterSetupInfoView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.matterSetupInfoView.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+    self.matterSetupInfoView.layer.shadowOpacity = 0.2f;
+    self.matterSetupInfoView.layer.shadowPath = shadowPath.CGPath;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -155,17 +165,17 @@ int commissiond;
     [self refreshTable];
 }
 
-- (void) setLeftAlignedTitle:(NSString*) text {
-    
-    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *backBtnImage = [UIImage imageNamed:@"btn_navbar_back.png"]  ;
-    [backBtn setBackgroundImage: backBtnImage forState:UIControlStateNormal];
-    [backBtn addTarget:self action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    backBtn.frame = CGRectMake(0, 0, 54, 30);
-    backBtn.titleLabel.text = @"Matter Demo";
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backBtn] ;
-    self.navigationItem.leftBarButtonItem = backButton;
-}
+//- (void) setLeftAlignedTitle:(NSString*) text {
+//    
+//    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    UIImage *backBtnImage = [UIImage imageNamed:@"btn_navbar_back.png"]  ;
+//    [backBtn setBackgroundImage: backBtnImage forState:UIControlStateNormal];
+//    [backBtn addTarget:self action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+//    backBtn.frame = CGRectMake(0, 0, 54, 30);
+//    backBtn.titleLabel.text = @"Matter Demo";
+//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backBtn] ;
+//    self.navigationItem.leftBarButtonItem = backButton;
+//}
 
 - (void) setRightBarButton {
     UIImage* qrImg = [UIImage imageNamed:@"qr"];
@@ -322,6 +332,20 @@ int commissiond;
         _switchOnOffViewController.nodeId = nodeId;
         _switchOnOffViewController.endPoint = endPoint;
         [self.navigationController pushViewController:_switchOnOffViewController animated: YES];
+    } else if ([deviceType isEqualToString:Dishwasher]){
+        NSString *currentVersion = [[UIDevice currentDevice] systemVersion];
+        NSString *targetVersion = @"17.4";
+        NSComparisonResult result = [currentVersion compare:targetVersion options:NSNumericSearch];
+        if (result == NSOrderedAscending) {
+            NSLog(@"The device is running older then IOS 17.4");
+            [self showAlertMessage:@"Dishwasher Demo requires iOS 17.4 or later. Please update your iOS version to access the feature"];
+        } else {
+            NSLog(@"The device is running iOS 17.4 or later.");
+            _dishwasherViewController = [story instantiateViewControllerWithIdentifier:@"DishwasherViewController"];
+            _dishwasherViewController.nodeId = nodeId;
+            _dishwasherViewController.endPoint = endPoint;
+            [self.navigationController pushViewController:_dishwasherViewController animated: YES];
+        }
     }
 }
 
@@ -341,7 +365,14 @@ int commissiond;
 //    [self updateListOfDevice];
     [self viewDidLoad];
 }
+- (IBAction)setupInfoAction:(id)sender {
+    self.matterSetupInfoView.hidden = false;
+//    [self showAlertMessage:@"To use matter "];
+}
 
+- (IBAction)dismissPopupView:(id)sender {
+    self.matterSetupInfoView.hidden = true;
+}
 
 
 - (void) didCommissionComplete:(BOOL)isCommissioned {
@@ -351,7 +382,7 @@ int commissiond;
 -(void) showDeletePopup:(uint64_t)deviceId cellIndex:(uint64_t)indexValue {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message:@"Do you want to delete Device?" preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         //arrayCount = 0;
         MTRUnpairDeviceWithID(deviceId);
         // need to update index
@@ -362,6 +393,7 @@ int commissiond;
         [[NSUserDefaults standardUserDefaults] synchronize];
         //[self updateListOfDevice];
         //[self showHideTableView: deviceListTemp];
+        [ self deleteDishwasherSavedStatus];
         [_tableView reloadData];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (deviceListTemp.count > 0) {
@@ -377,6 +409,17 @@ int commissiond;
     [alert addAction:cancel];
     [alert addAction:ok];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+// Store Dishwasher Status
+- (void)deleteDishwasherSavedStatus {
+    
+    bool isDWBackButtonFlow = [[NSUserDefaults standardUserDefaults] boolForKey:@"isBackButtonFlow"];
+    if (isDWBackButtonFlow) {
+        NSUserDefaults *dwValue = [NSUserDefaults standardUserDefaults];
+        [dwValue removeObjectForKey:@"isBackButtonFlow"];
+        [dwValue synchronize];
+    }
 }
 
 -(void) showAlertMessage:(NSString *) message {

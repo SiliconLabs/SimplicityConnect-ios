@@ -81,3 +81,17 @@
 #import "SILDebugServicesViewController.h"
 #import "NetTest.h"
 #import "SILGetIPAddress.h"
+
+#import "TcpClient.h"
+#import "ITcpClient.h"
+
+#import "TCPServer.h"
+#import "ITcpServer.h"
+
+#import "UdpClient.h"
+#import "UdpServer.h"
+#import "IUdpServer.h"
+
+#import "ITLS_TxServer.h"
+#import "TLS_Tx.h"
+

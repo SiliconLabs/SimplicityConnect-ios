@@ -200,7 +200,6 @@ MTRSubscribeParams * subParam;
                    // [self updateResult:@"Off"];
                 }
             }];
-
             
         } else {
             [self updateResult:[NSString stringWithFormat:@"Failed to establish a connection with the device"]];

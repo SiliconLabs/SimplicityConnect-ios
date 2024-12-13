@@ -59,7 +59,6 @@ class SILWifiOTAFileTranferViewController: UIViewController, NetTestDelegate, WY
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.setupTextLabels()
         network_Obj?.delegate = self
         startSrerver()
@@ -199,5 +198,5 @@ class SILWifiOTAFileTranferViewController: UIViewController, NetTestDelegate, WY
          }
         
     }
-
+//func 
 }
