@@ -9,6 +9,15 @@
 import UIKit
 import SceneKit
 
+//func updateOrientation(_ orientation: ThunderboardInclination)
+//func updateAcceleration(_ acceleration: ThunderboardVector)
+//func updateWheel(_ diameter: Meters)
+//func updateLocation(_ distance: Float, speed: Float, rpm: Float, totalRpm: UInt)
+//func updateLedColor(_ on: Bool, color: LedRgb)
+//func deviceCalibrating(_ isCalibrating: Bool)
+//func displayInfoAbout(missingCapabilities: Set<DeviceCapability>)
+
+
 class SILWiFiMotionVC: UIViewController, MotionDemoInteractionOutput, SILWiFiMotionSensorsViewModelProtocol {
 
     fileprivate static let defaultWheelSize: Meters = 0.0301

@@ -62,6 +62,8 @@ NSMutableDictionary *deviceDic;
         //Switch
         //deviceName = [NSMutableString stringWithFormat:@"Switch - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"switchOn_icon";
+    } else if ([deviceType isEqualToString:Dishwasher]) {
+        imgName = @"dishwasher_icon";
     }
     //_selectedMatterDeviceTitleLabel.text = deviceName;
     _selectedMatterDeviceTitleLabel.text = [NSString stringWithFormat:@"%@",[device valueForKey:@"title"]];

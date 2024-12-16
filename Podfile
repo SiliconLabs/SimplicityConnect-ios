@@ -25,6 +25,7 @@ def shared_pods
     pod 'RxCocoa',    '~> 6.2.0'
     pod 'Introspect'
     pod 'CocoaLumberjack/Swift'
+    pod 'WYPopoverController', :git => 'https://github.com/sammcewan/WYPopoverController.git'
 end
 
 def test_pods

@@ -24,7 +24,8 @@
                 [self eslDemoApp],
                 [self matterDemoApp],
                 [self WifiOTADemoApp],
-                [self WifiSensorDemoApp]
+                [self WifiSensorDemoApp],
+                [self WifiSensorThroughput]
             ];
 }
 
@@ -129,6 +130,14 @@
                                description:@"Read and display sensor data from the dev kit sensors."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeWiFiSensor];
+}
+
++ (SILApp *)WifiSensorThroughput {
+    return [[SILApp alloc] initWithAppType:SILAppTypeWifiThroughput
+                                     title:@"Wi-Fi Throughput"
+                               description:@"Measure Wi-Fi throughput between the mobile device and SiW917."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeWiFiThroughput];
 }
 
 - (instancetype)initWithAppType:(SILAppType)appType

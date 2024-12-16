@@ -35,7 +35,7 @@ extern NSString * const SILImageNameHomeWifiCommissioning;
 extern NSString * const SILImageNameHomeESLDemo;
 extern NSString * const SILImageNameHomeMatterDemo;
 extern NSString * const SILImageNameHomeWifiOtaDemo;
-//extern NSString * const SILImageNameHomeWifiSensor;
+extern NSString * const SILImageNameHomeWiFiThroughput;
 extern NSString * const SILImageNameHomeWiFiSensor;
 
 extern NSString * const SILImageNameKeyboard;

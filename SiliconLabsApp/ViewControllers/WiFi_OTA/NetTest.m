@@ -90,7 +90,7 @@ NSData *data;
 
 - (void)socketABC:(NSString *)sock{
     
-   
+    
 }
 
 - (void)closeSocket{
@@ -98,7 +98,7 @@ NSData *data;
     [self.serverSocket setDelegate:nil];
     [self.clientSocket setDelegate:nil];
     [self.clientSockets setDelegate:nil];
- 
+    
     [self.sock disconnect];
     [self.serverSocket disconnect];
     [self.clientSocket disconnect];
@@ -317,8 +317,8 @@ NSData *data;
     NSLog(@"didWriteDataWithTag tag:%ld",tag);
 }
 
-#pragma mark - IP地址
-//获取设备当前网络IP地址
+#pragma mark - IP
+
 - (NSString *)getIPAddressesToDo:(BOOL)preferIPv4
 {
     NSArray *searchArray = preferIPv4 ?
@@ -337,7 +337,7 @@ NSData *data;
     return address ? address : @"0.0.0.0";
 }
 
-//获取所有相关IP信息
+
 - (NSDictionary *)getIPAddressesToDo
 {
     NSMutableDictionary *addresses = [NSMutableDictionary dictionaryWithCapacity:8];

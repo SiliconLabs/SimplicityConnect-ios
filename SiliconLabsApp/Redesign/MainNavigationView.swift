@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainNavigationView: View {
-    @State var pickedTag = 2
+    @State var pickedTag = 0
     var body: some View {
         TabView(selection: $pickedTag) {
             DemoTab()

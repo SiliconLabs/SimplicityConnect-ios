@@ -58,6 +58,8 @@
 
 @implementation QRCodeViewController {
     dispatch_queue_t _captureSessionQueue;
+    uint64_t currentDeviceId;
+    int currentIntDeviceId;
 }
 
 NSString * isThread;
@@ -71,6 +73,7 @@ NSNumber * nodeIdAfterCommision;
 NSNumber * deviceTypeAfterCommission;
 NSString * savedStrQrCode;
 NSError * savedError;
+UIButton * backButton;
 
 // MARK: UI Setup
 
@@ -86,6 +89,16 @@ NSError * savedError;
     _addDeviceNameView.hidden = TRUE;
     _addDeviceNamePopupView.layer.cornerRadius = 5;
     _addDeviceButton.layer.cornerRadius = 5;
+    _commissioningDeviceProgressView.hidden = TRUE;
+    backButton.enabled = YES;
+    _commissioningPopupView.layer.cornerRadius = 10;
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:_commissioningPopupView.bounds];
+    _commissioningPopupView.layer.masksToBounds = NO;
+    _commissioningPopupView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _commissioningPopupView.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+    _commissioningPopupView.layer.shadowOpacity = 0.2f;
+    _commissioningPopupView.layer.shadowPath = shadowPath.CGPath;
+    _loaderIndicator.transform = CGAffineTransformMakeScale(1.5, 1.5);
 }
 
 // MARK: UIViewController methods
@@ -129,6 +142,22 @@ NSError * savedError;
     
     isThread = @"";
     
+    [self setLeftAlignedTitle: @"Back"];
+}
+
+- (void) setLeftAlignedTitle:(NSString*) text {
+    backButton = [[UIButton alloc] initWithFrame: CGRectMake(0, 0, 80.0f, 44.0f)];
+    UIImage *backImage = [UIImage imageNamed:@"btn_navbar_back"];
+    [backButton setImage:backImage  forState:UIControlStateNormal];
+    backButton.contentEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0);
+    [backButton setTitle:text forState:UIControlStateNormal];
+    [backButton addTarget:self action: @selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backButtonItem = [[UIBarButtonItem alloc] initWithCustomView: backButton];
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects: backButtonItem, nil];
+}
+
+- (void)goback {
+    [self.navigationController popViewControllerAnimated: YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -140,6 +169,9 @@ NSError * savedError;
     // Open Camera View
     [self openCameraView];
     passIsShow = FALSE;
+    backButton.enabled = YES;
+    _commissionCancelButton.enabled = NO;
+    [_commissionCancelButton setTitleColor:UIColor.grayColor forState: normal];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -161,7 +193,8 @@ NSError * savedError;
             
             [descriptorCluster readAttributeDeviceListWithCompletionHandler:^( NSArray * _Nullable value, NSError * _Nullable error) {
                 if (error) {
-                    [SVProgressHUD dismiss];
+                    _commissioningDeviceProgressView.hidden = TRUE;
+                    backButton.enabled = YES;
                     [self refresh];
                     return;
                 }
@@ -170,8 +203,8 @@ NSError * savedError;
                 deviceTypeAfterCommission = self->_descriptorClusterDeviceTypeStruct.deviceType;
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    // Go back to with payload and add device
-                    [SVProgressHUD dismiss];
+                    _commissioningDeviceProgressView.hidden = TRUE;
+                    backButton.enabled = YES;
                     [self->_delegate affterCommission:nodeId];
                     // Add device name
                     NSLog(@"Cluster DeviceType :- %@",self->_descriptorClusterDeviceTypeStruct.deviceType);
@@ -184,7 +217,9 @@ NSError * savedError;
             NSLog(@"Failed to establish a connection with the device");
             NSLog(@"deviceListTemp:- %@",MKdeviceListTemp);
             dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
+                // [SVProgressHUD dismiss];
+                _commissioningDeviceProgressView.hidden = TRUE;
+                backButton.enabled = YES;
             });
         }
     })) {
@@ -192,7 +227,9 @@ NSError * savedError;
     } else {
         NSLog(@"Failed to trigger the connection with the device");
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
+            // [SVProgressHUD dismiss];
+            _commissioningDeviceProgressView.hidden = TRUE;
+            backButton.enabled = YES;
         });
     }
 }
@@ -221,7 +258,9 @@ NSError * savedError;
     if (error != nil) {
         NSLog(@"Got pairing error back %@", error);
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
+            // [SVProgressHUD dismiss];
+            _commissioningDeviceProgressView.hidden = TRUE;
+            backButton.enabled = YES;
         });
     } else {
         MTRDeviceController * controller = InitializeMTR();
@@ -239,7 +278,6 @@ NSError * savedError;
                 }else if ([isThread isEqualToString:@"WIFI"]){
                     //Commented for flow change...
                     //[self retrieveAndSendWiFiCredentials];
-                    
                     [self commissionWithSSID:ssidStr password:passwordStr];
                 }
                 [self->_deviceList refreshDeviceList];
@@ -248,8 +286,9 @@ NSError * savedError;
             MTRCommissioningParameters * params = [[MTRCommissioningParameters alloc] init];
             params.deviceAttestationDelegate = [[CHIPToolDeviceAttestationDelegate alloc] initWithViewController:self];
             params.failSafeExpiryTimeoutSecs = @600;
-            [SVProgressHUD dismiss];
-            
+            // [SVProgressHUD dismiss];
+            _commissioningDeviceProgressView.hidden = TRUE;
+            backButton.enabled = YES;
             [self showAlertPopup:kDeviceRetrievingErrorMessage];
             NSError * error;
             if (![controller commissionDevice: deviceId commissioningParams: params error: &error]) {
@@ -301,7 +340,9 @@ NSError * savedError;
 
 - (void)manualCodeInitialState {
     _activityIndicator.hidden = YES;
-    [SVProgressHUD dismiss];
+    // [SVProgressHUD dismiss];
+    _commissioningDeviceProgressView.hidden = TRUE;
+    backButton.enabled = YES;
     _errorLabel.hidden = YES;
 }
 
@@ -313,8 +354,9 @@ NSError * savedError;
         [_activityIndicator stopAnimating];
     }
     _activityIndicator.hidden = YES;
-    [SVProgressHUD dismiss];
-    
+    // [SVProgressHUD dismiss];
+    _commissioningDeviceProgressView.hidden = TRUE;
+    backButton.enabled = YES;
     _captureSession = nil;
 }
 
@@ -323,22 +365,27 @@ NSError * savedError;
 }
 
 - (void)manualCodeEnteredStartState {
-    [SVProgressHUD showWithStatus: @"Commissioning Device..."];
-    
+    // [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    _commissioningDeviceProgressView.hidden = false;
+    backButton.enabled = NO;
     _errorLabel.hidden = YES;
     _manualQrCodeTextField.text = @"";
 }
 
 - (void)postScanningQRCodeState {
     _captureSession = nil;
-    [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    // [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    _commissioningDeviceProgressView.hidden = false;
+    backButton.enabled = NO;
+
 }
 
 - (void)showError:(NSError *)error {
     [self->_activityIndicator stopAnimating];
     self->_activityIndicator.hidden = YES;
-    [SVProgressHUD dismiss];
-    
+    //[SVProgressHUD dismiss];
+    _commissioningDeviceProgressView.hidden = TRUE;
+    backButton.enabled = YES;
     self->_errorLabel.text = error.localizedDescription;
     self->_errorLabel.hidden = NO;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ERROR_DISPLAY_TIME), dispatch_get_main_queue(), ^{
@@ -358,6 +405,7 @@ NSError * savedError;
 
 // Retrieve And Send WiFi Credentials
 - (void)retrieveAndSendWiFiCredentials:(NSString *)strQrCode error:(NSError *)error {
+    NSLog(@"commissionWithSSID = 2");
     alertControllerWifi = [UIAlertController alertControllerWithTitle:@"WiFi Configuration"
                                                               message:@"Input network SSID and password that your phone is connected to."
                                                        preferredStyle:UIAlertControllerStyleAlert];
@@ -424,14 +472,21 @@ NSError * savedError;
             //Commented for flow change...
             
             //[strongSelf commissionWithSSID:networkSSID.text password:networkPassword.text];
-            
+
             //Add for flow change...
             ssidStr = networkSSID.text;
             passwordStr = networkPassword.text;
-            [self postScanningQRCodeState];
-            NSLog(@"you pressed No, thanks button");
+//            [self postScanningQRCodeState];
+            
+            NSLog(@" ssidStr = %@", ssidStr);
+            NSLog(@" passwordStr = %@", passwordStr);
+            
             // call method whatever u need
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, INDICATOR_DELAY), dispatch_get_main_queue(), ^{
+                NSLog(@"_setupPayload %@", _setupPayload);
+                NSLog(@"strQrCode %@", strQrCode);
+                NSLog(@"strQrCode %@", error);
+                
                 [self displayQRCodeInSetupPayloadView:self->_setupPayload rawPayload:strQrCode error:error];
             });
         }
@@ -525,7 +580,10 @@ NSError * savedError;
     params.failSafeExpiryTimeoutSecs = @600;
     
     uint64_t deviceId = MTRGetNextAvailableDeviceID() - 1;
-    
+    currentIntDeviceId = deviceId;
+    NSLog(@"commission int DeviceId - 1 := %d", currentIntDeviceId);
+    _commissionCancelButton.enabled = YES;
+    [_commissionCancelButton setTitleColor:UIColor.sil_regularBlueColor forState: normal];
     if (![controller commissionDevice:deviceId commissioningParams:params error:&error]) {
         NSLog(@"Failed to commission Device %llu, with error %@", deviceId, error);
     }
@@ -535,7 +593,8 @@ NSError * savedError;
 - (void)commissionWithThread:(NSData *)dataSet {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+        _commissioningDeviceProgressView.hidden = false;
+        backButton.enabled = NO;
     });
     
     NSError * error;
@@ -548,10 +607,22 @@ NSError * savedError;
     params.failSafeExpiryTimeoutSecs = @6000;
     
     uint64_t deviceId = MTRGetNextAvailableDeviceID() - 1;
-    
+    currentIntDeviceId = deviceId;
+    _commissionCancelButton.enabled = YES;
+    [_commissionCancelButton setTitleColor:UIColor.sil_regularBlueColor forState: normal];
+
     if (![controller commissionDevice:deviceId commissioningParams:params error:&error]) {
         NSLog(@"Failed to commission Device %llu, with error %@", deviceId, error);
     }
+}
+
+// Cancel Commissioning Process
+- (void) cancelCommissioningProcess {
+    NSError * error;
+    MTRDeviceController * controller = InitializeMTR();
+    NSLog(@"commission int DeviceId - 2 := %d", currentIntDeviceId);
+    NSNumber *numberDeviceID = [NSNumber numberWithInt:currentIntDeviceId];
+    [controller cancelCommissioningForNodeID: numberDeviceID error: &error];
 }
 
 // Change data from hex string
@@ -577,20 +648,13 @@ NSError * savedError;
 }
 - (void)refresh {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [SVProgressHUD dismiss];
+        // [SVProgressHUD dismiss];
+        self->_commissioningDeviceProgressView.hidden = TRUE;
+        backButton.enabled = YES;
         [self openCameraView];
     });
 }
--(int64_t) getUniqueTimestamp {
-    
-    NSString * strTimeStamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
-    NSString * stringFullTimeStamp = [strTimeStamp stringByReplacingOccurrencesOfString:@"." withString:@""];
-    NSLog(@"unique timestamp %@", stringFullTimeStamp);
-    NSString *uniqueId = [stringFullTimeStamp substringFromIndex: [stringFullTimeStamp length] - 4];
-    uint64_t uniqueTimestamp = uniqueId.intValue;
-    NSLog(@"uniqueId last 8 digit - %llu", uniqueTimestamp);
-    return uniqueTimestamp;
-}
+
 -(void) showAlertPopup:(NSString *) message {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message: message preferredStyle:UIAlertControllerStyleAlert];
     
@@ -604,7 +668,9 @@ NSError * savedError;
     NSLog(@" nodeID ===:- %@", nodeID);
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [SVProgressHUD dismiss];
+        // [SVProgressHUD dismiss];
+        self->_commissioningDeviceProgressView.hidden = TRUE;
+        backButton.enabled = YES;
     });
     if (error != nil) {
         NSLog(@"Error retrieving device information over Mdns: %@", error);
@@ -635,7 +701,9 @@ NSError * savedError;
     NSLog(@"readCommissioningInfo, vendorID:%@, productID:%@", info.vendorID, info.productID);
     if (info.vendorID == 0 && info.productID == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
+            // [SVProgressHUD dismiss];
+            self->_commissioningDeviceProgressView.hidden = TRUE;
+            backButton.enabled = YES;
             [self showAlertPopup:kDeviceRetrievingErrorMessage];
             //[self.navigationController popViewControllerAnimated: YES];
             [self refresh];
@@ -650,13 +718,17 @@ NSError * savedError;
     int deviceStatus = (int)status;
     if (deviceStatus == 2) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [self showAlertPopup:@"This device is already commissioned."];
+            // [SVProgressHUD dismiss];
+            self->_commissioningDeviceProgressView.hidden = TRUE;
+            backButton.enabled = YES;
+            [self showAlertPopup:@"This device is already commissioned. Please reset device and try again."];
             [self refresh];
         });
     }else if (deviceStatus == 0){
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
+            // [SVProgressHUD dismiss];
+            self->_commissioningDeviceProgressView.hidden = TRUE;
+            backButton.enabled = YES;
             [self showAlertPopup:@"Device commissioning status Unknown.  Please try again."];
             [self refresh];
         });
@@ -734,7 +806,7 @@ NSError * savedError;
     uint64_t deviceID = MTRGetNextAvailableDeviceID();
     
     // restart the Matter Stack before pairing (for reliability + testing restarts)
-    [self _restartMatterStack];
+    //[self _restartMatterStack];
     
     if ([self.chipController pairDevice:deviceID onboardingPayload:payload error:&error]) {
         deviceID++;
@@ -828,8 +900,9 @@ NSError * savedError;
 - (void)displayManualCodeInSetupPayloadView:(MTRSetupPayload *)payload decimalString:(NSString *)decimalString withError:(NSError *)error {
     [self->_activityIndicator stopAnimating];
     self->_activityIndicator.hidden = YES;
-    [SVProgressHUD dismiss];
-    
+    // [SVProgressHUD dismiss];
+    _commissioningDeviceProgressView.hidden = TRUE;
+    backButton.enabled = YES;
     if (error) {
         [self showError:error];
     } else {
@@ -879,7 +952,18 @@ NSError * savedError;
     
     NSLog(@"Clicked readFromLedger...");
     //    _readFromLedgerButton.hidden = YES;
-    [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    // [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    _commissioningDeviceProgressView.hidden = false;
+    backButton.enabled = NO;
+
+}
+
+- (IBAction)cancel_CommissionProcess:(id)sender {
+    [self qrCodeInitialState];
+    [self refresh];
+    [self cancelCommissioningProcess];
+    
+    [self.navigationController popViewControllerAnimated: YES];
 }
 
 // Enter Manual Code.
@@ -898,7 +982,11 @@ NSError * savedError;
 }
 
 - (void)getRequest:(NSString *)url vendorId:(NSString *)vendorId productId:(NSString *)productId {
-    [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    // [SVProgressHUD showWithStatus: @"Commissioning Device..."];
+    _commissioningDeviceProgressView.hidden = false;
+    backButton.enabled = NO;
+
+
     NSString * targetUrl = [NSString stringWithFormat:@"%@/%@/%@", url, vendorId, productId];
     NSMutableURLRequest * request = [[NSMutableURLRequest alloc] init];
     [request setHTTPMethod:@"GET"];
@@ -940,7 +1028,7 @@ NSError * savedError;
                                                        handler:^(UIAlertAction * action)
                                  {
         // CHANGE...
-        // [self postScanningQRCodeState];
+         [self postScanningQRCodeState];
         NSLog(@"you pressed No, thanks button");
         // call method whatever u need
         isThread = @"WIFI";
@@ -982,6 +1070,22 @@ NSError * savedError;
         self->_addDeviceNameView.hidden = TRUE;
         [self.navigationController popViewControllerAnimated: YES];
     });
+}
+
+-(void) showAlertPopupForCancelCommission {
+        
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Cancel Commission" message: @"If you cancel, commissioning will stop and it will redirect to the home screen. You need to restart board and try again." preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated: YES];
+        });
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 // MARK: TextField Delegates

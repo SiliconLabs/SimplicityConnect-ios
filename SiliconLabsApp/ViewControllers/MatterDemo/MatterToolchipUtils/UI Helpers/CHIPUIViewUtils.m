@@ -203,6 +203,8 @@
     }else if ([deviceType isEqualToString:@"259"]){
         //Switch
         deviceTitle = [NSMutableString stringWithFormat:@"Switch"];
+    } else if ([deviceType isEqualToString:Dishwasher]) {
+        deviceTitle = [NSMutableString stringWithFormat:@"Dishwasher"];
     }
     return  deviceTitle;
 }

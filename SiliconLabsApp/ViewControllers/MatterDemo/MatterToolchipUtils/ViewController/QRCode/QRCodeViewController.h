@@ -36,4 +36,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *  commissioningFlow;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *baseViewTopConstraint;
+
+@property (weak, nonatomic) IBOutlet UIView *commissioningDeviceProgressView;
+@property (weak, nonatomic) IBOutlet UIView *commissioningPopupView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loaderIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *commissionCancelButton;
+
 @end

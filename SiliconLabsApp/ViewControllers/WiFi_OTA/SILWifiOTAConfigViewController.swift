@@ -33,7 +33,6 @@ class SILWifiOTAConfigViewController: UIViewController, WYPopoverControllerDeleg
     var silCentralManager: SILCentralManager?
     weak var peripheral: CBPeripheral?
     var progressViewController: SILOTAProgressViewController?
-    //let network_Obj = NetTest()
     let getIPAddressObj = SILGetIPAddress.sharedInstance()
     var delegate: SILWifiOTAConfigViewControllerDelegate?
 
@@ -155,7 +154,6 @@ class SILWifiOTAConfigViewController: UIViewController, WYPopoverControllerDeleg
             if let port = Int32(txtFld_ServerPort.text!){
                 let network_Obj = NetTest(port: port, fileData: fileData!, hostIP: ipAddress)
                 OTAConfigViewController.network_Obj = network_Obj
-            
             }
             self.devicePopoverController = WYPopoverController(contentViewController: OTAConfigViewController)
             self.devicePopoverController?.delegate = self
@@ -164,7 +162,6 @@ class SILWifiOTAConfigViewController: UIViewController, WYPopoverControllerDeleg
         }
 
     }
-    
     
     func presentOTAProgress(completion: (() -> Void)?) {
         self.progressViewModel = SILOTAProgressViewModel(peripheral: peripheral, with: silCentralManager)
@@ -218,6 +215,11 @@ class SILWifiOTAConfigViewController: UIViewController, WYPopoverControllerDeleg
         documentPickerViewController.delegate = self
         self.present(documentPickerViewController, animated: false, completion: nil)
     }
+    
+    //MARK: WYPopoverControllerDelegate
+        func popoverControllerShouldDismissPopover(_ popoverController: WYPopoverController!) -> Bool {
+            return false
+        }
 }
 extension SILWifiOTAConfigViewController: UITextFieldDelegate {
     
