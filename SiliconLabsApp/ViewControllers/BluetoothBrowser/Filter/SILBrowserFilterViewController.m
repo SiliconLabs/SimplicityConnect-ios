@@ -10,6 +10,7 @@
 #import "UIImage+SILImages.h"
 #import "SILBrowserFilterViewModel.h"
 #import "SILBluetoothBrowser+Constants.h"
+#import "NMRangeSlider.h"
 
 @interface SILBrowserFilterViewController () <UITextViewDelegate>
 
@@ -20,10 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *clearTextImageByDeviceName;
 @property (weak, nonatomic) IBOutlet UILabel *rssiLabel;
 @property (weak, nonatomic) IBOutlet UILabel *beaconTypeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *minRangeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *maxRangeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dBmValueLabel;
-@property (weak, nonatomic) IBOutlet UISlider *dBmSlider;
 @property (weak, nonatomic) IBOutlet UIView *seachByDeviceNameView;
 @property (weak, nonatomic) IBOutlet UILabel *favouriteAreaTitleLabel;
 @property (weak, nonatomic) IBOutlet SILSwitch *favouriteSwitch;
@@ -58,11 +56,55 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [self setAppearanceForButtonInFooterView];
     self.viewModel = [SILBrowserFilterViewModel sharedInstance];
     [self updateFilterView];
+    [self configureLabelSlider];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self updateSliderLabels];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     self.viewModel = nil;
+}
+
+#pragma mark - Filter Slider
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void) configureLabelSlider {
+    self.labelSlider.minimumValue = -100;
+    self.labelSlider.maximumValue = 0;
+    
+    self.labelSlider.lowerValue = self.viewModel.dBmValue;
+    self.labelSlider.upperValue = self.viewModel.dBmMaxValue;
+    
+    self.labelSlider.minimumRange = 0;
+}
+
+- (void) updateSliderLabels {
+    
+    CGPoint lowerCenter;
+    lowerCenter.x = (self.labelSlider.lowerCenter.x + self.labelSlider.frame.origin.x);
+    lowerCenter.y = (self.labelSlider.center.y - 30.0f);
+    self.minValueLabel.center = lowerCenter;
+    self.minValueLabel.text = [NSString stringWithFormat:@"%d", (int)self.labelSlider.lowerValue];
+        
+    CGPoint upperCenter;
+    upperCenter.x = (self.labelSlider.upperCenter.x + self.labelSlider.frame.origin.x);
+    upperCenter.y = (self.labelSlider.center.y - 30.0f);
+    self.maxValueLabel.center = upperCenter;
+    self.maxValueLabel.text = [NSString stringWithFormat:@"%d", (int)self.labelSlider.upperValue];
+    
+    [self updateDBMValueViewModel:(int)self.labelSlider.lowerValue];
+    [self updateDBMMaxValueViewModel:(int)self.labelSlider.upperValue];
+}
+
+- (IBAction)labelSliderChanged:(NMRangeSlider*)sender {
+    [self updateSliderLabels];
 }
 
 #pragma mark - Set Observers
@@ -219,10 +261,6 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 - (void)setAppearanceForRSSIView {
     [self setApperanceForRSSITitleLabel];
     [self setApperanceForDBMValueLabel];
-    [self setApperanceForDBMSlider];
-    [self setAppearanceForMinRangeLabel];
-    [self setAppearanceForMaxRangeLabel];
-    [self addGestureToSlider];
 }
 
 - (void)setApperanceForRSSITitleLabel {
@@ -234,25 +272,6 @@ NSString* const StarterRSSIValue = @"-100 dBm";
     [_dBmValueLabel setFont:[UIFont robotoBoldWithSize:[UIFont getSmallFontSize]]];
     _dBmValueLabel.textColor = [UIColor sil_regularBlueColor];
     _dBmValueLabel.text = StarterRSSIValue;
-}
-
-- (void)setApperanceForDBMSlider {
-    _dBmSlider.tintColor = [UIColor sil_regularBlueColor];
-    _dBmSlider.value = StarterDBMValue;
-}
-
-- (void)setAppearanceForMinRangeLabel {
-    [_minRangeLabel setFont:[UIFont robotoRegularWithSize:[UIFont getSmallFontSize]]];
-    _minRangeLabel.textColor = [UIColor sil_subtleTextColor];
-}
-
-- (void)setAppearanceForMaxRangeLabel {
-    [_maxRangeLabel setFont:[UIFont robotoRegularWithSize:[UIFont getSmallFontSize]]];
-    _maxRangeLabel.textColor = [UIColor sil_subtleTextColor];
-}
-
-- (void)addGestureToSlider {
-    [_dBmSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)sliderValueChanged:(UISlider *)sender {
@@ -269,6 +288,10 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 
 -  (void)updateDBMValueViewModel:(NSInteger)dBmValue {
     self.viewModel.dBmValue = dBmValue;
+}
+
+-  (void)updateDBMMaxValueViewModel:(NSInteger)dBmMaxValue {
+    self.viewModel.dBmMaxValue = dBmMaxValue;
 }
 
 #pragma mark - Appearance for Beacon Type Area
@@ -361,6 +384,10 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 }
 
 - (IBAction)applyFiltersButtonTapped:(id)sender {
+    
+    NSLog(@" selected min value - %ld", (long)_viewModel.dBmValue);
+    NSLog(@" selected max value - %ld", (long)_viewModel.dBmMaxValue);
+
     [_delegate applyFilters:_viewModel];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -380,7 +407,7 @@ NSString* const StarterRSSIValue = @"-100 dBm";
 
 - (void)updateFilterViewValues {
     _searchByDeviceNameTextView.text = _viewModel.searchByDeviceName;
-    _dBmSlider.value = _viewModel.dBmValue;
+    //_dBmSlider.value = _viewModel.dBmValue;
     [self.favouriteSwitch setIsOn: _viewModel.isFavouriteFilterSet];
     [self.connectableSwitch setIsOn: _viewModel.isConnectableFilterSet];
     [self textViewDidEndEditing:_searchByDeviceNameTextView];

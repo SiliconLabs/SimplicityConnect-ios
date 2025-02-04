@@ -54,6 +54,7 @@
 - (void)setDefaultValues {
     self.searchByDeviceName = EmptyText;
     self.dBmValue = DefaultDBMValue;
+    self.dBmMaxValue = DefaultDBMMaxValue;
     self.isBeaconTypeExpanded = NO;
     self.isFavouriteFilterSet = NO;
     self.isConnectableFilterSet = NO;
@@ -69,6 +70,7 @@
 - (void)clearViewModelData {
     self.searchByDeviceName = EmptyText;
     self.dBmValue = DefaultDBMValue;
+    self.dBmMaxValue = DefaultDBMMaxValue;
     self.isConnectableFilterSet = NO;
     self.isFavouriteFilterSet = NO;
     self.beaconTypes = [[NSMutableArray alloc] init];
@@ -81,6 +83,7 @@
 - (void)returnStateFrom:(SILBrowserSavedSearches*)savedSearch {
     self.searchByDeviceName = savedSearch.searchByDeviceNameText;
     self.dBmValue = savedSearch.dBmValue;
+    self.dBmMaxValue = savedSearch.dBmMaxValue;
     self.isFavouriteFilterSet = savedSearch.isFavourite;
     self.isConnectableFilterSet = savedSearch.isConnectable;
     [self initNewBeaconTypes:savedSearch.beaconTypes];

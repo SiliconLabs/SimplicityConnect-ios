@@ -54,7 +54,7 @@ class SILGraphView: UIView {
         setupLeftArrowButton()
         setupRightArrowButton()
     }
-    // GRAPH DATA
+    // GRAPH DATA //
     private func setupInput() {
         input.asObservable()
             .flatMap { Observable.from($0) }
@@ -186,6 +186,9 @@ class SILGraphView: UIView {
         self.maximumYValue = yValue > maximumYValue ? yValue : maximumYValue
         self.minimumYValue = yValue < minimumYValue ? yValue : minimumYValue
         if let dataSet = chartView.lineData?.dataSets.first(where: { $0.label == identifier }) as? LineChartDataSet {
+            
+            print(" dataSet ==== \(dataSet)")
+            
             dataSet.append(entry)
         } else {
             chartView.addDataSetFor([entry], identifier: identifier, color: color)

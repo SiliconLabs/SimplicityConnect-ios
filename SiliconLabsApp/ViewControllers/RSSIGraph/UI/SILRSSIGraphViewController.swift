@@ -31,7 +31,8 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
     
     private let cornerRadius: CGFloat = 16.0
     private var loaderTimer: Timer? = nil
-    
+    var timeoutValue = 0.0
+
     deinit {
         debugPrint("SILRSSIGraphViewController deinit")
     }
@@ -49,12 +50,16 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
         self.showProgressView(status: "Loading")
         loaderTimer = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: false)
 
-        self.applyFilters(SILBrowserFilterViewModel.sharedInstance())
-        self.chartView.setStartTime(time: ScannerTabSettings.sharedInstance.scanningStartedTime)
-        if !ScannerTabSettings.sharedInstance.scanningPausedByUser {
-            self.viewModel.isScanning.accept(true)
+        // Added async block for prevent segment switch crash
+        DispatchQueue.main.async {
+            self.applyFilters(SILBrowserFilterViewModel.sharedInstance())
+            self.chartView.setStartTime(time: ScannerTabSettings.sharedInstance.scanningStartedTime)
+            if !ScannerTabSettings.sharedInstance.scanningPausedByUser {
+                self.viewModel.isScanning.accept(true)
+            }
+            self.noDataFouldLabel.isHidden = false
         }
-        noDataFouldLabel.isHidden = false
+        startTimerForStopScanningAfterOneMin()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -104,7 +109,36 @@ class SILRSSIGraphViewController: UIViewController, UIGestureRecognizerDelegate 
             .disposed(by: disposeBag)
     }
     
-    // Scanning Button Tapped
+    private func startTimerForStopScanningAfterOneMin() {
+        
+        if let savedString = UserDefaults.standard.string(forKey: "SelectedOption") {
+            switch savedString {
+            case "15 seconds":
+                self.timeoutValue = 15.0
+            case "1 minute":
+                self.timeoutValue = 60.0
+            case "2 minutes":
+                self.timeoutValue = 120.0
+            case "5 minutes":
+                self.timeoutValue = 300.0
+            case "10 minutes":
+                self.timeoutValue = 600.0
+            case "No timeout":
+                self.timeoutValue = 90000.0
+            default:
+                self.timeoutValue = 60.0
+            }
+        } else {
+            self.timeoutValue = 60.0
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: self.timeoutValue, repeats: false) { timer in
+            print("\(self.timeoutValue) minute has passed!")
+            self.viewModel.isScanning.accept(false)
+        }
+    }
+    
+    // graph - Scanning Button Tapped
     func scanningButtonTapped() {
         if viewModel.isScanning.value {
             ScannerTabSettings.sharedInstance.scanningStartedTime = Date()

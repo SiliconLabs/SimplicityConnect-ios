@@ -16,6 +16,7 @@ NSInteger const NoDeviceFoundIndex = -1;
 const float AnimationExpandableControllerTime = 0.4;
 const float AnimationExpandableControllerDelay = 0.0;
 NSInteger DefaultDBMValue = -100;
+NSInteger DefaultDBMMaxValue = -0;
 NSString * const CommaAndSpaceText = @", ";
 NSString * const QuoteText = @"\"";
 NSString * const RSSITitle = @"RSSI > ";

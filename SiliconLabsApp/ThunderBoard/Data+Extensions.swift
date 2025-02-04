@@ -10,6 +10,7 @@ import Foundation
 
 extension Data {
     init(bytes: [UInt8]) {
-        self = .init(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
+        //self = .init(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
+        self = Data(bytes) 
     }
 }

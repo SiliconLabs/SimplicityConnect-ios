@@ -33,7 +33,7 @@ import Foundation
         let filterVC = storyboard.instantiateViewController(withIdentifier: SILSceneFilter) as! SILBrowserFilterViewController
         
         filterVC.delegate = filterDelegate;
-        
+        filterVC.modalPresentationStyle = .fullScreen
         presentingController?.present(filterVC, animated: true)
     }
     

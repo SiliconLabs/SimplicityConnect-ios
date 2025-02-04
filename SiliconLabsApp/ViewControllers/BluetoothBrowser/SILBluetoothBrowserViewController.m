@@ -34,10 +34,22 @@
 @property (strong, nonatomic) SILBrowserTableViewDelegate *tableDelegate;
 @property (strong, nonatomic) SILBrowserPresenter *browserPresenter;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) NSTimer *autoStartScanningTimer;
+
+@property (nonatomic) float timeoutValue;
 
 @end
 
 @implementation SILBluetoothBrowserViewController
+
+NSDictionary *timeoutMapping = @{
+    @"15 seconds" : @(15.0),
+    @"1 minute"   : @(60.0),
+    @"2 minutes"  : @(120.0),
+    @"5 minutes"  : @(300.0),
+    @"10 minutes" : @(600.0),
+    @"No timeout" : @(90000.0)
+};
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,6 +73,8 @@
     [self.floatingButtonSettings setPresented:YES];
     self.browserViewModel.isActiveScrollingUp = NO;
     [self.navigationController.tabBarController showTabBarAndUpdateFrames];
+    
+    [self startTimerForstopScanningAfterOneMin];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -162,6 +176,9 @@
 - (void)scanningButtonWasTapped {
     [self.browserViewModel scanningButtonTapped];
     [self setScanningAppearance];
+    
+    // Start timer for stop scanning
+    [self startTimerForstopScanningAfterOneMin];
 }
 
 - (void)startScanning {
@@ -172,6 +189,28 @@
 - (void)stopScanning {
     [self.browserViewModel stopScanning];
     [self setScanningAppearance];
+    
+    // working
+    [self removeAutoStartScanningTimer];
+}
+
+- (void)removeAutoStartScanningTimer {
+    [self.autoStartScanningTimer invalidate];
+    self.autoStartScanningTimer = nil;
+}
+
+// Set up timer to stop the animation after 1 minute
+- (void) startTimerForstopScanningAfterOneMin {
+    
+    [self removeAutoStartScanningTimer];
+    NSString *savedString = [[NSUserDefaults standardUserDefaults] stringForKey:@"SelectedOption"];
+    
+    NSNumber *savedTimeoutValue = timeoutMapping[savedString];
+    self.timeoutValue = savedTimeoutValue ? [savedTimeoutValue doubleValue] : 60.0;
+    NSLog(@"Selected timeout : %f", self.timeoutValue);
+    self.autoStartScanningTimer = [NSTimer scheduledTimerWithTimeInterval:self.timeoutValue target:self
+                                                    selector:@selector(stopScanning)
+                                                    userInfo:nil repeats:NO];
 }
 
 #pragma mark - Notification Methods

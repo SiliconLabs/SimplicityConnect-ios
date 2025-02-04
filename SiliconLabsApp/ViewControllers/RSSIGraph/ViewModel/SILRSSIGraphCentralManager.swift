@@ -25,7 +25,7 @@ class SILRSSIGraphCentralManager: NSObject {
     peripheralsFound.asObservable().throttle(.milliseconds(300), scheduler: MainScheduler.instance)
         .do(onSubscribe: { [weak self] in
             guard let sSelf = self else { return }
-            sSelf.startScanning()
+            sSelf.startScanning() // graph ss 
             sSelf.hasSubscribers = true
         }, onDispose: { [weak self] in
             guard let sSelf = self else { return }

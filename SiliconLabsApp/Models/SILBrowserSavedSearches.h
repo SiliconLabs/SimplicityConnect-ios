@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic, readonly) NSString *searchByDeviceNameText;
 @property (nonatomic, readonly) NSInteger dBmValue;
+@property (nonatomic, readonly) NSInteger dBmMaxValue;
 @property (strong, nonatomic, readonly) NSArray<SILBrowserBeaconType*>* beaconTypes;
 @property (nonatomic, readonly) BOOL isFavourite;
 @property (nonatomic, readonly) BOOL isConnectable;
