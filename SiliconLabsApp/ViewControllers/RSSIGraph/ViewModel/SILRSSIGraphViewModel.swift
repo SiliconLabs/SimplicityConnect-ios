@@ -117,6 +117,7 @@ class SILRSSGraphViewModel {
         self.filter.accept(filterHelper.andFilters(filters))
     }
     
+    // Geaph startScanning
     private func startScanning() {
         _peripherals.accept([])
         

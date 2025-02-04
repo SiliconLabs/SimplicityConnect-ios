@@ -42,6 +42,8 @@ final class BrowserViewModel: NSObject, SILBrowserFilterViewControllerDelegate {
     private var tableRefreshTimer : Timer?
     
     private var currentMinRSSI: NSNumber? = nil
+    private var currentMaxRSSI: NSNumber? = nil
+
     private var searchByDeviceName: String? = nil
     private var beaconTypes: [SILBrowserBeaconType]? = nil
     private var isFavourite: Bool = false
@@ -101,18 +103,28 @@ final class BrowserViewModel: NSObject, SILBrowserFilterViewControllerDelegate {
         }
     }
 
+    // Apply Filters delegate funciton 
     @objc func applyFilters(_ filterVM : SILBrowserFilterViewModel?) {
         self.searchByDeviceName = filterVM?.searchByDeviceName
         self.currentMinRSSI = filterVM?.dBmValue ?? -100 > -100 ? filterVM?.dBmValue.number : nil
+        self.currentMaxRSSI = filterVM?.dBmMaxValue ?? -0 < -0 ? filterVM?.dBmMaxValue.number : nil
+        
+        if (self.currentMinRSSI != -100 && currentMaxRSSI == nil) {
+            currentMaxRSSI = 0
+        } else if (self.currentMinRSSI == nil && currentMaxRSSI != 0) {
+            currentMinRSSI = -100
+        }
         self.isFavourite = filterVM?.isFavouriteFilterSet ?? false
         self.isConnectable = filterVM?.isConnectableFilterSet ?? false
         self.beaconTypes = filterVM?.beaconTypes as? [SILBrowserBeaconType]
         
         self.refreshDiscoveredPeripheralViewModels()
+        startScanning()
     }
 
     // MARK: - Scanning
     
+    // Start/stop Scan funciton
     func scanningButtonTapped() {
         ScannerTabSettings.sharedInstance.scanningPausedByUser = isScanning
         if !isScanning {
@@ -134,7 +146,7 @@ final class BrowserViewModel: NSObject, SILBrowserFilterViewControllerDelegate {
         centralManager.addScan(forPeripheralsObserver: self, selector: #selector(didReceiveScanForPeripheralChange))
         preparePeripheralsForCalculatingAdvertisingIntervals()
     }
-
+    // scan flow
     func stopScanning() {
         isScanning = false
         tableRefreshTimer?.invalidate()
@@ -296,11 +308,19 @@ final class BrowserViewModel: NSObject, SILBrowserFilterViewControllerDelegate {
     }
     
     private func filterByCurrentMinRSSI() {
-        guard let currentMinRSSI else { return }
-        
-        discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter {
-            $0.discoveredPeripheral.rssiMeasurementTable.lastRSSIMeasurement()?.compare(currentMinRSSI) == .orderedDescending
+        guard let currentMinRSSI = currentMinRSSI, let currentMaxRSSI = currentMaxRSSI else {
+            return
         }
+        //print("selected currentMinRSSI vaule ===== \(currentMinRSSI)")
+        //print("selected currentMaxRSSI vaule ===== \(currentMaxRSSI)")
+        discoveredPeripheralsViewModels = discoveredPeripheralsViewModels.filter { viewModel in
+            if let lastRSSI = viewModel.discoveredPeripheral.rssiMeasurementTable.lastRSSIMeasurement() {
+                return lastRSSI.compare(currentMinRSSI) == .orderedDescending &&
+                       lastRSSI.compare(currentMaxRSSI) == .orderedAscending
+            }
+            return false
+        }
+        //print("Filtered Devices Count - \(discoveredPeripheralsViewModels.count)")
     }
     
     private func filterBySearchDeviceName() {

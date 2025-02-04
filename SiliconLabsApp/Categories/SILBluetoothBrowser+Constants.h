@@ -15,6 +15,7 @@ extern NSInteger const NoDeviceFoundIndex;
 extern const float AnimationExpandableControllerTime;
 extern const float AnimationExpandableControllerDelay;
 extern NSInteger DefaultDBMValue;
+extern NSInteger DefaultDBMMaxValue;
 extern NSString* const CommaAndSpaceText;
 extern NSString * const QuoteText;
 extern NSString * const RSSITitle;

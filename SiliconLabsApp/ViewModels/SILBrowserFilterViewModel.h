@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic, readwrite) NSString *searchByDeviceName;
 @property (nonatomic, readwrite) NSInteger dBmValue;
+@property (nonatomic, readwrite) NSInteger dBmMaxValue;
 @property (nonatomic, readwrite) BOOL isBeaconTypeExpanded;
 @property (nonatomic, readwrite) BOOL isFavouriteFilterSet;
 @property (nonatomic, readwrite) BOOL isConnectableFilterSet;
