@@ -158,6 +158,10 @@ static float kTableRefreshInterval = 1;
     
     self.otaButton.hidden = ![self.peripheral hasOTAService];
     [self.otaButton addTarget:self action:@selector(performOTAAction) forControlEvents:UIControlEventPrimaryActionTriggered];
+        
+    self.disconnectButton.clipsToBounds = true;
+    self.disconnectButton.layer.cornerRadius = 10;
+    self.disconnectButton.backgroundColor = UIColor.sil_siliconLabsRedColor;
 }
 
 - (void)setIsUpdatingFirmware:(BOOL)isUpdatingFirmware {
@@ -218,6 +222,10 @@ static float kTableRefreshInterval = 1;
 
 - (IBAction)swipeToServer:(UISwipeGestureRecognizer *)sender {
     [(SILTabBarController *)self.tabBarController selectItemWithIndex:1];
+}
+
+- (IBAction)disconnectButtonAction:(id)sender {
+    self.centralManager.disconnectConnectedPeripheral;
 }
 
 #pragma mark - SILOTAUICoordinatorDelegate

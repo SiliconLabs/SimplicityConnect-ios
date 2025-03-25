@@ -32,38 +32,27 @@ NSMutableDictionary *deviceDic;
     NSString *deviceType = [NSString stringWithFormat:@"%@",[deviceDic valueForKey:@"deviceType"]];
     
     if ([deviceType isEqualToString:@"514"]) {
-        //deviceName = [NSMutableString stringWithFormat:@"Window Cover - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"windowClose_icon";
     }else if ([deviceType isEqualToString:@"10"]){
-        //deviceName = [NSMutableString stringWithFormat:@"Door Lock - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"door_icon";
     }else if ([deviceType isEqualToString:DimmingLight] || [deviceType isEqualToString:EnhancedColorLight] || [deviceType isEqualToString:OnOffLight] || [deviceType isEqualToString:TemperatureColorLight]) { // 269 // 257 = before and 257 with wifi.
-        //deviceName = [NSMutableString stringWithFormat:@"Light - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"light_icon";
     }else if ([deviceType isEqualToString:@"769"]){
-        //deviceName = [NSMutableString stringWithFormat:@"Thermostat - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"Temperature_Sensor_icon";
     }else if ([deviceType isEqualToString:@"267"]){
-        //deviceName = [NSMutableString stringWithFormat:@"Plug - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"plugBord_icon";
     }else if ([deviceType isEqualToString:@"770"]){
-        //Temperature Sensor
-        //deviceName = [NSMutableString stringWithFormat:@"Temperature Sensor - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"temp_icon";
     }else if ([deviceType isEqualToString:@"263"]){
-        //Occupancy Sensor
-        //deviceName = [NSMutableString stringWithFormat:@"Occupancy Sensor - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"OccupancySensor_icon";
     }else if ([deviceType isEqualToString:@"21"]){
-        //Contact Sensor
-        //deviceName = [NSMutableString stringWithFormat:@"Contact Sensor - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"contactSensor_icon";
     }else if ([deviceType isEqualToString:@"259"]){
-        //Switch
-        //deviceName = [NSMutableString stringWithFormat:@"Switch - %@", [deviceDic valueForKey:@"nodeId"]];
         imgName = @"switchOn_icon";
     } else if ([deviceType isEqualToString:Dishwasher]) {
         imgName = @"dishwasher_icon";
+    } else if ([deviceType isEqualToString:AirQuality]) {
+        imgName = @"airQuality_icon";
     }
     //_selectedMatterDeviceTitleLabel.text = deviceName;
     _selectedMatterDeviceTitleLabel.text = [NSString stringWithFormat:@"%@",[device valueForKey:@"title"]];

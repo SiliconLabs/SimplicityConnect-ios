@@ -10,6 +10,7 @@ import Foundation
 import CoreBluetooth
 import UIKit
 import CocoaLumberjack
+import DeviceGuru
 
 protocol SILIOPTesterViewModelDelegate {
     func notifyAfterAllTest()
@@ -342,10 +343,13 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     
     func prepareTestReport() {
         IOPLog().iopLogSwiftFunction(message: "END TEST")
+        let deviceGuru = DeviceGuruImplementation()
+        let deviceName = deviceGuru.hardware
+        
         let deviceSystemVersion = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
                 
         testReport = SILIOPTestReport(timestamp: timestamp ?? Date(),
-                                      phoneInfo: SILIOPTestPhoneInfo(phoneName: self.deviceModelName, phoneOSVersion: deviceSystemVersion),
+                                      phoneInfo: SILIOPTestPhoneInfo(phoneName: "\(deviceName)", phoneOSVersion: deviceSystemVersion),
                                       firmwareInfo: firmwareInfo,
                                       connectionParameters: connectionParameters,
                                       testCaseResults: testCaseResults)

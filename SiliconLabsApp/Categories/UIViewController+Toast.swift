@@ -27,16 +27,22 @@ extension UIViewController {
     
     @objc
     func showToast(message : String, toastType: ToastType, shouldHasSizeOfText: Bool, completion: @escaping () -> ()) {
-        let AnimationDuration = 0.5
+        let animationDuration = 5.0
         let AnimationDelay = displayParameters(for: toastType).delay
         let toastLabel = getToastLabel(shouldHasSizeOfText: shouldHasSizeOfText, withMessage: message, toastType: toastType)
         self.view.addSubview(toastLabel)
-        UIView.animate(withDuration: AnimationDuration, delay: AnimationDelay, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: {(isCompleted) in
-            toastLabel.removeFromSuperview()
-            completion()
-        })
+                
+        UIView.animate(withDuration: 1, delay: 0.2, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 1
+        }) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
+                UIView.animate(withDuration: 1) {
+                    toastLabel.alpha = 0
+                    toastLabel.removeFromSuperview()
+                }
+                completion()
+            }
+        }
     }
     
     @objc
@@ -59,7 +65,7 @@ extension UIViewController {
         toastLabel.textAlignment = .center
         toastLabel.numberOfLines = 0
         toastLabel.text = message
-        toastLabel.alpha = 1.0
+        toastLabel.alpha = 0.0
         toastLabel.layer.cornerRadius = CornerRadiusStandardValue
         toastLabel.clipsToBounds = true
         return toastLabel

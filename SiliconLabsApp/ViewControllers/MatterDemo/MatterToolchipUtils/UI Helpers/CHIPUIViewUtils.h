@@ -21,6 +21,7 @@ static NSString * _Nullable const ContactSensor = @"21";
 static NSString * _Nullable const Switch = @"259";
 
 static NSString * _Nullable const Dishwasher = @"117";
+static NSString * _Nullable const AirQuality = @"44";
 
 @interface CHIPUIViewUtils : NSObject
 + (UIView *)viewWithUITextField:(UITextField *)textField button:(UIButton *)button;

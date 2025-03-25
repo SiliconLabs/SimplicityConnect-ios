@@ -22,16 +22,26 @@ class SILESLDemoViewController: UIViewController, UIGestureRecognizerDelegate, U
     @IBOutlet weak var noSynchronizedTagsStackView: UIStackView!
     @IBOutlet weak var groupLedButton: UIButton!
     @IBOutlet weak var groupDisplayImageButton: UIButton!
+    @IBOutlet weak var progressPopupBgView: UIView!
+    @IBOutlet weak var popupView: UIView!
+    @IBOutlet weak var progressLabel: UILabel!
+    
     var popover: WYPopoverController?
     
     var viewModel: SILESLDemoViewModel!
     private let disposeBag = DisposeBag()
+    
+    private var msgText = "The selected image exceeds 100 KB, which may result in a longer upload time. Do you want to proceed with the upload?"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setLeftAlignedTitle("ESL Network")
         setupNavigationBarButtons()
         reloadTable()
+        progressPopupBgView.isHidden = true
+        popupView.tb_applyRoundedCorner(10)
+        UserDefaults.standard.setValue(false, forKey: "isImageUploadStarted")
+        progressLabel.text = "Image update progress: "
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,25 +123,35 @@ class SILESLDemoViewController: UIViewController, UIGestureRecognizerDelegate, U
             guard let self = self else { return }
             switch commandState {
             case .starting:
-                self.showProgressView(with: "Command in progress")
-            
+                if UserDefaults.standard.bool(forKey: "isImageUploadStarted") {
+                    progressPopupBgView.isHidden = false
+                    progressLabel.text = "Image update progress: "
+                } else {
+                    self.showProgressView(with: "Command in progress")
+                }
             case .provisioningInProgressConfig:
                 SVProgressHUD.dismiss()
                 self.showProvisioningProgressPopup()
                 
             case .provisioningInProgressImageUpdate(let tag):
                 SVProgressHUD.dismiss()
+                progressPopupBgView.isHidden = true
                 self.showImageUpdatePopup(for: tag)
             
             case .finishedWithError(commandName: let commandName, error: let error):
                 SVProgressHUD.dismiss()
+                progressPopupBgView.isHidden = true
                 self.alertWithOKButton(title: "Error", message: "Command \(commandName) failed with error \(error.localizedDescription)")
                 
             case .imageUpdateProgress(progress: let progress):
-                self.showProgressView(with: "Image update progress:\n \(progress)")
-                
+                progressPopupBgView.isHidden = false
+                progressLabel.text = "Image update progress:\n \(progress)"
+                UserDefaults.standard.setValue(true, forKey: "isImageUploadStarted")
+                SVProgressHUD.dismiss()
+                self.reloadTable()
             case .completed:
                 SVProgressHUD.dismiss()
+                progressPopupBgView.isHidden = true
                 self.reloadTable()
                 
             case .completedWithPopup(text: let text):
@@ -178,6 +198,34 @@ class SILESLDemoViewController: UIViewController, UIGestureRecognizerDelegate, U
         return false
     }
     
+    func cancelImageUploading() {
+        progressPopupBgView.isHidden = true
+        let success = viewModel.cancelImageUpload()
+        if success {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.progressPopupBgView.isHidden = true
+                SVProgressHUD.showError(withStatus: "Image Upload Cancled!")
+            }
+        } else {
+            print("Not Cancled!")
+        }
+    }
+        
+    @IBAction func cancelUploadAction(_ sender: Any) {
+       
+        let alertViewController = UIAlertController(title: "Alert", message: "Do you wish to cancel image uploading? ", preferredStyle: .alert)
+        let actionYes = UIAlertAction(title: "Yes", style: .default, handler: { [weak self] alert in
+            guard let self = self else { return }
+            cancelImageUploading()
+        })
+        let actionNo = UIAlertAction(title: "No", style: .destructive, handler: { [weak self] alart in
+            guard let self = self else { return }
+        })
+        alertViewController.addAction(actionNo)
+        alertViewController.addAction(actionYes)
+        present(alertViewController, animated: true)
+    }
+        
     @IBAction func infoButtonWasTapped(_ sender: UIButton) {
         self.alertWithOKButton(title: "Group messages",
                                message: "Unlike messages sent to specific tags, group messages prompt an immediate response from the Access Point (AP) without tracking changes on individual devices. The information about the current tag state displayed in the app may differ from the actual state.")

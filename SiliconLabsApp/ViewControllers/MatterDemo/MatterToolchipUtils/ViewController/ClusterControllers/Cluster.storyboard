@@ -1095,6 +1095,109 @@
             </objects>
             <point key="canvasLocation" x="2984.8000000000002" y="-27.436281859070466"/>
         </scene>
+        <!--Air Quality View Controller-->
+        <scene sceneID="PJo-dM-Mq0">
+            <objects>
+                <viewController storyboardIdentifier="AirQualityViewController" id="0U9-12-8aa" customClass="AirQualityViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="K5m-WE-Uce">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tGz-PJ-XMN">
+                                <rect key="frame" x="0.0" y="50" width="375" height="728"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Air Quality Sensor" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBN-9K-w7L">
+                                        <rect key="frame" x="10" y="10" width="355" height="57"/>
+                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="57" id="nlU-jJ-6sc"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wUR-Sm-Vbp">
+                                        <rect key="frame" x="0.0" y="97" width="375" height="200"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AQI: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TaJ-Uy-ysF">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="70"/>
+                                                <color key="textColor" name="sil_regularBlueColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QVh-Ia-zAV">
+                                                <rect key="frame" x="0.0" y="132" width="375" height="48"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="48" id="fJ6-EF-mKd"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
+                                                <color key="textColor" name="sil_regularBlueColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="TaJ-Uy-ysF" firstAttribute="leading" secondItem="wUR-Sm-Vbp" secondAttribute="leading" id="4Vv-Ky-2xo"/>
+                                            <constraint firstAttribute="trailing" secondItem="TaJ-Uy-ysF" secondAttribute="trailing" id="7Oa-T0-lua"/>
+                                            <constraint firstAttribute="bottom" secondItem="TaJ-Uy-ysF" secondAttribute="bottom" constant="50" id="CEx-mI-EMd"/>
+                                            <constraint firstItem="QVh-Ia-zAV" firstAttribute="leading" secondItem="wUR-Sm-Vbp" secondAttribute="leading" id="GjF-yH-PJH"/>
+                                            <constraint firstAttribute="bottom" secondItem="QVh-Ia-zAV" secondAttribute="bottom" constant="20" id="MyO-bB-8Di"/>
+                                            <constraint firstAttribute="trailing" secondItem="QVh-Ia-zAV" secondAttribute="trailing" id="Rng-Pf-apN"/>
+                                            <constraint firstItem="TaJ-Uy-ysF" firstAttribute="top" secondItem="wUR-Sm-Vbp" secondAttribute="top" id="ojQ-bz-3qn"/>
+                                            <constraint firstAttribute="height" constant="200" id="smc-Bk-ZGN"/>
+                                        </constraints>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="w7N-Im-aMn">
+                                        <rect key="frame" x="87.666666666666686" y="347" width="200" height="44"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nPS-7a-lSU">
+                                                <rect key="frame" x="0.0" y="0.0" width="200" height="44"/>
+                                                <color key="backgroundColor" name="sil_regularBlueColor"/>
+                                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Refresh"/>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="Qdu-z8-6vc"/>
+                                            <constraint firstAttribute="width" constant="200" id="Zc5-4L-YD0"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" name="sil_backgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="vBN-9K-w7L" firstAttribute="top" secondItem="tGz-PJ-XMN" secondAttribute="top" constant="10" id="JZf-GF-iYf"/>
+                                    <constraint firstItem="vBN-9K-w7L" firstAttribute="leading" secondItem="tGz-PJ-XMN" secondAttribute="leading" constant="10" id="MXS-Oz-scP"/>
+                                    <constraint firstItem="wUR-Sm-Vbp" firstAttribute="top" secondItem="vBN-9K-w7L" secondAttribute="bottom" constant="30" id="OXg-06-eb3"/>
+                                    <constraint firstAttribute="trailing" secondItem="wUR-Sm-Vbp" secondAttribute="trailing" id="XSG-vP-ApC"/>
+                                    <constraint firstItem="w7N-Im-aMn" firstAttribute="centerX" secondItem="wUR-Sm-Vbp" secondAttribute="centerX" id="agL-rx-teJ"/>
+                                    <constraint firstItem="w7N-Im-aMn" firstAttribute="top" secondItem="wUR-Sm-Vbp" secondAttribute="bottom" constant="50" id="njS-o0-g9Z"/>
+                                    <constraint firstItem="wUR-Sm-Vbp" firstAttribute="leading" secondItem="tGz-PJ-XMN" secondAttribute="leading" id="pWb-5c-8l8"/>
+                                    <constraint firstAttribute="trailing" secondItem="vBN-9K-w7L" secondAttribute="trailing" constant="10" id="v4w-41-btN"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="qeB-mv-I52"/>
+                        <color key="backgroundColor" name="sil_backgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="tGz-PJ-XMN" firstAttribute="leading" secondItem="qeB-mv-I52" secondAttribute="leading" id="3bK-tI-Ap7"/>
+                            <constraint firstItem="tGz-PJ-XMN" firstAttribute="top" secondItem="qeB-mv-I52" secondAttribute="top" id="57p-tk-uRx"/>
+                            <constraint firstItem="tGz-PJ-XMN" firstAttribute="bottom" secondItem="qeB-mv-I52" secondAttribute="bottom" id="5jx-uo-ykM"/>
+                            <constraint firstItem="tGz-PJ-XMN" firstAttribute="trailing" secondItem="qeB-mv-I52" secondAttribute="trailing" id="j7y-s0-2KX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="aeQ-vC-ewD"/>
+                    <connections>
+                        <outlet property="airQualityStatus" destination="QVh-Ia-zAV" id="Pht-Di-2ah"/>
+                        <outlet property="airQualityValueLabel" destination="TaJ-Uy-ysF" id="Kji-P2-EGR"/>
+                        <outlet property="bgView" destination="wUR-Sm-Vbp" id="oyE-ZA-kEa"/>
+                        <outlet property="refressButton" destination="nPS-7a-lSU" id="rbX-ff-br0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="am4-oM-qOr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3128.8000000000002" y="769.95073891625623"/>
+        </scene>
         <!--Temperature Sensor Controller-->
         <scene sceneID="uEk-Mg-lg3">
             <objects>
@@ -1840,10 +1943,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

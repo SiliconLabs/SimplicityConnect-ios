@@ -185,4 +185,12 @@ class SILESLProvisioningTag: NSObject, SILESLCommandRunner {
         self.disposeBag = DisposeBag()
         self.currentRunningCommand = nil
     }
+    
+    // Write 0x01 for cancel uploading image
+    func cancelUploading() -> Bool {
+        let dataToSend = Data(repeating: 0x01, count: 1)
+        debugPrint("ESL Command Image Update: Chunk data \(dataToSend.bytes) Image Update CANCLED !!!")
+        peripheral.writeValue(dataToSend, for: self.peripheralReferences.eslTransferImage!, type: .withResponse)
+        return true
+    }
 }
