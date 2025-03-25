@@ -279,21 +279,28 @@ UIButton * backButton;
                     //Commented for flow change...
                     //[self retrieveAndSendWiFiCredentials];
                     [self commissionWithSSID:ssidStr password:passwordStr];
+//                  [self commissionWithSSID:@"MantoshiPhone8" password:@"loveumom"];
                 }
                 [self->_deviceList refreshDeviceList];
             });
         } else {
-            MTRCommissioningParameters * params = [[MTRCommissioningParameters alloc] init];
-            params.deviceAttestationDelegate = [[CHIPToolDeviceAttestationDelegate alloc] initWithViewController:self];
-            params.failSafeExpiryTimeoutSecs = @600;
-            // [SVProgressHUD dismiss];
-            _commissioningDeviceProgressView.hidden = TRUE;
-            backButton.enabled = YES;
-            [self showAlertPopup:kDeviceRetrievingErrorMessage];
-            NSError * error;
-            if (![controller commissionDevice: deviceId commissioningParams: params error: &error]) {
-                NSLog(@"Failed to commission Device %llu, with error %@", deviceId, error);
-            }
+//            MTRCommissioningParameters * params = [[MTRCommissioningParameters alloc] init];
+//            params.deviceAttestationDelegate = [[CHIPToolDeviceAttestationDelegate alloc] initWithViewController:self];
+//            params.failSafeExpiryTimeoutSecs = @600;
+//            // [SVProgressHUD dismiss];
+//            _commissioningDeviceProgressView.hidden = TRUE;
+//            backButton.enabled = YES;
+//            [self showAlertPopup:kDeviceRetrievingErrorMessage];
+//            NSError * error;
+//            if (![controller commissionDevice: deviceId commissioningParams: params error: &error]) {
+//                NSLog(@"Failed to commission Device %llu, with error %@", deviceId, error);
+//            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self->_commissioningDeviceProgressView.hidden = TRUE;
+                backButton.enabled = YES;
+                [self showAlertPopup:kDeviceRetrievingErrorMessage];
+            });
         }
     }
 }

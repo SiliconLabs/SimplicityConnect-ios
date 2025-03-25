@@ -17,6 +17,10 @@ class SILESLImageUpdatePopup: UIViewController, UIDocumentPickerDelegate {
     private let selectedImage = UIImage(named: "checkBoxActive")
     private let deselectedImage = UIImage(named: "checkBoxInactive")
     var viewModel: SILESLImageUpdatePopupViewModel!
+    var sizeOfImage0: Double = 0.0
+    var sizeOfImage1: Double = 0.0
+    
+    private var msgText = "The selected image exceeds 100 KB, which may result in a longer upload time. Do you want to proceed with the upload?"
     
     override var preferredContentSize: CGSize {
         get {
@@ -96,10 +100,18 @@ Presented image info may be outdated if you controlled ESL Access Point outside 
     }
     
     @IBAction func uploadButtonWasTapped(_ sender: Any) {
-        viewModel.wasTapContinuation = true
-        viewModel.onImageUpdate(viewModel.selectedImageIndex,
-                                viewModel.selectedImageIndex == 0 ? viewModel.imageSlot0 : viewModel.imageSlot1,
-                                viewModel.showImageAfterUpdate)
+                        
+        var totalUploadImageSize = ((sizeOfImage0) + (sizeOfImage1)).rounded()
+        print("totalUploadImageSize:- \(totalUploadImageSize)")
+        
+        if (totalUploadImageSize > 100) {
+            showAlertWithButton(viewModel: viewModel)
+        } else {
+            viewModel.wasTapContinuation = true
+            viewModel.onImageUpdate(viewModel.selectedImageIndex,
+                                    viewModel.selectedImageIndex == 0 ? viewModel.imageSlot0 : viewModel.imageSlot1,
+                                    viewModel.showImageAfterUpdate)
+        }
     }
     
     private func showDocumentPicker() {
@@ -121,8 +133,10 @@ Presented image info may be outdated if you controlled ESL Access Point outside 
                         
                     if viewModel.lastTappedSlot == 0 {
                         viewModel.imageSlot0 = url
+                        sizeOfImage0 = getImageSizeInKB(imgPath: filePath)
                     } else {
                         viewModel.imageSlot1 = url
+                        sizeOfImage1 = getImageSizeInKB(imgPath: filePath)
                     }
                     viewModel.selectedImageIndex = viewModel.lastTappedSlot
                     showAvailableImages()
@@ -135,6 +149,16 @@ Presented image info may be outdated if you controlled ESL Access Point outside 
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         debugPrint("DID CANCEL")
         controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func getImageSizeInKB(imgPath: String ) -> Double {
+        let file = NSData(contentsOfFile: imgPath)
+        let byte = ByteCountFormatter()
+        byte.allowedUnits = [.useKB]
+        byte.countStyle = .file
+        let sizeInBytes = Int64(file!.count)
+        //let dataSize = byte.string(fromByteCount: Int64(file!.count))
+        return (Double(sizeInBytes)/1024.0)
     }
     
     private func showAvailableImages() {
@@ -167,5 +191,20 @@ Presented image info may be outdated if you controlled ESL Access Point outside 
         } else {
             uploadButton.isEnabled = false
         }
+    }
+        
+    func showAlertWithButton(viewModel: SILESLImageUpdatePopupViewModel) {
+        let alertView = UIAlertController(title: "Alert!", message: msgText, preferredStyle: UIAlertController.Style.alert)
+        
+        alertView.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("DismissPopup")
+        }))
+        alertView.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+            viewModel.wasTapContinuation = true
+            viewModel.onImageUpdate(viewModel.selectedImageIndex,
+                                    viewModel.selectedImageIndex == 0 ? viewModel.imageSlot0 : viewModel.imageSlot1,
+                                    viewModel.showImageAfterUpdate)
+        }))
+        present(alertView, animated: true, completion: nil)
     }
 }

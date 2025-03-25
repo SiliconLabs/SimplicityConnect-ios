@@ -36,6 +36,7 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
     self.dmpTypeImageView.image = nil;
     
     NSNumber *rssi = device.RSSI != nil ? device.RSSI : 0;
+    _deviceRSSILabel.text = [NSString stringWithFormat:@"%@ dBm", rssi];
     if ([rssi integerValue] > SILConstantsStrongSignalThreshold) {
         self.signalImageView.image = [UIImage imageNamed: SILImageNameBTStrong];
     } else if ([rssi integerValue] > SILConstantsMediumSignalThreshold) {
@@ -77,6 +78,7 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 
 - (void)setRSSIImageForPeripheral:(SILDiscoveredPeripheral*)discoveredPeripheral {
     NSInteger smoothedRSSIValue = [[discoveredPeripheral.rssiMeasurementTable averageRSSIMeasurementInPastTimeInterval:SILDeviceSelectionViewControllerReloadThreshold] integerValue];
+    _deviceRSSILabel.text = [NSString stringWithFormat:@"%ld dBm", (long)smoothedRSSIValue];
     if (smoothedRSSIValue > SILConstantsStrongSignalThreshold) {
         self.signalImageView.image = [UIImage imageNamed:SILImageNameBTStrong];
     } else if (smoothedRSSIValue > SILConstantsMediumSignalThreshold) {

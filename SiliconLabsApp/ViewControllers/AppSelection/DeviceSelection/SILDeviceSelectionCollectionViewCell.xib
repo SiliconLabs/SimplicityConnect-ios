@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -22,20 +22,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BZO-Kg-RA5">
-                        <rect key="frame" x="10" y="28.5" width="128" height="47"/>
+                        <rect key="frame" x="10" y="34" width="65" height="36"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconZigbee" translatesAutoresizingMaskIntoConstraints="NO" id="JX1-Xv-b70">
-                                <rect key="frame" x="0.0" y="0.0" width="47" height="47"/>
+                                <rect key="frame" x="0.0" y="0.0" width="30" height="36"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="47" id="MbE-lA-Nr0"/>
-                                    <constraint firstAttribute="width" secondItem="JX1-Xv-b70" secondAttribute="height" multiplier="1:1" id="vNU-9u-YBi"/>
+                                    <constraint firstAttribute="width" constant="30" id="MbE-lA-Nr0"/>
+                                    <constraint firstAttribute="width" secondItem="JX1-Xv-b70" secondAttribute="height" multiplier="1:1.2" id="vNU-9u-YBi"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BTMedium" translatesAutoresizingMaskIntoConstraints="NO" id="d9X-9O-eAN">
-                                <rect key="frame" x="52" y="0.0" width="76" height="47"/>
+                                <rect key="frame" x="35" y="0.0" width="30" height="36"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="76" id="HrW-3T-tyi">
+                                    <constraint firstAttribute="width" constant="30" id="HrW-3T-tyi">
                                         <variation key="widthClass=compact" constant="47"/>
                                     </constraint>
                                 </constraints>
@@ -43,40 +43,52 @@
                         </subviews>
                     </stackView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FD1-eU-J4c">
-                        <rect key="frame" x="158" y="102" width="114" height="1"/>
+                        <rect key="frame" x="85" y="102" width="187" height="1"/>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="zIN-6u-Ib3"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" text="Silicon Labs Keyboard" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="12" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="CqA-bB-xcX">
-                        <rect key="frame" x="158" y="28.5" width="104" height="47"/>
+                        <rect key="frame" x="85" y="34" width="145" height="36"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                         <color key="textColor" red="0.31372549019607843" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="9Oq-FF-esy">
+                        <rect key="frame" x="235" y="34" width="47" height="36"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="47" id="cMm-y7-KMw"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="12"/>
+                        <color key="textColor" red="0.31372549020000001" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="BZO-Kg-RA5" firstAttribute="leading" secondItem="SPD-AH-eml" secondAttribute="leading" constant="10" id="1U2-me-muR"/>
-                <constraint firstItem="CqA-bB-xcX" firstAttribute="leading" secondItem="BZO-Kg-RA5" secondAttribute="trailing" constant="20" id="6gF-PE-s9v"/>
+                <constraint firstItem="CqA-bB-xcX" firstAttribute="leading" secondItem="BZO-Kg-RA5" secondAttribute="trailing" constant="10" id="6gF-PE-s9v"/>
                 <constraint firstItem="BZO-Kg-RA5" firstAttribute="top" secondItem="CqA-bB-xcX" secondAttribute="top" id="Bt7-7w-GZB"/>
                 <constraint firstItem="CqA-bB-xcX" firstAttribute="leading" secondItem="FD1-eU-J4c" secondAttribute="leading" id="FWa-ud-ZxM"/>
+                <constraint firstItem="9Oq-FF-esy" firstAttribute="leading" secondItem="CqA-bB-xcX" secondAttribute="trailing" constant="5" id="ILi-lq-fxM"/>
                 <constraint firstAttribute="trailing" secondItem="FD1-eU-J4c" secondAttribute="trailing" constant="10" id="IbF-Za-vaJ"/>
+                <constraint firstItem="9Oq-FF-esy" firstAttribute="bottom" secondItem="CqA-bB-xcX" secondAttribute="bottom" id="K43-Lr-F0n"/>
                 <constraint firstItem="BZO-Kg-RA5" firstAttribute="centerY" secondItem="SPD-AH-eml" secondAttribute="centerY" id="Le5-Ys-HKe"/>
+                <constraint firstAttribute="trailing" secondItem="9Oq-FF-esy" secondAttribute="trailing" id="Qib-uM-3O9"/>
                 <constraint firstAttribute="bottom" secondItem="FD1-eU-J4c" secondAttribute="bottom" constant="1" id="VMo-BJ-2Nd"/>
-                <constraint firstAttribute="trailing" secondItem="CqA-bB-xcX" secondAttribute="trailing" priority="999" constant="20" id="Vfg-Y7-OhQ">
-                    <variation key="widthClass=compact" constant="10"/>
-                </constraint>
+                <constraint firstItem="9Oq-FF-esy" firstAttribute="top" secondItem="CqA-bB-xcX" secondAttribute="top" id="YrH-24-hby"/>
                 <constraint firstItem="BZO-Kg-RA5" firstAttribute="bottom" secondItem="CqA-bB-xcX" secondAttribute="bottom" id="dd5-BR-hOb"/>
             </constraints>
             <connections>
                 <outlet property="deviceNameLabel" destination="CqA-bB-xcX" id="vhO-xj-Ekx"/>
+                <outlet property="deviceRSSILabel" destination="9Oq-FF-esy" id="5oc-cA-nYr"/>
                 <outlet property="dmpTypeImageView" destination="JX1-Xv-b70" id="Idc-mQ-DLF"/>
                 <outlet property="signalImageView" destination="d9X-9O-eAN" id="1WK-kt-P4z"/>
             </connections>
-            <point key="canvasLocation" x="185" y="277"/>
+            <point key="canvasLocation" x="184.375" y="276.5625"/>
         </collectionViewCell>
     </objects>
     <resources>

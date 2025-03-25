@@ -19,6 +19,8 @@ extern NSString * const SILDeviceSelectionCollectionViewCellIdentifier;
 @property (weak , nonatomic) IBOutlet UIImageView *signalImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *dmpTypeImageView;
 @property (weak , nonatomic) IBOutlet UILabel *deviceNameLabel;
+@property (weak , nonatomic) IBOutlet UILabel *deviceRSSILabel;
+
 
 - (void)configureCellForPeripheral:(SILDiscoveredPeripheral*)discoveredPeripheral andApplication:(SILApp*)app;
 - (void)configureCellForThunderboardDevice:(DiscoveredDeviceDisplay *)device;

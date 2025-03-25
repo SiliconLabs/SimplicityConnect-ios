@@ -123,6 +123,18 @@ class SILESLDemoViewModel {
         }
     }
     
+    func cancelImageUpload() -> Bool {
+        var isCancled = false
+        if let provisioningTag = self.currentRunningCommand as? SILESLProvisioningTag {
+            isCancled = provisioningTag.cancelUploading()
+        } else if let provisioningTag = self.currentRunningCommand as? SILESLImageUpdate {
+            isCancled = provisioningTag.cancelUploadingImage()
+        } else {
+            isCancled = false
+        }
+        return isCancled
+    }
+    
     //MARK: Commands
     func listTags() {
         let list = commandRunnerFactory.createCommandListRunner(peripheral: peripheral,

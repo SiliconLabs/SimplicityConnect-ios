@@ -10,7 +10,7 @@ import Foundation
 import SVProgressHUD
 
 @objcMembers
-class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate, SILWifiCommissioningViewControllerDelegate {
+class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate, SILWifiCommissioningViewControllerDelegate, NetServiceBrowserDelegate {
     
    
     
@@ -26,11 +26,14 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     private var peripheralManagerSubscription: SILObservableToken?
     private var disposeBag = SILObservableTokenBag()
     private var peripheralManager: SILThroughputPeripheralManager!
-    
-    
 
     private var viewModel: SILWifiCommissioningViewModel!
 
+    func checkLocalNetworkPermission()  {
+        let serviceBrowser = NetServiceBrowser()
+        serviceBrowser.delegate = self
+        serviceBrowser.searchForServices(ofType: "_http._tcp.", inDomain: "local.")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +42,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         self.addObserverForNonIntentionallyBackFromThermometer()
         self.isDisconnectedIntentionally = false
         SILBluetoothModelManager.shared()?.populateModels()
+        self.checkLocalNetworkPermission()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -201,7 +205,15 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.presentDeviceSelectionViewController(app: app, shouldConnectWithPeripheral: false, animated: true) { $0!.advertisedLocalName?.contains("IOP") ?? false }
             
         case .typeWifiCommissioning:
-            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
+        //self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
+            self.presentDeviceSelectionViewController(app: app, animated: true) {
+                if let advName = $0!.advertisedLocalName {
+                    return advName.hasPrefix("BLE_CONFIG")
+                }
+                return false
+            }
+                //$0!.advertisedLocalName!.hasPrefix("BLE_CONFIG") }
+            
             
         case .typeESLDemo:
             self.presentDeviceSelectionViewController(app: app, animated: true)
@@ -220,7 +232,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                 showWiFiOTAScreen()
             }
         case .typeWifiSensor:
-            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "WIFI_SENSOR" }
+//           self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "WIFI_SENSOR" }
+            self.presentDeviceSelectionViewController(app: app, animated: true) {
+                if let advName = $0!.advertisedLocalName {
+                    return advName.hasPrefix("WIFI_SENSOR")
+                }
+                return false
+            }
         case .typeWifiThroughput:
             moveToSILWifiThroughputDemoView()
         default:

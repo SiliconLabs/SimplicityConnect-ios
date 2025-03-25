@@ -15,4 +15,6 @@
 @property (strong, nonatomic) SILCentralManager *centralManager;
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;
 
+@property (weak, nonatomic) IBOutlet UIButton *disconnectButton;
+
 @end

@@ -345,7 +345,12 @@ int commissiond;
             _dishwasherViewController.nodeId = nodeId;
             _dishwasherViewController.endPoint = endPoint;
             [self.navigationController pushViewController:_dishwasherViewController animated: YES];
-        }
+        } 
+    } else if ([deviceType isEqualToString: AirQuality]){
+        _temperatureViewController = [story instantiateViewControllerWithIdentifier:@"AirQualityViewController"];
+        _temperatureViewController.nodeId = nodeId;
+        _temperatureViewController.endPoint = endPoint;
+        [self.navigationController pushViewController:_temperatureViewController animated: YES];
     }
 }
 
