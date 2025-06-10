@@ -18,8 +18,11 @@ class SILWifiCommissioningPasswordPopup: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var okButton: UIButton!
     
+    @IBOutlet weak var eyeButton: UIButton!
+  
     var delegate: SILWifiCommissioningPasswordPopupDelegate?
     var accessPoint: SILWifiCommissioningAccessPoint!
+    var isPassSecureText: Bool = false
     
     override var preferredContentSize: CGSize {
         get {
@@ -40,6 +43,8 @@ class SILWifiCommissioningPasswordPopup: UIViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
         self.accessPointNameLabel.text = accessPoint.name
+        isPassSecureText = false
+
     }
     
     func showWrongPasswordAlert() {
@@ -70,6 +75,23 @@ class SILWifiCommissioningPasswordPopup: UIViewController {
     
     @IBAction func didTappedOKBtn(_ sender: Any) {
         self.enterPassword()
+    }
+    @IBAction func secureTextBtn(_ sender: Any){
+        if (isPassSecureText){
+            passwordTextField.isSecureTextEntry = true
+            eyeButton.clipsToBounds = true
+            eyeButton.contentMode = .scaleAspectFill
+            // Use setBackgroundImage or setImage
+            eyeButton.setBackgroundImage(UIImage(named: "eye_hide"), for: .normal)
+            isPassSecureText = false
+        } else {
+            passwordTextField.isSecureTextEntry = false
+            eyeButton.clipsToBounds = true
+            eyeButton.contentMode = .scaleAspectFill
+            // Use setBackgroundImage or setImage
+            eyeButton.setBackgroundImage(UIImage(named: "eye_view"), for: .normal)
+            isPassSecureText = true
+        }
     }
 }
 

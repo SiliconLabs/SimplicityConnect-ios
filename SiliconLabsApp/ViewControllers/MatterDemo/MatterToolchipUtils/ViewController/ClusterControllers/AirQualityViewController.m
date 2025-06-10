@@ -218,6 +218,11 @@ NSMutableArray * deviceListAirQuality;
         [deviceDic setObject:@1 forKey:@"endPoint"];
         [deviceDic setObject:connected forKey:@"isConnected"];
         [deviceDic setObject:[deviceListAirQuality[index2] valueForKey:@"title"] forKey:@"title"];
+        
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @"false"] forKey:@"isBinded"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceType"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceName"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToNodeId"];
 
         [deviceListAirQuality replaceObjectAtIndex:index2 withObject:deviceDic];
     }

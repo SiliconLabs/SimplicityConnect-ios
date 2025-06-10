@@ -14,7 +14,7 @@ class SILWiFiLedSensorsViewModel {
 
     
     func getLedData(completionBlockSensors: @escaping completionBlockSensors)  {
-        APIRequest.sharedInstance.getApiCall(url: "led") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "led", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -33,7 +33,7 @@ class SILWiFiLedSensorsViewModel {
     }
     
     func ledOnOf(ledType: String, parameter: String, urlEndpoint: String, completionBlockSensors: @escaping completionBlockSensors){
-        APIRequest.sharedInstance.postApiCall(parameterDictionary: parameter, url: urlEndpoint) { ReponsData, APIClientError in
+        APIRequest.sharedInstance.postApiCall(parameterDictionary: parameter, url: urlEndpoint, demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -56,7 +56,7 @@ class SILWiFiLedSensorsViewModel {
             let paramStr = """
                         {"status_led": "off"}
                         """
-            APIRequest.sharedInstance.postApiCall(parameterDictionary: paramStr, url: "status_led") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.postApiCall(parameterDictionary: paramStr, url: "status_led", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -74,7 +74,7 @@ class SILWiFiLedSensorsViewModel {
                 
             }
         }else if requestMethod == HttpMethods.GET.rawValue {
-            APIRequest.sharedInstance.getApiCall(url: "status_led") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "status_led", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])

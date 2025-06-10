@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="88" id="KGk-i7-Jjw" customClass="SILLightSwitchTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="587" height="55"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="587" height="55"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CA0-Ws-BOG">
+                        <rect key="frame" x="0.0" y="8" width="587" height="47"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light_icon" translatesAutoresizingMaskIntoConstraints="NO" id="417-hR-ioE">
+                                <rect key="frame" x="10" y="8.6666666666666679" width="30" height="30.000000000000004"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Wot-xb-unP"/>
+                                    <constraint firstAttribute="width" constant="30" id="s2Q-1Y-mQZ"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SiLabs-Switch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Etl-5T-cHW">
+                                <rect key="frame" x="54.999999999999993" y="2.6666666666666643" width="89.333333333333314" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="rC2-44-gh6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beaconCheckmark" translatesAutoresizingMaskIntoConstraints="NO" id="xkb-YG-XxT">
+                                <rect key="frame" x="547" y="13.666666666666668" width="20" height="20.000000000000004"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="16o-op-fsv"/>
+                                    <constraint firstAttribute="width" constant="20" id="23p-5m-ooO"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="xkb-YG-XxT" secondAttribute="trailing" constant="20" symbolic="YES" id="5yP-0v-DBN"/>
+                            <constraint firstAttribute="height" constant="47" id="6bH-KK-oC2"/>
+                            <constraint firstItem="xkb-YG-XxT" firstAttribute="centerY" secondItem="Etl-5T-cHW" secondAttribute="centerY" id="Bdt-n5-9GY"/>
+                            <constraint firstItem="417-hR-ioE" firstAttribute="centerY" secondItem="CA0-Ws-BOG" secondAttribute="centerY" id="TE9-6Q-zFp"/>
+                            <constraint firstItem="Etl-5T-cHW" firstAttribute="leading" secondItem="417-hR-ioE" secondAttribute="trailing" constant="15" id="W4X-H1-9ca"/>
+                            <constraint firstItem="Etl-5T-cHW" firstAttribute="centerY" secondItem="417-hR-ioE" secondAttribute="centerY" id="xXU-FW-UVo"/>
+                            <constraint firstItem="417-hR-ioE" firstAttribute="leading" secondItem="CA0-Ws-BOG" secondAttribute="leading" constant="10" id="zbY-qB-nfh"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="CA0-Ws-BOG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="531-Qr-0jz"/>
+                    <constraint firstAttribute="bottom" secondItem="CA0-Ws-BOG" secondAttribute="bottom" id="7Bo-ya-HkL"/>
+                    <constraint firstAttribute="trailing" secondItem="CA0-Ws-BOG" secondAttribute="trailing" id="xdL-bv-Mmb"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="deviceBGView" destination="CA0-Ws-BOG" id="wUm-Uh-kkV"/>
+                <outlet property="deviceIconImage" destination="417-hR-ioE" id="09u-Vy-yCY"/>
+                <outlet property="deviceNameLabel" destination="Etl-5T-cHW" id="7Tj-Ab-Rff"/>
+                <outlet property="tickMarkImage" destination="xkb-YG-XxT" id="tzx-Sx-O5p"/>
+            </connections>
+            <point key="canvasLocation" x="-996.18320610687022" y="3.8732394366197185"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="beaconCheckmark" width="17" height="12.666666984558105"/>
+        <image name="light_icon" width="54" height="52"/>
+    </resources>
+</document>

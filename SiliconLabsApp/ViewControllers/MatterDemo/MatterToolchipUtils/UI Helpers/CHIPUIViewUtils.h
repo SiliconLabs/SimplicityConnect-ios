@@ -19,6 +19,7 @@ static NSString * _Nullable const TemperatureSensor = @"770";
 static NSString * _Nullable const OccupancySensor = @"263";
 static NSString * _Nullable const ContactSensor = @"21";
 static NSString * _Nullable const Switch = @"259";
+static NSString * _Nullable const DimmerSwitch = @"260";
 
 static NSString * _Nullable const Dishwasher = @"117";
 static NSString * _Nullable const AirQuality = @"44";

@@ -211,6 +211,11 @@ NSMutableArray * contactDeviceList;
         [deviceDic setObject:connected forKey:@"isConnected"];
         [deviceDic setObject:[contactDeviceList[index2] valueForKey:@"title"] forKey:@"title"];
 
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @"false"] forKey:@"isBinded"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceType"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceName"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToNodeId"];
+
         [contactDeviceList replaceObjectAtIndex:index2 withObject:deviceDic];
     }
     [[NSUserDefaults standardUserDefaults] setObject:contactDeviceList forKey:@"saved_list"];

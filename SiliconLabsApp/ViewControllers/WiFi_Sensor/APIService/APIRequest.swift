@@ -6,7 +6,10 @@
 //
 
 import Foundation
-
+enum DemoTypes{
+    case WiFiSensor
+    case WiFiProvisioning
+}
 enum HttpMethods: String {
    case POST = "POST"
    case GET  = "GET"
@@ -16,10 +19,23 @@ struct ApiHTTPrequest {
 }
 
 struct URLForRequest {
+    let demoType: DemoTypes
     var uri: String
+
     func getUrl() -> String {
-        let ipArress = UserDefaults.standard.string(forKey: "access_point_IPA")
-        let Url = String(format: "http://\(ipArress ?? "")/\(uri)")
+        var ipArress = ""
+        switch demoType {
+        case .WiFiSensor:
+            ipArress = UserDefaults.standard.string(forKey: "access_point_IPA") ?? ""
+        case .WiFiProvisioning:
+            ipArress = "192.168.10.10"
+        default:
+            ipArress = "No Base URL"
+        }
+        
+        
+        //let ipArress = UserDefaults.standard.string(forKey: "access_point_IPA")
+        let Url = String(format: "http://\(ipArress)/\(uri)")
         return Url
     }
     
@@ -28,12 +44,12 @@ struct URLForRequest {
 class APIRequest {
     static let sharedInstance = APIRequest()
 
-    func postApiCall(parameterDictionary: String, url : String, completionBlock: @escaping (_ ReponsData: Data?, _ APIClientError:Error?) -> Void) {
+    func postApiCall(parameterDictionary: String, url : String, demoType: DemoTypes, completionBlock: @escaping (_ ReponsData: Data?, _ APIClientError:Error?) -> Void) {
         
 //        let ipArress = UserDefaults.standard.string(forKey: "access_point_IPA")
 //        let Url = String(format: "http://\(ipArress ?? "")/\(url)")
         
-        let UrlRe = URLForRequest(uri: url)
+        let UrlRe = URLForRequest(demoType: demoType, uri: url)
         let Url = UrlRe.getUrl()
         print(Url)
 
@@ -67,13 +83,13 @@ class APIRequest {
         }.resume()
     }
     
-    func getApiCall(url : String, completionBlock: @escaping (_ ReponsData: Data?, _ APIClientError:Error?) -> Void) {
+    func getApiCall(url : String, demoType: DemoTypes, completionBlock: @escaping (_ ReponsData: Data?, _ APIClientError:Error?) -> Void) {
 
 //        let ipArress = UserDefaults.standard.string(forKey: "access_point_IPA")
 //        let Url = String(format: "http://\(ipArress ?? "")/\(url)")
 //        print(Url)
         
-        let UrlRe = URLForRequest(uri: url)
+        let UrlRe = URLForRequest(demoType: demoType, uri: url)
         let Url = UrlRe.getUrl()
         print(Url)
         //let Url = String(format: "http://192.168.10.10/\(url)")

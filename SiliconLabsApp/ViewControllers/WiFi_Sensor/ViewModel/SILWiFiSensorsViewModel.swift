@@ -40,7 +40,7 @@ class SILWiFiSensorsViewModel {
 
     
     func getAllSensor<T:Codable>(completionBlockSensor: @escaping (_ ReponsData: T?, _ APIClientError:Error?) -> Void)  {
-        APIRequest.sharedInstance.getApiCall(url: "all_sensors") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "all_sensors", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
 //                    let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -48,6 +48,7 @@ class SILWiFiSensorsViewModel {
 //                    let string = String(data: ReponsData ?? Data(), encoding: .utf8)!
 //                    print(string)
                     let decodaData = try JSONDecoder().decode(T.self, from: ReponsData ?? Data())
+                    print("decodaData:= \(decodaData)")
                     completionBlockSensor(decodaData, APIClientError)
 
                 } catch {
@@ -99,7 +100,9 @@ class SILWiFiSensorsViewModel {
                 print("Have you done something new?")
             }
             //let tempDic = ["title": "\(val)", "value": valOfSensor]
-            sensorsData.append(tempDic)
+            if !tempDic.isEmpty {
+                sensorsData.append(tempDic)
+            }
         }
         
         if sensorsData.count > 0 {
@@ -114,7 +117,7 @@ class SILWiFiSensorsViewModel {
         if self.countInt == 0 {
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
             self.APIRequestdispatchGroup.enter()
-            APIRequest.sharedInstance.getApiCall(url: "temperature") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "temperature", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -136,7 +139,7 @@ class SILWiFiSensorsViewModel {
         }
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
             self.APIRequestdispatchGroup.enter()
-            APIRequest.sharedInstance.getApiCall(url: "humidity") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "humidity", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -158,7 +161,7 @@ class SILWiFiSensorsViewModel {
         
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
             self.APIRequestdispatchGroup.enter()
-            APIRequest.sharedInstance.getApiCall(url: "light") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "light", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -182,7 +185,7 @@ class SILWiFiSensorsViewModel {
         
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
             self.APIRequestdispatchGroup.enter()
-            APIRequest.sharedInstance.getApiCall(url: "led") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "led", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -203,7 +206,7 @@ class SILWiFiSensorsViewModel {
         }
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
             self.APIRequestdispatchGroup.enter()
-            APIRequest.sharedInstance.getApiCall(url: "gyroscope") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "gyroscope", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -224,7 +227,7 @@ class SILWiFiSensorsViewModel {
         }
         sensorConcurrentQueue.async(group: APIRequestdispatchGroup) {
             self.APIRequestdispatchGroup.enter()
-            APIRequest.sharedInstance.getApiCall(url: "accelerometer") { ReponsData, APIClientError in
+            APIRequest.sharedInstance.getApiCall(url: "accelerometer", demoType: .WiFiSensor) { ReponsData, APIClientError in
                 if APIClientError == nil {
                     do {
                         let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -291,7 +294,7 @@ class SILWiFiSensorsViewModel {
     
     
     func getTemperatureData(completionBlock: @escaping completionBlock)  {
-        APIRequest.sharedInstance.getApiCall(url: "temperature") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "temperature", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -309,7 +312,7 @@ class SILWiFiSensorsViewModel {
         }
     }
     func getHumidityData(completionBlock: @escaping completionBlock)  {
-        APIRequest.sharedInstance.getApiCall(url: "humidity") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "humidity", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -327,7 +330,7 @@ class SILWiFiSensorsViewModel {
         }
     }
     func getLightData(completionBlock: @escaping completionBlock)  {
-        APIRequest.sharedInstance.getApiCall(url: "light") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "light", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])

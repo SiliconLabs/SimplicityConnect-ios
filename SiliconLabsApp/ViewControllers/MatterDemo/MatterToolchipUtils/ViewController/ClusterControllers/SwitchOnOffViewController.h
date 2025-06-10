@@ -11,16 +11,21 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SwitchOnOffViewController : UIViewController
+@interface SwitchOnOffViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *clusterImage;
-@property (weak, nonatomic) IBOutlet UIButton *onButton;
-@property (weak, nonatomic) IBOutlet UIButton *offButton;
-@property (weak, nonatomic) IBOutlet UILabel *deviceCurrentStatusLabel;
+@property (weak, nonatomic) IBOutlet UIView *cellBGView;
+@property (weak, nonatomic) IBOutlet UIButton *bindButton;
+@property (weak, nonatomic) IBOutlet UIView *bindLightSwitchView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *noDeviceFoundView;
+
+
 @property (strong, nonatomic) NSNumber * nodeId;
 @property (strong, nonatomic) NSNumber * endPoint;
+@property (strong, nonatomic) NSString * deviceType;
+@property (strong, nonatomic) NSString * deviceName;
 
+//@property (strong, nonatomic) NSDictionary *switchInfo;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -11,9 +11,7 @@ import SVProgressHUD
 
 @objcMembers
 class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate, SILWifiCommissioningViewControllerDelegate, NetServiceBrowserDelegate {
-    
-   
-    
+
     var appsArray: [SILApp] = SILApp.demoApps()
     var isDisconnectedIntentionally: Bool = false
 
@@ -34,7 +32,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         serviceBrowser.delegate = self
         serviceBrowser.searchForServices(ofType: "_http._tcp.", inDomain: "local.")
     }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupAppCollectionView()
@@ -141,14 +138,24 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILWifiSensorsHomeView")
         self.navigationController?.pushViewController(nextViewController, animated: false)
     }
-    
+    private func moveToSILAWSIoTDemoView() {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "SILAWSIoT", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILAWSIoTHomeViewController")
+        self.navigationController?.pushViewController(nextViewController, animated: false)
+    }
     
     private func moveToSILWifiThroughputDemoView() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "WifiThroughputStoryboard", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILThroughputMainScreenVC")
         self.navigationController?.pushViewController(nextViewController, animated: true)
     }
-            
+    
+    private func moveToSILWifiProvisiningDemoView() {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "WiFiProvisioning", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILWifiProvisioningAPViewController")
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+    
     private func showWifiDisabledAlert() {
         let message = "Please check your Wi-Fi connection to use Wi-Fi OTA Demo"
         self.alertWithOKButton(title: "Wi-Fi Disabled", message: message, completion: { _ in
@@ -241,6 +248,10 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             }
         case .typeWifiThroughput:
             moveToSILWifiThroughputDemoView()
+        case .typeWifiProvision:
+            moveToSILWifiProvisiningDemoView()
+        case .typeAWSIOT:
+            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
         default:
             return
         }
@@ -339,7 +350,14 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                     wifiCommissioningController.delegateWifiCommissioning = self
                     self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
                 }
-                
+            case .typeAWSIOT:
+                if let wifiCommissioningController = UIStoryboard(name: "SILAppTypeWifiCommissioning", bundle: nil).instantiateInitialViewController() as? SILWifiCommissioningViewController {
+                    wifiCommissioningController.centralManager = viewController.centralManager
+                    wifiCommissioningController.connectedPeripheral = peripheral.peripheral
+                    wifiCommissioningController.demoScreenName = "typeAWSIoT"
+                    wifiCommissioningController.delegateWifiCommissioning = self
+                    self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
+                }
             default:
                 break
             }
@@ -495,9 +513,22 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     }
     
     // MARK: SILWifiCommissioningViewControllerDelegate
-    func onceDeviceIsConnect(isConnectedDevice: Bool) {
-        if isConnectedDevice {
-            moveToSILWifiSensorsDemoView()
+    
+    func onceDeviceIsConnect(isConnectedDevice: Bool, demoType: String) {
+        if demoType == "typeWifiSensor" {
+            if isConnectedDevice {
+                moveToSILWifiSensorsDemoView()
+            }
+        }else if demoType == "typeAWSIoT" {
+            if isConnectedDevice {
+                moveToSILAWSIoTDemoView()
+            }
         }
     }
+    
+//    func onceDeviceIsConnect(isConnectedDevice: Bool) {
+//        if isConnectedDevice {
+//            moveToSILWifiSensorsDemoView()
+//        }
+//    }
 }

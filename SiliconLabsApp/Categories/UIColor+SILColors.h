@@ -31,5 +31,6 @@
 + (UIColor *)sil_masalaColor;
 + (UIColor *)sil_silverColor;
 + (UIColor *)sil_yellowColor;
++ (UIColor *)sil_greenColor;
 
 @end

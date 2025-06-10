@@ -24,13 +24,13 @@ class SILWiFiMotionSensorsViewModel {
     var countInt = 0
     
     func getGyroscopeData(completionBlockMotionSensors: @escaping completionBlockMotionSensors)  {
-        APIRequest.sharedInstance.getApiCall(url: "gyroscope") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "gyroscope", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
                     print(json)
-                    if let temperatureDic: Dictionary = json as? Dictionary<String, Any>{
-                        completionBlockMotionSensors(temperatureDic, nil)
+                    if let gyroscopeDic: Dictionary = json as? Dictionary<String, Any>{
+                        completionBlockMotionSensors(gyroscopeDic, nil)
                     }
                 } catch {
                     completionBlockMotionSensors(nil, APIClientError)
@@ -43,13 +43,13 @@ class SILWiFiMotionSensorsViewModel {
     }
     
     func getAccelerometerData(completionBlockMotionSensors: @escaping completionBlockMotionSensors)  {
-        APIRequest.sharedInstance.getApiCall(url: "accelerometer") { ReponsData, APIClientError in
+        APIRequest.sharedInstance.getApiCall(url: "accelerometer", demoType: .WiFiSensor) { ReponsData, APIClientError in
             if APIClientError == nil {
                 do {
                     let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
                     print(json)
-                    if let temperatureDic: Dictionary = json as? Dictionary<String, Any>{
-                        completionBlockMotionSensors(temperatureDic, nil)
+                    if let accelerometerDic: Dictionary = json as? Dictionary<String, Any>{
+                        completionBlockMotionSensors(accelerometerDic, nil)
                     }
                 } catch {
                     completionBlockMotionSensors(nil, APIClientError)

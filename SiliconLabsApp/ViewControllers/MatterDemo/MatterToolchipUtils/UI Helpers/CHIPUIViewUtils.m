@@ -200,7 +200,7 @@
     }else if ([deviceType isEqualToString:@"21"]){
         //Contact Sensor
         deviceTitle = [NSMutableString stringWithFormat:@"Contact Sensor"];
-    }else if ([deviceType isEqualToString:@"259"]){
+    }else if ([deviceType isEqualToString:@"259"] || [deviceType isEqualToString:DimmerSwitch]) {
         //Switch
         deviceTitle = [NSMutableString stringWithFormat:@"Switch"];
     } else if ([deviceType isEqualToString:Dishwasher]) {

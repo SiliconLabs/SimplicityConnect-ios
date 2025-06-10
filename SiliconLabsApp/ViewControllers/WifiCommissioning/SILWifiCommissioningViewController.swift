@@ -10,7 +10,7 @@ import Foundation
 import SVProgressHUD
 
 protocol SILWifiCommissioningViewControllerDelegate {
-    func onceDeviceIsConnect(isConnectedDevice: Bool)
+    func onceDeviceIsConnect(isConnectedDevice: Bool, demoType: String)
 }
 
 class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioningPasswordPopupDelegate, SILWifiCommissioningViewModelDelegate, SILWifiCommissioningDisconnectPopupDelegate, WYPopoverControllerDelegate {
@@ -93,9 +93,12 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                     //self.showOnStartDisconnectView()
                     if self.demoScreenName == "typeWifiSensor" {
                         self.navigationController?.popViewController(animated: false)
-                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true)
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
                         //self.connectedPeripheral.readCharacteristic(characteristic: self.readCharacteristic)
 
+                    }else if self.demoScreenName == "typeAWSIoT" {
+                        self.navigationController?.popViewController(animated: false)
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
                     }else {
                         self.showOnStartDisconnectView()
                     }
@@ -128,8 +131,11 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                 if self.demoScreenName == "typeWifiSensor" {
                     //self.moveToSILWifiSensorsDemoView()
                     self.navigationController?.popViewController(animated: false)
-                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
                     //self.connectedPeripheral.readCharacteristic(characteristic: self.readCharacteristic)
+                }else if self.demoScreenName == "typeAWSIoT" {
+                    self.navigationController?.popViewController(animated: false)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
                 }
                 
             case .connectionFailed:

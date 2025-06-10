@@ -140,7 +140,6 @@ MTRBaseDevice * MTRGetDeviceBeingCommissioned(void)
 BOOL MTRGetConnectedDeviceWithID(uint64_t deviceId, MTRDeviceConnectionCallback completionHandler)
 {
     MTRDeviceController * controller = InitializeMTR();
-    
     return [controller getBaseDevice:deviceId queue:dispatch_get_main_queue() completionHandler:completionHandler];
 }
 

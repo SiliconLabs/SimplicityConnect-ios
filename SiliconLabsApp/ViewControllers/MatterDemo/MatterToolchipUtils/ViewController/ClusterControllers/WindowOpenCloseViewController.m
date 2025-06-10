@@ -450,6 +450,12 @@ NSString *liftValue;
         [deviceDic setObject:@1 forKey:@"endPoint"];
         [deviceDic setObject:connected forKey:@"isConnected"];
         [deviceDic setObject:[windowDeviceList[index2] valueForKey:@"title"] forKey:@"title"];
+        
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @"false"] forKey:@"isBinded"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceType"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceName"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToNodeId"];
+
         [windowDeviceList replaceObjectAtIndex:index2 withObject:deviceDic];
     }
     [[NSUserDefaults standardUserDefaults] setObject:windowDeviceList forKey:@"saved_list"];

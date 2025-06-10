@@ -127,18 +127,50 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 
     self.fileCompletion = completion;
 
-    if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
-        [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
-    } else {
-        [self disconnectConnectedPeripheral];
-    }
-
-    progress(SILDFUStatusRebooting);
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeUpdatingDFUStatusToWaiting * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//    if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
+//        [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
+//    } else {
+//        [self disconnectConnectedPeripheral];
+//    }
+//
+//    progress(SILDFUStatusRebooting);
+//
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeUpdatingDFUStatusToWaiting * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        progress(SILDFUStatusWaiting);
+//        [self reconnectToOTADevice];
+//    });
+    
+    NSLog(@"++++++++++++%d", [self.peripheral hasOTAControlCharacteristic]);
+    NSLog(@"++++++++++++%d", [self.peripheral hasOTADataCharacteristic]);
+    if (initiatingByteSequence && [self.peripheral hasOTADataCharacteristic]){
+        NSLog(@"Series 3 == ++++++++++++%d", [self.peripheral hasOTADataCharacteristic]);
         progress(SILDFUStatusWaiting);
-        [self reconnectToOTADevice];
-    });
+        progress(SILDFUStatusWaiting);
+       // progress(SILDFUStatusWaiting);
+        self.peripheral.delegate = self;
+        [self.peripheral discoverServices:nil];
+//        [self disconnectConnectedPeripheral];
+//        progress(SILDFUStatusRebooting);
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            progress(SILDFUStatusWaiting);
+//            progress(SILDFUStatusWaiting);
+//            //progress(SILDFUStatusWaiting);
+//            [self reconnectToOTADevice];
+//        });
+    }else{
+        if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
+            [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
+        } else {
+            [self disconnectConnectedPeripheral];
+        }
+        
+        progress(SILDFUStatusRebooting);
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSILDurationBeforeUpdatingDFUStatusToWaiting * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            progress(SILDFUStatusWaiting);
+            [self reconnectToOTADevice];
+        });
+    }
 }
 
 - (void)endCycleDevice {

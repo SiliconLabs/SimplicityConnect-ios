@@ -170,6 +170,11 @@ NSMutableArray * occupancyDeviceList;
         [deviceDic setObject:connected forKey:@"isConnected"];
         [deviceDic setObject:[occupancyDeviceList[index2] valueForKey:@"title"] forKey:@"title"];
 
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @"false"] forKey:@"isBinded"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceType"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToDeviceName"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", @""] forKey:@"connectedToNodeId"];
+
         [occupancyDeviceList replaceObjectAtIndex:index2 withObject:deviceDic];
     }
     [[NSUserDefaults standardUserDefaults] setObject:occupancyDeviceList forKey:@"saved_list"];

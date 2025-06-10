@@ -47,7 +47,7 @@ NSMutableDictionary *deviceDic;
         imgName = @"OccupancySensor_icon";
     }else if ([deviceType isEqualToString:@"21"]){
         imgName = @"contactSensor_icon";
-    }else if ([deviceType isEqualToString:@"259"]){
+    }else if ([deviceType isEqualToString:@"259"] || [deviceType isEqualToString:DimmerSwitch]){
         imgName = @"switchOn_icon";
     } else if ([deviceType isEqualToString:Dishwasher]) {
         imgName = @"dishwasher_icon";

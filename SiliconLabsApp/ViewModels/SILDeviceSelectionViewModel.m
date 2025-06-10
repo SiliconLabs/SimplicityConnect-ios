@@ -125,6 +125,8 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
             return @"A circuit board (SoC) must be connected and running firmware with a title containing \"Bluetooth - SoC NCP ESL Demo\".";
         case SILAppTypeWifiSensor:
             return @"1. The SoC and evaluation board (EVK) must be connected and running the correct firmware.\n2. The Wi-Fi network on your mobile device should match the Wi-Fi network used for the sensor device's commissioning.\n3. Enable your phone's local network to access sensor data.";
+        case SILAppTypeAWSIOT:
+            return @"1. The SoC and evaluation board (EVK) must be connected and running the correct firmware.\n2. The Wi-Fi network must have internet access to be used for the sensor device's commissioning.";
         default:
             return @"";
     }

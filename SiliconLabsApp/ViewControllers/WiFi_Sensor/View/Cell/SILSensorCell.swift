@@ -54,15 +54,15 @@ class SILSensorCell: UICollectionViewCell {
         }
         sensorTitleLabel.text = "\(sensorsData["title"] ?? "")"
         //sensorValueLabel.text = "\(valOfSensor)"
-        if sensorsData["title"] as! String == SensorType.temp.rawValue {
+        if sensorsData["title"] as? String == SensorType.temp.rawValue {
             sensorIconImage.image = SensorImage.temp
-        }else if sensorsData["title"] as! String == SensorType.humudity.rawValue {
+        }else if sensorsData["title"] as? String == SensorType.humudity.rawValue {
             sensorIconImage.image = SensorImage.humidity
-        }else if sensorsData["title"] as! String == SensorType.ambient.rawValue {
+        }else if sensorsData["title"] as? String == SensorType.ambient.rawValue {
             sensorIconImage.image = SensorImage.ambient
-        }else if sensorsData["title"] as! String == SensorType.led.rawValue {
+        }else if sensorsData["title"] as? String == SensorType.led.rawValue {
             sensorIconImage.image = SensorImage.LED_Status
-        }else if sensorsData["title"] as! String == SensorType.motion.rawValue {
+        }else if sensorsData["title"] as? String == SensorType.motion.rawValue {
             sensorIconImage.image = SensorImage.motion
         }
     }

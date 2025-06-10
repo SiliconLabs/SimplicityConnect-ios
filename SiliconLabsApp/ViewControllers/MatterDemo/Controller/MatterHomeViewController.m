@@ -50,6 +50,7 @@
 @property (strong, nonatomic) MTRDescriptorClusterDeviceTypeStruct * descriptorClusterDeviceTypeStruct;
 @property (strong, nonatomic) NSTimer *tempRefreshTimerHome;
 @property (weak, nonatomic) IBOutlet UIView *matterSetupInfoView;
+@property (strong, nonatomic)MTRDeviceController * controller;
 
 @end
 
@@ -61,10 +62,12 @@ int arrayCount;
 int isTimerOn;
 int commissiond;
 
+
 // MARK: View Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _controller = InitializeMTR();
     self.navigationItem.title = @"Matter Devices";
     self.tabBarController.tabBar.hidden = YES;
     self.tableView.hidden = YES;
@@ -144,7 +147,7 @@ int commissiond;
     arrayCount = 0;
     
     deviceListTemp = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"saved_list"]];
-    //NSLog(@" MKdeviceListTemp ======== %@\n", deviceListTemp);
+    NSLog(@" MKdeviceListTemp ======== %@\n", deviceListTemp);
     if ([deviceListTemp count] > 0){
         self.noDevicesAddedView.hidden = YES;
         if(isTimerOn == 0){
@@ -230,8 +233,10 @@ int commissiond;
     NSNumber *nodeNumber = [deviceDic valueForKey:@"nodeId"];
     NSNumber *endPointNumber = [deviceDic valueForKey:@"endPoint"];
     NSString *connectedDevice = [deviceDic valueForKey:@"isConnected"];
+    NSString *deviceName = [deviceDic valueForKey:@"title"];
+
     if ([connectedDevice isEqual:@"1"]){
-        [self pushToClusterView:[NSString stringWithFormat:@"%@",[deviceDic valueForKey:@"deviceType"]] node:nodeNumber endpoint:endPointNumber];
+        [self pushToClusterView:[NSString stringWithFormat:@"%@",[deviceDic valueForKey:@"deviceType"]] node:nodeNumber endpoint:endPointNumber deviceName:deviceName];
     }
 }
 
@@ -283,7 +288,7 @@ int commissiond;
     }
 }
 
-- (void)pushToClusterView:(NSString *)deviceType node:(NSNumber *)nodeId endpoint:(NSNumber *)endPoint {
+- (void)pushToClusterView:(NSString *)deviceType node:(NSNumber *)nodeId endpoint:(NSNumber *)endPoint deviceName:(NSString *)deviceName{
     
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"Cluster" bundle:[NSBundle mainBundle]];
     
@@ -327,10 +332,12 @@ int commissiond;
         _occupancySensorViewController.nodeId = nodeId;
         _occupancySensorViewController.endPoint = endPoint;
         [self.navigationController pushViewController:_occupancySensorViewController animated: YES];
-    }else if ([deviceType isEqualToString:@"259"]){
+    } else if ([deviceType isEqualToString:@"259"] || [deviceType isEqualToString:DimmerSwitch]){
         _switchOnOffViewController = [story instantiateViewControllerWithIdentifier:@"SwitchOnOffViewController"];
         _switchOnOffViewController.nodeId = nodeId;
         _switchOnOffViewController.endPoint = endPoint;
+        _switchOnOffViewController.deviceType = deviceType;
+        _switchOnOffViewController.deviceName = deviceName;
         [self.navigationController pushViewController:_switchOnOffViewController animated: YES];
     } else if ([deviceType isEqualToString:Dishwasher]){
         NSString *currentVersion = [[UIDevice currentDevice] systemVersion];
@@ -454,15 +461,28 @@ int commissiond;
         NSNumber *nodeId = [deviceListTemp[j] valueForKey:@"nodeId"];
         uint64_t devId = nodeId.intValue;
         
-        if (MTRGetConnectedDeviceWithID(devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
+        //NEW
+        
+        NSLog(@"%@", [MTRBaseDevice deviceWithNodeID:nodeId controller:_controller]);
+        MTRBaseDevice * _Nullable chipDevice = [MTRBaseDevice deviceWithNodeID:nodeId controller:_controller];
+        
+        //END
+        
+   // if (MTRGetConnectedDeviceWithID(devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
             if (chipDevice) {
                 NSLog(@"%@",chipDevice.isAccessibilityElement);
                 MTRBaseClusterDescriptor * descriptorCluster =
                 [[MTRBaseClusterDescriptor alloc] initWithDevice:chipDevice
                                                         endpoint:1
                                                            queue:dispatch_get_main_queue()];
-                
-                [descriptorCluster readAttributeDeviceListWithCompletionHandler:^( NSArray * _Nullable value, NSError * _Nullable error) {
+                //COMMENTED START
+               // [descriptorCluster readAttributeDeviceListWithCompletionHandler:^( NSArray * _Nullable value, NSError * _Nullable error) {
+                    
+                    //NEW
+                    
+                [descriptorCluster readAttributeDeviceTypeListWithCompletion:^(NSArray * _Nullable value, NSError * _Nullable error) {
+                    
+                    //END
                     if (error) {
                         arrayCount ++;
                         //[SVProgressHUD dismiss];
@@ -470,6 +490,9 @@ int commissiond;
                         return;
                     }
                     _descriptorClusterDeviceTypeStruct = value[0];
+                
+                    
+      //PREVIOUSLY COMMENTED
 //                    NSLog(@"%@",_descriptorClusterDeviceTypeStruct.deviceType);
 //                    NSMutableDictionary * deviceDic = [[NSMutableDictionary alloc] init];
 //                    [deviceDic setObject:self->_descriptorClusterDeviceTypeStruct.deviceType forKey:@"deviceType"];
@@ -478,22 +501,33 @@ int commissiond;
 //                    [deviceDic setObject:@"1" forKey:@"isConnected"];
 //                    [deviceListTemp addObject:deviceDic];
 //                    NSLog(@"deviceListTemp:- %@",deviceListTemp);
+                
+        //END
+                
                     arrayCount ++;
                     //[self showHideTableView: deviceListTemp];
                     [self updateDeviceList:@"1" nodeId:nodeId deviceType:[self->_descriptorClusterDeviceTypeStruct.deviceType stringValue]];
-                }];
+               }];
+                
+                //COMMENTED END
+
+             //NEW
+               // arrayCount ++;
+                //[self updateDeviceList:@"1" nodeId:nodeId deviceType:@""];
+            //END
+                
             } else {
                 NSLog(@"Failed to establish a connection with the device");
                 arrayCount ++;
                 [self updateDeviceList:@"0" nodeId:nodeId deviceType:@""];
             }
-        })) {
-            NSLog(@"Waiting for connection with the device");
-        } else {
-            NSLog(@"Failed to trigger the connection with the device");
-            arrayCount ++;
-            [self updateDeviceList:@"0" nodeId:nodeId deviceType:@""];
-        }
+//        })) {
+//            NSLog(@"Waiting for connection with the device");
+//        } else {
+//            NSLog(@"Failed to trigger the connection with the device");
+//            arrayCount ++;
+//            [self updateDeviceList:@"0" nodeId:nodeId deviceType:@""];
+//        }
     }
 }
 
@@ -511,15 +545,23 @@ int commissiond;
         }else{
             deviceType = typeOfDevice;
         }
+        NSLog(@"%@", deviceListTemp[index2]);
         NSNumber *nodeId = [deviceListTemp[index2] valueForKey:@"nodeId"];
-        
+        NSString *connectedTOdeviceType = [deviceListTemp[index2] valueForKey:@"connectedToDeviceType"];
+        NSString *connectedTOdeviceName = [deviceListTemp[index2] valueForKey:@"connectedToDeviceName"];
+        NSString *deviceisBinded = [deviceListTemp[index2] valueForKey:@"isBinded"];
+        NSString *connectedTOnodeId = [deviceListTemp[index2] valueForKey:@"connectedToNodeId"];
+
         NSMutableDictionary * deviceDic = [[NSMutableDictionary alloc] init];
         [deviceDic setObject:deviceType forKey:@"deviceType"];
         [deviceDic setObject:nodeId forKey:@"nodeId"];
         [deviceDic setObject:@1 forKey:@"endPoint"];
         [deviceDic setObject:connected forKey:@"isConnected"];
         [deviceDic setObject:[deviceListTemp[index2] valueForKey:@"title"] forKey:@"title"];
-        
+        [deviceDic setObject:deviceisBinded forKey:@"isBinded"];
+        [deviceDic setObject:connectedTOdeviceType forKey:@"connectedToDeviceType"];
+        [deviceDic setObject:connectedTOdeviceName forKey:@"connectedToDeviceName"];
+        [deviceDic setObject:connectedTOnodeId forKey:@"connectedToNodeId"];
         [deviceListTemp replaceObjectAtIndex:index2 withObject:deviceDic];
     }
     [[NSUserDefaults standardUserDefaults] setObject:deviceListTemp forKey:@"saved_list"];
@@ -535,8 +577,8 @@ int commissiond;
         [_tableView reloadData];
     });
     if (arrayCount >= [deviceListTemp count]){
-        [SVProgressHUD dismiss];
         dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
 //            deviceListTemp = [[NSMutableArray alloc] init];
 //            deviceListTemp = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"saved_list"]];
 //            [_tableView reloadData];
@@ -565,6 +607,7 @@ int commissiond;
 -(void)refreshTable{
     deviceListTemp = [[NSMutableArray alloc] init];
     deviceListTemp = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"saved_list"]];
+    NSLog(@"=====================+++++++++==================== %@", deviceListTemp);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (deviceListTemp.count > 0) {
             self.tableView.hidden = NO;

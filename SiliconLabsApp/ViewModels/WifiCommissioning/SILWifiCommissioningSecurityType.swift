@@ -15,6 +15,10 @@ enum SILWifiCommissioningSecurityType: Int {
     case eapWpa = 4
     case eapWpa2 = 5
     case wpaWpa2 = 6
+    case wpa3 = 7
+    case wpa3Transition = 8
+    case wpa3Enterprise = 9
+    case wpa3TransitionEnterprise = 10
     
     var name: String {
         get {
@@ -33,6 +37,14 @@ enum SILWifiCommissioningSecurityType: Int {
                 return "EAP-WPA2";
             case .wpaWpa2:
                 return "WPA/WPA2";
+            case .wpa3:
+                return "WPA3";
+            case .wpa3Enterprise:
+                return "WPA3 Enterprise";
+            case .wpa3Transition:
+                return "WPA3 Transition";
+            case .wpa3TransitionEnterprise:
+                return "WPA3 Transition Enterprise";
             case .unknown:
                 return "Unknown Mode";
             }

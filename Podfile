@@ -27,6 +27,8 @@ def shared_pods
     pod 'CocoaLumberjack/Swift'
     pod 'DeviceGuru'
     pod 'WYPopoverController', :git => 'https://github.com/sammcewan/WYPopoverController.git'
+    pod 'AWSCore'
+    pod 'AWSIoT'
 end
 
 def test_pods
@@ -61,7 +63,7 @@ post_install do |installer|
          		end
 
 			shell_script_path = "Pods/Target Support Files/#{target.name}/#{target.name}-frameworks.sh"
-			if File::exists?(shell_script_path)
+			if File::exist?(shell_script_path)
 		 		shell_script_input_lines = File.readlines(shell_script_path)
 		 		shell_script_output_lines = shell_script_input_lines.map { |line| line.sub("source=\"$(readlink \"${source}\")\"", "source=\"$(readlink -f \"${source}\")\"") }
 		 		File.open(shell_script_path, 'w') do |f|

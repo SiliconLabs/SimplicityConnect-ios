@@ -16,6 +16,7 @@ public enum ToastType: Int {
     case characteristicPasteAlert
     case characteristicError
     case advertiserTimeLimitError
+    case internetInfo
 }
 
 @objc
@@ -90,6 +91,8 @@ extension UIViewController {
             return (3.0, 60.0, 16.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .advertiserTimeLimitError:
             return (3.0, 60.0, 32.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
+        case .internetInfo:
+            return (3.0, 60.0, 32.0, 24.0, UIColor.white, UIColor.sil_green())
         @unknown default:
             return (0.0, 0.0, 0.0, 0.0, UIColor.white, .white)
         }

@@ -12,7 +12,7 @@
 @end
 
 @implementation OnOffViewController {
-    
+    MTRDeviceController * _controller;
 }
 @synthesize  nodeId, endPoint;
 NSMutableArray * lightDeviceList;
@@ -23,15 +23,18 @@ MTRSubscribeParams * subParamLight;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _controller = InitializeMTR();
     lightDeviceList = [[NSMutableArray alloc] init];
     lightDeviceList = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"saved_list"]];
     subParamLight = [[MTRSubscribeParams alloc] initWithMinInterval:@2 maxInterval:@5];
     [self readDevice];
+    //[self readCurrentStateFromDevice];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self setupUIElements];
+    
 }
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -72,10 +75,13 @@ MTRSubscribeParams * subParamLight;
     
     if (@available(iOS 16.1, *)) {
         if (@available(iOS 16.1, *)) {
-            [onOffLight onWithCompletionHandler:^(NSError * error) {
+            [onOffLight onWithCompletion:^(NSError * _Nullable error) {
+                if (error != nil) {
+                    //[self setDeviceStatus:@"0" nodeId:self->nodeId];
+                }
                 NSString * resultString = (error != nil)
-                ? [NSString stringWithFormat:@"An error occurred: 0x%02lx", error.code]
-                : @"On";
+                              ? [NSString stringWithFormat:@"An error occurred: 0x%02lx", error.code]
+                              : @"On";
                 [self updateResult:resultString];
             }];
         } else {
@@ -89,7 +95,10 @@ MTRSubscribeParams * subParamLight;
 - (IBAction)offButtonTapped:(id)sender
 {
     if (@available(iOS 16.1, *)) {
-        [onOffLight offWithCompletionHandler:^(NSError * error) {
+        [onOffLight offWithCompletion:^(NSError * _Nullable error) {
+            if (error != nil) {
+               // [self setDeviceStatus:@"0" nodeId:self->nodeId];
+            }
             NSString * resultString = (error != nil)
             ? [NSString stringWithFormat:@"An error occurred: 0x%02lx", error.code]
             : @"Off";
@@ -105,7 +114,12 @@ MTRSubscribeParams * subParamLight;
     if (@available(iOS 16.1, *)) {
         if (@available(iOS 16.1, *)) {
             [onOffLight toggleWithCompletion:^(NSError * _Nullable error) {
-                [self readDeviceStateAfterToggle];
+                if (error == nil) {
+                    [self readDeviceStateAfterToggle];
+                }else{
+                    //[self setDeviceStatus:@"0" nodeId:self->nodeId];
+                }
+               
             }];
         } else {
             // Fallback on earlier versions
@@ -117,11 +131,13 @@ MTRSubscribeParams * subParamLight;
 
 }
 
--(void) readCurrentStateFromDevice {
+-(void)readCurrentStateFromDevice {
     
     NSInteger endpoint = 1;
    uint64_t _devId = nodeId.intValue;
-   if (MTRGetConnectedDeviceWithID(_devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
+    NSLog(@"%@", [MTRBaseDevice deviceWithNodeID:nodeId controller:_controller]);
+    MTRBaseDevice * _Nullable chipDevice = [MTRBaseDevice deviceWithNodeID:nodeId controller:_controller];
+   //if (MTRGetConnectedDeviceWithID(_devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
        if (chipDevice) {
            [onOffLight subscribeAttributeOnOffWithParams:subParamLight subscriptionEstablished:^{
            } reportHandler:^(NSNumber * _Nullable value, NSError * _Nullable error) {
@@ -135,11 +151,11 @@ MTRSubscribeParams * subParamLight;
        } else {
            [self updateResult:[NSString stringWithFormat:@"Failed to establish a connection with the device"]];
        }
-   })) {
-       [self updateResult:[NSString stringWithFormat:@"Waiting for connection with the device"]];
-   } else {
-       [self updateResult:[NSString stringWithFormat:@"Failed to trigger the connection with the device"]];
-   }
+//   })) {
+//       [self updateResult:[NSString stringWithFormat:@"Waiting for connection with the device"]];
+//   } else {
+//       [self updateResult:[NSString stringWithFormat:@"Failed to trigger the connection with the device"]];
+//   }
 }
 
 - (void)readDeviceStateAfterToggle {
@@ -147,13 +163,11 @@ MTRSubscribeParams * subParamLight;
     uint64_t _devId = nodeId.intValue;
     if (MTRGetConnectedDeviceWithID(_devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
         if (chipDevice) {
-            // Start: - Light
-//            MTRBaseClusterOnOff * onOff = [[MTRBaseClusterOnOff alloc] initWithDevice:chipDevice
-//                                                                             endpoint:endpoint
-//                                                                                queue:dispatch_get_main_queue()];
             [onOffLight readAttributeOnOffWithCompletion:^(NSNumber * _Nullable value, NSError * _Nullable error) {
                 NSLog(@"chipDevice %@", value);
-                
+                if (error != nil) {
+                    //[self setDeviceStatus:@"0" nodeId:self->nodeId];
+                }
                 if ([value  isEqual: @1]) {
                     [self updateResult:@"On"];
                 } else {
@@ -184,14 +198,24 @@ MTRSubscribeParams * subParamLight;
     NSInteger endpoint = 1;
     uint64_t _devId = nodeId.intValue;
     [SVProgressHUD showWithStatus: @"Connecting to commissioned device..."];
-    if (MTRGetConnectedDeviceWithID(_devId, ^(MTRBaseDevice * _Nullable chipDevice, NSError * _Nullable error) {
-        if (chipDevice) {
+    //NEW
+    
+    NSLog(@"%@", [MTRBaseDevice deviceWithNodeID:nodeId controller:_controller]);
+    MTRBaseDevice * _Nullable deviceLight = [MTRBaseDevice deviceWithNodeID:nodeId controller:_controller];
+    onOffLight = [[MTRBaseClusterOnOff alloc] initWithDevice:deviceLight
+                                                                     endpoint:1
+                                                                        queue:dispatch_get_main_queue()];
+    
+    //END
+
+    
+        if (deviceLight) {
                 MTRBaseClusterDescriptor * descriptorCluster =
-                [[MTRBaseClusterDescriptor alloc] initWithDevice:chipDevice
+                [[MTRBaseClusterDescriptor alloc] initWithDevice:deviceLight
                                                         endpoint:1
                                                            queue:dispatch_get_main_queue()];
-                
-            [descriptorCluster readAttributeDeviceListWithCompletionHandler:^(NSArray * _Nullable value, NSError * _Nullable error) {
+            
+            [descriptorCluster readAttributeDeviceTypeListWithCompletion:^(NSArray * _Nullable value, NSError * _Nullable error) {
                 if (error) {
                     [self setDeviceStatus:@"0" nodeId:self->nodeId];
                     //[self showAlertMessage: errorMessage];
@@ -199,9 +223,6 @@ MTRSubscribeParams * subParamLight;
                 }
                 [self setDeviceStatus:@"1" nodeId:self->nodeId];
             }];
-            onOffLight = [[MTRBaseClusterOnOff alloc] initWithDevice:chipDevice
-                                                                             endpoint:endpoint
-                                                                                queue:dispatch_get_main_queue()];
             [onOffLight readAttributeOnOffWithCompletion:^(NSNumber * _Nullable value, NSError * _Nullable error) {
                 NSLog(@"chipDevice %@", value);
                 
@@ -217,12 +238,7 @@ MTRSubscribeParams * subParamLight;
             [self updateResult:[NSString stringWithFormat:@"Failed to establish a connection with the device"]];
             [self setDeviceStatus:@"0" nodeId:self->nodeId];
         }
-    })) {
-        [self updateResult:[NSString stringWithFormat:@"Waiting for connection with the device"]];
-    } else {
-        [self setDeviceStatus:@"0" nodeId:self->nodeId];
-        [self updateResult:[NSString stringWithFormat:@"Failed to trigger the connection with the device"]];
-    }
+
 }
 - (void)setDeviceStatus:(NSString *)connected nodeId:(NSNumber *)node_id{
     //NSArray *filtered = [lockDeviceList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(nodeId == %@)", @(7)]];
@@ -241,14 +257,23 @@ MTRSubscribeParams * subParamLight;
         [deviceDic setObject:@1 forKey:@"endPoint"];
         [deviceDic setObject:connected forKey:@"isConnected"];
         [deviceDic setObject:[lightDeviceList[index2] valueForKey:@"title"] forKey:@"title"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", [lightDeviceList[index2] valueForKey:@"isBinded"]] forKey:@"isBinded"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", [lightDeviceList[index2] valueForKey:@"connectedToDeviceType"]] forKey:@"connectedToDeviceType"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", [lightDeviceList[index2] valueForKey:@"connectedToDeviceName"]] forKey:@"connectedToDeviceName"];
+        [deviceDic setObject:[NSString stringWithFormat:@"%@", [lightDeviceList[index2] valueForKey:@"connectedToNodeId"]] forKey:@"connectedToNodeId"];
         [lightDeviceList replaceObjectAtIndex:index2 withObject:deviceDic];
     }
     [[NSUserDefaults standardUserDefaults] setObject:lightDeviceList forKey:@"saved_list"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     NSLog(@"deviceListTemp:- %@",lightDeviceList);
-    [SVProgressHUD dismiss];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+    });
+    
     if([connected isEqualToString:@"0"]){
-        [self showAlertPopup:@"Device is offline, Please check the device connectivity."];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showAlertPopup:@"Device is offline, Please check the device connectivity."];
+        });
     }else{
         //[self readCurrentStateFromDevice];
         NSTimeInterval delayInSeconds = 5.0;
@@ -261,6 +286,7 @@ MTRSubscribeParams * subParamLight;
 }
 
 -(void) showAlertPopup:(NSString *) message {
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Alert" message: message preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {

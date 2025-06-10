@@ -25,7 +25,9 @@
                 [self matterDemoApp],
                 [self WifiOTADemoApp],
                 [self WifiSensorDemoApp],
-                [self WifiSensorThroughput]
+                [self WifiSensorThroughput],
+                [self WifiProvisionDemoApp],
+                [self AWSIOTDemoApp]
             ];
 }
 
@@ -139,6 +141,23 @@
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeWiFiThroughput];
 }
+//Provisioning over Wi-Fi
++ (SILApp *)WifiProvisionDemoApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeWifiProvision
+                                     title:@"Wi-Fi Provisioning"
+                               description:@"Provisioning over Wi-Fi."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeWifiProvision];
+}
+
++ (SILApp *)AWSIOTDemoApp{
+    return [[SILApp alloc] initWithAppType:SILAppTypeAWSIOT
+                                     title:@"AWS IoT"
+                               description:@"Add/commission a device and read or control it over AWS IoT Cloud."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeAWSIoT];
+}
+
 
 - (instancetype)initWithAppType:(SILAppType)appType
                            title:(NSString *)title

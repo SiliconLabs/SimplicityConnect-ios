@@ -190,8 +190,10 @@ UIButton * backButton;
             [[MTRBaseClusterDescriptor alloc] initWithDevice:chipDevice
                                                     endpoint:1
                                                        queue:dispatch_get_main_queue()];
-            
-            [descriptorCluster readAttributeDeviceListWithCompletionHandler:^( NSArray * _Nullable value, NSError * _Nullable error) {
+            //readAttributeDeviceTypeListWithCompletion
+            [descriptorCluster readAttributeDeviceTypeListWithCompletion:^(NSArray * _Nullable value, NSError * _Nullable error) {
+                
+            //[descriptorCluster readAttributeDeviceListWithCompletionHandler:^( NSArray * _Nullable value, NSError * _Nullable error) {
                 if (error) {
                     _commissioningDeviceProgressView.hidden = TRUE;
                     backButton.enabled = YES;
@@ -529,6 +531,7 @@ UIButton * backButton;
         
         NSLog(@" payload Str :- %@", payloadStr);
         self.datasetValue = [self dataFromHexString: payloadStr];
+        //self.datasetValue = [self dataFromHexString:@"0e08000000000001000000030000134a0300001735060004001fffe0020822062d5f404109330708fdefddf810341ca80510274ccd7191c001f337f529bf9e07c960030f4f70656e5468726561642d33356136010235a6041084289c9775df20c8ec1c0ec08426f3980c0402a0f7f8"];
         
         //Commented for flow change...
         
@@ -934,7 +937,7 @@ UIButton * backButton;
     NSString *trimmedTextFieldText = [self.nameInputTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     if (![trimmedTextFieldText  isEqual: @""]){
-        [self deviceSaveInLocalDB:deviceTypeAfterCommission nodeId:nodeIdAfterCommision deviceTitle:self.nameInputTextField.text];
+        [self deviceSaveInLocalDB:deviceTypeAfterCommission nodeId:nodeIdAfterCommision deviceTitle:self.nameInputTextField.text isBinded:@"false"];
     }else{
         [self showAlertPopup:@"Please enter a device name."];
     }
@@ -1062,13 +1065,17 @@ UIButton * backButton;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)deviceSaveInLocalDB:(NSNumber *)deviceTypeId nodeId:(NSNumber *)nodeid deviceTitle:(NSString *)deviceTitleValue{
+- (void)deviceSaveInLocalDB:(NSNumber *)deviceTypeId nodeId:(NSNumber *)nodeid deviceTitle:(NSString *)deviceTitleValue isBinded: (NSString *) isBinded{
     NSMutableDictionary * deviceDic = [[NSMutableDictionary alloc] init];
     [deviceDic setObject:deviceTypeId forKey:@"deviceType"];
     [deviceDic setObject:nodeid forKey:@"nodeId"];
     [deviceDic setObject:@1 forKey:@"endPoint"];
     [deviceDic setObject:@"1" forKey:@"isConnected"];
     [deviceDic setObject:deviceTitleValue forKey:@"title"];
+    [deviceDic setObject:isBinded forKey:@"isBinded"];
+    [deviceDic setObject:@"" forKey:@"connectedToDeviceType"];
+    [deviceDic setObject:@"" forKey:@"connectedToDeviceName"];
+    [deviceDic setObject:@"" forKey:@"connectedToNodeId"];
     [MKdeviceListTemp addObject:deviceDic];
     [[NSUserDefaults standardUserDefaults] setObject:MKdeviceListTemp forKey:@"saved_list"];
     [[NSUserDefaults standardUserDefaults] synchronize];

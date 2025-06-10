@@ -91,5 +91,8 @@
 + (UIColor *)sil_yellowColor {
     return [UIColor colorNamed: @"sil_yellowColor"];
 }
++ (UIColor *)sil_greenColor {
+    return [UIColor colorNamed: @"sil_regularGreenColor"];
+}
 
 @end

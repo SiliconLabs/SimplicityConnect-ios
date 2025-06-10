@@ -313,7 +313,7 @@ class SILWifiCommissioningViewModel {
                 accessPoint.macAddress = macAddress
                 accessPoint.connected = true
                 accessPoints[index] = accessPoint
-                print("ip", ipAddress, macAddress, value)
+                print("ip address", ipAddress, macAddress, value)
                 // Storing data
                 UserDefaults.standard.set("\(ipAddress)", forKey: "access_point_IPA")
 
