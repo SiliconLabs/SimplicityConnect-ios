@@ -35,6 +35,9 @@ Simplicity Connect includes many demos to test sample apps in the Silicon Labs G
 - **Wi-Fi 917 Sensors**: The Wi-Fi 917 Sensor demo demonstrates to read and display sensor data from 917 Dev Kit.
 - **Wi-Fi Throughput**: Wi-Fi demo feature for measuring data throughput between SiWx91X device and the mobile phone.
 
+- **Wi-Fi Provisioning**: Commission a Wi-Fi device via Access Point.
+- **AWS Demo**: This Demo showcases a system where sensor data is sent to AWS IoT Core using the MQTT protocol. A mobile app subscribes to specific MQTT topics to receive this sensor data in real-time. The app can also publish messages to AWS IoT Core, which are then received by the sensor device's firmware, enabling two-way communication.
+
 ## Development Features
 Simplicity Connect helps developers create and troubleshoot Bluetooth applications running on Silicon Labs’ BLE hardware. Here’s a rundown of some example functionalities.
 
