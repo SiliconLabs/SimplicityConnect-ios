@@ -41,7 +41,6 @@ class SILAppDelegate : UIResponder, UIApplicationDelegate {
     }
     private func setupLogs() {
         DDLog.add(DDOSLogger.sharedInstance)
-        
         let fileLogger: DDFileLogger = DDFileLogger() // File Logger
         fileLogger.rollingFrequency = 60 * 60 * 24 // 24 hours
         fileLogger.logFileManager.maximumNumberOfLogFiles = 30
