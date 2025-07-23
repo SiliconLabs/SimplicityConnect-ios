@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2024-11-04T17:05:47 IST" name="Default suite" finished-at="2024-11-04T17:05:54 IST" duration-ms="6238">
+    <groups>
+    </groups>
+    <test started-at="2024-11-04T17:05:47 IST" name="Default test" finished-at="2024-11-04T17:05:54 IST" duration-ms="6238">
+      <class name="Test.BaseClass">
+        <test-method signature="iPhone()[pri:0, instance:Test.BaseClass@7dcf94f8]" started-at="2024-11-04T17:05:47 IST" name="iPhone" finished-at="2024-11-04T17:05:49 IST" duration-ms="1176" status="FAIL">
+          <exception class="org.openqa.selenium.SessionNotCreatedException">
+            <message>
+              <![CDATA[Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: Unknown device or simulator UDID: '00008120-000964611E9B401E' 
+Host info: host: 'mac0018146', ip: 'fe80:0:0:0:ac:356:b3c4:d12d%en0'
+Build info: version: '4.11.0', revision: '040bc5406b'
+System info: os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '14.4.1', java.version: '17.0.10'
+Driver info: io.appium.java_client.ios.IOSDriver
+Command: [null, newSession {capabilities=[{appium:app=/Users/negulati/Downloads/BlueGecko 6.app, appium:automationName=xcuitest, appium:deviceName=iPhone 13, appium:platformVersion=17.4, appium:autoAcceptAlerts=true, appium:autoGrantPermissions=true, appium:bundleID=com.silabs.BlueGeckoDemoApp, appium:newCommandTimeout=10000, platformName=IOS, appium:udid=00008120-000964611E9B401E, appium:wdaLaunchTimeout=60000, appium:xcodeOrgID=52444FG85C, appium:xcodeSigingId=iPhone Developer}], desiredCapabilities=Capabilities {appium:app: /Users/negulati/Downloads/B..., appium:automationName: xcuitest, appium:deviceName: iPhone 13, appium:platformVersion: 17.4, autoAcceptAlerts: true, autoGrantPermissions: true, bundleID: com.silabs.BlueGeckoDemoApp, newCommandTimeout: 10000, platformName: IOS, udid: 00008120-000964611E9B401E, wdaLaunchTimeout: 60000, xcodeOrgID: 52444FG85C, xcodeSigingId: iPhone Developer}}]
+Capabilities {appium:app: /Users/negulati/Downloads/B..., appium:automationName: xcuitest, appium:deviceName: iPhone 13, appium:platformVersion: 17.4, autoAcceptAlerts: true, autoGrantPermissions: true, bundleID: com.silabs.BlueGeckoDemoApp, newCommandTimeout: 10000, platformName: IOS, udid: 00008120-000964611E9B401E, wdaLaunchTimeout: 60000, xcodeOrgID: 52444FG85C, xcodeSigingId: iPhone Developer}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: Unknown device or simulator UDID: '00008120-000964611E9B401E' 
+Host info: host: 'mac0018146', ip: 'fe80:0:0:0:ac:356:b3c4:d12d%en0'
+Build info: version: '4.11.0', revision: '040bc5406b'
+System info: os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '14.4.1', java.version: '17.0.10'
+Driver info: io.appium.java_client.ios.IOSDriver
+Command: [null, newSession {capabilities=[{appium:app=/Users/negulati/Downloads/BlueGecko 6.app, appium:automationName=xcuitest, appium:deviceName=iPhone 13, appium:platformVersion=17.4, appium:autoAcceptAlerts=true, appium:autoGrantPermissions=true, appium:bundleID=com.silabs.BlueGeckoDemoApp, appium:newCommandTimeout=10000, platformName=IOS, appium:udid=00008120-000964611E9B401E, appium:wdaLaunchTimeout=60000, appium:xcodeOrgID=52444FG85C, appium:xcodeSigingId=iPhone Developer}], desiredCapabilities=Capabilities {appium:app: /Users/negulati/Downloads/B..., appium:automationName: xcuitest, appium:deviceName: iPhone 13, appium:platformVersion: 17.4, autoAcceptAlerts: true, autoGrantPermissions: true, bundleID: com.silabs.BlueGeckoDemoApp, newCommandTimeout: 10000, platformName: IOS, udid: 00008120-000964611E9B401E, wdaLaunchTimeout: 60000, xcodeOrgID: 52444FG85C, xcodeSigingId: iPhone Developer}}]
+Capabilities {appium:app: /Users/negulati/Downloads/B..., appium:automationName: xcuitest, appium:deviceName: iPhone 13, appium:platformVersion: 17.4, autoAcceptAlerts: true, autoGrantPermissions: true, bundleID: com.silabs.BlueGeckoDemoApp, newCommandTimeout: 10000, platformName: IOS, udid: 00008120-000964611E9B401E, wdaLaunchTimeout: 60000, xcodeOrgID: 52444FG85C, xcodeSigingId: iPhone Developer}
+at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:140)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+at io.appium.java_client.remote.AppiumProtocolHandshake.createSession(AppiumProtocolHandshake.java:133)
+at io.appium.java_client.remote.AppiumProtocolHandshake.createSession(AppiumProtocolHandshake.java:102)
+at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:182)
+at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:250)
+at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:518)
+at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:274)
+at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:159)
+at io.appium.java_client.AppiumDriver.<init>(AppiumDriver.java:89)
+at io.appium.java_client.AppiumDriver.<init>(AppiumDriver.java:101)
+at io.appium.java_client.ios.IOSDriver.<init>(IOSDriver.java:104)
+at Test.IOSDriverConfig.iOSSetUp(IOSDriverConfig.java:56)
+at Test.BaseClass.iPhone(BaseClass.java:18)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:227)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:50)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:957)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:200)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+at org.testng.TestRunner.privateRun(TestRunner.java:848)
+at org.testng.TestRunner.run(TestRunner.java:621)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1280)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1200)
+at org.testng.TestNG.runSuites(TestNG.java:1114)
+at org.testng.TestNG.run(TestNG.java:1082)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.SessionNotCreatedException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- iPhone -->
+        <test-method is-config="true" signature="quit()[pri:0, instance:Test.BaseClass@7dcf94f8]" started-at="2024-11-04T17:05:49 IST" name="quit" finished-at="2024-11-04T17:05:54 IST" duration-ms="5007" status="FAIL">
+          <exception class="java.lang.NullPointerException">
+            <message>
+              <![CDATA[Cannot invoke "io.appium.java_client.AppiumDriver.quit()" because "Test.IOSDriverConfig.driver" is null]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.NullPointerException: Cannot invoke "io.appium.java_client.AppiumDriver.quit()" because "Test.IOSDriverConfig.driver" is null
+at Test.IOSDriverConfig.quit(IOSDriverConfig.java:114)
+at Test.BaseClass.quit(BaseClass.java:30)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethodConsideringTimeout(MethodInvocationHelper.java:69)
+at org.testng.internal.invokers.ConfigInvoker.invokeConfigurationMethod(ConfigInvoker.java:390)
+at org.testng.internal.invokers.ConfigInvoker.invokeConfigurations(ConfigInvoker.java:325)
+at org.testng.TestRunner.invokeTestConfigurations(TestRunner.java:663)
+at org.testng.TestRunner.afterRun(TestRunner.java:933)
+at org.testng.TestRunner.run(TestRunner.java:624)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1280)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1200)
+at org.testng.TestNG.runSuites(TestNG.java:1114)
+at org.testng.TestNG.run(TestNG.java:1082)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.NullPointerException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- quit -->
+      </class> <!-- Test.BaseClass -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
