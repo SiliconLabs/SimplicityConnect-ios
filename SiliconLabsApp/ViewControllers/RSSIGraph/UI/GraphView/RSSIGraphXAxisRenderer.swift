@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Charts
+import DGCharts
 
 class RSSIGraphXAxisRenderer: XAxisRenderer {
     
