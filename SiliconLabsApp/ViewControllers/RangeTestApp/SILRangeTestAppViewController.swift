@@ -9,7 +9,7 @@
 import UIKit
 import ActionSheetPicker_3_0
 import ChameleonFramework
-import Charts
+import DGCharts
 import SVProgressHUD
 
 fileprivate struct Constants {
@@ -627,7 +627,7 @@ extension SILRangeTestAppViewController {
     }
     
     private class CubicLineSampleFillFormatter: FillFormatter {
-        func getFillLinePosition(dataSet: Charts.LineChartDataSetProtocol, dataProvider: Charts.LineChartDataProvider) -> CGFloat {
+        func getFillLinePosition(dataSet: DGCharts.LineChartDataSetProtocol, dataProvider: DGCharts.LineChartDataProvider) -> CGFloat {
             return -100
         }
     }
