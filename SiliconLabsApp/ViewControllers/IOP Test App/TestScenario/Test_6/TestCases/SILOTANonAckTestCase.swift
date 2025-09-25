@@ -124,8 +124,9 @@ class SILOTANonAckTestCase: SILTestCase {
             self.invalidateObservableTokens()
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Unsupported board."))
         }
-        
-        self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.originalVersion)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
+            self.otaUpdateManager.startTest(for: boardID, firmwareVersion: self.firmwareInfo!.originalVersion)
+        }
     }
     
     private func reconnectToDevice(passed: Bool, description: String? = nil) {

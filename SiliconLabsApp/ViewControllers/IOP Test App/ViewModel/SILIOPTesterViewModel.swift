@@ -174,8 +174,6 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
             observableTokens.append(iopTest[i].testResults.observe({ testResults in
                 if testResults.isEmpty { return }
                 guard let weakSelf = weakSelf else { return }
-                print("SOVAN TEST: \(self.iopTest[i])")
-                print("SOVAN TEST RESULT: \(testResults)")
                 print(i)
                 weakSelf.printTestResultInfo(testResults)
                 let newTestCaseStatuses: [SILTestStatus] = testResults.map { testResult in

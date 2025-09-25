@@ -115,7 +115,7 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
         case SILAppTypeWifiCommissioning:
             return @"A circuit board (SoC) and the evaluation board (EVK) must be connected and running proper firmwares. See the documentation, tutorial and GitHub for more information.";
         case SILAppTypeConnectedLighting:
-            return @"A circuit board (SoC) must be connected and running \"Bluetooth RAIL DMP - SoC Light Standard\" or \"Connect Bluetooth DMP - SoC Light\" firmware.";
+            return @"A circuit board (SoC) must be connected and running \"Bluetooth RAIL DMP - SoC Light\" or \"Connect Bluetooth DMP - SoC Light\" firmware.";
         case SILAppTypeRangeTest:
             return @"A circuit board (SoC) must be connected and running \"RAIL Bluetooth DMP - SoC Range Test\" firmware.";
         case SILAppTypeMotion:

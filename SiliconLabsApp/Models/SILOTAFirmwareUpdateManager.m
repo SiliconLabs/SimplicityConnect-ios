@@ -146,17 +146,16 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
         NSLog(@"Series 3 == ++++++++++++%d", [self.peripheral hasOTADataCharacteristic]);
         progress(SILDFUStatusWaiting);
         progress(SILDFUStatusWaiting);
-       // progress(SILDFUStatusWaiting);
         self.peripheral.delegate = self;
         [self.peripheral discoverServices:nil];
-//        [self disconnectConnectedPeripheral];
-//        progress(SILDFUStatusRebooting);
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            progress(SILDFUStatusWaiting);
-//            progress(SILDFUStatusWaiting);
-//            //progress(SILDFUStatusWaiting);
-//            [self reconnectToOTADevice];
+//            self.peripheral.delegate = self;
+//            [self.peripheral discoverServices:nil];
 //        });
+
+
     }else{
         if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
             [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];

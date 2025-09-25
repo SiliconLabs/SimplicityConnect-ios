@@ -196,8 +196,9 @@ class SILOTAAckTestCase: SILTestCase {
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Unsupported board."))
             IOPLog().iopLogSwiftFunction(message: "Unsupported board.")
         }
-        
-        self.otaUpdateManager.startTest(for: boardID, firmwareVersion: firmwareInfo!.originalVersion)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.otaUpdateManager.startTest(for: boardID, firmwareVersion: self.firmwareInfo!.originalVersion)
+       }
     }
     
     @objc private func scanIntervalTimerFired() {
