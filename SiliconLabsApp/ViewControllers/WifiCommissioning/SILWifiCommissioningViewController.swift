@@ -10,7 +10,7 @@ import Foundation
 import SVProgressHUD
 
 protocol SILWifiCommissioningViewControllerDelegate {
-    func onceDeviceIsConnect(isConnectedDevice: Bool, demoType: String)
+    func onceDeviceIsConnect(isConnectedDevice: Bool, demoType: String, connectedPeripheral: CBPeripheral?, CentralManager: SILCentralManager)
 }
 
 class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioningPasswordPopupDelegate, SILWifiCommissioningViewModelDelegate, SILWifiCommissioningDisconnectPopupDelegate, WYPopoverControllerDelegate {
@@ -32,6 +32,9 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
     var demoScreenName: String = ""
     var delegateWifiCommissioning:SILWifiCommissioningViewControllerDelegate?
     
+    var isBleDisconnectFlow: Bool = false
+    private var loaderTimer: Timer?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = SILWifiCommissioningViewModel(centralManager: centralManager, connectedPeripheral: connectedPeripheral)
@@ -51,7 +54,10 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.viewWillDisappear()
+        
+        if !isBleDisconnectFlow {
+            viewModel.viewWillDisappear()
+        }
         disposeBag.invalidateTokens()
         self.navigationController?.tabBarController?.showTabBarAndUpdateFrames()
     }
@@ -77,29 +83,45 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                 
             case .failure(let reason):
                 SVProgressHUD.showError(withStatus: reason)
+                self.dismissLoaderTimer()
                 self.navigationController?.popViewController(animated: true)
                 
             case .discoveringServicesAndCharacteristicsStarted:
                 SVProgressHUD.show(withStatus: "Connecting to device...")
+                self.loaderTimer?.invalidate()
+                self.loaderTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: false) { [weak self] _ in
+                    SVProgressHUD.dismiss()
+                    self?.showToast(message: "Access Point connection failed. Please ensure your APs are powered on and within range.", toastType: .disconnectionError, shouldHasSizeOfText: false, position: .bottom, completion: {})
+                    self?.loaderTimer = nil
+                }
                 
             case .firmwareVersionRead(let version):
                 self.firmwareVersionLabel.text = version
                 
             case .checkingStatusFinished(let isConnected):
                 SVProgressHUD.dismiss()
+                self.dismissLoaderTimer()
+
                 if !isConnected {
                     self.viewModel.scan()
                 } else {
                     //self.showOnStartDisconnectView()
                     if self.demoScreenName == "typeWifiSensor" {
                         self.navigationController?.popViewController(animated: false)
-                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: nil, CentralManager: self.centralManager)
                         //self.connectedPeripheral.readCharacteristic(characteristic: self.readCharacteristic)
 
                     }else if self.demoScreenName == "typeAWSIoT" {
                         self.navigationController?.popViewController(animated: false)
-                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
-                    }else {
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: nil, CentralManager: self.centralManager)
+                    } else if self.demoScreenName == "typeSmartLock" {
+                        self.navigationController?.popViewController(animated: false)
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: self.connectedPeripheral, CentralManager: self.centralManager)
+                    }else if self.demoScreenName == "typeSmartLockDMP" {
+                        self.navigationController?.popViewController(animated: false)
+                        self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: self.connectedPeripheral, CentralManager: self.centralManager)
+                    }
+                    else {
                         self.showOnStartDisconnectView()
                     }
                     
@@ -109,6 +131,8 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                 
             case .disconnectingFinished:
                 SVProgressHUD.dismiss()
+                self.dismissLoaderTimer()
+
                 self.showToast(message: "Access Point disconnected successfuly", toastType: .info, completion: {})
                 self.viewModel.scan()
                 
@@ -120,6 +144,7 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                 SVProgressHUD.show(withStatus: "Scanning for access points...")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     SVProgressHUD.dismiss()
+                    self.dismissLoaderTimer()
                 }
                 
             case .connectingStarted:
@@ -127,21 +152,29 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
                 
             case .connected:
                 SVProgressHUD.dismiss()
+                self.dismissLoaderTimer()
+
                 self.showToast(message: "Access Point connected successfuly", toastType: .info, completion: {})
                 if self.demoScreenName == "typeWifiSensor" {
                     //self.moveToSILWifiSensorsDemoView()
                     self.navigationController?.popViewController(animated: false)
-                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: nil, CentralManager: self.centralManager)
                     //self.connectedPeripheral.readCharacteristic(characteristic: self.readCharacteristic)
                 }else if self.demoScreenName == "typeAWSIoT" {
                     self.navigationController?.popViewController(animated: false)
-                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: nil, CentralManager: self.centralManager)
+                }else if self.demoScreenName == "typeSmartLock" {
+                    self.navigationController?.popViewController(animated: false)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: self.connectedPeripheral, CentralManager: self.centralManager)
+                }else if self.demoScreenName == "typeSmartLockDMP" {
+                    self.navigationController?.popViewController(animated: false)
+                    self.delegateWifiCommissioning?.onceDeviceIsConnect(isConnectedDevice: true, demoType: self.demoScreenName, connectedPeripheral: self.connectedPeripheral, CentralManager: self.centralManager)
                 }
                 
             case .connectionFailed:
                 SVProgressHUD.dismiss()
                 self.showToast(message: "Access Point connection failed", toastType: .disconnectionError, completion: {})
-                
+                self.dismissLoaderTimer()
             default:
                 break
             }
@@ -149,9 +182,15 @@ class SILWifiCommissioningViewController: UIViewController, SILWifiCommissioning
         
         viewModel.accessPointsCellModels.observe { cellModels in
             self.cellModels = cellModels
+            print("ALL AP LIST ******** : \(self.cellModels)")
             self.refreshControl.endRefreshing()
             self.tableView.reloadData()
         }.putIn(bag: disposeBag)
+    }
+    
+    private func dismissLoaderTimer() {
+        self.loaderTimer?.invalidate()
+        self.loaderTimer = nil
     }
     
     // MARK: Button actions

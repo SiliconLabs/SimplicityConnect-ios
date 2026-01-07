@@ -76,7 +76,7 @@ class SILBrowserDeviceViewCell: SILCell, SILConfigurableCell {
             connectingIndicator.stopAnimating()
         }
     }
-    
+    // 
     fileprivate func configureLabels(_ discoveredPeripheral: SILDiscoveredPeripheral) {
         let deviceName = discoveredPeripheral.advertisedLocalName
         let advertisingIntervalsInMS = discoveredPeripheral.advertisingInterval * 1000;

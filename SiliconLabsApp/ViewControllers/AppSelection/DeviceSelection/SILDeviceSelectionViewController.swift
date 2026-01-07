@@ -209,8 +209,8 @@ class SILDeviceSelectionViewController: SILAbstractDeviceSelectionViewController
         switch viewModel.app.appType {
         case .typeHealthThermometer:
             bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .healthThermometer)
-        case .typeConnectedLighting:
-            bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .connectedLighting)
+        case .typeConnectedDevice:
+            bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .connectedDevices)
         case .typeThroughput:
             bluetoothDisabledAlert = SILBluetoothDisabledAlertObjc(bluetoothDisabledAlert: .throughput)
         case .typeBlinky:

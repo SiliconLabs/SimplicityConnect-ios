@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, SILAppType) {
-    SILAppTypeConnectedLighting,
+    SILAppTypeConnectedDevice,
     SILAppTypeHealthThermometer,
     SILAppTypeBlinky,
     SILAppTypeRangeTest,
@@ -24,7 +24,9 @@ typedef NS_ENUM(NSInteger, SILAppType) {
     SILAppTypeWifiSensor,
     SILAppTypeWifiThroughput,
     SILAppTypeWifiProvision,
-    SILAppTypeAWSIOT
+    SILAppTypeAWSIOT,
+    SILAppTypeSmartLock,
+    SILAppTypeEnergyHarvestingDevices,
 };
 
 @interface SILApp : NSObject

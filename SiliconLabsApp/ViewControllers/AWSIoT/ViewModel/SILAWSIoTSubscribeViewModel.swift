@@ -46,7 +46,7 @@ class SILAWSIoTSubscribeViewModel {
            // print(payload)
             let stringValue = NSString(data: payload, encoding: String.Encoding.utf8.rawValue)!
 
-            //print("received: \(stringValue)")
+            print("received: \(stringValue)")
             
             do {
 //                    let json = try JSONSerialization.jsonObject(with: ReponsData ?? Data(), options: [])
@@ -54,11 +54,11 @@ class SILAWSIoTSubscribeViewModel {
 //                    let string = String(data: ReponsData ?? Data(), encoding: .utf8)!
 //                    print(string)
                 let decodaData = try JSONDecoder().decode(T.self, from: payload)
-                //print(decodaData)
+                print(decodaData)
                 completionBlockSensor(decodaData, nil)
 
-            } catch {
-                //print(APIClientError)
+            } catch let erro{
+                print(erro)
                 completionBlockSensor(nil, nil)
             }
 //            DispatchQueue.main.async {

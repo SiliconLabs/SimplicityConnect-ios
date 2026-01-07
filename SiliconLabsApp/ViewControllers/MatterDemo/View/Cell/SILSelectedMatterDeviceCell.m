@@ -53,6 +53,8 @@ NSMutableDictionary *deviceDic;
         imgName = @"dishwasher_icon";
     } else if ([deviceType isEqualToString:AirQuality]) {
         imgName = @"airQuality_icon";
+    } else if ([deviceType isEqualToString:ElectricVehicles]) {
+        imgName = @"EVSE_Icon";
     }
     //_selectedMatterDeviceTitleLabel.text = deviceName;
     _selectedMatterDeviceTitleLabel.text = [NSString stringWithFormat:@"%@",[device valueForKey:@"title"]];

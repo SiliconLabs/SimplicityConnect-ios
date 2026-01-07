@@ -805,7 +805,7 @@ static float kTableRefreshInterval = 1;
         [characteristicTableModel writeSucceeded];
     }
 }
-
+//
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
     NSMutableString* rssiDescription = [NSMutableString stringWithString:[NSString stringWithFormat:@"%@", RSSI]];
     [rssiDescription appendString:@" dBm"];

@@ -19,8 +19,14 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
     self.discoveredDevices = @[];
     self.filter = ^BOOL(SILDiscoveredPeripheral* peripheral) {
         for (CBUUID * cbuuid in [SILDeviceSelectionViewModel serviceListForAppType:app.appType]) {
-            if ([peripheral.advertisedServiceUUIDs containsObject:cbuuid]) {
-                return YES;
+//            if ([peripheral.advertisedServiceUUIDs containsObject:cbuuid]) {
+//                return YES;
+//            }
+            
+            for (CBUUID *advertisedUUID in peripheral.advertisedServiceUUIDs) {
+                if ([[advertisedUUID.UUIDString lowercaseString] isEqualToString:[cbuuid.UUIDString lowercaseString]]) {
+                    return YES;
+                }
             }
         }
         return NO;
@@ -47,11 +53,13 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
                              [CBUUID UUIDWithString:@"FFF0"], // Temporarily added to support connecting to 3rd Party Thermometer...
                              ];
             break;
-        case SILAppTypeConnectedLighting:
-            serviceUUIDs = @[[CBUUID UUIDWithString:SILServiceNumberConnectedLightingConnect],
-                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingProprietary],
-                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingThread],
-                             [CBUUID UUIDWithString:SILServiceNumberConnectedLightingZigbee],];
+        case SILAppTypeConnectedDevice:
+            serviceUUIDs = @[[CBUUID UUIDWithString:SILServiceNumberConnectedDeviceConnect],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedDeviceProprietary],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedDeviceThread],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedDeviceZigbee],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedDeviceSideWalk],
+                             [CBUUID UUIDWithString:SILServiceNumberConnectedDeviceAWSIoT],];
             break;
             
         case SILAppTypeESLDemo:
@@ -114,8 +122,9 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
             return @"A circuit board (SoC) must be connected and running \"Bluetooth - SoC Blinky\" firmware or firmware with a title containing \"Bluetooth - SoC Dev Kit\" or \"Bluetooth - SoC Thunderboard\".";
         case SILAppTypeWifiCommissioning:
             return @"A circuit board (SoC) and the evaluation board (EVK) must be connected and running proper firmwares. See the documentation, tutorial and GitHub for more information.";
-        case SILAppTypeConnectedLighting:
-            return @"A circuit board (SoC) must be connected and running \"Bluetooth RAIL DMP - SoC Light\" or \"Connect Bluetooth DMP - SoC Light\" firmware.";
+        case SILAppTypeConnectedDevice:
+            //return @"A circuit board (SoC) must be connected and running \"Bluetooth RAIL DMP - SoC Light\" or \"Connect Bluetooth DMP - SoC Light\" firmware.";
+            return @"A circuit board (SoC) must be connected and running \"Bluetooth RAIL DMP - SoC Light\" or \"Connect Bluetooth DMP - SoC Light\" or \"Amazon Sidewalk - SoC Dynamic Multiprotocol Light (BLE)\" or \"Amazon Sidewalk - SoC Dynamic Multiprotocol Light (FSK)\" firmware.";
         case SILAppTypeRangeTest:
             return @"A circuit board (SoC) must be connected and running \"RAIL Bluetooth DMP - SoC Range Test\" firmware.";
         case SILAppTypeMotion:
@@ -127,6 +136,10 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
             return @"1. The SoC and evaluation board (EVK) must be connected and running the correct firmware.\n2. The Wi-Fi network on your mobile device should match the Wi-Fi network used for the sensor device's commissioning.\n3. Enable your phone's local network to access sensor data.";
         case SILAppTypeAWSIOT:
             return @"1. The SoC and evaluation board (EVK) must be connected and running the correct firmware.\n2. The Wi-Fi network must have internet access to be used for the sensor device's commissioning.";
+        case SILAppTypeSmartLock:
+            return @"1. The SoC and evaluation board (EVK) must be connected and running the correct firmware.\n2. The Wi-Fi network must have internet access to be used for the sensor device's commissioning.";
+        case SILAppTypeEnergyHarvestingDevices:
+            return @"The SoC and evaluation board (EVK) must be connected and running the correct firmware.";
         default:
             return @"";
     }

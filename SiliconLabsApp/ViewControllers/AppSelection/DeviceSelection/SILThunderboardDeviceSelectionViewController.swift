@@ -14,6 +14,7 @@ protocol SILThunderboardDeviceSelectionViewControllerDelegate {
                                                                                appType: SILAppType)
     func deviceSelectionViewControllerDidConnectWithBlinkyDevice(device: Device, deviceConnector: DeviceConnection, isThunderboard: Bool)
     func didDismissDeviceSelectionViewController()
+    func deviceSelectionViewControllerDidConnectWithSmartLockDevice(device: Device, deviceConnector: DeviceConnection, isThunderboard: Bool) //Add on 25q4 GA...
 }
 
 class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionViewController, UICollectionViewDataSource, DeviceSelectionInteractionOutput {
@@ -154,7 +155,13 @@ class SILThunderboardDeviceSelectionViewController: SILAbstractDeviceSelectionVi
         delegate?.deviceSelectionViewControllerDidConnectWithBlinkyDevice(device: device, deviceConnector: deviceConnector,
                                                                           isThunderboard: isThunderboard)
     }
-    
+    //    var centralManager: SILCentralManager?
+
+    //Add on 25q4 GA...
+    func interactionDidConnectWithSmartLockDevice(_ device: any Device, deviceConnector: any DeviceConnection, isThunderboard: Bool) {
+        delegate?.deviceSelectionViewControllerDidConnectWithSmartLockDevice(device: device, deviceConnector: deviceConnector, isThunderboard: isThunderboard)
+    }
+
     func interactionShowConnectionFailed() {
         SVProgressHUD.showError(withStatus: "Failed to connect...")
     }

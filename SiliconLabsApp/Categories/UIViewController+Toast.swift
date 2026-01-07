@@ -9,6 +9,12 @@
 import Foundation
 
 @objc
+public enum ToastPosition: Int {
+    case top
+    case bottom
+}
+
+@objc
 public enum ToastType: Int {
     case disconnectionError
     case gattPropertiesError
@@ -72,6 +78,55 @@ extension UIViewController {
         return toastLabel
     }
     
+      func showToast(message: String, toastType: ToastType, shouldHasSizeOfText: Bool, position: ToastPosition = .top, completion: @escaping () -> ()) {
+          let animationDuration = 5.0
+          let values = displayParameters(for: toastType)
+          let toastLabel = getToastLabel(shouldHasSizeOfText: shouldHasSizeOfText, withMessage: message, toastType: toastType, position: position)
+          self.view.addSubview(toastLabel)
+          
+          UIView.animate(withDuration: 1, delay: 0.2, options: .curveEaseOut, animations: {
+              toastLabel.alpha = 1
+          }) { _ in
+              DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
+                  UIView.animate(withDuration: 1) {
+                      toastLabel.alpha = 0
+                      toastLabel.removeFromSuperview()
+                  }
+                  completion()
+              }
+          }
+      }
+    
+     func getToastLabel(shouldHasSizeOfText: Bool, withMessage message: String, toastType: ToastType, position: ToastPosition = .top) -> UILabel {
+         let values = displayParameters(for: toastType)
+         let toastMargin = values.margin
+         let toastTopSpacing = values.topSpacing
+         let toastLabel = UILabel()
+         let toastHeight = values.height
+         let yPosition: CGFloat
+         if position == .top {
+             yPosition = self.view.safeAreaInsets.top + toastTopSpacing
+         } else {
+             yPosition = self.view.frame.height - toastHeight - toastMargin - self.view.safeAreaInsets.bottom
+         }
+         if shouldHasSizeOfText {
+             let toastSize = countSizeOfText(message, withFont: UIFont.robotoMedium(size: 14.0)!)
+             toastLabel.frame = CGRect(x: (self.view.frame.width - toastSize.width - toastMargin) / 2, y: yPosition, width: toastSize.width + toastMargin, height: toastSize.height + toastMargin)
+         } else {
+             toastLabel.frame = CGRect(x: toastMargin, y: yPosition, width: self.view.frame.size.width - 2 * toastMargin, height: toastHeight)
+         }
+         toastLabel.backgroundColor = values.backgroundColor.withAlphaComponent(0.8)
+         toastLabel.textColor = values.labelTextColor
+         toastLabel.font = UIFont.robotoMedium(size: 14.0)
+         toastLabel.textAlignment = .center
+         toastLabel.numberOfLines = 0
+         toastLabel.text = message
+         toastLabel.alpha = 0.0
+         toastLabel.layer.cornerRadius = CornerRadiusStandardValue
+         toastLabel.clipsToBounds = true
+         return toastLabel
+     }
+    
     private func countSizeOfText(_ text: String, withFont font: UIFont) -> CGSize {
         return text.size(withAttributes: [.font: font])
     }
@@ -84,7 +139,7 @@ extension UIViewController {
         case .gattPropertiesError:
             return (3.0, 60.0, 16.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .info:
-            return (3.0, 60.0, 32.0, 24.0, UIColor.black, UIColor.sil_bgGrey())
+            return (3.0, 40.0, 32.0, 15.0, UIColor.black, UIColor.sil_bgGrey())
         case .characteristicPasteAlert:
             return (3.0, 60.0, 32.0, 24.0, UIColor.white, UIColor.sil_siliconLabsRed())
         case .characteristicError:

@@ -207,6 +207,8 @@
         deviceTitle = [NSMutableString stringWithFormat:@"Dishwasher"];
     } else if ([deviceType isEqualToString:AirQuality]) {
         deviceTitle = [NSMutableString stringWithFormat:@"Air Quality"];
+    } else if ([deviceType isEqualToString:ElectricVehicles]) {
+        deviceTitle = [NSMutableString stringWithFormat:@"Electric Vehicles"];
     }
     return  deviceTitle;
 }

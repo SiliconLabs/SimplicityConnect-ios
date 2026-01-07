@@ -113,13 +113,12 @@ class SILAppTypeBlinkyViewController: UIViewController, ConnectedDeviceDelegate,
     
     @objc func displayBluetoothDisabledAlert() {
         debugPrint("Did disconnect peripheral")
-            
         let bluetoothDisabledAlert = SILBluetoothDisabledAlert.blinky
         self.alertWithOKButton(title: bluetoothDisabledAlert.title, message: bluetoothDisabledAlert.message) { _ in
             self.navigationController?.popViewController(animated: true)
         }
     }
-        
+    
     @IBAction func onLightBulbButtonTapped() -> Void {
         viewModel?.changeLightState()
     }

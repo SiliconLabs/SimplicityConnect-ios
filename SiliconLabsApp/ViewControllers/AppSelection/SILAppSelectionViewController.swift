@@ -11,7 +11,6 @@ import SVProgressHUD
 
 @objcMembers
 class SILAppSelectionViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SILDeviceSelectionViewControllerDelegate, WYPopoverControllerDelegate, SILThunderboardDeviceSelectionViewControllerDelegate, SILWifiOTAConfigViewControllerDelegate, SILWifiCommissioningViewControllerDelegate, NetServiceBrowserDelegate {
-
     var appsArray: [SILApp] = SILApp.demoApps()
     var isDisconnectedIntentionally: Bool = false
 
@@ -26,6 +25,8 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     private var peripheralManager: SILThroughputPeripheralManager!
 
     private var viewModel: SILWifiCommissioningViewModel!
+    
+    private var appSelection: SILApp?
 
     func checkLocalNetworkPermission()  {
         let serviceBrowser = NetServiceBrowser()
@@ -143,7 +144,6 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILAWSIoTHomeViewController")
         self.navigationController?.pushViewController(nextViewController, animated: false)
     }
-    
     private func moveToSILWifiThroughputDemoView() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "WifiThroughputStoryboard", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILThroughputMainScreenVC")
@@ -153,6 +153,13 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     private func moveToSILWifiProvisiningDemoView() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "WiFiProvisioning", bundle:nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILWifiProvisioningAPViewController")
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
+    
+    private func moveToSILEnergyHarvestingDemoView() {
+        SVProgressHUD.dismiss()
+        let storyBoard : UIStoryboard = UIStoryboard(name: "SILEnergyHarvesting", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILEnergyHarvestingViewController") as! SILEnergyHarvestingViewController
         self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
@@ -169,11 +176,23 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         self.devicePopoverController = WYPopoverController.sil_presentCenterPopover(withContentViewController: OTAConfigViewController, presenting: self,delegate: self, animated: true)
     }
     
+    //Add 25q4 GA...
+    private func moveToSILSmartLockDemoView(_ connectionOption: SILSmartLockConnectionOption, device: Device?, deviceConnector: DeviceConnection?, connectedPeripheral: CBPeripheral? ) {
+
+        let storyBoard : UIStoryboard = UIStoryboard(name: "SILSmartLock", bundle:nil)
+        if let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SILSmartLockViewController") as? SILSmartLockViewController {
+           nextViewController.connectionType = connectionOption
+           nextViewController.connectedPeripheral = connectedPeripheral
+
+           self.navigationController?.pushViewController(nextViewController, animated: false)
+        }
+    }
+    
     //  Device Select App
     private func didSelectApp(app: SILApp!) {
         debugPrint("didSelectItem \(String(describing: app.title))")
         switch app.appType {
-        case .typeConnectedLighting,
+        case .typeConnectedDevice,
              .typeHealthThermometer:
             self.presentDeviceSelectionViewController(app: app, animated: true)
         
@@ -252,6 +271,16 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             moveToSILWifiProvisiningDemoView()
         case .typeAWSIOT:
             self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
+        case .typeSmartLock:
+            self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
+            //self.presentThunderboardDeviceSelection(app: app, animated: true) { $0.isThunderboardDevice() || $0.name!.hasPrefix("BLE_CONFIGURATOR") }
+//            appSelection = app
+//            self.presentSmartLockConnection()
+
+        case .typeEnergyHarvestingDevices:
+            //moveToSILEnergyHarvestingDemoView()
+            //self.presentDeviceSelectionViewController(app: app, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
+            moveToSILEnergyHarvestingDemoView()
         default:
             return
         }
@@ -301,6 +330,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         return 8.0
     }
     
+    //SILDeviceSelectionViewControllerDelegate
     func deviceSelectionViewController(_ viewController: SILDeviceSelectionViewController!, didSelect peripheral: SILDiscoveredPeripheral!) {
         self.devicePopoverController?.dismissPopover(animated: true) { [self] in
             self.devicePopoverController = nil
@@ -311,11 +341,24 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                 guard let peripheral = peripheral.peripheral else { return }
                 self.runHealthThermometer(viewController: viewController, peripheral: peripheral)
             
-            case .typeConnectedLighting:
-                if let connectedLightingController = UIStoryboard(name: "SILAppTypeConnectedLighting", bundle: nil).instantiateInitialViewController() as? SILConnectedLightingViewController {
-                    connectedLightingController.centralManager = viewController.centralManager
-                    connectedLightingController.connectedPeripheral = peripheral.peripheral
-                    self.navigationController?.pushViewController(connectedLightingController, animated: true)
+            case .typeConnectedDevice:
+              let isDMPAWSIoT = peripheral.isDMPConnectedDeviceAWSIoT;
+                if isDMPAWSIoT {
+                    if let wifiCommissioningController = UIStoryboard(name: "SILAppTypeWifiCommissioning", bundle: nil).instantiateInitialViewController() as? SILWifiCommissioningViewController {
+                        wifiCommissioningController.centralManager = viewController.centralManager
+                        wifiCommissioningController.connectedPeripheral = peripheral.peripheral
+                        wifiCommissioningController.demoScreenName = "typeSmartLockDMP"
+                        wifiCommissioningController.delegateWifiCommissioning = self
+                        wifiCommissioningController.isBleDisconnectFlow = true
+                        self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
+                    }
+
+                }else {
+                    if let connectedLightingController = UIStoryboard(name: "SILAppTypeConnectedLighting", bundle: nil).instantiateInitialViewController() as? SILConnectedLightingViewController {
+                        connectedLightingController.centralManager = viewController.centralManager
+                        connectedLightingController.connectedPeripheral = peripheral.peripheral
+                        self.navigationController?.pushViewController(connectedLightingController, animated: true)
+                    }
                 }
  
             case .typeThroughput:
@@ -331,6 +374,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                     wifiCommissioningController.centralManager = viewController.centralManager
                     wifiCommissioningController.connectedPeripheral = peripheral.peripheral
                     wifiCommissioningController.demoScreenName = "typeWifiCommissioning"
+                    wifiCommissioningController.isBleDisconnectFlow = false
                     self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
                 }
                 
@@ -348,6 +392,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                     wifiCommissioningController.connectedPeripheral = peripheral.peripheral
                     wifiCommissioningController.demoScreenName = "typeWifiSensor"
                     wifiCommissioningController.delegateWifiCommissioning = self
+                    wifiCommissioningController.isBleDisconnectFlow = false
                     self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
                 }
             case .typeAWSIOT:
@@ -356,8 +401,28 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
                     wifiCommissioningController.connectedPeripheral = peripheral.peripheral
                     wifiCommissioningController.demoScreenName = "typeAWSIoT"
                     wifiCommissioningController.delegateWifiCommissioning = self
+                    wifiCommissioningController.isBleDisconnectFlow = false
                     self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
                 }
+            case .typeSmartLock:
+                if let wifiCommissioningController = UIStoryboard(name: "SILAppTypeWifiCommissioning", bundle: nil).instantiateInitialViewController() as? SILWifiCommissioningViewController {
+                    wifiCommissioningController.centralManager = viewController.centralManager
+                    wifiCommissioningController.connectedPeripheral = peripheral.peripheral
+                    wifiCommissioningController.demoScreenName = "typeSmartLock"
+                    wifiCommissioningController.delegateWifiCommissioning = self
+                    wifiCommissioningController.isBleDisconnectFlow = true
+                    self.navigationController?.pushViewController(wifiCommissioningController, animated: true)
+                }
+            case .typeEnergyHarvestingDevices:
+//                let storyBoard: UIStoryboard = UIStoryboard(name: "SILEnergyHarvesting", bundle:nil)
+//                let energyHarvestingVC = storyBoard.instantiateViewController(withIdentifier: "SILEnergyHarvestingViewController") as! SILEnergyHarvestingViewController
+//                energyHarvestingVC.peripheralManager = peripheralManager
+//                energyHarvestingVC.centralManager = viewController.centralManager
+//                energyHarvestingVC.connectedPeripheral = peripheral.peripheral
+//                self.navigationController?.pushViewController(energyHarvestingVC, animated: true)
+                
+                moveToSILEnergyHarvestingDemoView()
+            
             default:
                 break
             }
@@ -461,7 +526,16 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
             self.displayBlinky(device: device, deviceConnector: deviceConnector, shouldDisplayPower: isThunderboard)
         }
     }
-    
+    //Add 25q4 GA...
+    func deviceSelectionViewControllerDidConnectWithSmartLockDevice(device: any Device, deviceConnector: any DeviceConnection, isThunderboard: Bool) {
+        SVProgressHUD.dismiss()
+        self.devicePopoverController?.dismissPopover(animated: true) {
+            print(device)
+            print(deviceConnector)
+            print(isThunderboard)
+            self.moveToSILSmartLockDemoView(.ble, device: device, deviceConnector: deviceConnector, connectedPeripheral: nil)
+        }
+    }
     private func displayBlinky(device: Device, deviceConnector: DeviceConnection, shouldDisplayPower: Bool) {
         if let blinkyController = UIStoryboard(name: "SILAppTypeBlinky", bundle: nil).instantiateInitialViewController() as? SILAppTypeBlinkyViewController, let device = device as? BleDevice {
             blinkyController.deviceConnector = deviceConnector
@@ -514,7 +588,7 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
     
     // MARK: SILWifiCommissioningViewControllerDelegate
     
-    func onceDeviceIsConnect(isConnectedDevice: Bool, demoType: String) {
+    func onceDeviceIsConnect(isConnectedDevice: Bool, demoType: String, connectedPeripheral: CBPeripheral?, CentralManager: SILCentralManager) {
         if demoType == "typeWifiSensor" {
             if isConnectedDevice {
                 moveToSILWifiSensorsDemoView()
@@ -522,6 +596,23 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
         }else if demoType == "typeAWSIoT" {
             if isConnectedDevice {
                 moveToSILAWSIoTDemoView()
+            }
+        }else if demoType == "typeSmartLock" {
+            if isConnectedDevice {
+                moveToSILSmartLockDemoView(.wifi, device: nil, deviceConnector: nil, connectedPeripheral: connectedPeripheral)
+            }
+        }else if demoType == "typeSmartLockDMP" {
+            if isConnectedDevice {
+                // moveToSILSmartLockDemoView(.wifi, device: nil, deviceConnector: nil, connectedPeripheral: connectedPeripheral)
+                if let connectedLightingController = UIStoryboard(name: "SILAppTypeConnectedLighting", bundle: nil).instantiateInitialViewController() as? SILConnectedLightingViewController {
+                    connectedLightingController.centralManager = CentralManager
+                    connectedLightingController.connectedPeripheral = connectedPeripheral
+                    self.navigationController?.pushViewController(connectedLightingController, animated: true)
+                }
+            }
+        }else if demoType == "typeEnergyHarvestingDevices" {
+            if isConnectedDevice {
+                moveToSILEnergyHarvestingDemoView()
             }
         }
     }
@@ -531,4 +622,29 @@ class SILAppSelectionViewController : UIViewController, UICollectionViewDataSour
 //            moveToSILWifiSensorsDemoView()
 //        }
 //    }
+    //Add 25q4 GA...
+    //MARK: presentSmartLockConnection and Delegate
+//    private func presentSmartLockConnection(){
+//        let selectionViewController = SILSmartLockConnection()
+//        //selectionViewController.delegate = self
+//        
+//        self.devicePopoverController = WYPopoverController(contentViewController: selectionViewController)
+//        self.devicePopoverController?.delegate = self
+//        //selectionViewController.devicePopoverController = self.devicePopoverController
+//        selectionViewController.smartLockConnectionDelegate = self
+//        self.devicePopoverController?.presentPopoverAsDialog(animated: true)
+//
+//    }
+    
+    func didDismissWithConnectionOptionOfSmartLock(_ connectionOption: SILSmartLockConnectionOption) {
+        self.devicePopoverController?.dismissPopover(animated: true)
+        switch connectionOption {
+        case .ble:
+            self.presentThunderboardDeviceSelection(app: appSelection, animated: true) { $0.isThunderboardDevice() || $0.name!.hasPrefix("BLE_CONFIGURATOR") }
+        case .wifi:
+            self.presentDeviceSelectionViewController(app: appSelection, animated: true) { $0!.advertisedLocalName == "BLE_CONFIGURATOR" }
+        default:
+            print("default")
+        }
+    }
 }
