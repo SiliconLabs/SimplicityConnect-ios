@@ -15,6 +15,7 @@ enum SILPeripheralDelegateStatus {
     case successGetValue(value: Data?, characteristic: CBCharacteristic)
     case successGetValueDescriptor(value: Any?, descriptor: CBDescriptor) //Added
     case successWrite(characteristic: CBCharacteristic)
+    case successWriteDescriptor(descriptor: CBDescriptor)
     case updateNotificationState(characteristic: CBCharacteristic, state: Bool)
     case servicesModified(peripheral: CBPeripheral)
     case failure(error: Error)
@@ -156,5 +157,14 @@ class SILPeripheralDelegate: NSObject, CBPeripheralDelegate {
             status.value = .successGetValueDescriptor(value: descriptor.value, descriptor: descriptor)
         }
     }
+    
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor descriptor: CBDescriptor, error: Error?) {
+          debugPrint("didWriteValueForDescriptor*********")
+          if let error = error {
+              status.value = .failure(error: error)
+          } else {
+              status.value = .successWriteDescriptor(descriptor: descriptor)
+          }
+      }
     //END
 }

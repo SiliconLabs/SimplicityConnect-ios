@@ -56,6 +56,15 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 @end
 
 @implementation SILOTAFirmwareUpdateManager
+BOOL isOTADataCharacteristicReady = NO;
+BOOL isSeriesTwo = NO;
+
+#pragma mark - Reset
+
++ (void)resetOTADataCharacteristicState {
+    isSeriesTwo = NO;
+    isOTADataCharacteristicReady = NO;
+}
 
 #pragma mark - Initializers
 
@@ -140,23 +149,30 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 //        [self reconnectToOTADevice];
 //    });
     
-    NSLog(@"++++++++++++%d", [self.peripheral hasOTAControlCharacteristic]);
-    NSLog(@"++++++++++++%d", [self.peripheral hasOTADataCharacteristic]);
-    if (initiatingByteSequence && [self.peripheral hasOTADataCharacteristic]){
-        NSLog(@"Series 3 == ++++++++++++%d", [self.peripheral hasOTADataCharacteristic]);
-        progress(SILDFUStatusWaiting);
-        progress(SILDFUStatusWaiting);
+    if (initiatingByteSequence && [self.peripheral hasOTADataCharacteristic] && !isSeriesTwo){
+        isSeriesTwo = NO;
+        isOTADataCharacteristicReady = YES;
+          progress(SILDFUStatusWaiting);
+          progress(SILDFUStatusWaiting);
         self.peripheral.delegate = self;
         [self.peripheral discoverServices:nil];
-
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            progress(SILDFUStatusWaiting);
-//            self.peripheral.delegate = self;
-//            [self.peripheral discoverServices:nil];
-//        });
-
-
-    }else{
+        
+//          if ([[self.peripheral name]  isEqual: @"IOP_Test_2"]) {
+//              self.peripheral.delegate = self;
+//              [self.peripheral discoverServices:nil];
+//          }else{
+//             [self disconnectConnectedPeripheral];
+//              progress(SILDFUStatusRebooting);
+//              
+//              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                  progress(SILDFUStatusWaiting);
+//                 [self reconnectToOTADevice];
+//              });
+//          }
+        
+      }else{
+          isOTADataCharacteristicReady = NO;
+          isSeriesTwo = YES;
         if (initiatingByteSequence && ![self.peripheral hasOTADataCharacteristic]) {
             [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
         } else {
@@ -232,7 +248,10 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error != nil) {
+        NSLog(@"ERROR LOG for IOP Upload: %@", error);
         NSError *theError = [NSError sil_errorWithCode:SILErrorCodeOTAFailedToWriteToCharacteristicError underlyingError:error];
+        NSLog(@"ERROR LOG for IOP Upload1: %@", theError);
+
         [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:peripheral error:theError];
         return;
     }
@@ -252,40 +271,73 @@ typedef NS_ENUM(NSInteger, SILOTAControlWriteMode) {
             self.otaControlWriteMode = SILOTAControlWriteModeTerminating;
         }
     } else if ([characteristic isEqual:[self.peripheral otaControlCharacteristic]]) {
-        if (self.otaControlWriteMode == SILOTAControlWriteModeTerminating) {
-            self.fileProgress = nil;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:peripheral error:error];
-            });
+        if (isOTADataCharacteristicReady) {
+            if (self.otaControlWriteMode == SILOTAControlWriteModeInitiating) { //add for Serise 3
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.location < self.fileData.length) {
+                        [self writeFileDataToCharacteristic:[self.peripheral otaDataCharacteristic]];
+                    }
+                });// End
+            }else if (self.otaControlWriteMode == SILOTAControlWriteModeTerminating) {
+                self.fileProgress = nil;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:peripheral error:error];
+                });
+            }
+            self.otaControlWriteMode = SILOTAControlWriteModeUnset;
+        } else {
+            if (self.otaControlWriteMode == SILOTAControlWriteModeTerminating) {
+                self.fileProgress = nil;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:peripheral error:error];
+                });
+            }
+            self.otaControlWriteMode = SILOTAControlWriteModeUnset;
         }
-        self.otaControlWriteMode = SILOTAControlWriteModeUnset;
     }
 }
 
 #pragma mark - Helpers
 
 - (void)uploadFile:(SILOTAFirmwareFile *)file {
-    self.expectingToDisconnectFromPeripheral = NO;
-    [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
-    self.otaControlWriteMode = SILOTAControlWriteModeInitiating;
     
-    // TODO: Move something executing here to a background queue. There is too much happening on the main queue at this
-    // moment. We have to dispatch openWithCompletionHandler: on the main queue in order to not have an exception thrown.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([file.fileData length] > 0) {
-            self.fileData = file.fileData;
-            self.location = 0;
-            // Even though the data characteristic is advertised as WriteWithResponse and WriteWithoutResponse, choose
-            // WriteWithoutResponse.
-            self.length = [SILOTAFirmwareUpdateManager maximumByteAlignedWriteValueLengthForPeripheral:self.peripheral forType:CBCharacteristicWriteWithoutResponse];
-            if (self.location < self.fileData.length) {
-                [self writeFileDataToCharacteristic:[self.peripheral otaDataCharacteristic]];
-            }
-        } else {
+    if (isOTADataCharacteristicReady) {
+        self.expectingToDisconnectFromPeripheral = NO;
+        if ([file.fileData length] == 0) {
             NSError *error = [NSError sil_errorWithCode:SILErrorCodeOTAFailedToReadFile underlyingError:nil];
             [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:nil error:error];
+            return;
         }
-    });
+        self.fileData = file.fileData;
+        self.location = 0;
+        self.length = [SILOTAFirmwareUpdateManager maximumByteAlignedWriteValueLengthForPeripheral:self.peripheral forType:CBCharacteristicWriteWithoutResponse];
+        [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
+        self.otaControlWriteMode = SILOTAControlWriteModeInitiating;
+        // File data write is started in didWriteValueForCharacteristic when the initiate (0x00) write completes,
+        // so the peripheral (e.g. Series 3 bootloader) is ready before we send the first chunk.
+    } else {
+        self.expectingToDisconnectFromPeripheral = NO;
+        [self writeSingleByteValue:kSILInitiateDFUData toCharacteristic:[self.peripheral otaControlCharacteristic]];
+        self.otaControlWriteMode = SILOTAControlWriteModeInitiating;
+        
+        // TODO: Move something executing here to a background queue. There is too much happening on the main queue at this
+        // moment. We have to dispatch openWithCompletionHandler: on the main queue in order to not have an exception thrown.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([file.fileData length] > 0) {
+                self.fileData = file.fileData;
+                self.location = 0;
+                // Even though the data characteristic is advertised as WriteWithResponse and WriteWithoutResponse, choose
+                // WriteWithoutResponse.
+                self.length = [SILOTAFirmwareUpdateManager maximumByteAlignedWriteValueLengthForPeripheral:self.peripheral forType:CBCharacteristicWriteWithoutResponse];
+                if (self.location < self.fileData.length) {
+                    [self writeFileDataToCharacteristic:[self.peripheral otaDataCharacteristic]];
+                }
+            } else {
+                NSError *error = [NSError sil_errorWithCode:SILErrorCodeOTAFailedToReadFile underlyingError:nil];
+                [self handleCompletionWithMode:self.firmwareUpdateMode peripheral:nil error:error];
+            }
+        });
+    }
 }
 
 - (void)writeFileDataToCharacteristic:(CBCharacteristic *)characteristic {

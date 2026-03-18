@@ -31,7 +31,6 @@ class SILIOPTester_Test7 : SILTestScenario {
     
     func performTestScenario() {
         weak var weakSelf = self
-        
         let throughputTestToken = self.tests[0].testResult.observe({ testResult in
             guard let testResult = testResult else { return }
             guard let weakSelf = weakSelf else { return }
