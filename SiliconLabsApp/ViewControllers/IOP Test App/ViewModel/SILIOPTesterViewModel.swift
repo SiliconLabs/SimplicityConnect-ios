@@ -160,7 +160,6 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         timestamp = Date.init()
         testStateStatus.value = .running
         debugPrint("START TEST")
-        
         IOPLog().iopLogSwiftFunction(message: "START TEST")
         
         testParameters = ["iopCentralManager": self.iopCentralManager,
@@ -334,6 +333,9 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         
         stopTest()
         prepareTestReport()
+        SILOTAFirmwareUpdateManager.resetOTADataCharacteristicState()
+        self.iopCentralManager  = SILIOPTesterCentralManager()
+        self.browserCentralManager = SILCentralManager(serviceUUIDs: [])
         testStateStatus.value = .ended
         SILIOPTesterViewModelDelegate?.notifyAfterAllTest()
         

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 extension UITextField {
 
     func isValid(with word: String) -> Bool {
@@ -22,6 +23,7 @@ extension UITextField {
         }
         return true
     }
+    
 }
 
 extension String {
@@ -35,5 +37,22 @@ extension String {
         } else {
             return false
         }
+    }
+}
+
+extension UITextView {
+    func isValid(with text: String) -> Bool {
+        return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    func isValidAWSEndpoint(_ endpoint: String) -> Bool {
+        // Basic URL validation
+        guard let url = URL(string: endpoint), url.scheme == "https" || url.scheme == "wss" else {
+            return false
+        }
+        // Optional: Regex for AWS IoT endpoint pattern
+        let pattern = #"^[a-zA-Z0-9\-]+\.iot\.[a-z0-9\-]+\.amazonaws\.com(\.cn)?$"#
+        let host = url.host ?? ""
+        return host.range(of: pattern, options: .regularExpression) != nil
     }
 }

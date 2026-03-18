@@ -1,0 +1,25 @@
+
+
+
+
+#####
+default_platform(:ios)
+
+lane :build_app_for_simulator do
+  build_ios_app(
+    workspace: "SiliconLabsApp.xcworkspace",
+    scheme: "BlueGecko",
+    configuration: "Debug",
+    clean: true,
+    sdk: "iphoneos",
+    build_path: "./build",
+    derived_data_path: "./DerivedData",
+    skip_archive: true,
+    skip_package_ipa: true,
+    include_symbols: false,
+    include_bitcode: false,
+    xcargs: "-UseModernBuildSystem=YES"
+  )
+end
+
+

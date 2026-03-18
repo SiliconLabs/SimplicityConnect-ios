@@ -41,20 +41,26 @@ class SILDiscoveredPeripheral: NSObject {
     private var lastTimestamp = 0.0
     private var packetReceivedCount: Int64 = 0
     
-    var isDMPConnectedLightConnect: Bool {
-        return isContainService(SILServiceNumberConnectedLightingConnect)
+    var isDMPConnectedDeviceConnect: Bool {
+        return isContainService(SILServiceNumberConnectedDeviceConnect)
     }
 
-    var isDMPConnectedLightProprietary: Bool {
-        return isContainService(SILServiceNumberConnectedLightingProprietary)
+    var isDMPConnectedDeviceProprietary: Bool {
+        return isContainService(SILServiceNumberConnectedDeviceProprietary)
     }
     
-    var isDMPConnectedLightThread: Bool {
-        return isContainService(SILServiceNumberConnectedLightingThread)
+    var isDMPConnectedDeviceThread: Bool {
+        return isContainService(SILServiceNumberConnectedDeviceThread)
     }
     
-    var isDMPConnectedLightZigbee: Bool {
-        return isContainService(SILServiceNumberConnectedLightingZigbee)
+    var isDMPConnectedDeviceZigbee: Bool {
+        return isContainService(SILServiceNumberConnectedDeviceZigbee)
+    }
+    var isDMPConnectedDeviceSidewalk: Bool {
+        return isContainService(SILServiceNumberConnectedDeviceSideWalk)
+    }
+    var isDMPConnectedDeviceAWSIoT: Bool {
+        return isContainService(SILServiceNumberConnectedDeviceAWSIoT)
     }
     
     var isRangeTest: Bool {

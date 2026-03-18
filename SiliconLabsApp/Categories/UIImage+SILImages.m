@@ -40,7 +40,8 @@ NSString * const SILImageNameHomeWiFiSensor = @"WiFi_sensore_icon";
 NSString * const SILImageNameHomeWiFiThroughput = @"wifiThroughput_icon";
 NSString * const SILImageNameHomeWifiProvision = @"icon-wifiProvisioning";
 NSString * const SILImageNameHomeAWSIoT = @"aws_iot_icon";
-
+NSString * const SILImageNameHomeSmartLock = @"smartLock_icon";
+NSString * const SILImageNameEnergyHarvestingDevices = @"energyHarvesting_icon";
 
 NSString * const SILImageNameKeyboard = @"Keyboard";
 NSString * const SILImageNameKeyboardCheckmark = @"KeyboardCheckmark";

@@ -14,20 +14,22 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 
 typedef NS_ENUM(int, SILLightState) {
-    SILConnectedLightStateOff = 0,
-    SILConnectedLightStateOn = 1
+    SILConnectedDeviceStateOff = 0,
+    SILConnectedDeviceStateOn = 1
 };
 
 typedef NS_ENUM(int, SILSwitchSource) {
-    SILConnectedLightSwitchSourceBluetooth = 0,
-    SILConnectedLightSwitchSourceZigbeeOrConnectOrProprietary = 1,
-    SILConnectedLightSwitchSourceLightBoard = 2,
+    SILConnectedDeviceSwitchSourceBluetooth = 0,
+    SILConnectedDeviceSwitchSourceZigbeeOrConnectOrProprietary = 1,
+    SILConnectedDeviceSwitchSourceLightBoard = 2,
 };
 
 #define IS_IOS10_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0)
 
 NSString * const SILLightEventOn = @"Light On";
 NSString * const SILLightEventOff = @"Light Off";
+NSString * const SILLockEventOn = @"Lock";
+NSString * const SILLockEventOff = @"Unlock";
 
 @interface SILConnectedLightingViewController () <CBPeripheralDelegate, UIGestureRecognizerDelegate> {
     NSTimer *scheduleReadTimer;
@@ -35,6 +37,8 @@ NSString * const SILLightEventOff = @"Light Off";
     BOOL isDMPConnect;
     BOOL isDMPThread;
     BOOL isDMPZigbee;
+    BOOL isDMPSideWalk;
+    BOOL isDMPAWSIoT;
     CBCharacteristic *lightStateCharacteristic;
     CBCharacteristic *switchSourceCharacteristic;
     CBCharacteristic *sourceAddressCharacteristic;
@@ -50,6 +54,7 @@ NSString * const SILLightEventOff = @"Light Off";
 @property (weak, nonatomic) IBOutlet UIView *lastEventImageContentView;
 @property (strong, nonatomic) UISelectionFeedbackGenerator *feedbackGenerator;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
+@property (weak, nonatomic) IBOutlet UILabel *pressTheIconToggleLbl;
 
 @end
 
@@ -80,35 +85,59 @@ NSString * const SILLightEventOff = @"Light Off";
 }
 
 - (void)updateLightStateImageViewWithData:(NSData *)data {
+    NSString *imageName = @"";
+    NSString *nameStr = @"";
     uint8_t byte = [self byteFromData:data];
     switch (byte) {
-        case SILConnectedLightStateOn:
+            //lockOpen_icon
+        case SILConnectedDeviceStateOn: {
             NSLog(@"Light State On");
-            self.lightStateImageView.image = [UIImage imageNamed:@"lightOn"];
-            self.lastEventStateLabel.text = SILLightEventOn;
-            lightState = SILConnectedLightStateOn;
+//            self.lightStateImageView.image = [UIImage imageNamed:@"lightOn"];
+//            self.lastEventStateLabel.text = SILLightEventOn;
+//            lightState = SILConnectedDeviceStateOn;
+            if (isDMPAWSIoT){
+                imageName = @"dmp_lockClose";
+                nameStr = SILLockEventOn;
+            }else{
+                imageName = @"lightOn";
+                nameStr = SILLightEventOn;
+            }
+            self.lightStateImageView.image = [UIImage imageNamed:imageName];
+            self.lastEventStateLabel.text = nameStr;
+            lightState = SILConnectedDeviceStateOn;
             break;
-        case SILConnectedLightStateOff:
+        }
+        case SILConnectedDeviceStateOff:
             NSLog(@"Light State Off");
-            self.lightStateImageView.image = [UIImage imageNamed:@"lightOff"];
-            self.lastEventStateLabel.text = SILLightEventOff;
-            lightState = SILConnectedLightStateOff;
+//            self.lightStateImageView.image = [UIImage imageNamed:@"lightOff"];
+//            self.lastEventStateLabel.text = SILLightEventOff;
+//            lightState = SILConnectedDeviceStateOff;
+            if (isDMPAWSIoT){
+                imageName = @"dmp_lockOpen";
+                nameStr = SILLockEventOff;
+            }else{
+                imageName = @"lightOff";
+                nameStr = SILLightEventOff;
+            }
+            self.lightStateImageView.image = [UIImage imageNamed:imageName];
+            self.lastEventStateLabel.text = nameStr;
+            lightState = SILConnectedDeviceStateOff;
             break;
         default:
             break;
     }
 }
-
+//Hear need to be change
 - (void)updateSourceImageViewWithData:(NSData *)data {
     uint8_t byte = [self byteFromData:data];
     switch (byte) {
-        case SILConnectedLightSwitchSourceBluetooth:
+        case SILConnectedDeviceSwitchSourceBluetooth:
             NSLog(@"Source Bluetooth");
             self.lastEventSourceImageView.image = [UIImage imageNamed:@"iconBluetooth"];
             self.lastEventSourceNameLabel.text = @"Bluetooth";
             [self.lastEventImageContentView setHidden:NO];
             break;
-        case SILConnectedLightSwitchSourceZigbeeOrConnectOrProprietary: {
+        case SILConnectedDeviceSwitchSourceZigbeeOrConnectOrProprietary: {
             NSString *imageName = nil;
             NSString *typeName = @"";
             
@@ -124,7 +153,15 @@ NSString * const SILLightEventOff = @"Light Off";
                 NSLog(@"Source Zigbee");
                 imageName = @"iconZigbee";
                 typeName = @"Zigbee";
-            } else {
+            }else if (isDMPAWSIoT) {
+                NSLog(@"Source AWS MQTT");
+                imageName = @"aws_iot";
+                typeName = @"AWS MQTT";
+            }else if (isDMPSideWalk){
+                NSLog(@"Source Amazon Sidewalk");
+                imageName = @"aws_sidewalk_icon";
+                typeName = @"Amazon Sidewalk";
+            }else {
                 NSLog(@"Source Proprietary");
                 imageName = @"iconProprietary";
                 typeName = @"Proprietary";
@@ -135,7 +172,7 @@ NSString * const SILLightEventOff = @"Light Off";
             [self scheduleRecoveryRead];
             break;
         }
-        case SILConnectedLightSwitchSourceLightBoard:
+        case SILConnectedDeviceSwitchSourceLightBoard:
             NSLog(@"Source LightBoard");
             self.lastEventSourceImageView.image = nil;
             self.lastEventSourceNameLabel.text = @"Local control";
@@ -186,7 +223,7 @@ NSString * const SILLightEventOff = @"Light Off";
     uint8_t bytesOff[1] = {0x00};
     uint8_t bytesOn[1] = {0x01};
     NSData *data;
-    if (lightState == SILConnectedLightStateOff) {
+    if (lightState == SILConnectedDeviceStateOff) {
         data = [NSData dataWithBytes:bytesOn length:sizeof(bytesOn)];
     } else {
         data = [NSData dataWithBytes:bytesOff length:sizeof(bytesOff)];
@@ -216,10 +253,11 @@ NSString * const SILLightEventOff = @"Light Off";
     self.feedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
     
     SILDiscoveredPeripheral *discoveredPeripheral = [self.centralManager discoveredPeripheralForPeripheral:self.connectedPeripheral];
-    isDMPConnect = discoveredPeripheral.isDMPConnectedLightConnect;
-    isDMPThread = discoveredPeripheral.isDMPConnectedLightThread;
-    isDMPZigbee = discoveredPeripheral.isDMPConnectedLightZigbee;
-    
+    isDMPConnect = discoveredPeripheral.isDMPConnectedDeviceConnect;
+    isDMPThread = discoveredPeripheral.isDMPConnectedDeviceThread;
+    isDMPZigbee = discoveredPeripheral.isDMPConnectedDeviceZigbee;
+    isDMPSideWalk = discoveredPeripheral.isDMPConnectedDeviceSidewalk;
+    isDMPAWSIoT = discoveredPeripheral.isDMPConnectedDeviceAWSIoT;
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapLightStateImageView)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.delegate = self;
@@ -229,9 +267,18 @@ NSString * const SILLightEventOff = @"Light Off";
     self.contentView.layer.cornerRadius = 16;
     [self.contentView addShadow];
     
-    [self setLeftAlignedTitle:@"Connected Lighting"];
-    
+   // [self setLeftAlignedTitle:@"Connected Lighting"];
+    [self setLeftAlignedTitle:@"Connected Device"];
+
     [self.lastEventImageContentView setHidden:YES];
+    
+    if (isDMPAWSIoT) {
+        self.lightStateImageView.image = [UIImage imageNamed:@"dmp_lockClose"];
+        _pressTheIconToggleLbl.text = @"Press the lock icon to toggle lock";
+    }else{
+        self.lightStateImageView.image = [UIImage imageNamed:@"lightOn"];
+        _pressTheIconToggleLbl.text = @"Press the bulb icon to toggle light";
+    }
     
     if(!self.bluetoothManager) {
         NSDictionary *options = @{CBCentralManagerOptionShowPowerAlertKey: @NO};
@@ -301,8 +348,15 @@ NSString * const SILLightEventOff = @"Light Off";
         isConnected = YES;
         self.connectedPeripheral.delegate = self;
         if ([self.connectedPeripheral services].count > 0) {
-            [self discoverPeripheralCharacteristicsForServices];
+            //[self discoverPeripheralCharacteristicsForServices];
+            if (isDMPAWSIoT) {
+                NSLog(@"connectedPeripheral services ==== %@", self.centralManager.serviceUUIDs);
+                [self.connectedPeripheral discoverServices:self.centralManager.serviceUUIDs];
+            }else{
+                [self discoverPeripheralCharacteristicsForServices];
+            }
         } else {
+            NSLog(@"connectedPeripheral services ==== %@", self.centralManager.serviceUUIDs);
             [self.connectedPeripheral discoverServices:self.centralManager.serviceUUIDs];
         }
     } else if ([self.connectedPeripheral state] == CBPeripheralStateDisconnected) {
@@ -400,6 +454,10 @@ NSString * const SILLightEventOff = @"Light Off";
     } else {
         NSLog(@"didUpdateValueForCharacteristic: %@ error: %@", characteristic, error);
     }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error{
+    NSLog(@"Write error: %@", error);
 }
 
 @end

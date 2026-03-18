@@ -39,6 +39,8 @@ extern NSString * const SILImageNameHomeWiFiThroughput;
 extern NSString * const SILImageNameHomeWiFiSensor;
 extern NSString * const SILImageNameHomeWifiProvision;
 extern NSString * const SILImageNameHomeAWSIoT;
+extern NSString * const SILImageNameHomeSmartLock;
+extern NSString * const SILImageNameEnergyHarvestingDevices;
 
 
 extern NSString * const SILImageNameKeyboard;

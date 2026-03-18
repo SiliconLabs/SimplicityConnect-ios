@@ -14,12 +14,19 @@ NSString * const SILServiceNumberTXPower = @"1804";
 NSString * const SILServiceNumberHealthThermometer = @"1809";
 NSString * const SILServiceNumberHeartRate = @"180D";
 NSString * const SILServiceNumberHumanInterfaceDevice = @"1812";
-NSString * const SILServiceNumberConnectedLightingConnect = @"62792313-ADF2-4FC9-974D-FAB9DDF2622C";
-NSString * const SILServiceNumberConnectedLightingProprietary = @"63f596e4-b583-4078-bfc3-b04225378713";
-NSString * const SILServiceNumberConnectedLightingThread = @"dd1c077d-d306-4b30-846a-4f55cc35767a";
-NSString * const SILServiceNumberConnectedLightingZigbee = @"BAE55B96-7D19-458D-970C-50613D801BC9";
+NSString * const SILServiceNumberConnectedDeviceConnect = @"62792313-ADF2-4FC9-974D-FAB9DDF2622C";
+NSString * const SILServiceNumberConnectedDeviceProprietary = @"63f596e4-b583-4078-bfc3-b04225378713";
+NSString * const SILServiceNumberConnectedDeviceThread = @"dd1c077d-d306-4b30-846a-4f55cc35767a";
+NSString * const SILServiceNumberConnectedDeviceZigbee = @"BAE55B96-7D19-458D-970C-50613D801BC9";
 NSString * const SILServiceNumberRangeTest = @"530AA649-17E6-4D62-9F20-9E393B177E63";
 NSString * const SILServiceNumberESLServiceControl = @"35100001-4B1D-B16B-00B1-35018BADF00D";
+//NSString * const SILServiceNumberConnectedDeviceSideWalk = @"9e8dea42-557b-4797-a890-90c5a93da1af";
+NSString * const SILServiceNumberConnectedDeviceSideWalk = @"9E8DEA42-557B-4797-A890-90C5A93DA1AF"; //9E8DEA42-557B-4797-A890-90C5A93DA1AF
+
+NSString * const SILServiceNumberConnectedDeviceAWSIoT = @"FD63";
+NSString * const smartLockStateChangeCharacteristicUUID = @"1AA1";
+NSString * const ssmartLockStateReadCharacteristicUUID = @"1CC1";
+
 
 NSString * const SILCharacteristicNumberAlertLevel = @"2A06";
 NSString * const SILCharacteristicNumberTXPowerLevel = @"2A07";

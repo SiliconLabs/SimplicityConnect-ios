@@ -159,7 +159,6 @@ class SILOTAAckTestCase: SILTestCase {
                 weakSelf.publishTestResult(passed: true)
             case let .failure(reason: reason):
                 weakSelf.otaUpdateManager = nil
-            
                 UserDefaults.standard.setValue("IOP_Test_1", forKey: "deviceNameAfterOtaUpdate")
                 weakSelf.browserCentralManager.disconnect(from: self.peripheral )
                 weakSelf.reconnectToDevice(passed: false,description: reason)
@@ -196,7 +195,7 @@ class SILOTAAckTestCase: SILTestCase {
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Unsupported board."))
             IOPLog().iopLogSwiftFunction(message: "Unsupported board.")
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             self.otaUpdateManager.startTest(for: boardID, firmwareVersion: self.firmwareInfo!.originalVersion)
        }
     }

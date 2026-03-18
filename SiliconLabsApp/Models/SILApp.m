@@ -14,7 +14,7 @@
 + (NSArray *)demoApps {
     return @[
                 [self healthThermometerApp],
-                [self connectedLightningApp],
+                [self connectedDeviceApp],
                 [self rangeTestApp],
                 [self blinkyApp],
                 [self throughputApp],
@@ -27,14 +27,16 @@
                 [self WifiSensorDemoApp],
                 [self WifiSensorThroughput],
                 [self WifiProvisionDemoApp],
-                [self AWSIOTDemoApp]
+                [self AWSIOTDemoApp],
+                [self SmartLockDemoApp],
+                [self EnergyHarvestingDevicesDemoApp]
             ];
 }
 
-+ (SILApp *)connectedLightningApp {
-    return [[SILApp alloc] initWithAppType:SILAppTypeConnectedLighting
-                                     title:@"Connected Lighting"
-                               description:@"Control a Dynamic Multiprotocol application of connected lights and switches."
++ (SILApp *)connectedDeviceApp {
+    return [[SILApp alloc] initWithAppType:SILAppTypeConnectedDevice
+                                     title:@"Connected Device"
+                               description:@"Control a Dynamic Multiprotocol application of connected device."
                          showcasedProfiles:@{}
                                  imageName:SILImageNameHomeConnectedLighting];
 }
@@ -158,6 +160,21 @@
                                  imageName:SILImageNameHomeAWSIoT];
 }
 
++ (SILApp *)SmartLockDemoApp{
+    return [[SILApp alloc] initWithAppType:SILAppTypeSmartLock
+                                     title:@"Smart Lock"
+                               description:@"Add/commission smart lock and read/control it over Bluetooth and AWS IoT Cloud."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameHomeSmartLock];
+}
+
++ (SILApp *)EnergyHarvestingDevicesDemoApp{
+    return [[SILApp alloc] initWithAppType:SILAppTypeEnergyHarvestingDevices
+                                     title:@"Energy Harvesting"
+                               description:@"Monitor harvested voltage in real time."
+                         showcasedProfiles:@{}
+                                 imageName:SILImageNameEnergyHarvestingDevices];
+}
 
 - (instancetype)initWithAppType:(SILAppType)appType
                            title:(NSString *)title

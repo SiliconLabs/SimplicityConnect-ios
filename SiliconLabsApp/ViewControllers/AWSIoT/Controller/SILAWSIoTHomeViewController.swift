@@ -11,15 +11,31 @@ import AWSIoT
 import Network
 import SVProgressHUD
 
-class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWSIoTHomeViewModelProtocol, SILAWSIoTSubscribeViewModelProtocol, SILAWSIoTLEDControllerProtocol {
+class SILAWSIoTHomeViewController: UIViewController, SILAWSIoTHomeViewModelProtocol, SILAWSIoTSubscribeViewModelProtocol, SILAWSIoTLEDControllerProtocol {
 
+    @IBOutlet weak var awsConfigureView: UIView!
+    
+    @IBOutlet weak var awsCertificateTFBGView: UIView!
+    @IBOutlet weak var awsCertificateFileTextField: UITextField!
+    
+    @IBOutlet weak var awsCertificatePasswordTFBGView: UIView!
+    @IBOutlet weak var awsCertificatePasswordTextField: UITextField!
+        
     @IBOutlet weak var pubTextField: UITextField!
     @IBOutlet weak var subTextField: UITextField!
+    
     @IBOutlet weak var subContainerView: UIView!
     @IBOutlet weak var pubContainerView: UIView!
+    
+    @IBOutlet weak var awsEndPointBGTextView: UIView!
+    @IBOutlet weak var awsEndPointTextView: UITextView!
+    
     @IBOutlet var collectionView: UICollectionView!
+    
     @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var connectView: UIView!
+    
+    @IBOutlet weak var passwordEyeButton: UIButton!
 
     let storyboardAWSIoT = UIStoryboard(name: "SILAWSIoT", bundle: .main)
 
@@ -36,6 +52,10 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
     
     var timer: Timer?
 
+    var selectedCtrPath: String? = ""
+    var selectedCtrPassword = ""
+    var selectedEndPoint: String = ""
+    var isPassSecureText: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +71,11 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
         Reachability().monitorReachabilityChanges()
         onlineStatus = false
         getPublishData = false
+        isPassSecureText = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+ 
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -70,7 +95,16 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
         pubContainerView.layer.borderColor = UIColor.lightGray.cgColor
         pubContainerView.layer.borderWidth = 1
         pubContainerView.layer.cornerRadius = 5
+        
+        awsCertificateTFBGView.layer.borderColor = UIColor.lightGray.cgColor
+        awsCertificateTFBGView.layer.borderWidth = 1
 
+        awsCertificatePasswordTFBGView.layer.borderColor = UIColor.lightGray.cgColor
+        awsCertificatePasswordTFBGView.layer.borderWidth = 1
+
+        awsEndPointBGTextView.layer.borderColor = UIColor.lightGray.cgColor
+        awsEndPointBGTextView.layer.borderWidth = 1
+        addDoneButtonOnKeyboard()
         let nib = UINib(nibName: "SILAWSIoTValueCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "SILAWSIoTValueCell")
         collectionView.backgroundColor = UIColor.clear
@@ -78,6 +112,7 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
         collectionView.dataSource = self
        // connectView.isHidden = false
         showConnectView()
+        
         
         if let subTopicStr = AWStopicUserDefault.string(forKey: subcribe_topic_name) {
            //print(subTopicStr)
@@ -110,7 +145,6 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
 //                self.showConnectView()
 //            }
         }
-
     }
 
     private func showConnectView(){
@@ -121,23 +155,33 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
         })
     }
    
-    
-    //MARK: @IBAction
+    // MARK: - IBAction
     @IBAction func connectBtn(_ sender: UIButton) {
-        guard subTextField.isValid(with: subTextField.text!), pubTextField.isValid(with: pubTextField.text!) else {
-           print("Text Fields are not validated, disable everything! ❌")
-            isValidTopic = false
-            self.alertWithOKButton(title: "Alert!", message: "Subscribe and publish topics should not be empty.", completion: { _ in
-            })
-           return
-          }
-          print("Text Fields are validated, enable everything! ✅")
+    
+        guard awsCertificateFileTextField.isValid(with: awsCertificateFileTextField.text ?? ""),
+              awsCertificatePasswordTextField.isValid(with: awsCertificatePasswordTextField.text ?? ""),
+              pubTextField.isValid(with: pubTextField.text ?? ""),
+              subTextField.isValid(with: subTextField.text ?? ""),
+              awsEndPointTextView.isValid(with: awsEndPointTextView.text ?? "")
+        else {
+            self.alertWithOKButton(title: "Alert!", message: SmartLockConstants.allFieldsRequired, completion: { _ in })
+            return
+        }
+        
+        guard awsEndPointTextView.isValidAWSEndpoint(awsEndPointTextView.text ?? "") else {
+            self.alertWithOKButton(title: "Alert!", message: SmartLockConstants.endPointValidationError, completion: { _ in })
+            return
+        }
+        
+        selectedCtrPassword = awsCertificatePasswordTextField.text ?? ""
+        selectedEndPoint = awsEndPointTextView.text ?? ""
+        
         isValidTopic = true
         if isValidTopic {
            if onlineStatus {
                 self.getPublishData = false
                 SVProgressHUD.show(withStatus: "Connecting")
-                SILAWSIoTHomeViewModelObj?.connectViaCert()
+               SILAWSIoTHomeViewModelObj?.connectViaCert(ctrPath: selectedCtrPath, password: selectedCtrPassword, awsEndpoint: selectedEndPoint)
                 if let subTopicName = subTextField.text {
                     AWStopicUserDefault.set(subTopicName, forKey: subcribe_topic_name)
                 }
@@ -147,7 +191,7 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
                 dismissLoader()
             }else{
                 DispatchQueue.main.async {
-                    self.showToast(message:"Internet not available. Kindly check your internet connection on your phone. Thank you!", toastType: .disconnectionError, completion: {})
+                    self.showToast(message: SmartLockConstants.internetNotAvailable, toastType: .disconnectionError, shouldHasSizeOfText: false, position: .bottom) { }
                 }
             }
         }else{
@@ -162,14 +206,29 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
        // self.connectView.isHidden =  true
     }
     
-    
+    @IBAction func secureTextBtn(_ sender: Any){
+        
+        if (isPassSecureText){
+            awsCertificatePasswordTextField.isSecureTextEntry = true
+            passwordEyeButton.clipsToBounds = true
+            passwordEyeButton.contentMode = .scaleAspectFill
+            passwordEyeButton.setBackgroundImage(UIImage(named: "eye_hide"), for: .normal)
+            isPassSecureText = false
+        } else {
+            awsCertificatePasswordTextField.isSecureTextEntry = false
+            passwordEyeButton.clipsToBounds = true
+            passwordEyeButton.contentMode = .scaleAspectFill
+            passwordEyeButton.setBackgroundImage(UIImage(named: "eye_view"), for: .normal)
+            isPassSecureText = true
+        }
+    }
     
     //MARK: SILAWSIoTHomeViewModelProtocol
     func notifyAWSIoTConnectionStatus(isConeected: Bool, status: AWSIoTMQTTStatus, msg: String) {
         if isConeected{
             self.getPublishData = false
             if let subTopicStr = AWStopicUserDefault.string(forKey: subcribe_topic_name) {
-              // print(subTopicStr)
+               print(subTopicStr)
                 SILAWSIoTSubscribeViewModelObj?.subscribeOverTopic(topicId: subTopicStr)
 
             }
@@ -181,7 +240,8 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
             self.getPublishData = false
             SILAWSIoTHomeViewModelObj?.handleDisconnect()
             DispatchQueue.main.async {
-                self.showToast(message:msg, toastType: .disconnectionError, completion: {})
+                self.showToast(message: msg, toastType: .disconnectionError, shouldHasSizeOfText: false, position: .bottom) { }
+                
                 self.sensorsData = []
                 self.sensorsData = self.SILAWSIoTSubscribeViewModelObj?.createCollectionArray() ?? []
                 self.collectionView.reloadData()
@@ -199,7 +259,7 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
-           // print("************* \(subscribeData)")
+            print("************* \(subscribeData)")
             for subVal in subscribeData {
                 if let valTemp = subVal as? Dictionary<String, Any> {
                     //print("+++++++++++++++++++ \(valTemp["title"] ?? "")")
@@ -216,15 +276,12 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
                 }
           
             }
-            
-         
-
         }
     }
     //MARK: SILAWSIoTLEDControllerProtocol
     func notifyAWSIoTPublishViewClose(isClose: Bool) {
         if let subTopicStr = AWStopicUserDefault.string(forKey: subcribe_topic_name) {
-          // print(subTopicStr)
+           print(subTopicStr)
             SILAWSIoTSubscribeViewModelObj?.subscribeOverTopic(topicId: subTopicStr)
         }
         DispatchQueue.main.async {
@@ -232,23 +289,7 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
             self.connectView.isHidden =  true
         }
     }
-    
-//MARK: - UITextFieldDelegate
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-         textField.resignFirstResponder()
-         return true
-    }
-//    @objc func textFieldDidChange(_ textField: UITextField) {
-//        //Here we will write some code, bear with me!
-//        guard subTextField.isValid(with: subTextField.text!), pubTextField.isValid(with: pubTextField.text!) else {
-//           print("Text Fields are not validated, disable everything! ❌")
-//            isValidTopic = false
-//           return
-//          }
-//          print("Text Fields are validated, enable everything! ✅")
-//        isValidTopic = true
-//    }
-    
+        
     //MARK: Network Reachability
     @objc func networkStatusChanged(_ notification: Notification) {
        // print(notification.userInfo)
@@ -261,7 +302,7 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
                 if !offlineAlertStatus {
                     offlineAlertStatus = true
                     DispatchQueue.main.async {
-                        self.showToast(message:"Internet not available. Kindly check your internet connection on your phone. Thank you!", toastType: .disconnectionError, completion: {})
+                        self.showToast(message: SmartLockConstants.internetNotAvailable, toastType: .disconnectionError, shouldHasSizeOfText: false, position: .bottom) { }
                     }
                 }
             }else{
@@ -270,7 +311,7 @@ class SILAWSIoTHomeViewController: UIViewController, UITextFieldDelegate, SILAWS
                 if !onlineAlertStatus {
                     onlineAlertStatus = true
                     DispatchQueue.main.async {
-                        self.showToast(message:"The device is reconnected to the internet.", toastType: .internetInfo, completion: {})
+                        self.showToast(message: SmartLockConstants.connectMsg, toastType: .internetInfo, shouldHasSizeOfText: false, position: .bottom) { }
                     }
                 }
             }

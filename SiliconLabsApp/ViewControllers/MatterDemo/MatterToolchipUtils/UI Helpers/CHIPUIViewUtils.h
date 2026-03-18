@@ -23,6 +23,7 @@ static NSString * _Nullable const DimmerSwitch = @"260";
 
 static NSString * _Nullable const Dishwasher = @"117";
 static NSString * _Nullable const AirQuality = @"44";
+static NSString * _Nullable const ElectricVehicles = @"1293";
 
 @interface CHIPUIViewUtils : NSObject
 + (UIView *)viewWithUITextField:(UITextField *)textField button:(UIButton *)button;
