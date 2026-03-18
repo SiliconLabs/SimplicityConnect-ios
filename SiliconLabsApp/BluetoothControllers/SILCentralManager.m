@@ -439,6 +439,11 @@ NSTimeInterval const SILCentralManagerConnectionTimeoutThreshold = 20.0;
     [[NSNotificationCenter defaultCenter] postNotificationName:SILCentralManagerDidDisconnectPeripheralNotification
                                                         object:self
                                                         userInfo:userInfo];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"thunderboardDviceDisconnect"
+                                                        object:self
+                                                        userInfo:userInfo];
+    
     [self postRegisterLogNotification:[SILLogDataModel prepareLogDescription:@"didDisconnectPeripheral: " andPeripheral:peripheral andError:error]];
     if (wasConnected) {
         [self postDeleteDisconnectedPeripheral:peripheral andError:error];

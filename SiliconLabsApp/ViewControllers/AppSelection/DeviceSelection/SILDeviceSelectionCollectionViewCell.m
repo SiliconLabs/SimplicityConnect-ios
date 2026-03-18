@@ -21,7 +21,7 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 
 - (void)configureCellForPeripheral:(SILDiscoveredPeripheral*)discoveredPeripheral andApplication:(SILApp*)app {
     [self setDeviceNameForPeripheral:discoveredPeripheral];
-    if (app.appType == SILAppTypeConnectedLighting) {
+    if (app.appType == SILAppTypeConnectedDevice) {
         [self showDbmImageForPeripheral:discoveredPeripheral];
     } else {
         [self hideDbmTypeImageView];
@@ -57,12 +57,16 @@ CGFloat const SILDeviceSelectionViewControllerReloadThreshold = 1.0;
 - (void)showDbmImageForPeripheral:(SILDiscoveredPeripheral*)discoveredPeripheral {
     NSString *dmpImage;
         
-    if (discoveredPeripheral.isDMPConnectedLightConnect) {
+    if (discoveredPeripheral.isDMPConnectedDeviceConnect) {
         dmpImage = @"iconBleConnect";
-    } else if (discoveredPeripheral.isDMPConnectedLightThread) {
+    } else if (discoveredPeripheral.isDMPConnectedDeviceThread) {
         dmpImage = @"iconThread";
-    } else if (discoveredPeripheral.isDMPConnectedLightZigbee) {
+    } else if (discoveredPeripheral.isDMPConnectedDeviceZigbee) {
         dmpImage = @"iconZigbee";
+    } else if (discoveredPeripheral.isDMPConnectedDeviceSidewalk) {
+        dmpImage = @"aws_sidewalk_icon";
+    } else if (discoveredPeripheral.isDMPConnectedDeviceAWSIoT) {
+        dmpImage = @"aws_iot";
     } else {
         dmpImage = @"iconProprietary";
     }

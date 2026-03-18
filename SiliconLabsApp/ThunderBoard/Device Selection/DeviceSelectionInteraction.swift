@@ -21,6 +21,8 @@ protocol DeviceSelectionInteractionOutput : class {
     func interactionShowConnectionFailed()
     func interactionDidFinishDeviceConfiguration(_ connection: DemoConnection, deviceConnector: DeviceConnection)
     func interactionDidConnectWithBlinkyDevice(_ device: Device, deviceConnector: DeviceConnection, isThunderboard: Bool)
+    func interactionDidConnectWithSmartLockDevice(_ device: Device, deviceConnector: DeviceConnection, isThunderboard: Bool) //Add 25q4 GA...
+
 }
 
 @objcMembers
@@ -283,6 +285,9 @@ class DeviceSelectionInteraction : DeviceScannerDelegate, DeviceConnectionDelega
         if self.appType == .typeBlinky, device.name!.hasPrefix("Blinky") {
             self.interactionOutput?.interactionDidConnectWithBlinkyDevice(device, deviceConnector: self.deviceConnector!,
                                                                           isThunderboard: false)
+            return
+        }else if self.appType == .typeSmartLock, device.name!.hasPrefix("BLE_CONFIGURATOR") { //Add 25q4 GA...
+            self.interactionOutput?.interactionDidConnectWithSmartLockDevice(device, deviceConnector: self.deviceConnector!, isThunderboard: false)
             return
         }
         device.configurationDelegate = self

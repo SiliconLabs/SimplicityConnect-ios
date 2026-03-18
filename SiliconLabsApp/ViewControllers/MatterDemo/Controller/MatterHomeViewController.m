@@ -25,6 +25,7 @@
 #import <Matter/Matter.h>
 #import "DeviceSelector.h"
 #import "FRHyperLabel.h"
+#import "EVSEViewController.h"
 
 @protocol MatterDeviceListDelegate <NSObject>
 - (void) didCommissionComplete:(BOOL)isCommissioned;
@@ -51,6 +52,7 @@
 @property (strong, nonatomic) NSTimer *tempRefreshTimerHome;
 @property (weak, nonatomic) IBOutlet UIView *matterSetupInfoView;
 @property (strong, nonatomic)MTRDeviceController * controller;
+@property (weak, nonatomic) EVSEViewController * evseViewController;
 
 @end
 
@@ -358,6 +360,11 @@ int commissiond;
         _temperatureViewController.nodeId = nodeId;
         _temperatureViewController.endPoint = endPoint;
         [self.navigationController pushViewController:_temperatureViewController animated: YES];
+    } else if ([deviceType isEqualToString:ElectricVehicles]) {
+        _evseViewController = [story instantiateViewControllerWithIdentifier:@"EVSEViewController"];
+        _evseViewController.nodeId = nodeId;
+        _evseViewController.endPoint = endPoint;
+        [self.navigationController pushViewController:_evseViewController animated: YES];
     }
 }
 

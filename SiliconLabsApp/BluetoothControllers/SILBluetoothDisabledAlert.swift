@@ -14,7 +14,7 @@ enum SILBluetoothDisabledAlert: Int {
     case advertiser
     case healthThermometer
     case rangeTest
-    case connectedLighting
+    case connectedDevices
     case interoperabilityTest
     case throughput
     case gattConfigurator
@@ -24,6 +24,7 @@ enum SILBluetoothDisabledAlert: Int {
     case wifiCommissioning
     case rssiGraph
     case eslDemo
+    case smartLock
     
     var title: String {
         "Bluetooth Disabled"
@@ -41,8 +42,8 @@ enum SILBluetoothDisabledAlert: Int {
             return "\(backMsg) \(turnOnMsg) use Health Thermometer."
         case .rangeTest:
             return "\(backMsg) \(turnOnMsg) use Range Test."
-        case .connectedLighting:
-            return "\(backMsg) \(turnOnMsg) use Connected Lighting."
+        case .connectedDevices:
+            return "\(backMsg) \(turnOnMsg) use Connected Device."
         case .interoperabilityTest:
             return "\(backMsg) \(turnOnMsg) run Interoperability Test."
         case .throughput:
@@ -61,6 +62,8 @@ enum SILBluetoothDisabledAlert: Int {
             return "\(backMsg) \(turnOnMsg) use RSSI Graph"
         case .eslDemo:
             return "\(backMsg) \(turnOnMsg) use ESL Demo"
+        case .smartLock:
+            return "\(backMsg) \(turnOnMsg) use Smart Lock"
         }
     }
 }

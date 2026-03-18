@@ -731,7 +731,7 @@ UIButton * backButton;
             // [SVProgressHUD dismiss];
             self->_commissioningDeviceProgressView.hidden = TRUE;
             backButton.enabled = YES;
-            [self showAlertPopup:@"This device is already commissioned. Please reset device and try again."];
+            [self showAlertPopup:@"Something went wrong during commissioning. Please reset the device and try again."];
             [self refresh];
         });
     }else if (deviceStatus == 0){

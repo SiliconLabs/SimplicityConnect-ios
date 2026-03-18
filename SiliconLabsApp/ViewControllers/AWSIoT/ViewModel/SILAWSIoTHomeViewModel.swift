@@ -23,6 +23,10 @@ class SILAWSIoTHomeViewModel: NSObject {
     @objc var iot: AWSIoT!
     @objc var iotDataManager: AWSIoTDataManager!
     
+    var selectedCertificate: String? = ""
+    var selectedCertificatePassword: String = ""
+    var selectedAWSEndPoint: String = ""
+
     init(SILAWSIoTHomeViewModelDelegate: SILAWSIoTHomeViewModelProtocol? = nil) {
         super.init()
         self.SILAWSIoTHomeViewModelDelegate = SILAWSIoTHomeViewModelDelegate
@@ -34,7 +38,13 @@ class SILAWSIoTHomeViewModel: NSObject {
         initializeDataPlane(credentialsProvider: credentialsProvider)
     }
     
-    //MARK: AWS IoT initial setup
+    // MARK: AWS IoT initial setup
+    func initialSetupOfAWSIOT() {
+        let credentialsProvider = AWSCognitoCredentialsProvider(regionType:AWS_REGION, identityPoolId: IDENTITY_POOL_ID)
+        initializeControlPlane(credentialsProvider: credentialsProvider)
+        initializeDataPlane(credentialsProvider: credentialsProvider)
+    }
+    
     func initializeControlPlane(credentialsProvider: AWSCredentialsProvider) {
         //Initialize control plane
         // Initialize the Amazon Cognito credentials provider
@@ -50,7 +60,10 @@ class SILAWSIoTHomeViewModel: NSObject {
     func initializeDataPlane(credentialsProvider: AWSCredentialsProvider) {
         //Initialize Dataplane:
         // IoT Dataplane must use your account specific IoT endpoint
-        let iotEndPoint = AWSEndpoint(urlString: IOT_ENDPOINT)
+
+        // let iotEndPoint = AWSEndpoint(urlString: IOT_ENDPOINT)
+        
+        let iotEndPoint = AWSEndpoint(urlString: selectedAWSEndPoint)
         
         // Configuration for AWSIoT data plane APIs
         let iotDataConfiguration = AWSServiceConfiguration(region: AWS_REGION,
@@ -62,11 +75,19 @@ class SILAWSIoTHomeViewModel: NSObject {
     }
     
     //MARK: Connect via Certificate
-    func connectViaCert() {
+    func connectViaCert(ctrPath: String?, password: String, awsEndpoint: String) {
         if self.connected == false {
-            handleConnectViaCert()
+            selectedCertificate = ctrPath
+            selectedCertificatePassword = password
+            selectedAWSEndPoint = awsEndpoint
+            
+            initialSetupOfAWSIOT()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.handleConnectViaCert()
+            }
         }else{
-          handleDisconnect()
+            handleDisconnect()
         }
     }
     
@@ -74,38 +95,64 @@ class SILAWSIoTHomeViewModel: NSObject {
         
         let defaults = UserDefaults.standard
         let certificateId = defaults.string( forKey: "certificateId")
+        
+        print(certificateId ?? "No certificateId")
+        
         if (certificateId == nil) {
-            let certificateIdInBundle = searchForExistingCertificateIdInBundle()
+            let certificateIdInBundle = searchForExistingCertificateIdInBundle { error in
+                print("Certificate import error: \(error)")
+                // Call mqttEventCallback with a custom error status
+                self.mqttEventCallback(.connectionRefused, error: error)
+            }
             
             if (certificateIdInBundle == nil) {
                 
                 createCertificateIdAndStoreinNSUserDefaults(onSuccess: {generatedCertificateId in
                     let uuid = UUID().uuidString
-                    self.iotDataManager.connect( withClientId: uuid, cleanSession:true, certificateId:generatedCertificateId, statusCallback: self.mqttEventCallback)
+                    self.iotDataManager.connect(
+                        withClientId: uuid,
+                        cleanSession: true,
+                        certificateId: generatedCertificateId,
+                        statusCallback: { status in
+                            self.mqttEventCallback(status, error: nil)
+                        }
+                    )
                 }, onFailure: {error in
                     print("Received error: \(error)")
                 })
             }
         } else {
             let uuid = UUID().uuidString;
-            // Connect to the AWS IoT data plane service w/ certificate
-            iotDataManager.connect( withClientId: uuid, cleanSession:true, certificateId:certificateId!, statusCallback: self.mqttEventCallback)
+            // Connect to the AWS IoT data plane service w/o certificate
+            self.iotDataManager.connect(
+                withClientId: uuid,
+                cleanSession: true,
+                certificateId: certificateId!,
+                statusCallback: { status in
+                    self.mqttEventCallback(status, error: nil)
+                }
+            )
         }
     }
-    func searchForExistingCertificateIdInBundle() -> String? {
+    
+    func searchForExistingCertificateIdInBundle(onFailure: @escaping (Error) -> Void) -> String? {
         let defaults = UserDefaults.standard
-        // No certificate ID has been stored in the user defaults; check to see if any .p12 files
-        // exist in the bundle.
         let mainBundle = Bundle.main
         //let certFile = mainBundle.paths(forResourcesOfType: "p12" as String, inDirectory:nil)
         //print(certFile)
-        let certFile = mainBundle.path(forResource: "SilabsAWSIoTCertificate", ofType: "p12")
-        print("SilabsAWSIoTCertificate: ************ \(certFile!)")
-
+        
+//        let certFile = mainBundle.path(forResource: "SilabsAWSIoTCertificate", ofType: "p12")
+//        print("SilabsAWSIoTCertificate: ************ \(certFile!)")
+        
         //NSString *p12Path = [[NSBundle mainBundle] pathForResource:@"TLSCertificate" ofType:@"p12"];
         let uuid = UUID().uuidString
         
-        guard let certId = certFile else {
+//        guard let certId = certFile else {
+//            let certificateId = defaults.string(forKey: "certificateId")
+//            return certificateId
+//        }
+        
+        guard let certId = selectedCertificate else {
             let certificateId = defaults.string(forKey: "certificateId")
             return certificateId
         }
@@ -115,23 +162,48 @@ class SILAWSIoTHomeViewModel: NSObject {
         // user defaults as the filename.  If the PKCS12 file requires a passphrase,
         // you'll need to provide that here; this code is written to expect that the
         // PKCS12 file will not have a passphrase.
-        guard let data = try? Data(contentsOf: URL(fileURLWithPath: certId)) else {
-            print("[ERROR] Found PKCS12 File in bundle, but unable to use it")
-            let certificateId = defaults.string( forKey: "certificateId")
-            return certificateId
+        
+//        guard let data = try? Data(contentsOf: URL(fileURLWithPath: certId)) else {
+//            print("[ERROR] Found PKCS12 File in bundle, but unable to use it")
+//            let certificateId = defaults.string( forKey: "certificateId")
+//            return certificateId
+//        }
+        
+        guard FileManager.default.fileExists(atPath: certId) else {
+            let error = NSError(domain: "PKCS12", code: -3, userInfo: [NSLocalizedDescriptionKey: "Please enter a valid certificate and its corresponding password."])
+            onFailure(error)
+            return nil
         }
         
-        if AWSIoTManager.importIdentity( fromPKCS12Data: data, passPhrase:"1234567890", certificateId:certId) {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: certId)) else {
+                let error = NSError(domain: "PKCS12", code: -1, userInfo: [NSLocalizedDescriptionKey: "Please enter a valid certificate and its corresponding password."])
+                onFailure(error)
+                return nil
+            }
+        
+        if AWSIoTManager.importIdentity( fromPKCS12Data: data, passPhrase: selectedCertificatePassword, certificateId:certId) {
+
             // Set the certificate ID and ARN values to indicate that we have imported
             // our identity from the PKCS12 file in the bundle.
             defaults.set(certId, forKey:"certificateId")
             defaults.set("from-bundle", forKey:"certificateArn")
             DispatchQueue.main.async {
-                self.iotDataManager.connect( withClientId: uuid,
-                                             cleanSession:true,
-                                             certificateId:certId,
-                                             statusCallback: self.mqttEventCallback)
+                print("Final uuid:= \(uuid)")
+                print("Final ctrid:= \(certId)")
+                
+                self.iotDataManager.connect(
+                    withClientId: uuid,
+                    cleanSession: true,
+                    certificateId: certId,
+                    statusCallback: { status in
+                        self.mqttEventCallback(status, error: nil)
+                    }
+                )
             }
+        } else {
+            let error = NSError(domain: "PKCS12", code: -2, userInfo: [NSLocalizedDescriptionKey: "Please enter a valid certificate and its corresponding password."])
+            onFailure(error)
+            return nil
         }
         
         let certificateId = defaults.string( forKey: "certificateId")
@@ -181,10 +253,8 @@ class SILAWSIoTHomeViewModel: NSObject {
         }
     }
     
-    
-    
-    //MARK: Handel Connect via Certificate
-    func mqttEventCallback( _ status: AWSIoTMQTTStatus ) {
+    // MARK: Handel Connect via Certificate
+    func mqttEventCallback( _ status: AWSIoTMQTTStatus, error: Error? ) {
         DispatchQueue.main.async {
             print("connection status = \(status.rawValue)")
             
@@ -195,22 +265,22 @@ class SILAWSIoTHomeViewModel: NSObject {
             case .connected:
                 print("Connected" )
                 self.connected = true
-                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Connected: connection status = \(status.rawValue)")
+                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Successfully Connected")
 
             case .disconnected:
                 print("Disconnected")
                 self.connected = false
-                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Disconnected: connection status = \(status.rawValue)")
+                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Disconnected")
                 
             case .connectionRefused:
                 print( "Connection Refused" )
                 self.connected = false
-                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Connection Refused: connection status = \(status.rawValue)")
+                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Connection Refused: \(error?.localizedDescription ?? "")")
                 
             case .connectionError:
                 print( "Connection Error" )
                 self.connected = false
-                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Connection Error: connection status = \(status.rawValue)")
+                self.SILAWSIoTHomeViewModelDelegate?.notifyAWSIoTConnectionStatus(isConeected: self.connected, status: status, msg: "Connection Error: \(error?.localizedDescription ?? "")")
                 
             case .protocolError:
                 print( "Protocol Error" )
@@ -226,7 +296,8 @@ class SILAWSIoTHomeViewModel: NSObject {
         }
     }
     
-    //MARK: Connected via Web Soket
+    //MARK: - Connected via Web Soket
+    
     func connectByWebSocketClicked() {
         if (connected == false) {
             handleConnectViaWebsocket()
@@ -235,29 +306,27 @@ class SILAWSIoTHomeViewModel: NSObject {
         }
     }
     
-    //MARK: handle Connect Via Websocket/using pool id
+    // MARK: handle Connect Via Websocket/using pool id
     func handleConnectViaWebsocket() {
-       // self.connectButton.isHidden = true
-  
         let uuid = UUID().uuidString
-        // Connect to the AWS IoT data plane service over websocket
         iotDataManager.connectUsingWebSocket(withClientId: uuid, cleanSession: true, statusCallback: mqttEventCallbackWebsocket(_:))
     }
     
     func mqttEventCallbackWebsocket(_ status: AWSIoTMQTTStatus) {
         guard case .connected = status else {
-            mqttEventCallback(status)
+            mqttEventCallback(status, error: nil)
             return
         }
         self.connected = true
     }
     
-    //MARK: Disconnect connection
+    // MARK: Disconnect connection
     func handleDisconnect() {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            self.iotDataManager.disconnect();
+            self.iotDataManager?.disconnect();
             DispatchQueue.main.async {
                 self.connected = false
+                UserDefaults.standard.removeObject(forKey: "certificateId")
             }
         }
     }

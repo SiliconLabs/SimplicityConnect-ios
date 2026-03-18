@@ -41,6 +41,9 @@ typedef NS_ENUM(NSInteger, SILDFUStatus) {
 + (NSUInteger)maximumByteAlignedWriteValueLengthForPeripheral:(CBPeripheral *)peripheral forType:(CBCharacteristicWriteType)type;
 - (void)reconnectToOTADevice;
 
+/// Resets OTA state to initial values (isSeriesTwo = NO, isOTADataCharacteristicReady = YES). Call after OTA Ack/Non-Ack test completion.
++ (void)resetOTADataCharacteristicState;
+
 @end
 
 @protocol SILOTAFirmwareUpdateManagerDelegate <NSObject>

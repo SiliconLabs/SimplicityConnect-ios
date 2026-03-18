@@ -40,7 +40,7 @@ let AWS_REGION = AWSRegionType.USEast2  // ap-south-1
 
 //Silabs
 //endpoint: a2m21kovu9tcsh-ats.iot.us-east-2.amazonaws.com
-let IOT_ENDPOINT = "https://a2m21kovu9tcsh-ats.iot.us-east-2.amazonaws.com"
+//let IOT_ENDPOINT = "https://a2m21kovu9tcsh-ats.iot.us-east-2.amazonaws.com"
 
 
 //let IDENTITY_POOL_ID = "ap-south-1:285452c9-0a2b-4518-bf86-585f5dad0078"

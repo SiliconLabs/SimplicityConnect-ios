@@ -36,7 +36,8 @@ Simplicity Connect includes many demos to test sample apps in the Silicon Labs G
 - **Wi-Fi Throughput**: Wi-Fi demo feature for measuring data throughput between SiWx91X device and the mobile phone.
 - **Wi-Fi Provisioning**: Commission a Wi-Fi device via Access Point.
 - **AWS Demo**: This Demo showcases a system where sensor data is sent to AWS IoT Core using the MQTT protocol. A mobile app subscribes to specific MQTT topics to receive this sensor data in real-time. The app can also publish messages to AWS IoT Core, which are then received by the sensor device's firmware, enabling two-way communication.
-
+- **Smart Lock**: Add/commission smart lock and read/control it over Bluetooth and AWS IoT Cloud.
+- **Energy Harvesting**: Monitor harvested voltage in real time.
 
 ## Development Features
 Simplicity Connect helps developers create and troubleshoot Bluetooth applications running on Silicon Labs’ BLE hardware. Here’s a rundown of some example functionalities.
