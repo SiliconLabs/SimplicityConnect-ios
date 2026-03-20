@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Charts
+import DGCharts
 
 class RSSIGraphYAxisRenderer : YAxisRenderer {
     private let arrowWidth = CGFloat(6)

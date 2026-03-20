@@ -6,7 +6,7 @@
 //  Copyright © 2022 SiliconLabs. All rights reserved.
 //
 
-import Charts
+import DGCharts
 
 class RSSIGraphLineChartView: LineChartView {
     
