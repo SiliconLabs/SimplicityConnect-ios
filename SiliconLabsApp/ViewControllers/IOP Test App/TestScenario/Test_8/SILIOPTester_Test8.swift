@@ -47,18 +47,7 @@ class SILIOPTester_Test8: SILTestScenario {
                         weakSelf.tests[i + 1].performTestCase()
 
                     case .failed(reason: _):
-                        if i + 1 == 1 {
-                            weakSelf.privTestResults[1] = SILTestResult(testID: weakSelf.tests[1].testID,
-                                                                        testName: weakSelf.tests[1].testName,
-                                                                        testStatus: .failed(reason: SILTestFailureReason(description: "Mandatory test 7.2 failed.")))
-                            weakSelf.privTestResults[2] = SILTestResult(testID: weakSelf.tests[2].testID,
-                                                                        testName: weakSelf.tests[2].testName,
-                                                                        testStatus: .failed(reason: SILTestFailureReason(description: "Mandatory test 7.2 failed.")))
-                        } else {
-                            weakSelf.privTestResults[2] = SILTestResult(testID: weakSelf.tests[2].testID,
-                                                                        testName: weakSelf.tests[2].testName,
-                                                                        testStatus: .failed(reason: SILTestFailureReason(description: "Mandatory test 7.3 failed.")))
-                        }
+                        weakSelf.markRemainingTestsAsFailed(after: i)
                         weakSelf.testResults.value = weakSelf.privTestResults
                         
                     default:
@@ -70,6 +59,18 @@ class SILIOPTester_Test8: SILTestScenario {
         }
         
         self.tests[0].performTestCase()
+    }
+    
+    private func markRemainingTestsAsFailed(after failedIndex: Int) {
+        let failedTestID = tests[failedIndex].testID
+        let description = "Mandatory test \(failedTestID) failed."
+        guard failedIndex + 1 < tests.count else { return }
+        
+        for index in (failedIndex + 1)..<tests.count {
+            privTestResults[index] = SILTestResult(testID: tests[index].testID,
+                                                   testName: tests[index].testName,
+                                                   testStatus: .failed(reason: SILTestFailureReason(description: description)))
+        }
     }
     
     func getTestsArtifacts() -> Dictionary<String, Any> {

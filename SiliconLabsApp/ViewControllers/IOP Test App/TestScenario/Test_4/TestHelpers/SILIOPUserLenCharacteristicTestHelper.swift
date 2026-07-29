@@ -9,6 +9,7 @@
 import Foundation
 
 class SILIOPUserLenCharacteristicTestHelper {
+    private let log = IOPLog()
     struct TestResult {
         var passed: Bool
         var description: String
@@ -92,8 +93,7 @@ class SILIOPUserLenCharacteristicTestHelper {
                 
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
-                    debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
+                    weakSelf.log.gatt(source: "SILIOPUserLenCharacteristicTestHelper", testID: weakSelf.testCase.testID, operation: "Write user-length characteristic", uuid: characteristic.uuid, outcome: "Write acknowledged, reading value back for verification")
                     weakSelf.peripheralDelegate.readCharacteristic(characteristic: characteristic)
                     return
                 }
@@ -102,8 +102,7 @@ class SILIOPUserLenCharacteristicTestHelper {
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
+                    weakSelf.log.gatt(source: "SILIOPUserLenCharacteristicTestHelper", testID: weakSelf.testCase.testID, operation: "Read user-length characteristic", uuid: characteristic.uuid, expected: weakSelf.exceptedValue, actual: data?.hexa(), outcome: "Verify written user-managed value")
                     if data?.hexa()  == weakSelf.exceptedValue {
                         weakSelf.testResult.value = TestResult(passed: true, description: "")
                     } else {

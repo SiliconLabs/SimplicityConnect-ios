@@ -55,6 +55,7 @@
 #import "SILOTAFirmwareFile.h"
 #import "CBPeripheral+Services.h"
 #import "CBService+Categories.h"
+#import "SILUUIDProvider.h"
 #import "SILOTAProgressViewController.h"
 #import "SILHealthThermometerAppViewController.h"
 #import "SILConnectedLightingViewController.h"

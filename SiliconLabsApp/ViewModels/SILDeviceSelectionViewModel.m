@@ -129,7 +129,7 @@ CGFloat const SILDeviceSelectionViewModelRSSIThreshold = 1.0;
         case SILAppTypeThroughput:
             return @"A circuit board (SoC) must be connected and running \"Bluetooth - SoC Throughput\" firmware.";
         case SILAppIopTest:
-            return @"A circuit board (SoC) must be connected and running \"Bluetooth - SoC Interoperability Test FreeRTOS\" firmware.";
+            return @"A circuit board (SoC) must be connected and running \"Bluetooth - SoC Interoperability Test\" or \"Bluetooth - SoC Interoperability Test FreeRTOS\" or \"Bluetooth - SoC Interoperability Test Micrium OS\" firmware.";
         case SILAppTypeBlinky:
             return @"A circuit board (SoC) must be connected and running \"Bluetooth - SoC Blinky or Bluetooth - SoC EFR32xG26 Dev Kit or Bluetooth - SoC EFR32xG24 Dev Kit or Bluetooth - SoC Thunderboard EFR32BG22\" firmware.";
         case SILAppTypeWifiCommissioning:

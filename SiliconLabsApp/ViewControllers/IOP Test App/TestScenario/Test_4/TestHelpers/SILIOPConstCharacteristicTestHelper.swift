@@ -9,6 +9,7 @@
 import Foundation
 
 class SILIOPConstCharacteristicTestHelper {
+    private let log = IOPLog()
     struct TestResult {
         var passed: Bool
         var description: String?
@@ -96,8 +97,7 @@ class SILIOPConstCharacteristicTestHelper {
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestCharacteristicTypesRWConstLen1 {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
+                    weakSelf.log.gatt(source: "SILIOPConstCharacteristicTestHelper", testID: weakSelf.testCase.testID, operation: "Read constant-length characteristic", uuid: characteristic.uuid, actual: data?.hexa(), outcome: weakSelf.isFirstSubtest ? "Evaluating initial read-only constant value" : "Evaluating write-not-permitted behavior")
                     if weakSelf.isFirstSubtest, data?.hexa() == weakSelf.ExceptedValue_Subtest1 {
                         weakSelf.isFirstSubtest = false
                         if let dataToWrite = weakSelf.ValueToWrite_Subtest2.data(withCount: 1) {

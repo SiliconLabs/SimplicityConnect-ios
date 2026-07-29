@@ -18,6 +18,20 @@ enum SILIOPTestOTAStatus {
 extension NSNotification.Name {
     static let SILIOPFileUrlChosen = Notification.Name("iopFileChosen")
     static let SILIOPShowFilePicker = Notification.Name("iopShowFilePicker")
+    /// Posted while IOP throughput test (7.1) is running and once more when it finishes; userInfo uses `SILIOPThroughputPopupKeys`.
+    static let SILIOPThroughputResultReady = Notification.Name("SILIOPThroughputResultReady")
+    /// Posted when throughput scenario ends **without** the gauge popup (early failure). Tells the runner to advance to Security tests.
+    static let SILIOPThroughputContinueWithoutPopup = Notification.Name("SILIOPThroughputContinueWithoutPopup")
+}
+
+enum SILIOPThroughputPopupKeys {
+    static let speedKbps = "speedKbps"
+    static let mtuSize = "mtuSize"
+    static let bufferSize = "bufferSize"
+    static let isCompleted = "isCompleted"
+    static let maxSpeedKbps = "maxSpeedKbps"
+    static let averageSpeedKbps = "averageSpeedKbps"
+    static let targetSpeedKbps = "targetSpeedKbps"
 }
 
 class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate {
@@ -40,11 +54,14 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
     
     private var otaProgress: OTAProgress = .unknown
     private var boardID: String = ""
+    private let maxConnectionAttempts = 3
+    private let reconnectRetryDelay: TimeInterval = 3
     
     var otaTestStatus: SILObservable<SILIOPTestOTAStatus> = SILObservable(initialValue: .unknown)
     private var fileToUpdate: URL?
     private var failureReson: String!
     private var finishOTAError: Error?
+    private let log = IOPLog()
     
     //IOP MANAGER...
     init(with peripheral: CBPeripheral, centralManager: SILCentralManager, otaMode: SILOTAMode) {
@@ -76,8 +93,11 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
     }
     
     @objc private func didConnectPeripheral(notification: Notification) {
-        debugPrint("didConnectPeripheral**********OTA")
-        IOPLog().iopLogSwiftFunction(message: "didConnectPeripheral**********OTA")
+        if let connectedPeripheral = notification.userInfo?[SILCentralManagerPeripheralKey] as? CBPeripheral {
+            self.peripheral = connectedPeripheral
+        }
+        log.emit(source: "SILIopTestOTAUpdateManger",
+                 message: "Did connect to OTA peripheral | \(log.peripheralSummary(self.peripheral))")
         if self.otaProgress == .unknown {
             self.otaProgress = .reconnected
         } else if self.otaProgress == .initiated || self.otaProgress == .reconnected {
@@ -85,13 +105,13 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
         } else {
             self.unregisterNotifications()
             self.otaTestStatus.value = .failure(reason: "Not allowed connection to peripheral.")
-            IOPLog().iopLogSwiftFunction(message: "Not allowed connection to peripheral.")
+            log.step(source: "SILIopTestOTAUpdateManger", action: "Unexpected OTA connect event", detail: "Connection happened in an invalid OTA state.")
         }
     }
     
     @objc private func didDisconnectPeripheral(notification: Notification) {
-        debugPrint("didDisconnectPeripheral**********OTA")
-        IOPLog().iopLogSwiftFunction(message: "didDisconnectPeripheral**********OTA")
+        log.emit(source: "SILIopTestOTAUpdateManger",
+                 message: "Did disconnect from OTA peripheral | \(log.peripheralSummary(self.peripheral))")
         if self.otaProgress == .reconnected {
             self.otaProgress = .initiated
         } else if self.otaProgress == .finished {
@@ -104,25 +124,21 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
             self.unregisterNotifications()
             self.failureReson =  "Not allowed disconnection from peripheral."
             self.waitForChangeTopController()
-            IOPLog().iopLogSwiftFunction(message: "Not allowed disconnection from peripheral.")
+            log.step(source: "SILIopTestOTAUpdateManger", action: "Unexpected OTA disconnect event", detail: "Disconnect happened before the OTA flow completed.")
         }
     }
     
     @objc private func didFailToConnectPeripheral(notification: Notification) {
-        debugPrint("didFailToConnectPeripheral**********OTA")
-        IOPLog().iopLogSwiftFunction(message: "didFailToConnectPeripheral**********OTA")
+        log.step(source: "SILIopTestOTAUpdateManger", action: "Failed to connect to OTA peripheral", detail: log.peripheralSummary(self.peripheral))
         self.unregisterNotifications()
         self.otaTestStatus.value = .failure(reason: "Fail to connect to peripheral.")
-        IOPLog().iopLogSwiftFunction(message: "Fail to connect to peripheral.")
     }
     
     @objc private func bluetoothDisabled() {
-        debugPrint("bluetoothDisabled**********OTA")
-        IOPLog().iopLogSwiftFunction(message: "bluetoothDisabled**********OTA")
+        log.step(source: "SILIopTestOTAUpdateManger", action: "OTA flow interrupted", detail: "Bluetooth was disabled.")
         self.unregisterNotifications()
         self.dismissPopoverWithCompletion(completion: nil)
         self.otaTestStatus.value = .failure(reason: "Bluetooth disabled.")
-        IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled.")
     }
     
     func setupOTAFirmWareModel() {
@@ -134,18 +150,53 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
     func startTest(for board: String, firmwareVersion: SILIOPFirmwareVersion) {
         self.boardID = board
         
+        if self.peripheral?.state == .connected {
+            findOTAFileForBoard(firmwareVersion)
+        } else {
+            tryConnection(attempt: 1, firmwareVersion: firmwareVersion)
+        }
+    }
+    
+    func tryConnection(attempt: Int, firmwareVersion: SILIOPFirmwareVersion) {
+        if attempt > maxConnectionAttempts {
+            self.unregisterNotifications()
+            self.otaTestStatus.value = .failure(reason: "Peripheral disconnected before opening file picker.")
+            log.step(source: "SILIopTestOTAUpdateManger",
+                     action: "Failed to reconnect OTA peripheral before file picker",
+                     detail: "Exceeded \(maxConnectionAttempts) attempts while waiting for a connected peripheral.")
+            return
+        }
+        if self.peripheral?.state == .connected {
+            findOTAFileForBoard(firmwareVersion)
+            return
+        }
+        log.retry(source: "SILIopTestOTAUpdateManger",
+                  attempt: attempt,
+                  maxAttempts: maxConnectionAttempts,
+                  action: "Reconnect OTA peripheral before file picker",
+                  timeoutDescription: "\(Int(reconnectRetryDelay)) s retry delay")
         self.otaFirmwareUpdateManager?.reconnectToOTADevice()
-        
-        _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { timer in
-            timer.invalidate()
-            self.findOTAFileForBoard(firmwareVersion)
-        })
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + self.reconnectRetryDelay) {
+            if self.peripheral?.state == .connected {
+                self.findOTAFileForBoard(firmwareVersion)
+                return
+            }
+            self.tryConnection(attempt: attempt + 1, firmwareVersion: firmwareVersion)
+        }
     }
     
     private func findOTAFileForBoard(_ firmwareVersion: SILIOPFirmwareVersion) {
         if firmwareVersion.isLesserThan3_3_0() {
             findLocalFile(version: firmwareVersion.version)
         } else {
+            guard let peripheral = self.peripheral, peripheral.state == .connected else {
+                tryConnection(attempt: 1, firmwareVersion: firmwareVersion)
+                return
+            }
+            log.step(source: "SILIopTestOTAUpdateManger",
+                     action: "Opening OTA file picker",
+                     detail: "Peripheral is connected, so the file picker can be shown immediately.")
             postShowFilePickerNotification()
         }
     }
@@ -253,7 +304,17 @@ class SILIopTestOTAUpdateManger: NSObject,  SILOTAFirmwareUpdateManagerDelegate 
                 self.finishOTAError = error
                 if self.finishOTAError == nil {
                     self.otaProgress = .finished
-                    self.silCentralManager?.disconnect(from: self.peripheral!)
+                    self.log.step(source: "SILIopTestOTAUpdateManger",
+                                  action: "Upload finished, forcing OTA disconnect",
+                                  detail: "Disconnecting from the OTA peripheral so the post-upload reconnect check can verify the device comes back.")
+                    if let peripheral = self.peripheral {
+                        self.silCentralManager?.disconnect(from: peripheral)
+                    } else {
+                        self.unregisterNotifications()
+                        self.dismissPopoverWithCompletion(completion: {
+                            self.otaTestStatus.value = .failure(reason: "OTA upload finished but the peripheral reference is missing before disconnect.")
+                        })
+                    }
                 } else {
                     self.unregisterNotifications()
                     self.dismissPopoverWithCompletion(completion: {

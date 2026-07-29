@@ -10,6 +10,7 @@ import Foundation
 import CoreBluetooth
 
 class SILDiscoverFirmwareInfo {
+    private let log = IOPLog()
     enum State {
         case initiated
         case running
@@ -39,20 +40,33 @@ class SILDiscoverFirmwareInfo {
     
     func run() {
         guard let _ = peripheral else {
+            log.step(source: "SILDiscoverFirmwareInfo",
+                     action: "Cannot discover firmware information",
+                     detail: "Peripheral is nil.")
             self.state.value = .failed
             return
         }
         
         guard let _ = peripheralDelegate else {
+            log.step(source: "SILDiscoverFirmwareInfo",
+                     action: "Cannot discover firmware information",
+                     detail: "Peripheral delegate is nil.")
             self.state.value = .failed
             return
         }
         
+        log.step(source: "SILDiscoverFirmwareInfo",
+                 action: "Discover firmware version characteristic",
+                 detail: "service=\(iopTestService.uuidString) | char=\(iopTestVersionCharacteristic.uuidString)")
         self.state.value = .running
         subscribeToPeripheralDelegate()
         subscribeToCentralManager()
         
         guard let iopTestService = self.peripheral.services?.first(where: { service in service.uuid == iopTestService }) else {
+            log.gatt(source: "SILDiscoverFirmwareInfo",
+                     operation: "Resolve IOP Test service",
+                     serviceUUID: self.iopTestService,
+                     outcome: "Required IOP Test service not found on peripheral")
             self.invalidateObservableTokens()
             self.state.value = .failed
             return
@@ -67,15 +81,19 @@ class SILDiscoverFirmwareInfo {
             guard let weakSelf = weakSelf else { return }
             switch status {
             case let .disconnected(peripheral: _, error: error):
-                debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
-                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                weakSelf.log.connection(source: "SILDiscoverFirmwareInfo",
+                                        action: "Firmware information discovery disconnected",
+                                        peripheralName: weakSelf.peripheral?.name,
+                                        identifier: weakSelf.peripheral?.identifier,
+                                        error: error)
                 weakSelf.invalidateObservableTokens()
                 weakSelf.state.value = .failed
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
-                    debugPrint("Bluetooth disabled!")
-                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+                    weakSelf.log.step(source: "SILDiscoverFirmwareInfo",
+                                      action: "Firmware information discovery interrupted",
+                                      detail: "Bluetooth was disabled.")
                     weakSelf.invalidateObservableTokens()
                     weakSelf.state.value = .failed
                 }
@@ -84,6 +102,9 @@ class SILDiscoverFirmwareInfo {
                 break
             
             default:
+                weakSelf.log.step(source: "SILDiscoverFirmwareInfo",
+                                  action: "Firmware information discovery failed",
+                                  detail: "Received an unexpected central manager status.")
                 weakSelf.invalidateObservableTokens()
                 weakSelf.state.value = .failed
                 break
@@ -102,22 +123,42 @@ class SILDiscoverFirmwareInfo {
             case let .successForCharacteristics(characteristics):
                 for characteristic in characteristics {
                     if characteristic.uuid == weakSelf.iopTestVersionCharacteristic {
+                        weakSelf.log.gatt(source: "SILDiscoverFirmwareInfo",
+                                          operation: "Read firmware version characteristic",
+                                          uuid: characteristic.uuid,
+                                          serviceUUID: weakSelf.iopTestService,
+                                          outcome: "Version characteristic discovered, reading value")
                         weakSelf.peripheralDelegate.readCharacteristic(characteristic: characteristic)
                         return
                     }
                 }
                 
+                weakSelf.log.gatt(source: "SILDiscoverFirmwareInfo",
+                                  operation: "Resolve firmware version characteristic",
+                                  uuid: weakSelf.iopTestVersionCharacteristic,
+                                  serviceUUID: weakSelf.iopTestService,
+                                  outcome: "Version characteristic not found in discovered characteristic list")
                 weakSelf.invalidateObservableTokens()
                 weakSelf.state.value = .failed
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.iopTestVersionCharacteristic,
                    let stackVersion = weakSelf.parseStackVersion(data: data) {
+                    weakSelf.log.gatt(source: "SILDiscoverFirmwareInfo",
+                                      operation: "Read firmware version characteristic",
+                                      uuid: characteristic.uuid,
+                                      actual: data?.hexa(),
+                                      outcome: "Parsed stack version \(stackVersion)")
                     weakSelf.invalidateObservableTokens()
                     weakSelf.state.value = .completed(stackVersion: stackVersion)
                     return
                 }
     
+                weakSelf.log.gatt(source: "SILDiscoverFirmwareInfo",
+                                  operation: "Read firmware version characteristic",
+                                  uuid: characteristic.uuid,
+                                  actual: data?.hexa(),
+                                  outcome: "Could not parse firmware version value")
                 weakSelf.invalidateObservableTokens()
                 weakSelf.state.value = .failed
                 
@@ -125,6 +166,9 @@ class SILDiscoverFirmwareInfo {
                 break
                 
             default:
+                weakSelf.log.step(source: "SILDiscoverFirmwareInfo",
+                                  action: "Firmware information discovery failed",
+                                  detail: "Received an unexpected peripheral delegate status.")
                 weakSelf.invalidateObservableTokens()
                 weakSelf.state.value = .failed
                 break

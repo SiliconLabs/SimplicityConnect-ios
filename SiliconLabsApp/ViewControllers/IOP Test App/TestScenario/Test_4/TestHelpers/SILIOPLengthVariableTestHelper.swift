@@ -9,6 +9,7 @@
 import Foundation
 
 class SILIOPLengthVariableTestHelper {
+    private let log = IOPLog()
     struct TestResult {
         var passed: Bool
         var description: String?
@@ -101,8 +102,7 @@ class SILIOPLengthVariableTestHelper {
                 
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
-                    debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
+                    weakSelf.log.gatt(source: "SILIOPLengthVariableTestHelper", testID: weakSelf.testCase.testID, operation: "Write variable-length characteristic", uuid: characteristic.uuid, outcome: "Write acknowledged, reading value back for verification")
                     weakSelf.peripheralDelegate.readCharacteristic(characteristic: characteristic)
                     return
                 }
@@ -111,8 +111,7 @@ class SILIOPLengthVariableTestHelper {
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
+                    weakSelf.log.gatt(source: "SILIOPLengthVariableTestHelper", testID: weakSelf.testCase.testID, operation: "Read variable-length characteristic", uuid: characteristic.uuid, actual: data?.hexa(), outcome: weakSelf.isFirstSubtest ? "Evaluating 1-byte subtest" : "Evaluating 4-byte subtest")
                     if weakSelf.isFirstSubtest, data?.hexa() == weakSelf.exceptedValue_Subtest1 {
                         weakSelf.isFirstSubtest = false
                         if let dataToWrite = weakSelf.expectedValue_Subtest2.data(withCount: 4) {

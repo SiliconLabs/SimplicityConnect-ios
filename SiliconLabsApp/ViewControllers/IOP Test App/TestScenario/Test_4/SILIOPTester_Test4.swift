@@ -9,6 +9,7 @@
 import Foundation
 
 class SILIOPTester_Test4 : SILTestScenario {
+    private let log = IOPLog()
     var scenarioName: String = "GATT Operations"
     var scenarioDescription: String = "Perform GATT operations (read, write, write without response, indication, notification) with various lengths."
     
@@ -87,24 +88,20 @@ class SILIOPTester_Test4 : SILTestScenario {
             guard let weakSelf = weakSelf else { return }
             switch state {
             case .initiated:
-                debugPrint("DISCOVER FIRMWARE INFO INITIATED")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE INFO INITIATED")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Start firmware information discovery", detail: "Reading stack version before GATT operations.")
                 break
                 
             case .running:
-                debugPrint("DISCOVER FIRMWARE INFO RUNNING")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE INFO RUNNING")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Firmware information discovery running", detail: nil)
                 break
                 
             case .failed:
-                debugPrint("DISCOVER FIRMWARE INFO FAILED")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE INFO FAILED")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Firmware information discovery failed", detail: "Proceeding with GATT operation tests without firmware metadata.")
                 weakSelf.tests[0].performTestCase()
                 break
                 
             case let .completed(stackVersion: stackVersion):
-                debugPrint("DISCOVER FIRMWARE COMPLETED")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER FIRMWARE COMPLETED")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Firmware information discovery completed", detail: "Stack version=\(stackVersion)")
                 weakSelf.parameters["stackVersion"] = stackVersion
                 weakSelf.stackVersion = stackVersion
                 weakSelf.discoverRFUFeatures.injectParameters(parameters: weakSelf.parameters)
@@ -123,24 +120,20 @@ class SILIOPTester_Test4 : SILTestScenario {
             guard let weakSelf = weakSelf else { return }
             switch state {
             case .initiated:
-                debugPrint("DISCOVER RFU INITIATED")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU INITIATED")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Start connection parameter discovery", detail: "Reading RFU feature payload for MTU, PDU, interval, latency, and supervision timeout.")
                 break
                 
             case .running:
-                debugPrint("DISCOVER RFU RUNNING")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU RUNNING")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Connection parameter discovery running", detail: nil)
                 break
                 
             case .failed:
-                debugPrint("DISCOVER RFU FAILED")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU FAILED")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Connection parameter discovery failed", detail: "Proceeding with GATT operation tests without RFU metadata.")
                 weakSelf.tests[0].performTestCase()
                 break
                 
             case let .completed(firmwareInfo: firmwareInfo, connectionParameters: connectionParameters):
-                debugPrint("DISCOVER RFU COMPLETED")
-                IOPLog().iopLogSwiftFunction(message: "DISCOVER RFU COMPLETED")
+                weakSelf.log.step(source: "SILIOPTester_Test4", action: "Connection parameter discovery completed", detail: "MTU=\(connectionParameters.mtu_size) | PDU=\(connectionParameters.pdu_size) | interval=\(connectionParameters.interval) ms | latency=\(connectionParameters.latency) | supervisionTimeout=\(connectionParameters.supervision_timeout)")
                 weakSelf.firmwareInfo = firmwareInfo
                 weakSelf.connectionParameters = connectionParameters
                 weakSelf.tests[0].performTestCase()

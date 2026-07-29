@@ -18,6 +18,7 @@ enum SILIOPTesterCentralManagerConnectionStatus {
 }
 
 @objcMembers class SILIOPTesterCentralManager: NSObject, CBCentralManagerDelegate {
+    private let log = IOPLog()
     private var centralManager: CBCentralManager!
     private var shouldScan = false
     
@@ -83,15 +84,15 @@ enum SILIOPTesterCentralManagerConnectionStatus {
     
     func connect(to discoveredPeripheral: SILDiscoveredPeripheral) {
         guard let peripheral = discoveredPeripheral.peripheral else {
-            debugPrint("CENTRAL MANAGER discovered peripheral is nil!")
-            
-        IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER discovered peripheral is nil!")
-            
+            log.step(source: "SILIOPTesterCentralManager",
+                     action: "Cannot connect to discovered peripheral",
+                     detail: "Discovered peripheral object is nil.")
             return
         }
-        debugPrint("CONNECTING PERIPHERAL \(String(describing: peripheral))")
-        
-        IOPLog().iopLogSwiftFunction(message: "CONNECTING PERIPHERAL \(String(describing: peripheral))")
+        log.connection(source: "SILIOPTesterCentralManager",
+                       action: "Connecting to peripheral",
+                       peripheralName: peripheral.name,
+                       identifier: peripheral.identifier)
         
         //self.centralManager.connect(peripheral)
         let deviceUUID = UserDefaults.standard.value(forKey: "deviceUUIDToConnect")
@@ -110,53 +111,31 @@ enum SILIOPTesterCentralManagerConnectionStatus {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOff:
-            debugPrint("CENTRAL MANAGER powered off")
-            
-            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER powered off")
-            
+            log.step(source: "SILIOPTesterCentralManager", action: "Bluetooth central state changed", detail: "State=poweredOff")
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .poweredOn:
-            debugPrint("CENTRAL MANAGER powered on")
-            
-            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER powered on")
-            
+            log.step(source: "SILIOPTesterCentralManager", action: "Bluetooth central state changed", detail: "State=poweredOn")
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: true)
         case .resetting:
-            debugPrint("CENTRAL MANAGER resetting")
-            
-            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER powered resetting")
-
+            log.step(source: "SILIOPTesterCentralManager", action: "Bluetooth central state changed", detail: "State=resetting")
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .unauthorized:
-            debugPrint("CENTRAL MANAGER unauthorized")
-            
-            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER unauthorized")
-
+            log.step(source: "SILIOPTesterCentralManager", action: "Bluetooth central state changed", detail: "State=unauthorized")
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .unknown:
-            debugPrint("CENTRAL MANAGER unknown")
-            
-            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER unknown")
-
+            log.step(source: "SILIOPTesterCentralManager", action: "Bluetooth central state changed", detail: "State=unknown")
             self.stopScanningActions()
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         case .unsupported:
-            debugPrint("CENTRAL MANAGER UNSUPPORTED")
-            
-            IOPLog().iopLogSwiftFunction(message: "CENTRAL MANAGER UNSUPPORTED")
-
+            log.step(source: "SILIOPTesterCentralManager", action: "Bluetooth central state changed", detail: "State=unsupported")
             self.publishConnectionStatus.value = .bluetoothEnabled(enabled: false)
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        debugPrint("DID DISCOVER PERIPHERAL \(peripheral)")
-        
-        IOPLog().iopLogSwiftFunction(message: "DID DISCOVER PERIPHERAL \(peripheral)")
-
         if let discoveredPeripheral = self.discoveredPeripherals.first(where: { discoveredPeripheral in discoveredPeripheral.peripheral == peripheral }) {
             discoveredPeripheral.update(withAdvertisementData: advertisementData, rssi: RSSI, andDiscoveringTimestamp: Date.timeIntervalBetween1970AndReferenceDate)
         } else {
@@ -167,6 +146,10 @@ enum SILIOPTesterCentralManagerConnectionStatus {
                 return
             }
             if peripheral.identifier.uuidString  == peripheralUUID {
+                log.connection(source: "SILIOPTesterCentralManager",
+                               action: "Discovered target peripheral during scan",
+                               peripheralName: peripheral.name,
+                               identifier: peripheral.identifier)
                 let newDiscoveredPeripheral = SILDiscoveredPeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI, andDiscoveringTimestamp: Date.timeIntervalBetween1970AndReferenceDate)
                 self.discoveredPeripherals.append(newDiscoveredPeripheral)
             }
@@ -174,25 +157,22 @@ enum SILIOPTesterCentralManagerConnectionStatus {
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        debugPrint("DID CONNECT \(peripheral)")
-        
-        IOPLog().iopLogSwiftFunction(message: "DID CONNECT \(peripheral)")
+        log.emit(source: "SILIOPTesterCentralManager",
+                 message: "Did connect to peripheral | \(log.peripheralSummary(peripheral))")
 
         publishConnectionStatus.value = .connected(peripheral: peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        debugPrint("DID DISCONNECT \(peripheral) WITH ERROR \(error.debugDescription)")
-        
-        IOPLog().iopLogSwiftFunction(message: "DID DISCONNECT \(peripheral) WITH ERROR \(error.debugDescription)")
+        log.emit(source: "SILIOPTesterCentralManager",
+                 message: "Did disconnect from peripheral | \(log.peripheralSummary(peripheral)) | error=\(log.formattedError(error))")
 
         publishConnectionStatus.value = .disconnected(peripheral: peripheral, error: error)
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        debugPrint("DID FAIL TO CONNECT \(peripheral) WITH EROR \(error.debugDescription)")
-        
-        IOPLog().iopLogSwiftFunction(message: "DID FAIL TO CONNECT \(peripheral) WITH EROR \(error.debugDescription)")
+        log.emit(source: "SILIOPTesterCentralManager",
+                 message: "Failed to connect to peripheral | \(log.peripheralSummary(peripheral)) | error=\(log.formattedError(error))")
 
         publishConnectionStatus.value = .failToConnect(peripheral: peripheral, error: error)
     }

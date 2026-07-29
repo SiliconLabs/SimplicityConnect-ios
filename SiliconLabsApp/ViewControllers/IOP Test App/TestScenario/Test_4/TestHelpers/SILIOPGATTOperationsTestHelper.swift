@@ -9,6 +9,7 @@
 import Foundation
 
 class SILIOPGATTOperationsTestHelper {
+    private let log = IOPLog()
     // MARK: - Validators
     
     func checkInjectedParameters(iopCentralManager: SILIOPTesterCentralManager?,
@@ -41,14 +42,15 @@ class SILIOPGATTOperationsTestHelper {
             guard let weakTestCase = weakTestCase else { return }
             switch status {
             case let .disconnected(peripheral: _, error: error):
-                debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
-                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                self.log.connection(source: "SILIOPGATTOperationsTestHelper",
+                                    testID: weakTestCase.testID,
+                                    action: "GATT operation disconnected unexpectedly",
+                                    error: error)
                 weakTestCase.publishTestResult(passed: false, description: "Peripheral was disconnected with \(String(describing: error?.localizedDescription)).")
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
-                    debugPrint("Bluetooth disabled!")
-                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+                    self.log.step(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, action: "GATT operation interrupted", detail: "Bluetooth was disabled.")
                     weakTestCase.publishTestResult(passed: false, description: "Bluetooth disabled.")
                 }
                 
@@ -72,29 +74,33 @@ class SILIOPGATTOperationsTestHelper {
             switch status {
             case let .successForCharacteristics(characteristics):
                 guard let iopTestPropertiesROLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Resolve read-only characteristic", uuid: characteristicUUID, outcome: "Characteristic not discovered")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic RO Len wasn't discovered.")
                     return
                 }
                 
                 guard iopTestPropertiesROLen.properties.contains(.read) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Validate read property", uuid: characteristicUUID, outcome: "Characteristic does not support read")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic RO Len doesn't have read property.")
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic", uuid: characteristicUUID, expected: exceptedValue, outcome: "Reading characteristic value")
                 peripheralDelegate.readCharacteristic(characteristic: iopTestPropertiesROLen)
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if data?.hexa() == exceptedValue {
-                        weakTestCase.publishTestResult(passed: true)
+                        self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic", uuid: characteristicUUID, expected: exceptedValue, actual: data?.hexa(), outcome: "Read value matched expected payload")
+                        weakTestCase.publishTestResult(passed: true, description: "Read \(data?.hexa() ?? "nil") from \(characteristicUUID.uuidString), matching expected value \(exceptedValue).")
                     } else {
+                        self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic", uuid: characteristicUUID, expected: exceptedValue, actual: data?.hexa(), outcome: "Read value did not match expected payload")
                         weakTestCase.publishTestResult(passed: false, description: "Wrong value in a characteristic.")
                     }
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic", uuid: characteristic.uuid, outcome: "Unexpected characteristic returned a value")
                 weakTestCase.publishTestResult(passed: false, description: "Failure during read from a characteristic.")
                 
             case .unknown:
@@ -120,30 +126,34 @@ class SILIOPGATTOperationsTestHelper {
             switch status {
             case let .successForCharacteristics(characteristics):
                 guard let iopTestPropertiesWRLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Resolve write characteristic", uuid: characteristicUUID, outcome: "Characteristic not discovered")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic WR Len wasn't discovered.")
                     return
                 }
                 
                 guard iopTestPropertiesWRLen.properties.contains(.write) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Validate write property", uuid: characteristicUUID, outcome: "Characteristic does not support write")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic WR Len doesn't have write property.")
                     return
                 }
                 
                 guard let dataToWrite = valueToWrite.data(withCount: count) else {
+                    self.log.step(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, action: "Prepare write payload", detail: "Invalid value '\(valueToWrite)' for count \(count).")
                     weakTestCase.publishTestResult(passed: false, description: "Invalid value to write.")
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic", uuid: characteristicUUID, writeType: .withResponse, value: dataToWrite.hexa(), outcome: "Writing payload to characteristic")
                 peripheralDelegate.writeToCharacteristic(data: dataToWrite, characteristic: iopTestPropertiesWRLen, writeType: .withResponse)
   
             case let .successWrite(characteristic):
                 if characteristic.uuid == characteristicUUID {
-                    debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
-                    weakTestCase.publishTestResult(passed: true)
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic", uuid: characteristicUUID, outcome: "Write with response completed successfully")
+                    weakTestCase.publishTestResult(passed: true, description: "Write with response completed successfully on \(characteristicUUID.uuidString).")
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic", uuid: characteristic.uuid, outcome: "Unexpected characteristic acknowledged the write")
                 weakTestCase.publishTestResult(passed: false, description: "Failure during write to characteristic.")
           
             case .unknown:
@@ -169,35 +179,40 @@ class SILIOPGATTOperationsTestHelper {
             switch status {
             case let .successForCharacteristics(characteristics):
                 guard let iopTestPropertiesWRNoResLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Resolve write-without-response characteristic", uuid: characteristicUUID, outcome: "Characteristic not discovered")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic WRNoRes Len wasn't discovered.")
                     return
                 }
                 
                 guard iopTestPropertiesWRNoResLen.properties.contains(.writeWithoutResponse) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Validate write-without-response property", uuid: characteristicUUID, outcome: "Characteristic does not support write without response")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic WRNoRes Len doesn't have write without response property.")
                     return
                 }
                 
                 guard let dataToWrite = valueToWrite.data(withCount: count) else {
+                    self.log.step(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, action: "Prepare write-without-response payload", detail: "Invalid value '\(valueToWrite)' for count \(count).")
                     weakTestCase.publishTestResult(passed: false, description: "Invalid value to write.")
                     return
                 }
 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic", uuid: characteristicUUID, writeType: .withoutResponse, value: dataToWrite.hexa(), outcome: "Writing payload without response and reading back for verification")
                 peripheralDelegate.writeToCharacteristic(data: dataToWrite, characteristic: iopTestPropertiesWRNoResLen, writeType: .withoutResponse)
                 peripheralDelegate.readCharacteristic(characteristic: iopTestPropertiesWRNoResLen)
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if data?.hexa() == exceptedValue {
-                        weakTestCase.publishTestResult(passed: true)
+                        self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read back write-without-response characteristic", uuid: characteristicUUID, expected: exceptedValue, actual: data?.hexa(), outcome: "Readback matched expected payload")
+                        weakTestCase.publishTestResult(passed: true, description: "Read back \(data?.hexa() ?? "nil") from \(characteristicUUID.uuidString) after write without response, matching expected value \(exceptedValue).")
                     } else {
+                        self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read back write-without-response characteristic", uuid: characteristicUUID, expected: exceptedValue, actual: data?.hexa(), outcome: "Readback did not match expected payload")
                         weakTestCase.publishTestResult(passed: false, description: "Wrong value in a characteristic.")
                     }
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read back write-without-response characteristic", uuid: characteristic.uuid, outcome: "Unexpected characteristic returned a value")
                 weakTestCase.publishTestResult(passed: false, description: "Failure during read value from a characteristic.")
                 
             case .unknown:
@@ -223,39 +238,43 @@ class SILIOPGATTOperationsTestHelper {
             switch status {
             case let .successForCharacteristics(characteristics):
                 guard let iopTestCharacteristicTypesRWLen = peripheralDelegate.findCharacteristic(with: characteristicUUID, in: characteristics) else {
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Resolve characteristic types RW characteristic", uuid: characteristicUUID, outcome: "Characteristic not discovered")
                     weakTestCase.publishTestResult(passed: false, description: "Characteristic Types RW Len wasn't discovered.")
                     return
                 }
                 
                 guard let dataToWrite = exceptedValue.data(withCount: count) else {
+                    self.log.step(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, action: "Prepare RW characteristic payload", detail: "Invalid expected value '\(exceptedValue)' for count \(count).")
                     weakTestCase.publishTestResult(passed: false, description: "Invalid data to write.")
                     return
                 }
               
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic types RW value", uuid: characteristicUUID, writeType: .withResponse, value: dataToWrite.hexa(), outcome: "Writing payload before readback verification")
                 peripheralDelegate.writeToCharacteristic(data: dataToWrite, characteristic: iopTestCharacteristicTypesRWLen, writeType: .withResponse)
              
             case let .successWrite(characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
-                    debugPrint("DATA \(String(describing: characteristic.value?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: characteristic.value?.hexa()))")
+                    self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic types RW value", uuid: characteristicUUID, outcome: "Write acknowledged, reading back value")
                     peripheralDelegate.readCharacteristic(characteristic: characteristic)
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Write characteristic types RW value", uuid: characteristic.uuid, outcome: "Unexpected characteristic acknowledged the write")
                 weakTestCase.publishTestResult(passed: false, description: "Characteristic not found.")
                 
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == characteristicUUID {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
                     if data?.hexa() == exceptedValue {
-                        weakTestCase.publishTestResult(passed: true)
+                        self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic types RW value", uuid: characteristicUUID, expected: exceptedValue, actual: data?.hexa(), outcome: "Readback matched expected payload")
+                        weakTestCase.publishTestResult(passed: true, description: "Read back \(data?.hexa() ?? "nil") from \(characteristicUUID.uuidString), matching expected value \(exceptedValue).")
                     } else {
+                        self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic types RW value", uuid: characteristicUUID, expected: exceptedValue, actual: data?.hexa(), outcome: "Readback did not match expected payload")
                         weakTestCase.publishTestResult(passed: false, description: "Wrong value in a characteristic.")
                     }
                     return
                 }
                 
+                self.log.gatt(source: "SILIOPGATTOperationsTestHelper", testID: weakTestCase.testID, operation: "Read characteristic types RW value", uuid: characteristic.uuid, outcome: "Unexpected characteristic returned a value")
                 weakTestCase.publishTestResult(passed: false, description: "Characteristic not found.")
                 
             case .unknown:

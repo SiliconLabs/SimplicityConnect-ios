@@ -15,6 +15,7 @@ enum SILIOPTestReconnectStatus {
 }
 
 class SILIOPTestReconnectManager: NSObject {
+    private let log = IOPLog()
     
     private var iopCentralManager: SILIOPTesterCentralManager!
     private var peripheral: CBPeripheral!
@@ -24,6 +25,7 @@ class SILIOPTestReconnectManager: NSObject {
     
     var nameToReconnect: String?
     var reconnectStatus: SILObservable<SILIOPTestReconnectStatus> = SILObservable(initialValue: .unknown)
+    private var lastSeenMismatchedLocalName: String?
     
     private var timer: Timer?
     private var connectionTimeout: Timer?
@@ -41,18 +43,27 @@ class SILIOPTestReconnectManager: NSObject {
     }
     
     func reconnectToDevice(withName name: String) {
-        
         self.nameToReconnect = name
+        self.lastSeenMismatchedLocalName = nil
+        log.retry(source: "SILIOPTestReconnectManager",
+                  testID: nil,
+                  attempt: 1,
+                  maxAttempts: 1,
+                  action: "Start reconnect scan",
+                  timeoutDescription: "scan 5 s / connect 10 s")
+        log.connection(source: "SILIOPTestReconnectManager",
+                       action: "Looking for peripheral to reconnect",
+                       peripheralName: name,
+                       identifier: peripheral?.identifier)
         self.setCentralManagerSubscription()
         
         self.observeDiscoveredPeripherals()
         self.iopCentralManager.startScanning()
         self.timer = Timer.scheduledTimer(timeInterval: 5,
-                                              target: self,
-                                              selector: #selector(self.scanIntervalTimerFired),
-                                              userInfo: nil,
-                                              repeats: false)
-        
+                                          target: self,
+                                          selector: #selector(self.scanIntervalTimerFired),
+                                          userInfo: nil,
+                                          repeats: false)
     }
     
     private func setCentralManagerSubscription() {
@@ -61,10 +72,10 @@ class SILIOPTestReconnectManager: NSObject {
             guard let weakSelf = weakSelf else { return }
             switch connectionStatus {
             case let .connected(peripheral: peripheral):
-                debugPrint("didConnectPeripheral**********RECONNECT")
-                if let name = self.nameToReconnect {
-                    debugPrint("Connected peripheral name: \(name)")
-                }
+                weakSelf.log.connection(source: "SILIOPTestReconnectManager",
+                                        action: "Reconnect succeeded",
+                                        peripheralName: self.nameToReconnect ?? peripheral.name,
+                                        identifier: peripheral.identifier)
                 weakSelf.peripheral = peripheral
                 weakSelf.discoveredPeripheral?.peripheral = peripheral
                 weakSelf.stopConnectionTimeout()
@@ -74,18 +85,28 @@ class SILIOPTestReconnectManager: NSObject {
             
                 
             case let .disconnected(peripheral: _, error: error):
-                debugPrint("didDisconnectPeripheral**********RECONNECT")
+                weakSelf.log.connection(source: "SILIOPTestReconnectManager",
+                                        action: "Reconnect disconnected before completion",
+                                        peripheralName: weakSelf.nameToReconnect,
+                                        identifier: weakSelf.peripheral?.identifier,
+                                        error: error)
                 weakSelf.connectionTimeout?.invalidate()
                 weakSelf.reconnectStatus.value = .failure(reason: "Disconnected peripheral with error \(String(describing: error?.localizedDescription))")
                 
             case let .failToConnect(peripheral: _, error: error):
-                debugPrint("didFailToConnectPeripheralRec**********RECONNECT")
+                weakSelf.log.connection(source: "SILIOPTestReconnectManager",
+                                        action: "Reconnect failed to connect",
+                                        peripheralName: weakSelf.nameToReconnect,
+                                        identifier: weakSelf.peripheral?.identifier,
+                                        error: error)
                 weakSelf.connectionTimeout?.invalidate()
                 weakSelf.reconnectStatus.value = .failure(reason: "Did fail to connect to peripheral with error \(String(describing: error?.localizedDescription))")
                 
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
-                    debugPrint("Bluetooth disabled!")
+                    weakSelf.log.step(source: "SILIOPTestReconnectManager",
+                                      action: "Bluetooth disabled during reconnect",
+                                      detail: "Reconnect cannot continue.")
                     weakSelf.connectionTimeout?.invalidate()
                     weakSelf.reconnectStatus.value = .failure(reason: "Bluetooth disabled.")
                 }
@@ -105,9 +126,17 @@ class SILIOPTestReconnectManager: NSObject {
             switch status {
             case let .successForServices(discoveredServices):
                 guard let _ = discoveredServices.first(where: { service in service.uuid == SILIOPPeripheral.SILIOPTest.cbUUID }) else {
+                    weakSelf.log.gatt(source: "SILIOPTestReconnectManager",
+                                      operation: "Discover services",
+                                      serviceUUID: SILIOPPeripheral.SILIOPTest.cbUUID,
+                                      outcome: "Expected IOP Test service not found after reconnect")
                     weakSelf.reconnectStatus.value = .failure(reason: "Discovered GATT Services don't match with expected.")
                     return
                 }
+                weakSelf.log.gatt(source: "SILIOPTestReconnectManager",
+                                  operation: "Discover services",
+                                  serviceUUID: SILIOPPeripheral.SILIOPTest.cbUUID,
+                                  outcome: "Found expected IOP Test service")
                 weakSelf.stopConnectionTimeout()
                 weakSelf.discoverFirmwareVersion()
                 
@@ -115,6 +144,9 @@ class SILIOPTestReconnectManager: NSObject {
                 break
 
             default:
+                weakSelf.log.step(source: "SILIOPTestReconnectManager",
+                                  action: "Reconnect service discovery failed",
+                                  detail: "Peripheral delegate returned an unexpected status.")
                 weakSelf.reconnectStatus.value = .failure(reason: "Unknown failure from peripheral delegate.")
             }
         })
@@ -133,12 +165,18 @@ class SILIOPTestReconnectManager: NSObject {
             guard let weakSelf = weakSelf else { return }
             switch state {
             case .failed:
+                weakSelf.log.step(source: "SILIOPTestReconnectManager",
+                                  action: "Read firmware version after reconnect",
+                                  detail: "Firmware discovery helper reported failure.")
                 weakSelf.reconnectStatus.value = .failure(reason: "Discover firmware version failed")
                 break
                 
             case let .completed(stackVersion: stackVersion):
                 weakSelf.invalidateObservableTokens()
                 weakSelf.stopConnectionTimeout()
+                weakSelf.log.step(source: "SILIOPTestReconnectManager",
+                                  action: "Reconnect completed",
+                                  detail: "Firmware version=\(stackVersion)")
                 
                 weakSelf.reconnectStatus.value = .success(discoveredPeripheral: self.discoveredPeripheral, stackVersion: stackVersion)
                 break
@@ -163,7 +201,19 @@ class SILIOPTestReconnectManager: NSObject {
     
     @objc private func scanIntervalTimerFired() {
         stopScanning()
-        self.reconnectStatus.value = .failure(reason: "Peripheral didn't found.")
+        let failureReason: String
+        if let expectedName = nameToReconnect, let observedName = lastSeenMismatchedLocalName {
+            failureReason = "Post-OTA peripheral reappeared with name \(observedName) instead of expected \(expectedName)."
+            log.step(source: "SILIOPTestReconnectManager",
+                     action: "Reconnect scan found peripheral with unexpected post-OTA name",
+                     detail: "expected=\(expectedName) | observed=\(observedName) | id=\(peripheral?.identifier.uuidString ?? "unknown")")
+        } else {
+            failureReason = "Post-OTA peripheral did not reappear with expected name \(nameToReconnect ?? "unknown")."
+            log.step(source: "SILIOPTestReconnectManager",
+                     action: "Reconnect scan timed out",
+                     detail: "Target peripheral did not reappear within 5 seconds for expected name \(nameToReconnect ?? "unknown").")
+        }
+        self.reconnectStatus.value = .failure(reason: failureReason)
     }
     
     func stopScanning() {
@@ -175,9 +225,18 @@ class SILIOPTestReconnectManager: NSObject {
     }
     
     private func observeDiscoveredPeripherals() {
-        debugPrint("DID RECEIVE RECONNECT")
         weak var weakSelf = self
         self.discoveredPeripheralSubscription = self.iopCentralManager.newPublishDiscoveredPeripherals().observe( { discoveredPeripherals in
+            if let weakSelf = weakSelf,
+               let sameUUIDPeripheral = discoveredPeripherals.first(where: { discoveredPeripheral in
+                   discoveredPeripheral.peripheral?.identifier.uuidString == weakSelf.peripheral.identifier.uuidString
+               }),
+               let observedName = sameUUIDPeripheral.advertisedLocalName,
+               let expectedName = weakSelf.nameToReconnect,
+               weakSelf.reformatPeripheralName(name: observedName) != weakSelf.reformatPeripheralName(name: expectedName) {
+                weakSelf.lastSeenMismatchedLocalName = observedName
+            }
+
             let discoveredPeripheral = discoveredPeripherals.first(where: { peripheral in
                 guard let weakSelf = weakSelf else { return false }
                 return weakSelf.isPeripheralWithName(discoveredPeripheral: peripheral, name: self.nameToReconnect!, uuid: weakSelf.peripheral.identifier.uuidString)
@@ -185,6 +244,10 @@ class SILIOPTestReconnectManager: NSObject {
             
             if let discoveredPeripheral = discoveredPeripheral {
                 self.discoveredPeripheral = discoveredPeripheral
+                self.log.connection(source: "SILIOPTestReconnectManager",
+                                    action: "Reconnect scan found target peripheral",
+                                    peripheralName: discoveredPeripheral.advertisedLocalName,
+                                    identifier: discoveredPeripheral.peripheral?.identifier)
                 self.stopScanning()
                 self.discoveredPeripheralSubscription?.invalidate()
                 
@@ -205,7 +268,11 @@ class SILIOPTestReconnectManager: NSObject {
     @objc private func connectionFailed() {
         stopConnectionTimeout()
         iopCentralManager.disconnect(peripheral: peripheral)
-        reconnectStatus.value = .failure(reason: "Peripheral with name \(self.nameToReconnect ?? "") wasn't reconnected in 10 seconds.")
+        log.connection(source: "SILIOPTestReconnectManager",
+                       action: "Reconnect timed out",
+                       peripheralName: nameToReconnect,
+                       identifier: peripheral?.identifier)
+        reconnectStatus.value = .failure(reason: "Post-OTA peripheral reappeared with expected name \(self.nameToReconnect ?? "unknown") but did not reconnect within 10 seconds.")
     }
         
     private func isPeripheralWithName(discoveredPeripheral: SILDiscoveredPeripheral, name: String, uuid: String) -> Bool {

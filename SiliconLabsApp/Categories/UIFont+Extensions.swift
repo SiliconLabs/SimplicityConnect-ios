@@ -28,6 +28,18 @@ extension UIFont {
     @objc class func helveticaNeueThin(size: CGFloat) -> UIFont? {
         return UIFont(name: "HelveticaNeue-Thin", size: size)
     }
+    
+    @objc class func robotoMedium(size: CGFloat) -> UIFont? {
+        return UIFont(name: "Roboto-Medium", size: size)
+    }
+    
+    @objc class func robotoRegular(size: CGFloat) -> UIFont? {
+        return UIFont(name: "Roboto-Regular", size: size)
+    }
+    
+    @objc class func robotoBold(size: CGFloat) -> UIFont? {
+        return UIFont(name: "Roboto-Bold", size: size)
+    }
 
     // MARK: - Stolzl (Primary / Headline font per Brand Guidelines)
 
