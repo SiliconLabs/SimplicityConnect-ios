@@ -10,6 +10,7 @@ import Foundation
 import CoreBluetooth
 
 class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
+    private let log = IOPLog()
     var testID: String = "3"
     var testName: String = "BLE Service Discovery"
     var testResult: SILObservable<SILTestResult?> = SILObservable(initialValue: nil)
@@ -51,6 +52,10 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
         }
         
         publishStartTestEvent()
+        log.step(source: "SILDiscoverGATTTestCase",
+                 testID: testID,
+                 action: "Start BLE service discovery test",
+                 detail: "timeout=\(timeoutMS) ms | expectedServices=4")
         discoverGattServices()
     }
     
@@ -64,6 +69,10 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
         discoverTimer = Timer.scheduledTimer(timeInterval: timeIntervalFromTimeout, target: self, selector: #selector(stopDiscovering), userInfo: nil, repeats: false)
         subscribeToCentralManager()
         startTestTimer()
+        log.step(source: "SILDiscoverGATTTestCase",
+                 testID: testID,
+                 action: "Discover expected services",
+                 detail: "IOP Test, IOP Test Properties, IOP Test Characteristic Types, and Device Information")
         
         peripheralDelegate.discoverServices(services: [SILIOPPeripheral.SILIOPTest.cbUUID,
                                      SILIOPPeripheral.SILIOPTestProperties.cbUUID,
@@ -77,14 +86,20 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
             guard let weakSelf = weakSelf else { return }
             switch status {
             case let .disconnected(peripheral: _, error: error):
-                debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
-                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                weakSelf.log.connection(source: "SILDiscoverGATTTestCase",
+                                        testID: weakSelf.testID,
+                                        action: "Service discovery disconnected",
+                                        peripheralName: weakSelf.peripheral?.name,
+                                        identifier: weakSelf.peripheral?.identifier,
+                                        error: error)
                 weakSelf.notifyError(reason: "Peripheral was disconnected with \(String(describing: error?.localizedDescription)).")
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
-                    debugPrint("Bluetooth disabled!")
-                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+                    weakSelf.log.step(source: "SILDiscoverGATTTestCase",
+                                      testID: weakSelf.testID,
+                                      action: "Service discovery interrupted",
+                                      detail: "Bluetooth was disabled.")
                     weakSelf.notifyError(reason: "Bluetooth disabled.")
                 }
                 
@@ -92,6 +107,10 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
                 break
             
             default:
+                weakSelf.log.step(source: "SILDiscoverGATTTestCase",
+                                  testID: weakSelf.testID,
+                                  action: "Service discovery failed",
+                                  detail: "Received an unexpected central manager status.")
                 weakSelf.notifyError(reason: "Unknown failure from central manager.")
             }
         })
@@ -106,16 +125,30 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
             switch status {
             case let .successForServices(discoveredServices):
                 if weakSelf.areValidServices(services: discoveredServices) {
+                    let serviceList = discoveredServices.map { $0.uuid.uuidString }.joined(separator: ", ")
                     weakSelf.discoverTimer?.invalidate()
                     let testTime = weakSelf.stopTestTimerWithResult()
                     if testTime < weakSelf.timeoutMS {
+                        weakSelf.log.step(source: "SILDiscoverGATTTestCase",
+                                          testID: weakSelf.testID,
+                                          action: "Service discovery completed within target time",
+                                          detail: "services=\(serviceList) | elapsed=\(testTime) ms")
                         weakSelf.publishTestResult(passed: true,
                                                    description: "(Testing time: \(testTime)ms, Acceptable Time: \(weakSelf.timeoutMS)ms).")
                     } else {
+                        weakSelf.log.step(source: "SILDiscoverGATTTestCase",
+                                          testID: weakSelf.testID,
+                                          action: "Service discovery exceeded target time",
+                                          detail: "services=\(serviceList) | elapsed=\(testTime) ms | timeout=\(weakSelf.timeoutMS) ms")
                         weakSelf.notifyError(reason: "The GATT Services were found but not in \(self.timeoutMS) ms.")
                     }
 
                 } else {
+                    let serviceList = discoveredServices.map { $0.uuid.uuidString }.joined(separator: ", ")
+                    weakSelf.log.step(source: "SILDiscoverGATTTestCase",
+                                      testID: weakSelf.testID,
+                                      action: "Service discovery returned unexpected services",
+                                      detail: "services=\(serviceList)")
                     weakSelf.notifyError(reason: "Discovered GATT Services don't match with expected.")
                 }
                 
@@ -123,6 +156,10 @@ class SILDiscoverGATTTestCase: SILTestCase, SILTestCaseTimeout {
                 break
 
             default:
+                weakSelf.log.step(source: "SILDiscoverGATTTestCase",
+                                  testID: weakSelf.testID,
+                                  action: "Service discovery failed",
+                                  detail: "Received an unexpected peripheral delegate status.")
                 weakSelf.notifyError(reason: "Unknown failure from peripheral delegate.")
             }
         })

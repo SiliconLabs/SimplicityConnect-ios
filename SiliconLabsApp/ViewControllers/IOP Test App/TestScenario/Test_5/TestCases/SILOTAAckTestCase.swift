@@ -9,6 +9,9 @@
 import Foundation
 
 class SILOTAAckTestCase: SILTestCase {
+    private let log = IOPLog()
+    private let postOTARestartDelay: TimeInterval = 15
+    private let maxPostOTAReconnectAttempts = 3
     var testResult: SILObservable<SILTestResult?> = SILObservable(initialValue: nil)
     var testID: String = "6.1"
     var testName: String = "Update user application via OTA with Ack."
@@ -47,25 +50,25 @@ class SILOTAAckTestCase: SILTestCase {
     func performTestCase() {
         guard iopCentralManager.bluetoothState else {
             self.publishTestResult(passed: false, description: "Bluetooth disabled!")
-            IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+            log.step(source: "SILOTAAckTestCase", testID: testID, action: "Cannot start OTA acknowledged test", detail: "Bluetooth is disabled.")
             return
         }
         
         guard let _ = firmwareInfo else {
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Firmware Info is nil."))
-            IOPLog().iopLogSwiftFunction(message: "Firmware Info is nil.")
+            log.step(source: "SILOTAAckTestCase", testID: testID, action: "Cannot start OTA acknowledged test", detail: "Firmware info is nil.")
             return
         }
         
         guard firmwareInfo!.firmware != .unknown else {
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Board not supported."))
-            IOPLog().iopLogSwiftFunction(message: "Board not supported.")
+            log.step(source: "SILOTAAckTestCase", testID: testID, action: "Cannot start OTA acknowledged test", detail: "Board is not supported.")
             return
         }
         
         guard let _ = peripheral else {
             self.publishTestResult(passed: false, description: "Peripheral is nil.")
-            IOPLog().iopLogSwiftFunction(message: "Peripheral is nil.")
+            log.step(source: "SILOTAAckTestCase", testID: testID, action: "Cannot start OTA acknowledged test", detail: "Peripheral is nil.")
             return
         }
         
@@ -85,15 +88,16 @@ class SILOTAAckTestCase: SILTestCase {
             switch status {
             case let .disconnected(peripheral: peripheral, error: error):
                 if peripheral === weakSelf.peripheral {
-                    debugPrint("DISCONNECTED WITH \(String(describing: error?.localizedDescription))")
-                    IOPLog().iopLogSwiftFunction(message: "DISCONNECTED WITH \(String(describing: error?.localizedDescription))")
+                    IOPLog().step(source: "SILOTAAckTestCase",
+                                  testID: weakSelf.testID,
+                                  action: "Disconnected from application mode peripheral before OTA reconnect scan",
+                                  detail: "error=\(IOPLog().formattedError(error))")
                     weakSelf.scanUsingBrowserBluetoothManager()
                 }
                 
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
-                    debugPrint("Bluetooth disabled!")
-                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+                    weakSelf.log.step(source: "SILOTAAckTestCase", testID: weakSelf.testID, action: "OTA acknowledged flow interrupted", detail: "Bluetooth was disabled.")
                     weakSelf.otaUpdateManager = nil
                     weakSelf.publishTestResult(passed: false, description: "Bluetooth disabled.")
                 }
@@ -102,7 +106,7 @@ class SILOTAAckTestCase: SILTestCase {
                 break
                 
             default:
-                IOPLog().iopLogSwiftFunction(message: "Unknown failure reason from IOP Central Manager.")
+                weakSelf.log.step(source: "SILOTAAckTestCase", testID: weakSelf.testID, action: "OTA acknowledged flow failed", detail: "Received an unexpected central manager status.")
                 weakSelf.publishTestResult(passed: false, description: "Unknown failure reason from IOP Central Manager.")
             }
         })
@@ -113,17 +117,19 @@ class SILOTAAckTestCase: SILTestCase {
     }
     
     private func scanUsingBrowserBluetoothManager() {
-            self.browserCentralManager.addScan(forPeripheralsObserver: self, selector: #selector(self.didReceiveScanForPeripheralChange))
-            self.timer = Timer.scheduledTimer(timeInterval: 5,
-                                                  target: self,
-                                                  selector: #selector(self.scanIntervalTimerFired),
-                                                  userInfo: nil,
-                                                  repeats: false)
+        self.browserCentralManager.addScan(forPeripheralsObserver: self, selector: #selector(self.didReceiveScanForPeripheralChange))
+        self.timer = Timer.scheduledTimer(timeInterval: 5,
+                                          target: self,
+                                          selector: #selector(self.scanIntervalTimerFired),
+                                          userInfo: nil,
+                                          repeats: false)
     }
     
     @objc private func didReceiveScanForPeripheralChange() {
-        debugPrint("DID RECEIVE")
-        IOPLog().iopLogSwiftFunction(message: "DID RECEIVE")
+        IOPLog().step(source: "SILOTAAckTestCase",
+                      testID: testID,
+                      action: "Received OTA scan update",
+                      detail: "Scanning for renamed peripheral \(peripheralLocalName) with id \(peripheral.identifier.uuidString).")
         weak var weakSelf = self
         let discoveredPeripheral = browserCentralManager.discoveredPeripherals().first(where: { peripheral in
             guard let weakSelf = weakSelf else { return false }
@@ -152,16 +158,25 @@ class SILOTAAckTestCase: SILTestCase {
             guard let weakSelf = weakSelf else { return }
             switch status {
             case .success:
+                weakSelf.log.step(source: "SILOTAAckTestCase",
+                                  testID: weakSelf.testID,
+                                  action: "OTA acknowledged update completed",
+                                  detail: "Firmware upload completed successfully.")
                 weakSelf.otaUpdateManager = nil
                 weakSelf.invalidateObservableTokens()
                 UserDefaults.standard.setValue("IOP_Test_2", forKey: "deviceNameAfterOtaUpdate")
-               // weakSelf.reconnectToDevice(passed: true)
-                weakSelf.publishTestResult(passed: true)
+                weakSelf.log.step(source: "SILOTAAckTestCase",
+                                  testID: weakSelf.testID,
+                                  action: "Waiting for device to reappear after OTA acknowledged update",
+                                  detail: "Delaying reconnect by \(Int(weakSelf.postOTARestartDelay)) seconds and expecting device name \(weakSelf.deviceNameAfterOtaUpdate).")
+                DispatchQueue.main.asyncAfter(deadline: .now() + weakSelf.postOTARestartDelay) { [weak weakSelf] in
+                    weakSelf?.reconnectToDevice(passed: true, attempt: 1, maxAttempts: weakSelf?.maxPostOTAReconnectAttempts ?? 3)
+                }
             case let .failure(reason: reason):
                 weakSelf.otaUpdateManager = nil
                 UserDefaults.standard.setValue("IOP_Test_1", forKey: "deviceNameAfterOtaUpdate")
                 weakSelf.browserCentralManager.disconnect(from: self.peripheral )
-                weakSelf.reconnectToDevice(passed: false,description: reason)
+                weakSelf.reconnectToDevice(passed: false, description: reason)
                 
             case .unknown:
                 break
@@ -193,17 +208,17 @@ class SILOTAAckTestCase: SILTestCase {
         case .unknown:
             self.invalidateObservableTokens()
             self.testResult.value = SILTestResult(testID: self.testID, testName: self.testName, testStatus: .unknown(reason: "Unsupported board."))
-            IOPLog().iopLogSwiftFunction(message: "Unsupported board.")
+            log.step(source: "SILOTAAckTestCase", testID: testID, action: "OTA acknowledged test skipped", detail: "Unsupported board for OTA flow.")
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             self.otaUpdateManager.startTest(for: boardID, firmwareVersion: self.firmwareInfo!.originalVersion)
-       }
+       //}
     }
     
     @objc private func scanIntervalTimerFired() {
         stopScanning()
         self.publishTestResult(passed: false, description: "Peripheral didn't found.")
-        IOPLog().iopLogSwiftFunction(message: "Peripheral didn't found.")
+        log.step(source: "SILOTAAckTestCase", testID: testID, action: "OTA reconnect scan timed out", detail: "Target peripheral was not found within 5 seconds.")
     }
     
     func stopScanning() {
@@ -214,7 +229,13 @@ class SILOTAAckTestCase: SILTestCase {
         }
     }
     
-    private func reconnectToDevice(passed: Bool, description: String? = nil) {
+    private func reconnectToDevice(passed: Bool, description: String? = nil, attempt: Int = 1, maxAttempts: Int = 1) {
+        log.retry(source: "SILOTAAckTestCase",
+                  testID: testID,
+                  attempt: attempt,
+                  maxAttempts: maxAttempts,
+                  action: passed ? "Reconnect after OTA acknowledged update" : "Reconnect after OTA acknowledged update failure",
+                  timeoutDescription: "scan 5 s / connect 10 s")
         weak var weakSelf = self
         let reconnectManager = SILIOPTestReconnectManager(with: peripheral, iopCentralManager: iopCentralManager)
         let reconnectManagerSubscription = reconnectManager.reconnectStatus.observe { reconnectStatus in
@@ -232,7 +253,16 @@ class SILOTAAckTestCase: SILTestCase {
                     weakSelf.publishTestResult(passed: passed, description: description)
                 }
             case let .failure(reason: reason):
-                weakSelf.publishTestResult(passed: false, description: reason)
+                weakSelf.invalidateObservableTokens()
+                if passed, attempt < maxAttempts {
+                    weakSelf.log.step(source: "SILOTAAckTestCase",
+                                      testID: weakSelf.testID,
+                                      action: "Post-OTA reconnect attempt failed",
+                                      detail: "\(reason) Retrying with attempt \(attempt + 1) of \(maxAttempts).")
+                    weakSelf.reconnectToDevice(passed: true, attempt: attempt + 1, maxAttempts: maxAttempts)
+                } else {
+                    weakSelf.publishTestResult(passed: false, description: reason)
+                }
                 
             case .unknown:
                 break

@@ -9,6 +9,7 @@
 import Foundation
 
 class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetries {
+    private let log = IOPLog()
     struct NotificationTestResult {
         var passed: Bool
         var description: String
@@ -120,8 +121,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
             switch status {
             case let .successGetValue(value: data, characteristic: characteristic):
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID {
-                    debugPrint("DATA \(String(describing: data?.hexa()))")
-                    IOPLog().iopLogSwiftFunction(message: "DATA \(String(describing: data?.hexa()))")
+                    weakSelf.log.gatt(source: "SILIOPGATTNotificationTestHelper", testID: weakSelf.testCase.testID, operation: "Receive notification or indication payload", uuid: characteristic.uuid, actual: data?.hexa(), outcome: "Evaluate payload and response timing")
                     weakSelf.testTimeoutTimer?.invalidate()
                     if let data = data?.hexa(), weakSelf.exceptedValue.contains(data) {
                         weakSelf.observableTokens.append(weakSelf.centralManagerSubscription)
@@ -135,8 +135,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
                 weakSelf.stopWaiting()
             
             case let .updateNotificationState(characteristic: characteristic, state: state):
-                debugPrint("Notification \(state) on characteristic \(characteristic)")
-                IOPLog().iopLogSwiftFunction(message: "Notification \(state) on characteristic \(characteristic)")
+                weakSelf.log.gatt(source: "SILIOPGATTNotificationTestHelper", testID: weakSelf.testCase.testID, operation: state ? "Enable notification or indication" : "Disable notification or indication", uuid: characteristic.uuid, outcome: state ? "Subscription acknowledged by peripheral" : "Subscription disabled before retry")
 
                 if characteristic.uuid == weakSelf.testedCharacteristicUUID, state == true {
                     weakSelf.testTimeoutTimer?.invalidate()
@@ -185,8 +184,7 @@ class SILIOPGATTNotificationTestHelper: SILTestCaseTimeout, SILTestCaseWithRetri
                 guard let weakSelf = weakSelf else { return }
                 switch status {
                 case let .updateNotificationState(characteristic: characteristic, state: state):
-                    debugPrint("Notification \(state) on characteristic \(characteristic)")
-                    IOPLog().iopLogSwiftFunction(message: "Notification \(state) on characteristic \(characteristic)")
+                    weakSelf.log.gatt(source: "SILIOPGATTNotificationTestHelper", testID: weakSelf.testCase.testID, operation: state ? "Re-enable notification or indication" : "Disable notification or indication for retry", uuid: characteristic.uuid, outcome: state ? "Subscription unexpectedly stayed enabled" : "Retry can start because subscription is disabled")
                     if characteristic.uuid == weakSelf.testedCharacteristicUUID, state == false {
                         weakSelf.invalidateOldSubscriptions()
                         weakSelf.test()

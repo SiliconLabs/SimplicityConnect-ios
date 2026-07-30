@@ -392,7 +392,9 @@ BOOL isSeriesTwo = NO;
 
 - (void)writeSingleByteValue:(char)value toCharacteristic:(CBCharacteristic *)characteristic {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        const CBCharacteristicWriteType writeType = self.delegate.characteristicWriteType;
+        // Control bytes (0x00 initiate / 0x03 terminate) should be sent reliably even in
+        // non-acknowledged OTA mode; bulk firmware chunks still use the delegate-selected mode.
+        const CBCharacteristicWriteType writeType = CBCharacteristicWriteWithResponse;
         NSError * error = nil;
         SILCharacteristicTableModel *characteristicTableModel = [[SILCharacteristicTableModel alloc] initWithCharacteristic:characteristic];
         NSData *data = [NSData dataWithBytes:&value length:1];

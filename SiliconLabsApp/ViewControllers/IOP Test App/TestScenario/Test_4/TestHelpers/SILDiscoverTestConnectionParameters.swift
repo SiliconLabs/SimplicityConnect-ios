@@ -9,6 +9,7 @@
 import Foundation
 
 class SILDiscoverTestConnectionParameters {
+    private let log = IOPLog()
     enum State {
         case initiated
         case running
@@ -55,20 +56,33 @@ class SILDiscoverTestConnectionParameters {
     
     func run() {
         guard let _ = peripheral else {
+            log.step(source: "SILDiscoverTestConnectionParameters",
+                     action: "Cannot discover connection parameters",
+                     detail: "Peripheral is nil.")
             self.state.value = .failed
             return
         }
         
         guard let _ = peripheralDelegate else {
+            log.step(source: "SILDiscoverTestConnectionParameters",
+                     action: "Cannot discover connection parameters",
+                     detail: "Peripheral delegate is nil.")
             self.state.value = .failed
             return
         }
         
+        log.step(source: "SILDiscoverTestConnectionParameters",
+                 action: "Discover connection parameter characteristics",
+                 detail: "rfuChar=\(iopTestFeaturesRFUCharacteristic.uuidString) | modelChar=\(modelNumberStringCharacteristic.uuidString) | stackVersion=\(stackVersion ?? "unknown")")
         self.state.value = .running
         subscribeToPeripheralDelegate()
         subscribeToCentralManager()
         
         guard let iopTestService = self.peripheral.services?.first(where: { service in service.uuid == iopTestService }) else {
+            log.gatt(source: "SILDiscoverTestConnectionParameters",
+                     operation: "Resolve IOP Test service",
+                     serviceUUID: self.iopTestService,
+                     outcome: "Required IOP Test service not found on peripheral")
             setFailed()
             return
         }
@@ -76,6 +90,10 @@ class SILDiscoverTestConnectionParameters {
         
         if !isVersionNumberLesserThan3_3_0 {
             guard let deviceInformationService = self.peripheral.services?.first(where: { service in service.uuid == deviceInformationService }) else {
+                log.gatt(source: "SILDiscoverTestConnectionParameters",
+                         operation: "Resolve Device Information service",
+                         serviceUUID: self.deviceInformationService,
+                         outcome: "Device Information service not found on peripheral")
                 setFailed()
                 return
             }
@@ -90,14 +108,18 @@ class SILDiscoverTestConnectionParameters {
             guard let weakSelf = weakSelf else { return }
             switch status {
             case let .disconnected(peripheral: _, error: error):
-                debugPrint("Peripheral disconnected with \(String(describing: error?.localizedDescription))")
-                IOPLog().iopLogSwiftFunction(message: "Peripheral disconnected with \(String(describing: error?.localizedDescription))")
+                weakSelf.log.connection(source: "SILDiscoverTestConnectionParameters",
+                                        action: "Connection parameter discovery disconnected",
+                                        peripheralName: weakSelf.peripheral?.name,
+                                        identifier: weakSelf.peripheral?.identifier,
+                                        error: error)
                 weakSelf.setFailed()
             
             case let .bluetoothEnabled(enabled: enabled):
                 if !enabled {
-                    debugPrint("Bluetooth disabled!")
-                    IOPLog().iopLogSwiftFunction(message: "Bluetooth disabled!")
+                    weakSelf.log.step(source: "SILDiscoverTestConnectionParameters",
+                                      action: "Connection parameter discovery interrupted",
+                                      detail: "Bluetooth was disabled.")
                     weakSelf.setFailed()
                 }
                 
@@ -105,6 +127,9 @@ class SILDiscoverTestConnectionParameters {
                 break
             
             default:
+                weakSelf.log.step(source: "SILDiscoverTestConnectionParameters",
+                                  action: "Connection parameter discovery failed",
+                                  detail: "Received an unexpected central manager status.")
                 weakSelf.setFailed()
             }
         })
@@ -123,17 +148,37 @@ class SILDiscoverTestConnectionParameters {
                     if !weakSelf.isVersionNumberLesserThan3_3_0 {
                         guard let modelNumberStringCharacteristic = weakSelf.peripheralDelegate.findCharacteristic(with: weakSelf.modelNumberStringCharacteristic,
                                                                                                                    in: characteristics) else  {
+                            weakSelf.log.gatt(source: "SILDiscoverTestConnectionParameters",
+                                              operation: "Resolve model number characteristic",
+                                              uuid: weakSelf.modelNumberStringCharacteristic,
+                                              serviceUUID: weakSelf.deviceInformationService,
+                                              outcome: "Model number characteristic not found")
                             weakSelf.setFailed()
                             return
                         }
+                        weakSelf.log.gatt(source: "SILDiscoverTestConnectionParameters",
+                                          operation: "Read model number characteristic",
+                                          uuid: modelNumberStringCharacteristic.uuid,
+                                          serviceUUID: weakSelf.deviceInformationService,
+                                          outcome: "Reading board name from Device Information service")
                         weakSelf.peripheralDelegate.readCharacteristic(characteristic: modelNumberStringCharacteristic)
                     }
                 case weakSelf.iopTestService:
                     guard let featuresRFUCharacteristic = weakSelf.peripheralDelegate.findCharacteristic(with: weakSelf.iopTestFeaturesRFUCharacteristic,
                                                                                                          in: characteristics) else {
+                        weakSelf.log.gatt(source: "SILDiscoverTestConnectionParameters",
+                                          operation: "Resolve RFU connection parameter characteristic",
+                                          uuid: weakSelf.iopTestFeaturesRFUCharacteristic,
+                                          serviceUUID: weakSelf.iopTestService,
+                                          outcome: "RFU characteristic not found")
                         weakSelf.setFailed()
                         return
                     }
+                    weakSelf.log.gatt(source: "SILDiscoverTestConnectionParameters",
+                                      operation: "Read RFU connection parameter characteristic",
+                                      uuid: featuresRFUCharacteristic.uuid,
+                                      serviceUUID: weakSelf.iopTestService,
+                                      outcome: "Reading MTU, PDU, interval, latency, supervision timeout, and PHY")
                     weakSelf.peripheralDelegate.readCharacteristic(characteristic: featuresRFUCharacteristic)
                 default:
                     break
@@ -161,6 +206,11 @@ class SILDiscoverTestConnectionParameters {
                             phy = arrayData[indexOfFirstData + 5]
                         }
                         
+                        weakSelf.log.gatt(source: "SILDiscoverTestConnectionParameters",
+                                          operation: "Parse RFU connection parameter payload",
+                                          uuid: characteristic.uuid,
+                                          actual: data?.hexa(),
+                                          outcome: "MTU=\(mtu_size) | PDU=\(pdu_size) | interval=\(interval) ms | latency=\(latency) | supervisionTimeout=\(supervision_timeout) | phy=\(phy)")
                         weakSelf.connectionParameters = SILIOPTestConnectionParameters(mtu_size: mtu_size,
                                                                                        pdu_size: pdu_size,
                                                                                        interval: interval,
@@ -172,6 +222,11 @@ class SILDiscoverTestConnectionParameters {
                     }
                 case weakSelf.modelNumberStringCharacteristic:
                     if let data = data, let boardName = String(data: data, encoding: .utf8) {
+                        weakSelf.log.gatt(source: "SILDiscoverTestConnectionParameters",
+                                          operation: "Read model number characteristic",
+                                          uuid: characteristic.uuid,
+                                          actual: boardName,
+                                          outcome: "Resolved board name from Device Information service")
                         weakSelf.firmware = .readName(boardName)
                         weakSelf.setCompletedIfPossible()
                         return
@@ -186,6 +241,9 @@ class SILDiscoverTestConnectionParameters {
                 break
                 
             default:
+                weakSelf.log.step(source: "SILDiscoverTestConnectionParameters",
+                                  action: "Connection parameter discovery failed",
+                                  detail: "Received an unexpected peripheral delegate status.")
                 weakSelf.setFailed()
             }
         })
@@ -221,11 +279,17 @@ class SILDiscoverTestConnectionParameters {
         }
         let version = SILIOPFirmwareVersion(version: stackVersion)
         let firmwareInfo = SILIOPTestFirmwareInfo(originalVersion: version, name: deviceName, firmware: firmware)
+        log.step(source: "SILDiscoverTestConnectionParameters",
+                 action: "Connection parameter discovery completed",
+                 detail: "Firmware=\(firmware.rawValue) | MTU=\(connectionParameters.mtu_size) | PDU=\(connectionParameters.pdu_size) | interval=\(connectionParameters.interval) ms | latency=\(connectionParameters.latency) | supervisionTimeout=\(connectionParameters.supervision_timeout) | phy=\(connectionParameters.phy)")
         invalidateObservableTokens()
         state.value = .completed(firmwareInfo: firmwareInfo, connectionParameters: connectionParameters)
     }
     
     private func setFailed() {
+        log.step(source: "SILDiscoverTestConnectionParameters",
+                 action: "Connection parameter discovery failed",
+                 detail: "Unable to resolve all required firmware or RFU fields.")
         invalidateObservableTokens()
         state.value = .failed
     }

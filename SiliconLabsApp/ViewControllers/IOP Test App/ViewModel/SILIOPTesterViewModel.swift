@@ -42,6 +42,9 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     private var connectionParameters: SILIOPTestConnectionParameters?
     private var testReport: SILIOPTestReport?
     
+    /// When Throughput (scenario index 6) finishes, advancing to Security is delayed until the user dismisses the throughput popup (or an early-failure notification runs this immediately).
+    private var deferredAfterThroughputScenario: (() -> Void)?
+    
     enum TestState {
         case initiated
         case running
@@ -64,6 +67,7 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     }
     
     func stopTest() {
+        deferredAfterThroughputScenario = nil
         for test in iopTest {
             test.stopTesting()
         }
@@ -77,6 +81,14 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         if let peripheral = peripheral {
             iopCentralManager.disconnect(peripheral: peripheral)
         }
+    }
+    
+    
+    /// Call after the throughput summary popup is dismissed (Done / backdrop) or when throughput ended without the popup.
+    func continueAfterThroughputScenarioDeferred() {
+        guard let continuation = deferredAfterThroughputScenario else { return }
+        deferredAfterThroughputScenario = nil
+        continuation()
     }
     
     // MARK: Creating a new test
@@ -159,8 +171,16 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         setInitialUIState()
         timestamp = Date.init()
         testStateStatus.value = .running
+        SILIOPExpertLogPublisher.publishSessionEvent(title: "Test run started",
+                                                     detail: "Device: \(deviceNameToSearch ?? "Unknown")",
+                                                     tone: "info")
+        SILIOPExpertLogPublisher.publishScenarioEvent(index: 0,
+                                                      name: iopTest[0].scenarioName,
+                                                      description: iopTest[0].scenarioDescription)
         debugPrint("START TEST")
-        IOPLog().iopLogSwiftFunction(message: "START TEST")
+        IOPLog().step(source: "SILIOPTesterViewModel",
+                      action: "Started IOP test run",
+                      detail: "Device=\(deviceNameToSearch ?? "Unknown") | scenarios=\(iopTest.count)")
         
         testParameters = ["iopCentralManager": self.iopCentralManager,
                           "browserCentralManager": self.browserCentralManager,
@@ -194,7 +214,18 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
                 weakSelf.objectWillChange.send()
                 switch weakSelf.cellViewModels[i].status {
                 case .passed(details: _):
-                    weakSelf.runNextTestIfPossible(index: i)
+                    //weakSelf.runNextTestIfPossible(index: i)
+                    if i == 7, let privacyFailureReason = weakSelf.privacyPrerequisiteFailureReason(from: testResults) {
+                        weakSelf.failPrivacyScenario(reason: privacyFailureReason)
+                        return
+                    }
+                    if i == 6 {
+                        weakSelf.deferredAfterThroughputScenario = { [weak self] in
+                            self?.runNextTestIfPossible(index: 6)
+                        }
+                    } else {
+                        weakSelf.runNextTestIfPossible(index: i)
+                    }
                     
                 case .failed(reason: _),
                      .unknown(reason: _):
@@ -203,11 +234,36 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
                         weakSelf.markRestTestsAsFailed(fromTestAtIndex: i + 1, andfromTestID: testResults.last!.testID)
                         weakSelf.endTesting()
                     } else {
-                        weakSelf.runNextTestIfPossible(index: i)
+                        if i == 7, let privacyFailureReason = weakSelf.privacyPrerequisiteFailureReason(from: testResults) {
+                            weakSelf.failPrivacyScenario(reason: privacyFailureReason)
+                            return
+                        }
+                        if i == 7, weakSelf.didAllTestsFail(testResults) {
+                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 8, andfromTestID: testResults.last!.testID)
+                            weakSelf.inProgressTestCases = weakSelf.testCaseResults.testInProgressCount()
+                            weakSelf.testCasesInProgress.value = "\(weakSelf.inProgressTestCases)/\(weakSelf.allTestCases)"
+                            weakSelf.updateTableViewWithCurrentTestScenarioIndex.value = 8
+                            weakSelf.objectWillChange.send()
+                            weakSelf.endTesting()
+                            return
+                        }
+                        //                        weakSelf.runNextTestIfPossible(index: i)
+                        //                        if i == 6 {
+                        //                            //print(i)
+                        //                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 6 + 1, andfromTestID: testResults.last!.testID)
+                        //                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 8 + 1, andfromTestID: testResults.last!.testID)
+                        //                        }
+                        
                         if i == 6 {
-                            //print(i)
-                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 6 + 1, andfromTestID: testResults.last!.testID)
-                            weakSelf.markRestTestsAsFailed(fromTestAtIndex: 8 + 1, andfromTestID: testResults.last!.testID)
+                            let lastID = testResults.last!.testID
+                            weakSelf.deferredAfterThroughputScenario = { [weak self] in
+                                guard let self = self else { return }
+                                self.runNextTestIfPossible(index: 6)
+                                self.markRestTestsAsFailed(fromTestAtIndex: 7, andfromTestID: lastID)
+                                self.markRestTestsAsFailed(fromTestAtIndex: 9, andfromTestID: lastID)
+                            }
+                        } else {
+                            weakSelf.runNextTestIfPossible(index: i)
                         }
                     }
                     
@@ -224,8 +280,6 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     private func printTestResultInfo(_ testResults: [SILTestResult]) {
         for testResult in testResults {
             var testResultText = "TEST RESULT \(testResult.testID) \(testResult.testName) \(testResult.testStatus.rawValue)"
-            
-            IOPLog().iopLogSwiftFunction(message: "TEST RESULT \(testResult.testID) \(testResult.testName) \(testResult.testStatus.rawValue)")
             print(testResult)
             switch testResult.testStatus {
             case let .passed(details: details):
@@ -246,6 +300,7 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
                 break
             }
             
+            IOPLog().emit(source: "SILIOPTesterViewModel", message: testResultText)
             debugPrint(testResultText)
         }
     }
@@ -262,6 +317,40 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
         return true
     }
     
+    private func didAllTestsFail(_ testResults: [SILTestResult]) -> Bool {
+        guard !testResults.isEmpty else { return false }
+        
+        for testResult in testResults {
+            if case .failed = testResult.testStatus {
+                continue
+            }
+            return false
+        }
+        
+        return true
+    }
+    
+    private func privacyPrerequisiteFailureReason(from securityResults: [SILTestResult]) -> String? {
+        let failedPrerequisites = securityResults.compactMap { testResult -> String? in
+            guard testResult.testID == "7.4" || testResult.testID == "7.5" else { return nil }
+            if case .failed = testResult.testStatus {
+                return testResult.testID
+            }
+            return nil
+        }
+        
+        guard !failedPrerequisites.isEmpty else { return nil }
+        return "Prerequisite bonding test(s) \(failedPrerequisites.joined(separator: ", ")) failed."
+    }
+    
+    private func failPrivacyScenario(reason: String) {
+        guard iopTest.indices.contains(8), !iopTest[8].privTestResults.isEmpty else { return }
+        iopTest[8].privTestResults[0] = SILTestResult(testID: "7.6",
+                                                      testName: "LE Privacy.",
+                                                      testStatus: .failed(reason: SILTestFailureReason(description: reason)))
+        iopTest[8].testResults.value = iopTest[8].privTestResults
+    }
+    
     private func runNextTestIfPossible(index i: Int) {
         let dict = iopTest[i].getTestsArtifacts()
         updateParametersDictionary(newArtifacts: dict, testIndex: i)
@@ -271,6 +360,9 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
        // print(iopTest.count)
         if i + 1 < iopTest.count {
             iopTest[i + 1].injectParameters(parameters: testParameters)
+            SILIOPExpertLogPublisher.publishScenarioEvent(index: i + 1,
+                                                          name: iopTest[i + 1].scenarioName,
+                                                          description: iopTest[i + 1].scenarioDescription)
             iopTest[i + 1].performTestScenario()
         } else {
             endTesting()
@@ -323,13 +415,18 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
             testParameters["peripheral"] = peripheral
             peripheralDelegate = dict["peripheralDelegate"] as? SILPeripheralDelegate
             testParameters["peripheralDelegate"] = peripheralDelegate
+            discoveredPeripheral = dict["discoveredPeripheral"] as? SILDiscoveredPeripheral
+            testParameters["discoveredPeripheral"] = discoveredPeripheral
         }
     }
     
     func endTesting() {
         debugPrint("END TESTING")
         
-        IOPLog().iopLogSwiftFunction(message: "END TEST")
+        IOPLog().step(source: "SILIOPTesterViewModel",
+                      action: "Finished IOP test run",
+                      detail: "Preparing final report and reset popup.")
+        SILIOPExpertLogPublisher.publishSessionEvent(title: "Test run finished", detail: nil, tone: "success")
         
         stopTest()
         prepareTestReport()
@@ -342,7 +439,9 @@ class SILIOPTesterViewModel: NSObject, ObservableObject {
     }
     
     func prepareTestReport() {
-        IOPLog().iopLogSwiftFunction(message: "END TEST")
+        IOPLog().step(source: "SILIOPTesterViewModel",
+                      action: "Preparing IOP test report",
+                      detail: "Collecting phone info, firmware info, connection parameters, and test results.")
         let deviceGuru = DeviceGuruImplementation()
         let deviceName = deviceGuru.hardware
         

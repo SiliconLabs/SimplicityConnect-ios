@@ -813,6 +813,10 @@
 		4359CAA62E964E6700C6AFDA /* SILEHGraphViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359CAA22E964E6700C6AFDA /* SILEHGraphViewModel.swift */; };
 		435B1FDB2E0D1D6C00A66DA1 /* SILSmartLockPeripheralDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B1FDA2E0D1D6C00A66DA1 /* SILSmartLockPeripheralDelegate.swift */; };
 		435B1FDD2E0D1E3300A66DA1 /* SILSmartLockPeripheralGATTDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435B1FDC2E0D1E3300A66DA1 /* SILSmartLockPeripheralGATTDatabase.swift */; };
+		4368230E2FFFB2680098491B /* SILIOPGATTInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368230D2FFFB2680098491B /* SILIOPGATTInfoViewController.swift */; };
+		436823102FFFB2C10098491B /* SILIOPGATTSpecCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368230F2FFFB2C10098491B /* SILIOPGATTSpecCatalog.swift */; };
+		4368BE4D2FF75479005B80F3 /* SILIOPThroughputPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BE4B2FF75479005B80F3 /* SILIOPThroughputPopupViewController.swift */; };
+		4368BE4E2FF75479005B80F3 /* SILIOPThroughputGaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BE4A2FF75479005B80F3 /* SILIOPThroughputGaugeView.swift */; };
 		4388B2C72C2DA13E0068C950 /* SILWiFiLEDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4388B2C62C2DA13E0068C950 /* SILWiFiLEDViewController.swift */; };
 		4388B2C92C2DBC160068C950 /* SILWiFiLedSensorsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4388B2C82C2DBC160068C950 /* SILWiFiLedSensorsViewModel.swift */; };
 		4388B2CB2C2DC14B0068C950 /* SILWiFiMotionSensorsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4388B2CA2C2DC14B0068C950 /* SILWiFiMotionSensorsViewModel.swift */; };
@@ -1950,6 +1954,10 @@
 		4359CAA32E964E6700C6AFDA /* SILEHPeripheralDataFilterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILEHPeripheralDataFilterHelper.swift; sourceTree = "<group>"; };
 		435B1FDA2E0D1D6C00A66DA1 /* SILSmartLockPeripheralDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSmartLockPeripheralDelegate.swift; sourceTree = "<group>"; };
 		435B1FDC2E0D1E3300A66DA1 /* SILSmartLockPeripheralGATTDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILSmartLockPeripheralGATTDatabase.swift; sourceTree = "<group>"; };
+		4368230D2FFFB2680098491B /* SILIOPGATTInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILIOPGATTInfoViewController.swift; sourceTree = "<group>"; };
+		4368230F2FFFB2C10098491B /* SILIOPGATTSpecCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILIOPGATTSpecCatalog.swift; sourceTree = "<group>"; };
+		4368BE4A2FF75479005B80F3 /* SILIOPThroughputGaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILIOPThroughputGaugeView.swift; sourceTree = "<group>"; };
+		4368BE4B2FF75479005B80F3 /* SILIOPThroughputPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILIOPThroughputPopupViewController.swift; sourceTree = "<group>"; };
 		4388B2C62C2DA13E0068C950 /* SILWiFiLEDViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILWiFiLEDViewController.swift; sourceTree = "<group>"; };
 		4388B2C82C2DBC160068C950 /* SILWiFiLedSensorsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILWiFiLedSensorsViewModel.swift; sourceTree = "<group>"; };
 		4388B2CA2C2DC14B0068C950 /* SILWiFiMotionSensorsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SILWiFiMotionSensorsViewModel.swift; sourceTree = "<group>"; };
@@ -3453,6 +3461,7 @@
 				1E4D8F4D26035FE000924430 /* SILIopTestOTAUpdateManger.swift */,
 				1E0E2E5026284D0600B7B7FD /* SILIOPTestReport.swift */,
 				8044307C270F008200DD3EA6 /* SILIOPTestReconnectManager.swift */,
+				4368230F2FFFB2C10098491B /* SILIOPGATTSpecCatalog.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -3665,10 +3674,12 @@
 		1E5FEAA4261F37BD00D00E5F /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4368BE4C2FF75479005B80F3 /* IOPThroughputPopup */,
 				80DBE36E282E4B0D00F7C579 /* SILIOPInfoPopup.swift */,
 				2E4854D42C414B640096699B /* SILIOPDeviceResetInfoPopupViewController.swift */,
 				2E4854D22C414B5D0096699B /* SILIOPDeviceResetInfoPopupViewController.xib */,
 				80DBE36D282E4B0D00F7C579 /* SILIOPInfoPopup.xib */,
+				4368230D2FFFB2680098491B /* SILIOPGATTInfoViewController.swift */,
 				1E4D8F4726035FE000924430 /* SILIOPTesterViewController.swift */,
 				1E4D8F4826035FE000924430 /* SILIOPTestScenarioCellView.swift */,
 				1E0E2E0226275C5300B7B7FD /* SILIOPTestStatusView.swift */,
@@ -4733,6 +4744,15 @@
 			children = (
 			);
 			path = WYPopoverOTAController;
+			sourceTree = "<group>";
+		};
+		4368BE4C2FF75479005B80F3 /* IOPThroughputPopup */ = {
+			isa = PBXGroup;
+			children = (
+				4368BE4A2FF75479005B80F3 /* SILIOPThroughputGaugeView.swift */,
+				4368BE4B2FF75479005B80F3 /* SILIOPThroughputPopupViewController.swift */,
+			);
+			path = IOPThroughputPopup;
 			sourceTree = "<group>";
 		};
 		439A8DD22D38E04800FCE430 /* Controller */ = {
@@ -6815,6 +6835,8 @@
 				FE8AD36A289BC80900086BF0 /* NSNumber+FieldModelModifier.swift in Sources */,
 				1ECC20912A0BA59400EFA5BB /* SILESLBasicStateResponse.swift in Sources */,
 				1E586CE023FBFEF900E2C385 /* SILBrowserSavedSearches.m in Sources */,
+				4368BE4D2FF75479005B80F3 /* SILIOPThroughputPopupViewController.swift in Sources */,
+				4368BE4E2FF75479005B80F3 /* SILIOPThroughputGaugeView.swift in Sources */,
 				1EFC766026AEDF770035594E /* SILGattConfigurationEntity+SILGattXMLExportable.swift in Sources */,
 				0C2FCB211F9A542300F4F259 /* SILBluetoothEnumerationModel.m in Sources */,
 				80B5FFAA275F9148008F08A8 /* SILDot.swift in Sources */,
@@ -7096,6 +7118,7 @@
 				205131EC270365A800C27B92 /* DeviceConnection.swift in Sources */,
 				1E1457F5266E0555009792C2 /* SILThroughputPeripheral.swift in Sources */,
 				2051326C270365A800C27B92 /* DemoConnection.swift in Sources */,
+				436823102FFFB2C10098491B /* SILIOPGATTSpecCatalog.swift in Sources */,
 				4388B2D12C30476E0068C950 /* SILWiFiMotionVC.swift in Sources */,
 				4C4F2DE124080E50005D43BB /* SILRoundedButton.swift in Sources */,
 				1E36E8B729D082C00011BA0D /* SILESLDemoTagCell.swift in Sources */,
@@ -7107,6 +7130,7 @@
 				FEDEE5492902A87100F354A6 /* UIViewController+LeftAlignedTitle.swift in Sources */,
 				7269F9782AF427D400246507 /* QRCodeViewController.m in Sources */,
 				20513200270365A800C27B92 /* CBCharacteristicExtensions.swift in Sources */,
+				4368230E2FFFB2680098491B /* SILIOPGATTInfoViewController.swift in Sources */,
 				2051327D270365A800C27B92 /* IoDemoInteraction.swift in Sources */,
 				0C2FCB571F9A542300F4F259 /* UIFont+Extensions.swift in Sources */,
 				1E6CBCF12588AE1E00B11648 /* SILExitAdvertiserPopupViewModel.swift in Sources */,
@@ -7644,7 +7668,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 52444FG85C;
 				DISPLAY_NAME = "Si Connect";
@@ -7662,7 +7686,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.0;
+				MARKETING_VERSION = 3.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -7686,7 +7710,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Silicon Laboratories Inc (52444FG85C)";
 				CODE_SIGN_RESOURCE_RULES_PATH = "";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 52444FG85C;
@@ -7704,7 +7728,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.0;
+				MARKETING_VERSION = 3.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.silabs.BlueGeckoDemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
